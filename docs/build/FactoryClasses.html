@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Factory Classes &mdash; Python Project 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Python Project 0.1 documentation" href="index.html" />
+    <link rel="prev" title="Data Classes" href="DataClasses.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="DataClasses.html" title="Data Classes"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Python Project 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="factory-classes">
+<h1>Factory Classes<a class="headerlink" href="#factory-classes" title="Permalink to this headline">¶</a></h1>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<span class="target" id="module-ColorFactory"></span><dl class="class">
+<dt id="ColorFactory.ColorFactory">
+<em class="property">class </em><tt class="descclassname">ColorFactory.</tt><tt class="descname">ColorFactory</tt><a class="headerlink" href="#ColorFactory.ColorFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Color a PointSet using different methods</p>
+<dl class="staticmethod">
+<dt id="ColorFactory.ColorFactory.ProjectImages">
+<em class="property">static </em><tt class="descname">ProjectImages</tt><big>(</big><em>points</em>, <em>images</em>, <em>matrices</em><big>)</big><a class="headerlink" href="#ColorFactory.ColorFactory.ProjectImages" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Args:</th><td class="field-body"><ul class="first simple">
+<li>points (PointSet or PointSubSet): The point cloud to color</li>
+<li>images (list of numpy arrays): The images to project</li>
+<li>matrices (list of (3, 4) numpy array): camera matrices</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt>ColorProperty.</dt>
+<dd><p class="first last">in which each points color is taken from the appropriate image</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-IOFactory"></span><dl class="class">
+<dt id="IOFactory.IOFactory">
+<em class="property">class </em><tt class="descclassname">IOFactory.</tt><tt class="descname">IOFactory</tt><a class="headerlink" href="#IOFactory.IOFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create PointSet from different types of input files: .pts, .xyz</p>
+<p>Write PointSet data to different types of file: .pts(TODO), .xyz(TODO), shapeFile</p>
+<dl class="classmethod">
+<dt id="IOFactory.IOFactory.ReadPts">
+<em class="property">classmethod </em><tt class="descname">ReadPts</tt><big>(</big><em>fileName</em>, <em>pointSetList</em><big>)</big><a class="headerlink" href="#IOFactory.IOFactory.ReadPts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reading points from <a href="#id1"><span class="problematic" id="id2">*</span></a>.pts file
+Creates one or more PointSet objects, returned through pointSetList</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Args:</th><td class="field-body">fileName (str): name of .pts file
+pointSetList (list): place holder for created PointSet objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">int.  Number of PointSet objects created</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="IOFactory.IOFactory.ReadXYZ">
+<em class="property">classmethod </em><tt class="descname">ReadXYZ</tt><big>(</big><em>fileName</em>, <em>pointSetList</em><big>)</big><a class="headerlink" href="#IOFactory.IOFactory.ReadXYZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reading points from <a href="#id3"><span class="problematic" id="id4">*</span></a>.xyz file
+Creates one PointSet objects returned through pointSetList</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>fileName (str): name of .xyz file            
+pointSetList (list): place holder for created PointSet object</dd>
+<dt>Returns:</dt>
+<dd>int.  Number of PointSet objects created</dd>
+</dl>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="IOFactory.IOFactory.WriteToShapeFile">
+<em class="property">classmethod </em><tt class="descname">WriteToShapeFile</tt><big>(</big><em>pointSet</em>, <em>fileName</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#IOFactory.IOFactory.WriteToShapeFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-NeighborsFactory"></span><dl class="class">
+<dt id="NeighborsFactory.NeighborsFactory">
+<em class="property">class </em><tt class="descclassname">NeighborsFactory.</tt><tt class="descname">NeighborsFactory</tt><a class="headerlink" href="#NeighborsFactory.NeighborsFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find neighbors of a given points using different methods</p>
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange">
+<em class="property">static </em><tt class="descname">GetNeighborsIn3dRange</tt><big>(</big><em>points</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>radius</em><big>)</big><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all tokens (points) in radius range</p>
+<p>Find all points in range of the ball field with radius &#8216;radius&#8217;. 
+:Args:</p>
+<blockquote>
+<div><ul class="simple">
+<li>points - PointSet</li>
+<li>x, y, z - search point coordinates</li>
+<li>radius Radius of ball field</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last simple">
+<li>PointSubSet containing all points in ranges</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-NormalsFactory"></span><dl class="class">
+<dt id="NormalsFactory.NormalsFactory">
+<em class="property">class </em><tt class="descclassname">NormalsFactory.</tt><tt class="descname">NormalsFactory</tt><a class="headerlink" href="#NormalsFactory.NormalsFactory" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="staticmethod">
+<dt id="NormalsFactory.NormalsFactory.ReadNormalsFromFile">
+<em class="property">static </em><tt class="descname">ReadNormalsFromFile</tt><big>(</big><em>points</em>, <em>normalsFileName</em><big>)</big><a class="headerlink" href="#NormalsFactory.NormalsFactory.ReadNormalsFromFile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Args:</th><td class="field-body"><ul class="first simple">
+<li>points: PointSet/PointSubSet object</li>
+<li>normalsFileName: name of file containing normal for each poitns</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last simple">
+<li>NormalsProperty</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NormalsFactory.NormalsFactory.VtkNormals">
+<em class="property">static </em><tt class="descname">VtkNormals</tt><big>(</big><em>points</em>, <em>triangulation=None</em><big>)</big><a class="headerlink" href="#NormalsFactory.NormalsFactory.VtkNormals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate normals for each points as average of normals of trianges to which the points belongs to.
+If no triangulation is given, use TriangulationFactory.Delaunay2D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Args:</th><td class="field-body"><ul class="first simple">
+<li>points: PointSet/PointSubSet object</li>
+<li>triangulation: triangulationProperty</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last simple">
+<li>NormalsProperty</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-SegmentationFactory"></span><dl class="class">
+<dt id="SegmentationFactory.SegmentationFactory">
+<em class="property">class </em><tt class="descclassname">SegmentationFactory.</tt><tt class="descname">SegmentationFactory</tt><a class="headerlink" href="#SegmentationFactory.SegmentationFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create different types of segmentations</p>
+<p>The results are saved to SegmentationProperty object</p>
+<dl class="classmethod">
+<dt id="SegmentationFactory.SegmentationFactory.ScanLinesSegmentation">
+<em class="property">classmethod </em><tt class="descname">ScanLinesSegmentation</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#SegmentationFactory.SegmentationFactory.ScanLinesSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>For now, we read the segmentation results from pickled file</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>points (pointSet)</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-SphericalCoordinatesFactory"></span><dl class="class">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory">
+<em class="property">class </em><tt class="descclassname">SphericalCoordinatesFactory.</tt><tt class="descname">SphericalCoordinatesFactory</tt><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO  SphericalCoordinatesFactory</p>
+<dl class="staticmethod">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">
+<em class="property">static </em><tt class="descname">CartesianToSphericalCoordinates</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO CartesianToSphericalCoordinates</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.SphericalToCartesainCoordinates">
+<em class="property">static </em><tt class="descname">SphericalToCartesainCoordinates</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.SphericalToCartesainCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO SphericalToCartesainCoordinates</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-TriangulationFactory"></span><dl class="class">
+<dt id="TriangulationFactory.TriangulationFactory">
+<em class="property">class </em><tt class="descclassname">TriangulationFactory.</tt><tt class="descname">TriangulationFactory</tt><a class="headerlink" href="#TriangulationFactory.TriangulationFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create triangulation for a set of points using different methods</p>
+<dl class="staticmethod">
+<dt id="TriangulationFactory.TriangulationFactory.Delaunay2D">
+<em class="property">static </em><tt class="descname">Delaunay2D</tt><big>(</big><em>points</em><big>)</big><a class="headerlink" href="#TriangulationFactory.TriangulationFactory.Delaunay2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creating a 2D Delaunay triangulation for a given set of points
+:Args:</p>
+<blockquote>
+<div><ul class="simple">
+<li>points: a PointSet object</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last simple">
+<li>TriangulationProperty object</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="DataClasses.html"
+                        title="previous chapter">Data Classes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/FactoryClasses.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="DataClasses.html" title="Data Classes"
+             >previous</a> |</li>
+        <li><a href="index.html">Python Project 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Zachi Shtain &amp; Mika Hirsch.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

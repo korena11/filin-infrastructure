@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NormalsFactory &mdash; Python Project 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="Python Project 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Project 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for NormalsFactory</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">NormalsProperty</span> <span class="kn">import</span> <span class="n">NormalsProperty</span>
+<span class="kn">import</span> <span class="nn">mayavi.mlab</span> <span class="kn">as</span> <span class="nn">mlab</span>
+<span class="kn">from</span> <span class="nn">TriangulationFactory</span> <span class="kn">import</span> <span class="n">TriangulationFactory</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">genfromtxt</span><span class="p">,</span> <span class="n">nonzero</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">asarray</span>
+
+<div class="viewcode-block" id="NormalsFactory"><a class="viewcode-back" href="../FactoryClasses.html#NormalsFactory.NormalsFactory">[docs]</a><span class="k">class</span> <span class="nc">NormalsFactory</span><span class="p">:</span>    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NormalsFactory.ReadNormalsFromFile"><a class="viewcode-back" href="../FactoryClasses.html#NormalsFactory.NormalsFactory.ReadNormalsFromFile">[docs]</a>    <span class="k">def</span> <span class="nf">ReadNormalsFromFile</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">normalsFileName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :Args: </span>
+<span class="sd">            </span>
+<span class="sd">            - points: PointSet/PointSubSet object</span>
+<span class="sd">            - normalsFileName: name of file containing normal for each poitns</span>
+<span class="sd">            </span>
+<span class="sd">        :Returns:                </span>
+<span class="sd">            - NormalsProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c"># Read normals from file                 </span>
+        <span class="n">parametersTypes</span> <span class="o">=</span> <span class="n">dtype</span><span class="p">({</span><span class="s">&#39;names&#39;</span><span class="p">:[</span><span class="s">&#39;dx&#39;</span><span class="p">,</span> <span class="s">&#39;dy&#39;</span><span class="p">,</span> <span class="s">&#39;dz&#39;</span><span class="p">]</span>
+                               <span class="p">,</span> <span class="s">&#39;formats&#39;</span><span class="p">:[</span><span class="s">&#39;float&#39;</span><span class="p">,</span> <span class="s">&#39;float&#39;</span><span class="p">,</span> <span class="s">&#39;float&#39;</span><span class="p">]})</span>
+        
+            
+        <span class="n">imported_array</span> <span class="o">=</span> <span class="n">genfromtxt</span><span class="p">(</span><span class="n">normalsFileName</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">parametersTypes</span><span class="p">,</span> <span class="n">filling_values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    
+        <span class="n">dxdydz</span> <span class="o">=</span> <span class="n">imported_array</span><span class="p">[[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">imported_array</span> <span class="p">),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                            
+        <span class="n">normals</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dxdydz</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">normals</span>
+    </div>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__CalcAverageNormal</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">normalsPoints</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.00001</span><span class="p">):</span>
+        
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">nonzero</span><span class="p">(</span><span class="nb">sum</span><span class="p">((</span><span class="n">normalsPoints</span> <span class="o">-</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">eps</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="p">(</span><span class="n">normals</span><span class="p">[</span><span class="n">indices</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="NormalsFactory.VtkNormals"><a class="viewcode-back" href="../FactoryClasses.html#NormalsFactory.NormalsFactory.VtkNormals">[docs]</a>    <span class="k">def</span> <span class="nf">VtkNormals</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">triangulation</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate normals for each points as average of normals of trianges to which the points belongs to.</span>
+<span class="sd">        If no triangulation is given, use TriangulationFactory.Delaunay2D</span>
+<span class="sd">                </span>
+<span class="sd">        :Args: </span>
+<span class="sd">            </span>
+<span class="sd">            - points: PointSet/PointSubSet object</span>
+<span class="sd">            - triangulation: triangulationProperty</span>
+<span class="sd">            </span>
+<span class="sd">            </span>
+<span class="sd">            </span>
+<span class="sd">        :Returns:                </span>
+<span class="sd">            - NormalsProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">polyData</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">ToPolyData</span><span class="p">()</span>
+                
+        <span class="k">if</span> <span class="n">triangulation</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> 
+            <span class="n">triangulation</span> <span class="o">=</span> <span class="n">TriangulationFactory</span><span class="o">.</span><span class="n">Delaunay2D</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        
+        <span class="n">polyData</span><span class="o">.</span><span class="n">polys</span> <span class="o">=</span> <span class="n">triangulation</span><span class="o">.</span><span class="n">TrianglesIndices</span><span class="p">()</span>
+               
+        <span class="n">compute_normals</span> <span class="o">=</span> <span class="n">mlab</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">poly_data_normals</span><span class="p">(</span><span class="n">polyData</span><span class="p">)</span>
+                                    
+<span class="c">#        normals = compute_normals.outputs[0].point_data.normals.to_array()</span>
+        
+        <span class="n">mlab</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>        
+
+        <span class="n">normals</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">NormalsFactory</span><span class="o">.</span><span class="n">__CalcAverageNormal</span><span class="p">,</span> <span class="n">points</span><span class="o">.</span><span class="n">X</span><span class="p">(),</span> <span class="n">points</span><span class="o">.</span><span class="n">Y</span><span class="p">(),</span> <span class="n">points</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> 
+                                           <span class="n">tile</span><span class="p">(</span><span class="n">compute_normals</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">to_array</span><span class="p">(),</span> <span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> 
+                                           <span class="n">tile</span><span class="p">(</span><span class="n">compute_normals</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">point_data</span><span class="o">.</span><span class="n">normals</span><span class="o">.</span><span class="n">to_array</span><span class="p">(),</span> <span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">(),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))))</span>
+        
+        <span class="k">return</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">normals</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="kn">from</span> <span class="nn">IOFactory</span> <span class="kn">import</span> <span class="n">IOFactory</span>    
+    <span class="kn">from</span> <span class="nn">Visualization</span> <span class="kn">import</span> <span class="n">Visualization</span>
+    
+    <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
+    
+<span class="c">#    IOFactory.ReadXYZ(&#39;..\\Sample Data\\cubeSurface.xyz&#39;, pointSetList)</span>
+<span class="c">#    normalsFileName = &#39;..\\Sample Data\\cubeSurfaceNormals.xyz&#39;</span>
+<span class="c">#    normals = NormalsFactory.ReadNormalsFromFile(pointSetList[0], normalsFileName)</span>
+    <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadXYZ</span><span class="p">(</span><span class="s">&#39;..</span><span class="se">\\</span><span class="s">Sample Data</span><span class="se">\\</span><span class="s">data.xyz&#39;</span><span class="p">,</span> <span class="n">pointSetList</span><span class="p">)</span>
+<span class="c">#    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])</span>
+    <span class="n">normals</span> <span class="o">=</span> <span class="n">NormalsFactory</span><span class="o">.</span><span class="n">VtkNormals</span><span class="p">(</span><span class="n">pointSetList</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="c">#, triangulation)</span>
+    
+    <span class="n">Visualization</span><span class="o">.</span><span class="n">RenderPointSet</span><span class="p">(</span><span class="n">normals</span><span class="p">,</span> <span class="s">&#39;color&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">pointSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">Visualization</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+    
+<span class="c">#    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)</span>
+<span class="c">#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    </span>
+<span class="c">#    show()</span>
+        
+        
+        
+         
+        
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">Python Project 0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Zachi Shtain &amp; Mika Hirsch.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
