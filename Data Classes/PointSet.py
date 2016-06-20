@@ -28,8 +28,8 @@ class PointSet( object ):
             - 'rgb': rgb values for each point (optional)
             - 'intensity': intensity values for each point(optional)
         #TODO: remove property __xy
-        """        
-        
+        """
+        # hello world
         if points.shape[1] == 3:  # 3D Data
             self.__xyz = points            
         elif points.shape[1] == 2:  # 2D Data
