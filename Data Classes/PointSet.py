@@ -1,4 +1,5 @@
 # Class PointSet hold a set of un-ordered 2D or 3D points.
+
 from tvtk.api import tvtk
 import pandas
 from numpy import arange, array, vstack, hstack

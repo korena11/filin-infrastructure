@@ -93,7 +93,7 @@ class SegmentationFactory:
         paramsList = []
         
         now = datetime.datetime.now()
-        print datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Starting Phase 1 of Sorting Process"
+        print (datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Starting Phase 1 of Sorting Process")
         startTime = now
         
         azimuths = sphCoorProp.Azimuths
@@ -101,7 +101,7 @@ class SegmentationFactory:
         
         while (len(pntIndexes) > 0):
             
-            print "Progress Status:", float(int((1 - float(len(pntIndexes)) / pointSet.Size) * 10000000)) / 100000 , "% complete"
+            print ("Progress Status:", float(int((1 - float(len(pntIndexes)) / pointSet.Size) * 10000000)) / 100000 , "% complete")
             
             startAzimuth = azimuths[pntIndexes[0]]
             
@@ -128,19 +128,19 @@ class SegmentationFactory:
             pntIndexes = pntIndexes[pntIndexes != -10]
         
         now = datetime.datetime.now()
-        print datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- End of Phase 1 - Total time:", now - startTime 
-        print "            Number of scan lines:", currentScanLineIndex
-        print "            Number of unsorted points: ", len(scanLineIndex[scanLineIndex == -1]), "out of", pointSet.Size
+        print (datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- End of Phase 1 - Total time:", now - startTime)
+        print ("            Number of scan lines:", currentScanLineIndex)
+        print ("            Number of unsorted points: ", len(scanLineIndex[scanLineIndex == -1]), "out of", pointSet.Size)
         
         unsortedIndexes = nonzero(scanLineIndex == -1)[0]
         
         now = datetime.datetime.now()
-        print datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Starting Phase 2 of Sorting Process"
+        print (datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Starting Phase 2 of Sorting Process")
         
         closestLineIndex = -1 * ones((len(unsortedIndexes)), dtype=int)
         minDiffs = 100 * ones((len(unsortedIndexes)))
         
-        for i in xrange(currentScanLineIndex):
+        for i in range(currentScanLineIndex):
             
             diffs = fabs(paramsList[i][0] + paramsList[i][1] * elevationAngles[unsortedIndexes] + paramsList[i][2] * 
                             elevationAngles[unsortedIndexes] ** 2 - azimuths[unsortedIndexes])
@@ -149,10 +149,10 @@ class SegmentationFactory:
             minDiffs[minDiffs > diffs] = diffs[minDiffs > diffs]
         
         now = datetime.datetime.now()
-        print datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- End of Phase 2"
+        print (datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- End of Phase 2")
         
         now = datetime.datetime.now()
-        print datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Creating SegmentationProperty Object"
+        print (datetime.date(now.year, now.month, now.day), datetime.time(now.hour, now.minute, now.second), "- Creating SegmentationProperty Object")
         
         segmentationProperty = SegmentationProperty(pointSet, scanLineIndex)
         map(segmentationProperty.UpdatePointLabel, unsortedIndexes, closestLineIndex)
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     scanLineSegmentation = SegmentationFactory.ParabolicScanLineSegmentation(pointSetList[0], 0.1, minimalScanLineLength=5)
         
     colors = 255 * random.random((scanLineSegmentation.NumberOfSegments, 3))
-    print colors  
+    print (colors)
     
     _figure = None
     for i in range(scanLineSegmentation.NumberOfSegments):
