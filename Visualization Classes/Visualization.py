@@ -1,6 +1,6 @@
-# from mayavi.scripts import mayavi2
-# import mayavi
-# from mayavi.sources.vtk_data_source import VTKDataSource
+from mayavi.scripts import mayavi2
+import mayavi
+from mayavi.sources.vtk_data_source import VTKDataSource
 from mayavi import mlab
 from numpy import tile, asarray, uint8, hstack, expand_dims, abs, uint8, log
 from mayavi.core import lut_manager

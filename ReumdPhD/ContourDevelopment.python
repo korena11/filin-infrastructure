@@ -1,0 +1,95 @@
+'''
+infraGit
+photo - lab - 3
+15, Jan, 2017
+'''
+
+import matplotlib
+matplotlib.use('TkAgg')
+
+import numpy as np
+from matplotlib import pyplot as plt
+import cv2
+from numpy import pi, sqrt, arctan, arctan2, sin, cos
+from numpy.linalg import norm
+from skimage import measure
+from scipy import interpolate
+
+def hillshade(array, azimuth=315, angle_altitude=45):
+    '''
+    Generates hillshade from array used by azimuth and angle altitude
+    :param array: DEM
+    :param azimuth: degrees, default 315 deg
+    :param angle_altitude: degrees, defualt 45 deg
+    :return: a shaded relief of a raster
+    '''
+    x, y = np.gradient(array)
+    slope = pi / 2. - arctan(sqrt(x * x + y * y))
+    aspect = arctan2(-x, y)
+    azimuthrad = azimuth * pi / 180.
+    altituderad = angle_altitude * pi / 180.
+
+    shaded = sin(altituderad) * sin(slope) \
+             + cos(altituderad) * cos(slope) \
+               * cos(azimuthrad - aspect)
+    return 255 * (shaded + 1) / 2
+
+if __name__ == '__main__':
+
+    w = 70
+    winSize = (5, 5)
+    deltaHeight = 0.2 # m
+
+    # Construct some test data
+    gridSpacing = pi
+    x, y = np.ogrid[-pi:gridSpacing:100j, -pi:gridSpacing:100j] # the '100j' is the number of elements
+    r = np.sin(np.exp((np.sin(x) ** 3 + np.cos(y) ** 2)))
+
+    # compute image gradient
+    dimg_dx, dimg_dy = np.gradient(r)
+    grad_img = norm(np.vstack((dimg_dx,dimg_dy)), axis=1)
+    grad_img_function = interpolate.interp2d(np.arange(grad_img.shape[0]), np.arange(grad_img.shape[1]), grad_img.T)
+
+
+    # --- Define a contour ---
+    # Find contours at a constant value of 0.8
+    contours = measure.find_contours(r, 0.8)
+
+    #fig, ax = plt.figure()
+    #ax.imshow(r, interpolation='nearest', cmap='gray')
+
+    for dh in np.arange(0,1,0.001):
+        for c in contours:
+
+            # contour tangent
+            dxdy = np.zeros((c.shape[0],2), np.float)
+            dxdy[0:-1,:] = np.diff(c, axis=0) / gridSpacing
+            dxdy[-1,:] = (c[-1,:] - c[-2,:]) / gridSpacing
+            tangent_c = dxdy / norm(dxdy, axis=1)[:, None] #normalize T
+
+            # image gradient at contour points
+
+            normal_c =  tangent_c.T.dot(np.array([[1, 0], [-1, 0]]))
+            grad_img_c = grad_img_function(*c)
+
+            #contour movement
+            dc_dh = dh * 1/grad_img_c * normal_c.T
+            c+=dc_dh
+
+            contours[c] = c
+     #       ax.plot(c[:,0], c[:,1], linewidth=2)
+
+
+
+
+      #  ax.axis('image')
+    #     plt.hold(True)
+    #     plt.plot(x, y, '-r')
+    #     plt.pause(0.1)
+    #     plt.draw()
+    #     plt.hold(False)
+    # plt.show()
+
+
+
+

@@ -1,3 +1,4 @@
+
 from BaseProperty import BaseProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory

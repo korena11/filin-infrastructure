@@ -1,0 +1,48 @@
+'''
+infraGit
+photo-lab-3\Reuma
+16, Jan, 2017 
+'''
+
+import numpy as np
+from matplotlib import pyplot as plt
+from BaseProperty import BaseProperty
+import platform
+
+if platform.system() == 'Linux':
+    import matplotlib
+    matplotlib.use('TkAgg')
+
+
+class RasterProperty( BaseProperty ):
+    """
+    A raster representation of the point set
+    """
+    __dataType = ""  # A string indicating the type of data stored in the panoramic view (e.g. range, intensity, etc.)
+    __rasterData = None  # A m-by-n-by-p array in which the raster is stored
+    __voidData = -9999  # A number indicating missing data in the panorama
+    __gridSpacing = 0.05  # The spacing between grid cells
+
+    #Grid bounding box
+    __extent = None #four corners of the bounding box; dictionary.
+
+    def __init__(self, points, data, gridSpacing, **kwargs ):
+        """
+        constructor
+        :param points: PointSet object from which the panorama will be created
+        :param gridSpacing: The spacing between grid cells
+        :param kwargs:
+        """
+        self.__gridSpacing = gridSpacing
+        self.__points = points
+        self.__rasterData = data
+
+        if ('dataType' in kwargs.keys()):
+            self.__dataType = kwargs['dataType']
+        if ('extent' in kwargs.keys()):
+            self.__extent = kwargs['extent']
+
+
+
+if __name__ == '__main__':
+    pass

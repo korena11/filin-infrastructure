@@ -25,7 +25,6 @@ if __name__ == '__main__':
 
 
     #draw
-
     plt.plot(x,y,'-b')
     plt.axis('equal')
     plt.show()
