@@ -1,7 +1,6 @@
 # Updated Last on 13/06/2014 14:07
  
 import numpy as np
-# import shapefile
 from string import split
 from numpy import array, asarray, hstack, tile, ndarray, where, savetxt
 from PointSet import PointSet
@@ -10,6 +9,7 @@ from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 
 from shapefile import Writer, Reader, POINTZ
+import linecache
 
 # splitline = lambda line : [float(x) for x in split(line, ' ')]
 # numpy.array(map(splitline,file))
@@ -23,24 +23,25 @@ class IOFactory:
     
     Write PointSet Data to different types of file: .pts(TODO), .xyz(TODO), shapeFile
     """
-    
+
+    # ---------------------------READ -------------------------------
     @classmethod    
-    def ReadPts( cls, fileName, pointSetList, **kwargs ):
+    def ReadPts( cls, filename, pointsetlist, **kwargs ):
         """
         Reading points from *.pts file
         Creates one or more PointSet objects, returned through pointSetList 
         
-        :Args:
-            fileName (str): name of .pts file
-            pointSetList (list): place holder for created PointSet objects            
+
+        :param fileName (str): name of .pts file
+        :param pointSetList (list): place holder for created PointSet objects
+        :param merge (boolean) : True to merge points in file; False do no merge
             
-        :Returns:
-             int.  Number of PointSet objects created
- 
+
+        :return int.  Number of PointSet objects created
         """
         
         # Opening file and reading all lines from it
-        fin = open( fileName )
+        fin = open( filename )
         fileLines = fin.read()
         fin.close()
         
@@ -68,7 +69,7 @@ class IOFactory:
             # Read the points
             currentLines = lines[readLines + 1: readLines + numPoints + 1]                                                                                    
             # Converting lines to 3D Cartesian coordinates Data                
-            data = map( cls.__SplitPtsString, currentLines )            
+            data = map( cls.__splitPtsString, currentLines )
             # advance lines counter
             readLines += numPoints + 1
 
@@ -89,11 +90,14 @@ class IOFactory:
                     intensity = np.asarray( data[:, 3], dtype = np.int )         
                 # Create the PointSet object
                 pointSet = PointSet( xyz, rgb, intensity )            
-                pointSetList.append( pointSet )        
+                pointsetlist.append(pointSet)
                 
         del lines
-        
-        return len( pointSetList )
+
+        if kwargs.get('merge', True):
+                return cls.__mergePntList(pointSetList)
+        else:
+            return len( pointsetlist )
     
     
     @classmethod    
@@ -141,7 +145,7 @@ class IOFactory:
             line2del = line2del[-2::-2]  # there two lines one after another with length 1, we need the first one
         for i2del in line2del:
             del lines[i2del:i2del + 10] 
-        data = map( cls.__SplitPtsString, lines )
+        data = map( cls.__splitPtsString, lines )
         line2del = where( asarray( data )[:, 0:4] == [0, 0, 0, 0.5] )[0]
         data = np.delete( data, line2del, 0 )         
 
@@ -195,40 +199,61 @@ class IOFactory:
         pointSetList.append( pointSet )
         
         return len( pointSetList )
-    
-    
-    @classmethod    
-    def MergePntList( cls, pointSetList ):
-        '''
-        Merging several pointset
-        
-        :Args:
-            - pointSetList: a list of PointSets
-        :Returns:
-            - refPntSet: merged PointSet
-        '''
-        list_length = len( pointSetList )
-        if list_length > 1:
-            refPntSet = pointSetList[0]
-            fields_num = refPntSet.FieldsDimension
-            for pntSet in pointSetList[1::]:
-                if fields_num == 7:
-                    refPntSet.AddData2Fields( pntSet.ToNumpy(), field = 'XYZ' )
-                    refPntSet.AddData2Fields( pntSet.RGB, field = 'RGB' )
-                    refPntSet.AddData2Fields( pntSet.Intensity, field = 'Intensity' )
-                elif fields_num == 6:
-                    refPntSet.AddData2Fields( pntSet.ToNumpy(), field = 'XYZ' )
-                    refPntSet.AddData2Fields( pntSet.RGB, field = 'RGB' )
-                elif fields_num == 4:
-                    refPntSet.AddData2Fields( pntSet.ToNumpy(), field = 'XYZ' )
-                    refPntSet.AddData2Fields( pntSet.Intensity, field = 'Intensity' )
-                else:
-                    refPntSet.AddData2Fields( pntSet.ToNumpy(), field = 'XYZ' )
-            
-            return refPntSet
+
+    @classmethod
+    def ReadShapeFile(cls, fileName, pointSetList):
+        """
+         Importing points from shapefiles
+         :Todo:
+             - make small functions from other kinds of shapefiles rather than polylines
+
+         :Args:
+             fileName (str): Full path and name of the shapefile to be created (not including the extension)
+             pointSetList (list): place holder for created PointSet objects
+         """
+        shape = Reader(fileName)
+
+        if shape.shapeType == 3:
+            shapeRecord = shape.shapeRecords()
+            polylinePoints = map(cls.__ConvertRecodrsToPoints, shapeRecord)
+
+            for i in (polylinePoints):
+                pointSet = PointSet(i)
+                pointSetList.append(pointSet)
+
+
         else:
-            return pointSetList[0]
-    
+            return 0
+
+    def read_ascii_grid(cls, filename, **kwargs):
+        """
+
+        :param filename: .asc filename
+        :param raster: rasterProperty variable, will hold the spatial information data
+        :return: raster numpy array
+
+        """
+        #:TODO CHECK RUNNING (wasn't debugged)
+
+        myArray = np.loadtxt(filename, skiprows=6)
+
+        for i in range(0,6):
+            line = linecache.getline(filename, i)
+            spatialData = cls.__splitPtsString(line)[1]
+
+        ncolmns = spatialData[0]
+        nrows = spatialData[1]
+        xll = spatialData[2]
+        yll = spatialData[3]
+        cellSize = spatialData[4]
+        nodata_value = spatialData[5]
+
+        if ('raster' in kwargs.keys()):
+            kwargs['raster'].setValues(ncolumns=ncolmns, nrows=nrows, extent={'east': xll, 'south': yll},
+                                       cellSize=cellSize, noDataValue=nodata_value)
+
+
+    # ---------------------------WRITE -------------------------------
     @classmethod
     def WriteToPts( cls, points, path ):
         '''
@@ -255,49 +280,7 @@ class IOFactory:
         savetxt( path, points.Size, fmt = '%long' )
         with open( path, 'a' ) as f_handle:
             savetxt( f_handle, data, fmt, delimiter = '\t', newline = '\n' )
-    
-    
-    @classmethod 
-    def __SplitPtsString( cls, line ):
-        """ 
-        Extracting from a string the Data of a point (3D coordinates, intensity, color)
-                
-        :Args:
-            - line: A string containing a line from a *.pts file
-                    
-        :Returns:
-            -  An array containing all existing Data of a point            
-        """
-        tmp = split( line, ' ' )
-        return map( float, tmp )
-    
-        # return [float(x) for x in split(line, ' ')]
-    
-    @classmethod 
-    def ReadShapeFile( cls, fileName, pointSetList ):
-        """
-         Importing points from shapefiles
-         :Todo: 
-             - make small functions from other kinds of shapefiles rather than polylines
-           
-         :Args:
-             fileName (str): Full path and name of the shapefile to be created (not including the extension)
-             pointSetList (list): place holder for created PointSet objects
-         """
-        shape = Reader( fileName )
-         
-        if shape.shapeType == 3:
-            shapeRecord = shape.shapeRecords()
-            polylinePoints = map( cls.__ConvertRecodrsToPoints, shapeRecord )
-            
-            for i in ( polylinePoints ):
-                pointSet = PointSet( i )          
-                pointSetList.append( pointSet )        
-         
-            
-        else:
-            return 0 
-    
+
     @classmethod
     def WriteToShapeFile( cls, pointSet, fileName, **kwargs ):
         """
@@ -353,8 +336,9 @@ class IOFactory:
 #         map(w.record, attributes2)
         w.records = map( ndarray.tolist, attributes )
         
-        w.save( fileName )                
-    
+        w.save( fileName )
+
+    # ---------------------------PRIVATES -------------------------------
     @classmethod
     def __ConvertRecodrsToPoints( cls, shapeRecord ):
         """ 
@@ -366,9 +350,57 @@ class IOFactory:
         
         points = array( shapeRecord.shape.points )
         return points
-    
-    
-     
+
+
+    @classmethod
+    def __mergePntList(cls, pointSetList):
+        '''
+        Merging several pointset
+
+        :Args:
+            - pointSetList: a list of PointSets
+        :Returns:
+            - refPntSet: merged PointSet
+        '''
+        # TODO: changed from MegrePntList to __MergePntList. CHECK WHERE WAS IN USE!
+
+        list_length = len(pointSetList)
+        if list_length > 1:
+            refPntSet = pointSetList[0]
+            fields_num = refPntSet.FieldsDimension
+            for pntSet in pointSetList[1::]:
+                if fields_num == 7:
+                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field='XYZ')
+                    refPntSet.AddData2Fields(pntSet.RGB, field='RGB')
+                    refPntSet.AddData2Fields(pntSet.Intensity, field='Intensity')
+                elif fields_num == 6:
+                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field='XYZ')
+                    refPntSet.AddData2Fields(pntSet.RGB, field='RGB')
+                elif fields_num == 4:
+                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field='XYZ')
+                    refPntSet.AddData2Fields(pntSet.Intensity, field='Intensity')
+                else:
+                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field='XYZ')
+
+            return refPntSet
+        else:
+            return pointSetList[0]
+
+    @classmethod
+    def __splitPtsString(cls, line):
+        """
+        Extracting from a string the Data of a point (3D coordinates, intensity, color)
+
+        :Args:
+            - line: A string containing a line from a *.pts file
+
+        :Returns:
+            -  An array containing all existing Data of a point
+        """
+        tmp = split(line, ' ')
+        return map(float, tmp)
+
+        # return [float(x) for x in split(line, ' ')]
      
         
      

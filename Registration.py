@@ -310,40 +310,36 @@ if __name__ == '__main__':
 #     sData = Registration.PointSet2Array(fileName_s)   
 #     sourceData = Registration.TransformData(sData, transl_4, angle_4, axis_4)
     pointSetList = []
-    numPSets = IOFactory.ReadPts( fileName_s, pointSetList )
-    if numPSets > 1:
-        pointSet = IOFactory.MergePntList( pointSetList )
-        pp = pointSet.ToNumpy() 
-        # remove duplicate points
-        b = np.ascontiguousarray( pp ).view( np.dtype( ( np.void, pp.dtype.itemsize * pp.shape[1] ) ) )
+    pointSet = IOFactory.ReadPts( fileName_s, pointSetList, merge=True )
+
+    pp = pointSet.ToNumpy()
+    # remove duplicate points
+    b = np.ascontiguousarray( pp ).view( np.dtype( ( np.void, pp.dtype.itemsize * pp.shape[1] ) ) )
 #         _, idx = np.unique( b, return_index = True )
 #         pp = pp[idx]      
-        sourceData = np.unique( b ).view( pp.dtype ).reshape( -1, pp.shape[1] )  # speed-up the procedure
-        del pointSet
-        pointSet_s = PointSet( pp )
-    else:
-        pointSet_s = pointSetList[0]
-        sourceData1 = pointSet_s.ToNumpy()
+    sourceData = np.unique( b ).view( pp.dtype ).reshape( -1, pp.shape[1] )  # speed-up the procedure
+    del pointSet
+
+    pointSet_s = PointSet( pp )
+    sourceData1 = pointSet_s.ToNumpy()
 #     sourceData = Registration.PointSet2Array(fileName_s) 
  
     print "Target data..." 
 #     tData = Registration.PointSet2Array(fileName_t)
 #     targetData = Registration.TransformData(tData, transl_5, angle_5, axis_5)
     pointSetList = []
-    numPSets = IOFactory.ReadPts( fileName_t, pointSetList )
-    if numPSets > 1:
-        pointSet = IOFactory.MergePntList( pointSetList )
-        pp = pointSet.ToNumpy() 
-        # remove duplicate points
-        b = np.ascontiguousarray( pp ).view( np.dtype( ( np.void, pp.dtype.itemsize * pp.shape[1] ) ) )
+    pointSet = IOFactory.ReadPts( fileName_t, pointSetList, merge=True )
+    pp = pointSet.ToNumpy()
+    # remove duplicate points
+    b = np.ascontiguousarray( pp ).view( np.dtype( ( np.void, pp.dtype.itemsize * pp.shape[1] ) ) )
 #         _, idx = np.unique( b, return_index = True )
 #         pp = pp[idx]      
-        targetData = np.unique( b ).view( pp.dtype ).reshape( -1, pp.shape[1] )  # speed-up the procedure
-        del pointSet
-        pointSet_t = PointSet( pp )
-    else:
-        pointSet_t = pointSetList[0]
-        targetData1 = pointSet_t.ToNumpy() 
+    targetData = np.unique( b ).view( pp.dtype ).reshape( -1, pp.shape[1] )  # speed-up the procedure
+    del pointSet
+    pointSet_t = PointSet( pp )
+
+
+    targetData1 = pointSet_t.ToNumpy()
     
     fig_ = Visualization.RenderPointSet( pointSet_t, renderFlag = 'color', color = ( 1, 0, 0 ), pointSize = 1.0 )
     Visualization.RenderPointSet( pointSet_s, renderFlag = 'color', _figure = fig_, color = ( 0, 0, 1 ), pointSize = 1.0 )
