@@ -17,12 +17,12 @@ from functools import partial
 from scipy import interpolate
 import RasterVisualizations
 
-def getValueSubpix(img, location_x, location_y):
+def getValueSubpix(img, location_row, location_column):
     """
 
     :param img: the image to subsample (grayscale, 8bit)
-    :param location_x: the column location where we want to subsample
-    :param location_y: the row location where we want to subsample
+    :param location_row: the row location where we want to subsample
+    :param location_column: the column location where we want to subsample
     :param kind: interpolation type. Default: bilinear
 
     :return: the image subpixel value
@@ -34,11 +34,11 @@ def getValueSubpix(img, location_x, location_y):
     newImage[:-1, :-1] = img
 
     # bilinear interpolation: [1-a a] [[img[i,j] img[i, j+1],[img[i+1,j], img[i+1,j+1]] [[1-b][b]]
+    i = np.int(round(location_row))
+    j = np.int(round(location_column))
 
-    i = np.int(round(location_x))
-    j = np.int(round(location_y))
-    a = location_x - i
-    b = location_y - j
+    a = location_row - i
+    b = location_column - j
 
     a = np.array([1-a, a])
     b = np.array([1-b,b])
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
             c[:, [0, 1]] = c[:, [1, 0]] #swapping between columns: x will be at the first column and y on the second
 
-            if np.any(c < 0) or np.any(c[:,0] > grad_img.shape[0]) or np.any(c[:,1] > grad_img.shape[1]):
+            if np.any(c < 0) or np.any(c[:,0] > grad_img.shape[1]) or np.any(c[:,1] > grad_img.shape[0]):
                 break
 
             plt.plot(c[:,0], c[:,1], '-r')
@@ -95,17 +95,15 @@ if __name__ == '__main__':
 
 
             # contour tangent
-            # dxdy = np.zeros((c.shape[0],2), np.float)
-            # dxdy[0:-1,:] = np.diff(c, axis=0) / gridSpacing
-            # dxdy[-1,:] = (c[-1,:] - c[-2,:]) / gridSpacing
-            # tangent_c = dxdy / norm(dxdy, axis=1)[:, None] #normalize T
+
             dc_dtau = np.gradient(c, axis=0)
             dc_dtau = dc_dtau / norm(dc_dtau, axis=1)[:, None] #normalize T
 
 
-            # image gradient at contour points
+            # curve normal
             normal_c = dc_dtau.dot(np.array([[0, 1], [-1, 0]]))
 
+            # image gradient at contour points
             grad_img_c = np.asarray(map(partial(getValueSubpix,grad_img), c[:,0], c[:,1]))
 
             #contour movement
