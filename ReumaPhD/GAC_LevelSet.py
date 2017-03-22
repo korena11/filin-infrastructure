@@ -47,9 +47,9 @@ if __name__ == '__main__':
                        cv2.COLOR_BGR2GRAY)
     img = cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)  # Convert to normalized floating point
 
-    beta = 10
-    stepsize = .025
-    alpha = 1.e-6
+    beta = 1
+    stepsize = .05
+    alpha = 1.e-5
     # define an initial contour via phi(x,y) = 0
     phi = np.ones(img.shape)
     img_height, img_width = img.shape
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     MyTools.imshow(img)
 
     # ---- define g(I) ---
-    imgGradient = MyTools.computeImageGradient(img, gradientType='L2', ksize=5, sigma=1.5)
+    imgGradient = MyTools.computeImageGradient(img, gradientType='L2', ksize=5, sigma=7.5)
     g = 1/(1+imgGradient)
 
     g_x, g_y = MyTools.computeImageDerivatives(g, 1, ksize=3)
@@ -72,14 +72,14 @@ if __name__ == '__main__':
     g = cv2.GaussianBlur(g, (0, 0), 2.5)
 
     epsilon = 100
-    while epsilon > 12:
+    while epsilon > 15:
     #for i in range(0,1500):
 
         # computing phi derivatives
         phi_x, phi_y, phi_xx, phi_yy, phi_xy = MyTools.computeImageDerivatives(phi, 2)
 
         # div(phi/|phi|^2)
-        div_phi =  ((phi_xx * phi_y**2 + phi_yy * phi_x**2 - 2 * phi_xy * phi_x * phi_y) / (1+phi_x**2 + phi_y**2)) + alpha
+        div_phi =  beta *((phi_xx * phi_y**2 + phi_yy * phi_x**2 - 2 * phi_xy * phi_x * phi_y) / (1+phi_x**2 + phi_y**2)**3) + alpha
 
         # dot product of \nabla g and \nabla phi
         grad_g_dot_grad_phi = g_x * phi_x + g_y * phi_y
