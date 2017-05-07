@@ -12,6 +12,7 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
+
 from ContourDevelopment import getValueSubpix
 from numpy.linalg import norm
 from numpy import sin, cos, pi

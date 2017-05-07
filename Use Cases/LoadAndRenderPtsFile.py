@@ -7,7 +7,7 @@ from IOFactory import IOFactory
 
 if __name__ == "__main__":
     
-    fileName = '..\Sample Data\Geranium2Clouds.pts'
+    fileName = '/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/PCLs/channel2.pts'
     pointSetList = []
     IOFactory.ReadPts(fileName, pointSetList)
     

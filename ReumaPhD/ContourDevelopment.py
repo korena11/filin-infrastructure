@@ -28,14 +28,33 @@ def getValueSubpix(img, location_row, location_column):
     :return: the image subpixel value
     """
     # TODO: add other interpolations
-
-    # pad image for edges cases
-    newImage = np.zeros((img.shape[0]+1, img.shape[1]+1))
-    newImage[:-1, :-1] = img
-
-    # bilinear interpolation: [1-a a] [[img[i,j] img[i, j+1],[img[i+1,j], img[i+1,j+1]] [[1-b][b]]
     i = np.int(round(location_row))
     j = np.int(round(location_column))
+
+    # pad image for edge cases
+    newImage = img
+
+    if i < 0:
+        newImage = np.ones((img.shape[0] + np.abs(i), img.shape[1])) * 1000
+        newImage[np.abs(i):, :] = img
+        i = 0
+
+    if j < 0:
+        newImage = np.ones((img.shape[0], img.shape[1]+ np.abs(j))) * 1000
+        newImage[:, np.abs(j):] = img
+        j = 0
+
+    if i >= img.shape[0]-1:
+        add = (i - img.shape[0]) + 2
+        newImage = np.ones((img.shape[0] + add, img.shape[1])) * -1000
+        newImage[:-add, :] = img
+
+    if j >= img.shape[1]-1:
+        add = (j - img.shape[1]) + 2
+        newImage = np.ones((img.shape[0], img.shape[1]  + add)) * -1000
+        newImage[:, :-add] = img
+
+    # Bilinear interpolation: [1-a a] [[img[i,j] img[i, j+1],[img[i+1,j], img[i+1,j+1]] [[1-b][b]]
 
     a = location_row - i
     b = location_column - j
@@ -45,10 +64,10 @@ def getValueSubpix(img, location_row, location_column):
 
     imgVals = newImage[i:i+2, j:j+2]
 
-    subpixVal = a.dot(imgVals).dot(b.T)
+    return a.dot(imgVals).dot(b.T)
 
 
-    return subpixVal
+
 
 if __name__ == '__main__':
 
@@ -84,7 +103,6 @@ if __name__ == '__main__':
 
     for c in contours:
         for k in np.arange(0, 5):
-
             c[:, [0, 1]] = c[:, [1, 0]] #swapping between columns: x will be at the first column and y on the second
 
             if np.any(c < 0) or np.any(c[:,0] > grad_img.shape[1]) or np.any(c[:,1] > grad_img.shape[0]):

@@ -94,10 +94,15 @@ class IOFactory:
                 
         del lines
 
-        if kwargs.get('merge', True):
-                return cls.__mergePntList(pointSetList)
+        if 'merge' in kwargs:
+
+            if kwargs.get('merge', True):
+                    return cls.__mergePntList(pointSetList)
+            else:
+                return len(pointsetlist)
         else:
             return len( pointsetlist )
+
     
     
     @classmethod    
