@@ -1,16 +1,20 @@
 from tvtk.api import tvtk
 from numpy import arange, array
+from PointSet import PointSet
 
-class PointSubSet:
+class PointSubSet(PointSet):
     """
     Holds a subset of a PointSet
     
     Provides the same interface as PointSet        
     """    
     def __init__(self, points, indices):
-        
-        
-        self.pointSet = points
+
+        if isinstance(points, PointSet):
+            self.pointSet = points
+        else:
+            self.pointSet =super(PointSubSet, self).__init__(points)
+
         self.indices = indices
     
     @property    

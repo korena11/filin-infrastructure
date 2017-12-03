@@ -4,12 +4,11 @@ photo-lab-3\Reuma
 16, Jan, 2017 
 '''
 
+import platform
+
 import numpy as np
-from matplotlib import pyplot as plt
-from RasterProperty import RasterProperty
 from numpy import pi, sqrt, arctan, arctan2, sin, cos
 
-import platform
 if platform.system() == 'Linux':
     import matplotlib
     matplotlib.use('TkAgg')

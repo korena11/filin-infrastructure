@@ -5,9 +5,10 @@ photo-lab-3\Reuma
 '''
 
 import numpy as np
-from matplotlib import pyplot as plt
-from RasterProperty import RasterProperty
 from scipy import interpolate
+
+from RasterData import RasterProperty
+
 
 class RasterFactory:
     """

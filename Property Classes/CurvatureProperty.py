@@ -7,8 +7,8 @@ class CurvatureProperty( BaseProperty ):
 
 
     def __init__( self, points, curvature ):
-        
-        self._BaseProperty__points = points
+        super(CurvatureProperty, self).__init__(points)
+        # self._BaseProperty__points = points
         self.__curvature = curvature
     
     @property    

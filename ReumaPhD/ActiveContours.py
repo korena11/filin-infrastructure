@@ -4,24 +4,26 @@ photo-lab-3\Reuma
 30, Jan, 2017 
 
 '''
-from ContourDevelopment import getValueSubpix
-from scipy.linalg import toeplitz
-import numpy.linalg as LA
-from scipy.ndimage import filters
-from numpy import sin, cos, pi
-from matplotlib import pyplot as plt
-from MyTools import imshow
-from skimage import measure
-from functools import partial
-import matplotlib.mlab as mlab
-import numpy as np
 import platform
-import cv2
+from functools import partial
 
 if platform.system() == 'Linux':
     import matplotlib
-
     matplotlib.use('TkAgg')
+
+import cv2
+import matplotlib.mlab as mlab
+import numpy as np
+import numpy.linalg as LA
+from matplotlib import pyplot as plt
+from numpy import sin, cos, pi
+from scipy.linalg import toeplitz
+from scipy.ndimage import filters
+
+from ContourDevelopment import getValueSubpix
+from MyTools import imshow
+
+
 
 
 def createGaussianImage(gridSpacing = .025, noise = 0.01):
@@ -32,28 +34,6 @@ def createGaussianImage(gridSpacing = .025, noise = 0.01):
     gaussian = img.copy()
 
     img = img + cv2.randn(gaussian, 0, noise)
-
-
-def _buildPentadiagonal(n, array):
-    '''
-    Builds a pentadiagonal matrix
-    :param n: numer of points (repetitions of array)
-    :param array: array according to which the pentadiagonal matrix is solved
-
-    :return: a Toeplitz matrix array to the arrays sent
-    '''
-
-    # --- build array according to which the Toeplitz matrix will be built ---
-    numElements = n % array.shape[1]
-    numRepetitions = np.int(n / array.shape[1])
-
-    for i in range(numRepetitions):
-        array = np.append(array, array)
-
-    if numElements != 0:
-        partArray = array[:numElements]
-        array = np.append(array, partArray)
-    return toeplitz(array)
 
 
 def returnPentadiagonal(n, a, b, **kwargs):
@@ -195,11 +175,10 @@ def GVF(energy, **kwargs):
     return u, v
 
 
-
 if __name__ == '__main__':
 
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/Images/tractor.png', 1),
+    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/twosink.png', 1),
                        cv2.COLOR_BGR2GRAY)
 
     plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
@@ -212,8 +191,8 @@ if __name__ == '__main__':
     w_term = 0.6
 
     # space and time steps
-    dt = 0.07
-    ds = 2.
+    dt = 0.7
+    ds = 10.
     ds2 = ds ** 2
 
     # other constants
@@ -221,7 +200,7 @@ if __name__ == '__main__':
     b = beta * dt / ds2 ** 2
 
     # define an initial contour
-    radius = 75
+    radius = 1250
     s = np.arange(0, 2 * pi * radius, ds)
 
     # tau \in [0,1];  s (arclencth reparametrization) \in [0,2\pi*radius]
@@ -258,15 +237,9 @@ if __name__ == '__main__':
     epsilon = 1000
     iternum = range(500)
     for i in iternum:
-
-
-
         # external force - using energy_image
         fx = np.array(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0]))
         fy = np.array(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0]))
-
-
-
 
         # internal force - solving the (I-timeStep * A) = x, +timeStep * fx,y
         # contour movement
@@ -275,7 +248,7 @@ if __name__ == '__main__':
         c[:, 1] = invM.dot(c[:, 1] + dt * fy)
 
         epsilon = np.linalg.norm(c - ct_1)
-        print epsilon
+        print(epsilon)
         plt.cla()
         plt.axis("off")
         plt.ylim([img.shape[0], 0])

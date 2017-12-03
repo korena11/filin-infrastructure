@@ -16,9 +16,20 @@ from matplotlib import pyplot as plt
 import matplotlib.animation as manimation
 import cv2
 from numpy.linalg import norm
+
+
+import matplotlib.animation as animation
+
+import pylab as pl
+
+
+
 if __name__ == '__main__':
 
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/Images/channel91.png', 1),
+
+
+
+    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/channel91.png', 1),
                        cv2.COLOR_BGR2GRAY)
 
     FFMpegWriter = manimation.writers['ffmpeg']
@@ -29,8 +40,6 @@ if __name__ == '__main__':
     fig = plt.figure()
 
     plt.imshow(img, interpolation='nearest', cmap='gray')
-
-
 
     dt = 0.01
     ds = 5.
@@ -75,11 +84,11 @@ if __name__ == '__main__':
 
     x0, y0 = 0, 0
 
-    with writer.saving(fig, "writer_test.mp4", 100):
+    with writer.saving(fig, "writer_test1.mp4", 100):
         for i in range(100):
           #  x0 += 10 * np.random.randn()
             y_tau += 10
             l.set_data(x_tau, y_tau)
             writer.grab_frame()
 
-    print 'done'
+    print ('done')

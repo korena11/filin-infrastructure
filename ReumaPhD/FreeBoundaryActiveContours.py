@@ -30,9 +30,10 @@ def closestBoundaryPoint(point, boundary_curve, **kwargs):
     :param point: point [x y] (1x2) numpy array
     :param boundary_curve: the boundary curve [x y] (n x 2) numpy array
     :param kwargs:
-    #TODO: threshold when to resample the boundary for better "guess"
+
     :return: the closest point in the boundary curve to the given point np.ndarray(2,1)
     '''
+    # TODO: threshold when to resample the boundary for better "guess"
 
     dist2 = np.sum(np.power(boundary_curve - point,2), axis=1)
 
@@ -135,4 +136,4 @@ if __name__ == '__main__':
             writer.grab_frame()
         plt.show()
 
-        print 'done'
+        print ('done')
