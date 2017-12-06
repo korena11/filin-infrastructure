@@ -15,8 +15,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 from scipy.stats import norm
 from RasterData import RasterData
-from PointSet import PointSet
 from EigenFactory import EigenFactory
+from ClassificationProperty import ClassificationProperty
 
 # Classification codes
 RIDGE  =    1
@@ -38,7 +38,7 @@ class ClassificationFactory:
         :param significance level for hypothesis testing. Default: 5%
         :return: a classificaiton map
         """
-        #TODO Adjust function for individual points. Now works for raster only
+        # TODO Adjust function for point clouds. Now works for raster only
 
         if 'alpha' in kwargs:
             alpha = kwargs['alpha']
@@ -110,11 +110,13 @@ class ClassificationFactory:
             saddle_map = np.zeros(data.shape)
             saddle_map[(z_min > oneTail) * (z_max <-oneTail)] = SADDLE
 
-            print 'hello'
+            return ClassificationProperty(data, pit_map, valley_map, ridge_map, peak_map, flat_map, saddle_map)
 
 
 if __name__ == '__main__':
     from IOFactory import IOFactory
 
-    raster = IOFactory.rasterFromAscFile('/home/photo-lab-3/ownCloud/Data/sinkholes11.asc')
-    ClassificationFactory.ClassifyPoints(raster, 5)
+    raster = IOFactory.rasterFromAscFile('/home/photo-lab-3/ownCloud/Data/sinkholei11.asc')
+    classified = ClassificationFactory.ClassifyPoints(raster, 5)
+    plt.imshow(classified.ridge)
+    plt.show()
