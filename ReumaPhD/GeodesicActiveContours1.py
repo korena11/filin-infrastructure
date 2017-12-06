@@ -1,41 +1,48 @@
-'''
+"""
 infraGit
 photo-lab-3\Reuma
 06, Feb, 2017
 
  Geodesic active contours (Caselles, Kimmel and Sapiro, 1997), PART I
-'''
+"""
 
-from ContourDevelopment import getValueSubpix
-from numpy.linalg import norm
-from numpy import sin, cos, pi
-from matplotlib import pyplot as plt
-import MyTools
-from functools import partial
-import numpy as np
 import platform
-import cv2
-
-
 if platform.system() == 'Linux':
     import matplotlib
 
     matplotlib.use('TkAgg')
 
+from ContourDevelopment import getValueSubpix
+from numpy.linalg import norm
+from numpy import sin, cos, pi
+from matplotlib import pyplot as plt
+import MyTools as mt
+import Saliency as sl
+from functools import partial
+import numpy as np
+
+import cv2
+
+
 if __name__ == '__main__':
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/Images/Image.bmp', 1),
+    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png', 1),
                        cv2.COLOR_BGR2GRAY)
     img = cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)  # Convert to normalized floating point
-    dt = 2.
-    alpha = .1
+
+    # img  = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png'), cv2.COLOR_BGR2RGB)
+    # sigma = 2.5
+    # img = sl.distance_based(img, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma],
+    #                    feature='normals')
+    dt = 0.05
+    alpha = 1e-3
 
 #    plt.imshow(img, interpolation='nearest', cmap='gray')
 
     # define an initial contour
-    ds = 8.
+    ds = 5.
 
-    radius = 60
+    radius = 20
     s = np.arange(0, 2 * pi * radius, ds)
     tau = np.arange(0, 2 * pi, 0.05)
 
@@ -48,11 +55,11 @@ if __name__ == '__main__':
 
     #y_tau = img.shape[0] / 2 + radius * sin(tau)
     y_tau = np.append(y_tau, y_tau[0])
-    c = np.vstack((x_tau, y_tau)).T
+    c = np.vstack((y_tau, x_tau)).T
 
 
     # ---- define g(\nabla I) ---
-    imgGradient = MyTools.computeImageGradient(img, gradientType='L1', ksize=3)
+    imgGradient = mt.computeImageGradient(img, gradientType='L1', ksize=3)
 #    imgGradient[np.isinf(imgGradient)] = 1e6
     g = - imgGradient
     g_x = cv2.Sobel(g, cv2.CV_64F, 0, 1, ksize=3)
@@ -74,7 +81,7 @@ if __name__ == '__main__':
 
     epsilon = 1000
 
-    plt.plot(c[:, 0], c[:, 1], '-b')
+    plt.plot(c[:, 1], c[:, 0], '-b')
   #  plt.show()
     plt.figure()
     # -------- Curve evolution -----------------
@@ -82,7 +89,7 @@ if __name__ == '__main__':
         if np.any(c < 0) or np.any(c[:, 0] > img.shape[0]) or np.any(c[:, 1] > img.shape[1]):
             break
 
-        c, dc_dtau, d2c_dtau2 = MyTools.curveCentralDerivatives(c, ds)
+        c, dc_dtau, d2c_dtau2 = mt.curveCentralDerivatives(c, ds)
         #  curve tangent
         dc_dtau__ = np.gradient(c, ds, axis=0)
         tangent = dc_dtau / norm(dc_dtau, axis=1)[:, None]  # normalize T
@@ -111,7 +118,7 @@ if __name__ == '__main__':
         epsilon = norm(dc_dt)
         c += dc_dt
 
-        print epsilon
+        print (epsilon)
         plt.cla()
         plt.axis("off")
         plt.ylim([img.shape[0], 0])
@@ -120,6 +127,6 @@ if __name__ == '__main__':
         plt.imshow(g, cmap='gray')
 
         plt.plot(c[:, 1], c[:, 0], '-r.')
-        plt.pause(1e-6)
+        plt.pause(1e-10)
 
     plt.show()

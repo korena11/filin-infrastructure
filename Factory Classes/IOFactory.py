@@ -7,9 +7,11 @@ from PointSet import PointSet
 from ColorProperty import ColorProperty
 from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-
+from RasterData import RasterData
 from shapefile import Writer, Reader, POINTZ
-import linecache
+from sys import exc_info
+from traceback import print_tb
+from osgeo import gdal
 
 # splitline = lambda line : [float(x) for x in split(line, ' ')]
 # numpy.array(map(splitline,file))
@@ -230,32 +232,40 @@ class IOFactory:
         else:
             return 0
 
-    def read_ascii_grid(cls, filename, **kwargs):
-        """
+    @classmethod
+    def rasterFromGDAL(cls, path):
+        try:
+            ds = gdal.Open(path)
 
-        :param filename: .asc filename
-        :param raster: rasterProperty variable, will hold the spatial information data
-        :return: raster numpy array
+            return RasterData(ds.ReadAsArray(), ds.GetGeoTransform(), spatial_reference=ds.GetProjection().split('\"')[-2])
+        except:
+            print "Unexpected error: ", exc_info()[0]
+            print_tb(exc_info()[2])
+            return None
 
-        """
-        #:TODO CHECK RUNNING (wasn't debugged)
+    @classmethod
+    def rasterFromAscFile(cls, path, projection = None):
+        try:
+            fin = open(path, 'r')
+            filelines = fin.readlines()
+            fin.close()
+        except:
+            print "Unexpected error: ", exc_info()[0]
+            print_tb(exc_info()[2])
+            return None
 
-        myArray = np.loadtxt(filename, skiprows=6)
+        ncols = np.int(filelines[0].split(' ')[-1])
+        nrows = np.int(filelines[1].split(' ')[-1])
+        xllcorner = np.float32(filelines[2].split(' ')[-1])
+        yllcorner = np.float32(filelines[3].split(' ')[-1])
+        cellsize = np.float32(filelines[4].split(' ')[-1])
+        nodata_value = np.float32(filelines[5].split(' ')[-1])
 
-        for i in range(0,6):
-            line = linecache.getline(filename, i)
-            spatialData = cls.__splitPtsString(line)[1]
+        tmp = lambda x: np.float32(x.split(' ')[:-1])
 
-        ncolmns = spatialData[0]
-        nrows = spatialData[1]
-        xll = spatialData[2]
-        yll = spatialData[3]
-        cellSize = spatialData[4]
-        nodata_value = spatialData[5]
+        data = array(map(tmp, filelines[6:]))
+        return RasterData(data, gridSpacing = cellsize, geoTransform=(xllcorner, yllcorner, 1., 1.), spatial_reference=projection, voidData = nodata_value)
 
-        if ('raster' in kwargs.keys()):
-            kwargs['raster'].setValues(ncolumns=ncolmns, nrows=nrows, extent={'east': xll, 'south': yll},
-                                       cellSize=cellSize, noDataValue=nodata_value)
 
 
     # ---------------------------WRITE -------------------------------

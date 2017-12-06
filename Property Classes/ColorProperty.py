@@ -3,8 +3,7 @@ from BaseProperty import BaseProperty
 class ColorProperty(BaseProperty):
     
     def __init__(self, points, rgb):
-        
-        self._BaseProperty__points = points
+        super(ColorProperty, self).__init__(points)
         self.__rgb = rgb
         
     @property
