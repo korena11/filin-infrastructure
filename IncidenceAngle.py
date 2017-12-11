@@ -4,14 +4,15 @@ Created on Nov 26, 2014
 @author: Vera
 '''
 
-import numpy as np
-from NormalsProperty import NormalsProperty
-from IOFactory import IOFactory
-from Visualization import Visualization
-from scipy.spatial import cKDTree
 import functools
-from NormalsFactory import NormalsFactory
+
+import numpy as np
+from scipy.spatial import cKDTree
+
+from IOFactory import IOFactory
+from NormalsProperty import NormalsProperty
 from PointSet import PointSet
+from Visualization import Visualization
 
 
 def Neighbors(pnt, pntSet, rad=None):
@@ -24,6 +25,7 @@ def Neighbors(pnt, pntSet, rad=None):
     :Returns:
         - points: neighbor points
     '''
+
     if rad == None:
         dist = np.linalg.norm(pnt, ord=2)
         rad = 0.15 * dist / 100  # scan_res*range
