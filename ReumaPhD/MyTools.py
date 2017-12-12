@@ -13,56 +13,10 @@ if platform.system() == 'Linux':
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-import matplotlib.animation as animation
 from numpy.linalg import norm
 from scipy.interpolate import interp1d
 from scipy.ndimage import filters
-import pylab as pl
-#import karta
 
-def asciiGrid2Numpy(filename):
-    '''
-    Reads ascii grid from file and returns 2D numpy array  
-    
-
-    :Args:
-    - filename: full ascii grid file name
-    
-    :Returns:
-    2D numpy array
-    
-     
-    '''
-    print('Reading grid...')
-
-    myArray = np.loadtxt(filename, skiprows = 6)
-
-    meanValue = np.mean(np.mean(myArray[np.nonzero(myArray != -9999)]))
-
-    myArray[np.nonzero(myArray == -9999)] = meanValue
-    #
-    print('Done')
-    return myArray
-
-
-def Geotiff2Numpy(filename):
-    '''
-    Reads geotiff from file and returns 2D numpy array  
-    
-    ** karta dependent **
-    ** MAYBE OBSOLETE IF KARTA IS IN USE. **
-    
-    :Args:
-    - filename: full ascii grid file name
-    
-    :Returns:
-    2D numpy array
-    '''
-    print('Reading grid...')
-    # grid_new = karta.raster.read.read_geotiff(filename)
-    #
-    # return karta.raster.AAIGrid.toarray(grid_new)
-    return karta.raster.read_geotiff(filename)  #TODO check if works.
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):
     '''

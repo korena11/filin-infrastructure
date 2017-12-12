@@ -1,17 +1,20 @@
 # Updated Last on 13/06/2014 14:07
- 
-import numpy as np
+
 from string import split
-from numpy import array, asarray, hstack, tile, ndarray, where, savetxt
-from PointSet import PointSet
-from ColorProperty import ColorProperty
-from SegmentationProperty import SegmentationProperty
-from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-from RasterData import RasterData
-from shapefile import Writer, Reader, POINTZ
 from sys import exc_info
 from traceback import print_tb
+
+import numpy as np
+from numpy import array, asarray, hstack, tile, ndarray, where, savetxt
 from osgeo import gdal
+
+from ColorProperty import ColorProperty
+from PointSet import PointSet
+from RasterData import RasterData
+from SegmentationProperty import SegmentationProperty
+from SphericalCoordinatesProperty import SphericalCoordinatesProperty
+from shapefile import Writer, Reader, POINTZ
+
 
 # splitline = lambda line : [float(x) for x in split(line, ' ')]
 # numpy.array(map(splitline,file))
@@ -32,12 +35,10 @@ class IOFactory:
         """
         Reading points from *.pts file
         Creates one or more PointSet objects, returned through pointSetList 
-        
 
         :param fileName (str): name of .pts file
         :param pointSetList (list): place holder for created PointSet objects
-        :param merge (boolean) : True to merge points in file; False do no merge
-            
+        :param merge (boolean): True to merge points in file; False do no merge
 
         :return int.  Number of PointSet objects created
         """
@@ -46,13 +47,11 @@ class IOFactory:
         fin = open( filename )
         fileLines = fin.read()
         fin.close()
-        
-        
+
         # Splitting into list of lines 
         lines = split( fileLines, '\n' )
         del fileLines
-                    
-                    
+
         # Removing the last line if it is empty
         while( True ):
             numLines = len( lines )
@@ -91,7 +90,7 @@ class IOFactory:
                 if data.shape[1] == 4 or data.shape[1] == 7:
                     intensity = np.asarray( data[:, 3], dtype = np.int )         
                 # Create the PointSet object
-                pointSet = PointSet( xyz, rgb, intensity )            
+                pointSet = PointSet(xyz, rgb = rgb, intensity = intensity)
                 pointsetlist.append(pointSet)
                 
         del lines
@@ -105,8 +104,6 @@ class IOFactory:
         else:
             return len( pointsetlist )
 
-    
-    
     @classmethod    
     def ReadPtx( cls, fileName, pointSetList ):
         """
@@ -126,13 +123,11 @@ class IOFactory:
         fin = open( fileName )
         fileLines = fin.read()
         fin.close()
-        
-        
+
         # Splitting into list of lines 
         lines = split( fileLines, '\n' )
         del fileLines
-                    
-                    
+
         # Removing the last line if it is empty
         while( True ):
             numLines = len( lines )

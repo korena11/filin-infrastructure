@@ -1,8 +1,7 @@
 # Class PointSet hold a set of un-ordered 2D or 3D points.
 
-from tvtk.api import tvtk
-import pandas
 from numpy import arange, array, vstack, hstack
+from tvtk.api import tvtk
 
 
 class PointSet(object):
@@ -40,7 +39,7 @@ class PointSet(object):
             self.__xyz = None
             self.__xy = points
 
-            # missing rgb is the size of the points.
+            # TODO: missing rgb is the size of the points.
 
         self.__rgb = properties['rgb']
         self.__intensity = properties['intensity']
