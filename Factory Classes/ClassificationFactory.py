@@ -7,12 +7,10 @@ photo-lab-3\Reuma
 # TODO: - create hypothesis functions for each classification (stopped at ridge)
 # TODO: - make sure that idx do not repeat in multiple classes
 
-import platform
+# if platform.system() == 'Linux':
+import matplotlib
 
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -55,8 +53,9 @@ class ClassificationFactory:
             byaxis = nrows
         dtype = {'names': ['f{}'.format(i) for i in range(byaxis)],
                  'formats': byaxis * [a.dtype]}
-
-        c = np.intersect1d(a.view(dtype), b.view(dtype))
+        aa = a.copy()
+        bb = b.copy()
+        c = np.intersect1d(aa.view(dtype), bb.view(dtype))
 
         return c.view(a.dtype).reshape(-1, byaxis)
 
@@ -66,90 +65,163 @@ class ClassificationFactory:
         Checks that each index belongs to one classification
         :return:
         """
+        if np.size(b) == 0:
+            return a
         newIdx = []
         repeated_Idx = self.intersect2d(a, b)
         if repeated_Idx.shape[0] != 0:
-            for j in a:
-                if np.any(j == repeated_Idx):
-                    for i in repeated_Idx:
-                        if new_precentMap[i] >= self.precentMap[i]:
-                            self.precentMap[i] = new_precentMap[i]
-                            newIdx.append(i)
-                else:
-                    newIdx.append(j)
+            if repeated_Idx.shape[0] == a.shape[0]:
+                tmpidx = new_precentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]] >= \
+                         self.precentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]]
+                newIdx = repeated_Idx[tmpidx]
+            else:
+                for j in a:
+                    if np.any((repeated_Idx[:] == j.tolist()).all(1)):
+                        if new_precentMap[(j[0], j[1])] >= self.precentMap[(j[0], j[1])]:
+                            newIdx.append(j)
+                    else:
+                        newIdx.append(j)
         else:
             newIdx = a
-        return newIdx
+        if len(newIdx) == 0:
+            return np.array([[False, False], [False, False]])
+        else:
+            return newIdx
 
     @classmethod
-    def __pit(self, statistic):
+    def __pit(self, oneTail):
 
         new_precentMap = np.zeros(self.data.shape)
 
-        idx_assigned = np.nonzero(self.precentMap)
+        idx_assigned = np.nonzero(self.classified.classified_map)
 
         # Hypothesis test for pit:
         # lambda_min > eighThreshold (and therefore lambda_max also)
         # Reject when z_min>z_1-alpha; Rejected are the pits
-        idx = np.nonzero(self.z_min > statistic)
+        idx = np.nonzero(self.z_min > oneTail)
 
         # Correct classification and precentMap
-        new_precentMap[idx] = self.z_min[idx] + self.z_max[idx]
+        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
-        self.classified.pit_idx = newidx
+        self.classified.classify_map(newidx, PIT)
         return newidx
 
     @classmethod
-    def __peak(self, statistic):
+    def __peak(self, oneTail):
 
         new_precentMap = np.zeros(self.data.shape)
 
-        idx_assigned = np.nonzero(self.precentMap)
+        idx_assigned = np.nonzero(self.classified.classified_map)
 
         # Hypothesis test for peak:
         # lambda_max < eighThreshold (and therefore lambda_min also)
         # Reject when z_max<-z_1-alpha; Rejected are the peaks
-        idx = np.nonzero(self.z_max < -statistic)
-
+        idx = np.nonzero(self.z_max < -oneTail)
+        new_precentMap[idx] = self.z_max[idx] / 100.
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
-        self.classified.peak_idx = newidx
+        self.classified.classify_map(newidx, PEAK)
         return newidx
 
     @classmethod
-    def __ridge(self, statistic):
-
+    def __flat(self, twoTail):
+        '''
+        Hypothesis test for flat:
+        lambda_min = eighThreshold and lambda_max = eigThreshold
+        '''
         new_precentMap = np.zeros(self.data.shape)
 
-        idx_assigned = np.nonzero(self.precentMap)
+        idx_assigned = np.nonzero(self.classified.classified_map)
 
+        idx = np.nonzero((np.abs(self.z_max) < twoTail) * (np.abs(self.z_min) < twoTail))
+        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
+
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+
+        self.classified.classify_map(newidx, FLAT)
+        return newidx
+
+    @classmethod
+    def __saddle(self, oneTail):
+        # Hypothesis test for saddle:
+        #    lambda_min < eighThreshold and lambda_max > eigThreshold
+        new_precentMap = np.zeros(self.data.shape)
+
+        idx_assigned = np.nonzero(self.classified.classified_map)
+
+        idx = np.nonzero((self.z_min > oneTail) * (self.z_max < -oneTail))
+        new_precentMap[idx] = (self.z_max[idx] + self.z_min[idx]) / 100.
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+
+        self.classified.classify_map(newidx, SADDLE)
+        return newidx
+
+    @classmethod
+    def __ridge(self, oneTail, twoTail):
+
+        new_precentMap = np.zeros(self.data.shape)
+        idx_assigned = np.nonzero(self.classified.classified_map)
         # Hypothesis test for ridge:
         #    1.    lambda_min = eighThreshold and lambda_max > eigThreshold
         # or 2.    lambda_max = eighThreshold and lambda_min > eigThreshold
 
         # 1. reject when  |lambda_min| > z_1-alpha/2 (choose non-rejected) AND when
         #                 lambda_max < -Z_1-alpha (choose reject)
-        ridge_map = np.zeros(data.shape)
-        ridge_map[(np.abs(z_min) < statistic) * (z_max < -statistic)] = RIDGE
-        precentMap[(np.abs(z_min) < twoTail) * (z_max < -oneTail)] = z_min[(np.abs(z_min) < twoTail) * (
-            z_max < -oneTail)] \
-                                                                     + z_max[(np.abs(z_min) < twoTail) * (
-            z_max < -oneTail)]
+        idx = np.nonzero((np.abs(self.z_min) < oneTail) * (self.z_max < -twoTail))
+        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
+
+        # 2. reject when |lambda_max| > z_1-alpha/2 (choose non-rejected) AND when
+        #                lambda_min > Z_1-alpha (choose reject)
+
+        idx2 = np.nonzero(np.abs(self.z_max) < twoTail * (self.z_min < -oneTail))
+        new_precentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
+
+        if idx[0].size != 0 and idx2[0].size != 0:
+            idx = np.hstack((np.array(idx), np.array(idx2)))
+
+        if idx[0].size == 0:
+            idx = idx2
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+
+        self.classified.classify_map(newidx, RIDGE)
+        return newidx
+
+    @classmethod
+    def __valley(self, oneTail, twoTail):
+        '''
+         Hypothesis test for valley:
+            1.    lambda_min = eighThreshold and lambda_max < eigThreshold
+         or 2.    lambda_max = eighThreshold and lambda_min < eigThreshold
+        '''
+        new_precentMap = np.zeros(self.data.shape)
+        idx_assigned = np.nonzero(self.classified.classified_map)
+        # 1. reject when |lambda_min| > z_1-alpha/2 (choose non-rejected) AND when
+        #                lambda_max > Z_1-alpha (choose reject)
+        idx = np.nonzero((np.abs(self.z_min) < twoTail) * (self.z_max > oneTail))
+        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
 
         # 2. reject when |lambda_max| > z_1-alpha/2 (choose non-rejected) AND when
         #                lambda_min < -Z_1-alpha (choose reject)
-        ridge_map[] = RIDGE
-        precentMap[(np.abs(z_max) < twoTail) * (z_min < -oneTail)] = z_min[(np.abs(z_max) < twoTail) * (
-            z_min < -oneTail)] \
-                                                                     + z_max[(np.abs(z_max) < twoTail) * (
-            z_min < -oneTail)]
 
-        idx = np.nonzero(np.abs(self.z_max) < self.twoTail) * (self.z_min < -twoTail)
+        idx2 = np.nonzero((np.abs(self.z_max) < twoTail) * (self.z_min > oneTail))
+        new_precentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
+
+        if idx[0].size != 0 and idx2[0].size != 0:
+            idx = np.hstack((np.array(idx), np.array(idx2)))
+
+        if idx[0].size == 0:
+            idx = idx2
 
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
-        self.classified.peak_idx = newidx
+        self.classified.classify_map(newidx, VALLEY)
         return newidx
 
     @classmethod
@@ -181,12 +253,12 @@ class ClassificationFactory:
         twoTail = norm.ppf(1-alpha/2)
 
         if isinstance(self.data, RasterData):
-            self.precentMap = np.zeros(self.data.shape)
+            if self.precentMap is None:
+                self.precentMap = np.zeros(self.data.shape)
             resolution = self.data.resolution
             eigenvalue_sigma = np.sqrt(6) * self.data.accuracy / (winsize * resolution) ** 2
             eigenprop = EigenFactory.eigen_Hessian(self.data, winsize = winsize, resolution = resolution)
             eigThreshold = 2 * self.data.roughness / (winsize * resolution) **2
-
 
             # Compute z-statistic for maximal eigenvalue and for minimal eigenvalue:
             # z_max/min = (lambda_max/min - eigThreshold) / eigenvalue_sigma
@@ -195,52 +267,12 @@ class ClassificationFactory:
 
             self.__pit(oneTail)
             self.__peak(oneTail)
+            self.__ridge(oneTail, twoTail)
+            self.__valley(oneTail, twoTail)
+            self.__flat(twoTail)
+            self.__saddle(oneTail)
 
-
-
-
-
-
-            # Hypothesis test for valley:
-            #    1.    lambda_min = eighThreshold and lambda_max < eigThreshold
-            # or 2.    lambda_max = eighThreshold and lambda_min < eigThreshold
-
-
-            # 1. reject when |lambda_min| > z_1-alpha/2 (choose non-rejected) AND when
-            #                lambda_max > Z_1-alpha (choose reject)
-            valley_map = np.zeros(data.shape)
-            valley_map[(np.abs(z_min) < twoTail) * (z_max > oneTail)] = VALLEY
-            precentMap[(np.abs(z_min) < twoTail) * (z_max > oneTail)] = z_min[(np.abs(z_min) < twoTail) * (
-            z_max > oneTail)] \
-                                                                        + z_max[(np.abs(z_min) < twoTail) * (
-            z_max > oneTail)]
-
-            # 2. reject when |lambda_max| > z_1-alpha/2 (choose non-rejected) AND when
-            #                lambda_min > Z_1-alpha (choose reject)
-            valley_map[(np.abs(z_max) < twoTail) * (z_min > oneTail)] = VALLEY
-            precentMap[(np.abs(z_max) < twoTail) * (z_min > oneTail)] = z_min[(np.abs(z_max) < twoTail) * (
-            z_min > oneTail)] \
-                                                                        + z_max[(np.abs(z_max) < twoTail) * (
-            z_min > oneTail)]
-
-            # Hypothesis test for flat:
-            #    lambda_min = eighThreshold and lambda_max = eigThreshold
-            flat_map = np.zeros(data.shape)
-            flat_map[(np.abs(z_max)< twoTail) * (np.abs(z_min)< twoTail)] = FLAT
-            precentMap[(np.abs(z_max) < twoTail) * (np.abs(z_min) < twoTail)] = z_min[(np.abs(z_max) < twoTail) * (
-            np.abs(z_min) < twoTail)] \
-                                                                                + z_max[(np.abs(z_max) < twoTail) * (
-            np.abs(z_min) < twoTail)]
-
-            # Hypothesis test for saddle:
-            #    lambda_min < eighThreshold and lambda_max > eigThreshold
-            saddle_map = np.zeros(data.shape)
-            saddle_map[(z_min > oneTail) * (z_max <-oneTail)] = SADDLE
-            precentMap[(z_min > oneTail) * (z_max < -oneTail)] = z_min[(z_min > oneTail) * (z_max < -oneTail)] \
-                                                                 + z_max[(z_min > oneTail) * (z_max < -oneTail)]
-
-            return ClassificationProperty(data, pit_map, valley_map, ridge_map, peak_map, flat_map,
-                                          saddle_map), precentMap
+            return self.classified
 
     @classmethod
     def SurfaceClassification(self, data, winSizes, **kwargs):
@@ -256,17 +288,14 @@ class ClassificationFactory:
         for win in winSizes:
             if isinstance(self.data, RasterData):
                 self.__ClassifyPoints(win, classProp = classified)
-
-
-
-
-
+        return classified, self.precentMap
 
 if __name__ == '__main__':
     from IOFactory import IOFactory
 
-    raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\sinkholei11.asc')
+    raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\tf1.TXT')
     winSizes = np.linspace(0.1, 10)
     classified, precentMap = ClassificationFactory.SurfaceClassification(raster, winSizes)
-    plt.imshow(classified.ridge)
+
+    plt.imshow(classified.classified_map)
     plt.show()

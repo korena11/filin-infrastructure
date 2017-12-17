@@ -33,6 +33,7 @@ class ClassificationProperty(BaseProperty):
         :param args:
         """
         super(ClassificationProperty, self).__init__(data)
+
         self.datatype = type(data)
         self.pit_idx = None
         self.valley_idx = None
@@ -40,6 +41,9 @@ class ClassificationProperty(BaseProperty):
         self.peak_idx = None
         self.saddle_idx = None
         self.flat_idx = None
+
+        if self.datatype == RasterData:
+            self.classified_map = np.zeros(self.Raster.shape)
 
     def classification(self, *args):
         """
@@ -57,72 +61,79 @@ class ClassificationProperty(BaseProperty):
 
         # TODO: append for PointSet data
 
-        if self.datatype == RasterData:
-            classified_map = np.zeros(self.Raster.shape)
-            raster_flag = True
+
         for num, type in enumerate(args):
             if type == PIT:
-                classified_map[self.pit_idx] = PIT
+                self.classified_map[self.pit_idx] = PIT
             if type == VALLEY:
-                classified_map[self.valley_idx] = VALLEY
+                self.classified_map[self.valley_idx] = VALLEY
             if type == RIDGE:
-                classified_map[self.ridge_idx] = RIDGE
+                self.classified_map[self.ridge_idx] = RIDGE
             if type == FLAT:
-                classified_map[self.flat_idx] = FLAT
+                self.classified_map[self.flat_idx] = FLAT
             if type == PEAK:
-                classified_map[self.peak_idx] = PEAK
+                self.classified_map[self.peak_idx] = PEAK
             if type == SADDLE:
-                classified_map[self.saddle_idx] = SADDLE
+                self.classified_map[self.saddle_idx] = SADDLE
 
-        return classified_map
+        return self.classified_map
 
-    @property
-    def ridge(self, idx = None):
-        if idx is not None:
-            self.ridge_idx = idx
-        else:
-            return self.ridge_idx
+    def classify_map(self, indices, type):
+        """
+        Classifies the map according to the indices sent and the type of the classification
 
-    @property
-    def pit(self, idx = None):
-        if idx is not None:
-            self.pit_idx = idx
-        else:
-            return self.pit_idx
+        :param indices: tuple(array(nx1), array(nx1))
+        :param type: CAPITAL LETTERS according the the classification definitions at the beginning of the file.
+        :return: classified map
+        """
+        if self.datatype == RasterData:
+            self.classified_map[indices[:, 0], indices[:, 1]] = type
 
-    @property
-    def valley(self, idx = None):
-        if idx is not None:
-            self.valley_idx = idx
-        else:
-            return self.valley_idx
+        return self.classified_map
+        # TODO: for point cloud
 
     @property
-    def peak(self, idx = None):
-        if idx is not None:
-            self.peak_idx = idx
-        else:
-            return self.peak_idx
+    def ridge(self):
+        if self.datatype == RasterData:
+            self.ridge_idx = np.nonzero(self.classified_map[self.classified_map == RIDGE])
+        return self.ridge_idx
 
     @property
-    def flat(self, idx = None):
-        if idx is not None:
-            self.flat_idx = idx
-        else:
-            return self.flat_idx
+    def pit(self):
+        if self.datatype == RasterData:
+            self.pit_idx = np.nonzero(self.classified_map[self.classified_map == PIT])
+        return self.pit_idx
 
     @property
-    def saddle(self, idx = None):
-        if idx is not None:
-            self.saddle_idx = idx
-        else:
-            return self.saddle_idx
+    def valley(self):
+        if self.datatype == RasterData:
+            self.valley_idx = np.nonzero(self.classified_map[self.classified_map == VALLEY])
+
+        return self.valley_idx
 
     @property
+    def peak(self):
+        if self.datatype == RasterData:
+            self.peak_idx = np.nonzero(self.classified_map[self.classified_map == PEAK])
+
+        return self.peak_idx
+
+    @property
+    def flat(self):
+        if self.datatype == RasterData:
+            self.flat_idx = np.nonzero(self.classified_map[self.classified_map == FLAT])
+
+        return self.flat_idx
+    @property
+    def saddle(self):
+        if self.datatype == RasterData:
+            self.saddle_idx = np.nonzero(self.classified_map[self.classified_map == SADDLE])
+        return self.saddle_idx
+
     def unclassified(self):
-        classisfied = np.zeros(self.classified_map.shape)
-        classisfied[self.classified_map == 0] = 1
-        return classisfied
+        unclassisfied = np.zeros(self.classified_map.shape)
+        unclassisfied[self.classified_map == 0] = 1
+        return unclassisfied
 
 
 if __name__ == '__main__':
