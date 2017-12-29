@@ -4,20 +4,18 @@ photo-lab-3\Reuma
 30, Mar, 2017
 
 '''
-from ContourDevelopment import getValueSubpix
-from numpy.linalg import norm, inv
-import ActiveContours as ac
-from scipy.ndimage import filters
-from numpy import sin, cos, pi
-from matplotlib import pyplot as plt
-from MyTools import imshow
-from skimage import measure
-from functools import partial
-import matplotlib.mlab as mlab
-import numpy as np
 import platform
+from functools import partial
+
 import cv2
 import matplotlib.animation as manimation
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.linalg import norm
+from scipy.ndimage import filters
+
+import ActiveContours as ac
+from ContourDevelopment import getValueSubpix
 
 if platform.system() == 'Linux':
     import matplotlib
@@ -124,7 +122,6 @@ if __name__ == '__main__':
             c[:, 1] = invM.dot(c[:, 1] + dt * fy)
 
             # replace at the beginning and end of the curve with the closest boundary point
-
             b0_closest = closestBoundaryPoint(c[1,:], b0)
             b1_closest = closestBoundaryPoint(c[-2, :], b1)
 

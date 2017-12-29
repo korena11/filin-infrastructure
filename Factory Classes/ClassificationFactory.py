@@ -13,7 +13,6 @@ import matplotlib
 matplotlib.use('TkAgg')
 
 import numpy as np
-from matplotlib import pyplot as plt
 from scipy.stats import norm
 from RasterData import RasterData
 from EigenFactory import EigenFactory
@@ -65,6 +64,8 @@ class ClassificationFactory:
         Checks that each index belongs to one classification
         :return:
         """
+        if np.size(a) == 0:
+            return False
         if np.size(b) == 0:
             return a
         newIdx = []
@@ -84,7 +85,7 @@ class ClassificationFactory:
         else:
             newIdx = a
         if len(newIdx) == 0:
-            return np.array([[False, False], [False, False]])
+            return False
         else:
             return newIdx
 
@@ -103,6 +104,8 @@ class ClassificationFactory:
         # Correct classification and precentMap
         new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, PIT)
@@ -121,6 +124,8 @@ class ClassificationFactory:
         idx = np.nonzero(self.z_max < -oneTail)
         new_precentMap[idx] = self.z_max[idx] / 100.
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, PEAK)
@@ -140,6 +145,8 @@ class ClassificationFactory:
         new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
 
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, FLAT)
@@ -156,6 +163,9 @@ class ClassificationFactory:
         idx = np.nonzero((self.z_min > oneTail) * (self.z_max < -oneTail))
         new_precentMap[idx] = (self.z_max[idx] + self.z_min[idx]) / 100.
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, SADDLE)
@@ -187,6 +197,8 @@ class ClassificationFactory:
         if idx[0].size == 0:
             idx = idx2
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, RIDGE)
@@ -219,6 +231,8 @@ class ClassificationFactory:
             idx = idx2
 
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(newidx): return False
+
         self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, VALLEY)
@@ -286,16 +300,21 @@ class ClassificationFactory:
         self.data = data
         classified = ClassificationProperty(data)
         for win in winSizes:
+            print ('current window size %.4f' % win)
             if isinstance(self.data, RasterData):
                 self.__ClassifyPoints(win, classProp = classified)
         return classified, self.precentMap
 
 if __name__ == '__main__':
     from IOFactory import IOFactory
+    import cProfile, pstats
 
-    raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\tf1.TXT')
-    winSizes = np.linspace(0.1, 10)
-    classified, precentMap = ClassificationFactory.SurfaceClassification(raster, winSizes)
-
-    plt.imshow(classified.classified_map)
-    plt.show()
+    raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\minearl_try.txt')
+    winSizes = np.linspace(0.1, 10, 5)
+    cProfile.run("ClassificationFactory.SurfaceClassification(raster, winSizes)", "{}.profile".format(__file__))
+    s = pstats.Stats("{}.profile".format(__file__))
+    # classified, precentMap = ClassificationFactory.SurfaceClassification(raster, winSizes)
+    s.strip_dirs()
+    s.sort_stats("time").print_stats(10)
+    # plt.imshow(classified.classified_map)
+    # plt.show()

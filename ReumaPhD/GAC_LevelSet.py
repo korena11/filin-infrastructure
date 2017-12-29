@@ -12,11 +12,8 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
-
-from ContourDevelopment import getValueSubpix
 import matplotlib.animation as manimation
 import Saliency as sl
-import numpy.linalg as la
 from matplotlib import pyplot as plt
 import MyTools as mt
 import numpy as np
@@ -355,7 +352,7 @@ if __name__ == '__main__':
     region = cv2.GaussianBlur(region, ksize = (5, 5), sigmaX = sigma)
     region1 = cv2.GaussianBlur(np.uint8(region), ksize = (5,5), sigmaX = sigma)
 
-    #deine edge function
+    # define edge function
     edges = cv2.Canny(region1, 30,70)
     kernel = np.ones((3, 3), np.uint8)
  #   edges = cv2.dilate(edges, kernel, iterations = 1)
