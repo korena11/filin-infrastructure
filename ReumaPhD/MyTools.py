@@ -114,11 +114,11 @@ def computeImageGradient(I, **kwargs):
     dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
 
     if gradientType == 'L1':
-        return np.abs(dx) + np.abs(dy)  # L1-norm of grad(I)
+        return cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (0, 0), sigma)  # L1-norm of grad(I)
     elif gradientType == 'L2':
-        return (dx ** 2 + dy ** 2)
+        return cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (0, 0), sigma)
     elif gradientType == 'LoG':
-        return filters.gaussian_laplace(I, sigma)
+        return cv2.GaussianBlur(filters.gaussian_laplace(I, sigma), (0, 0), sigma)
     else:
         pass
 

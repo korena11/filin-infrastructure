@@ -12,7 +12,6 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
-import matplotlib.animation as manimation
 import Saliency as sl
 from matplotlib import pyplot as plt
 import MyTools as mt
@@ -37,13 +36,15 @@ def chooseLargestContours(contours, labelProp, minArea):
 
     return contours_filtered
 
-def drawContours(phi, img, ax):
+
+def drawContours(phi, img, ax, **kwargs):
     """
     Draws the contours of a specific iteration
     :param phi: the potential function
     :param img: the image on which the contours will be drawn
     :return: the figure
     """
+
     ax.cla()
     ax.axis("off")
     ax.set_ylim([img.shape[0], 0])
@@ -105,6 +106,41 @@ def compute_vt(vectorField, edge_map, kappa, **kwargs):
 
     return np.stack((vx_t, vy_t), axis = 2)
 
+
+def compute_vb(img, phi, **kwargs):
+    """
+    Computes the band velocity, according to Li et al., 2006.
+    :param img: the image upon which the contour is searched
+    :param phi: the level set function
+    :param band_width: the width of the contour. default: 5
+    :param threshold: for when the velocity equals zero. default: 0.5
+    :param stepsize. default 0.05
+
+    :return: vb
+    """
+    band_width = kwargs.get('band_width', 5.)
+    threshold = kwargs.get('threshold', 0.5)
+    tau = kwargs.get('stepsize', 0.05)
+
+    # Define the areas for R and R'
+    R = (phi > 0) * (phi <= band_width)
+    R_ = (phi >= -band_width) * (phi < 0)
+
+    SR = np.zeros(img.shape)
+    SR_ = np.zeros(img.shape)
+
+    SR[R] = np.mean(img[R])
+    SR_[R_] = np.mean(img[R_])
+    vb = 1 - (SR - SR_) / (np.linalg.norm(SR + SR_))
+    vb[vb < threshold] = 0
+    vb *= tau
+    vb[np.where(phi != 0)] = 0
+    return vb
+
+
+
+
+
 def geometricActiveContours(img, phi, **kwargs):
     """
     :param img: the image upon which the active contours is implemented.
@@ -137,12 +173,22 @@ def geometricActiveContours(img, phi, **kwargs):
     :param region - dictionary with:
             'region' - a map between [-1,1] where the most interesting areas are 1 and the least are -1
             'weights' - a weight for the region element; how much it influences the development
+
+    Second Level set function - for open contours
+    :param open_contour - Whether the contour searched is open or not. Boolean (default: false)
+    :param psi - the function with which the first level-set function intersects with in order to define the end-points
+            of the contour.
+
     :return:
     """
 
     # -------Initializations--------
     edgeMap = kwargs.get('edges', None)
+    open_contour = kwargs.get('open_contour', False)
     GAC_inputs = {'alpha': None, 'stepsize': 1.}
+
+    if open_contour:
+        psi = kwargs['psi']
 
     gradient_inputs = {'gradientType': 'L2',
                        'sigma': 2.5,
@@ -190,20 +236,23 @@ def geometricActiveContours(img, phi, **kwargs):
 
     fig, ax = plt.subplots()
 
-    FFMpegWriter = manimation.writers['ffmpeg']
-    metadata = dict(title = 'Movie Test', artist = 'Matplotlib',
-                    comment = 'Movie support!')
-    writer = FFMpegWriter(fps = 25, metadata = metadata)
+    # FFMpegWriter = manimation.writers['ffmpeg']
+    # metadata = dict(title = 'Movie Test', artist = 'Matplotlib',
+    #                 comment = 'Movie support!')
+    # writer = FFMpegWriter(fps = 25, metadata = metadata)
 
     #with writer.saving(fig, 'mult1_double1.mp4', 300):
+    ax2 = plt.figure(2)
     for i in range(0,200):
 
         # phi derivatives
         phi_x, phi_y, phi_xx, phi_yy, phi_xy = mt.computeImageDerivatives(phi, 2, ksize = gradient_inputs['ksize'],
                                                                           sigma = gradient_inputs['sigma'])
-
         # |\nabla \phi|
-        norm_nabla_phi = np.sqrt(phi_x ** 2 + phi_y**2 + eps)
+        norm_nabla_phi = np.sqrt(phi_x ** 2 + phi_y ** 2 + eps)
+
+        if open_contour:
+            nabla_psi = mt.computeImageGradient(psi, ksize = gradient_inputs['ksize'], gradientType = 'L1')
 
         # level set curvature: kappa=div(\nabla \phi / |\nabla \phi|)
         kappa = ((phi_xx * phi_y ** 2 + phi_yy * phi_x ** 2 - 2 * phi_xy * phi_x * phi_y) / norm_nabla_phi**3)
@@ -220,15 +269,32 @@ def geometricActiveContours(img, phi, **kwargs):
         # total external forces
         Fext = Fext_gvf - Fext_nabla_phi
         #-------------
-        phi_t = (alpha * kappa + region_inputs['weight'] * region_inputs['region']) * norm_nabla_phi - Fext
-        phi += cv2.GaussianBlur(phi_t, blur_ksize, blur_sigma) * stepsize
 
-        ax = drawContours(phi, img, ax)
+        # band velocity
+        if open_contour:
+            vb = compute_vb(img, phi, stepsize = stepsize)
+        else:
+            vb = np.zeros(img)
+
+        v_phi = (alpha * kappa + region_inputs['weight'] * region_inputs['region'] + 5 * vb)
+        phi_t = v_phi * norm_nabla_phi - Fext
+
+        phi -= cv2.GaussianBlur(phi_t, blur_ksize, blur_sigma) * stepsize
+        if open_contour:
+            psi_t = v_phi * nabla_psi
+            psi -= cv2.GaussianBlur(psi_t, blur_ksize, blur_sigma) * stepsize
+            psi_copy = psi.copy()
+            psi_copy[np.where(psi > 0)] = 1
+            psi_copy[np.where(psi < 0)] = -1
+            plt.figure(2), plt.imshow(psi)
+            plt.figure(3)
+            #  psi_copy= np.uint8(psi_copy)
+            ax = drawContours(phi * psi_copy, img, ax)
+        else:
+            ax = drawContours(phi, img, ax)
    #     writer.grab_frame()
         plt.pause(.5e-10)
     plt.show()
-
-
 
 def geodesicActiveContours(img, phi, **kwargs):
     """
@@ -341,7 +407,7 @@ if __name__ == '__main__':
   #  img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png'), cv2.COLOR_BGR2GRAY)
 
 
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png'), cv2.COLOR_BGR2RGB)
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\channel91.png'), cv2.COLOR_BGR2RGB)
     img_ = cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5
 
@@ -372,18 +438,27 @@ if __name__ == '__main__':
     # define an initial contour via phi(x,y) = 0
     phi = np.ones(img.shape[:2])
     img_height, img_width = img.shape[:2]
-    width, height = 500, 500
-    phi[img_height/2-height : img_height/2 + height, img_width/2 - width: img_width/2 + width] = -1
+    width, height = 5, 5
+    # phi[img_height/2-height : img_height/2 + height, img_width/2 - width: img_width/2 + width] = -1
+    phi[img_height - 2 * height: img_height - height, :] = -1
+
+    # define an initial end points via psi(x,y)
+    psi = np.ones(img.shape[:2])
+    zero_pos = 50  # at +- 250 pixels
+    psi[:, zero_pos: zero_pos + width] = 0
+    psi[:, -(zero_pos + width):-zero_pos] = 0
+    psi[:, :zero_pos] = -1
+    psi[:, -zero_pos:] = -1
+
 
     # function inputs
     gradient_inputs = {'gradientType': 'L2', 'sigma': 2.5}
     gac_inputs = {'alpha': g,
-                  'stepsize': .5,
+                  'stepsize': .1,
                   'epsilon': 1e-6}
 
     blur_inputs = {'sigma': 2.5, 'ksize': (0,0)}
     region_inputs = {'region': region, 'weight': 1}
 
-
     geometricActiveContours(img, phi, GAC_inputs = gac_inputs, img_grad = gradient_inputs, blur=blur_inputs,
-                            region = region_inputs)
+                            region = region_inputs, open_contour = True, psi = psi)
