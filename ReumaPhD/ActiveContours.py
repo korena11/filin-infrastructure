@@ -17,13 +17,10 @@ import numpy as np
 import numpy.linalg as LA
 from matplotlib import pyplot as plt
 from numpy import sin, cos, pi
-from scipy.linalg import toeplitz
 from scipy.ndimage import filters
 
 from ContourDevelopment import getValueSubpix
 from MyTools import imshow
-
-
 
 
 def createGaussianImage(gridSpacing = .025, noise = 0.01):
@@ -156,16 +153,14 @@ def GVF(energy, **kwargs):
     c2 = b * fy
 
     # derivative computation
-
-
     epsilon = 500
 
     while epsilon > 3:
         del_u = filters.laplace(u)
         del_v = filters.laplace(v)
 
-        ut = mu * 4* del_u - b* (u-fx)
-        vt = mu * 4* del_v - b* (v-fy)
+        ut = mu * 4 * del_u - b * (u - fx)
+        vt = mu * 4 * del_v - b * (v - fy)
 
         u += ut
         v += vt

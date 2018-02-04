@@ -102,7 +102,7 @@ def compute_vt(vectorField, edge_map, kappa, **kwargs):
     h = 1 - g
 
     vx_t = g * laplacian_vx - h * (vectorField[:,:,0] - edge_map)
-    vy_t = g * laplacian_vy - h * (vectorField[:,:,0] - edge_map)
+    vy_t = g * laplacian_vy - h * (vectorField[:, :, 1] - edge_map)
 
     return np.stack((vx_t, vy_t), axis = 2)
 
@@ -136,10 +136,6 @@ def compute_vb(img, phi, **kwargs):
     vb *= tau
     vb[np.where(phi != 0)] = 0
     return vb
-
-
-
-
 
 def geometricActiveContours(img, phi, **kwargs):
     """

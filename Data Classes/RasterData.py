@@ -5,7 +5,9 @@ photo-lab-3\Reuma
 '''
 
 import platform
+
 from numpy import array, floor, nonzero, logical_or, logical_and, logical_not, zeros
+from numpy import max as npmax
 from pyproj import Proj, transform
 
 if platform.system() == 'Linux':
@@ -272,13 +274,12 @@ class RasterData(object):
         """
         return cls.__mean_roughness
 
-
-
-    def min_range(self):
+    @property
+    def min_range(cls):
         """
         :return: the closest range in the data
         """
-
+        return npmax(npmax(cls.data))
 
 if __name__ == '__main__':
     pass
