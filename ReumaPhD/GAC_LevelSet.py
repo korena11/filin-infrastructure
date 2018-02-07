@@ -323,6 +323,7 @@ def geodesicActiveContours(img, phi, **kwargs):
     # -------Initializations--------
     GAC_inputs = {'alpha':1.,
                   'beta': 1.,
+                  'epsilon': np.finfo(float).eps,
                   'stepsize': 1.}
 
     gradient_inputs = {'gradientType': 'L2',
@@ -364,7 +365,8 @@ def geodesicActiveContours(img, phi, **kwargs):
         phi_x, phi_y, phi_xx, phi_yy, phi_xy = mt.computeImageDerivatives(phi, 2)
 
         # div(\nabla phi/|\nabla phi|)
-        div_phi = beta *((phi_xx * phi_y**2 + phi_yy * phi_x**2 - 2 * phi_xy * phi_x * phi_y) / (phi_x**2 + phi_y**2+ eps)^2)
+        div_phi = beta * (
+        (phi_xx * phi_y ** 2 + phi_yy * phi_x ** 2 - 2 * phi_xy * phi_x * phi_y) / (phi_x ** 2 + phi_y ** 2 + eps) ** 2)
 
         # dot product of \nabla g and \nabla phi
         grad_g_dot_grad_phi = g_x * phi_x + g_y * phi_y
@@ -403,7 +405,7 @@ if __name__ == '__main__':
   #  img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png'), cv2.COLOR_BGR2GRAY)
 
 
-    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\channel91.png'), cv2.COLOR_BGR2RGB)
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\DoubleTrouble.png'), cv2.COLOR_BGR2RGB)
     img_ = cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5
 
@@ -434,9 +436,9 @@ if __name__ == '__main__':
     # define an initial contour via phi(x,y) = 0
     phi = np.ones(img.shape[:2])
     img_height, img_width = img.shape[:2]
-    width, height = 5, 5
-    # phi[img_height/2-height : img_height/2 + height, img_width/2 - width: img_width/2 + width] = -1
-    phi[img_height - 2 * height: img_height - height, :] = -1
+    width, height = 20, 20
+    phi[img_height / 2 - height: img_height / 2 + height, img_width / 2 - width: img_width / 2 + width] = -1
+    # phi[img_height - 2 * height: img_height - height, :] = -1
 
     # define an initial end points via psi(x,y)
     psi = np.ones(img.shape[:2])
@@ -456,5 +458,7 @@ if __name__ == '__main__':
     blur_inputs = {'sigma': 2.5, 'ksize': (0,0)}
     region_inputs = {'region': region, 'weight': 1}
 
-    geometricActiveContours(img, phi, GAC_inputs = gac_inputs, img_grad = gradient_inputs, blur=blur_inputs,
-                            region = region_inputs, open_contour = True, psi = psi)
+    geodesicActiveContours(img, phi, GAC_inputs = gac_inputs)
+
+    # geometricActiveContours(img, phi, GAC_inputs = gac_inputs, img_grad = gradient_inputs, blur=blur_inputs,
+    #                         region = region_inputs, open_contour = True, psi = psi)

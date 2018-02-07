@@ -17,7 +17,6 @@ from numpy.linalg import norm
 from numpy import sin, cos, pi
 from matplotlib import pyplot as plt
 import MyTools as mt
-import Saliency as sl
 from functools import partial
 import numpy as np
 
@@ -26,7 +25,7 @@ import cv2
 
 if __name__ == '__main__':
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/doubleTrouble.png', 1),
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\doubleTrouble.png', 1),
                        cv2.COLOR_BGR2GRAY)
     img = cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)  # Convert to normalized floating point
 

@@ -173,7 +173,7 @@ def GVF(energy, **kwargs):
 if __name__ == '__main__':
 
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/twosink.png', 1),
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\twosink.png', 1),
                        cv2.COLOR_BGR2GRAY)
 
     plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
