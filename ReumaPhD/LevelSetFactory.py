@@ -18,6 +18,7 @@ import cv2
 from skimage import measure
 from matplotlib import pyplot as plt
 
+EPS = np.finfo(float).eps
 
 def chooseLargestContours(contours, labelProp, minArea):
     '''
@@ -41,7 +42,6 @@ class LevelSetFactory:
     img = None  # the analyzed image (of the data)
     region = None  # region constraint
 
-    region_weight = 0  # weights for region constraints
     step = 0  # step size
 
     imgGradient = None  # gradient of the analyzed image
@@ -50,6 +50,8 @@ class LevelSetFactory:
     kappa = None  # level set curvature
     g = None  # internal force
     f = None  # external force (for GVF)
+    psi = None  # internal force, for open contours
+    norm_nabla_psi = None  # |\nabla \phi| - open contour level set gradient size
 
     def __init__(self, img, **kwargs):
         """
@@ -142,90 +144,42 @@ class LevelSetFactory:
         if type == 'geodesic':
             # !! pay attention, if self.g is constant - then this flow is actually curavature flow !!
             g_x, g_y = mt.computeImageDerivatives(self.g, 1, ksize = ksize)
-            return self.g * self.kappa * self.norm_nabla_phi + (g_x * self.phi_x + g_y * self.phi_y)
+            return cv2.GaussianBlur(self.g * self.kappa * self.norm_nabla_phi + (g_x * self.phi_x + g_y * self.phi_y),
+                                    (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+
+        if type == 'open':
+            psi_x, psi_y = mt.computeImageDerivatives(self.psi, 1, ksize = ksize)
+            self.norm_nabla_psi = np.sqrt(psi_x ** 2 + psi_y ** 2)
+            g_x, g_y = mt.computeImageDerivatives(self.g, 1, ksize = ksize)
+            return cv2.GaussianBlur(self.g * self.kappa * self.norm_nabla_psi + (g_x * psi_x + g_y * psi_y),
+                                    (processing_props['ksize'], processing_props['ksize']),
+                                    processing_props['sigma'])
 
         if type == 'band':
             return self.__compute_vb(**kwargs)
 
-    def __ls_derivatives_curvature(self, processing_props):
+    def __ls_derivatives_curvature(self, processing_props, **kwargs):
         """
         computes and updates the level set function derivatives and curvature
+        :param processing_props: gradient type, sigma and ksize for derivatives and gradient computations
+
         """
-        eps = np.finfo(float).eps
 
         self.norm_nabla_phi = mt.computeImageGradient(self.phi, gradientType = processing_props['gradientType'])
         self.phi_x, self.phi_y, self.phi_xx, self.phi_yy, self.phi_xy = \
             mt.computeImageDerivatives(self.phi, 2, ksize = processing_props['ksize'],
                                        sigma = processing_props['sigma'])
 
-        self.kappa = ((self.phi_xx * self.phi_y ** 2 +
-                       self.phi_yy * self.phi_x ** 2 -
-                       2 * self.phi_xy * self.phi_x * self.phi_y) /
-                      (self.norm_nabla_phi + eps) ** 2)
+        self.kappa = cv2.GaussianBlur((self.phi_xx * self.phi_y ** 2 +
+                                       self.phi_yy * self.phi_x ** 2 -
+                                       2 * self.phi_xy * self.phi_x * self.phi_y) /
+                                      (self.norm_nabla_phi + EPS) ** 2,
+                                      (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
-    def moveLS(self, **kwargs):
-        """
-        The function that moves the level set until the desired contour is reached
+        if np.any(np.abs(self.kappa) < 1e-5):
+            self.kappa[np.abs(self.kappa) < 1e-5] = 0
 
-        flow_type - flags for flow types (binary):
-        'constant', 'curvature', 'equi-affine', 'geodesic'
-
-        :return the contours after level set
-         """
-        # ------inputs
-        flow_types = kwargs.get('flow_types', ['geodesic'])
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
-        gvf_flag = kwargs.get('gvf_flag', False)
-
-        if gvf_flag:  # using gvf or not
-            gvf_w = 1
-        else:
-            gvf_w = 0
-
-        if 'processing_props' in kwargs.keys():
-            processing_props.update(kwargs['processing_props'])
-
-        fig, ax = plt.subplots(num = 1)
-        ax2 = plt.figure("phi")
-
-        plt.imshow(self.phi)
-
-        for i in range(200):
-            intrinsic = np.zeros(self.img.shape[:2])
-            extrinsic = np.zeros(self.img.shape[:2])
-            self.__ls_derivatives_curvature(processing_props)
-
-            # ---------- intrinsic movement ----------
-            # regular flows
-            for item in flow_types:
-                intrinsic += self.flow(item, **processing_props)
-
-            # region force
-            intrinsic += self.region_weight * self.region * self.norm_nabla_phi
-
-            # ---------------extrinsic movement ----------
-            f_x, f_y = mt.computeImageDerivatives(self.f, 1, ksize = processing_props['ksize'],
-                                                  sigma = processing_props['sigma'])
-            v = np.stack((f_x, f_y), axis = 2)
-            vt = self.__compute_vt(v, **processing_props)
-            v += vt
-            extrinsic = (v[:, :, 0] * self.phi_x + v[:, :, 1] * self.phi_y) * gvf_w
-
-            # for open contours
-            # extrinsic = ....
-            plt.figure("phi")
-            plt.imshow(self.phi)
-            plt.pause(.5e-10)
-
-            phi_t = self.step * (intrinsic - extrinsic)
-            self.phi += cv2.GaussianBlur(phi_t, (processing_props['ksize'], processing_props['ksize']),
-                                         processing_props['sigma'])
-            plt.figure(1)
-            ax = self.__drawContours(ax)
-            plt.pause(.5e-10)
-        plt.show()
-
-    def __drawContours(self, ax, **kwargs):
+    def __drawContours(self, function, ax, **kwargs):
         """
         Draws the contours of a specific iteration
         :param phi: the potential function
@@ -238,27 +192,30 @@ class LevelSetFactory:
         ax.set_ylim([self.img.shape[0], 0])
         ax.set_xlim([0, self.img.shape[1]])
 
-        phi_binary = self.phi.copy()
+        color = kwargs.get('color', 'b')
+        img = kwargs.get('image', self.img)
+
+        function_binary = function.copy()
 
         # segmenting and presenting the found areas
-        phi_binary[np.where(self.phi > 0)] = 0
-        phi_binary[np.where(self.phi < 0)] = 1
-        phi_binary = np.uint8(phi_binary)
+        function_binary[np.where(function > 0)] = 0
+        function_binary[np.where(function < 0)] = 1
+        function_binary = np.uint8(function_binary)
 
-        contours = measure.find_contours(self.phi, 0.)
-        blob_labels = measure.label(phi_binary, background = 0)
+        contours = measure.find_contours(function, 0.)
+        blob_labels = measure.label(function_binary, background = 0)
         label_props = measure.regionprops(blob_labels)
 
         #     contours = chooseLargestContours(contours, label_props, 1)
 
-        mt.imshow(self.img)
-
+        mt.imshow(img)
+        l_curve = []
         for c in contours:
             c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
-            ax.plot(c[:, 0], c[:, 1], '-b')
+            curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
+            l_curve.append(curve)
 
-        return ax
-
+        return l_curve, ax
     def __compute_vb(self, **kwargs):
         """
         Computes the band velocity, according to Li et al., 2006.
@@ -288,7 +245,6 @@ class LevelSetFactory:
         vb *= tau
         vb[np.where(self.phi != 0)] = 0
         return vb
-
     def __compute_vt(self, vectorField, **kwargs):
         """
         Computes the vector field derivative in each direction according to
@@ -306,7 +262,7 @@ class LevelSetFactory:
 
         :return: vt, nxmx2 (for x and y directions)
         """
-        eps = np.finfo(float).eps
+
         # compute the derivatives of the edge map at each direction
         nabla_edge = mt.computeImageGradient(self.f, **kwargs)
 
@@ -315,7 +271,7 @@ class LevelSetFactory:
         laplacian_vy = cv2.Laplacian(vectorField[:, :, 1], cv2.CV_64F)
 
         # compute the functions that are part of the vt computation
-        g = np.exp(-nabla_edge / (self.kappa + eps) ** 2)
+        g = np.exp(-nabla_edge / (self.kappa + EPS) ** 2)
         h = 1 - g
 
         vx_t = g * laplacian_vx - h * (vectorField[:, :, 0] - self.f)
@@ -325,31 +281,145 @@ class LevelSetFactory:
 
         return np.stack((vx_t, vy_t), axis = 2)
 
+    def __compute_vo(self, **kwargs):
+        """
+        Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal
+        to another function (psi)
+        :param kwargs:
+        :return:
+        """
+        psi = kwargs.get('function', self.psi)  # if no other function is given it will be moving according to psi
+        processing_props = kwargs.get('processing_props', {'sigma': 2.5, 'ksize': 3, 'gradientType': 'L1'})
+
+        psi_x, psi_y = mt.computeImageDerivatives(psi, 1, **processing_props)
+        self.norm_nabla_psi = np.sqrt(psi_x ** 2 + psi_y ** 2)
+        grad_psi_grad_phi = psi_x * self.phi_x + psi_y * self.phi_y
+
+        return grad_psi_grad_phi / (self.norm_nabla_phi + EPS)
+
+    def moveLS(self, **kwargs):
+        """
+        The function that moves the level set until the desired contour is reached
+
+        :param flow_type - flags for flow types (binary):
+        'constant', 'curvature', 'equi-affine', 'geodesic'
+
+        :param gvf_flag: flag to add gradient vector flow
+        :param open_flag: flag for open contours
+
+        :return the contours after level set
+         """
+        # ------inputs
+
+        flow_types = kwargs.get('flow_types', ['geodesic'])
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
+        open_flag = kwargs.get('open_flag', False)
+
+        gvf_w = kwargs.get('gvf_w', 1.)
+        vo_w = kwargs.get('vo_w', 1.)
+        region_w = kwargs.get('region_w', 1.)
+
+        if 'processing_props' in kwargs.keys():
+            processing_props.update(kwargs['processing_props'])
+
+        fig, ax = plt.subplots(num = 1)
+        ax2 = plt.figure("phi")
+        fig3, ax3 = plt.subplots(num = 3)
+
+        plt.imshow(self.img)
+        for i in range(200):
+            print i
+            if i > 26:
+                print 'hello'
+            intrinsic = np.zeros(self.img.shape[:2])
+            extrinsic = np.zeros(self.img.shape[:2])
+            self.__ls_derivatives_curvature(processing_props)
+
+            # ---------- intrinsic movement ----------
+            # regular flows
+            for item in flow_types:
+                intrinsic += self.flow(item, **processing_props)
+                if np.any(intrinsic > 20):
+                    print i
+
+            # region force
+            intrinsic += region_w * self.region * self.norm_nabla_phi
+
+            # open contour
+            if open_flag:
+                psi_t = self.flow('open', **processing_props)
+                # psi_t += self.region_weight * self.region * self.norm_nabla_psi
+                self.psi += cv2.GaussianBlur(psi_t, (processing_props['ksize'], processing_props['ksize']),
+                                             processing_props['sigma'])
+                plt.figure(1)
+                l_curve, ax3 = self.__drawContours(self.psi, ax, color = 'b')
+
+            # ---------------extrinsic movement ----------
+            f_x, f_y = mt.computeImageDerivatives(self.f, 1, ksize = processing_props['ksize'],
+                                                  sigma = processing_props['sigma'])
+            v = np.stack((f_x, f_y), axis = 2)
+            vt = self.__compute_vt(v, **processing_props)
+            v += vt
+            extrinsic = (v[:, :, 0] * self.phi_x + v[:, :, 1] * self.phi_y) * gvf_w
+
+            # for constrained contours
+            extrinsic += self.__compute_vo() * vo_w
+            #  self.psi += extrinsic
+            plt.figure(3)
+            plt.imshow(self.kappa)
+            plt.pause(.5e-10)
+
+            phi_t = self.step * (intrinsic - extrinsic)
+            self.phi += cv2.GaussianBlur(phi_t, (processing_props['ksize'], processing_props['ksize']),
+                                         processing_props['sigma'])
+
+            plt.figure('phi')
+            plt.imshow(self.phi)
+
+            if open_flag:
+                for curve in l_curve:
+                    self.phi[curve._y.astype('int'), curve._x.astype('int')] = 0
+
+            plt.figure(1)
+            _, ax = self.__drawContours(self.phi, ax, color = 'r')
+            plt.pause(.5e-10)
+        plt.show()
 if __name__ == '__main__':
     # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\DoubleTrouble.png'), cv2.COLOR_BGR2RGB)
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\channel91.png'), cv2.COLOR_BGR2RGB)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
-    ls_obj = LevelSetFactory(img_normed, step = .01)
     sigma = 2.5  # blurring
 
-    processing_props = {'sigma': 2.5, 'ksize': 3, 'gradientType': 'L1'}
-    eps = np.finfo(float).eps
+    ls_obj = LevelSetFactory(img_normed, step = 0.05)
+
+    processing_props = {'sigma': 5, 'ksize': 3, 'gradientType': 'L1'}
+
 
     # ------- Initial contour via phi(x,y) = 0 ---------------------------
     phi = np.ones(img_orig.shape[:2])
+    psi = np.ones(img_orig.shape[:2])
     img_height, img_width = img_orig.shape[:2]
-    width, height = 20,20
+    width, height = 5,20
 
     # option 1: rectangle:
-    phi[img_height / 2 - height: img_height / 2 + height, img_width / 2 - width: img_width / 2 + width] = -1
+    # phi[img_height / 2 - height: img_height / 2 + height, img_width / 2 - width: img_width / 2 + width] = -1
 
     # option 2: horizontal line
-    # phi[img_height - 2 * height: img_height - height, :] = -1
+    #phi[img_height - 2 * height: img_height - height, :] = -1
 
     # option 3: vertical line
-    # phi[:, img_width - 2 * width: img_width - width] = -1
+    phi[:, img_width - 2 * width: img_width - width] = -1
     ls_obj.phi = phi
+
+    # ------- Initial limits via psi(x,y) = 0 ---------------------------
+    # option 1: horizontal line
+    # psi[img_height - 2 * height: img_height - height, :] = -1
+    # option 2: vertical line
+    width_boundary = 20
+    psi[:, 0: width_boundary] = -1
+    psi[:, -width_boundary:] = -1
+    ls_obj.psi = psi
     # ---------------------------------------------------------------------
 
     # ---------------- Intrinsic forces maps ------------------------------
@@ -369,13 +439,15 @@ if __name__ == '__main__':
     ls_obj.g = g
 
     # Force II - region constraint:
-    ls_obj.region_weight = 1
     region = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
                                feature = 'normals')
     region = cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
     region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
 
     ls_obj.region = region
+
+    # Force III - open contours:
+
     # ---------------------------------------------------------------------
 
     # ----------------Extrinsic forces maps (vector field)------------------
@@ -388,8 +460,8 @@ if __name__ == '__main__':
     # f = cv2.Canny(img_orig, 10, 50)
     #  f = cv2.GaussianBlur(f, ksize = (5, 5), sigmaX = 1.5)
 
-    plt.imshow(f)
-    plt.show()
+    # plt.imshow(f)
+    # plt.show()
 
     #
     # # option 3: saliency map
@@ -398,4 +470,7 @@ if __name__ == '__main__':
     #  f = np.zeros(img_gray.shape)
     ls_obj.f = f
 
-    ls_obj.moveLS(gvf_flag = False, processing_props = processing_props)
+    ls_obj.moveLS(flow_types = [], open_flag = False, processing_props = processing_props,
+                  gvf_w = 1.,
+                  vo_w = 1.,
+                  region_w = 0.)
