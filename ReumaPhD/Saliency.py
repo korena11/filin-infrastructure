@@ -25,7 +25,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 import scipy.linalg as LA
 
-import scipy.ndimage as ndimage
 import cv2
 import MyTools as mt
 import LatexUtils as lu
@@ -175,10 +174,11 @@ def distance_based(image, **kwargs):
         raise RuntimeError('No filter size or sigma is given')
 
     # if the image feature is CIELAB, the image should be transformed to CIELab
+    if image.ndim == 2:
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
 
     if img_feature == 'LAB':
         image = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
-
     else:
         image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 

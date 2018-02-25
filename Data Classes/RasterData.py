@@ -267,12 +267,14 @@ class RasterData(object):
         """
         return cls.__measurement_accuracy
 
-    @property
-    def roughness(cls):
+    def roughness(cls, **kwargs):
         """
         :return: measurement accuracy
         """
-        return cls.__mean_roughness
+        if kwargs:
+            cls.__mean_roughness = kwargs['roughness']
+        else:
+            return cls.__mean_roughness
 
     @property
     def min_range(cls):
@@ -280,6 +282,16 @@ class RasterData(object):
         :return: the closest range in the data
         """
         return npmax(npmax(cls.data))
+
+    def ToPointSet(self):
+        """
+        Transforms raster to PointSet data
+        :return: PointSet
+        """
+        # pts = PointSet()
+
+
+
 
 if __name__ == '__main__':
     pass

@@ -187,43 +187,42 @@ def computeImageDerivatives(img, order, **kwargs):
 
         :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)
     """
-    from scipy import signal
 
     params = {'order': 1,
               'ksize': 3,
               'resolution': 1,
-              'sigma': 2.5,
+              'sigma': 1.,
               'window': (0,0)}
     params.update(kwargs)
     ksize = params['ksize']
-
     img = np.float64(img)
-    # construct kernel
 
-    sep1 = np.array([ 1, 2, 1 ])
-    sep2 = np.array([-1, 0, 1])
-    sobel_x = np.float64(np.outer(sep1, sep2))
-
-    for kernel in np.arange(3,ksize,2):
-        outer = np.float64(np.outer(sep1, sep1))
-        sobel_x= signal.convolve2d(outer,sobel_x)
-
-    sobel_x /= params['resolution']
-
-    img_x = cv2.filter2D(img, cv2.CV_64F, sobel_x)
-    img_y = cv2.filter2D(img, cv2.CV_64F, sobel_x.T)
+    img_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = ksize)
+    img_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
 
     img_x = cv2.GaussianBlur(img_x, params['window'], params['sigma'])
     img_y = cv2.GaussianBlur(img_y, params['window'], params['sigma'])
 
+    img_x = cv2.normalize(img_x.astype('float'), None, 0.0, 1.0,
+                          cv2.NORM_MINMAX)
+    img_y = cv2.normalize(img_y.astype('float'), None, 0.0, 1.0,
+                          cv2.NORM_MINMAX)
+
     if order == 2:
-        img_xx = cv2.filter2D(img_x, cv2.CV_64F, sobel_x)
-        img_yy = cv2.filter2D(img_y, cv2.CV_64F, sobel_x.T)
-        img_xy = cv2.filter2D(img_y, cv2.CV_64F, sobel_x)
+        img_xx = cv2.Sobel(img_x, cv2.CV_64F, 1, 0, ksize = ksize)
+        img_yy = cv2.Sobel(img_y, cv2.CV_64F, 0, 1, ksize = ksize)
+        img_xy = cv2.Sobel(img_x, cv2.CV_64F, 0, 1, ksize = ksize)
 
         img_xx = cv2.GaussianBlur(img_xx, params['window'], params['sigma'])
         img_yy = cv2.GaussianBlur(img_yy, params['window'], params['sigma'])
         img_xy = cv2.GaussianBlur(img_xy, params['window'], params['sigma'])
+
+        img_xx = cv2.normalize(img_xx.astype('float'), None, 0.0, 1.0,
+                               cv2.NORM_MINMAX)
+        img_yy = cv2.normalize(img_yy.astype('float'), None, 0.0, 1.0,
+                               cv2.NORM_MINMAX)
+        img_xy = cv2.normalize(img_xy.astype('float'), None, 0.0, 1.0,
+                               cv2.NORM_MINMAX)
 
         return img_x, img_y, img_xx, img_yy, img_xy
     else:
@@ -277,3 +276,33 @@ def is_pos_semidef(x):
     return np.all(np.linalg.eigvals(x) >= 0)
 
 
+def hillshade(array, **kwargs):
+    """
+
+    :param array: the raster
+    :param kwargs:
+    :return:
+    """
+    azimuth = kwargs.get('azimuth', 315.0)
+    angle_altitude = kwargs.get('altitude', 45.)
+
+    azimuth = 360.0 - azimuth
+
+    x, y = np.gradient(array)
+    slope = np.pi / 2. - np.arctan(np.sqrt(x * x + y * y))
+    aspect = np.arctan2(-x, y)
+    azimuthrad = azimuth * np.pi / 180.
+    altituderad = angle_altitude * np.pi / 180.
+
+    shaded = np.sin(altituderad) * np.sin(slope) + np.cos(altituderad) * np.cos(slope) * np.cos(
+        (azimuthrad - np.pi / 2.) - aspect)
+
+    return 255 * (shaded + 1) / 2
+
+
+if __name__ == '__main__':
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2GRAY)
+    img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
+                               cv2.NORM_MINMAX)  # Convert to normalized floating point
+
+    computeImageDerivatives(img_normed, 1, ksize = 5)

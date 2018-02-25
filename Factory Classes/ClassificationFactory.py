@@ -8,15 +8,13 @@ photo-lab-3\Reuma
 # TODO: - make sure that idx do not repeat in multiple classes
 
 # if platform.system() == 'Linux':
-import matplotlib
-
-matplotlib.use('TkAgg')
 
 import numpy as np
 from scipy.stats import norm
-from RasterData import RasterData
-from EigenFactory import EigenFactory
+
 from ClassificationProperty import ClassificationProperty
+from EigenFactory import EigenFactory
+from RasterData import RasterData
 
 # Classification codes
 RIDGE  =    1
@@ -30,7 +28,7 @@ SADDLE =    6
 class ClassificationFactory:
     z_min = z_max = None
     oneTail = TwoTail = None
-    precentMap = None
+    percentMap = None
     data = None
     classified = None
 
@@ -59,7 +57,7 @@ class ClassificationFactory:
         return c.view(a.dtype).reshape(-1, byaxis)
 
     @classmethod
-    def __checkIdx(self, a, b, new_precentMap):
+    def __checkIdx(self, a, b, new_percentMap):
         """
         Checks that each index belongs to one classification
         :return:
@@ -72,13 +70,13 @@ class ClassificationFactory:
         repeated_Idx = self.intersect2d(a, b)
         if repeated_Idx.shape[0] != 0:
             if repeated_Idx.shape[0] == a.shape[0]:
-                tmpidx = new_precentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]] >= \
-                         self.precentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]]
+                tmpidx = new_percentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]] >= \
+                         self.percentMap[repeated_Idx[:, 0], repeated_Idx[:, 1]]
                 newIdx = repeated_Idx[tmpidx]
             else:
                 for j in a:
                     if np.any((repeated_Idx[:] == j.tolist()).all(1)):
-                        if new_precentMap[(j[0], j[1])] >= self.precentMap[(j[0], j[1])]:
+                        if new_percentMap[(j[0], j[1])] >= self.percentMap[(j[0], j[1])]:
                             newIdx.append(j)
                     else:
                         newIdx.append(j)
@@ -90,10 +88,9 @@ class ClassificationFactory:
             return newIdx
 
     @classmethod
-    def __pit(self, oneTail):
+    def __pit(self, oneTail, percentMap):
 
-        new_precentMap = np.zeros(self.data.shape)
-
+        new_percentMap = np.zeros(self.data.shape)
         idx_assigned = np.nonzero(self.classified.classified_map)
 
         # Hypothesis test for pit:
@@ -101,20 +98,20 @@ class ClassificationFactory:
         # Reject when z_min>z_1-alpha; Rejected are the pits
         idx = np.nonzero(self.z_min > oneTail)
 
-        # Correct classification and precentMap
-        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        # Correct classification and percentMap
+        new_percentMap[idx] = percentMap[idx]
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, PIT)
         return newidx
 
     @classmethod
-    def __peak(self, oneTail):
+    def __peak(self, oneTail, percentMap):
 
-        new_precentMap = np.zeros(self.data.shape)
+        new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
 
@@ -122,59 +119,59 @@ class ClassificationFactory:
         # lambda_max < eighThreshold (and therefore lambda_min also)
         # Reject when z_max<-z_1-alpha; Rejected are the peaks
         idx = np.nonzero(self.z_max < -oneTail)
-        new_precentMap[idx] = self.z_max[idx] / 100.
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        new_percentMap[idx] = percentMap[idx]
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, PEAK)
         return newidx
 
     @classmethod
-    def __flat(self, twoTail):
+    def __flat(self, twoTail, percentMap):
         '''
         Hypothesis test for flat:
         lambda_min = eighThreshold and lambda_max = eigThreshold
         '''
-        new_precentMap = np.zeros(self.data.shape)
+        new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
 
         idx = np.nonzero((np.abs(self.z_max) < twoTail) * (np.abs(self.z_min) < twoTail))
-        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
+        new_percentMap[idx] = percentMap[idx]
 
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, FLAT)
         return newidx
 
     @classmethod
-    def __saddle(self, oneTail):
+    def __saddle(self, oneTail, percentMap1, percentMap2):
         # Hypothesis test for saddle:
         #    lambda_min < eighThreshold and lambda_max > eigThreshold
-        new_precentMap = np.zeros(self.data.shape)
+        new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
 
         idx = np.nonzero((self.z_min > oneTail) * (self.z_max < -oneTail))
-        new_precentMap[idx] = (self.z_max[idx] + self.z_min[idx]) / 100.
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        if not np.any(idx): return False
+        new_percentMap[idx] = max(percentMap1[idx], percentMap2[idx])
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, SADDLE)
         return newidx
 
     @classmethod
-    def __ridge(self, oneTail, twoTail):
+    def __ridge(self, oneTail, twoTail, percentMap):
 
-        new_precentMap = np.zeros(self.data.shape)
+        new_percentMap = np.zeros(self.data.shape)
         idx_assigned = np.nonzero(self.classified.classified_map)
         # Hypothesis test for ridge:
         #    1.    lambda_min = eighThreshold and lambda_max > eigThreshold
@@ -183,46 +180,46 @@ class ClassificationFactory:
         # 1. reject when  |lambda_min| > z_1-alpha/2 (choose non-rejected) AND when
         #                 lambda_max < -Z_1-alpha (choose reject)
         idx = np.nonzero((np.abs(self.z_min) < oneTail) * (self.z_max < -twoTail))
-        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
+        new_percentMap[idx] = percentMap[idx]
 
         # 2. reject when |lambda_max| > z_1-alpha/2 (choose non-rejected) AND when
         #                lambda_min > Z_1-alpha (choose reject)
 
         idx2 = np.nonzero(np.abs(self.z_max) < twoTail * (self.z_min < -oneTail))
-        new_precentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
+        new_percentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
 
         if idx[0].size != 0 and idx2[0].size != 0:
             idx = np.hstack((np.array(idx), np.array(idx2)))
 
         if idx[0].size == 0:
             idx = idx2
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, RIDGE)
         return newidx
 
     @classmethod
-    def __valley(self, oneTail, twoTail):
+    def __valley(self, oneTail, twoTail, percentMap):
         '''
          Hypothesis test for valley:
             1.    lambda_min = eighThreshold and lambda_max < eigThreshold
          or 2.    lambda_max = eighThreshold and lambda_min < eigThreshold
         '''
-        new_precentMap = np.zeros(self.data.shape)
+        new_percentMap = np.zeros(self.data.shape)
         idx_assigned = np.nonzero(self.classified.classified_map)
         # 1. reject when |lambda_min| > z_1-alpha/2 (choose non-rejected) AND when
         #                lambda_max > Z_1-alpha (choose reject)
         idx = np.nonzero((np.abs(self.z_min) < twoTail) * (self.z_max > oneTail))
-        new_precentMap[idx] = (self.z_min[idx] + self.z_max[idx]) / 100.
+        new_percentMap[idx] = percentMap[idx]
 
         # 2. reject when |lambda_max| > z_1-alpha/2 (choose non-rejected) AND when
         #                lambda_min < -Z_1-alpha (choose reject)
 
         idx2 = np.nonzero((np.abs(self.z_max) < twoTail) * (self.z_min > oneTail))
-        new_precentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
+        new_percentMap[idx2] = (self.z_min[idx2] + self.z_max[idx2]) / 100.
 
         if idx[0].size != 0 and idx2[0].size != 0:
             idx = np.hstack((np.array(idx), np.array(idx2)))
@@ -230,10 +227,10 @@ class ClassificationFactory:
         if idx[0].size == 0:
             idx = idx2
 
-        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_precentMap))
+        newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
         if not np.any(newidx): return False
 
-        self.precentMap[(newidx[:, 0], newidx[:, 1])] = new_precentMap[(newidx[:, 0], newidx[:, 1])]
+        self.percentMap[(newidx[:, 0], newidx[:, 1])] = new_percentMap[(newidx[:, 0], newidx[:, 1])]
 
         self.classified.classify_map(newidx, VALLEY)
         return newidx
@@ -253,6 +250,10 @@ class ClassificationFactory:
         """
         # TODO Adjust function for point clouds. Now works for raster only
 
+        winsize = np.int(np.floor(winsize))
+        if winsize % 2 == 0:
+            winsize += 1
+
         if 'alpha' in kwargs:
             alpha = kwargs['alpha']
         else:
@@ -267,26 +268,77 @@ class ClassificationFactory:
         twoTail = norm.ppf(1-alpha/2)
 
         if isinstance(self.data, RasterData):
-            if self.precentMap is None:
-                self.precentMap = np.zeros(self.data.shape)
+            if self.percentMap is None:
+                self.percentMap = np.zeros(self.data.shape)
             resolution = self.data.resolution
             eigenvalue_sigma = np.sqrt(6) * self.data.accuracy / (winsize * resolution) ** 2
             eigenprop = EigenFactory.eigen_Hessian(self.data, winsize = winsize, resolution = resolution)
             eigThreshold = 2 * self.data.roughness / (winsize * resolution) **2
 
+            # Computes percentages for each combination:
+            eigMax = eigenprop.eigenValues[1, :, :]
+            eigMin = eigenprop.eigenValues[0, :, :]
+            denominator_oneTail = oneTail * eigenvalue_sigma + eigThreshold
+            denominator_twoTail = twoTail * eigenvalue_sigma
+
+            eigMaxPos_eigMinPos = self.__percentMapComputation(eigenprop, 1, 1, denominator_oneTail)
+            eigMaxPos_eigMinZero = self.__percentMapComputation(eigenprop, 1, 0,
+                                                                denominator_oneTail, denominator_twoTail)
+            eigMaxPos_eigMinNeg = self.__percentMapComputation(eigenprop, 1, -1, denominator_oneTail)
+
+            eigMaxNeg_eigMinNeg = self.__percentMapComputation(eigenprop, -1, -1, denominator_oneTail)
+            eigMaxNeg_eigMinPos = self.__percentMapComputation(eigenprop, -1, 1, denominator_oneTail)
+
+            eigMaxZero_eigMinNeg = self.__percentMapComputation(eigenprop, 0, -1,
+                                                                denominator_oneTail, denominator_twoTail)
+
             # Compute z-statistic for maximal eigenvalue and for minimal eigenvalue:
             # z_max/min = (lambda_max/min - eigThreshold) / eigenvalue_sigma
-            self.z_max = (eigenprop.eigenValues[1, :, :] - eigThreshold) / eigenvalue_sigma
-            self.z_min = (eigenprop.eigenValues[0, :, :] - eigThreshold) / eigenvalue_sigma
+            self.z_max = (eigMax - eigThreshold) / eigenvalue_sigma
+            self.z_min = (eigMin - eigThreshold) / eigenvalue_sigma
 
-            self.__pit(oneTail)
-            self.__peak(oneTail)
-            self.__ridge(oneTail, twoTail)
-            self.__valley(oneTail, twoTail)
-            self.__flat(twoTail)
-            self.__saddle(oneTail)
+            self.__pit(oneTail, eigMaxPos_eigMinPos)
+            self.__peak(oneTail, eigMaxNeg_eigMinNeg)
+            self.__ridge(oneTail, twoTail, eigMaxZero_eigMinNeg)
+            self.__valley(oneTail, twoTail, eigMaxPos_eigMinZero)
+            self.__flat(twoTail, eigMaxPos_eigMinZero)
+
+            self.__saddle(oneTail, eigMaxPos_eigMinNeg, eigMaxNeg_eigMinPos)
 
             return self.classified
+
+    @staticmethod
+    def __percentMapComputation(eigenProp, eigMax_sign, eigMin_sign,
+                                denominator_oneTail = 0, denominator_twoTail = 0):
+        """
+        computes the percent map according to the probability to have a negative or positive min/max eigenvalues
+
+        :param eigenProp: eigenvalues property, which have max and min eigen values assigned (eigenvalue property)
+        :param eigMax_sign: computing probability for: +1, -1, 0
+        :param eigMin_sign: computing probability for: +1, -1, 0
+        :param denominator1,2: one or two scalars, computed according to:
+        for one tail hypothesis: oneTail * eigenvalue_sigma + eigThreshold
+        for two tail hypothesis: twoTail * eigenvalue_sigma
+        -- computed in advance (scalar)
+        :return: the percent map for the required hypothesis
+        """
+        eigMax = eigenProp.eigenValues[1, :, :]
+        eigMin = eigenProp.eigenValues[0, :, :]
+
+        if eigMax_sign == 0:
+            eigMax_normed = np.abs(eigMax) / denominator_twoTail
+        else:
+            eigMax_normed = eigMax_sign * eigMax / denominator_oneTail
+
+        if eigMin_sign == 0:
+            eigMin_normed = np.abs(eigMin) / denominator_twoTail
+        else:
+            eigMin_normed = eigMin_sign * eigMin / denominator_oneTail
+
+        percentMap = (eigMax_normed + eigMin_normed) / 2
+
+        percentMap[percentMap < 0] = 0
+        return percentMap
 
     @classmethod
     def SurfaceClassification(self, data, winSizes, **kwargs):
@@ -303,17 +355,20 @@ class ClassificationFactory:
             print ('current window size %.4f' % win)
             if isinstance(self.data, RasterData):
                 self.__ClassifyPoints(win, classProp = classified)
-        return classified, self.precentMap
+        return classified, self.percentMap
 
 if __name__ == '__main__':
     from IOFactory import IOFactory
     import cProfile, pstats
+    import matplotlib
+
+    matplotlib.use('TkAgg')
 
     raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\minearl_try.txt')
     winSizes = np.linspace(0.1, 10, 5)
     cProfile.run("ClassificationFactory.SurfaceClassification(raster, winSizes)", "{}.profile".format(__file__))
     s = pstats.Stats("{}.profile".format(__file__))
-    # classified, precentMap = ClassificationFactory.SurfaceClassification(raster, winSizes)
+    # classified, percentMap = ClassificationFactory.SurfaceClassification(raster, winSizes)
     s.strip_dirs()
     s.sort_stats("time").print_stats(10)
     # plt.imshow(classified.classified_map)
