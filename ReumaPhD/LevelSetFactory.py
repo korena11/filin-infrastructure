@@ -66,8 +66,12 @@ class LevelSetFactory:
         """
         step = kwargs.get('step', 0.05)
         self.step = step
+        if 'img_rgb' in kwargs.keys():
+            self.img_rgb = kwargs['img_rgb']
+
         if isinstance(img, RasterData):
             self.img = img.data
+            self.data = img
 
         else:
             self.img = img
@@ -100,11 +104,11 @@ class LevelSetFactory:
         # dists/= np.linalg.norm(dists)
 
         # phi(x,y,t) < 0 for (x,y) \not\in \Omega
-        phi = np.ones(img_orig.shape[:2])
+        phi = -np.ones(img_orig.shape[:2])
 
         if type == 'rectangle':
             # phi(x,y,t) > 0 for (x,y) \in \Omega
-            phi[start_point[0]: start_point[0] + 2 * height, start_point[1]:start_point[1] + 2 * width] = -1
+            phi[start_point[0]: start_point[0] + 2 * height, start_point[1]:start_point[1] + 2 * width] = 1
 
             # phi(x,y,t) = 0 for (x,y) on curve
             phi[start_point[0]: start_point[0] + 2 * height, start_point[1]] = 0
@@ -134,6 +138,49 @@ class LevelSetFactory:
         """
         self.f = f
         self.f_x, self.f_y = mt.computeImageDerivatives(f, 1, **kwargs)
+
+    def init_region(self, method, **kwargs):
+        """
+        Initializes region function
+        :param kwargs:
+            :param method: type of the region wanted: 'classification', 'saliency'
+
+            inputs according to method:
+            saliency:
+                    inputs according to Saliency class
+            classification:
+            :param winSizes: array or list with different window sizes for classification
+            :param class: the classes which are looked for.
+
+            :param
+
+        :return:
+        """
+
+        if method == 'saliency':
+            inputs = {'feature': 'normals',
+                      'saliency_method': 'frequency',
+                      'dist_type': 'Euclidean',
+                      'filter_sigma': [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
+                      'filter_size': 0,
+                      'scales_number': 3,
+                      'verbose': True}
+            inputs.update(kwargs)
+
+            region = sl.distance_based(self.img_rgb, **inputs)
+        elif method == 'classification':
+            inputs = {'winSizes', np.linspace(0.1, 10, 5),
+                      'class', 1}
+            inputs.update(kwargs)
+
+            from ClassificationFactory import ClassificationFactory as Cf
+            classified, percentMap = Cf.SurfaceClassification(self.img, inputs['winSizes'])
+            region = classified.classification(inputs['class'])
+
+        region = cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
+        region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
+        self.region = region
+
     def drawContours(self, ax, **kwargs):
         """
         Draws the contours of a specific iteration
@@ -244,8 +291,6 @@ class LevelSetFactory:
                                       (self.norm_nabla_phi + EPS),
                                       (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
-
-
     def __drawContours(self, function, ax, **kwargs):
         """
         Draws the contours of a specific iteration
@@ -283,6 +328,7 @@ class LevelSetFactory:
             l_curve.append(curve)
 
         return l_curve, ax
+
     def __compute_vb(self, **kwargs):
         """
         Computes the band velocity, according to Li et al., 2006.
@@ -392,7 +438,7 @@ class LevelSetFactory:
 
         fig, ax = plt.subplots(num = 1)
         ax2 = plt.figure("phi")
-        fig3, ax3 = plt.subplots(num = 3)
+        fig3, ax3 = plt.subplots(num = 'kappa')
 
         mt.imshow(self.img)
         for i in range(iterations):
@@ -425,7 +471,6 @@ class LevelSetFactory:
                 l_curve, ax3 = self.__drawContours(self.psi, ax, color = 'b')
 
             # ---------------extrinsic movement ----------
-
             v = np.stack((self.f_x, self.f_y), axis = 2)
             vt = self.__compute_vt(v, **processing_props)
             v += vt
@@ -436,7 +481,7 @@ class LevelSetFactory:
             # for constrained contours
             extrinsic += self.__compute_vo() * vo_w
             #  self.psi += extrinsic
-            plt.figure(3)
+            plt.figure('kappa')
             mt.imshow(self.kappa)
             plt.pause(.5e-10)
 
@@ -455,6 +500,8 @@ class LevelSetFactory:
             _, ax = self.__drawContours(self.phi, ax, color = 'r')
             plt.pause(.5e-10)
         plt.show()
+        print ('Done')
+
 if __name__ == '__main__':
     # initial input:
     img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2RGB)
@@ -462,7 +509,7 @@ if __name__ == '__main__':
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
 
-    ls_obj = LevelSetFactory(img_normed, step = 20.)
+    ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 5.)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
     ls_obj.init_phi(width = 80, height = 80, start = (10, 10))
@@ -470,14 +517,6 @@ if __name__ == '__main__':
     plt.figure()
     mt.imshow(ls_obj.phi)
     plt.show()
-
-    #  phi *= dists
-    # option 2: horizontal line
-    # phi[img_height - 2 * height: img_height - height, :] = -1
-
-    # option 3: vertical line
-    # phi[:, img_width/2 : img_width/2 + width] = -1
-
 
     # ------- Initial limits via psi(x,y) = 0 ---------------------------
     # option 1: horizontal line
@@ -500,21 +539,15 @@ if __name__ == '__main__':
                              cv2.NORM_MINMAX)  # Convert to normalized floating point
     imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 1.5)
     g = 1 / (1 + imgGradient **2)
+    plt.imshow(g)
 
     # option 2: saliency map
     #    g = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma], feature='normals')
-
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    region = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
-                               feature = 'normals')
-    region = cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
-    region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
-
-    ls_obj.region = region
-    plt.imshow(g)
-    plt.show()
+    ls_obj.init_region('saliency')
+    plt.imshow(ls_obj.region)
 
     # Force III - open contours:
 
@@ -530,17 +563,13 @@ if __name__ == '__main__':
     # f = cv2.Canny(img_orig, 10, 50)
     #  f = cv2.GaussianBlur(f, ksize = (5, 5), sigmaX = 1.5)
 
-    plt.imshow(f)
-    plt.show()
-
-    #
     # # option 3: saliency map
     # f = cv2.GaussianBlur(region, ksize = (5, 5), sigmaX = sigma)
 
     #  f = np.zeros(img_gray.shape)
     ls_obj.init_f(f, **processing_props)
 
-    ls_obj.moveLS(open_flag = False, processing_props = processing_props,
-                  gvf_w = 0,
+    ls_obj.moveLS(open_flag = False, processing_props = processing_props, iterations = 500,
+                  gvf_w = 1.,
                   vo_w = 0.,
                   region_w = 0.)

@@ -50,6 +50,10 @@ class ClassificationProperty(BaseProperty):
         if self.datatype == RasterData:
             self.classified_map = np.zeros(self.Raster.shape)
 
+        elif self.datatype == np.ndarray:
+            self.classified_map = np.zeros(data.shape)
+
+
     def classification(self, *args):
         """
         Return classification map (numpy array)
