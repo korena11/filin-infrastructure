@@ -15,9 +15,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 import MyTools as mt
-from IOFactory import IOFactory
 from LevelSetFactory import LevelSetFactory
-from RasterVisualizations import RasterVisualization as rv
 
 # Classification codes
 RIDGE = 1
@@ -29,15 +27,16 @@ SADDLE = 6
 
 if __name__ == '__main__':
     # initial input:
-    raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\tt3.txt')
-    raster.roughness = 0.5
-    img_orig = raster.data
+    # raster = IOFactory.rasterFromAscFile(r'D:\Documents\ownCloud\Data\Channel91.txt')
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2RGB)
+    # raster.roughness = 0.5
+    # img_orig = raster.data
     img_normed = img_orig.copy()
     img_normed[img_normed == -9999] = np.mean(np.mean(img_normed[img_normed != -9999]))
     img_normed = cv2.normalize(img_normed.astype('float'), None, 0.0, 1.0,
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
-    hillshade = rv.hillshade(img_orig)
+    # hillshade = rv.hillshade(img_orig)
     ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 2.)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}

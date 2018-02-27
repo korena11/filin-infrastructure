@@ -156,7 +156,7 @@ class LevelSetFactory:
 
         :return:
         """
-
+        sigma = kwargs.get('sigma', 2.5)
         if method == 'saliency':
             inputs = {'feature': 'normals',
                       'saliency_method': 'frequency',
@@ -177,7 +177,7 @@ class LevelSetFactory:
             classified, percentMap = Cf.SurfaceClassification(self.img, inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
-        region = cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
+        region = 255 - cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.region = region
 
@@ -442,6 +442,7 @@ class LevelSetFactory:
 
         mt.imshow(self.img)
         for i in range(iterations):
+
             if verbose:
                 print i
                 if i > 26:
@@ -488,7 +489,9 @@ class LevelSetFactory:
             phi_t = self.step * (intrinsic - extrinsic)
             self.phi += cv2.GaussianBlur(phi_t, (processing_props['ksize'], processing_props['ksize']),
                                          processing_props['sigma'])
-
+            if np.all(np.abs(self.kappa)) <= 3e-7:
+                print 'done'
+                return
             plt.figure('phi')
             mt.imshow(self.phi)
 
@@ -509,7 +512,7 @@ if __name__ == '__main__':
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
 
-    ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 5.)
+    ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 1.)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
     ls_obj.init_phi(width = 80, height = 80, start = (10, 10))
@@ -539,15 +542,17 @@ if __name__ == '__main__':
                              cv2.NORM_MINMAX)  # Convert to normalized floating point
     imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 1.5)
     g = 1 / (1 + imgGradient **2)
-    plt.imshow(g)
+    plt.figure('g')
+    mt.imshow(g)
 
     # option 2: saliency map
-    #    g = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma], feature='normals')
+    # g = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma], feature='pixel_val')
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    ls_obj.init_region('saliency')
-    plt.imshow(ls_obj.region)
+    ls_obj.init_region('saliency', saliency_method = 'frequency', sigma = 0.5, feature = 'pixel_val')
+    plt.figure('region')
+    mt.imshow(ls_obj.region)
 
     # Force III - open contours:
 
@@ -568,8 +573,11 @@ if __name__ == '__main__':
 
     #  f = np.zeros(img_gray.shape)
     ls_obj.init_f(f, **processing_props)
+    plt.figure('f')
+    mt.imshow(f)
+    plt.show()
 
     ls_obj.moveLS(open_flag = False, processing_props = processing_props, iterations = 500,
                   gvf_w = 1.,
                   vo_w = 0.,
-                  region_w = 0.)
+                  region_w = .01)
