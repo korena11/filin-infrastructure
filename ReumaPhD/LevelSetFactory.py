@@ -104,7 +104,7 @@ class LevelSetFactory:
         # dists/= np.linalg.norm(dists)
 
         # phi(x,y,t) < 0 for (x,y) \not\in \Omega
-        phi = -np.ones(img_orig.shape[:2])
+        phi = -np.ones(self.img.shape[:2])
 
         if type == 'rectangle':
             # phi(x,y,t) > 0 for (x,y) \in \Omega
@@ -138,6 +138,16 @@ class LevelSetFactory:
         """
         self.f = f
         self.f_x, self.f_y = mt.computeImageDerivatives(f, 1, **kwargs)
+
+    def init_psi(self, psi, **kwargs):
+        """
+         Initializes the psi function (open edges)
+        :param psi: the function
+        :param kwargs: gradient process dictionary
+
+        """
+        self.psi = psi
+        self.psi_x, self.psi_y = mt.computeImageDerivatives(psi, 1, **kwargs)
 
     def init_region(self, method, **kwargs):
         """
@@ -261,10 +271,9 @@ class LevelSetFactory:
                                     (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
         if type == 'open':
-            psi_x, psi_y = mt.computeImageDerivatives(self.psi, 1, ksize = processing_props['ksize'])
-            self.norm_nabla_psi = np.sqrt(psi_x ** 2 + psi_y ** 2)
-            g_x, g_y = mt.computeImageDerivatives(self.g, 1, ksize = processing_props['ksize'])
-            return cv2.GaussianBlur(self.g * self.kappa * self.norm_nabla_psi + (g_x * psi_x + g_y * psi_y),
+            self.norm_nabla_psi = np.sqrt(self.psi_x ** 2 + self.psi_y ** 2)
+            return cv2.GaussianBlur(
+                self.g * self.kappa * self.norm_nabla_psi + (self.g_x * self.psi_x + self.g_y * self.psi_y),
                                     (processing_props['ksize'], processing_props['ksize']),
                                     processing_props['sigma'])
 
@@ -295,7 +304,7 @@ class LevelSetFactory:
         """
         Draws the contours of a specific iteration
         :param phi: the potential function
-        :param img: the image on which the contours will be drawn
+        :param image: the image on which the contours will be drawn
         :return: the figure
         """
 
@@ -426,6 +435,7 @@ class LevelSetFactory:
         flow_types = kwargs.get('flow_types', ['geodesic'])
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
         open_flag = kwargs.get('open_flag', False)
+        img_showed = kwargs.get('image_showed', self.img)
         iterations = kwargs.get('iterations', 150)
         verbose = kwargs.get('verbose', False)
 
@@ -500,14 +510,14 @@ class LevelSetFactory:
                     self.phi[curve._y.astype('int'), curve._x.astype('int')] = 0
 
             plt.figure(1)
-            _, ax = self.__drawContours(self.phi, ax, color = 'r')
+            _, ax = self.__drawContours(self.phi, ax, color = 'r', image = img_showed)
             plt.pause(.5e-10)
         plt.show()
         print ('Done')
 
 if __name__ == '__main__':
     # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2RGB)
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Channel91.png'), cv2.COLOR_BGR2RGB)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
@@ -515,7 +525,7 @@ if __name__ == '__main__':
     ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 1.)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
-    ls_obj.init_phi(width = 80, height = 80, start = (10, 10))
+    ls_obj.init_phi(width = 120, height = 60, start = (10, 10))
 
     plt.figure()
     mt.imshow(ls_obj.phi)
@@ -529,7 +539,7 @@ if __name__ == '__main__':
     width_boundary = 20
     psi[:, 0: width_boundary] = -1
     psi[:, -width_boundary:] = -1
-    ls_obj.psi = psi
+    ls_obj.init_psi(psi, **processing_props)
     # ---------------------------------------------------------------------
 
     # ---------------- Intrinsic forces maps ------------------------------
@@ -550,7 +560,7 @@ if __name__ == '__main__':
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    ls_obj.init_region('saliency', saliency_method = 'frequency', sigma = 0.5, feature = 'pixel_val')
+    ls_obj.init_region('saliency', saliency_method = 'context', sigma = 0.5, feature = 'pixel_val')
     plt.figure('region')
     mt.imshow(ls_obj.region)
 
@@ -577,7 +587,9 @@ if __name__ == '__main__':
     mt.imshow(f)
     plt.show()
 
+    # PAY ATTENTION to region's weight - it should be a scale or two smaller than the others
+
     ls_obj.moveLS(open_flag = False, processing_props = processing_props, iterations = 500,
                   gvf_w = 1.,
                   vo_w = 0.,
-                  region_w = .01)
+                  region_w = .02)

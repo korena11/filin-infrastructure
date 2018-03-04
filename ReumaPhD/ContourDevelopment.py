@@ -10,12 +10,10 @@ matplotlib.use('TkAgg')
 import numpy as np
 from matplotlib import pyplot as plt
 import cv2
-from numpy import pi, sqrt, arctan, arctan2, sin, cos
 from numpy.linalg import norm
 from skimage import measure
 from functools import partial
-from scipy import interpolate
-import RasterVisualizations
+
 
 def getValueSubpix(img, location_row, location_column):
     """
@@ -79,7 +77,7 @@ if __name__ == '__main__':
     # gridSpacing = pi
     # x, y = np.ogrid[-pi:gridSpacing:100j, -pi:gridSpacing:100j] # the '100j' is the number of elements
     # img = np.sin(np.exp((np.sin(x) ** 3 + np.cos(y) ** 2)))
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/Images/doubleTrouble.png',1), cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\doubleTrouble.png', 1), cv2.COLOR_BGR2GRAY)
 
     # compute image gradient
     dimg_dx = cv2.Sobel(img, cv2.CV_64F,1,0,ksize=3)
@@ -97,12 +95,12 @@ if __name__ == '__main__':
    # plt.figure()
     plt.imshow(img, interpolation='nearest', cmap='gray')
     plt.hold(True)
-    dh = 0.05
+    dh = 2
 
 
 
     for c in contours:
-        for k in np.arange(0, 5):
+        for k in np.arange(0, 10):
             c[:, [0, 1]] = c[:, [1, 0]] #swapping between columns: x will be at the first column and y on the second
 
             if np.any(c < 0) or np.any(c[:,0] > grad_img.shape[1]) or np.any(c[:,1] > grad_img.shape[0]):
