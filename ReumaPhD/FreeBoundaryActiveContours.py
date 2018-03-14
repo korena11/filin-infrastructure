@@ -4,11 +4,10 @@ photo-lab-3\Reuma
 30, Mar, 2017
 
 '''
-import platform
 from functools import partial
 
 import cv2
-import matplotlib.animation as manimation
+import matplotlib
 import numpy as np
 from matplotlib import pyplot as plt
 from numpy.linalg import norm
@@ -17,9 +16,7 @@ from scipy.ndimage import filters
 import ActiveContours as ac
 from ContourDevelopment import getValueSubpix
 
-if platform.system() == 'Linux':
-    import matplotlib
-    matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 
 
 def closestBoundaryPoint(point, boundary_curve, **kwargs):
@@ -41,7 +38,7 @@ def closestBoundaryPoint(point, boundary_curve, **kwargs):
 
 if __name__ == '__main__':
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/Dropbox/PhD/Data/ActiveContours/Images/channel91.png', 1),
+    img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\channel91.png', 1),
                        cv2.COLOR_BGR2GRAY)
 
     # tension and stiffness
@@ -84,10 +81,10 @@ if __name__ == '__main__':
 
     # ================================ MOVIE INITIALIZATIONS ===========================
     # Movie initializations
-    FFMpegWriter = manimation.writers['ffmpeg']
-    metadata = dict(title='Open boundary active contour', artist='Reuma',
-                    comment='Movie support!')
-    writer = FFMpegWriter(fps=30, metadata=metadata)
+    # FFMpegWriter = manimation.writers['ffmpeg']
+    # metadata = dict(title='Open boundary active contour', artist='Reuma',
+    #                 comment='Movie support!')
+    # writer = FFMpegWriter(fps=30, metadata=metadata)
     fig = plt.figure()
     plt.imshow(img, interpolation='nearest', cmap='gray')
     plt.axis('off')
@@ -108,29 +105,28 @@ if __name__ == '__main__':
     eyeM = np.eye(M.shape[0])
     invM = np.linalg.inv(M)
 
-    with writer.saving(fig, "freeBoundary.mp4", 100):
-        for i in range(500):
+    # with writer.saving(fig, "freeBoundary.mp4", 100):
+    for i in range(500):
+        # external force - using energy_image
+        fx = np.array(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0]))
+        fy = np.array(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0]))
 
-            # external force - using energy_image
-            fx = np.array(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0]))
-            fy = np.array(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0]))
+        # internal force - solving the (I-timeStep * A) = x, +timeStep * fx,y
+        # contour movement
+        ct_1 = c.copy()
+        c[:, 0] = invM.dot(c[:, 0] + dt * fx)
+        c[:, 1] = invM.dot(c[:, 1] + dt * fy)
 
-            # internal force - solving the (I-timeStep * A) = x, +timeStep * fx,y
-            # contour movement
-            ct_1 = c.copy()
-            c[:, 0] = invM.dot(c[:, 0] + dt * fx)
-            c[:, 1] = invM.dot(c[:, 1] + dt * fy)
+        # replace at the beginning and end of the curve with the closest boundary point
+        b0_closest = closestBoundaryPoint(c[1, :], b0)
+        b1_closest = closestBoundaryPoint(c[-2, :], b1)
 
-            # replace at the beginning and end of the curve with the closest boundary point
-            b0_closest = closestBoundaryPoint(c[1,:], b0)
-            b1_closest = closestBoundaryPoint(c[-2, :], b1)
+        c[0, :] = b0_closest
+        c[-1, :] = b1_closest
 
-            c[0,:] = b0_closest
-            c[-1,:] = b1_closest
+        l_curve.set_data(c[:, 0], c[:, 1])
 
-            l_curve.set_data(c[:,0], c[:,1])
-
-            writer.grab_frame()
+        # writer.grab_frame()
         plt.show()
 
         print ('done')

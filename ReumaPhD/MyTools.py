@@ -106,6 +106,7 @@ def computeImageGradient(I, **kwargs):
     ksize = kwargs.get('ksize', 5)
     gradientType = kwargs.get('gradientType', 'L1')
     sigma = kwargs.get('sigma', 2.5)
+    gradient = None
 
     img = cv2.GaussianBlur(I, (0, 0), sigma)
 
@@ -114,14 +115,14 @@ def computeImageGradient(I, **kwargs):
     dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
 
     if gradientType == 'L1':
-        return cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (0, 0), sigma)  # L1-norm of grad(I)
+        gradient = cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (0, 0), sigma)  # L1-norm of grad(I)
     elif gradientType == 'L2':
-        return cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (0, 0), sigma)
+        gradient = cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (0, 0), sigma)
     elif gradientType == 'LoG':
-        return cv2.GaussianBlur(filters.gaussian_laplace(I, sigma), (0, 0), sigma)
-    else:
-        pass
+        gradient = cv2.GaussianBlur(filters.gaussian_laplace(I, sigma), (0, 0), sigma)
 
+    # return cv2.normalize((gradient).astype('float'), None, 0.0,1.0, cv2.NORM_MINMAX)
+    return gradient
 
 def repartitionCurve(c, dh):
     '''

@@ -4,12 +4,11 @@ photo-lab-3\Reuma
 30, Jan, 2017 
 
 '''
-import platform
 from functools import partial
 
-if platform.system() == 'Linux':
-    import matplotlib
-    matplotlib.use('TkAgg')
+import matplotlib
+
+matplotlib.use('TkAgg')
 
 import cv2
 import matplotlib.mlab as mlab

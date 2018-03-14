@@ -496,7 +496,7 @@ class LevelSetFactory:
 
 if __name__ == '__main__':
     # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Channel91.png'), cv2.COLOR_BGR2RGB)
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2RGB)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
