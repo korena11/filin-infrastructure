@@ -40,6 +40,7 @@ def chooseLargestContours(contours, labelProp, minArea):
 class LevelSetFactory:
     phi = None  # LevelSetFunction
     img = None  # the analyzed image (of the data)
+    img_rgb = 0
     region = None  # region constraint
 
     step = 0  # step size
@@ -104,7 +105,7 @@ class LevelSetFactory:
         y = np.arange(img_height)
         xx, yy = np.meshgrid(x, y)
         dists = np.sqrt(xx ** 2 + yy ** 2)
-        # dists/= np.linalg.norm(dists)
+        dists /= np.linalg.norm(dists)
 
         self.phi = LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), **processing_props)
 
@@ -213,10 +214,10 @@ class LevelSetFactory:
 
         return ax
 
-    def flow(self, type, function, **kwargs):
+    def flow(self, flow_type, function, chanvese_w = 0, **kwargs):
         """
         Returns the flow of the level set according to the type wanted
-        :param type: can be one of the following:
+        :param flow_type: can be one of the following:
             'constant': Ct = N ==> phi_t = |\nabla \varphi|
             'curvature': Ct = kN ==> phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
             'equi-affine': Ct = k^(1/3) N ==> phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
@@ -226,6 +227,7 @@ class LevelSetFactory:
             'band': band velocity, according to Li et al., 2006.
 
         :param function: the level set according to which the flow goes (usually phi), a LevelSetFunction object
+        :param chanvese_w: weights for chan vese flow: area_w, length_w, inside_w, outside_w
 
 
         ------- optionals ---------
@@ -247,21 +249,45 @@ class LevelSetFactory:
         if 'processing_props' in kwargs.keys():
             processing_props.update(kwargs['processing_props'])
 
-        if type == 'constant':
+        if flow_type == 'constant':
             return np.abs(function.norm_nabla)
 
-        if type == 'curvature':
+        if flow_type == 'curvature':
             return function.kappa * function.norm_nabla
 
-        if type == 'equi-affine':
+        if flow_type == 'equi-affine':
             return np.cbrt(function.kappa) * function.norm_nabla
 
-        if type == 'geodesic':
+        if flow_type == 'geodesic':
             # !! pay attention, if self.g is constant - then this flow is actually curvature flow !!
 
             return cv2.GaussianBlur(
                 self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y * function._y),
                                     (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+        if flow_type == 'chan-vese':
+            weights = {'area_w': 1.,
+                       'length_w': 1.,
+                       'inside_w': 1.,
+                       'outside_w': 1.}
+            weights.update(kwargs)
+
+            self.phi.Heaviside(**kwargs)
+            self.phi.Dirac_delta(**kwargs)
+
+            img = self.img
+
+            c1 = np.sum(img * self.phi.heaviside) / np.sum(self.phi.heaviside)
+            c2 = np.sum(img * (1 - self.phi.heaviside)) / np.sum(1 - self.phi.heaviside)
+            if np.isnan(c1):
+                c1 = 0
+            if np.isnan(c2):
+                c2 = 0
+
+            return cv2.GaussianBlur(self.phi.dirac_delta * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
+                                                            weights['inside_w'] * (img - c1) ** 2 +
+                                                            weights['outside_w'] * (img - c2) ** 2),
+                                    (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+
 
         # if type == 'open':
         #     self.norm_nabla_psi = np.sqrt(self.psi_x ** 2 + self.psi_y ** 2)
@@ -270,7 +296,7 @@ class LevelSetFactory:
         #                             (processing_props['ksize'], processing_props['ksize']),
         #                             processing_props['sigma'])
 
-        if type == 'band':
+        if flow_type == 'band':
             return self.__compute_vb(**kwargs) * function.norm_nabla
 
     def __drawContours(self, function, ax, **kwargs):
@@ -287,7 +313,12 @@ class LevelSetFactory:
         ax.set_xlim([0, self.img.shape[1]])
 
         color = kwargs.get('color', 'b')
-        img = kwargs.get('image', self.img)
+
+        if np.any(self.img_rgb) != 0:
+            temp = self.img_rgb
+        else:
+            temp = self.img
+        img = kwargs.get('image', temp)
 
         function_binary = function.copy()
 
@@ -408,25 +439,36 @@ class LevelSetFactory:
         flow_types = kwargs.get('flow_types', ['geodesic'])
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
         open_flag = kwargs.get('open_flag', False)
-        img_showed = kwargs.get('image_showed', self.img)
+
         iterations = kwargs.get('iterations', 150)
         verbose = kwargs.get('verbose', False)
-
+        chanvese_w = kwargs.get('chanvese_w', {'area_w': 1., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.})
         gvf_w = kwargs.get('gvf_w', 1.)
         vo_w = kwargs.get('vo_w', 1.)
         region_w = kwargs.get('region_w', 1.)
+
+        if np.any(self.img_rgb) != 0:
+            temp = self.img_rgb
+        else:
+            temp = self.img
+
+        img_showed = kwargs.get('image_showed', temp)
 
         if 'processing_props' in kwargs.keys():
             processing_props.update(kwargs['processing_props'])
 
         fig, ax = plt.subplots(num = 1)
+        if np.any(self.img_rgb) != 0:
+            mt.imshow(self.img_rgb)
+        else:
+            mt.imshow(self.img)
         ax2 = plt.figure("phi")
         fig3, ax3 = plt.subplots(num = 'kappa')
         fig4, ax4 = plt.subplots(num = 'psi')
 
-        mult_phi = np.zeros(self.img.shape[:2])
+        # mult_phi = np.zeros(self.img.shape[:2])
 
-        mt.imshow(self.img)
+
         for i in range(iterations):
 
             if verbose:
@@ -439,7 +481,7 @@ class LevelSetFactory:
             # ---------- intrinsic movement ----------
             # regular flows
             for item in flow_types:
-                intrinsic += self.flow(item, self.phi, **processing_props)
+                intrinsic += self.flow(item, self.phi, chanvese_w, **processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
@@ -467,7 +509,7 @@ class LevelSetFactory:
 
             # for constrained contours
             extrinsic += self.__compute_vo() * vo_w
-            extrinsic += (1 - mult_phi)
+            # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
             plt.figure('kappa')
             mt.imshow(self.phi.kappa)
@@ -495,15 +537,16 @@ class LevelSetFactory:
 
 if __name__ == '__main__':
     # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2RGB)
-    img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
-                               cv2.NORM_MINMAX)  # Convert to normalized floating point
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\tt4.png'), cv2.COLOR_BGR2RGB)
+    img_gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
+    img_gray = cv2.normalize(img_gray.astype('float'), None, 0.0, 1.0,
+                             cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
 
-    ls_obj = LevelSetFactory(img_normed, img_rgb = img_orig, step = 5.)
+    ls_obj = LevelSetFactory(img_gray, img_rgb = img_orig, step = .1)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
-    ls_obj.init_phi(start = (100, 0), width = img_orig.shape[1] / 2, height = 5)
+    ls_obj.init_phi(start = (10, 10), width = 250, height = 160)
 
     plt.figure()
     mt.imshow(ls_obj.phi.value)
@@ -529,10 +572,8 @@ if __name__ == '__main__':
     # Force I - function g:
     # can be either constant, weights, or function
     # option 1: edge map g = 1/(1+|\nabla G(I) * I|).
-    img_gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
-    img_gray = cv2.normalize(img_gray.astype('float'), None, 0.0, 1.0,
-                             cv2.NORM_MINMAX)  # Convert to normalized floating point
-    imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 1.5)
+
+    imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 2.5)
     g = 1 / (1 + imgGradient **2)
     plt.figure('g')
     mt.imshow(g)
@@ -542,7 +583,7 @@ if __name__ == '__main__':
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    ls_obj.init_region('saliency', saliency_method = 'context', sigma = 0.5, feature = 'pixel_val')
+    ls_obj.init_region('saliency', saliency_method = 'frequency', sigma = 0.5, feature = 'normals')
     plt.figure('region')
     mt.imshow(ls_obj.region)
 
@@ -554,7 +595,7 @@ if __name__ == '__main__':
 
     # The map which the GVF will be defined by
     # option 1: the image itself
-    f = 1 - cv2.GaussianBlur(img_gray, ksize = (5, 5), sigmaX = sigma)
+    f = 1 - cv2.GaussianBlur(img_gray, ksize = (9, 9), sigmaX = sigma)
 
     # # option 2: edge map
     # f = cv2.Canny(img_orig, 10, 50)
@@ -570,8 +611,10 @@ if __name__ == '__main__':
     plt.show()
 
     # PAY ATTENTION to region's weight - it should be a scale or two smaller than the others
-
-    ls_obj.moveLS(open_flag = False, processing_props = processing_props, iterations = 500,
-                  gvf_w = 1.,
+    chanvese_weights = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
+    ls_obj.moveLS(flow_types = ['chan-vese', 'geodesic'], open_flag = False, processing_props = processing_props,
+                  iterations = 500,
+                  gvf_w = 1.00,
                   vo_w = 0.,
-                  region_w = 0.002)
+                  region_w = 0.5,
+                  chanvese_w = chanvese_weights)
