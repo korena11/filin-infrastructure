@@ -441,7 +441,6 @@ class LevelSetFactory:
             for item in flow_types:
                 intrinsic += self.flow(item, self.phi, **processing_props)
 
-
                 if verbose:
                     if np.any(intrinsic > 20):
                         print i

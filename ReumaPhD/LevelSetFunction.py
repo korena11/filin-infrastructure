@@ -17,6 +17,9 @@ class LevelSetFunction(object):
     _x = _y = _xx = _xy = _yy = None  # level set function derivatives
     norm_nabla = None  # |\nabla \phi| - level set gradient size
 
+    heaviside = None
+    dirac_delta = None
+
     kappa = None  # level set curvature
     processing_props = {}  # processing properties for gradient computation
 
@@ -117,3 +120,63 @@ class LevelSetFunction(object):
             phi[:, :start_point[1]] = 1
 
         return phi
+
+    def Heaviside(self, approximation_type = 0, **kwargs):
+        """
+        Returns the Heaviside function of phi: H(phi)
+
+        :param approximation_type:
+         0 - no approximation: H(x) = 1 if >= 0; H(x) = 0 x < 0
+         1 - 1st approximation: H(x) = 1 if x > epsilon; H(x)=0 if x< -epsilon;
+                                H(x)=0.5*(1+x/epsilon + 1/pi*sin(pi*x / epsilon)) if |x| <= epsilon
+         2 - 2nd approximation: H(x) = 0.5*(1+2/pi * arctan(x/epsilon))
+        :param kwargs: epsilon - for the approximations
+        :return: the heaviside function. Also updates the class.
+        """
+        epsilon = kwargs.get('epsilon', EPS)
+        H = np.zeros(self.value.shape)
+        x = self.value.copy()
+
+        if approximation_type == 0:
+            H[x >= 0] = 1
+
+        elif approximation_type == 1:
+            H[x > epsilon] = 1
+            H[x >= -epsilon & x <= epsilon] = 0.5 * (1 + x[x >= -epsilon & x <= epsilon] / epsilon +
+                                                     1 / np.pi * np.sin(
+                                                         np.pi * x[x >= -epsilon & x <= epsilon] / epsilon))
+
+        elif approximation_type == 2:
+            H = 0.5 * (1 + 2 / np.pi * np.arctan(x / epsilon))
+
+        self.heaviside = H
+        return H
+
+    def Dirac_delta(self, approximation_type = 0, **kwargs):
+        """
+        Returns the Dirac Delta function of phi. d(phi)
+
+        :param approximation_type:
+         0 - no approximation: d(x) = phi if  x >=0; d(x) = 0 if x < 0
+         1 - 1st approximation: d(x) = 0 if  |x| > epsilon;
+                                d(x) = 1/(2*epsilon) *(1+cos(pi*x / epsilon)) if |x|<=epsilon
+         2 - 2nd approximation: d(x) = 1/pi * epsilon/(epsilon**2 + x**2)
+        :param kwargs: epsilon - for the 1st and 2nd approximations
+        :return: the dirac delta function. Also updates the class
+        """
+        epsilon = kwargs.get('epsilon', EPS)
+        d = np.zeros(self.value.shape)
+        x = self.value.copy()
+
+        if approximation_type == 0:
+            d[x >= 0] = x[x >= 0]
+
+        elif approximation_type == 1:
+            d[x >= -epsilon & x <= epsilon] = 1 / (2 * epsilon) * (
+            1 + np.cos(np.pi * x[x >= -epsilon & x <= epsilon] / epsilon))
+
+        elif approximation_type == 2:
+            d = 1 / np.pi * epsilon / (epsilon ** 2 + x ** 2)
+
+        self.dirac_delta = d
+        return d
