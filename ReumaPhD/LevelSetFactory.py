@@ -75,7 +75,7 @@ class LevelSetFactory:
 
     def init_phi(self, **kwargs):
         """
-        Builds an initial smooth function (Lipsschitz continuous) that represents the interface as the set where
+        Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
         phi(x,y,t) = 0 is the curve.
         The function has the following characteristics:
         phi(x,y,t) > 0 for (x,y) \in \Omega
@@ -97,8 +97,9 @@ class LevelSetFactory:
         height = kwargs.get('height', img_height / 4)
         func_type = kwargs.get('type', 'rectangle')
         start_point = kwargs.get('start', (img_height / 2 - height, img_width / 2 - width))
+        regularization = kwargs.get('regularization_note', 0)
 
-        phi = LevelSetFunction.build_function(self.img.shape[:2], type = func_type,
+        phi = LevelSetFunction.build_function(self.img.shape[:2], func_type = func_type,
                                               height = height, width = width, start = start_point)
 
         x = np.arange(img_width)
@@ -107,7 +108,9 @@ class LevelSetFactory:
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
 
-        self.phi = LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), **processing_props)
+        self.phi = LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), regularization_note = regularization,
+                                    epsilon = 1e-8,
+                                    **processing_props)
 
     def init_psi(self, psi, **kwargs):
         """
@@ -116,7 +119,12 @@ class LevelSetFactory:
         :param kwargs: gradient process dictionary
 
         """
-        self.psi = LevelSetFunction(psi, **processing_props)
+        x = np.arange(psi.shape[1])
+        y = np.arange(psi.shape[0])
+        xx, yy = np.meshgrid(x, y)
+        dists = np.sqrt(xx ** 2 + yy ** 2)
+        dists /= np.linalg.norm(dists)
+        self.psi = LevelSetFunction(psi * dists, **processing_props)
 
     def init_g(self, g, **kwargs):
         """
@@ -180,41 +188,7 @@ class LevelSetFactory:
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.region = region
 
-    def drawContours(self, ax, **kwargs):
-        """
-        Draws the contours of a specific iteration
-        :param phi: the potential function
-        :param img: the image on which the contours will be drawn
-        :return: the figure
-        """
-
-        ax.cla()
-        ax.axis("off")
-        ax.set_ylim([self.img.shape[0], 0])
-        ax.set_xlim([0, self.img.shape[1]])
-
-        phi_binary = self.phi.copy()
-
-        # segmenting and presenting the found areas
-        phi_binary[np.where(self.phi > 0)] = 0
-        phi_binary[np.where(self.phi < 0)] = 1
-        phi_binary = np.uint8(phi_binary)
-
-        contours = measure.find_contours(self.phi, 0.)
-        blob_labels = measure.label(phi_binary, background = 0)
-        label_props = measure.regionprops(blob_labels)
-
-        #  contours = chooseLargestContours(contours, label_props, 1)
-
-        mt.imshow(self.img)
-
-        for c in contours:
-            c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
-            ax.plot(c[:, 0], c[:, 1], '-r')
-
-        return ax
-
-    def flow(self, flow_type, function, chanvese_w = 0, **kwargs):
+    def flow(self, flow_type, function, *args, **kwargs):
         """
         Returns the flow of the level set according to the type wanted
         :param flow_type: can be one of the following:
@@ -227,6 +201,7 @@ class LevelSetFactory:
             'band': band velocity, according to Li et al., 2006.
 
         :param function: the level set according to which the flow goes (usually phi), a LevelSetFunction object
+        :param open_flag: boolean for open flag
         :param chanvese_w: weights for chan vese flow: area_w, length_w, inside_w, outside_w
 
 
@@ -236,6 +211,7 @@ class LevelSetFactory:
         :param gradientType: 'L1' L1 norm of grad(I); 'L2' L2-norm of grad(I); 'LoG' Laplacian of gaussian
         :param sigma: sigma for LoG gradient
         :param ksize: kernel size, for blurring and derivatives
+        :param regularization: regularization note for heaviside and dirac (0,1,2)
 
         ---- band velocity optionals ----
         :param band_width: the width of the contour. default: 5
@@ -244,60 +220,57 @@ class LevelSetFactory:
 
         :return: phi_t
         """
-
-        processing_props = kwargs.get('processing_props', {'sigma': 2.5, 'ksize': 3, 'gradientType': 'L1'})
-        if 'processing_props' in kwargs.keys():
-            processing_props.update(kwargs['processing_props'])
+        flow = None
+        open_flag = args[0]
+        processing_props.update(**kwargs)
 
         if flow_type == 'constant':
-            return np.abs(function.norm_nabla)
+            flow = np.abs(function.norm_nabla)
 
         if flow_type == 'curvature':
-            return function.kappa * function.norm_nabla
+            flow = function.kappa * function.norm_nabla
 
         if flow_type == 'equi-affine':
-            return np.cbrt(function.kappa) * function.norm_nabla
+            flow = np.cbrt(function.kappa) * function.norm_nabla
 
         if flow_type == 'geodesic':
             # !! pay attention, if self.g is constant - then this flow is actually curvature flow !!
 
-            return cv2.GaussianBlur(
-                self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y * function._y),
-                                    (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+            flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y * function._y)
+            if open_flag:
+                psi_t = self.g * self.phi.kappa * self.psi.norm_nabla + (
+                    self.g_x * self.psi._x + self.g_y * self.psi._y)
+                self.psi.update(self.psi.value - psi_t, regularization_note = processing_props['regularization'])
+
         if flow_type == 'chan-vese':
             weights = {'area_w': 1.,
                        'length_w': 1.,
                        'inside_w': 1.,
                        'outside_w': 1.}
-            weights.update(kwargs)
-
-            self.phi.Heaviside(**kwargs)
-            self.phi.Dirac_delta(**kwargs)
+            weights.update(processing_props)
 
             img = self.img
 
             c1 = np.sum(img * self.phi.heaviside) / np.sum(self.phi.heaviside)
             c2 = np.sum(img * (1 - self.phi.heaviside)) / np.sum(1 - self.phi.heaviside)
+
             if np.isnan(c1):
                 c1 = 0
             if np.isnan(c2):
                 c2 = 0
 
-            return cv2.GaussianBlur(self.phi.dirac_delta * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
-                                                            weights['inside_w'] * (img - c1) ** 2 +
-                                                            weights['outside_w'] * (img - c2) ** 2),
-                                    (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
-
-
-        # if type == 'open':
-        #     self.norm_nabla_psi = np.sqrt(self.psi_x ** 2 + self.psi_y ** 2)
-        #     return cv2.GaussianBlur(
-        #         self.g * self.kappa * self.norm_nabla_psi + (self.g_x * self.psi_x + self.g_y * self.psi_y),
-        #                             (processing_props['ksize'], processing_props['ksize']),
-        #                             processing_props['sigma'])
+            flow = self.phi.dirac_delta * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
+                                           weights['inside_w'] * (img - c1) ** 2 +
+                                           weights['outside_w'] * (img - c2) ** 2)
 
         if flow_type == 'band':
-            return self.__compute_vb(**kwargs) * function.norm_nabla
+            vb = self.__compute_vb(**processing_props)
+            flow = vb * self.phi.norm_nabla
+            psi_t = vb * self.psi.norm_nabla
+            self.psi.update(self.psi.value + psi_t, **processing_props)
+
+        return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+
 
     def __drawContours(self, function, ax, **kwargs):
         """
@@ -313,6 +286,7 @@ class LevelSetFactory:
         ax.set_xlim([0, self.img.shape[1]])
 
         color = kwargs.get('color', 'b')
+        open_flag = kwargs.get('open', False)
 
         if np.any(self.img_rgb) != 0:
             temp = self.img_rgb
@@ -335,7 +309,26 @@ class LevelSetFactory:
 
         mt.imshow(img)
         l_curve = []
+
+        if open_flag:
+            psi_ind = np.nonzero(self.psi.value < 0)
+            psi_ind = np.vstack(psi_ind).T
+
         for c in contours:
+            if open_flag:
+                # collide_ind = mt.intersect2d(np.int64(np.round(c[:])), psi_ind)
+                # if collide_ind.shape[0] == 0:
+                #     pass
+                #
+                # elif collide_ind.shape[0] == c.shape[0]:
+                #     continue
+                # else:
+                collide_ind = np.isin(np.int64(np.round(c[:])), psi_ind)
+
+                c = c[np.sum(collide_ind, axis = 1).astype('bool')]
+                if c.shape[0] == 0:
+                    continue
+
             c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
 
             curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
@@ -354,10 +347,11 @@ class LevelSetFactory:
 
         :return: vb
         """
-        band_width = kwargs.get('band_width', 5.)
+        band_width = kwargs.get('band_width', 1.e-3)
         threshold = kwargs.get('threshold', 0.5)
         tau = kwargs.get('stepsize', 0.05)
         phi = self.phi.value
+
         # Define the areas for R and R'
         R = (phi > 0) * (phi <= band_width)
         R_ = (phi >= -band_width) * (phi < 0)
@@ -367,7 +361,7 @@ class LevelSetFactory:
 
         SR[R] = np.mean(self.img[R])
         SR_[R_] = np.mean(self.img[R_])
-        vb = 1 - (SR_ - SR) / (np.linalg.norm(SR + SR_))
+        vb = 1 - (SR_ - SR) / (np.linalg.norm(SR + SR_) + EPS)
         vb[vb < threshold] = 0
         vb *= tau
         #  vb[np.where(phi != 0)] = 0
@@ -426,23 +420,25 @@ class LevelSetFactory:
         """
         The function that moves the level set until the desired contour is reached
 
-        :param flow_type - flags for flow types (binary):
-        'constant', 'curvature', 'equi-affine', 'geodesic'
+        :param flow_type -  flow types and their weight (string, weight):
+        'constant', 'curvature', 'equi-affine', 'geodesic', 'chan-vese', 'band'
+
+        *NOTE: The 'chan-vese' flow requires weights (chanvese_w), for the four components of the model:
+         {area_w, length_w, inside_w, outside_w} (dictionary)
 
         :param gvf_flag: flag to add gradient vector flow
         :param open_flag: flag for open contours
 
         :return the contours after level set
          """
-        # ------inputs
-
-        flow_types = kwargs.get('flow_types', ['geodesic'])
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
+        # ------inputs--------
+        flow_types = kwargs.get('flow_types', {'geodesic': 1.})
+        regularization_epsilon = kwargs.get('regularization_epsilon', EPS)
         open_flag = kwargs.get('open_flag', False)
 
         iterations = kwargs.get('iterations', 150)
         verbose = kwargs.get('verbose', False)
-        chanvese_w = kwargs.get('chanvese_w', {'area_w': 1., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.})
+
         gvf_w = kwargs.get('gvf_w', 1.)
         vo_w = kwargs.get('vo_w', 1.)
         region_w = kwargs.get('region_w', 1.)
@@ -454,8 +450,15 @@ class LevelSetFactory:
 
         img_showed = kwargs.get('image_showed', temp)
 
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
         if 'processing_props' in kwargs.keys():
             processing_props.update(kwargs['processing_props'])
+
+        if 'band_props' in kwargs.keys():
+            processing_props.update(kwargs['band_props'])
+
+        if 'chanvese_w' in kwargs.keys():
+            processing_props.update(kwargs['chanvese_w'])
 
         fig, ax = plt.subplots(num = 1)
         if np.any(self.img_rgb) != 0:
@@ -463,14 +466,15 @@ class LevelSetFactory:
         else:
             mt.imshow(self.img)
         ax2 = plt.figure("phi")
+        mt.imshow(self.phi.value)
         fig3, ax3 = plt.subplots(num = 'kappa')
+        mt.imshow(self.phi.kappa)
         fig4, ax4 = plt.subplots(num = 'psi')
+        mt.imshow(self.psi.value)
 
         # mult_phi = np.zeros(self.img.shape[:2])
 
-
         for i in range(iterations):
-
             if verbose:
                 print i
                 if i > 26:
@@ -480,8 +484,10 @@ class LevelSetFactory:
 
             # ---------- intrinsic movement ----------
             # regular flows
-            for item in flow_types:
-                intrinsic += self.flow(item, self.phi, chanvese_w, **processing_props)
+            for item in flow_types.keys():
+                if flow_types[item] == 0:
+                    continue
+                intrinsic += flow_types[item] * self.flow(item, self.phi, open_flag, **processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
@@ -492,11 +498,13 @@ class LevelSetFactory:
 
             # open contour
             if open_flag:
-                intrinsic += self.flow('band', self.phi, **processing_props)
-                psi_t = self.flow('band', self.psi, **processing_props)
-                self.psi.update(
-                    cv2.GaussianBlur(self.psi.value + psi_t, (processing_props['ksize'], processing_props['ksize']),
-                                     sigmaX = processing_props['sigma']))
+                #     band_props.update(processing_props)
+                #     vb = self.__compute_vb(**band_props)
+                #     intrinsic += vb * self.phi.norm_nabla
+                #     psi_t = band_w * vb * self.psi.norm_nabla + flow_types['geodesic']*self.flow('geodesic', self.psi, **processing_props)
+                #     self.psi.update(
+                #         cv2.GaussianBlur(self.psi.value - psi_t, (processing_props['ksize'], processing_props['ksize']),
+                #                          sigmaX = processing_props['sigma']))
                 plt.figure('psi')
                 l_curve, ax4 = self.__drawContours(self.psi.value, ax4, color = 'b', image = self.psi.value)
                 plt.pause(.5e-10)
@@ -518,8 +526,8 @@ class LevelSetFactory:
             phi_t = self.step * (intrinsic - extrinsic)
             self.phi.update(
                 cv2.GaussianBlur(self.phi.value + phi_t, (processing_props['ksize'], processing_props['ksize']),
-                                 processing_props['sigma']))
-            if np.all(np.abs(self.phi.kappa)) <= 3e-7:
+                                 processing_props['sigma']), epsilon = regularization_epsilon)
+            if np.max(np.abs(phi_t)) <= 5e-5:
                 print 'done'
                 return
             plt.figure('phi')
@@ -530,14 +538,19 @@ class LevelSetFactory:
             #         self.phi.value[curve._y.astype('int'), curve._x.astype('int')] = 0
 
             plt.figure(1)
-            _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed)
+            if open_flag:
+                _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed,
+                                            open = True)
+
+            else:
+                _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed)
             plt.pause(.5e-10)
         plt.show()
         print ('Done')
 
 if __name__ == '__main__':
     # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\tt4.png'), cv2.COLOR_BGR2RGB)
+    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Channel91.png'), cv2.COLOR_BGR2RGB)
     img_gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
     img_gray = cv2.normalize(img_gray.astype('float'), None, 0.0, 1.0,
                              cv2.NORM_MINMAX)  # Convert to normalized floating point
@@ -546,7 +559,7 @@ if __name__ == '__main__':
     ls_obj = LevelSetFactory(img_gray, img_rgb = img_orig, step = .1)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
-    ls_obj.init_phi(start = (10, 10), width = 250, height = 160)
+    ls_obj.init_phi(start = (10, 10), width = 120, height = 60, regularization_note = 1)
 
     plt.figure()
     mt.imshow(ls_obj.phi.value)
@@ -557,13 +570,13 @@ if __name__ == '__main__':
     # psi[img_height - 2 * height: img_height - height, :] = -1
     # option 2: vertical line
     psi = -np.ones(img_orig.shape[:2])
-    width_boundary = 10
+    width_boundary = 50
     psi[:, 0: width_boundary] = 1
     psi[:, -width_boundary:] = 1
     # psi[0:width_boundary, : ] = -1
     # psi[-width_boundary:, :] = -1
     ls_obj.init_psi(cv2.GaussianBlur(psi, (5, 5), 2.5), **processing_props)
-    plt.imshow(psi)
+    mt.imshow(psi)
     plt.show()
     # ---------------------------------------------------------------------
 
@@ -612,9 +625,13 @@ if __name__ == '__main__':
 
     # PAY ATTENTION to region's weight - it should be a scale or two smaller than the others
     chanvese_weights = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
-    ls_obj.moveLS(flow_types = ['chan-vese', 'geodesic'], open_flag = False, processing_props = processing_props,
+    band_props = {'band_width': 5e-4, 'threshold': 0.1, 'stepsize': 0.5}
+    ls_obj.moveLS(flow_types = {'band': 1.0, 'chan-vese': 1., 'geodesic': 1.0, },
+                  open_flag = True,
+                  processing_props = processing_props,
                   iterations = 500,
                   gvf_w = 1.00,
                   vo_w = 0.,
-                  region_w = 0.5,
-                  chanvese_w = chanvese_weights)
+                  region_w = .020,
+                  chanvese_w = chanvese_weights,
+                  band_props = band_props)

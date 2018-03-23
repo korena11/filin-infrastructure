@@ -277,30 +277,28 @@ def is_pos_semidef(x):
     return np.all(np.linalg.eigvals(x) >= 0)
 
 
-def hillshade(array, **kwargs):
+def intersect2d(a, b, **kwargs):
     """
+    finds the recurring elements in two arrays (row-wise)
 
-    :param array: the raster
-    :param kwargs:
+    :param axis: column-wise
     :return:
     """
-    azimuth = kwargs.get('azimuth', 315.0)
-    angle_altitude = kwargs.get('altitude', 45.)
+    axis = kwargs.get('axis', 0)
+    nrows, ncols = a.shape
+    if axis == 0:
+        byaxis = ncols
 
-    azimuth = 360.0 - azimuth
+    else:
+        # TODO: CHECK THIS ONE WROKS, DIDN'T TRY THAT
+        byaxis = nrows
+    dtype = {'names': ['f{}'.format(i) for i in range(byaxis)],
+             'formats': byaxis * [a.dtype]}
+    aa = a.copy()
+    bb = b.copy()
+    c = np.intersect1d(aa.view(dtype), bb.view(dtype))
 
-    x, y = np.gradient(array)
-    slope = np.pi / 2. - np.arctan(np.sqrt(x * x + y * y))
-    aspect = np.arctan2(-x, y)
-    azimuthrad = azimuth * np.pi / 180.
-    altituderad = angle_altitude * np.pi / 180.
-
-    shaded = np.sin(altituderad) * np.sin(slope) + np.cos(altituderad) * np.cos(slope) * np.cos(
-        (azimuthrad - np.pi / 2.) - aspect)
-
-    return 255 * (shaded + 1) / 2
-
-
+    return c.view(a.dtype).reshape(-1, byaxis)
 if __name__ == '__main__':
     img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2GRAY)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
