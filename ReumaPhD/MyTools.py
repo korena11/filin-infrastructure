@@ -267,6 +267,20 @@ def DoG_filter(image, **kwargs):
     return blur2-blur1
 
 
+def chooseLargestContours(contours, labelProp, minArea):
+    '''
+    leaves only contours with area larger than minArea
+    :param contours: list of contours
+    :param labelProp: properties of labeled area
+    :param minArea: minimal area needed
+    :return: list of "large" contours
+    '''
+    contours_filtered = []
+
+    for prop, c in zip(labelProp, contours):
+        if prop.area >= minArea and prop.area <= 10e6:
+            contours_filtered.append(c)
+    return contours_filtered
 
 def is_pos_semidef(x):
     """

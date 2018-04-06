@@ -21,38 +21,39 @@ from LevelSetFunction import LevelSetFunction
 
 EPS = np.finfo(float).eps
 
-def chooseLargestContours(contours, labelProp, minArea):
-    '''
-    leaves only contours with area larger than minArea
-    :param contours: list of contours
-    :param labelProp: properties of labeled area
-    :param minArea: minimal area needed
-    :return: list of "large" contours
-    '''
-    contours_filtered = []
-
-    for prop, c in zip(labelProp, contours):
-        if prop.area >= minArea and prop.area <= 10e6:
-            contours_filtered.append(c)
-
-    return contours_filtered
-
 class LevelSetFactory:
-    phi = None  # LevelSetFunction
+    __phi = []  # LevelSetFunction
     img = None  # the analyzed image (of the data)
     img_rgb = 0
     region = None  # region constraint
 
-    step = 0  # step size
+    step = 0.  # step size
 
     imgGradient = None  # gradient of the analyzed image
-    norm_nabla_phi = None  # |\nabla \phi| - level set gradient size
     g = None  # internal force
     g_x = g_y = None  # g derivatives
 
     f = None  # external force (for GVF)
     f_x = f_y = None
-    psi = None  # internal force, for open contours;  LevelSetFunction
+    __psi = []  # internal force, for open contours;  LevelSetFunction
+
+    @property
+    def phi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__phi
+        """
+
+        return self.__phi[index]
+
+    @property
+    def psi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__psi
+        """
+
+        return self.__psi[index]
 
     def __init__(self, img, **kwargs):
         """
@@ -108,9 +109,10 @@ class LevelSetFactory:
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
 
-        self.phi = LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), regularization_note = regularization,
-                                    epsilon = 1e-8,
-                                    **processing_props)
+        self.__phi.append(
+            LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), regularization_note = regularization,
+                             epsilon = 1e-8,
+                             **processing_props))
 
     def init_psi(self, psi, **kwargs):
         """
@@ -124,7 +126,7 @@ class LevelSetFactory:
         xx, yy = np.meshgrid(x, y)
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
-        self.psi = LevelSetFunction(psi * dists, **processing_props)
+        self.__psi.append(LevelSetFunction(psi * dists, **processing_props))
 
     def init_g(self, g, **kwargs):
         """
@@ -270,7 +272,6 @@ class LevelSetFactory:
             self.psi.update(self.psi.value + psi_t, **processing_props)
 
         return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
-
 
     def __drawContours(self, function, ax, **kwargs):
         """
