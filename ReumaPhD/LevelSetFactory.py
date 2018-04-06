@@ -22,12 +22,23 @@ from LevelSetFunction import LevelSetFunction
 EPS = np.finfo(float).eps
 
 class LevelSetFactory:
+    # General initializations
+    processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
+    flow_types = {'geodesic': 1.}
+    regularization_epsilon = EPS
+
+    iterations = 150
+    step = 1.  # step size
+    gvf_w = 1.
+    vo_w = 1.
+    region_w = 1.
+
+    # Level set initializations
     __phi = []  # LevelSetFunction
     img = None  # the analyzed image (of the data)
     img_rgb = 0
     region = None  # region constraint
 
-    step = 0.  # step size
 
     imgGradient = None  # gradient of the analyzed image
     g = None  # internal force
@@ -37,23 +48,6 @@ class LevelSetFactory:
     f_x = f_y = None
     __psi = []  # internal force, for open contours;  LevelSetFunction
 
-    @property
-    def phi(self, index = 0):
-        """
-        Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__phi
-        """
-
-        return self.__phi[index]
-
-    @property
-    def psi(self, index = 0):
-        """
-        Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__psi
-        """
-
-        return self.__psi[index]
 
     def __init__(self, img, **kwargs):
         """
@@ -126,7 +120,25 @@ class LevelSetFactory:
         xx, yy = np.meshgrid(x, y)
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
-        self.__psi.append(LevelSetFunction(psi * dists, **processing_props))
+        self.__psi.append(LevelSetFunction(psi * dists, self.processing_props))
+
+    @property
+    def phi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__phi
+        """
+
+        return self.__phi[index]
+
+    @property
+    def psi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__psi
+        """
+
+        return self.__psi[index]
 
     def init_g(self, g, **kwargs):
         """
@@ -224,7 +236,7 @@ class LevelSetFactory:
         """
         flow = None
         open_flag = args[0]
-        processing_props.update(**kwargs)
+        processing_props = kwargs
 
         if flow_type == 'constant':
             flow = np.abs(function.norm_nabla)
@@ -433,17 +445,8 @@ class LevelSetFactory:
         :return the contours after level set
          """
         # ------inputs--------
-        flow_types = kwargs.get('flow_types', {'geodesic': 1.})
-        regularization_epsilon = kwargs.get('regularization_epsilon', EPS)
-        open_flag = kwargs.get('open_flag', False)
-
-        iterations = kwargs.get('iterations', 150)
         verbose = kwargs.get('verbose', False)
-
-        gvf_w = kwargs.get('gvf_w', 1.)
-        vo_w = kwargs.get('vo_w', 1.)
-        region_w = kwargs.get('region_w', 1.)
-
+        open_flag = kwargs.get('open_flag', False)
         if np.any(self.img_rgb) != 0:
             temp = self.img_rgb
         else:
@@ -451,15 +454,15 @@ class LevelSetFactory:
 
         img_showed = kwargs.get('image_showed', temp)
 
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
-        if 'processing_props' in kwargs.keys():
-            processing_props.update(kwargs['processing_props'])
+        # -------- initializations ---------
+        flow_types = self.flow_types
+        regularization_epsilon = self.regularization_epsilon
+        iterations = self.iterations
 
-        if 'band_props' in kwargs.keys():
-            processing_props.update(kwargs['band_props'])
-
-        if 'chanvese_w' in kwargs.keys():
-            processing_props.update(kwargs['chanvese_w'])
+        gvf_w = self.gvf_w
+        vo_w = self.vo_w
+        region_w = self.region_w
+        processing_props = self.processing_props
 
         fig, ax = plt.subplots(num = 1)
         if np.any(self.img_rgb) != 0:
@@ -472,8 +475,6 @@ class LevelSetFactory:
         mt.imshow(self.phi.kappa)
         fig4, ax4 = plt.subplots(num = 'psi')
         mt.imshow(self.psi.value)
-
-        # mult_phi = np.zeros(self.img.shape[:2])
 
         for i in range(iterations):
             if verbose:
@@ -549,90 +550,3 @@ class LevelSetFactory:
         plt.show()
         print ('Done')
 
-if __name__ == '__main__':
-    # initial input:
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Channel91.png'), cv2.COLOR_BGR2RGB)
-    img_gray = cv2.cvtColor(img_orig, cv2.COLOR_BGR2GRAY)
-    img_gray = cv2.normalize(img_gray.astype('float'), None, 0.0, 1.0,
-                             cv2.NORM_MINMAX)  # Convert to normalized floating point
-    sigma = 2.5  # blurring
-
-    ls_obj = LevelSetFactory(img_gray, img_rgb = img_orig, step = .1)
-
-    processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
-    ls_obj.init_phi(start = (10, 10), width = 120, height = 60, regularization_note = 1)
-
-    plt.figure()
-    mt.imshow(ls_obj.phi.value)
-    plt.show()
-
-    # ------- Initial limits via psi(x,y) = 0 ---------------------------
-    # option 1: horizontal line
-    # psi[img_height - 2 * height: img_height - height, :] = -1
-    # option 2: vertical line
-    psi = -np.ones(img_orig.shape[:2])
-    width_boundary = 50
-    psi[:, 0: width_boundary] = 1
-    psi[:, -width_boundary:] = 1
-    # psi[0:width_boundary, : ] = -1
-    # psi[-width_boundary:, :] = -1
-    ls_obj.init_psi(cv2.GaussianBlur(psi, (5, 5), 2.5), **processing_props)
-    mt.imshow(psi)
-    plt.show()
-    # ---------------------------------------------------------------------
-
-    # ---------------- Intrinsic forces maps ------------------------------
-
-    # Force I - function g:
-    # can be either constant, weights, or function
-    # option 1: edge map g = 1/(1+|\nabla G(I) * I|).
-
-    imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 2.5)
-    g = 1 / (1 + imgGradient **2)
-    plt.figure('g')
-    mt.imshow(g)
-
-    # option 2: saliency map
-    # g = sl.distance_based(img_orig, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma], feature='pixel_val')
-    ls_obj.init_g(g, **processing_props)
-
-    # Force II - region constraint:
-    ls_obj.init_region('saliency', saliency_method = 'frequency', sigma = 0.5, feature = 'normals')
-    plt.figure('region')
-    mt.imshow(ls_obj.region)
-
-    # Force III - open contours:
-
-    # ---------------------------------------------------------------------
-
-    # ----------------Extrinsic forces maps (vector field)------------------
-
-    # The map which the GVF will be defined by
-    # option 1: the image itself
-    f = 1 - cv2.GaussianBlur(img_gray, ksize = (9, 9), sigmaX = sigma)
-
-    # # option 2: edge map
-    # f = cv2.Canny(img_orig, 10, 50)
-    #  f = cv2.GaussianBlur(f, ksize = (5, 5), sigmaX = 1.5)
-
-    # # option 3: saliency map
-    # f = cv2.GaussianBlur(region, ksize = (5, 5), sigmaX = sigma)
-
-    #  f = np.zeros(img_gray.shape)
-    ls_obj.init_f(f, **processing_props)
-    plt.figure('f')
-    mt.imshow(f)
-    plt.show()
-
-    # PAY ATTENTION to region's weight - it should be a scale or two smaller than the others
-    chanvese_weights = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
-    band_props = {'band_width': 5e-4, 'threshold': 0.1, 'stepsize': 0.5}
-    ls_obj.moveLS(flow_types = {'band': 1.0, 'chan-vese': 1., 'geodesic': 1.0, },
-                  open_flag = True,
-                  processing_props = processing_props,
-                  iterations = 500,
-                  gvf_w = 1.00,
-                  vo_w = 0.,
-                  region_w = .020,
-                  chanvese_w = chanvese_weights,
-                  band_props = band_props)
