@@ -24,9 +24,16 @@ def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):
     '''
     if ax is None:
         ax = plt.gca()
+
+    def format_coord(x, y):
+        x = int(x + 0.5)
+        y = int(y + 0.5)
+        try:
+            return "%s @ [%4i, %4i]" % (img[y, x], x, y)
+        except IndexError:
+            return ""
     im = ax.imshow(img, cmap = cmap, *args, **kwargs)
-    ax.format_coord = lambda x, y: 'x=%d,y=%d, z=%f' % (scale_val * int(x + .5),
-                                                        scale_val * int(y + .5), img[y, x])
+    ax.format_coord = format_coord
     ax.figure.canvas.draw()
     return im
 

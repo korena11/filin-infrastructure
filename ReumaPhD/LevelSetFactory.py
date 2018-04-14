@@ -32,6 +32,7 @@ class LevelSetFactory:
     gvf_w = 1.
     vo_w = 1.
     region_w = 1.
+    chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
 
     # Level set initializations
     __phi = []  # LevelSetFunction
@@ -236,7 +237,7 @@ class LevelSetFactory:
         """
         flow = None
         open_flag = args[0]
-        processing_props = kwargs
+        processing_props = args[1]
 
         if flow_type == 'constant':
             flow = np.abs(function.norm_nabla)
@@ -257,11 +258,6 @@ class LevelSetFactory:
                 self.psi.update(self.psi.value - psi_t, regularization_note = processing_props['regularization'])
 
         if flow_type == 'chan-vese':
-            weights = {'area_w': 1.,
-                       'length_w': 1.,
-                       'inside_w': 1.,
-                       'outside_w': 1.}
-            weights.update(processing_props)
 
             img = self.img
 
@@ -272,7 +268,7 @@ class LevelSetFactory:
                 c1 = 0
             if np.isnan(c2):
                 c2 = 0
-
+            weights = self.chanvese_w
             flow = self.phi.dirac_delta * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
                                            weights['inside_w'] * (img - c1) ** 2 +
                                            weights['outside_w'] * (img - c2) ** 2)
@@ -489,7 +485,7 @@ class LevelSetFactory:
             for item in flow_types.keys():
                 if flow_types[item] == 0:
                     continue
-                intrinsic += flow_types[item] * self.flow(item, self.phi, open_flag, **processing_props)
+                intrinsic += flow_types[item] * self.flow(item, self.phi, open_flag, processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):

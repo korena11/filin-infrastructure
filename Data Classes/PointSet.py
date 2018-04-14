@@ -48,7 +48,8 @@ class PointSet(object):
     @property
     def Size(self):
         """
-        Return number of points 
+        :return: number of points
+
         """
         return self.__xyz.shape[0]
 
