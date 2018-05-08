@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>PointSet class &#8212; infragit 1 documentation</title>
+
+    <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="infragit 1 documentation" href="index.html"/>
+    <link rel="next" title="PointSubSet class" href="PointSubSet.html"/>
+    <link rel="prev" title="Welcome to infragit’s documentation!" href="index.html"/>
+</head>
+<body role="document">
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="genindex.html" title="General Index"
+               accesskey="I">index</a></li>
+        <li class="right">
+            <a href="py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="right">
+            <a href="PointSubSet.html" title="PointSubSet class"
+               accesskey="N">next</a> |
+        </li>
+        <li class="right">
+            <a href="index.html" title="Welcome to infragit’s documentation!"
+               accesskey="P">previous</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+    </ul>
+</div>
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+            <div class="body" role="main">
+
+                <div class="section" id="module-PointSet">
+                    <span id="pointset-class"></span>
+                    <h1>PointSet class<a class="headerlink" href="#module-PointSet"
+                                         title="Permalink to this headline">¶</a></h1>
+                    <dl class="class">
+                        <dt id="PointSet.PointSet">
+                            <em class="property">class </em><code class="descclassname">PointSet.</code><code
+                                class="descname">PointSet</code><span class="sig-paren">(</span><em>points</em>, <em>**kwargs</em><span
+                                class="sig-paren">)</span><a class="reference internal"
+                                                             href="_modules/PointSet.html#PointSet"><span
+                                class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet"
+                                                                            title="Permalink to this definition">¶</a>
+                        </dt>
+                        <dd><p>Basic point cloud</p>
+                            <p>Mandatory Data (must be different from None):</p>
+                            <blockquote>
+                                <div>__xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D
+                                    currently)
+                                </div>
+                            </blockquote>
+                            <dl class="docutils">
+                                <dt>Optional Data (May not exist at all, or can be None):</dt>
+                                <dd>__rgb - color of each point (ndarray)
+                                    __intensity - intensity of each point (ndarray)
+                                    __measurement_accuracy: noise of modeled surface
+                                </dd>
+                            </dl>
+                            <dl class="method">
+                                <dt id="PointSet.PointSet.AddData2Fields">
+                                    <code class="descname">AddData2Fields</code><span
+                                        class="sig-paren">(</span><em>data</em>, <em>field='XYZ'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/PointSet.html#PointSet.AddData2Fields"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#PointSet.PointSet.AddData2Fields"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Add data to a field</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.FieldsDimension">
+                                    <code class="descname">FieldsDimension</code><a class="headerlink"
+                                                                                    href="#PointSet.PointSet.FieldsDimension"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Return number of columns (channels)</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="classmethod">
+                                <dt id="PointSet.PointSet.GetPoint">
+                                    <em class="property">classmethod </em><code class="descname">GetPoint</code><span
+                                        class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a
+                                        class="reference internal" href="_modules/PointSet.html#PointSet.GetPoint"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#PointSet.PointSet.GetPoint"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Return specific point/s as numpy nX3 ndarray (incase we change the type of __xyz
+                                    in the future)</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.Intensity">
+                                    <code class="descname">Intensity</code><a class="headerlink"
+                                                                              href="#PointSet.PointSet.Intensity"
+                                                                              title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Return nX1 ndarray of intensity values</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.RGB">
+                                    <code class="descname">RGB</code><a class="headerlink" href="#PointSet.PointSet.RGB"
+                                                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Return nX3 ndarray of rgb values</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.Size">
+                                    <code class="descname">Size</code><a class="headerlink"
+                                                                         href="#PointSet.PointSet.Size"
+                                                                         title="Permalink to this definition">¶</a></dt>
+                                <dd>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">number of points</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="classmethod">
+                                <dt id="PointSet.PointSet.ToNumpy">
+                                    <em class="property">classmethod </em><code class="descname">ToNumpy</code><span
+                                        class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                        class="reference internal" href="_modules/PointSet.html#PointSet.ToNumpy"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#PointSet.PointSet.ToNumpy"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the
+                                    future)</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="classmethod">
+                                <dt id="PointSet.PointSet.ToPolyData">
+                                    <em class="property">classmethod </em><code class="descname">ToPolyData</code><span
+                                        class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="_modules/PointSet.html#PointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a
+                                        class="headerlink" href="#PointSet.PointSet.ToPolyData"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Create and return PolyData object</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li>tvtk.PolyData of the current PointSet</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="classmethod">
+                                <dt id="PointSet.PointSet.UpdateFields">
+                                    <em class="property">classmethod </em><code
+                                        class="descname">UpdateFields</code><span
+                                        class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="_modules/PointSet.html#PointSet.UpdateFields"><span class="viewcode-link">[source]</span></a><a
+                                        class="headerlink" href="#PointSet.PointSet.UpdateFields"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Update a field within the PointSet</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>Y, Z</strong> (<em>X,</em>) &#8211; which field to
+                                                        update
+                                                    </li>
+                                                    <li><strong>indices</strong> &#8211; which indices to update
+                                                        (optional)
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.X">
+                                    <code class="descname">X</code><a class="headerlink" href="#PointSet.PointSet.X"
+                                                                      title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Return nX1 ndarray of X coordinate</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.Y">
+                                    <code class="descname">Y</code><a class="headerlink" href="#PointSet.PointSet.Y"
+                                                                      title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Return nX1 ndarray of Y coordinate</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="PointSet.PointSet.Z">
+                                    <code class="descname">Z</code><a class="headerlink" href="#PointSet.PointSet.Z"
+                                                                      title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Return nX1 ndarray of Z coordinate</p>
+                                </dd>
+                            </dl>
+
+                        </dd>
+                    </dl>
+
+                    <div class="toctree-wrapper compound">
+                        <ul>
+                            <li class="toctree-l1"><a class="reference internal" href="PointSubSet.html">PointSubSet
+                                class</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Welcome to infragit&#8217;s documentation!</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="PointSubSet.html"
+                                  title="next chapter">PointSubSet class</a></p>
+            <div role="note" aria-label="source link">
+                <h3>This Page</h3>
+                <ul class="this-page-menu">
+                    <li><a href="_sources/PointSet.txt"
+                           rel="nofollow">Show Source</a></li>
+                </ul>
+            </div>
+            <div id="searchbox" style="display: none" role="search">
+                <h3>Quick search</h3>
+                <form class="search" action="search.html" method="get">
+                    <div><input type="text" name="q"/></div>
+                    <div><input type="submit" value="Go"/></div>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="genindex.html" title="General Index"
+            >index</a></li>
+        <li class="right">
+            <a href="py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="right">
+            <a href="PointSubSet.html" title="PointSubSet class"
+            >next</a> |
+        </li>
+        <li class="right">
+            <a href="index.html" title="Welcome to infragit’s documentation!"
+            >previous</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+    </ul>
+</div>
+<div class="footer" role="contentinfo">
+    &#169; Copyright 2018, Sagi Students.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+</div>
+</body>
+</html>

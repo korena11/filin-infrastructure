@@ -40,7 +40,6 @@ class LevelSetFactory:
     img_rgb = 0
     region = None  # region constraint
 
-
     imgGradient = None  # gradient of the analyzed image
     g = None  # internal force
     g_x = g_y = None  # g derivatives
@@ -49,14 +48,13 @@ class LevelSetFactory:
     f_x = f_y = None
     __psi = []  # internal force, for open contours;  LevelSetFunction
 
-
     def __init__(self, img, **kwargs):
         """
-        initialize factory.
+        Initialize factory.
 
         :param img: the image upon which the level set is started.
-        :param kwargs:
-            step - time step for advancing the level set function.
+        :param imb_rgb: an rgb image if exists
+        :param step: time step for advancing the level set function.
         """
         step = kwargs.get('step', 0.05)
         self.step = step
@@ -70,28 +68,42 @@ class LevelSetFactory:
             self.img = img
 
     def init_phi(self, **kwargs):
-        """
+        r"""
         Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
         phi(x,y,t) = 0 is the curve.
         The function has the following characteristics:
-        phi(x,y,t) > 0 for (x,y) \in \Omega
-        phi(x,y,t) < 0 for (x,y) \not\in \Omega
-        phi(x,y,t) = 0 for (x,y) on curve
+        .. math:: \begin{cases}
+            phi(x,y,t) > 0 & \forall (x,y) \in \Omega \\
+            phi(x,y,t) < 0 & \forall (x,y) \not\in \Omega \\
+            phi(x,y,t) = 0 & \forall (x,y) on curve \\
 
-        :param kwargs:
-        characteristics of the function:
+        *characteristics of the function*
+            :param processing_props: properties for gradient and differentiation:
+                'gradientType' - distance computation method
+                'sigma' - for smoothing
+                'ksize' - for smoothing
+
             :param width: the width of the area inside the curve
             :param height: the height of the area inside the curve
-            :param type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+            :param start: starting point for the inside area of the curve (x_start, y_start)
+            :param reularization: regularizataion note for heaviside function
+            :param function_type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+
+            :type processing_props: dict
+            :type width: int
+            :type height: int
+            :type function_type: str
+            :type start: tuple
+            :type regularization: int 0,1,2
 
         :return:
         """
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
-
+        processing_props.update(kwargs['processing_props'])
         img_height, img_width = self.img.shape[:2]
         width = kwargs.get('width', img_width / 4)
         height = kwargs.get('height', img_height / 4)
-        func_type = kwargs.get('type', 'rectangle')
+        func_type = kwargs.get('function_type', 'rectangle')
         start_point = kwargs.get('start', (img_height / 2 - height, img_width / 2 - width))
         regularization = kwargs.get('regularization_note', 0)
 
@@ -112,8 +124,11 @@ class LevelSetFactory:
     def init_psi(self, psi, **kwargs):
         """
          Initializes the psi function (open edges)
+
         :param psi: the function
-        :param kwargs: gradient process dictionary
+        :param processing_props: gradient process dictionary
+
+        :type psi: nd-array mxn
 
         """
         x = np.arange(psi.shape[1])
@@ -204,37 +219,60 @@ class LevelSetFactory:
         self.region = region
 
     def flow(self, flow_type, function, *args, **kwargs):
-        """
-        Returns the flow of the level set according to the type wanted
+        r"""
+        Return the flow of the level set according to the type wanted
+
         :param flow_type: can be one of the following:
-            'constant': Ct = N ==> phi_t = |\nabla \varphi|
-            'curvature': Ct = kN ==> phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
-            'equi-affine': Ct = k^(1/3) N ==> phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
+            'constant':
+
+            .. math:: Ct = N \Rightarrow phi_t = |\nabla \varphi|
+
+            'curvature':
+
+            .. math:: Ct = kN \Rightarrow phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
+
+            'equi-affine':
+
+             .. math:: Ct = k^(1/3) N \Rightarrow phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
+
             'geodesic': geodesic active contours, according to Casselles et al., 1997
-                        Ct = (g(I)k -\nabla(g(I))N)N ==>
+
+             .. math::  Ct = (g(I)k -\nabla(g(I))N)N \Rightarrow
                         phi_t = [g(I)*div(\nabla \varphi / |\nabla \varphi|))^(1/3))*|\nabla \varphi|
+
             'band': band velocity, according to Li et al., 2006.
 
-        :param function: the level set according to which the flow goes (usually phi), a LevelSetFunction object
+        :param function: the level set according to which the flow goes (usually phi)
         :param open_flag: boolean for open flag
         :param chanvese_w: weights for chan vese flow: area_w, length_w, inside_w, outside_w
 
-
-        ------- optionals ---------
-        :param function: the function of which the flow will move
+        **Optionals**
 
         :param gradientType: 'L1' L1 norm of grad(I); 'L2' L2-norm of grad(I); 'LoG' Laplacian of gaussian
         :param sigma: sigma for LoG gradient
         :param ksize: kernel size, for blurring and derivatives
-        :param regularization: regularization note for heaviside and dirac (0,1,2)
+        :param regularization: regularization note for heaviside and dirac
 
-        ---- band velocity optionals ----
+        *Band velocity optionals*
         :param band_width: the width of the contour. default: 5
         :param threshold: for when the velocity equals zero. default: 0.5
         :param stepsize. default 0.05
 
+        :type flow_type: str
+        :type function: LevelSetFunction
+        :type open_flag: bool
+        :type chanvese_w: dict
+        :type gradientType: dict
+        :type sigma: float
+        :type regularization: int 0,1,2
+        :type band_width: int
+        :type threshold: float
+        :type stepsize: float
+
         :return: phi_t
+
         """
+
         flow = None
         open_flag = args[0]
         processing_props = args[1]
@@ -284,9 +322,12 @@ class LevelSetFactory:
     def __drawContours(self, function, ax, **kwargs):
         """
         Draws the contours of a specific iteration
+
         :param phi: the potential function
         :param image: the image on which the contours will be drawn
+
         :return: the figure
+
         """
 
         ax.cla()
@@ -348,6 +389,7 @@ class LevelSetFactory:
     def __compute_vb(self, **kwargs):
         """
         Computes the band velocity, according to Li et al., 2006.
+
         :param img: the image upon which the contour is searched
         :param phi: the level set function
         :param band_width: the width of the contour. default: 5
@@ -379,19 +421,21 @@ class LevelSetFactory:
     def __compute_vt(self, vectorField, **kwargs):
         """
         Computes the vector field derivative in each direction according to
-        vt = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)
+        .. math:: v_t = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)
 
         :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)
-        :param edge_map
+        :param edge_map:
         :param kappa: curvature map
 
-        ---optionals: ----
+        **Optionals**
         gradient computation parameters
-        :param gradientType
-        :param ksize
-        :param sigma
 
-        :return: vt, nxmx2 (for x and y directions)
+        :param gradientType:
+        :param ksize:
+        :param sigma:
+
+        :return vt: velocity for x and y directions
+         :type vt: nd-array nxmx2
         """
 
         # compute the derivatives of the edge map at each direction
@@ -416,7 +460,9 @@ class LevelSetFactory:
         """
         Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal
         to another function (psi)
+
         :param kwargs:
+
         :return:
         """
         psi = kwargs.get('function', self.psi)  # if no other function is given it will be moving according to psi
@@ -439,6 +485,7 @@ class LevelSetFactory:
         :param open_flag: flag for open contours
 
         :return the contours after level set
+
          """
         # ------inputs--------
         verbose = kwargs.get('verbose', False)

@@ -1,0 +1,18 @@
+Rotation Property Documentation
+=====================================
+
+
+
+.. autoclass:: RotationMatrixProperty.RotationMatrixProperty
+:members:
+       :undoc-members:
+
+    		.. rubric:: Attributes
+
+		.. autoautosummary:: RotationMatrixProperty.RotationMatrixProperty
+:attributes:
+			
+		.. rubric:: Methods
+
+		.. autoautosummary:: RotationMatrixProperty.RotationMatrixProperty
+:methods:

@@ -1,16 +1,20 @@
+from numpy import nonzero, random, zeros, uint8
+
 from BaseProperty import BaseProperty
 from PointSubSet import PointSubSet
-from numpy import nonzero, random, zeros, uint8
 
 
 class SegmentationProperty(BaseProperty):
     """
-    Holds segments. 
+    Holds segments.
+
     Each segment represented by an integer in range (0, nSegments). 
     The segment -1 is used for unsegmented points
     Can hold result of filter. 
-        In this case Count is 2, and segments has values of 0 and 1. 
-        (Consider inheritance for convenience).
+
+    In this case Count is 2, and segments has values of 0 and 1.
+    (Consider inheritance for convenience).
+
     """
             
     __nSegments = None  # Number of segments. 
@@ -22,12 +26,15 @@ class SegmentationProperty(BaseProperty):
         """
         Constructor
         
-        Args:
-            points (PointSet / PointSubSet): reference to points  
-            segments (nX1 ndarray): segmentation labels for each point
+        :param points: reference to points
+        :param segments: segmentation labels for each point
+
+        :type points: PointSubSet or PointSet
+        :type segments: nx1 nd-array
             
-        """        
-        self._BaseProperty__points = points
+        """
+        super(SegmentationProperty, self).__init__(points)
+
         self.__segments = segments        
         self.__nSegments = len(set(self.__segments))
         

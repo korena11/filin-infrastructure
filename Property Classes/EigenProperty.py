@@ -11,25 +11,27 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
-from RasterData import RasterData
-from PointSet import PointSet
 from BaseProperty import BaseProperty
 
 
-class EigenPropoerty(BaseProperty):
+class EigenProperty(BaseProperty):
+    """
+    Property that holds eigen propoerties (e.g., eigen vectors, eigen values)
 
+    """
     __eigenVectors = None
     __eigenValues = None
 
     def __init__(self, dataset, **kwargs):
         """
         Property that holds eigen propoerties (e.g., eigen vectors, eigen values)
+
         :param dataset: a data class (PointSet of RasterData)
-        :param kwargs:
-                eigenValues: if two nd-arrays were sent for raster data: np.array([minVals, maxVals])
-                eigenVectors
+        :param eigenValues: if two nd-arrays were sent for raster data: np.array([minVals, maxVals])
+        :param eigenVectors
+
         """
-        super(EigenPropoerty, self).__init__(dataset)
+        super(EigenProperty, self).__init__(dataset)
 
         if 'eigenValues' in kwargs:
             self.__eigenValues = kwargs['eigenValues']
@@ -43,7 +45,6 @@ class EigenPropoerty(BaseProperty):
     @property
     def eigenVectors(self):
         return self.__eigenVectors
-
 
 
 if __name__ == '__main__':

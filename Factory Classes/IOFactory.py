@@ -261,16 +261,29 @@ class IOFactory:
         data = array(map(tmp, filelines[6:]))
         return RasterData(data, gridSpacing = cellsize, geoTransform=(xllcorner, yllcorner, 1., 1.), spatial_reference=projection, voidData = nodata_value)
 
-
-
     # ---------------------------WRITE -------------------------------
     @classmethod
-    def WriteToPts( cls, points, path ):
+    def SaveProperty(cls, property, *args, **kwargs):
+        """
+        Converts and saves a property to json file
+        :param property: the property which is needed to be saved
+        :param filename: path to json file
+
+        :type property: property class
+        :type filename: str
+
+        :return:
+        """
+        pass
+
+
+    @classmethod
+    def WriteToPts(cls, points, path):
         '''
         Write to pts file
-        :Args:
-            - points: PointSet
-            - path: path to the directory of a new file + file name
+
+            :param points: PointSet
+            :param path: to the directory of a new file + file name
         '''
         
         fields_num = points.FieldsDimension
@@ -296,10 +309,13 @@ class IOFactory:
         """
         Exporting points to shapefile
         
-        :Args:
-            pointSet: A PointSet\PointSubSet object with the points to be extracted
-            fileName: Full path and name of the shapefile to be created (not including the extension)
-            Additional properties can be sent using **kwargs which will be added as attributes in the shapfile
+        :param pointSet: A PointSet\PointSubSet object with the points to be extracted
+        :param fileName: Full path and name of the shapefile to be created (not including the extension)
+        :param Additional properties can be sent using **kwargs which will be added as attributes in the shapfile
+
+        :type pointSet: PointSet or PointSubSet
+        :type fileName: str
+
         """
         if ( pointSet.Z != None ):
             fieldList = ['X', 'Y', 'Z']
@@ -333,7 +349,6 @@ class IOFactory:
                 fieldList.append( 'Range' )
                 attributes = hstack( [attributes, auxProperty.ToNumpy] )
 
-        
         w = Writer( POINTZ )
         
         map( w.field, fieldList, tile( 'F', len( fieldList ) ) )

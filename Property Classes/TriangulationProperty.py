@@ -1,6 +1,8 @@
 from numpy import fabs, sum, mean, median, sqrt, tile, nonzero, asarray, logical_or, logical_not, ones, roll
-from PointSet import PointSet
+
 from BaseProperty import BaseProperty
+from PointSet import PointSet
+
 
 class TriangulationProperty(BaseProperty):
     '''
@@ -10,26 +12,28 @@ class TriangulationProperty(BaseProperty):
     def __init__(self, points, trianglesIndices):
         '''
         Constructor:
-        @param points: A PointSet Object
-        @param trianglesIndices: a n-by-3 array holding the indices, each row representing a triangle 
+        :param points
+        :param trianglesIndices: each row representing a triangle, holding the indices
+
+        :type points: PointSet or PointSubSet
+        :type trianglesIndices: nx3 nd-array
         '''
-        
-        self._BaseProperty__points = points
+        super(TriangulationProperty, self).__init__(points)
+
         self.__trianglesIndices = trianglesIndices
         self.__numTriangles = len(trianglesIndices)
     
     @property        
     def NumberOfTriangles(self):
         '''
-        Returns the number of triangles
-        @return: The number of triangles
+        Number of triangles
         '''
         return self.__numTriangles
     
     @property    
     def TrianglesIndices(self):
         '''
-        Returns the indices of all the triangles
+        Indices of all the triangles
         '''
         return self.__trianglesIndices  
     
@@ -37,8 +41,11 @@ class TriangulationProperty(BaseProperty):
     def AreaOfTriangle(self, index):
         '''
         Calculating the area of a specific triangle defined by its index in the triangles list
-        @param index: The index of the triangle
-        @return: The area of the triangle 
+
+        :param index: The index of the triangle
+
+        :return: The area of the triangle
+
         '''
         if (index < 0 or index >= self.__numTriangles):
             return 0
@@ -52,7 +59,9 @@ class TriangulationProperty(BaseProperty):
     def TotalArea(self):
         '''
         Calculating the total area enclosed in the triangulation
-        @return: The total area of all the triangles in the triangulation
+
+        :return: The total area of all the triangles in the triangulation
+
         '''
         return sum(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
       
@@ -60,7 +69,8 @@ class TriangulationProperty(BaseProperty):
     def AverageTriangleArea(self):
         '''
         Calculating the average area of all triangles
-        @return: The average area of all the triangles
+
+        :return: The average area of all the triangles
         '''
         return mean(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
     
@@ -68,7 +78,8 @@ class TriangulationProperty(BaseProperty):
     def MedianTriangleArea(self):
         '''
         Calculating the median area of all triangles
-        @return: The median area of all the triangles
+
+        :return: The median area of all the triangles
         '''
         return median(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
     
@@ -76,10 +87,13 @@ class TriangulationProperty(BaseProperty):
     def LengthOfEdge(self, triangleIndex, edgeIndex):
         '''
         Calculating the length of a specific edge of one of the triangles
-        @param triangleIndex: The index of a triangle
-        @param edgeIndex: The index of the edge (0 - the edge between the first two points of the triangle,
-                                                 1 - the edge between the last two points of the triangle,
-                                                 2 - the edge between the first point and the last point)
+
+        :param triangleIndex: The index of a triangle
+        :param edgeIndex: The index of the edge
+            * 0 - the edge between the first two points of the triangle,
+            * 1 - the edge between the last two points of the triangle,
+            * 2 - the edge between the first point and the last point)
+
         '''
         if ((triangleIndex < 0 or triangleIndex >= self.__numTriangles) or (edgeIndex < 0 or edgeIndex >= 3)):
             return 0
@@ -131,7 +145,8 @@ class TriangulationProperty(BaseProperty):
     def TrimEdgesByLength(self, maxLength):
         '''
         Removing all triangles which have an edge longer than a given threshold
-        @return: Number of triangles removed
+
+        :return: Number of triangles removed
         '''
         currentNumOfTriangles = self.__numTriangles
         

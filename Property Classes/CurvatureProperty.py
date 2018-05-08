@@ -14,21 +14,21 @@ class CurvatureProperty( BaseProperty ):
     @property    
     def Curvature( self ):
         """
-        Return points' curvature values 
+        Points' curvature values
         """  
         return self.__curvature
     
     @property  
     def k1( self ):
         """
-        Return maximal principal curvature value 
+        Maximal principal curvature value
         """  
         return self.__curvature[:, 0]
     
     @property  
     def k2( self ):
         """
-        Return minimal principal curvature value  
+        Minimal principal curvature value
         """  
         return self.__curvature[:, 1]
     

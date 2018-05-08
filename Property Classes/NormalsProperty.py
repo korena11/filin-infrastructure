@@ -3,8 +3,7 @@ from BaseProperty import BaseProperty
 class NormalsProperty(BaseProperty):
     
     def __init__(self, points, normals):
-        
-        self._BaseProperty__points = points
+        super(NormalsProperty, self).__init__(points)
         self.__normals = normals
     
     @property    

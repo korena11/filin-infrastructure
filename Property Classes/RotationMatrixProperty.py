@@ -1,10 +1,12 @@
-from BaseProperty import BaseProperty
 import numpy as np
+
+from BaseProperty import BaseProperty
+
 
 class RotationMatrixProperty( BaseProperty ):
 
     def __init__( self, points, rotation_matrix ):
-        self._BaseProperty__points = points
+        super(RotationMatrixProperty, self).__init__(points)
         self.__rotation_matrix = rotation_matrix
     
     @property    
@@ -17,13 +19,14 @@ class RotationMatrixProperty( BaseProperty ):
         
     @classmethod
     def EulerAngles_from_R( cls, R ):
-        '''
+        """
         given rotation matrix compute rotation angles
-        :Args:
-            - R: (3x3 array) rotation matrix 
-        :Returns:
-            - omega,phi,kappa: Euler angles (tuple) 
-        '''
+        :param R: - rotation matrix
+        :type R: 3x3 nd-array
+        :returns omega,phi,kappa: Euler angles
+        :rtype tuple
+
+        """
         R = cls.__rotation_matrix
         omega = np.arctan( -R[1, 2] / R[2, 2] )
         phi = np.arcsin( R[0, 2] )

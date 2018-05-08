@@ -12,10 +12,8 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 import numpy as np
-import json
 from BaseProperty import BaseProperty
 from RasterData import RasterData
-from JsonConvertor import JsonConvertor
 
 # Classification codes
 RIDGE  =    1
@@ -144,56 +142,7 @@ class ClassificationProperty(BaseProperty):
         unclassisfied[self.classified_map == 0] = 1
         return unclassisfied
 
-    # @classmethod
-    # def segmentFromDictionary(cls, data):
-    #
-    #     # self.datatype = type(data)
-    #     # self.pit_idx = None
-    #     # self.valley_idx = None
-    #     # self.ridge_idx = None
-    #     # self.peak_idx = None
-    #     # self.saddle_idx = None
-    #     # self.flat_idx = None
-    #
-    #     s = cls(None)
-    #
-    #     if isinstance(data['tensor'], str):
-    #         s.__tensor = TensorSegment.deserializes(data['tensor'])
-    #     elif isinstance(data['tensor'], dict):
-    #         s.__tensor = TensorSegment.tensorFromDictionary(data['tensor'])
-    #     else:
-    #         raise TypeError('Unexpected type of \'tensor\' value')
-    #     if isinstance(data['patches'], dict):
-    #         s.__patches = dict(zip(data['patches'].keys(),
-    #                                map(TensorSegment.deserializes, data['patches'].values())))
-    #     elif isinstance(data['patches'], str):
-    #         temp = JsonConvertor.deserializes(data['patches'])
-    #         s.__patches = dict(zip(temp.keys(),
-    #                                map(TensorSegment.tensorFromDictionary, temp.values())))
-    #     else:
-    #         raise TypeError('Unexpected type of \'patches\' value')
 
-    def serialize(self, filename, **kwargs):
-        """
-        saves to json
-        :param filename: path to file
-        :param kwargs:
-
-        """
-
-        temp = self.__dict__
-        json.dump(temp, open(filename, 'w'))
-
-    @classmethod
-    def deserialize(cls, filename, **kwargs):
-        """
-
-        :param filename:
-        :param kwargs:
-        :return:
-        """
-        tempDictionary = JsonConvertor.deserialize(filename)
-        cls.segmentFromDictionary(tempDictionary)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ from numpy import ndarray, array
 
 class JsonConvertor(object):
     @classmethod
-    def serializes(cls, obj):
+    def serializes(cls, obj, *args):
         """
         Serializing an object of any given built-in type to a JSON object
         :param obj: An array to be serialize
@@ -46,8 +46,8 @@ class JsonConvertor(object):
     @classmethod
     def deserializes(cls, obj):
         """
-        Deserializing a JSON object from string
-        :param filename: The file name and path of the JSON object to be deserialized
+        Deserialize a JSON object from string
+        :param obj: The JSON object to be deserialized
         :return: The deserialized object
         """
         jsonObj = literal_eval(obj)
@@ -61,4 +61,11 @@ class JsonConvertor(object):
 
     @classmethod
     def deserialize(cls, filename):
+        """
+        Deserialize a JSON object from file
+
+        :param filename: The file name and path of the JSON object to be deserialized
+        :type filename: str
+
+        """
         return cls.deserializes(str(load(open(filename, 'r'))))

@@ -89,13 +89,20 @@ class ClassificationFactory:
 
     @classmethod
     def __pit(self, oneTail, percentMap):
+        """
+         Hypothesis test for pit:
+        :math: lambda_min > eighThreshold
+        (and therefore lambda_max also)
+        Reject when :math: z_min>z_1-alpha; Rejected are the pits
+
+        :param oneTail: alpha for oneTail
+        :param percentMap: the current percent map for classification
+        :return:
+        """
 
         new_percentMap = np.zeros(self.data.shape)
         idx_assigned = np.nonzero(self.classified.classified_map)
 
-        # Hypothesis test for pit:
-        # lambda_min > eighThreshold (and therefore lambda_max also)
-        # Reject when z_min>z_1-alpha; Rejected are the pits
         idx = np.nonzero(self.z_min > oneTail)
 
         # Correct classification and percentMap
@@ -110,14 +117,20 @@ class ClassificationFactory:
 
     @classmethod
     def __peak(self, oneTail, percentMap):
+        """
+         Hypothesis test for peak:
+         lambda_max < eighThreshold (and therefore lambda_min also)
+        Reject when :math: z_max<-z_1-alpha; Rejected are the peaks
 
+        :param oneTail:
+        :param percentMap:
+        :return:
+        """
         new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
 
-        # Hypothesis test for peak:
-        # lambda_max < eighThreshold (and therefore lambda_min also)
-        # Reject when z_max<-z_1-alpha; Rejected are the peaks
+
         idx = np.nonzero(self.z_max < -oneTail)
         new_percentMap[idx] = percentMap[idx]
         newidx = np.array(self.__checkIdx(np.array(idx).T, np.array(idx_assigned).T, new_percentMap))
@@ -130,10 +143,10 @@ class ClassificationFactory:
 
     @classmethod
     def __flat(self, twoTail, percentMap):
-        '''
+        """
         Hypothesis test for flat:
         lambda_min = eighThreshold and lambda_max = eigThreshold
-        '''
+        """
         new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
@@ -151,8 +164,16 @@ class ClassificationFactory:
 
     @classmethod
     def __saddle(self, oneTail, percentMap1, percentMap2):
-        # Hypothesis test for saddle:
-        #    lambda_min < eighThreshold and lambda_max > eigThreshold
+        """
+        Hypothesis test for saddle:
+        :math: lambda_min < eighThreshold and lambda_max > eigThreshold
+
+        :param oneTail:
+        :param percentMap1:
+        :param percentMap2:
+        :return:
+        """
+
         new_percentMap = np.zeros(self.data.shape)
 
         idx_assigned = np.nonzero(self.classified.classified_map)
@@ -239,6 +260,7 @@ class ClassificationFactory:
     def __ClassifyPoints(self, winsize, **kwargs):
         """
         Classifying points according to their eigenvalues
+
         :param data: Raster or PointSet data
         :param winsize: the window size according to which teh classification is made
         :param classProp: a classification property that already exists .
@@ -247,6 +269,7 @@ class ClassificationFactory:
 
                 Default: no property
         :return: a classificaiton map
+
         """
         # TODO Adjust function for point clouds. Now works for raster only
 
@@ -313,13 +336,18 @@ class ClassificationFactory:
         """
         computes the percent map according to the probability to have a negative or positive min/max eigenvalues
 
-        :param eigenProp: eigenvalues property, which have max and min eigen values assigned (eigenvalue property)
+        :param eigenProp: eigenvalues property, which have max and min eigen values assigned
         :param eigMax_sign: computing probability for: +1, -1, 0
         :param eigMin_sign: computing probability for: +1, -1, 0
         :param denominator1,2: one or two scalars, computed according to:
-        for one tail hypothesis: oneTail * eigenvalue_sigma + eigThreshold
-        for two tail hypothesis: twoTail * eigenvalue_sigma
+         - for one tail hypothesis: oneTail * eigenvalue_sigma + eigThreshold
+         - for two tail hypothesis: twoTail * eigenvalue_sigma
         -- computed in advance (scalar)
+
+        :type eigenProp: EigenProperty
+        :type denominator_oneTail: float
+        :type denominator_twoTail: float
+
         :return: the percent map for the required hypothesis
         """
         eigMax = eigenProp.eigenValues[1, :, :]
@@ -345,9 +373,13 @@ class ClassificationFactory:
         """
         Classifying the surface to areas of the same kind via different scale s
         :param data:
-        :param winSizes: window sizes between which the classification is made. ndarray nx1
+        :param winSizes: window sizes between which the classification is made.
+
+        :type winSizes: ndarray nx1
+
         :return:
             classification property created based on different scales.
+
         """
         self.data = data
         classified = ClassificationProperty(data)

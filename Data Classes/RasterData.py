@@ -18,7 +18,8 @@ if platform.system() == 'Linux':
 
 class RasterData(object):
     """
-    A raster representation of the point set and munipulations on it
+    A raster representation of the point set and manipulations on it
+
     """
 
     __rasterData = None  # A m-by-n-by-p array in which the raster is stored
@@ -92,6 +93,7 @@ class RasterData(object):
         :param row:
         :param col:
         :return:
+
         """
         x = self.scaleX * col + self.translationX
         y = self.scaleY * row + self.translationY
@@ -100,10 +102,12 @@ class RasterData(object):
     def worldToPixel(self, x, y, spatialRef = None):
         """
         Conversion of a point from world coordinates to pixel ones
+
         :param x: The X-axis coordinate of the point to convert
         :param y: The Y-axis coordinate of the point to convert
         :param spatialRef: The spatial reference of the point to convert given in EPSG code
         :return: the row and column that correspond to the given point (tuple of two float numbers)
+
         """
         if not(spatialRef is None) and spatialRef != self.__spatialReference:
             rasterProj = Proj(init='epsg:' + self.__spatialReference)
@@ -118,6 +122,7 @@ class RasterData(object):
     def interpolateAtPoint(self, x, y, spatialRef=None, method='bilinear'):
         """
         Computing the height(s) of a given point(s) based on a given method
+
         :param x: x-coordinate(s) of the point(s)
         :param y: y-coordinate(s) of the point(s)
         :param spatialRef: The spatial reference of the point(s), given as an ESPG code
@@ -125,7 +130,9 @@ class RasterData(object):
                         - 'nearest' - for nearest neighbor
                         - 'bilinear' - for bilinear intepolation (default)
                         - 'bicubic' - for bicubic interpolation (to be implemented)
+
         :return:
+
         """
         row, col = self.worldToPixel(x, y, spatialRef)
         return self.intepolateAtPixel(row, col, method)
@@ -133,10 +140,13 @@ class RasterData(object):
     def intepolateAtPixel(self, row, col, method='bilinear'):
         """
         Computing the height(s) of a given pixel(s) based on a given method
+
         :param row: The row(s) of the pixel(s)
         :param col: The column(s) of the pixel(s)
         :param method: The method to be used for the interpolation (same as methods as in interpolateAtPoint method)
+
         :return:
+
         """
         from numpy import round, int_
         row = array([row]).reshape((-1, ))
@@ -218,6 +228,7 @@ class RasterData(object):
     def data(cls):
         """
         :return: return the image data
+
         """
         return cls.__rasterData
 
@@ -264,12 +275,14 @@ class RasterData(object):
     def accuracy(cls):
         """
         :return: measurement accuracy
+
         """
         return cls.__measurement_accuracy
 
     def roughness(cls, **kwargs):
         """
         :return: measurement accuracy
+
         """
         if kwargs:
             cls.__mean_roughness = kwargs['roughness']
@@ -280,13 +293,16 @@ class RasterData(object):
     def min_range(cls):
         """
         :return: the closest range in the data
+
         """
         return npmax(npmax(cls.data))
 
     def ToPointSet(self):
         """
         Transforms raster to PointSet data
+
         :return: PointSet
+
         """
         # pts = PointSet()
 

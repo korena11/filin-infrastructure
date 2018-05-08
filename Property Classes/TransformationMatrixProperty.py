@@ -1,3 +1,5 @@
+import numpy as np
+
 class TransformationMatrixProperty:
     """
     This class represents a 4x4 3D transformation matrix
@@ -6,4 +8,5 @@ class TransformationMatrixProperty:
         
         transformMatrix = np.matrix(np.zeros((3, 4)))
     @staticmethod
-    def FromFile
+    def FromFile():
+        pass

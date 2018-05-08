@@ -8,4 +8,12 @@ class ColorProperty(BaseProperty):
         
     @property
     def RGB(self):
+        """
+        Points' colors in rgb
+
+        :return: rgb
+
+        :rtype: nx3 nd-array
+
+        """
         return self.__rgb

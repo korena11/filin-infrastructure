@@ -1,0 +1,509 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>Triangulation Property Documentation &#8212; infragit 1 documentation</title>
+
+    <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="infragit 1 documentation" href="index.html"/>
+    <link rel="up" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="prev" title="Transformation Matrix Property Documentation" href="TransformationProperty.html"/>
+</head>
+<body role="document">
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="genindex.html" title="General Index"
+               accesskey="I">index</a></li>
+        <li class="right">
+            <a href="py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="right">
+            <a href="TransformationProperty.html" title="Transformation Matrix Property Documentation"
+               accesskey="P">previous</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Base Property Documentation</a> &#187;
+        </li>
+    </ul>
+</div>
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+            <div class="body" role="main">
+
+                <div class="section" id="triangulation-property-documentation">
+                    <h1>Triangulation Property Documentation<a class="headerlink"
+                                                               href="#triangulation-property-documentation"
+                                                               title="Permalink to this headline">¶</a></h1>
+                    <dl class="class">
+                        <dt id="TriangulationProperty.TriangulationProperty">
+                            <em class="property">class </em><code
+                                class="descclassname">TriangulationProperty.</code><code class="descname">TriangulationProperty</code><span
+                                class="sig-paren">(</span><em>points</em>, <em>trianglesIndices</em><span
+                                class="sig-paren">)</span><a class="reference internal"
+                                                             href="_modules/TriangulationProperty.html#TriangulationProperty"><span
+                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                            href="#TriangulationProperty.TriangulationProperty"
+                                                                            title="Permalink to this definition">¶</a>
+                        </dt>
+                        <dd><p>TriangulationProperty - Class for holding and analyzing the triangulation data of a given
+                            point set</p>
+                            <blockquote>
+                                <div><p class="rubric">Attributes</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.NumberOfTriangles"
+                                                   title="TriangulationProperty.TriangulationProperty.NumberOfTriangles"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">NumberOfTriangles</span></code></a>
+                                            </td>
+                                            <td>Number of triangles</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">Points</span></code></td>
+                                            <td>Holds the points dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">Raster</span></code></td>
+                                            <td>Holds raster dataset</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TrianglesIndices"
+                                                   title="TriangulationProperty.TriangulationProperty.TrianglesIndices"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">TrianglesIndices</span></code></a>
+                                            </td>
+                                            <td>Indices of all the triangles</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="rubric">Methods</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AreaOfTriangle"
+                                                   title="TriangulationProperty.TriangulationProperty.AreaOfTriangle"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">AreaOfTriangle</span></code></a>(index)
+                                            </td>
+                                            <td>Calculating the area of a specific triangle defined by its index in the
+                                                triangles list
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AverageEdgeLength"
+                                                   title="TriangulationProperty.TriangulationProperty.AverageEdgeLength"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">AverageEdgeLength</span></code></a>()
+                                            </td>
+                                            <td>Calculating the average edge length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AverageTriangleArea"
+                                                   title="TriangulationProperty.TriangulationProperty.AverageTriangleArea"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">AverageTriangleArea</span></code></a>()
+                                            </td>
+                                            <td>Calculating the average area of all triangles</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.IsPointInTriangle"
+                                                   title="TriangulationProperty.TriangulationProperty.IsPointInTriangle"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">IsPointInTriangle</span></code></a>(x,&nbsp;y,&nbsp;triangleIndex)
+                                            </td>
+                                            <td>Finding if a given point (x, y) is inside one of the triangles (defined
+                                                by its index)
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.LengthOfAllEdges"
+                                                   title="TriangulationProperty.TriangulationProperty.LengthOfAllEdges"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">LengthOfAllEdges</span></code></a>()
+                                            </td>
+                                            <td>Calculating edges&#8217; length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.LengthOfEdge"
+                                                   title="TriangulationProperty.TriangulationProperty.LengthOfEdge"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">LengthOfEdge</span></code></a>(triangleIndex,&nbsp;edgeIndex)
+                                            </td>
+                                            <td>Calculating the length of a specific edge of one of the triangles</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.MedianEdgeLength"
+                                                   title="TriangulationProperty.TriangulationProperty.MedianEdgeLength"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">MedianEdgeLength</span></code></a>()
+                                            </td>
+                                            <td>Calculating the median edge length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.MedianTriangleArea"
+                                                   title="TriangulationProperty.TriangulationProperty.MedianTriangleArea"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">MedianTriangleArea</span></code></a>()
+                                            </td>
+                                            <td>Calculating the median area of all triangles</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TotalArea"
+                                                   title="TriangulationProperty.TriangulationProperty.TotalArea"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">TotalArea</span></code></a>()
+                                            </td>
+                                            <td>Calculating the total area enclosed in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TrimEdgesByLength"
+                                                   title="TriangulationProperty.TriangulationProperty.TrimEdgesByLength"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">TrimEdgesByLength</span></code></a>(maxLength)
+                                            </td>
+                                            <td>Removing all triangles which have an edge longer than a given
+                                                threshold
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">save</span></code>(**kwargs)
+                                            </td>
+                                            <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </blockquote>
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.AreaOfTriangle">
+                                    <code class="descname">AreaOfTriangle</code><span class="sig-paren">(</span><em>index</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.AreaOfTriangle"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.AreaOfTriangle"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the area of a specific triangle defined by its index in the triangles
+                                    list</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>index</strong> &#8211; The index of the
+                                                triangle
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">The area of the triangle</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.AverageEdgeLength">
+                                    <code class="descname">AverageEdgeLength</code><span class="sig-paren">(</span><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.AverageEdgeLength"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.AverageEdgeLength"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the average edge length in the triangulation</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.AverageTriangleArea">
+                                    <code class="descname">AverageTriangleArea</code><span
+                                        class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="_modules/TriangulationProperty.html#TriangulationProperty.AverageTriangleArea"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.AverageTriangleArea"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the average area of all triangles</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">The average area of all the triangles</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.IsPointInTriangle">
+                                    <code class="descname">IsPointInTriangle</code><span
+                                        class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>triangleIndex</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.IsPointInTriangle"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.IsPointInTriangle"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Finding if a given point (x, y) is inside one of the triangles (defined by its
+                                    index)
+                                    &#64;return: 1 - if the point is inside the triangle, 0 - if the point lies on one
+                                    or more of the triangle edges, -1 - the point is outside the triangle</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.LengthOfAllEdges">
+                                    <code class="descname">LengthOfAllEdges</code><span class="sig-paren">(</span><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.LengthOfAllEdges"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.LengthOfAllEdges"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating edges&#8217; length in the triangulation</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.LengthOfEdge">
+                                    <code class="descname">LengthOfEdge</code><span class="sig-paren">(</span><em>triangleIndex</em>,
+                                    <em>edgeIndex</em><span class="sig-paren">)</span><a class="reference internal"
+                                                                                         href="_modules/TriangulationProperty.html#TriangulationProperty.LengthOfEdge"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.LengthOfEdge"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the length of a specific edge of one of the triangles</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>triangleIndex</strong> &#8211; The index of a triangle
+                                                    </li>
+                                                    <li><strong>edgeIndex</strong> &#8211; The index of the edge
+                                                        * 0 - the edge between the first two points of the triangle,
+                                                        * 1 - the edge between the last two points of the triangle,
+                                                        * 2 - the edge between the first point and the last point)
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.MedianEdgeLength">
+                                    <code class="descname">MedianEdgeLength</code><span class="sig-paren">(</span><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.MedianEdgeLength"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.MedianEdgeLength"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the median edge length in the triangulation</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.MedianTriangleArea">
+                                    <code class="descname">MedianTriangleArea</code><span
+                                        class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="_modules/TriangulationProperty.html#TriangulationProperty.MedianTriangleArea"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.MedianTriangleArea"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the median area of all triangles</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">The median area of all the triangles</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="TriangulationProperty.TriangulationProperty.NumberOfTriangles">
+                                    <code class="descname">NumberOfTriangles</code><a class="headerlink"
+                                                                                      href="#TriangulationProperty.TriangulationProperty.NumberOfTriangles"
+                                                                                      title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Number of triangles</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.TotalArea">
+                                    <code class="descname">TotalArea</code><span class="sig-paren">(</span><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.TotalArea"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.TotalArea"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Calculating the total area enclosed in the triangulation</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">The total area of all the triangles in the
+                                                triangulation
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="attribute">
+                                <dt id="TriangulationProperty.TriangulationProperty.TrianglesIndices">
+                                    <code class="descname">TrianglesIndices</code><a class="headerlink"
+                                                                                     href="#TriangulationProperty.TriangulationProperty.TrianglesIndices"
+                                                                                     title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Indices of all the triangles</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.TrimEdgesByLength">
+                                    <code class="descname">TrimEdgesByLength</code><span class="sig-paren">(</span><em>maxLength</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.TrimEdgesByLength"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.TrimEdgesByLength"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Removing all triangles which have an edge longer than a given threshold</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">Number of triangles removed</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                        </dd>
+                    </dl>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="TransformationProperty.html"
+                                  title="previous chapter">Transformation Matrix Property Documentation</a></p>
+            <div role="note" aria-label="source link">
+                <h3>This Page</h3>
+                <ul class="this-page-menu">
+                    <li><a href="_sources/TriangulationProperty.txt"
+                           rel="nofollow">Show Source</a></li>
+                </ul>
+            </div>
+            <div id="searchbox" style="display: none" role="search">
+                <h3>Quick search</h3>
+                <form class="search" action="search.html" method="get">
+                    <div><input type="text" name="q"/></div>
+                    <div><input type="submit" value="Go"/></div>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="genindex.html" title="General Index"
+            >index</a></li>
+        <li class="right">
+            <a href="py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="right">
+            <a href="TransformationProperty.html" title="Transformation Matrix Property Documentation"
+            >previous</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Base Property Documentation</a> &#187;</li>
+    </ul>
+</div>
+<div class="footer" role="contentinfo">
+    &#169; Copyright 2018, Sagi Students.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+</div>
+</body>
+</html>
