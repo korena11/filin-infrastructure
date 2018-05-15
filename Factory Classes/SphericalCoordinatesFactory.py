@@ -1,6 +1,8 @@
 from numpy import sqrt, pi, arctan2, cos, sin, zeros
-from SphericalCoordinatesProperty import SphericalCoordinatesProperty
+
 from PointSet import PointSet
+from SphericalCoordinatesProperty import SphericalCoordinatesProperty
+
 
 class SphericalCoordinatesFactory:
     """
@@ -28,8 +30,11 @@ class SphericalCoordinatesFactory:
     def SphericalToCartesianCoordinates(points):
         """
         SphericalToCartesainCoordinates
-        :Args:
-            - points: spherical coordinates (az,el,r)
+
+        :param points: spherical coordinates (az,el,r)
+
+        :return: points in cartesian coordinates
+        :rtype: PointSet
         """
         x = points[:, 2] * cos(points[:, 1] * pi / 180) * cos(points[:, 0] * pi / 180) 
         y = points[:, 2] * cos(points[:, 1] * pi / 180) * sin(points[:, 0] * pi / 180)

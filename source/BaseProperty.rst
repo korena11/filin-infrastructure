@@ -1,32 +1,40 @@
-Base Property Documentation
-============================
+Properties base class Documentation
+===================================
 
-Each property inherits from this class. 
+Each property inherits from this class. If values need to be set, each property has its own :func:`~BaseProperty.setValues` , and it should be defined for new properties. 
 
-.. toctree:: 
-ClassificationProperty
+The following are the existing properties:
+
+.. toctree::
+:maxdepth: 2
+
+       ClassificationProperty
    ColorProperty
    CurvatureProperty
    EigenProperty
    NormalsProperty
    PanoramaProperty
    RotationProperty
+       RasterProperty
    SegmentationProperty
    SphericalProperty
    TransformationProperty
    TriangulationProperty
 
-.. autoclass:: BaseProperty.BaseProperty
+    ..
+    	.. autoclass:: BaseProperty.BaseProperty
 :members:
-       :undoc-members:
+    		   :undoc-members:
 
-    		.. rubric:: Attributes
+        			.. rubric:: Attributes
 
-		.. autoautosummary:: BaseProperty.BaseProperty
+			.. autoautosummary:: BaseProperty.BaseProperty
 :attributes:
-			
-		.. rubric:: Methods
+				
+			.. rubric:: Methods
 
-		.. autoautosummary:: BaseProperty.BaseProperty
+			.. autoautosummary:: BaseProperty.BaseProperty
 :methods:
 			
+
+

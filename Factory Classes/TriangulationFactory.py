@@ -1,7 +1,9 @@
+from mayavi import mlab
+from numpy import array
+
 from PointSet import PointSet
 from TriangulationProperty import TriangulationProperty
-from numpy import array
-from mayavi import mlab
+
 
 class TriangulationFactory:
     '''
@@ -11,10 +13,13 @@ class TriangulationFactory:
     def Delaunay2D( points ):
         '''
         Creating a 2D Delaunay triangulation for a given set of points
-        :Args:
-            - points: a PointSet object
-        :Returns:
-            - TriangulationProperty object
+
+        :param points:
+
+        :type points: PointSet
+
+        :returns: TriangulationProperty object
+
         '''
         fig2Close = mlab.figure( bgcolor = ( 0.5, 0.5, 0.5 ), fgcolor = ( 1, 1, 1 ) )
         

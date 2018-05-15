@@ -1,8 +1,9 @@
 # from CurvatureProperty import CurvatureProperty
+import numpy as np
+
+from EigenFactory import EigenFactory
 from NeighborsFactory import NeighborsFactory
 from RotationMatrixFactory import RotationMatrixFactory
-from EigenFactory import EigenFactory
-import numpy as np
 
 
 class CurvatureFactory:
@@ -45,10 +46,15 @@ class CurvatureFactory:
     def __BiQuadratic_Surface(points):
         '''
         BiQuadratic surface adjustment to discrete point cloud
-        :Args: 
-            - points: (nx3 array) 3D points coordinates
-        :Returns:
-            - p: (array) surface's coefficients
+
+        :param points: 3D points coordinates
+
+        :type points: nx3 array
+
+        :return: p  - surface's coefficients
+
+        :rtype: nd-array
+
         '''
         # ==== initial guess ====
         x = np.expand_dims(points[:, 0], 1)
@@ -113,11 +119,13 @@ class CurvatureFactory:
     def Similarity_Curvature(k1, k2):
         '''
         calculates similarity curvature (E,H)
-        :Args:
-            - k1,k2: principal curvatures (k1>k2)
-        :Returns:
-            - similarCurv: values of similarity curvature (E,H)
-            - rgb: RGB color for every point
+
+        :param k1,k2: principal curvatures (k1>k2)
+
+
+        :return similarCurv: values of similarity curvature (E,H)
+        :return rgb: RGB color for every point
+
         '''
         #         if 'points' in kwargs and ('k1' not in kwargs and 'k2' not in kwargs):
         #             points = kwargs['points']

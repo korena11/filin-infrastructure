@@ -32,7 +32,19 @@ class EigenProperty(BaseProperty):
 
         """
         super(EigenProperty, self).__init__(dataset)
+        self.setValues(**kwargs)
 
+    def setValues(self, **kwargs):
+        """
+        Sets eigen values and eigen vectors into the EigenProperty object
+
+        :param eigenValues: if two nd-arrays were sent for raster data. np.array([minVals, maxVals])
+        :param eigenVectors:
+
+        :type eigenValues: np.array
+        :type eigenVectors: np.array
+
+        """
         if 'eigenValues' in kwargs:
             self.__eigenValues = kwargs['eigenValues']
         if 'eigenVectors' in kwargs:

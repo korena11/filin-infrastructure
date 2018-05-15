@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>PointSet &#8212; infragit 1 documentation</title>
+    <title>PointSet &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -58,13 +57,15 @@
                         class="n">arange</span><span class="p">,</span> <span class="n">array</span><span
                         class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span
                         class="n">hstack</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="k">import</span> <span class="n">tvtk</span>
-
+<span class="kn">from</span> <span class="nn">BaseData</span> <span class="k">import</span> <span
+                        class="n">BaseData</span>
 
 <div class="viewcode-block" id="PointSet"><a class="viewcode-back"
                                              href="../PointSet.html#PointSet.PointSet">[docs]</a><span
         class="k">class</span> <span class="nc">PointSet</span><span class="p">(</span><span
-        class="nb">object</span><span class="p">):</span>
+        class="n">BaseData</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">    Basic point cloud </span>
 <span class="sd">    </span>
@@ -89,7 +90,9 @@
 <span class="sd">        :param &#39;rgb&#39;: rgb values for each point (optional)</span>
 <span class="sd">        :param &#39;intensity&#39;: intensity values for each point(optional)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="nb">super</span><span class="p">(</span><span class="n">PointSet</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">()</span>
         <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;rgb&#39;</span><span
             class="p">:</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="s1">&#39;intensity&#39;</span><span class="p">:</span> <span
@@ -99,21 +102,14 @@
         <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span
             class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">points</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span
-            class="mi">3</span><span class="p">:</span>  <span class="c1"># 3D Data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">=</span> <span class="n">points</span>
-        <span class="k">elif</span> <span class="n">points</span><span class="o">.</span><span
-            class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span
-            class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># 2D Data</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">=</span> <span class="kc">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xy</span> <span
-            class="o">=</span> <span class="n">points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setdata</span><span class="p">(</span><span
+            class="n">points</span><span class="p">)</span>
+
+        <span class="c1"># if points.shape[1] == 3:  # 3D Data</span>
+
+        <span class="c1"># elif points.shape[1] == 2:  # 2D Data</span>
 
             <span class="c1"># TODO: missing rgb is the size of the points.</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">=</span> <span
             class="n">properties</span><span class="p">[</span><span class="s1">&#39;rgb&#39;</span><span
             class="p">]</span>
@@ -124,6 +120,12 @@
             class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span
             class="p">]</span>
 
+        <span class="n">path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
+            class="n">get</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span
+            class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># The path for the data file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setPath</span><span class="p">(</span><span
+            class="n">path</span><span class="p">)</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
@@ -132,7 +134,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
             class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
@@ -142,19 +144,19 @@
 <span class="sd">        Return number of columns (channels) </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span> <span
-            class="o">!=</span> <span class="kc">None</span> <span class="ow">and</span> <span
-            class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span class="o">!=</span> <span
-            class="kc">None</span><span class="p">:</span>
+            class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span
+            class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span
+            class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">7</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__intensity</span> <span class="o">==</span> <span class="kc">None</span> <span
+            class="n">__intensity</span> <span class="ow">is</span> <span class="kc">None</span> <span
             class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">6</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__intensity</span> <span class="o">!=</span> <span class="kc">None</span> <span
-            class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span
-            class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            class="n">__intensity</span> <span class="ow">is</span> <span class="ow">not</span> <span
+            class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__rgb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">4</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">3</span>
@@ -180,92 +182,75 @@
     <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of X coordinate </span>
+<span class="sd">        :return: X coordinates</span>
+
+<span class="sd">        :rtype: nx1 nd-array</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Y</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of Y coordinate </span>
+
+<span class="sd">        :return: Y coordinates</span>
+
+<span class="sd">        :rtype: nx1 nd-array</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Z</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of Z coordinate </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
+<span class="sd">        :return: Z coordinates</span>
 
-    <span class="nd">@classmethod</span>
+<span class="sd">        :rtype: nx1 nd-array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+
+
 <div class="viewcode-block" id="PointSet.ToNumpy"><a class="viewcode-back"
                                                      href="../PointSet.html#PointSet.PointSet.ToNumpy">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the future)</span>
+<span class="sd">        :return: points as numpy nX3 ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="p">)</span></div>
 
-        <span class="k">return</span> <span class="kc">None</span></div>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">ToPandas</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
+<div class="viewcode-block" id="PointSet.ToPandas"><a class="viewcode-back"
+                                                      href="../PointSet.html#PointSet.PointSet.ToPandas">[docs]</a>    <span
+        class="k">def</span> <span class="nf">ToPandas</span><span class="p">(</span><span class="n">cls</span><span
+        class="p">):</span>
         <span class="c1"># TODO add this method</span>
-        <span class="k">pass</span>
+        <span class="k">pass</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="PointSet.GetPoint"><a class="viewcode-back"
                                                       href="../PointSet.html#PointSet.PointSet.GetPoint">[docs]</a>    <span
         class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return specific point/s as numpy nX3 ndarray (incase we change the type of __xyz in the future)</span>
+<span class="sd">        :param index: the index of the point to return</span>
+
+<span class="sd">        :return: pecific point/s as numpy nX3 ndarray</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span
+            class="p">:]</span></div>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span
-            class="p">:]</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xy</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span
-            class="p">:]</span>
-
-        <span class="k">return</span> <span class="kc">None</span></div>
-
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="PointSet.UpdateFields"><a class="viewcode-back"
                                                           href="../PointSet.html#PointSet.PointSet.UpdateFields">[docs]</a>    <span
         class="k">def</span> <span class="nf">UpdateFields</span><span class="p">(</span><span
@@ -274,27 +259,27 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Update a field within the PointSet</span>
 <span class="sd">        </span>
-
 <span class="sd">        :param X, Y, Z: which field to update</span>
 <span class="sd">        :param indices: which indices to update (optional)</span>
+
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># TODO: add this option</span>
 
         <span class="k">if</span> <span class="s1">&#39;X&#39;</span> <span class="ow">in</span> <span
             class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span><span
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s1">&#39;Y&#39;</span> <span class="ow">in</span> <span
             class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span><span
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="s1">&#39;Z&#39;</span> <span class="ow">in</span> <span
             class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span><span
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;Z&#39;</span><span class="p">]</span>
 
@@ -306,15 +291,10 @@
 
         <span class="k">if</span> <span class="s1">&#39;XYZ&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span
             class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span><span
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">kwargs</span><span
-            class="p">[</span><span class="s1">&#39;XYZ&#39;</span><span class="p">]</span>
+            class="p">[</span><span class="s1">&#39;XYZ&#39;</span><span class="p">]</span></div>
 
-        <span class="k">if</span> <span class="s1">&#39;XY&#39;</span> <span class="ow">in</span> <span
-            class="n">kwargs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xy</span><span
-            class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">kwargs</span><span
-            class="p">[</span><span class="s1">&#39;XY&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="PointSet.AddData2Fields"><a class="viewcode-back"
                                                             href="../PointSet.html#PointSet.PointSet.AddData2Fields">[docs]</a>    <span
@@ -325,19 +305,20 @@
 <span class="sd">        Add data to a field</span>
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="c1">#TODO: add xy option</span>
         <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span
             class="s1">&#39;XYZ&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span> <span
-            class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">__xyz</span><span class="p">,</span> <span class="n">data</span><span
-            class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setdata</span><span
+            class="p">(</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span
+            class="p">)))</span>
         <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span
             class="s1">&#39;RGB&#39;</span><span class="p">:</span>
+            <span class="c1">#TODO: check that this works</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span> <span
             class="o">=</span> <span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span
             class="o">.</span><span class="n">__rgb</span><span class="p">,</span> <span class="n">data</span><span
             class="p">))</span>
+
         <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;Intensity&#39;</span><span
             class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span> <span
@@ -345,36 +326,35 @@
             class="o">.</span><span class="n">__intensity</span><span class="p">,</span> <span
             class="n">data</span><span class="p">))</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="PointSet.ToPolyData"><a class="viewcode-back"
                                                         href="../PointSet.html#PointSet.PointSet.ToPolyData">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create and return PolyData object</span>
-<span class="sd">        </span>
-<span class="sd">        :Return:</span>
-<span class="sd">            - tvtk.PolyData of the current PointSet</span>
+
+<span class="sd">        :return tvtk.PolyData of the current PointSet</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># TODO add xy option?</span>
 
         <span class="n">_polyData</span> <span class="o">=</span> <span class="n">tvtk</span><span
             class="o">.</span><span class="n">PolyData</span><span class="p">(</span><span class="n">points</span> <span
             class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">__xyz</span><span class="p">,</span> <span
+            class="o">.</span><span class="n">data</span><span class="p">,</span> <span
             class="s1">&#39;f&#39;</span><span class="p">))</span>
         <span class="n">verts</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span
             class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__xyz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
             class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">verts</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__xyz</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
             class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">_polyData</span><span class="o">.</span><span class="n">verts</span> <span
             class="o">=</span> <span class="n">verts</span>
 
         <span class="k">return</span> <span class="n">_polyData</span></div></div>
+
 </pre>
                 </div>
 
@@ -407,7 +387,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

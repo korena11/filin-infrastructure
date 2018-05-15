@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>SegmentationProperty &#8212; infragit 1 documentation</title>
+    <title>SegmentationProperty &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -52,13 +51,12 @@
 
                 <h1>Source code for SegmentationProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span
-                        class="n">BaseProperty</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">nonzero</span><span
+                        class="p">,</span> <span class="n">random</span><span class="p">,</span> <span
+                        class="n">zeros</span><span class="p">,</span> <span class="n">uint8</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
-                        class="n">nonzero</span><span class="p">,</span> <span class="n">random</span><span
-                        class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span
-                        class="n">uint8</span>
 
 
 <div class="viewcode-block" id="SegmentationProperty"><a class="viewcode-back"
@@ -168,11 +166,12 @@
 <span class="sd">        Return a PointSubSet object from the points in segment labeled &quot;label&quot;</span>
 <span class="sd">        in case there are no points with the given label return None (and NOT an empty SubSet) </span>
 <span class="sd">        </span>
-<span class="sd">        Args:</span>
-<span class="sd">            label(int) - the label</span>
+<span class="sd">        :param label: the label</span>
+
+<span class="sd">        :type label: int</span>
 <span class="sd">            </span>
-<span class="sd">        Returns:</span>
-<span class="sd">            PointSubSet object</span>
+<span class="sd">        :return: subset of the points that are segmented as the label</span>
+<span class="sd">        :rtype: PointSubSet</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
@@ -185,9 +184,8 @@
             <span class="k">return</span> <span class="kc">None</span>
         
         <span class="n">pointSubSet</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">_BaseProperty__points</span><span class="p">,</span> <span class="n">indices</span><span
-            class="p">)</span>
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span
+            class="p">,</span> <span class="n">indices</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">pointSubSet</span></div>
     
@@ -201,7 +199,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">pointIndex</span> <span class="o">&gt;=</span> <span
             class="mi">0</span> <span class="ow">and</span> <span class="n">pointIndex</span> <span
-            class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_BaseProperty__points</span><span
+            class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span
             class="o">.</span><span class="n">Size</span> <span class="ow">and</span> <span
             class="n">newLabel</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span
             class="n">newLabel</span> <span class="o">&lt;</span> <span class="bp">self</span><span
@@ -247,7 +245,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

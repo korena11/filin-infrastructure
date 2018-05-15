@@ -1,31 +1,57 @@
-from BaseProperty import BaseProperty
 from numpy import zeros, arange, array
 from tvtk.api import tvtk
+
+from BaseProperty import BaseProperty
 
 
 class SphericalCoordinatesProperty(BaseProperty):
     '''
-    Class for containing the spherical coordinates of a certain PointSet Object
+    Spherical coordinates property of a certain PointSet Object
     Angular coordinates are in decimal degrees
     '''
-    
-    def __init__(self, points, azimuths, elevationAngles, distances):
-        
-        self._BaseProperty__points = points
-        self.__azimuthElevationRange = zeros((points.Size, 3))
+
+    def __init__(self, points, *args):
+        """
+
+        :param points:
+        :param azimuths:
+        :param elevationAngles:
+        :param distances:
+
+        """
+
+        super(SphericalCoordinatesProperty, self).__init__(points)
+        self.setValues(*args)
+
+    def setValues(self, *args, **kwargs):
+        """
+        Sets the values to the spherical coordinates property
+
+        :param azimuths:
+        :param elevationAngles:
+        :param distances:
+
+        :type azimuths: float
+        :type elevationAngles: float
+        :type distances: float
+
+        """
+
+        azimuths = args[0]
+        elevationAngles = args[1]
+        distances = args[2]
+        self.__azimuthElevationRange = zeros((self.Points.Size, 3))
         self.__azimuthElevationRange[:, 0] = azimuths
         self.__azimuthElevationRange[:, 1] = elevationAngles
-        self.__azimuthElevationRange[:, 2] = distances 
-    
+        self.__azimuthElevationRange[:, 2] = distances
+
     @property
     def XYZ(self):
-        
-        return self._BaseProperty__points
-        
+        return self.Points.ToNumpy()
+
     @property
     def Size(self):
-        
-        return self._BaseProperty__points.Size
+        return self.__dataset.Size
     
     @property
     def Azimuths(self):
@@ -52,8 +78,8 @@ class SphericalCoordinatesProperty(BaseProperty):
         """
         Create and return PolyData object
         
-        :Return:
-            - tvtk.PolyData of the current PointSet
+        :return: tvtk.PolyData of the current PointSet
+            -
         """
   
         _polyData = tvtk.PolyData(points=array(self.__azimuthElevationRange, 'f'))

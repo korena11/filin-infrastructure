@@ -2,7 +2,6 @@ Eigen Property Documentation
 =====================================
 
 
-
 .. autoclass:: EigenProperty.EigenProperty
 :members:
        :undoc-members:

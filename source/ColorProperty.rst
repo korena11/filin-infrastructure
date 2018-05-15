@@ -2,7 +2,6 @@ Color Property Documentation
 =====================================
 
 
-
 .. autoclass:: ColorProperty.ColorProperty
 :members:
        :undoc-members:

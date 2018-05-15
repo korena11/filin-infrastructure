@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>ClassificationProperty &#8212; infragit 1 documentation</title>
+    <title>ClassificationProperty &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -69,11 +68,9 @@
                         class="s1">&#39;TkAgg&#39;</span><span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
                         class="n">RasterData</span>
-<span class="kn">from</span> <span class="nn">JsonConvertor</span> <span class="k">import</span> <span class="n">JsonConvertor</span>
 
 <span class="c1"># Classification codes</span>
 <span class="n">RIDGE</span>  <span class="o">=</span>    <span class="mi">1</span>
@@ -137,27 +134,36 @@
             class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span
             class="p">)</span>
 
+        <span class="c1"># TODO: check that this works</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
+            class="o">*</span><span class="n">args</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ClassificationProperty.classification"><a class="viewcode-back"
-                                                                          href="../ClassificationProperty.html#ClassificationProperty.ClassificationProperty.classification">[docs]</a>    <span
-        class="k">def</span> <span class="nf">classification</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span
-        class="p">):</span>
+<div class="viewcode-block" id="ClassificationProperty.setValues"><a class="viewcode-back"
+                                                                     href="../ClassificationProperty.html#ClassificationProperty.ClassificationProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return classification map (numpy array)</span>
-<span class="sd">        default: returns the entire classification map.</span>
+<span class="sd">        Sets values into classification property (map).</span>
 
-<span class="sd">        Can be specific which:</span>
-<span class="sd">        :param RIDGE</span>
-<span class="sd">        :param PIT</span>
-<span class="sd">        :param VALLEY</span>
-<span class="sd">        :param FLAT</span>
-<span class="sd">        :param PEAK</span>
-<span class="sd">        :param SADDLE</span>
+<span class="sd">        Can be specific which value should be inserted to the classification map:</span>
+
+<span class="sd">        :param RIDGE: 1</span>
+<span class="sd">        :param PIT: 2</span>
+<span class="sd">        :param VALLEY: 3</span>
+<span class="sd">        :param FLAT: 4</span>
+<span class="sd">        :param PEAK: 5</span>
+<span class="sd">        :param SADDLE: 6</span>
+
+
+<span class="sd">        .. note:: UNCLASSIFIED is 0</span>
+
+<span class="sd">        .. warning:: Should be appended and reviewed.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: append for PointSet data</span>
-
+        <span class="c1"># TODO: correct the function and its instances</span>
 
         <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="nb">type</span> <span
             class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span
@@ -206,7 +212,9 @@
 
 <span class="sd">        :param indices: tuple(array(nx1), array(nx1))</span>
 <span class="sd">        :param type: CAPITAL LETTERS according the the classification definitions at the beginning of the file.</span>
+
 <span class="sd">        :return: classified map</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">datatype</span> <span class="o">==</span> <span class="n">RasterData</span><span
@@ -353,7 +361,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

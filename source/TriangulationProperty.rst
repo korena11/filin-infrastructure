@@ -1,8 +1,6 @@
 Triangulation Property Documentation
 =====================================
 
-
-
 .. autoclass:: TriangulationProperty.TriangulationProperty
 :members:
        :undoc-members:

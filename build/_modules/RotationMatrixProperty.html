@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>RotationMatrixProperty &#8212; infragit 1 documentation</title>
+    <title>RotationMatrixProperty &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -52,68 +51,161 @@
 
                 <h1>Source code for RotationMatrixProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span
-                        class="n">BaseProperty</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
+                        class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <div class="viewcode-block" id="RotationMatrixProperty"><a class="viewcode-back"
                                                            href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty">[docs]</a><span
         class="k">class</span> <span class="nc">RotationMatrixProperty</span><span class="p">(</span> <span class="n">BaseProperty</span> <span
         class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. warning:: Now only implemented for Euler angles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__rotationType</span> <span class="o">=</span> <span class="s1">&#39;euler&#39;</span> <span
+            class="c1"># The type of rotation matrix (euler, quaternion, axis and rotation, etc.)</span>
+
+    <span class="c1"># TODO: add angles extraction in case of other rotations than &quot;euler&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span
             class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-            class="n">rotation_matrix</span> <span class="p">):</span>
+            class="n">rotation_matrix</span><span class="p">,</span> <span class="n">rotation_axis</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RotationMatrixProperty</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="n">rotation_matrix</span><span class="p">,</span> <span class="n">rotation_axis</span><span
+            class="p">)</span>
+
+<div class="viewcode-block" id="RotationMatrixProperty.setValues"><a class="viewcode-back"
+                                                                     href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the rotation matrix for the RotationMatrixProperty object</span>
+
+<span class="sd">        :param rotationMatrix: a 3x3 matrix that holds the rotation</span>
+<span class="sd">        :param rotationAxis: a 3x1 vector that holds the axis about which the rotation is made, in a quaternion case</span>
+
+<span class="sd">        *Optionals*</span>
+
+<span class="sd">        :param rotation_type: &#39;quaternions&#39;, &#39;euler&#39;</span>
+
+<span class="sd">        :type matrix_type: str</span>
+<span class="sd">        :type rotationMatrix: np.array</span>
+<span class="sd">        :type rotationAxis: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rotation_matrix</span> <span
-            class="o">=</span> <span class="n">rotation_matrix</span>
-    
-    <span class="nd">@property</span>    
+            class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span>
+        <span class="n">rotationAxis</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span
+            class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">rotationAxis</span> <span class="ow">is</span> <span
+            class="kc">None</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No rotation type was set for the matrix. Default is Euler Rotation Matrix&#39;</span><span
+            class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;rotation_type&#39;</span> <span class="ow">in</span> <span
+            class="n">kwargs</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rotationType</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rotation_type&#39;</span><span
+            class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No rotation type was set for the matrix, but the matrix has&#39;</span>
+                     <span class="s1">&#39;axis of rotation Default is Euler Rotation Matrix&#39;</span> <span
+            class="p">)</span></div>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">RotationMatrix</span><span class="p">(</span> <span
             class="bp">self</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return points&#39; rotation matrix with respect to reference pointset </span>
-<span class="sd">        &quot;&quot;&quot;</span>  
+<span class="sd">        Points&#39; rotation matrix with respect to reference pointset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__rotationType</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotation_matrix</span>
-    
+
         
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="RotationMatrixProperty.EulerAngles_from_R"><a class="viewcode-back"
                                                                               href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty.EulerAngles_from_R">[docs]</a>    <span
-        class="k">def</span> <span class="nf">EulerAngles_from_R</span><span class="p">(</span> <span
-        class="n">cls</span><span class="p">,</span> <span class="n">R</span> <span class="p">):</span>
+        class="k">def</span> <span class="nf">EulerAngles_from_R</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span
+        class="s1">&#39;degrees&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        given rotation matrix compute rotation angles</span>
-<span class="sd">        :param R: - rotation matrix</span>
-<span class="sd">        :type R: 3x3 nd-array</span>
-<span class="sd">        :returns omega,phi,kappa: Euler angles</span>
-<span class="sd">        :rtype tuple</span>
+<span class="sd">        Extracts rotation angles from the rotation matrix</span>
+
+<span class="sd">        .. warning:: The angles returned are subjected to ambiguity</span>
+
+<span class="sd">        :param dtype: the output in &#39;degrees&#39; or &#39;radians&#39; (default &#39;degrees&#39;)</span>
+
+<span class="sd">        :type dtype: str</span>
+
+<span class="sd">        :return:  (omega, phi, kappa) according to the dtype</span>
+
+<span class="sd">        :rtype: tuple</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span
+
+        <span class="n">warn</span><span class="p">(</span><span
+            class="s1">&#39;The angles may contain ambiguity&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__rotationType</span> <span class="o">==</span> <span class="s1">&#39;euler&#39;</span><span
+            class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__rotation_matrix</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+            <span class="c1"># TODO: add the quaternion or other rotation options</span>
+
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arcsin</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">phi</span> <span class="o">&gt;=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">pi</span> <span class="o">-</span> <span class="n">phi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
         <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">arctan</span><span class="p">(</span> <span class="o">-</span><span class="n">R</span><span
+            class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">R</span><span
             class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span
             class="p">]</span> <span class="o">/</span> <span class="n">R</span><span class="p">[</span><span
-            class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span
-            class="p">)</span>
-        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">arcsin</span><span class="p">(</span> <span class="n">R</span><span class="p">[</span><span
-            class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span
-            class="p">)</span>
+            class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span
+            class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span
+            class="o">*</span> <span class="n">n</span>
         <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">arctan</span><span class="p">(</span> <span class="o">-</span><span class="n">R</span><span
+            class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">R</span><span
             class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">/</span> <span class="n">R</span><span class="p">[</span><span
-            class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span
-            class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">omega</span><span class="p">,</span> <span
+            class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span
+            class="n">n</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;degrees&#39;</span><span
+            class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">degrees</span><span class="p">(</span><span class="n">omega</span><span class="p">),</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span
+            class="n">phi</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">degrees</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">omega</span><span class="p">,</span> <span
             class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div></div>
-    
+
 
         
 </pre>
@@ -148,7 +240,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

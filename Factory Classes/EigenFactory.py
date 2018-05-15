@@ -12,10 +12,8 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 import numpy as np
-from matplotlib import pyplot as plt
 from RasterData import RasterData
-from PointSet import PointSet
-from EigenProperty import EigenPropoerty
+from EigenProperty import EigenProperty
 from MyTools import computeImageDerivatives
 
 class EigenFactory:
@@ -43,7 +41,7 @@ class EigenFactory:
         C = np.dot(pT, points) / np.sum(w)  # points.shape[0]  # covariance matrix of pointset
         eigVal, eigVec = np.linalg.eig(C)
 
-        return EigenPropoerty(points, eigenValues = eigVal, eigenVectors = eigVec)
+        return EigenProperty(points, eigenValues = eigVal, eigenVectors = eigVec)
 
     @staticmethod
     def eigen_Hessian(data, winsize, resolution=1, **kwargs):
@@ -66,7 +64,7 @@ class EigenFactory:
             eigMax = np.real((- b + np.sqrt(b**2 - 4 * c))/ 2)
             eigMin = np.real((- b - np.sqrt(b**2 - 4 * c)) / 2)
 
-            return EigenPropoerty(data, eigenValues = np.array([eigMin, eigMax]))
+            return EigenProperty(data, eigenValues = np.array([eigMin, eigMax]))
 
 
 

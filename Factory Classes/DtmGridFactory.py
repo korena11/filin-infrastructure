@@ -1,8 +1,9 @@
-from osgeo import gdal, osr
-from DtmGrid import DtmGrid
 from sys import exc_info
 from traceback import print_tb
+
+from DtmGrid import DtmGrid
 from numpy import array, float32
+from osgeo import gdal
 
 
 class DtmGridFactory:

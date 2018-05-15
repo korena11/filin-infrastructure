@@ -71,19 +71,20 @@ class SegmentationProperty(BaseProperty):
         Return a PointSubSet object from the points in segment labeled "label"
         in case there are no points with the given label return None (and NOT an empty SubSet) 
         
-        Args:
-            label(int) - the label
+        :param label: the label
+
+        :type label: int
             
-        Returns:
-            PointSubSet object
+        :return: subset of the points that are segmented as the label
+        :rtype: PointSubSet
             
         """
         
         indices = nonzero(self.__segments == label)[0]
         if len(indices) == 0:
             return None
-        
-        pointSubSet = PointSubSet(self._BaseProperty__points, indices)
+
+        pointSubSet = PointSubSet(self.Points, indices)
         
         return pointSubSet
     
@@ -91,7 +92,7 @@ class SegmentationProperty(BaseProperty):
         """
         Change the label of a certain point. This method doesn't change the number of labels in the property
         """
-        if (pointIndex >= 0 and pointIndex < self._BaseProperty__points.Size and newLabel >= 0 and newLabel < self.__nSegments):
+        if (pointIndex >= 0 and pointIndex < self.Points.Size and newLabel >= 0 and newLabel < self.__nSegments):
             # Updating label of point
             self.__segments[pointIndex] = newLabel
             self.__rgb[pointIndex, :] = self.__segmentsColors[newLabel]

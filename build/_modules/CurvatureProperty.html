@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>CurvatureProperty &#8212; infragit 1 documentation</title>
+    <title>CurvatureProperty &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -63,6 +62,7 @@
 <span class="sd">    classdocs</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
+    <span class="n">__curvature</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span
             class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
@@ -71,10 +71,25 @@
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
         <span class="c1"># self._BaseProperty__points = points</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__curvature</span> <span class="o">=</span> <span
-            class="n">curvature</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="n">curvature</span><span class="p">)</span>
     
-    <span class="nd">@property</span>    
+<div class="viewcode-block" id="CurvatureProperty.setValues"><a class="viewcode-back"
+                                                                href="../CurvatureProperty.html#CurvatureProperty.CurvatureProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets curvature into Curvature Property object</span>
+
+<span class="sd">        :param curvature:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__curvature</span> <span class="o">=</span> <span
+            class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Curvature</span><span class="p">(</span> <span
             class="bp">self</span> <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -135,7 +150,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

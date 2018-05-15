@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>Spherical Property Documentation &#8212; infragit 1 documentation</title>
+    <title>Spherical Property Documentation &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
@@ -14,20 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="index.html"/>
-    <link rel="up" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="top" title="infragit 1a documentation" href="index.html"/>
+    <link rel="up" title="Properties base class Documentation" href="BaseProperty.html"/>
     <link rel="next" title="Transformation Matrix Property Documentation" href="TransformationProperty.html"/>
     <link rel="prev" title="Segmentation Property Documentation" href="SegmentationProperty.html"/>
 </head>
@@ -50,9 +49,9 @@
             <a href="SegmentationProperty.html" title="Segmentation Property Documentation"
                accesskey="P">previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Base Property Documentation</a> &#187;
-        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Properties base class
+            Documentation</a> &#187;</li>
     </ul>
 </div>
 
@@ -68,14 +67,14 @@
                         <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty">
                             <em class="property">class </em><code
                                 class="descclassname">SphericalCoordinatesProperty.</code><code class="descname">SphericalCoordinatesProperty</code><span
-                                class="sig-paren">(</span><em>points</em>, <em>azimuths</em>, <em>elevationAngles</em>,
-                            <em>distances</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                 href="_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty"><span
+                                class="sig-paren">(</span><em>points</em>, <em>*args</em><span
+                                class="sig-paren">)</span><a class="reference internal"
+                                                             href="_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty"><span
                                 class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                             href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty"
                                                                             title="Permalink to this definition">¶</a>
                         </dt>
-                        <dd><p>Class for containing the spherical coordinates of a certain PointSet Object
+                        <dd><p>Spherical coordinates property of a certain PointSet Object
                             Angular coordinates are in decimal degrees</p>
                             <blockquote>
                                 <div><p class="rubric">Attributes</p>
@@ -164,9 +163,18 @@
                                         </tr>
                                         <tr class="row-odd">
                                             <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code>(**kwargs)
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
                                             </td>
                                             <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues"
+                                                   title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">setValues</span></code></a>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the values to the spherical coordinates property</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -234,11 +242,9 @@
                                         <col class="field-body"/>
                                         <tbody valign="top">
                                         <tr class="field-odd field">
-                                            <th class="field-name">Return:</th>
-                                            <td class="field-body">
-                                                <ul class="first last simple">
-                                                    <li>tvtk.PolyData of the current PointSet</li>
-                                                </ul>
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">tvtk.PolyData of the current PointSet
+                                                -
                                             </td>
                                         </tr>
                                         </tbody>
@@ -252,6 +258,45 @@
                                                                         href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ"
                                                                         title="Permalink to this definition">¶</a></dt>
                                 <dd></dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues">
+                                    <code class="descname">setValues</code><span
+                                        class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.setValues"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Sets the values to the spherical coordinates property</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>azimuths</strong> (<a class="reference external"
+                                                                                      href="https://docs.python.org/3/library/functions.html#float"
+                                                                                      title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; </li>
+                                                    <li><strong>elevationAngles</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#float"
+                                                                                             title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; </li>
+                                                    <li><strong>distances</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#float"
+                                                                                       title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
                             </dl>
 
                         </dd>
@@ -310,8 +355,8 @@
             <a href="SegmentationProperty.html" title="Segmentation Property Documentation"
             >previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Base Property Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Properties base class Documentation</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

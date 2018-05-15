@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>SphericalCoordinatesProperty &#8212; infragit 1 documentation</title>
+    <title>SphericalCoordinatesProperty &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -65,21 +64,56 @@
         class="k">class</span> <span class="nc">SphericalCoordinatesProperty</span><span class="p">(</span><span
         class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Class for containing the spherical coordinates of a certain PointSet Object</span>
+<span class="sd">    Spherical coordinates property of a certain PointSet Object</span>
 <span class="sd">    Angular coordinates are in decimal degrees</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    
+
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-            class="n">azimuths</span><span class="p">,</span> <span class="n">elevationAngles</span><span
-            class="p">,</span> <span class="n">distances</span><span class="p">):</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">_BaseProperty__points</span> <span
-            class="o">=</span> <span class="n">points</span>
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="o">*</span><span
+            class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param points:</span>
+<span class="sd">        :param azimuths:</span>
+<span class="sd">        :param elevationAngles:</span>
+<span class="sd">        :param distances:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">SphericalCoordinatesProperty</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SphericalCoordinatesProperty.setValues"><a class="viewcode-back"
+                                                                           href="../SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the values to the spherical coordinates property</span>
+
+<span class="sd">        :param azimuths:</span>
+<span class="sd">        :param elevationAngles:</span>
+<span class="sd">        :param distances:</span>
+
+<span class="sd">        :type azimuths: float</span>
+<span class="sd">        :type elevationAngles: float</span>
+<span class="sd">        :type distances: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">azimuths</span> <span class="o">=</span> <span class="n">args</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">elevationAngles</span> <span class="o">=</span> <span class="n">args</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">args</span><span
+            class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthElevationRange</span> <span
-            class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">points</span><span
-            class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="mi">3</span><span
-            class="p">))</span>
+            class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">,</span> <span class="mi">3</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthElevationRange</span><span
             class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">azimuths</span>
@@ -88,20 +122,21 @@
             class="n">elevationAngles</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthElevationRange</span><span
             class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span
-            class="n">distances</span>
-    
+            class="n">distances</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">XYZ</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
-        
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_BaseProperty__points</span>
-        
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">Points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_BaseProperty__points</span><span
-            class="o">.</span><span class="n">Size</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__dataset</span><span class="o">.</span><span class="n">Size</span>
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Azimuths</span><span class="p">(</span><span class="bp">self</span><span
@@ -140,8 +175,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create and return PolyData object</span>
 <span class="sd">        </span>
-<span class="sd">        :Return:</span>
-<span class="sd">            - tvtk.PolyData of the current PointSet</span>
+<span class="sd">        :return: tvtk.PolyData of the current PointSet</span>
+<span class="sd">            -</span>
 <span class="sd">        &quot;&quot;&quot;</span>
   
         <span class="n">_polyData</span> <span class="o">=</span> <span class="n">tvtk</span><span
@@ -193,7 +228,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

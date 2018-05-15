@@ -1,8 +1,6 @@
 Classification Property Documentation
 =====================================
 
-
-
 .. autoclass:: ClassificationProperty.ClassificationProperty
 :members:
        :undoc-members:

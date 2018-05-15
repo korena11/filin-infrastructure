@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>RasterData &#8212; infragit 1 documentation</title>
+    <title>RasterData &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="../index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
     <link rel="up" title="Module code" href="index.html"/>
 </head>
 <body role="document">
@@ -40,7 +39,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
     </ul>
 </div>
@@ -69,6 +68,10 @@
                         class="nb">max</span> <span class="k">as</span> <span class="n">npmax</span>
 <span class="kn">from</span> <span class="nn">pyproj</span> <span class="k">import</span> <span
                         class="n">Proj</span><span class="p">,</span> <span class="n">transform</span>
+<span class="kn">from</span> <span class="nn">BaseData</span> <span class="k">import</span> <span
+                        class="n">BaseData</span>
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                        class="n">PointSet</span>
 
 <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span
                         class="p">()</span> <span class="o">==</span> <span class="s1">&#39;Linux&#39;</span><span
@@ -80,30 +83,23 @@
 
 
 <div class="viewcode-block" id="RasterData"><a class="viewcode-back" href="../RasterData.html#RasterData.RasterData">[docs]</a><span
-        class="k">class</span> <span class="nc">RasterData</span><span class="p">(</span><span
-        class="nb">object</span><span class="p">):</span>
+        class="k">class</span> <span class="nc">RasterData</span><span class="p">(</span><span class="n">BaseData</span><span
+        class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A raster representation of the point set and manipulations on it</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">__rasterData</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the raster is stored</span>
     <span class="n">__voidData</span> <span class="o">=</span> <span class="o">-</span><span
             class="mi">9999</span>  <span class="c1"># A number indicating missing data in the raster</span>
     <span class="n">__cellSize</span> <span class="o">=</span> <span class="mf">0.05</span>  <span class="c1"># The spacing between grid cells</span>
     <span class="n">__spatialReference</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># spatial reference info</span>
 
     <span class="c1"># transformation to convert pixel to world coordinates</span>
-    <span class="n">tx</span> <span class="o">=</span> <span class="n">ty</span> <span class="o">=</span> <span
-            class="mi">0</span>
-    <span class="n">sx</span> <span class="o">=</span> <span class="n">sy</span> <span class="o">=</span><span
-            class="mi">1</span>
     <span class="n">__geoTransform</span> <span class="o">=</span> <span class="p">(</span><span
-            class="n">tx</span><span class="p">,</span><span class="n">ty</span><span class="p">,</span><span class="n">sx</span><span
-            class="p">,</span><span class="n">sy</span><span class="p">)</span>
+            class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span
+            class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">#Lidar data info</span>
-    <span class="n">__points</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># PointSet data from which the raster was made from</span>
     <span class="n">__dataOrigin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="c1"># A string indicating the point acquiring means: &#39;terrestrial&#39;,</span>
                 <span class="c1"># &#39;airborne&#39; , &#39;mobile&#39;, &#39;slam&#39;, &#39;kinect&#39;, &#39;photogrammetry&#39;</span>
     <span class="n">__dataFeature</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span
@@ -113,88 +109,126 @@
             class="c1"># roughness estimation of the raster data</span>
 
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">cls</span><span
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
             class="p">,</span> <span class="n">data</span><span class="p">,</span> <span
             class="n">gridSpacing</span><span class="p">,</span> <span class="o">**</span><span
             class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        constructor</span>
-<span class="sd">        :param points: PointSet object from which the panorama will be created</span>
+
+<span class="sd">        :param data: the rasterized data</span>
 <span class="sd">        :param gridSpacing: The spacing between grid cells</span>
+
+<span class="sd">        **Optionals**</span>
 
 <span class="sd">        :param voidData: A number indicating missing data in the raster</span>
 <span class="sd">        :param geoTrnasform: The transformation needed to convert from pixel to world coordinates (tx, ty, sx, sx)</span>
-<span class="sd">        :param spatialRefEpsg: The EPSG code of spatial reference of the raster given</span>
+<span class="sd">        :param spatialReference: spatial reference info</span>
+<span class="sd">        :param dataOrigin: A string indicating the point acquiring means: &#39;terrestrial&#39;,</span>
+<span class="sd">        :param dataFeature: A string indicating the type of data stored  (e.g. range, intensity, etc.)</span>
+<span class="sd">        :param accuracy: measurement accuracy estimation</span>
+<span class="sd">        :param roughness: an estimation of the surface roughness</span>
+<span class="sd">        :param path: the path for the datafile</span>
+
+<span class="sd">        :type voidData: int</span>
+<span class="sd">        :type geoTrnasform: tuple</span>
+<span class="sd">        :type spatialReference: ??</span>
+<span class="sd">        :type dataOrigin: str</span>
+<span class="sd">        :type dataFeature: str</span>
+<span class="sd">        :type accuracy: float</span>
+<span class="sd">        :type roughness: float</span>
+<span class="sd">        :type path: str</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">cls</span><span class="o">.</span><span class="n">__cellSize</span> <span
+        <span class="nb">super</span><span class="p">(</span><span class="n">RasterData</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cellSize</span> <span
             class="o">=</span> <span class="n">gridSpacing</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__rasterData</span> <span
-            class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setdata</span><span class="p">(</span><span
+            class="n">data</span><span class="p">)</span>
 
-        <span class="n">cls</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
-            class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="RasterData.setValues"><a class="viewcode-back"
                                                          href="../RasterData.html#RasterData.RasterData.setValues">[docs]</a>    <span
-        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="n">cls</span><span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        sets self values</span>
-<span class="sd">        :param in kwargs: extent, ncolumns, nrows, cellSize, noDataValue,</span>
+
+<span class="sd">        :param voidData: A number indicating missing data in the raster</span>
+<span class="sd">        :param geoTrnasform: The transformation needed to convert from pixel to world coordinates (tx, ty, sx, sx)</span>
+<span class="sd">        :param spatialReference: spatial reference info</span>
+<span class="sd">        :param dataOrigin: A string indicating the point acquiring means: &#39;terrestrial&#39;,</span>
+<span class="sd">        :param dataFeature: A string indicating the type of data stored  (e.g. range, intensity, etc.)</span>
+<span class="sd">        :param accuracy: measurement accuracy estimation</span>
+<span class="sd">        :param roughness: an estimation of the surface roughness</span>
+<span class="sd">        :param path: the path for the datafile</span>
+
+<span class="sd">        :type voidData: int</span>
+<span class="sd">        :type geoTrnasform: tuple</span>
+<span class="sd">        :type spatialReference: ??</span>
+<span class="sd">        :type dataOrigin: str</span>
+<span class="sd">        :type dataFeature: str</span>
+<span class="sd">        :type accuracy: float</span>
+<span class="sd">        :type roughness: float</span>
+<span class="sd">        :type path: str</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;voidData&#39;</span><span
-            class="p">:</span> <span class="n">cls</span><span class="o">.</span><span class="n">__voidData</span><span
-            class="p">,</span>
+            class="p">:</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__voidData</span><span class="p">,</span>
                   <span class="s1">&#39;geoTransform&#39;</span><span class="p">:</span> <span class="p">(</span><span
-            class="n">cls</span><span class="o">.</span><span class="n">__geoTransform</span><span class="p">),</span>
-                  <span class="s1">&#39;spatial_reference&#39;</span><span class="p">:</span> <span class="n">cls</span><span
-            class="o">.</span><span class="n">__spatialReference</span><span class="p">,</span>
-                  <span class="s1">&#39;cellSize&#39;</span><span class="p">:</span> <span class="n">cls</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">__geoTransform</span><span class="p">),</span>
+                  <span class="s1">&#39;spatialReference&#39;</span><span class="p">:</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__spatialReference</span><span
+            class="p">,</span>
+                  <span class="s1">&#39;cellSize&#39;</span><span class="p">:</span> <span class="bp">self</span><span
             class="o">.</span><span class="n">__cellSize</span><span class="p">,</span>
-                  <span class="s1">&#39;points&#39;</span><span class="p">:</span> <span class="n">cls</span><span
-            class="o">.</span><span class="n">__points</span><span class="p">,</span>
-                  <span class="s1">&#39;dataOrigin&#39;</span><span class="p">:</span> <span class="n">cls</span><span
+                  <span class="s1">&#39;dataOrigin&#39;</span><span class="p">:</span> <span class="bp">self</span><span
             class="o">.</span><span class="n">__dataOrigin</span><span class="p">,</span>
-                  <span class="s1">&#39;dataFeature&#39;</span><span class="p">:</span> <span class="n">cls</span><span
-            class="o">.</span><span class="n">__dataFeature</span><span class="p">,</span>
-                  <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="n">cls</span><span
+                  <span class="s1">&#39;dataFeature&#39;</span><span class="p">:</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__dataFeature</span><span class="p">,</span>
+                  <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="bp">self</span><span
             class="o">.</span><span class="n">__measurement_accuracy</span><span class="p">,</span>
-                  <span class="s1">&#39;roughness&#39;</span><span class="p">:</span> <span class="n">cls</span><span
-            class="o">.</span><span class="n">__mean_roughness</span>
+                  <span class="s1">&#39;roughness&#39;</span><span class="p">:</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__mean_roughness</span><span class="p">,</span>
+                  <span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">path</span>
                   <span class="p">}</span>
         <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span
             class="n">kwargs</span><span class="p">)</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__geoTransform</span> <span class="o">=</span> <span
-            class="n">params</span><span class="p">[</span><span class="s1">&#39;geoTransform&#39;</span><span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__geoTransform</span> <span
+            class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;geoTransform&#39;</span><span
             class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__spatialReference</span> <span
-            class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;spatial_reference&#39;</span><span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__spatialReference</span> <span
+            class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;spatialReference&#39;</span><span
             class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setPath</span><span class="p">(</span><span
+            class="n">params</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span
+            class="p">])</span>
 
-        <span class="n">cls</span><span class="o">.</span><span class="n">__voidData</span> <span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__voidData</span> <span
             class="o">=</span> <span class="n">params</span><span class="p">[</span><span
             class="s1">&#39;voidData&#39;</span><span class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__cellSize</span> <span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__cellSize</span> <span
             class="o">=</span> <span class="n">params</span><span class="p">[</span><span
             class="s1">&#39;cellSize&#39;</span><span class="p">],</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__points</span> <span class="o">=</span> <span
-            class="n">params</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dataOrigin</span> <span class="o">=</span> <span
+            class="n">params</span><span class="p">[</span><span class="s1">&#39;dataOrigin&#39;</span><span
             class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__dataOrigin</span> <span
-            class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dataOrigin&#39;</span><span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dataFeature</span> <span
+            class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;dataFeature&#39;</span><span
             class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__dataFeature</span> <span class="o">=</span> <span
-            class="n">params</span><span class="p">[</span><span class="s1">&#39;dataFeature&#39;</span><span class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__measurement_accuracy</span> <span class="o">=</span> <span
-            class="n">params</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span
-            class="p">]</span>
-        <span class="n">cls</span><span class="o">.</span><span class="n">__mean_roughness</span> <span
+        <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_accuracy</span> <span
+            class="o">=</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mean_roughness</span> <span
             class="o">=</span> <span class="n">params</span><span class="p">[</span><span
             class="s1">&#39;roughness&#39;</span><span class="p">]</span></div>
+
 
 <div class="viewcode-block" id="RasterData.pixelToWorld"><a class="viewcode-back"
                                                             href="../RasterData.html#RasterData.RasterData.pixelToWorld">[docs]</a>    <span
@@ -202,10 +236,16 @@
         class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span
         class="n">col</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transform a pixel to world coordinate system</span>
 
-<span class="sd">        :param row:</span>
-<span class="sd">        :param col:</span>
-<span class="sd">        :return:</span>
+<span class="sd">        :param row: the pixel&#39;s row</span>
+<span class="sd">        :param col: the pixel&#39;s column</span>
+
+<span class="sd">        :type row: int</span>
+<span class="sd">        :type col: int</span>
+
+<span class="sd">        :return: x, y in world coordinates</span>
+<span class="sd">        :rtype: tuple</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
@@ -228,7 +268,13 @@
 <span class="sd">        :param x: The X-axis coordinate of the point to convert</span>
 <span class="sd">        :param y: The Y-axis coordinate of the point to convert</span>
 <span class="sd">        :param spatialRef: The spatial reference of the point to convert given in EPSG code</span>
+
+<span class="sd">        :type x: float</span>
+<span class="sd">        :type y: float</span>
+<span class="sd">        :type spatialRef: ESPG code</span>
+
 <span class="sd">        :return: the row and column that correspond to the given point (tuple of two float numbers)</span>
+<span class="sd">        :rtype: tuple (int, int)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span
@@ -326,14 +372,14 @@
         <span class="n">outOfBoundsTest</span> <span class="o">=</span> <span class="n">logical_or</span><span
             class="p">(</span><span class="n">row</span> <span class="o">&lt;</span> <span class="mi">0</span><span
             class="p">,</span> <span class="n">logical_or</span><span class="p">(</span><span class="n">row</span> <span
-            class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">],</span>
                                                          <span class="n">logical_or</span><span class="p">(</span><span
             class="n">col</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span
             class="n">col</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">1</span><span class="p">])))</span>
         <span class="n">values</span><span class="p">[</span><span class="n">nonzero</span><span class="p">(</span><span
             class="n">outOfBoundsTest</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span> <span
             class="o">=</span> <span class="kc">None</span>
@@ -354,7 +400,7 @@
             class="mi">0</span><span class="p">:</span>
             <span class="n">values</span><span class="p">[</span><span class="n">exactPointsIdx</span><span
             class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span
+            class="n">data</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span
             class="n">exactPointsIdx</span><span class="p">],</span> <span class="n">col</span><span
             class="p">[</span><span class="n">exactPointsIdx</span><span class="p">]]</span>
 
@@ -370,11 +416,11 @@
             class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;nearest&#39;</span><span
             class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rasterData</span><span
-            class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">row</span><span
-            class="p">[</span><span class="n">otherPoints</span><span class="p">]),</span> <span class="nb">round</span><span
-            class="p">(</span><span class="n">col</span><span class="p">[</span><span class="n">otherPoints</span><span
-            class="p">])]</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">[</span><span class="nb">round</span><span class="p">(</span><span
+            class="n">row</span><span class="p">[</span><span class="n">otherPoints</span><span
+            class="p">]),</span> <span class="nb">round</span><span class="p">(</span><span class="n">col</span><span
+            class="p">[</span><span class="n">otherPoints</span><span class="p">])]</span>
             <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;bilinear&#39;</span><span
             class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -385,20 +431,20 @@
             class="p">(</span><span class="n">col</span><span class="p">[</span><span class="n">otherPoints</span><span
             class="p">]))</span>
                     <span class="n">z00</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">__rasterData</span><span class="p">[</span><span
-            class="n">intRow</span><span class="p">,</span> <span class="n">intCol</span><span class="p">]</span>
+            class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">intRow</span><span
+            class="p">,</span> <span class="n">intCol</span><span class="p">]</span>
                     <span class="n">z10</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">__rasterData</span><span class="p">[</span><span
-            class="n">intRow</span><span class="p">,</span> <span class="n">intCol</span> <span class="o">+</span> <span
-            class="mi">1</span><span class="p">]</span>
+            class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">intRow</span><span
+            class="p">,</span> <span class="n">intCol</span> <span class="o">+</span> <span class="mi">1</span><span
+            class="p">]</span>
                     <span class="n">z01</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">__rasterData</span><span class="p">[</span><span
-            class="n">intRow</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span
-            class="n">intCol</span><span class="p">]</span>
+            class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">intRow</span> <span
+            class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">intCol</span><span
+            class="p">]</span>
                     <span class="n">z11</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">__rasterData</span><span class="p">[</span><span
-            class="n">intRow</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span
-            class="n">intCol</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">intRow</span> <span
+            class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">intCol</span> <span
+            class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
                     <span class="n">a</span> <span class="o">=</span> <span class="n">z00</span>
                     <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">z10</span> <span
@@ -475,13 +521,13 @@
             class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">xv</span> <span class="o">=</span> <span class="n">arange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span
+            class="p">])</span>
             <span class="n">yv</span> <span class="o">=</span> <span class="n">arange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">])</span>
 
         <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span
             class="n">meshgrid</span><span class="p">(</span><span class="n">xv</span><span class="p">,</span> <span
@@ -493,10 +539,9 @@
             class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span
             class="p">,</span> <span class="p">))</span>
         <span class="n">rasterData</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">__rasterData</span><span class="p">[</span><span class="n">xs</span><span
+            class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">xs</span><span
             class="p">,</span> <span class="n">ys</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span
-            class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span
-            class="p">))</span>
+            class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
 
         <span class="n">xs</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span
             class="o">.</span><span class="n">translationX</span> <span class="o">+</span> <span
@@ -529,29 +574,31 @@
 
 <span class="c1">#------------------ PROPERTIES --------------------------</span>
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: return the image data</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span
-            class="n">__rasterData</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">spatialReference</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The spatial reference information</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__spatialReference</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translationX</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The east translation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__geoTransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translationY</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The north translation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__geoTransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -568,67 +615,79 @@
             class="n">__geoTransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">rows</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cols</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span
-            class="n">__rasterData</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">resolution</span><span class="p">(</span><span class="n">cls</span><span
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: raster resolution</span>
+<span class="sd">        Raster&#39;s rows and columns size</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rows</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of rows in the raster</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cols</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of columns in the raster</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">resolution</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster resolution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__cellSize</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="n">cls</span><span
+    <span class="k">def</span> <span class="nf">accuracy</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: measurement accuracy</span>
+<span class="sd">        Measurement accuracy</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">__measurement_accuracy</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_accuracy</span>
 
 <div class="viewcode-block" id="RasterData.roughness"><a class="viewcode-back"
                                                          href="../RasterData.html#RasterData.RasterData.roughness">[docs]</a>    <span
-        class="k">def</span> <span class="nf">roughness</span><span class="p">(</span><span class="n">cls</span><span
+        class="k">def</span> <span class="nf">roughness</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: measurement accuracy</span>
+<span class="sd">        An estimation of the surface roughness</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">cls</span><span class="o">.</span><span class="n">__mean_roughness</span> <span
-            class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span
-            class="s1">&#39;roughness&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__mean_roughness</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;roughness&#39;</span><span
+            class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">__mean_roughness</span></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mean_roughness</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">min_range</span><span class="p">(</span><span class="n">cls</span><span
-            class="p">):</span>
+    <span class="k">def</span> <span class="nf">min_range</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :return: the closest range in the data</span>
+<span class="sd">        The closest range in the data</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">npmax</span><span class="p">(</span><span
-            class="n">npmax</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span
+            class="n">npmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">data</span><span class="p">))</span>
 
 <div class="viewcode-block" id="RasterData.ToPointSet"><a class="viewcode-back"
@@ -638,7 +697,9 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transforms raster to PointSet data</span>
 
-<span class="sd">        :return: PointSet</span>
+<span class="sd">        :return: PointSet of the raster data</span>
+
+<span class="sd">        :rtype: PointSet</span>
 
 <span class="sd">        &quot;&quot;&quot;</span></div></div>
         <span class="c1"># pts = PointSet()</span>
@@ -681,7 +742,7 @@
             <a href="../py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
         <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
     </ul>
 </div>

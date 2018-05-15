@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>Panorama Property Documentation &#8212; infragit 1 documentation</title>
+    <title>Panorama Property Documentation &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
@@ -14,20 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="index.html"/>
-    <link rel="up" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="top" title="infragit 1a documentation" href="index.html"/>
+    <link rel="up" title="Properties base class Documentation" href="BaseProperty.html"/>
     <link rel="next" title="Rotation Property Documentation" href="RotationProperty.html"/>
     <link rel="prev" title="Normals Property Documentation" href="NormalsProperty.html"/>
 </head>
@@ -50,9 +49,9 @@
             <a href="NormalsProperty.html" title="Normals Property Documentation"
                accesskey="P">previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Base Property Documentation</a> &#187;
-        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Properties base class
+            Documentation</a> &#187;</li>
     </ul>
 </div>
 
@@ -68,7 +67,7 @@
                         <dt id="PanoramaProperty.PanoramaProperty">
                             <em class="property">class </em><code class="descclassname">PanoramaProperty.</code><code
                                 class="descname">PanoramaProperty</code><span class="sig-paren">(</span><em>points</em>,
-                            <em>rowIndexes</em>, <em>columnIndexes</em>, <em>data</em>, <em>**kwargs</em><span
+                            <em>rowIndexes=None</em>, <em>columnIndexes=None</em>, <em>panoramaData=None</em>, <em>**kwargs</em><span
                                 class="sig-paren">)</span><a class="reference internal"
                                                              href="_modules/PanoramaProperty.html#PanoramaProperty"><span
                                 class="viewcode-link">[source]</span></a><a class="headerlink"
@@ -113,9 +112,18 @@
                                         <tbody valign="top">
                                         <tr class="row-odd">
                                             <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code>(**kwargs)
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
                                             </td>
                                             <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#PanoramaProperty.PanoramaProperty.setValues"
+                                                   title="PanoramaProperty.PanoramaProperty.setValues"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">setValues</span></code></a>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the values into the panoramaProperty object</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -128,6 +136,111 @@
                                                                                   title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>Returns the panorama image</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
+                                <dt id="PanoramaProperty.PanoramaProperty.setValues">
+                                    <code class="descname">setValues</code><span
+                                        class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/PanoramaProperty.html#PanoramaProperty.setValues"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#PanoramaProperty.PanoramaProperty.setValues"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Sets the values into the panoramaProperty object</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>panoramaData</strong> &#8211; The data to be represented
+                                                        as a panorama (e.g. range, intesity, etc.). Default: range
+                                                    </li>
+                                                    <li><strong>rowIndexes</strong> &#8211; The row indices of the
+                                                        points in the point set based on the elevation angles
+                                                    </li>
+                                                    <li><strong>columnIndexs</strong> &#8211; The column indices of the
+                                                        points in the point set based on the azimuth angles
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p><strong>Optionals</strong></p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>dataType</strong> (<a class="reference external"
+                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                      title="(in Python v3.6)"><em>str</em></a>)
+                                                        &#8211; A string indicating the type of data stored in the
+                                                        panoramic view (e.g. &#8216;range&#8217;, &#8216;intensity&#8217;,
+                                                        etc.)
+                                                    </li>
+                                                    <li><strong>minAzimuth</strong> (<a class="reference external"
+                                                                                        href="https://docs.python.org/3/library/functions.html#float"
+                                                                                        title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The minimal azimuth value
+                                                    </li>
+                                                    <li><strong>maxAzimuth</strong> (<a class="reference external"
+                                                                                        href="https://docs.python.org/3/library/functions.html#float"
+                                                                                        title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The maximal azimuth value
+                                                    </li>
+                                                    <li><strong>minElevation</strong> (<a class="reference external"
+                                                                                          href="https://docs.python.org/3/library/functions.html#float"
+                                                                                          title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The minimal elevation value
+                                                    </li>
+                                                    <li><strong>maxElevation</strong> (<a class="reference external"
+                                                                                          href="https://docs.python.org/3/library/functions.html#float"
+                                                                                          title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The maximal elevation value
+                                                    </li>
+                                                    <li><strong>azimuthSpacing</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/functions.html#float"
+                                                                                            title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The measurements&#8217; angular resolution in the
+                                                        azimuth direction.
+                                                    </li>
+                                                    <li><strong>elevationSpacing</strong> (<a class="reference external"
+                                                                                              href="https://docs.python.org/3/library/functions.html#float"
+                                                                                              title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; The measurements&#8217; angular resolution in the
+                                                        elevation angle direction
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="admonition note">
+                                        <p class="first admonition-title">Note</p>
+                                        <p>For the Scanstation C10 the measurements&#8217; angular resolution for both
+                                            elevation and
+                                            azimuth directions:</p>
+                                        <blockquote class="last">
+                                            <div>
+                                                <ul class="simple">
+                                                    <li>Low: 0.11 deg</li>
+                                                    <li>Medium: 0.057 deg</li>
+                                                    <li>High: 0.028 deg</li>
+                                                    <li>Highest: <em>TO ADD</em></li>
+                                                </ul>
+                                            </div>
+                                        </blockquote>
+                                    </div>
                                 </dd>
                             </dl>
 
@@ -187,8 +300,8 @@
             <a href="NormalsProperty.html" title="Normals Property Documentation"
             >previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Base Property Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Properties base class Documentation</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

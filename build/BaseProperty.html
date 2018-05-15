@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>Base Property Documentation &#8212; infragit 1 documentation</title>
+    <title>Properties base class Documentation &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
@@ -14,19 +14,18 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="index.html"/>
+    <link rel="top" title="infragit 1a documentation" href="index.html"/>
     <link rel="next" title="Classification Property Documentation" href="ClassificationProperty.html"/>
     <link rel="prev" title="RasterData class" href="RasterData.html"/>
 </head>
@@ -49,7 +48,7 @@
             <a href="RasterData.html" title="RasterData class"
                accesskey="P">previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
     </ul>
 </div>
 
@@ -58,10 +57,14 @@
         <div class="bodywrapper">
             <div class="body" role="main">
 
-                <div class="section" id="base-property-documentation">
-                    <h1>Base Property Documentation<a class="headerlink" href="#base-property-documentation"
-                                                      title="Permalink to this headline">¶</a></h1>
-                    <p>Each property inherits from this class.</p>
+                <div class="section" id="properties-base-class-documentation">
+                    <h1>Properties base class Documentation<a class="headerlink"
+                                                              href="#properties-base-class-documentation"
+                                                              title="Permalink to this headline">¶</a></h1>
+                    <p>Each property inherits from this class. If values need to be set, each property has its own <code
+                            class="xref py py-func docutils literal"><span class="pre">setValues()</span></code> , and
+                        it should be defined for new properties.</p>
+                    <p>The following are the existing properties:</p>
                     <div class="toctree-wrapper compound">
                         <ul>
                             <li class="toctree-l1"><a class="reference internal" href="ClassificationProperty.html">Classification
@@ -78,6 +81,8 @@
                                 Property Documentation</a></li>
                             <li class="toctree-l1"><a class="reference internal" href="RotationProperty.html">Rotation
                                 Property Documentation</a></li>
+                            <li class="toctree-l1"><a class="reference internal" href="RasterProperty.html">Raster
+                                Property Documentation</a></li>
                             <li class="toctree-l1"><a class="reference internal" href="SegmentationProperty.html">Segmentation
                                 Property Documentation</a></li>
                             <li class="toctree-l1"><a class="reference internal" href="SphericalProperty.html">Spherical
@@ -88,155 +93,6 @@
                                 Property Documentation</a></li>
                         </ul>
                     </div>
-                    <dl class="class">
-                        <dt id="BaseProperty.BaseProperty">
-                            <em class="property">class </em><code class="descclassname">BaseProperty.</code><code
-                                class="descname">BaseProperty</code><span
-                                class="sig-paren">(</span><em>dataset</em><span class="sig-paren">)</span><a
-                                class="reference internal" href="_modules/BaseProperty.html#BaseProperty"><span
-                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                            href="#BaseProperty.BaseProperty"
-                                                                            title="Permalink to this definition">¶</a>
-                        </dt>
-                        <dd><p>Base class for all property classes</p>
-                            <blockquote>
-                                <div><p class="rubric">Attributes</p>
-                                    <table border="1" class="longtable docutils">
-                                        <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
-                                        </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#BaseProperty.BaseProperty.Points"
-                                                   title="BaseProperty.BaseProperty.Points"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Points</span></code></a></td>
-                                            <td>Holds the points dataset</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#BaseProperty.BaseProperty.Raster"
-                                                   title="BaseProperty.BaseProperty.Raster"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Raster</span></code></a></td>
-                                            <td>Holds raster dataset</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <p class="rubric">Methods</p>
-                                    <table border="1" class="longtable docutils">
-                                        <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
-                                        </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#BaseProperty.BaseProperty.save"
-                                                   title="BaseProperty.BaseProperty.save"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code></a>(**kwargs)
-                                            </td>
-                                            <td>Save the property in either json or hdf5.</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </blockquote>
-                            <dl class="attribute">
-                                <dt id="BaseProperty.BaseProperty.Points">
-                                    <code class="descname">Points</code><a class="headerlink"
-                                                                           href="#BaseProperty.BaseProperty.Points"
-                                                                           title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Holds the points dataset</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body">PointSet related to this property</td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Return type:</th>
-                                            <td class="field-body"><a class="reference internal"
-                                                                      href="PointSet.html#module-PointSet"
-                                                                      title="PointSet">PointSet</a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="BaseProperty.BaseProperty.Raster">
-                                    <code class="descname">Raster</code><a class="headerlink"
-                                                                           href="#BaseProperty.BaseProperty.Raster"
-                                                                           title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Holds raster dataset</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body">RasterData related to this property</td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Return type:</th>
-                                            <td class="field-body"><a class="reference internal"
-                                                                      href="RasterData.html#RasterData.RasterData"
-                                                                      title="RasterData.RasterData">RasterData</a></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="method">
-                                <dt id="BaseProperty.BaseProperty.save">
-                                    <code class="descname">save</code><span
-                                        class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a
-                                        class="reference internal"
-                                        href="_modules/BaseProperty.html#BaseProperty.save"><span class="viewcode-link">[source]</span></a><a
-                                        class="headerlink" href="#BaseProperty.BaseProperty.save"
-                                        title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Save the property in either json or hdf5.</p>
-                                    <p>Default is hdf5.</p>
-                                    <div class="admonition warning">
-                                        <p class="first admonition-title">Warning</p>
-                                        <p class="last">Need to be implemented for json</p>
-                                    </div>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first last simple">
-                                                    <li><strong>filename</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.6)"><em>str</em></a>)
-                                                        &#8211; path to filename and filename (with or without
-                                                        extension)
-                                                    </li>
-                                                    <li><strong>extension</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                       title="(in Python v3.6)"><em>str</em></a>)
-                                                        &#8211; &#8216;h5&#8217; or &#8216;json&#8217;</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                        </dd>
-                    </dl>
-
                 </div>
 
 
@@ -290,7 +146,7 @@
             <a href="RasterData.html" title="RasterData class"
             >previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

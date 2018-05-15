@@ -1,10 +1,13 @@
 # Class PointSet hold a set of un-ordered 2D or 3D points.
 
+import numpy as np
 from numpy import arange, array, vstack, hstack
 from tvtk.api import tvtk
 
+from BaseData import BaseData
 
-class PointSet(object):
+
+class PointSet(BaseData):
     """ 
     Basic point cloud 
     
@@ -27,23 +30,25 @@ class PointSet(object):
         :param 'rgb': rgb values for each point (optional)
         :param 'intensity': intensity values for each point(optional)
         """
-
+        super(PointSet, self).__init__()
         properties = {'rgb': None,
                       'intensity': None,
                       'accuracy': .002}
         properties.update(kwargs)
 
-        if points.shape[1] == 3:  # 3D Data
-            self.__xyz = points
-        elif points.shape[1] == 2:  # 2D Data
-            self.__xyz = None
-            self.__xy = points
+        self.setdata(points)
+
+        # if points.shape[1] == 3:  # 3D Data
+
+        # elif points.shape[1] == 2:  # 2D Data
 
             # TODO: missing rgb is the size of the points.
-
         self.__rgb = properties['rgb']
         self.__intensity = properties['intensity']
         self.__measurement_accuracy = properties['accuracy']
+
+        path = kwargs.get('path', '')  # The path for the data file
+        self.setPath(path)
 
     @property
     def Size(self):
@@ -51,18 +56,18 @@ class PointSet(object):
         :return: number of points
 
         """
-        return self.__xyz.shape[0]
+        return self.data.shape[0]
 
     @property
     def FieldsDimension(self):
         """
         Return number of columns (channels) 
         """
-        if self.__intensity != None and self.__rgb != None:
+        if self.__intensity is not None and self.__rgb is not None:
             return 7
-        elif self.__intensity == None and self.__rgb != None:
+        elif self.__intensity is None and self.__rgb is not None:
             return 6
-        elif self.__intensity != None and self.__rgb == None:
+        elif self.__intensity is not None and self.__rgb is None:
             return 4
         else:
             return 3
@@ -84,119 +89,109 @@ class PointSet(object):
     @property
     def X(self):
         """
-        Return nX1 ndarray of X coordinate 
+        :return: X coordinates
+
+        :rtype: nx1 nd-array
+
         """
-        if self.__xyz != None:
-            return self.__xyz[:, 0]
-        else:
-            return self.__xy[:, 0]
+        return self.data[:, 0]
 
     @property
     def Y(self):
         """
-        Return nX1 ndarray of Y coordinate 
+
+        :return: Y coordinates
+
+        :rtype: nx1 nd-array
+
         """
-        if self.__xyz != None:
-            return self.__xyz[:, 1]
-        else:
-            return self.__xy[:, 1]
+        return self.data[:, 1]
 
     @property
     def Z(self):
         """
-        Return nX1 ndarray of Z coordinate 
-        """
-        if self.__xyz != None:
-            return self.__xyz[:, 2]
-        else:
-            return None
+        :return: Z coordinates
 
-    @classmethod
+        :rtype: nx1 nd-array
+
+        """
+        return self.data[:, 2]
+
+
     def ToNumpy(self):
         """
-        Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the future)
+        :return: points as numpy nX3 ndarray
         """
 
-        if self.__xyz != None:
-            return self.__xyz
-        elif self.__xy != None:
-            return self.__xy
+        return np.array(self.data)
 
-        return None
 
     @classmethod
     def ToPandas(cls):
         # TODO add this method
         pass
 
-    @classmethod
     def GetPoint(self, index):
         """
-        Return specific point/s as numpy nX3 ndarray (incase we change the type of __xyz in the future)
+        :param index: the index of the point to return
+
+        :return: pecific point/s as numpy nX3 ndarray
+
         """
+        return self.data[index, :]
 
-        if self.__xyz != None:
-            return self.__xyz[index, :]
-        elif self.__xy != None:
-            return self.__xy[index, :]
-
-        return None
-
-    @classmethod
     def UpdateFields(self, **kwargs):
         '''
         Update a field within the PointSet
         
-
         :param X, Y, Z: which field to update
         :param indices: which indices to update (optional)
+
         '''
         # TODO: add this option
 
         if 'X' in kwargs:
-            self.__xyz[:, 0] = kwargs['X']
+            self.data[:, 0] = kwargs['X']
 
         if 'Y' in kwargs:
-            self.__xyz[:, 1] = kwargs['Y']
+            self.data[:, 1] = kwargs['Y']
 
         if 'Z' in kwargs:
-            self.__xyz[:, 2] = kwargs['Z']
+            self.data[:, 2] = kwargs['Z']
 
         if 'RGB' in kwargs:
             self.__rgb = kwargs['RGB']
 
         if 'XYZ' in kwargs:
-            self.__xyz[:, :] = kwargs['XYZ']
+            self.data[:, :] = kwargs['XYZ']
 
-        if 'XY' in kwargs:
-            self.__xy[:, :] = kwargs['XY']
 
     def AddData2Fields(self, data, field = 'XYZ'):
         '''
         Add data to a field
         '''
 
-        #TODO: add xy option
         if field == 'XYZ':
-            self.__xyz = vstack((self.__xyz, data))
+            self.setdata(vstack((self.data, data)))
         if field == 'RGB':
+            # TODO: check that this works
             self.__rgb = vstack((self.__rgb, data))
+
         if field == 'Intensity':
             self.__intensity = hstack((self.__intensity, data))
 
-    @classmethod
     def ToPolyData(self):
         """
         Create and return PolyData object
-        
-        :Return:
-            - tvtk.PolyData of the current PointSet
-        """
-        # TODO add xy option?
 
-        _polyData = tvtk.PolyData(points = array(self.__xyz, 'f'))
-        verts = arange(0, self.__xyz.shape[0], 1)
-        verts.shape = (self.__xyz.shape[0], 1)
+        :return tvtk.PolyData of the current PointSet
+
+        """
+
+        _polyData = tvtk.PolyData(points = array(self.data, 'f'))
+        verts = arange(0, self.data.shape[0], 1)
+        verts.shape = (self.data.shape[0], 1)
         _polyData.verts = verts
 
         return _polyData
+

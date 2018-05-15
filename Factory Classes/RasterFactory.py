@@ -7,8 +7,6 @@ photo-lab-3\Reuma
 import numpy as np
 from scipy import interpolate
 
-from RasterData import RasterProperty
-
 
 class RasterFactory:
     """

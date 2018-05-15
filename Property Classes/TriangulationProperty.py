@@ -9,21 +9,30 @@ class TriangulationProperty(BaseProperty):
     TriangulationProperty - Class for holding and analyzing the triangulation data of a given point set
     '''
 
-    def __init__(self, points, trianglesIndices):
+    def __init__(self, points, trianglesIndices = None):
         '''
         Constructor:
+
         :param points
         :param trianglesIndices: each row representing a triangle, holding the indices
 
         :type points: PointSet or PointSubSet
-        :type trianglesIndices: nx3 nd-array
+        :type trianglesIndices: np.array nx3
+
         '''
         super(TriangulationProperty, self).__init__(points)
+        self.setValues(trianglesIndices)
 
-        self.__trianglesIndices = trianglesIndices
-        self.__numTriangles = len(trianglesIndices)
-    
-    @property        
+    def setValues(self, *args, **kwargs):
+        """
+        Sets the TriagulationProperty attributes
+        :param trianglesIndices: each row representing a triangle, holding the indices
+
+        """
+        self.__trianglesIndices = args[0]
+        self.__numTriangles = len(args[0])
+
+    @property
     def NumberOfTriangles(self):
         '''
         Number of triangles
@@ -40,7 +49,7 @@ class TriangulationProperty(BaseProperty):
       
     def AreaOfTriangle(self, index):
         '''
-        Calculating the area of a specific triangle defined by its index in the triangles list
+        Calculates the area of a specific triangle defined by its index in the triangles list
 
         :param index: The index of the triangle
 
@@ -50,7 +59,7 @@ class TriangulationProperty(BaseProperty):
         if (index < 0 or index >= self.__numTriangles):
             return 0
         else:
-            trianglePoints = self._BaseProperty__points.ToNumpy()[self.__trianglesIndices[index]]
+            trianglePoints = self.Points.ToNumpy()[self.__trianglesIndices[index]]
             return 0.5 * fabs(trianglePoints[0, 0] * (trianglePoints[1, 1] - trianglePoints[2, 1]) + 
                               trianglePoints[1, 0] * (trianglePoints[2, 1] - trianglePoints[0, 1]) + 
                               trianglePoints[2, 0] * (trianglePoints[0, 1] - trianglePoints[1, 1]))
@@ -58,7 +67,7 @@ class TriangulationProperty(BaseProperty):
            
     def TotalArea(self):
         '''
-        Calculating the total area enclosed in the triangulation
+        Calculates the total area enclosed in the triangulation
 
         :return: The total area of all the triangles in the triangulation
 
@@ -98,7 +107,7 @@ class TriangulationProperty(BaseProperty):
         if ((triangleIndex < 0 or triangleIndex >= self.__numTriangles) or (edgeIndex < 0 or edgeIndex >= 3)):
             return 0
         else:
-            trianglePoints = self._BaseProperty__points.ToNumpy()[self.__trianglesIndices[triangleIndex]]
+            trianglePoints = self.Points.ToNumpy()[self.__trianglesIndices[triangleIndex]]
             
             if (edgeIndex == 0):
                 return sqrt((trianglePoints[0, 0] - trianglePoints[1, 0]) ** 2 + 

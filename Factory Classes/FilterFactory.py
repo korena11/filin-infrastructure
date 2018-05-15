@@ -1,36 +1,48 @@
-from numba import autojit
+from numba import jit
 from numpy import sqrt, arctan, ones, uint8, pi, min, max, logical_and, nonzero
-from IOFactory import IOFactory
-from Visualization import Visualization
-from SegmentationProperty import SegmentationProperty 
 
-@autojit
-def SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold):
-    numPoints = len(pntData)
-    groundPointsIndices = []
-    
-    slopeThreshold = slopeThreshold  * pi / 180
-    
-    for i in xrange(numPoints):
-        isGround = True
-        for j in xrange(numPoints):
-            dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
-            if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
-                slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)
-                if (slope > slopeThreshold):
-                    isGround = False                        
-                    break
-        
-        if (isGround):
-            groundPointsIndices.append(i)
-    
-    return groundPointsIndices
+from PointSet import PointSet
+from SegmentationProperty import SegmentationProperty
 
-class FilterFactory:       
+
+class FilterFactory:
     """
     Filter PointSet using different methods
     """
-    @staticmethod        
+
+    @staticmethod
+    @jit
+    def SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold):
+        """
+
+        :param pntData:
+        :param searchRadius:
+        :param slopeThreshold:
+
+        :return:
+
+        """
+        numPoints = len(pntData)
+        groundPointsIndices = []
+
+        slopeThreshold = slopeThreshold * pi / 180
+
+        for i in xrange(numPoints):
+            isGround = True
+            for j in xrange(numPoints):
+                dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
+                if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
+                    slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)
+                    if (slope > slopeThreshold):
+                        isGround = False
+                        break
+
+            if (isGround):
+                groundPointsIndices.append(i)
+
+        return groundPointsIndices
+
+    @staticmethod
     def __CreateSegmentationProperty(points, indices):
         numPoints = points.Size()
         segments = ones((numPoints), dtype=uint8)
@@ -43,22 +55,22 @@ class FilterFactory:
         """
         Slope Based Morphological Filter
         
-        :Args:
-        -----
-            - points (PointSet)
-            - searchRadius (float): search radius in meters
-            - slopeThreshold (float): maximum slope angle allowed, given in degrees 
-            
-        :Returns:
-        ------- 
-            - SegmentationProperty
-            
-            segment 0 contains the terrain points
-        
+        :param points
+        :param searchRadius: search radius in meters
+        :param slopeThreshold: maximum slope angle allowed, given in degrees
+
+        :type points: PointSet
+        :type searchRadius: float
+        :type slopeThreshold: float
+
+        :return: segmented points, with segment 0 contains the terrain points
+
+        :rtype: SegmentationProperty
+
         """
         pntData = points.ToNumpy()
-               
-        groundPointsIndices = SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold)
+
+        groundPointsIndices = FilterFactory.SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold)
 
         # 0 - terrain, 1 - cover
         return FilterFactory.__CreateSegmentationProperty(points, groundPointsIndices)        
@@ -68,15 +80,17 @@ class FilterFactory:
         """
         Filtering based on a defined boundary box
         
-        :Args:
-            - points (PointSet)
-            - xmin, xmax, ymin, ymax, zmin, zmax 
+
+        :param points
+        :param xmin, xmax: ymin, ymax, zmin, zmax:
+
+        :type points: PointSet
+        :type xmin, xmax: ymin, ymax, zmin, zmax: float
+
+        :return: segmented data, segment 0 contains the non-filtered points
+
+        :rtype: SegmentationProperty
             
-        :Returns:
-            - SegmentationProperty
-            
-            segment 0 contains the non-filtered points
-        
         """
         
         # Defining values of unsent parameters
@@ -130,12 +144,12 @@ class FilterFactory:
         return FilterFactory.__CreateSegmentationProperty(sphCoorProp.Points(), insidePointIndices)
             
 if __name__ == '__main__':
-    
-    pointSetList = []
-    IOFactory.ReadXYZ('..\\Sample Data\\DU9_2.xyz', pointSetList)
-
-#    filterFactory = FilterFactory()
-    terrainSubSet = FilterFactory.SlopeBasedMorphologicFilter(pointSetList[0], 1.0, 25).GetSegment(0)
-    
-    Visualization.RenderPointSet(terrainSubSet, 'color', color=(0.5, 0, 0))
-    Visualization.Show()
+    pass
+    #     pointSetList = []
+    #     IOFactory.ReadXYZ('..\\Sample Data\\DU9_2.xyz', pointSetList)
+    #
+    # #    filterFactory = FilterFactory()
+    #     terrainSubSet = FilterFactory.SlopeBasedMorphologicFilter(pointSetList[0], 1.0, 25).GetSegment(0)
+    #
+    #     Visualization.RenderPointSet(terrainSubSet, 'color', color=(0.5, 0, 0))
+    #     Visualization.Show()

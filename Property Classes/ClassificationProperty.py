@@ -51,23 +51,32 @@ class ClassificationProperty(BaseProperty):
         elif self.datatype == np.ndarray:
             self.classified_map = np.zeros(data.shape)
 
+        # TODO: check that this works
+        if args:
+            self.setValues(*args)
 
-    def classification(self, *args):
+    def setValues(self, *args):
         """
-        Return classification map (numpy array)
-        default: returns the entire classification map.
+        Sets values into classification property (map).
 
-        Can be specific which:
-        :param RIDGE
-        :param PIT
-        :param VALLEY
-        :param FLAT
-        :param PEAK
-        :param SADDLE
+        Can be specific which value should be inserted to the classification map:
+
+        :param RIDGE: 1
+        :param PIT: 2
+        :param VALLEY: 3
+        :param FLAT: 4
+        :param PEAK: 5
+        :param SADDLE: 6
+
+
+        .. note:: UNCLASSIFIED is 0
+
+        .. warning:: Should be appended and reviewed.
+
         """
 
         # TODO: append for PointSet data
-
+        # TODO: correct the function and its instances
 
         for num, type in enumerate(args):
             if type == PIT:
@@ -91,7 +100,9 @@ class ClassificationProperty(BaseProperty):
 
         :param indices: tuple(array(nx1), array(nx1))
         :param type: CAPITAL LETTERS according the the classification definitions at the beginning of the file.
+
         :return: classified map
+
         """
         if self.datatype == RasterData:
             self.classified_map[indices[:, 0], indices[:, 1]] = type

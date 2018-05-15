@@ -1,8 +1,6 @@
 Spherical Property Documentation
 =====================================
 
-
-
 .. autoclass:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :members:
        :undoc-members:

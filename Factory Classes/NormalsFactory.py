@@ -1,20 +1,25 @@
-from NormalsProperty import NormalsProperty
 import mayavi.mlab as mlab
+from numpy import dtype, genfromtxt, nonzero, mean, sum
+
+from NormalsProperty import NormalsProperty
 from TriangulationFactory import TriangulationFactory
-from numpy import dtype, genfromtxt, nonzero, mean, tile, sum, asarray
-import vtk as vtk
+
 
 class NormalsFactory:    
     @staticmethod
     def ReadNormalsFromFile(points, normalsFileName):
         """
-        :Args: 
-            
-            - points: PointSet/PointSubSet object
-            - normalsFileName: name of file containing normal for each poitns
-            
-        :Returns:                
-            - NormalsProperty
+
+        :param points: PointSet to which the normals belong to
+        :param normalsFileName: name of file containing normal for each poitns
+
+        :type points: PointSet.PointSet
+        :type normalsFileName: str
+
+        :return: NormalsProperty of the points
+
+        :rtype: NormalsProperty
+
         """
         
         # Read normals from file                 

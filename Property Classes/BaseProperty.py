@@ -1,5 +1,4 @@
-import h5py
-
+from MyTools import CreateFilename
 from PointSet import PointSet
 from RasterData import RasterData
 
@@ -7,9 +6,10 @@ from RasterData import RasterData
 class BaseProperty(object):
     """
     Base class for all property classes
+
     """
 
-    def __init__(self, dataset):
+    def __init__(self, dataset = None):
         """
         Constructor
         """
@@ -43,59 +43,59 @@ class BaseProperty(object):
         else:
             raise TypeError('Wrong data type data for this instance')
 
-    def save(self, **kwargs):
-        r"""
+    def setValues(self, *args, **kwargs):
+        """
+        Sets the values of a property.
+
+        :param args: according to the property
+        :param kwargs: according to the property
+
+
+        """
+        pass
+
+    def save(self, filename, **kwargs):
+        """
         Save the property in either json or hdf5.
 
         Default is hdf5.
 
         .. warning:: Need to be implemented for json
 
-        :param filename: path to filename and filename (with or without extension)
-        :param extension: 'h5' or 'json'
+        :param filename: can be a filename or a path and filename, with or without extension.
+        :param save_dataset: flag whether to save the dataset that the property relates to or not. Default: False
+
 
         :type filename: str
-        :type extension: str
+        :type save_dataset: bool
 
         """
-        import re
-
-        filename = kwargs.get('filename', r'output')
-
+        save_dataset = kwargs.get('save_dataset', False)
         attrs = {}
 
-        # find filename until extension (can get dynamic foldering)
-        matched = re.match('(.*)\.([a-z].*)', filename)
-
-        if matched is None:
-            # if no extension is in filename, add
-            extension = kwargs.get('extension', 'h5')
-            filename = filename + '.' + extension
-        else:
-            # otherwise - use the extension in filename
-            extension = matched.group(2)
+        f, extension = CreateFilename(filename)
 
         if extension == 'h5':
-            f = h5py.File(filename, 'w')
             attrs = self.__dict__
 
             # the group name will be according to the property class name
-            property_group = f.create_group(attrs.keys()[0].split('_')[1])
+            groupname = attrs.keys()[0].split('_')[1]
+            property_group = f.create_group(groupname)
 
             for key in attrs:
                 if len(key.split('__dataset')) > 1:
                     # if it is the dataset attribute - create a subgroup and insert its attributes
-                    data_group = property_group.create_group('dataset')
-                    dataset_attributes = attrs[key].__dict__
-                    for att in dataset_attributes:
-                        if dataset_attributes[att] is not None:
-                            data_group.create_dataset(key, dataset_attributes[att])
 
+                    self.__dataset.save(f, group_name = '_' + groupname + '__dataset',
+                                        save_dataset = save_dataset)
                 else:
                     # otherwise - insert the property attributes into an attrs
                     property_group.attrs.create(key, attrs[key])
 
-            f.close()
+        f.close()
+
+    # def load(self, filename):
+    #     pass
 
     # def serialize(self, filename = None):
     #     """

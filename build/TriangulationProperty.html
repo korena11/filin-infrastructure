@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>Triangulation Property Documentation &#8212; infragit 1 documentation</title>
+    <title>Triangulation Property Documentation &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
@@ -14,20 +14,20 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="index.html"/>
-    <link rel="up" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="top" title="infragit 1a documentation" href="index.html"/>
+    <link rel="up" title="Properties base class Documentation" href="BaseProperty.html"/>
+    <link rel="next" title="Factories" href="Factories.html"/>
     <link rel="prev" title="Transformation Matrix Property Documentation" href="TransformationProperty.html"/>
 </head>
 <body role="document">
@@ -42,12 +42,16 @@
             >modules</a> |
         </li>
         <li class="right">
+            <a href="Factories.html" title="Factories"
+               accesskey="N">next</a> |
+        </li>
+        <li class="right">
             <a href="TransformationProperty.html" title="Transformation Matrix Property Documentation"
                accesskey="P">previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Base Property Documentation</a> &#187;
-        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Properties base class
+            Documentation</a> &#187;</li>
     </ul>
 </div>
 
@@ -64,7 +68,7 @@
                         <dt id="TriangulationProperty.TriangulationProperty">
                             <em class="property">class </em><code
                                 class="descclassname">TriangulationProperty.</code><code class="descname">TriangulationProperty</code><span
-                                class="sig-paren">(</span><em>points</em>, <em>trianglesIndices</em><span
+                                class="sig-paren">(</span><em>points</em>, <em>trianglesIndices=None</em><span
                                 class="sig-paren">)</span><a class="reference internal"
                                                              href="_modules/TriangulationProperty.html#TriangulationProperty"><span
                                 class="viewcode-link">[source]</span></a><a class="headerlink"
@@ -122,7 +126,7 @@
                                                    title="TriangulationProperty.TriangulationProperty.AreaOfTriangle"><code
                                                     class="xref py py-obj docutils literal"><span class="pre">AreaOfTriangle</span></code></a>(index)
                                             </td>
-                                            <td>Calculating the area of a specific triangle defined by its index in the
+                                            <td>Calculates the area of a specific triangle defined by its index in the
                                                 triangles list
                                             </td>
                                         </tr>
@@ -191,7 +195,7 @@
                                                     class="xref py py-obj docutils literal"><span
                                                     class="pre">TotalArea</span></code></a>()
                                             </td>
-                                            <td>Calculating the total area enclosed in the triangulation</td>
+                                            <td>Calculates the total area enclosed in the triangulation</td>
                                         </tr>
                                         <tr class="row-even">
                                             <td><a class="reference internal"
@@ -205,9 +209,18 @@
                                         </tr>
                                         <tr class="row-odd">
                                             <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code>(**kwargs)
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
                                             </td>
                                             <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.setValues"
+                                                   title="TriangulationProperty.TriangulationProperty.setValues"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">setValues</span></code></a>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the TriagulationProperty attributes</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -222,7 +235,7 @@
                                                                                     href="#TriangulationProperty.TriangulationProperty.AreaOfTriangle"
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
-                                <dd><p>Calculating the area of a specific triangle defined by its index in the triangles
+                                <dd><p>Calculates the area of a specific triangle defined by its index in the triangles
                                     list</p>
                                     <table class="docutils field-list" frame="void" rules="none">
                                         <col class="field-name"/>
@@ -399,7 +412,7 @@
                                                                                     href="#TriangulationProperty.TriangulationProperty.TotalArea"
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
-                                <dd><p>Calculating the total area enclosed in the triangulation</p>
+                                <dd><p>Calculates the total area enclosed in the triangulation</p>
                                     <table class="docutils field-list" frame="void" rules="none">
                                         <col class="field-name"/>
                                         <col class="field-body"/>
@@ -448,6 +461,21 @@
                                 </dd>
                             </dl>
 
+                            <dl class="method">
+                                <dt id="TriangulationProperty.TriangulationProperty.setValues">
+                                    <code class="descname">setValues</code><span
+                                        class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="_modules/TriangulationProperty.html#TriangulationProperty.setValues"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TriangulationProperty.TriangulationProperty.setValues"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Sets the TriagulationProperty attributes
+                                    :param trianglesIndices: each row representing a triangle, holding the indices</p>
+                                </dd>
+                            </dl>
+
                         </dd>
                     </dl>
 
@@ -462,6 +490,9 @@
             <h4>Previous topic</h4>
             <p class="topless"><a href="TransformationProperty.html"
                                   title="previous chapter">Transformation Matrix Property Documentation</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="Factories.html"
+                                  title="next chapter">Factories</a></p>
             <div role="note" aria-label="source link">
                 <h3>This Page</h3>
                 <ul class="this-page-menu">
@@ -494,11 +525,15 @@
             >modules</a> |
         </li>
         <li class="right">
+            <a href="Factories.html" title="Factories"
+            >next</a> |
+        </li>
+        <li class="right">
             <a href="TransformationProperty.html" title="Transformation Matrix Property Documentation"
             >previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Base Property Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Properties base class Documentation</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

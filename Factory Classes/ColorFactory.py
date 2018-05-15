@@ -1,5 +1,7 @@
 from numpy import nonzero, zeros, uint8 #logical_and
+
 from ColorProperty import ColorProperty
+
 
 class ColorFactory:
     """
@@ -9,14 +11,20 @@ class ColorFactory:
     @staticmethod
     def ProjectImages(points, images, matrices):
         """
-        :Args: 
-            - points (PointSet or PointSubSet): The point cloud to color
-            - images (list of numpy arrays): The images to project
-            - matrices (list of (3, 4) numpy array): camera matrices 
+        Project images onto a points set (giving each point a color)
 
-        :Returns:
-            - ColorProperty.
-                 in which each points color is taken from the appropriate image
+        :param points: The point cloud to color
+        :param images: The images to project
+        :param matrices: Camera matrices
+
+         :type points: PointSet.PointSet
+         :type images: list of nd-array
+         :param matrices: list of 3x4 nd-array
+
+        :return: Each point's color is taken from the appropriate image
+
+        :rtype: ColorProperty
+
         """           
         xyz = points.ToNumpy()
         

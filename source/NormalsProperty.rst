@@ -2,7 +2,6 @@ Normals Property Documentation
 =====================================
 
 
-
 .. autoclass:: NormalsProperty.NormalsProperty
 :members:
        :undoc-members:

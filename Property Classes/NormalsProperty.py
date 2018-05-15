@@ -1,10 +1,11 @@
 from BaseProperty import BaseProperty
 
 class NormalsProperty(BaseProperty):
-    
+    __normals = None
+
     def __init__(self, points, normals):
         super(NormalsProperty, self).__init__(points)
-        self.__normals = normals
+        self.setValues(normals)
     
     @property    
     def Normals(self):
@@ -12,7 +13,17 @@ class NormalsProperty(BaseProperty):
         Return points' normals 
         """  
         return self.__normals
-    
+
+    def setValues(self, *args, **kwargs):
+        """
+        Sets normals into the NormalsProperty object
+
+        :param normals: the computes normals
+        :param kwargs:
+        :return:
+        """
+        self.__normals = args[0]
+
     @property  
     def dX(self):
         """

@@ -1,8 +1,6 @@
 Transformation Matrix Property Documentation
 =============================================
 
-
-
 .. autoclass:: TransformationMatrixProperty.TransformationMatrixProperty
 :members:
        :undoc-members:

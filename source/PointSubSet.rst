@@ -1,7 +1,6 @@
 PointSubSet class
 ==================
 
-
 .. autoclass:: PointSubSet.PointSubSet
 :members:
        :undoc-members:

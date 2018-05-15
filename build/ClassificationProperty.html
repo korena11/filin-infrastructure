@@ -6,7 +6,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <title>Classification Property Documentation &#8212; infragit 1 documentation</title>
+    <title>Classification Property Documentation &#8212; infragit 1a documentation</title>
 
     <link rel="stylesheet" href="_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
@@ -14,22 +14,21 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '1a',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1 documentation" href="index.html"/>
-    <link rel="up" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="top" title="infragit 1a documentation" href="index.html"/>
+    <link rel="up" title="Properties base class Documentation" href="BaseProperty.html"/>
     <link rel="next" title="Color Property Documentation" href="ColorProperty.html"/>
-    <link rel="prev" title="Base Property Documentation" href="BaseProperty.html"/>
+    <link rel="prev" title="Properties base class Documentation" href="BaseProperty.html"/>
 </head>
 <body role="document">
 <div class="related" role="navigation" aria-label="related navigation">
@@ -47,12 +46,12 @@
                accesskey="N">next</a> |
         </li>
         <li class="right">
-            <a href="BaseProperty.html" title="Base Property Documentation"
+            <a href="BaseProperty.html" title="Properties base class Documentation"
                accesskey="P">previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Base Property Documentation</a> &#187;
-        </li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html" accesskey="U">Properties base class
+            Documentation</a> &#187;</li>
     </ul>
 </div>
 
@@ -162,16 +161,6 @@
                                         <tbody valign="top">
                                         <tr class="row-odd">
                                             <td><a class="reference internal"
-                                                   href="#ClassificationProperty.ClassificationProperty.classification"
-                                                   title="ClassificationProperty.ClassificationProperty.classification"><code
-                                                    class="xref py py-obj docutils literal"><span class="pre">classification</span></code></a>(*args)
-                                            </td>
-                                            <td>Return classification map (numpy array) default: returns the entire
-                                                classification map.
-                                            </td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal"
                                                    href="#ClassificationProperty.ClassificationProperty.classify_map"
                                                    title="ClassificationProperty.ClassificationProperty.classify_map"><code
                                                     class="xref py py-obj docutils literal"><span class="pre">classify_map</span></code></a>(indices,&nbsp;type)
@@ -180,11 +169,20 @@
                                                 classification
                                             </td>
                                         </tr>
-                                        <tr class="row-odd">
+                                        <tr class="row-even">
                                             <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code>(**kwargs)
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
                                             </td>
                                             <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#ClassificationProperty.ClassificationProperty.setValues"
+                                                   title="ClassificationProperty.ClassificationProperty.setValues"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">setValues</span></code></a>(*args)
+                                            </td>
+                                            <td>Sets values into classification property (map).</td>
                                         </tr>
                                         <tr class="row-even">
                                             <td><a class="reference internal"
@@ -198,27 +196,6 @@
                                     </table>
                                 </div>
                             </blockquote>
-                            <dl class="method">
-                                <dt id="ClassificationProperty.ClassificationProperty.classification">
-                                    <code class="descname">classification</code><span class="sig-paren">(</span><em>*args</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="_modules/ClassificationProperty.html#ClassificationProperty.classification"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#ClassificationProperty.ClassificationProperty.classification"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Return classification map (numpy array)
-                                    default: returns the entire classification map.</p>
-                                    <p>Can be specific which:
-                                        :param RIDGE
-                                        :param PIT
-                                        :param VALLEY
-                                        :param FLAT
-                                        :param PEAK
-                                        :param SADDLE</p>
-                                </dd>
-                            </dl>
-
                             <dl class="attribute">
                                 <dt id="ClassificationProperty.ClassificationProperty.classified_map">
                                     <code class="descname">classified_map</code><em class="property"> = None</em><a
@@ -308,6 +285,48 @@
                             </dl>
 
                             <dl class="method">
+                                <dt id="ClassificationProperty.ClassificationProperty.setValues">
+                                    <code class="descname">setValues</code><span
+                                        class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="_modules/ClassificationProperty.html#ClassificationProperty.setValues"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#ClassificationProperty.ClassificationProperty.setValues"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Sets values into classification property (map).</p>
+                                    <p>Can be specific which value should be inserted to the classification map:</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first last simple">
+                                                    <li><strong>RIDGE</strong> &#8211; 1</li>
+                                                    <li><strong>PIT</strong> &#8211; 2</li>
+                                                    <li><strong>VALLEY</strong> &#8211; 3</li>
+                                                    <li><strong>FLAT</strong> &#8211; 4</li>
+                                                    <li><strong>PEAK</strong> &#8211; 5</li>
+                                                    <li><strong>SADDLE</strong> &#8211; 6</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="admonition note">
+                                        <p class="first admonition-title">Note</p>
+                                        <p class="last">UNCLASSIFIED is 0</p>
+                                    </div>
+                                    <div class="admonition warning">
+                                        <p class="first admonition-title">Warning</p>
+                                        <p class="last">Should be appended and reviewed.</p>
+                                    </div>
+                                </dd>
+                            </dl>
+
+                            <dl class="method">
                                 <dt id="ClassificationProperty.ClassificationProperty.unclassified">
                                     <code class="descname">unclassified</code><span class="sig-paren">(</span><span
                                         class="sig-paren">)</span><a class="reference internal"
@@ -341,7 +360,7 @@
         <div class="sphinxsidebarwrapper">
             <h4>Previous topic</h4>
             <p class="topless"><a href="BaseProperty.html"
-                                  title="previous chapter">Base Property Documentation</a></p>
+                                  title="previous chapter">Properties base class Documentation</a></p>
             <h4>Next topic</h4>
             <p class="topless"><a href="ColorProperty.html"
                                   title="next chapter">Color Property Documentation</a></p>
@@ -381,11 +400,11 @@
             >next</a> |
         </li>
         <li class="right">
-            <a href="BaseProperty.html" title="Base Property Documentation"
+            <a href="BaseProperty.html" title="Properties base class Documentation"
             >previous</a> |
         </li>
-        <li class="nav-item nav-item-0"><a href="index.html">infragit 1 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Base Property Documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="BaseProperty.html">Properties base class Documentation</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">
