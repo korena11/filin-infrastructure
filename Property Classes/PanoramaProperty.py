@@ -99,17 +99,17 @@ class PanoramaProperty(BaseProperty):
         self.__columnIndexes = args[2]
 
         # TODO: ORDER PLEASE!
-        if ('dataType' in kwargs.keys()):
+        if ('dataType' in list(kwargs.keys())):
             self.__dataType = kwargs['dataType']
-        if ('minAzimuth' in kwargs.keys()):
+        if ('minAzimuth' in list(kwargs.keys())):
             self.__minAzimuth = kwargs['minAzimuth']
-        if ('maxAzimuth' in kwargs.keys()):
+        if ('maxAzimuth' in list(kwargs.keys())):
             self.__maxAzimuth = kwargs['maxAzimuth']
-        if ('minElevation' in kwargs.keys()):
+        if ('minElevation' in list(kwargs.keys())):
             self.__minElevation = kwargs['minElevation']
-        if ('maxElevation' in kwargs.keys()):
+        if ('maxElevation' in list(kwargs.keys())):
             self.__maxElevation = kwargs['maxElevation']
-        if ('azimuthSpacing' in kwargs.keys()):
+        if ('azimuthSpacing' in list(kwargs.keys())):
             self.__azimuthSpacing = kwargs['azimuthSpacing']
-        if ('elevationSpacing' in kwargs.keys()):
+        if ('elevationSpacing' in list(kwargs.keys())):
             self.__elevationSpacing = kwargs['elevationSpacing']

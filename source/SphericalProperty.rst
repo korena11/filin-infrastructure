@@ -1,11 +1,12 @@
 Spherical Property Documentation
 =====================================
 
+
 .. autoclass:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :attributes:
@@ -14,3 +15,5 @@ Spherical Property Documentation
 
 		.. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :methods:
+
+

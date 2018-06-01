@@ -2,12 +2,11 @@ Curvature Property Documentation
 =====================================
 
 
-
 .. autoclass:: CurvatureProperty.CurvatureProperty
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: CurvatureProperty.CurvatureProperty
 :attributes:
@@ -16,3 +15,5 @@ Curvature Property Documentation
 
 		.. autoautosummary:: CurvatureProperty.CurvatureProperty
 :methods:
+
+

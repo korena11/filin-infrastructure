@@ -13,8 +13,8 @@ from matplotlib import pyplot as plt
 from numpy.linalg import norm
 from scipy.ndimage import filters
 
-import ActiveContours as ac
-from ContourDevelopment import getValueSubpix
+from . import ActiveContours as ac
+from .ContourDevelopment import getValueSubpix
 
 matplotlib.use('TkAgg')
 
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     # with writer.saving(fig, "freeBoundary.mp4", 100):
     for i in range(500):
         # external force - using energy_image
-        fx = np.array(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0]))
-        fy = np.array(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0]))
+        fx = np.array(list(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0])))
+        fy = np.array(list(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0])))
 
         # internal force - solving the (I-timeStep * A) = x, +timeStep * fx,y
         # contour movement

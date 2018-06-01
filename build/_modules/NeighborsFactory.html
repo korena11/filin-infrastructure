@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -52,22 +51,21 @@
 
                 <h1>Source code for NeighborsFactory</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span
-                        class="n">PointSubSet</span>
-<span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
-                        class="n">SphericalCoordinatesFactory</span>
+<span></span><span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="k">import</span> <span
+                        class="n">Path</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
                         class="n">mean</span><span class="p">,</span> <span class="nb">round</span><span
                         class="p">,</span> <span class="n">nonzero</span><span class="p">,</span> <span
                         class="n">where</span><span class="p">,</span> <span class="n">hstack</span><span
-                        class="p">,</span> <span class="n">array</span><span class="p">,</span> <span
-                        class="n">inf</span><span class="p">,</span> <span class="n">rad2deg</span><span
-                        class="p">,</span> <span class="n">expand_dims</span>
-<span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="k">import</span> <span
-                        class="n">Path</span>
+                        class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span
+                        class="n">rad2deg</span><span class="p">,</span> <span class="n">expand_dims</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span
                         class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">BallTree</span>
+
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+<span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
+                        class="n">SphericalCoordinatesFactory</span>
 
 
 <div class="viewcode-block" id="NeighborsFactory"><a class="viewcode-back"
@@ -88,7 +86,7 @@
 <span class="sd">        Find all tokens (points) in radius range </span>
 <span class="sd">        </span>
 <span class="sd">        Find all points in range of the ball field with radius &#39;radius&#39;. </span>
-<span class="sd">        :Args:</span>
+
 <span class="sd">        :param points: - PointSet</span>
 <span class="sd">        :param x:, y:, z:  search point coordinates</span>
 <span class="sd">        :param radius: Radius of ball field</span>
@@ -250,17 +248,25 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Find neighbors of a point using KDtree</span>
 <span class="sd">        </span>
-<span class="sd">        :Args:</span>
-<span class="sd">            - pnt: search point coordinates </span>
-<span class="sd">            - pntSet: pointset - in cartesian coordinates</span>
-<span class="sd">            - radius: search radius</span>
-<span class="sd">            - tree: ball tree</span>
-<span class="sd">            - num_neighbor: number of nearest neighbors </span>
+
+<span class="sd">        :param pnt: search point coordinates</span>
+<span class="sd">        :param pntSet: pointset - in cartesian coordinates</span>
+<span class="sd">        :param radius: search radius</span>
+<span class="sd">        :param tree: ball tree</span>
+<span class="sd">        :param num_neighbor: number of nearest neighbors</span>
 <span class="sd">                if num_neighbor!=None the result will be the exact number of neighbors </span>
 <span class="sd">                and not neighbors in radius</span>
-<span class="sd">         </span>
-<span class="sd">        :Returns:</span>
-<span class="sd">            - neighbor: subset of neighbors from original pointset</span>
+
+<span class="sd">        :type pnt: tuple?</span>
+<span class="sd">        :type pntSet: PointSet.PointSet</span>
+<span class="sd">        :type radius: float</span>
+<span class="sd">        :type tree: BallTree</span>
+<span class="sd">        :type num_neighbor: int</span>
+
+<span class="sd">        :return: neighbors</span>
+
+<span class="sd">        :rtype: PointSubSet</span>
+
 <span class="sd">        &#39;&#39;&#39;</span>
 
         <span class="k">if</span> <span class="n">num_neighbor</span> <span class="o">==</span> <span
@@ -291,16 +297,20 @@
         class="n">pnt</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
         class="n">radius</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Find points in defined window - </span>
-<span class="sd">        neighbors of a point</span>
+<span class="sd">        Find points in defined window - neighbors of a point</span>
 <span class="sd">        </span>
-<span class="sd">        :Args:</span>
-<span class="sd">            - pnt: search point coordinates </span>
-<span class="sd">            - points: pointset - in spherical coordinates</span>
-<span class="sd">            - rad: search radius in radian</span>
-<span class="sd">         </span>
-<span class="sd">        :Returns:</span>
-<span class="sd">            - neighbor: subset of neighbors from original pointset</span>
+<span class="sd">        :param pnt: search point coordinates</span>
+<span class="sd">        :param points: pointset - in spherical coordinates</span>
+<span class="sd">        :param radius: search radius in radian</span>
+
+<span class="sd">        :type pnt: tuple?</span>
+<span class="sd">        :type points: PointSet.PointSet</span>
+<span class="sd">        :type radius: float</span>
+
+<span class="sd">        :return: neighbors from original pointset</span>
+
+<span class="sd">        :rtype: PointSubSet</span>
+
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">radius</span> <span class="o">=</span> <span class="n">rad2deg</span><span
             class="p">(</span><span class="n">radius</span><span class="p">)</span>

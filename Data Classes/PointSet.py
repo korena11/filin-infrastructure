@@ -1,10 +1,12 @@
 # Class PointSet hold a set of un-ordered 2D or 3D points.
 
 import numpy as np
-from numpy import arange, array, vstack, hstack
-from tvtk.api import tvtk
+from numpy import vstack, hstack
 
 from BaseData import BaseData
+
+
+# from vtk.api import vtk
 
 
 class PointSet(BaseData):
@@ -16,7 +18,6 @@ class PointSet(BaseData):
         __xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D currently) 
         
     Optional Data (May not exist at all, or can be None):
-        __rgb - color of each point (ndarray) 
         __intensity - intensity of each point (ndarray)
         __measurement_accuracy: noise of modeled surface
          
@@ -26,24 +27,25 @@ class PointSet(BaseData):
         """
         Initialize the PointSet object
 
-        :param 'points': ndarray of xyz or xy
-        :param 'rgb': rgb values for each point (optional)
-        :param 'intensity': intensity values for each point(optional)
+        :param points: ndarray of xyz or xy
+
+        **Optionals**
+
+        :param intensity: intensity values for each point(optional)
+        :param path: path to PointSet file
+
+        :type points: np.array
+        :type intensity: int
+        :type path: str
+
         """
         super(PointSet, self).__init__()
-        properties = {'rgb': None,
-                      'intensity': None,
+        properties = {'intensity': None,
                       'accuracy': .002}
         properties.update(kwargs)
 
         self.setdata(points)
 
-        # if points.shape[1] == 3:  # 3D Data
-
-        # elif points.shape[1] == 2:  # 2D Data
-
-            # TODO: missing rgb is the size of the points.
-        self.__rgb = properties['rgb']
         self.__intensity = properties['intensity']
         self.__measurement_accuracy = properties['accuracy']
 
@@ -61,23 +63,13 @@ class PointSet(BaseData):
     @property
     def FieldsDimension(self):
         """
-        Return number of columns (channels) 
+        Return number of columns (channels)
         """
-        if self.__intensity is not None and self.__rgb is not None:
-            return 7
-        elif self.__intensity is None and self.__rgb is not None:
-            return 6
-        elif self.__intensity is not None and self.__rgb is None:
+        if self.__intensity is not None:
             return 4
+
         else:
             return 3
-
-    @property
-    def RGB(self):
-        """
-        Return nX3 ndarray of rgb values 
-        """
-        return self.__rgb
 
     @property
     def Intensity(self):
@@ -135,7 +127,7 @@ class PointSet(BaseData):
         """
         :param index: the index of the point to return
 
-        :return: pecific point/s as numpy nX3 ndarray
+        :return: specific point/s as numpy nX3 ndarray
 
         """
         return self.data[index, :]
@@ -159,9 +151,6 @@ class PointSet(BaseData):
         if 'Z' in kwargs:
             self.data[:, 2] = kwargs['Z']
 
-        if 'RGB' in kwargs:
-            self.__rgb = kwargs['RGB']
-
         if 'XYZ' in kwargs:
             self.data[:, :] = kwargs['XYZ']
 
@@ -171,14 +160,14 @@ class PointSet(BaseData):
         Add data to a field
         '''
 
-        if field == 'XYZ':
+        if field == 'XYZ' or field == 'xyz':
             self.setdata(vstack((self.data, data)))
-        if field == 'RGB':
-            # TODO: check that this works
-            self.__rgb = vstack((self.__rgb, data))
 
-        if field == 'Intensity':
-            self.__intensity = hstack((self.__intensity, data))
+        if field == 'Intensity' or field == 'intensity':
+            if self.__intensity is None:
+                self.__intensity = data
+            else:
+                self.__intensity = hstack((self.__intensity, data))
 
     def ToPolyData(self):
         """
@@ -188,10 +177,10 @@ class PointSet(BaseData):
 
         """
 
-        _polyData = tvtk.PolyData(points = array(self.data, 'f'))
-        verts = arange(0, self.data.shape[0], 1)
-        verts.shape = (self.data.shape[0], 1)
-        _polyData.verts = verts
-
-        return _polyData
-
+        # _polyData = tvtk.PolyData(points = array(self.data, 'f'))
+        # verts = arange(0, self.data.shape[0], 1)
+        # verts.shape = (self.data.shape[0], 1)
+        # _polyData.verts = verts
+        #
+        # return _polyData
+        #

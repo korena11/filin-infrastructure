@@ -11,13 +11,13 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 import numpy as np
-import MyTools as mt
-import Saliency as sl
+from . import MyTools as mt
+from . import Saliency as sl
 from RasterData import RasterData
 import cv2
 from skimage import measure
 from matplotlib import pyplot as plt
-from LevelSetFunction import LevelSetFunction
+from .LevelSetFunction import LevelSetFunction
 
 EPS = np.finfo(float).eps
 
@@ -58,7 +58,7 @@ class LevelSetFactory:
         """
         step = kwargs.get('step', 0.05)
         self.step = step
-        if 'img_rgb' in kwargs.keys():
+        if 'img_rgb' in list(kwargs.keys()):
             self.img_rgb = kwargs['img_rgb']
 
         if isinstance(img, RasterData):
@@ -521,22 +521,22 @@ class LevelSetFactory:
 
         for i in range(iterations):
             if verbose:
-                print i
+                print(i)
                 if i > 26:
-                    print 'hello'
+                    print('hello')
             intrinsic = np.zeros(self.img.shape[:2])
             extrinsic = np.zeros(self.img.shape[:2])
 
             # ---------- intrinsic movement ----------
             # regular flows
-            for item in flow_types.keys():
+            for item in list(flow_types.keys()):
                 if flow_types[item] == 0:
                     continue
                 intrinsic += flow_types[item] * self.flow(item, self.phi, open_flag, processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
-                        print i
+                        print(i)
 
             # region force
             intrinsic += region_w * self.region * self.phi.norm_nabla
@@ -573,7 +573,7 @@ class LevelSetFactory:
                 cv2.GaussianBlur(self.phi.value + phi_t, (processing_props['ksize'], processing_props['ksize']),
                                  processing_props['sigma']), epsilon = regularization_epsilon)
             if np.max(np.abs(phi_t)) <= 5e-5:
-                print 'done'
+                print('done')
                 return
             plt.figure('phi')
             mt.imshow(self.phi.value)

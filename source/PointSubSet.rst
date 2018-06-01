@@ -1,11 +1,12 @@
 PointSubSet class
 ==================
 
+
 .. autoclass:: PointSubSet.PointSubSet
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: PointSubSet.PointSubSet
 :attributes:

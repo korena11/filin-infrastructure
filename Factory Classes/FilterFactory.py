@@ -27,9 +27,9 @@ class FilterFactory:
 
         slopeThreshold = slopeThreshold * pi / 180
 
-        for i in xrange(numPoints):
+        for i in range(numPoints):
             isGround = True
-            for j in xrange(numPoints):
+            for j in range(numPoints):
                 dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
                 if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
                     slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)

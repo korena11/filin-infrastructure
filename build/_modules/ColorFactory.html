@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -55,7 +54,10 @@
 <span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">nonzero</span><span
                         class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span
                         class="n">uint8</span> <span class="c1">#logical_and</span>
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                        class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
+
 
 <div class="viewcode-block" id="ColorFactory"><a class="viewcode-back"
                                                  href="../ColorFactory.html#ColorFactory.ColorFactory">[docs]</a><span
@@ -63,7 +65,42 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Color a PointSet using different methods</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-        
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="ColorFactory.assignColor"><a class="viewcode-back"
+                                                             href="../ColorFactory.html#ColorFactory.ColorFactory.assignColor">[docs]</a>    <span
+        class="k">def</span> <span class="nf">assignColor</span><span class="p">(</span><span
+        class="n">points</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assigns color to PointSet</span>
+
+<span class="sd">        :param points: The PointSet to which the color is added</span>
+<span class="sd">        :param colors: The colors added</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type colors: np.array</span>
+
+
+<span class="sd">        :return: the color property of the PointSet</span>
+
+<span class="sd">        :rtype: ColorProperty</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color_size</span> <span class="o">=</span> <span class="nb">len</span><span
+            class="p">(</span><span class="n">colors</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color_size</span> <span class="o">!=</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Colors are not in the size of the PointSet&quot;</span><span
+            class="p">,</span> <span class="n">color_size</span><span class="p">,</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">)</span>
+
+        <span class="n">colorProp</span> <span class="o">=</span> <span class="n">ColorProperty</span><span
+            class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">colors</span><span
+            class="p">)</span>
+        <span class="k">return</span> <span class="n">colorProp</span></div>
+
+
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="ColorFactory.ProjectImages"><a class="viewcode-back"
                                                                href="../ColorFactory.html#ColorFactory.ColorFactory.ProjectImages">[docs]</a>    <span

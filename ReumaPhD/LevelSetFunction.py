@@ -6,7 +6,7 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 import numpy as np
-import MyTools as mt
+from . import MyTools as mt
 import cv2
 
 EPS = np.finfo(float).eps
@@ -82,7 +82,7 @@ class LevelSetFunction(object):
         """
         self.value = new_function
         self.__ls_derivatives_curvature()
-        if 'regularization_note' in kwargs.keys():
+        if 'regularization_note' in list(kwargs.keys()):
             self.regularization_note = kwargs['regularization_note']
 
         self.Heaviside(**kwargs)

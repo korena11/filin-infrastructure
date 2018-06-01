@@ -46,7 +46,7 @@ class SegmentationProperty(BaseProperty):
         self.__rgb = zeros((nPoints, 3), dtype=uint8)
         
         # Assign for each point a color according to the segments it belongs to.                                        
-        for i in xrange(0, nPoints):
+        for i in range(0, nPoints):
             self.__rgb[i, :] = self.__segmentsColors[segments[i]]
             
     @property

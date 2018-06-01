@@ -17,13 +17,16 @@ class RasterVisualization:
 
     @classmethod
     def hillshade(cls, array, azimuth=315, angle_altitude=45):
-        '''
+        """
         Generates hillshade from array used by azimuth and angle altitude
+
         :param array: DEM
         :param azimuth: degrees, default 315 deg
         :param angle_altitude: degrees, defualt 45 deg
+
         :return: a shaded relief of a raster
-        '''
+
+        """
         x, y = np.gradient(array)
         slope = pi / 2. - arctan(sqrt(x * x + y * y))
         aspect = arctan2(-x, y)
@@ -34,6 +37,7 @@ class RasterVisualization:
                  + cos(altituderad) * cos(slope) \
                    * cos(azimuthrad - aspect)
         return 255 * (shaded + 1) / 2
+
 
 if __name__ == '__main__':
     pass

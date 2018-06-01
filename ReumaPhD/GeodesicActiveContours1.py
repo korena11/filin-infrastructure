@@ -12,11 +12,11 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
-from ContourDevelopment import getValueSubpix
+from .ContourDevelopment import getValueSubpix
 from numpy.linalg import norm
 from numpy import sin, cos, pi
 from matplotlib import pyplot as plt
-import MyTools as mt
+from . import MyTools as mt
 from functools import partial
 import numpy as np
 
@@ -104,11 +104,11 @@ if __name__ == '__main__':
         normal_c = tangent.dot(np.array([[0, 1], [-1, 0]]))
 
         # g at contour points
-        g_I = np.asarray(map(partial(getValueSubpix, g), c[:, 0], c[:, 1])) + alpha
+        g_I = np.asarray(list(map(partial(getValueSubpix, g), c[:, 0], c[:, 1]))) + alpha
 
         # \nabla g at contour points with the direction of the curve's normal
-        grad_gx = np.asarray(map(partial(getValueSubpix, g_x), c[:, 0], c[:, 1]))
-        grad_gy = np.asarray(map(partial(getValueSubpix, g_y), c[:, 0], c[:, 1]))
+        grad_gx = np.asarray(list(map(partial(getValueSubpix, g_x), c[:, 0], c[:, 1])))
+        grad_gy = np.asarray(list(map(partial(getValueSubpix, g_y), c[:, 0], c[:, 1])))
         grad_g = np.vstack((grad_gx, grad_gy))
         grad_gN = np.sum(grad_g.T*normal_c, axis=1)
 

@@ -9,7 +9,7 @@ import warnings
 
 import h5py
 
-from MyTools import CreateFilename
+from IO_Tools import CreateFilename
 
 
 class BaseData(object):
@@ -122,7 +122,7 @@ class BaseData(object):
                         data_group.attrs.create(key, dataset_attributes[key])
 
                     except:
-                        print ("{name} attribute will be saved in a differernt group".format(name = keyname))
+                        print("{name} attribute will be saved in a differernt group".format(name = keyname))
                         try:
                             dataset_attributes[key].save(path_or_buf, group_name = keyname)
                         except:

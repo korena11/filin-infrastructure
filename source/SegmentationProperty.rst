@@ -1,11 +1,12 @@
 Segmentation Property Documentation
 =====================================
 
+
 .. autoclass:: SegmentationProperty.SegmentationProperty
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: SegmentationProperty.SegmentationProperty
 :attributes:
@@ -14,3 +15,4 @@ Segmentation Property Documentation
 
 		.. autoautosummary:: SegmentationProperty.SegmentationProperty
 :methods:
+

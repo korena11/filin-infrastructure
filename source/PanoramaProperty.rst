@@ -3,10 +3,10 @@ Panorama Property Documentation
 
 
 .. autoclass:: PanoramaProperty.PanoramaProperty
-:members:
-       :undoc-members:
+	:members:
+    :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: PanoramaProperty.PanoramaProperty
 :attributes:
@@ -15,3 +15,5 @@ Panorama Property Documentation
 
 		.. autoautosummary:: PanoramaProperty.PanoramaProperty
 :methods:
+
+

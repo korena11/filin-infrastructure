@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -27,9 +26,6 @@
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="infragit 1a documentation" href="index.html"/>
-    <link rel="up" title="Factories" href="Factories.html"/>
-    <link rel="next" title="Panorama Factory Documentation" href="PanoramaFactory.html"/>
-    <link rel="prev" title="Normals Factory Documentation" href="NormalsFactory.html"/>
 </head>
 <body role="document">
 <div class="related" role="navigation" aria-label="related navigation">
@@ -42,16 +38,7 @@
             <a href="py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="right">
-            <a href="PanoramaFactory.html" title="Panorama Factory Documentation"
-               accesskey="N">next</a> |
-        </li>
-        <li class="right">
-            <a href="NormalsFactory.html" title="Normals Factory Documentation"
-               accesskey="P">previous</a> |
-        </li>
         <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="Factories.html" accesskey="U">Factories</a> &#187;</li>
     </ul>
 </div>
 
@@ -111,7 +98,7 @@
                                                    title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord"><code
                                                     class="xref py py-obj docutils literal"><span class="pre">GetNeighborsIn3dRange_SphericCoord</span></code></a>(pnt,&nbsp;...)
                                             </td>
-                                            <td>Find points in defined window -</td>
+                                            <td>Find points in defined window - neighbors of a point</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -128,10 +115,22 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>Find all tokens (points) in radius range</p>
-                                    <p>Find all points in range of the ball field with radius &#8216;radius&#8217;.
-                                        :Args:
-                                        :param points: - PointSet
-                                        :param x:, y:, z: search point coordinates
+                                    <p>Find all points in range of the ball field with radius &#8216;radius&#8217;.</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>points</strong> &#8211;
+                                                <ul class="simple">
+                                                    <li>PointSet</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p>:param x:, y:, z: search point coordinates
                                         :param radius: Radius of ball field</p>
                                     <table class="docutils field-list" frame="void" rules="none">
                                         <col class="field-name"/>
@@ -170,35 +169,45 @@
                                         <col class="field-body"/>
                                         <tbody valign="top">
                                         <tr class="field-odd field">
-                                            <th class="field-name">Args:</th>
+                                            <th class="field-name">Parameters:</th>
                                             <td class="field-body">
-                                                <ul class="first">
-                                                    <li><p class="first">pnt: search point coordinates</p>
+                                                <ul class="first simple">
+                                                    <li><strong>pnt</strong> (<em>tuple?</em>) &#8211; search point
+                                                        coordinates
                                                     </li>
-                                                    <li><p class="first">pntSet: pointset - in cartesian coordinates</p>
+                                                    <li><strong>pntSet</strong> (<a class="reference internal"
+                                                                                    href="PointSet.html#PointSet.PointSet"
+                                                                                    title="PointSet.PointSet"><em>PointSet.PointSet</em></a>)
+                                                        &#8211; pointset - in cartesian coordinates
                                                     </li>
-                                                    <li><p class="first">radius: search radius</p>
+                                                    <li><strong>radius</strong> (<a class="reference external"
+                                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                                    title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; search radius
                                                     </li>
-                                                    <li><p class="first">tree: ball tree</p>
-                                                    </li>
-                                                    <li>
-                                                        <dl class="first docutils">
-                                                            <dt>num_neighbor: number of nearest neighbors</dt>
-                                                            <dd><p class="first last">if num_neighbor!=None the result
-                                                                will be the exact number of neighbors
-                                                                and not neighbors in radius</p>
-                                                            </dd>
-                                                        </dl>
+                                                    <li><strong>tree</strong> (<em>BallTree</em>) &#8211; ball tree</li>
+                                                    <li><strong>num_neighbor</strong> (<a class="reference external"
+                                                                                          href="https://docs.python.org/3/library/functions.html#int"
+                                                                                          title="(in Python v3.6)"><em>int</em></a>)
+                                                        &#8211; number of nearest neighbors
+                                                        if num_neighbor!=None the result will be the exact number of
+                                                        neighbors
+                                                        and not neighbors in radius
                                                     </li>
                                                 </ul>
                                             </td>
                                         </tr>
                                         <tr class="field-even field">
                                             <th class="field-name">Returns:</th>
-                                            <td class="field-body">
-                                                <ul class="first last simple">
-                                                    <li>neighbor: subset of neighbors from original pointset</li>
-                                                </ul>
+                                            <td class="field-body"><p class="first">neighbors</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last"><a class="reference internal"
+                                                                                            href="PointSubSet.html#PointSubSet.PointSubSet"
+                                                                                            title="PointSubSet.PointSubSet">PointSubSet</a>
+                                            </p>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -278,28 +287,42 @@
                                                                                     href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord"
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
-                                <dd><p>Find points in defined window -
-                                    neighbors of a point</p>
+                                <dd><p>Find points in defined window - neighbors of a point</p>
                                     <table class="docutils field-list" frame="void" rules="none">
                                         <col class="field-name"/>
                                         <col class="field-body"/>
                                         <tbody valign="top">
                                         <tr class="field-odd field">
-                                            <th class="field-name">Args:</th>
+                                            <th class="field-name">Parameters:</th>
                                             <td class="field-body">
                                                 <ul class="first simple">
-                                                    <li>pnt: search point coordinates</li>
-                                                    <li>points: pointset - in spherical coordinates</li>
-                                                    <li>rad: search radius in radian</li>
+                                                    <li><strong>pnt</strong> (<em>tuple?</em>) &#8211; search point
+                                                        coordinates
+                                                    </li>
+                                                    <li><strong>points</strong> (<a class="reference internal"
+                                                                                    href="PointSet.html#PointSet.PointSet"
+                                                                                    title="PointSet.PointSet"><em>PointSet.PointSet</em></a>)
+                                                        &#8211; pointset - in spherical coordinates
+                                                    </li>
+                                                    <li><strong>radius</strong> (<a class="reference external"
+                                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                                    title="(in Python v3.6)"><em>float</em></a>)
+                                                        &#8211; search radius in radian
+                                                    </li>
                                                 </ul>
                                             </td>
                                         </tr>
                                         <tr class="field-even field">
                                             <th class="field-name">Returns:</th>
-                                            <td class="field-body">
-                                                <ul class="first last simple">
-                                                    <li>neighbor: subset of neighbors from original pointset</li>
-                                                </ul>
+                                            <td class="field-body"><p class="first">neighbors from original pointset</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last"><a class="reference internal"
+                                                                                            href="PointSubSet.html#PointSubSet.PointSubSet"
+                                                                                            title="PointSubSet.PointSubSet">PointSubSet</a>
+                                            </p>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -318,12 +341,6 @@
     </div>
     <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="NormalsFactory.html"
-                                  title="previous chapter">Normals Factory Documentation</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="PanoramaFactory.html"
-                                  title="next chapter">Panorama Factory Documentation</a></p>
             <div role="note" aria-label="source link">
                 <h3>This Page</h3>
                 <ul class="this-page-menu">
@@ -355,16 +372,7 @@
             <a href="py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="right">
-            <a href="PanoramaFactory.html" title="Panorama Factory Documentation"
-            >next</a> |
-        </li>
-        <li class="right">
-            <a href="NormalsFactory.html" title="Normals Factory Documentation"
-            >previous</a> |
-        </li>
         <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="Factories.html">Factories</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

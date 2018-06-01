@@ -87,8 +87,8 @@ class PanoramaFactory:
                                         minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                         elevationSpacing = elevationSpacing)
             else:
-                print "Color data cannot be derived from the sent data type: ", type(points)
-                print "Panorama was not created"
+                print("Color data cannot be derived from the sent data type: ", type(points))
+                print("Panorama was not created")
                 return None
 
         elif (_property == 'segmentation'):  # Creating a panorama based on the segmentation of point set
@@ -100,8 +100,8 @@ class PanoramaFactory:
                                         minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                         elevationSpacing = elevationSpacing)
             else:
-                print "Segmentation data cannot be derived from the sent data type: ", type(points)
-                print "Panorama was not created"
+                print("Segmentation data cannot be derived from the sent data type: ", type(points))
+                print("Panorama was not created")
                 return None
 
         elif (_property == 'normals'):  # Creating a panorama based on the normals of point set
@@ -113,8 +113,8 @@ class PanoramaFactory:
                                         minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                         elevationSpacing = elevationSpacing)
             else:
-                print "Normals data cannot be derived from the sent data type: ", type(points)
-                print "Panorama was not created"
+                print("Normals data cannot be derived from the sent data type: ", type(points))
+                print("Panorama was not created")
                 return None
 
 
@@ -126,13 +126,13 @@ if __name__ == '__main__':
     pointSetList = []
     fileName = r'D:\Documents\Pointsets\bonim_5_big.pts'
 
-    print 'Reading from file'
+    print('Reading from file')
     IOFactory.ReadPts(fileName, pointSetList)
 
-    print 'Creating Panorama'
+    print('Creating Panorama')
     pano = PanoramaFactory.CreatePanorama(pointSetList[0])
 
-    print 'Showing Panorama'
+    print('Showing Panorama')
     Visualization.ShowPanorama(pano, 'gray')
 
     #     pano = PanoramaFactory.CreatePanorama( pointSetList[0], 'intensity' )

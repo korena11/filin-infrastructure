@@ -120,7 +120,7 @@ if __name__ == '__main__':
             normal_c = dc_dtau.dot(np.array([[0, 1], [-1, 0]]))
 
             # image gradient at contour points
-            grad_img_c = np.asarray(map(partial(getValueSubpix,grad_img), c[:,0], c[:,1]))
+            grad_img_c = np.asarray(list(map(partial(getValueSubpix,grad_img), c[:,0], c[:,1])))
 
             #contour movement
             dc_dh = (dh * 1/grad_img_c[:,None]) * normal_c

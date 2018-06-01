@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -52,21 +51,21 @@
 
                 <h1>Source code for PanoramaFactory</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span
-                        class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
-                        class="n">SphericalCoordinatesProperty</span>
-<span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
-                        class="n">SphericalCoordinatesFactory</span>
-<span class="kn">from</span> <span class="nn">PanoramaProperty</span> <span class="k">import</span> <span class="n">PanoramaProperty</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="nb">min</span><span
+                        class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span
+                        class="nb">int</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
-<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
 <span class="kn">from</span> <span class="nn">NormalsProperty</span> <span class="k">import</span> <span class="n">NormalsProperty</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
-                        class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span
-                        class="p">,</span> <span class="nb">int</span>
+<span class="kn">from</span> <span class="nn">PanoramaProperty</span> <span class="k">import</span> <span class="n">PanoramaProperty</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
+<span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
+                        class="n">SphericalCoordinatesFactory</span>
+<span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
+                        class="n">SphericalCoordinatesProperty</span>
 
 
 <div class="viewcode-block" id="PanoramaFactory"><a class="viewcode-back"
@@ -222,10 +221,11 @@
                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
             class="n">elevationSpacing</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="s2">&quot;Color data cannot be derived from the sent data type: &quot;</span><span
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Color data cannot be derived from the sent data type: &quot;</span><span
             class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
+            class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
             class="p">)</span>
-                <span class="nb">print</span> <span class="s2">&quot;Panorama was not created&quot;</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
@@ -250,10 +250,11 @@
                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
             class="n">elevationSpacing</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="s2">&quot;Segmentation data cannot be derived from the sent data type: &quot;</span><span
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Segmentation data cannot be derived from the sent data type: &quot;</span><span
             class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
+            class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
             class="p">)</span>
-                <span class="nb">print</span> <span class="s2">&quot;Panorama was not created&quot;</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
@@ -277,10 +278,11 @@
                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
             class="n">elevationSpacing</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span> <span class="s2">&quot;Normals data cannot be derived from the sent data type: &quot;</span><span
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Normals data cannot be derived from the sent data type: &quot;</span><span
             class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
+            class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
             class="p">)</span>
-                <span class="nb">print</span> <span class="s2">&quot;Panorama was not created&quot;</span>
                 <span class="k">return</span> <span class="kc">None</span></div></div>
 
 
@@ -293,17 +295,20 @@
     <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">fileName</span> <span class="o">=</span> <span class="s1">r&#39;D:\Documents\Pointsets\bonim_5_big.pts&#39;</span>
 
-    <span class="nb">print</span> <span class="s1">&#39;Reading from file&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading from file&#39;</span><span
+                        class="p">)</span>
     <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span
                         class="n">fileName</span><span class="p">,</span> <span class="n">pointSetList</span><span
                         class="p">)</span>
 
-    <span class="nb">print</span> <span class="s1">&#39;Creating Panorama&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating Panorama&#39;</span><span
+                        class="p">)</span>
     <span class="n">pano</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span
                         class="o">.</span><span class="n">CreatePanorama</span><span class="p">(</span><span class="n">pointSetList</span><span
                         class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="nb">print</span> <span class="s1">&#39;Showing Panorama&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Showing Panorama&#39;</span><span
+                        class="p">)</span>
     <span class="n">Visualization</span><span class="o">.</span><span class="n">ShowPanorama</span><span
                         class="p">(</span><span class="n">pano</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span
                         class="p">)</span>

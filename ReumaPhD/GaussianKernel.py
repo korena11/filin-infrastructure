@@ -34,5 +34,5 @@ def GaussianKernel(size, sigma):
 if __name__ == '__main__':
     G = GaussianKernel(256, 20)
 
-    print
+    print()
     G

@@ -65,8 +65,8 @@ def to_latex(a, decimals=4, tab='  '):
     -----
     The resultant array environment should be used within LaTeX's mathmode,
     and the following should appear in the preamble:
-        \usepackage{array}
-        \usepackage{dcolumn}
+        \\usepackage{array}
+        \\usepackage{dcolumn}
     """
     # array = np.around(a, decimals)
     array = np.atleast_2d(a)
@@ -76,7 +76,7 @@ def to_latex(a, decimals=4, tab='  '):
     # This does not handle negative signs appropriately since -0.5 goes to 0.
     # So we make sure it never counts a negative sign by taking the abs().
     integral = np.abs(np.trunc(array.flat).astype(int))
-    left_digits = max(map(len, map(str, integral)))
+    left_digits = max(list(map(len, list(map(str, integral)))))
 
     # Adjust for negative signs.
     if np.any(array < 0):
@@ -184,7 +184,7 @@ def matrix_latex(a, **kwargs):
     # Determine the number of digits left of the decimal.
     # Grab integral part, convert to string, and get maximum length.
     integral = np.abs(np.trunc(array.flat).astype(int))
-    left_digits = max(map(len, map(str, integral)))
+    left_digits = max(list(map(len, list(map(str, integral)))))
 
     # Adjust for negative signs.
     if np.any(array < 0):

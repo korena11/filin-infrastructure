@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -59,12 +58,10 @@
                         class="n">uint8</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span
                         class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span
                         class="p">,</span> <span class="n">logical_and</span><span class="p">,</span> <span class="n">nonzero</span>
-<span class="kn">from</span> <span class="nn">IOFactory</span> <span class="k">import</span> <span
-                        class="n">IOFactory</span>
-<span class="c1"># from Visualization import Visualization</span>
-<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span> 
+
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
 
 
 <div class="viewcode-block" id="FilterFactory"><a class="viewcode-back"
@@ -96,9 +93,9 @@
             class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="n">numPoints</span><span class="p">):</span>
+            class="nb">range</span><span class="p">(</span><span class="n">numPoints</span><span class="p">):</span>
             <span class="n">isGround</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">xrange</span><span
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span
             class="p">(</span><span class="n">numPoints</span><span class="p">):</span>
                 <span class="n">dist</span> <span class="o">=</span> <span class="n">sqrt</span><span
             class="p">((</span><span class="n">pntData</span><span class="p">[</span><span class="n">i</span><span
@@ -169,7 +166,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">pntData</span> <span class="o">=</span> <span class="n">points</span><span
             class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
-               
+
         <span class="n">groundPointsIndices</span> <span class="o">=</span> <span class="n">FilterFactory</span><span
             class="o">.</span><span class="n">SlopeBasedMorphologicFilter</span><span class="p">(</span><span class="n">pntData</span><span
             class="p">,</span> <span class="n">searchRadius</span><span class="p">,</span> <span class="n">slopeThreshold</span><span
@@ -325,16 +322,15 @@
             
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span
                         class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-
     <span class="k">pass</span>
-<span class="c1">#     pointSetList = []</span>
-<span class="c1">#     IOFactory.ReadXYZ(&#39;..\\Sample Data\\DU9_2.xyz&#39;, pointSetList)</span>
-<span class="c1">#</span>
-<span class="c1"># #    filterFactory = FilterFactory()</span>
-<span class="c1">#     terrainSubSet = FilterFactory.SlopeBasedMorphologicFilter(pointSetList[0], 1.0, 25).GetSegment(0)</span>
-<span class="c1">#</span>
-<span class="c1">#     Visualization.RenderPointSet(terrainSubSet, &#39;color&#39;, color=(0.5, 0, 0))</span>
-<span class="c1">#     Visualization.Show()</span>
+    <span class="c1">#     pointSetList = []</span>
+    <span class="c1">#     IOFactory.ReadXYZ(&#39;..\\Sample Data\\DU9_2.xyz&#39;, pointSetList)</span>
+    <span class="c1">#</span>
+    <span class="c1"># #    filterFactory = FilterFactory()</span>
+    <span class="c1">#     terrainSubSet = FilterFactory.SlopeBasedMorphologicFilter(pointSetList[0], 1.0, 25).GetSegment(0)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Visualization.RenderPointSet(terrainSubSet, &#39;color&#39;, color=(0.5, 0, 0))</span>
+    <span class="c1">#     Visualization.Show()</span>
 </pre>
                 </div>
 

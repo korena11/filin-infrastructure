@@ -51,12 +51,12 @@
 
                 <h1>Source code for SphericalCoordinatesProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span
-                        class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
-                        class="n">zeros</span><span class="p">,</span> <span class="n">arange</span><span
-                        class="p">,</span> <span class="n">array</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span
+                        class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span
+                        class="n">array</span>
 <span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="k">import</span> <span class="n">tvtk</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
 
 <div class="viewcode-block" id="SphericalCoordinatesProperty"><a class="viewcode-back"
@@ -127,14 +127,12 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">XYZ</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
-
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">Points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
-        
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__dataset</span><span class="o">.</span><span class="n">Size</span>
     

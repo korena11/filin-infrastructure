@@ -109,6 +109,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__numTriangles</span> <span
             class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span
             class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">NumberOfTriangles</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
@@ -186,7 +187,7 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span
             class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">AreaOfTriangle</span><span class="p">,</span> <span class="n">xrange</span><span
+            class="n">AreaOfTriangle</span><span class="p">,</span> <span class="nb">range</span><span
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">)))</span></div>
       
@@ -201,10 +202,10 @@
 <span class="sd">        :return: The average area of all the triangles</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">mean</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">AreaOfTriangle</span><span class="p">,</span> <span class="n">xrange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span></div>
+            class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">AreaOfTriangle</span><span class="p">,</span> <span
+            class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">__numTriangles</span><span class="p">))))</span></div>
     
       
 <div class="viewcode-block" id="TriangulationProperty.MedianTriangleArea"><a class="viewcode-back"
@@ -217,10 +218,10 @@
 <span class="sd">        :return: The median area of all the triangles</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">median</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">AreaOfTriangle</span><span class="p">,</span> <span class="n">xrange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span></div>
+            class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">AreaOfTriangle</span><span class="p">,</span> <span
+            class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">__numTriangles</span><span class="p">))))</span></div>
     
     
 <div class="viewcode-block" id="TriangulationProperty.LengthOfEdge"><a class="viewcode-back"
@@ -317,29 +318,30 @@
             class="n">expand_dims</span>
         <span class="k">return</span> <span class="n">hstack</span><span class="p">((</span><span
             class="n">expand_dims</span><span class="p">(</span><span class="n">asarray</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">))),</span> <span class="mi">1</span><span
+            class="n">__numTriangles</span><span class="p">)))),</span> <span class="mi">1</span><span
             class="p">),</span>
                 <span class="n">expand_dims</span><span class="p">(</span><span class="n">asarray</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">LengthOfEdge</span><span class="p">,</span> <span class="n">xrange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
-            class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">))),</span> <span class="mi">1</span><span
-            class="p">),</span>
+            class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">LengthOfEdge</span><span
+            class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span
+            class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__numTriangles</span><span class="p">)))),</span> <span
+            class="mi">1</span><span class="p">),</span>
                 <span class="n">expand_dims</span><span class="p">(</span><span class="n">asarray</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">LengthOfEdge</span><span class="p">,</span> <span class="n">xrange</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
-            class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">))),</span> <span class="mi">1</span><span
-            class="p">)))</span></div>
+            class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">LengthOfEdge</span><span
+            class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span
+            class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__numTriangles</span><span class="p">)))),</span> <span
+            class="mi">1</span><span class="p">)))</span></div>
     
    
 <div class="viewcode-block" id="TriangulationProperty.AverageEdgeLength"><a class="viewcode-back"
@@ -366,27 +368,29 @@
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Calculating the median edge length in the triangulation</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">edgeLengths</span> <span class="o">=</span> <span class="nb">map</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">LengthOfEdge</span><span class="p">,</span> <span class="n">xrange</span><span
+        <span class="n">edgeLengths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span
+            class="nb">map</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">))</span>
+            class="n">__numTriangles</span><span class="p">)))</span>
         <span class="n">edgeLengths</span><span class="o">.</span><span class="n">extend</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span>
+            class="n">__numTriangles</span><span class="p">))))</span>
         <span class="n">edgeLengths</span><span class="o">.</span><span class="n">extend</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span>
+            class="n">__numTriangles</span><span class="p">))))</span>
         <span class="k">return</span> <span class="n">median</span><span class="p">(</span><span
             class="n">edgeLengths</span><span class="p">)</span></div>
     
@@ -404,26 +408,29 @@
             class="o">.</span><span class="n">__numTriangles</span>
         
         <span class="n">edges1</span> <span class="o">=</span> <span class="n">asarray</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span>
+            class="n">__numTriangles</span><span class="p">))))</span>
         <span class="n">edges2</span> <span class="o">=</span> <span class="n">asarray</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span>
+            class="n">__numTriangles</span><span class="p">))))</span>
         <span class="n">edges3</span> <span class="o">=</span> <span class="n">asarray</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">LengthOfEdge</span><span class="p">,</span> <span
-            class="n">xrange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">LengthOfEdge</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__numTriangles</span><span class="p">),</span> <span class="n">tile</span><span class="p">(</span><span
             class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__numTriangles</span><span class="p">)))</span>
+            class="n">__numTriangles</span><span class="p">))))</span>
         <span class="n">trianglesToKeep</span> <span class="o">=</span> <span class="n">nonzero</span><span
             class="p">(</span><span class="n">logical_not</span><span class="p">(</span><span
             class="n">logical_or</span><span class="p">(</span><span class="n">logical_or</span><span class="p">(</span><span
@@ -558,7 +565,8 @@
                         class="p">(</span><span class="n">pointSet</span><span class="p">,</span> <span class="n">triangles</span><span
                         class="p">)</span>
     
-    <span class="nb">print</span> <span class="nb">map</span><span class="p">(</span><span class="n">tp</span><span
+    <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span
+                        class="nb">map</span><span class="p">(</span><span class="n">tp</span><span
                         class="o">.</span><span class="n">IsPointInTriangle</span><span class="p">,</span> <span
                         class="mf">0.5</span> <span class="o">*</span> <span class="n">ones</span><span
                         class="p">((</span><span class="n">tp</span><span class="o">.</span><span class="n">NumberOfTriangles</span><span
@@ -566,42 +574,47 @@
                         class="mf">0.5</span> <span class="o">*</span> <span class="n">ones</span><span
                         class="p">((</span><span class="n">tp</span><span class="o">.</span><span class="n">NumberOfTriangles</span><span
                         class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span
-                        class="n">xrange</span><span class="p">(</span><span class="n">tp</span><span class="o">.</span><span
-                        class="n">NumberOfTriangles</span><span class="p">))</span>
+                        class="nb">range</span><span class="p">(</span><span class="n">tp</span><span class="o">.</span><span
+                        class="n">NumberOfTriangles</span><span class="p">))))</span>
     
-    <span class="nb">print</span> <span class="s2">&quot;Number of points:&quot;</span><span class="p">,</span> <span
-                        class="n">tp</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span
-                        class="n">Size</span>
-    <span class="nb">print</span> <span class="s2">&quot;Number of triangles:&quot;</span><span class="p">,</span> <span
-                        class="n">tp</span><span class="o">.</span><span class="n">NumberOfTriangles</span>
-    <span class="nb">print</span> <span class="s2">&quot;Area of first triangle:&quot;</span><span
-                        class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">AreaOfTriangle</span><span
-                        class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="nb">print</span> <span class="s2">&quot;Total area of all triangles:&quot;</span><span
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of points:&quot;</span><span
                         class="p">,</span> <span class="n">tp</span><span class="o">.</span><span
-                        class="n">TotalArea</span><span class="p">()</span>
-    <span class="nb">print</span> <span class="s2">&quot;Average area of triangles:&quot;</span><span class="p">,</span> <span
+                        class="n">Points</span><span class="o">.</span><span class="n">Size</span><span
+                        class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of triangles:&quot;</span><span
+                        class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">NumberOfTriangles</span><span
+                        class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Area of first triangle:&quot;</span><span class="p">,</span> <span
+                        class="n">tp</span><span class="o">.</span><span class="n">AreaOfTriangle</span><span class="p">(</span><span
+                        class="mi">0</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Total area of all triangles:&quot;</span><span class="p">,</span> <span
+                        class="n">tp</span><span class="o">.</span><span class="n">TotalArea</span><span
+                        class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Average area of triangles:&quot;</span><span class="p">,</span> <span
                         class="n">tp</span><span class="o">.</span><span class="n">AverageTriangleArea</span><span
-                        class="p">()</span>
-    <span class="nb">print</span> <span class="s2">&quot;Median area of triangles:&quot;</span><span class="p">,</span> <span
-                        class="n">tp</span><span class="o">.</span><span class="n">MedianTriangleArea</span><span
-                        class="p">()</span>
-    <span class="nb">print</span> <span
-                        class="s2">&quot;Length of the first edge of the first triangle: &quot;</span><span
+                        class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Median area of triangles:&quot;</span><span class="p">,</span> <span class="n">tp</span><span
+                        class="o">.</span><span class="n">MedianTriangleArea</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Length of the first edge of the first triangle: &quot;</span><span
                         class="p">,</span> <span class="n">tp</span><span class="o">.</span><span
                         class="n">LengthOfEdge</span><span class="p">(</span><span class="mi">0</span><span
-                        class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="nb">print</span> <span class="s2">&quot;Average length of edges: &quot;</span><span class="p">,</span> <span
-                        class="n">tp</span><span class="o">.</span><span class="n">AverageEdgeLength</span><span
-                        class="p">()</span>
-    <span class="nb">print</span> <span class="s2">&quot;Median length of edges: &quot;</span><span
-                        class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">MedianEdgeLength</span><span
-                        class="p">()</span>
-    <span class="nb">print</span> <span class="s2">&quot;Removing triangles with edges larger than &quot;</span><span
-                        class="p">,</span> <span class="mf">2.0</span>
-    <span class="nb">print</span> <span class="s2">&quot;Number of triangles removed: &quot;</span><span
-                        class="p">,</span> <span class="n">tp</span><span class="o">.</span><span class="n">TrimEdgesByLength</span><span
-                        class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+                        class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Average length of edges: &quot;</span><span class="p">,</span> <span class="n">tp</span><span
+                        class="o">.</span><span class="n">AverageEdgeLength</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Median length of edges: &quot;</span><span class="p">,</span> <span class="n">tp</span><span
+                        class="o">.</span><span class="n">MedianEdgeLength</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Removing triangles with edges larger than &quot;</span><span
+                        class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span
+                        class="s2">&quot;Number of triangles removed: &quot;</span><span class="p">,</span> <span
+                        class="n">tp</span><span class="o">.</span><span class="n">TrimEdgesByLength</span><span
+                        class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
 </pre>
                 </div>
 

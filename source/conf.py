@@ -42,7 +42,7 @@ sys.path.insert(0, os.path.abspath('../Data Classes'))
 sys.path.insert(0, os.path.abspath('../Property Classes'))
 sys.path.insert(0, os.path.abspath('../Factory Classes'))
 sys.path.insert(0, os.path.abspath('../Visualization Classes'))
-sys.path.insert(0, os.path.abspath('../ReumaPhD'))
+sys.path.insert(0, os.path.abspath('../IO modules'))
 sys.path.insert(0, os.path.abspath('../Third Party'))
 
 extensions = [

@@ -19,7 +19,6 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
-
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -52,12 +51,14 @@
 
                 <h1>Source code for TriangulationFactory</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+<span></span><span class="kn">from</span> <span class="nn">mayavi</span> <span class="k">import</span> <span class="n">mlab</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">TriangulationProperty</span> <span class="k">import</span> <span
                         class="n">TriangulationProperty</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
-<span class="kn">from</span> <span class="nn">mayavi</span> <span class="k">import</span> <span class="n">mlab</span>
+
 
 <div class="viewcode-block" id="TriangulationFactory"><a class="viewcode-back"
                                                          href="../TriangulationFactory.html#TriangulationFactory.TriangulationFactory">[docs]</a><span
@@ -149,8 +150,8 @@
                         class="o">.</span><span class="n">Delaunay2D</span><span class="p">(</span> <span class="n">pointSet</span> <span
                         class="p">)</span>
     
-    <span class="nb">print</span> <span class="n">tp</span><span class="o">.</span><span
-                        class="n">NumberOfTriangles</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tp</span><span class="o">.</span><span
+                        class="n">NumberOfTriangles</span><span class="p">())</span>
 </pre>
                 </div>
 

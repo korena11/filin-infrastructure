@@ -47,5 +47,5 @@ if __name__ == '__main__':
     pointSet = PointSet( points )
     
     tp = TriangulationFactory.Delaunay2D( pointSet )
-    
-    print tp.NumberOfTriangles()
+
+    print(tp.NumberOfTriangles())

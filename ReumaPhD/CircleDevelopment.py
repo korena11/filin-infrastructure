@@ -32,7 +32,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.axis('equal')
 
-    for t in xrange(0,100):
+    for t in range(0,100):
         xt = -cos(s/radius) * velocity * 1/radius
         yt = -sin(s/radius) * velocity * 1/radius
         x+=xt

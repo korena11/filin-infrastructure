@@ -6,7 +6,7 @@ RasterData class
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: RasterData.RasterData
 :attributes:

@@ -3,10 +3,10 @@ Color Property Documentation
 
 
 .. autoclass:: ColorProperty.ColorProperty
-:members:
-       :undoc-members:
+	:members:
+    :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: ColorProperty.ColorProperty
 :attributes:
@@ -15,3 +15,5 @@ Color Property Documentation
 
 		.. autoautosummary:: ColorProperty.ColorProperty
 :methods:
+
+

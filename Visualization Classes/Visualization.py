@@ -1,21 +1,21 @@
-from mayavi.scripts import mayavi2
-import mayavi
-from mayavi.sources.vtk_data_source import VTKDataSource
 from mayavi import mlab
-from numpy import tile, asarray, uint8, hstack, expand_dims, abs, uint8, log
+import matplotlib.pyplot as plt
+from mayavi import mlab
 from mayavi.core import lut_manager
-from PointSet import PointSet
-from PointSubSet import PointSubSet
+from mayavi.mlab import quiver3d
+from numpy import tile, asarray, expand_dims, uint8
+from scipy.ndimage import morphology as morph
+
+import SphericalCoordinatesProperty
 from BaseProperty import BaseProperty
 from ColorProperty import ColorProperty
 from NormalsProperty import NormalsProperty
-from TriangulationProperty import TriangulationProperty
+from PointSet import PointSet
+from PointSubSet import PointSubSet
 from SegmentationProperty import SegmentationProperty
-from mayavi.mlab import quiver3d
 from TriangulationFactory import TriangulationFactory
-import SphericalCoordinatesProperty
-import matplotlib.pyplot as plt
-from scipy.ndimage import morphology as morph
+from TriangulationProperty import TriangulationProperty
+
 
 class Visualization:
     
@@ -52,7 +52,7 @@ class Visualization:
                 param = color[0]
             polyData.point_data.scalars = param              
         else:  # display in some default color
-            print 'rendering using default color' 
+            print('rendering using default color') 
             polyData.point_data.scalars = asarray( 255 * tile( ( 0.5, 0, 0 ), ( len( polyData.points ), 1 ) ), dtype = uint8 )
             polyData.point_data.scalars.name = 'default'
             

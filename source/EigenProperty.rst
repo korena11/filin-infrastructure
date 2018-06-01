@@ -6,7 +6,7 @@ Eigen Property Documentation
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: EigenProperty.EigenProperty
 :attributes:
@@ -15,3 +15,5 @@ Eigen Property Documentation
 
 		.. autoautosummary:: EigenProperty.EigenProperty
 :methods:
+
+

@@ -10,9 +10,9 @@ photo-lab-3\Reuma
 # if platform.system() == 'Linux':
 
 import numpy as np
+from ReumaPhD.Classification.ClassificationProperty import ClassificationProperty
 from scipy.stats import norm
 
-from ClassificationProperty import ClassificationProperty
 from EigenFactory import EigenFactory
 from RasterData import RasterData
 
@@ -384,7 +384,7 @@ class ClassificationFactory:
         self.data = data
         classified = ClassificationProperty(data)
         for win in winSizes:
-            print ('current window size %.4f' % win)
+            print(('current window size %.4f' % win))
             if isinstance(self.data, RasterData):
                 self.__ClassifyPoints(win, classProp = classified)
         return classified, self.percentMap

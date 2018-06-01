@@ -18,7 +18,7 @@ class NeighborsFactory:
         Find all tokens (points) in radius range 
         
         Find all points in range of the ball field with radius 'radius'. 
-        :Args:
+
         :param points: - PointSet
         :param x:, y:, z:  search point coordinates
         :param radius: Radius of ball field
@@ -109,17 +109,25 @@ class NeighborsFactory:
         '''
         Find neighbors of a point using KDtree
         
-        :Args:
-            - pnt: search point coordinates 
-            - pntSet: pointset - in cartesian coordinates
-            - radius: search radius
-            - tree: ball tree
-            - num_neighbor: number of nearest neighbors 
+
+        :param pnt: search point coordinates
+        :param pntSet: pointset - in cartesian coordinates
+        :param radius: search radius
+        :param tree: ball tree
+        :param num_neighbor: number of nearest neighbors
                 if num_neighbor!=None the result will be the exact number of neighbors 
                 and not neighbors in radius
-         
-        :Returns:
-            - neighbor: subset of neighbors from original pointset
+
+        :type pnt: tuple?
+        :type pntSet: PointSet.PointSet
+        :type radius: float
+        :type tree: BallTree
+        :type num_neighbor: int
+
+        :return: neighbors
+
+        :rtype: PointSubSet
+
         '''
 
         if num_neighbor == None:
@@ -137,16 +145,20 @@ class NeighborsFactory:
     @staticmethod
     def GetNeighborsIn3dRange_SphericCoord(pnt, points, radius):
         '''
-        Find points in defined window - 
-        neighbors of a point
+        Find points in defined window - neighbors of a point
         
-        :Args:
-            - pnt: search point coordinates 
-            - points: pointset - in spherical coordinates
-            - rad: search radius in radian
-         
-        :Returns:
-            - neighbor: subset of neighbors from original pointset
+        :param pnt: search point coordinates
+        :param points: pointset - in spherical coordinates
+        :param radius: search radius in radian
+
+        :type pnt: tuple?
+        :type points: PointSet.PointSet
+        :type radius: float
+
+        :return: neighbors from original pointset
+
+        :rtype: PointSubSet
+
         '''
         radius = rad2deg(radius)
         az_min, az_max, el_min, el_max = pnt[0] - radius, pnt[0] + radius, pnt[1] - radius, pnt[1] + radius

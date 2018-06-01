@@ -72,7 +72,7 @@ class TriangulationProperty(BaseProperty):
         :return: The total area of all the triangles in the triangulation
 
         '''
-        return sum(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
+        return sum(map(self.AreaOfTriangle, range(self.__numTriangles)))
       
       
     def AverageTriangleArea(self):
@@ -81,7 +81,7 @@ class TriangulationProperty(BaseProperty):
 
         :return: The average area of all the triangles
         '''
-        return mean(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
+        return mean(list(map(self.AreaOfTriangle, range(self.__numTriangles))))
     
       
     def MedianTriangleArea(self):
@@ -90,7 +90,7 @@ class TriangulationProperty(BaseProperty):
 
         :return: The median area of all the triangles
         '''
-        return median(map(self.AreaOfTriangle, xrange(self.__numTriangles)))
+        return median(list(map(self.AreaOfTriangle, range(self.__numTriangles))))
     
     
     def LengthOfEdge(self, triangleIndex, edgeIndex):
@@ -128,9 +128,12 @@ class TriangulationProperty(BaseProperty):
         Calculating edges' length in the triangulation
         '''
         from numpy import asarray, hstack, expand_dims
-        return hstack((expand_dims(asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(0, self.__numTriangles))), 1),
-                expand_dims(asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(1, self.__numTriangles))), 1),
-                expand_dims(asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(2, self.__numTriangles))), 1)))
+        return hstack((expand_dims(
+            asarray(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(0, self.__numTriangles)))), 1),
+                       expand_dims(asarray(
+                           list(map(self.LengthOfEdge, range(self.__numTriangles), tile(1, self.__numTriangles)))), 1),
+                       expand_dims(asarray(
+                           list(map(self.LengthOfEdge, range(self.__numTriangles), tile(2, self.__numTriangles)))), 1)))
     
    
     def AverageEdgeLength(self):
@@ -145,9 +148,9 @@ class TriangulationProperty(BaseProperty):
         '''
         Calculating the median edge length in the triangulation
         '''
-        edgeLengths = map(self.LengthOfEdge, xrange(self.__numTriangles), tile(0, self.__numTriangles))
-        edgeLengths.extend(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(1, self.__numTriangles)))
-        edgeLengths.extend(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(2, self.__numTriangles)))
+        edgeLengths = list(map(self.LengthOfEdge, range(self.__numTriangles), tile(0, self.__numTriangles)))
+        edgeLengths.extend(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(1, self.__numTriangles))))
+        edgeLengths.extend(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(2, self.__numTriangles))))
         return median(edgeLengths)
     
    
@@ -158,10 +161,10 @@ class TriangulationProperty(BaseProperty):
         :return: Number of triangles removed
         '''
         currentNumOfTriangles = self.__numTriangles
-        
-        edges1 = asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(0, self.__numTriangles)))
-        edges2 = asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(1, self.__numTriangles)))
-        edges3 = asarray(map(self.LengthOfEdge, xrange(self.__numTriangles), tile(2, self.__numTriangles))) 
+
+        edges1 = asarray(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(0, self.__numTriangles))))
+        edges2 = asarray(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(1, self.__numTriangles))))
+        edges3 = asarray(list(map(self.LengthOfEdge, range(self.__numTriangles), tile(2, self.__numTriangles)))) 
         trianglesToKeep = nonzero(logical_not(logical_or(logical_or(edges1 > maxLength,
                                                                       edges2 > maxLength),
                                                edges3 > maxLength)))[0]
@@ -209,17 +212,18 @@ if __name__ == "__main__":
     
     pointSet = PointSet(points)
     tp = TriangulationProperty(pointSet, triangles)
-    
-    print map(tp.IsPointInTriangle, 0.5 * ones((tp.NumberOfTriangles, 1)), 0.5 * ones((tp.NumberOfTriangles, 1)), xrange(tp.NumberOfTriangles))
-    
-    print "Number of points:", tp.Points.Size
-    print "Number of triangles:", tp.NumberOfTriangles
-    print "Area of first triangle:", tp.AreaOfTriangle(0)
-    print "Total area of all triangles:", tp.TotalArea()
-    print "Average area of triangles:", tp.AverageTriangleArea()
-    print "Median area of triangles:", tp.MedianTriangleArea()
-    print "Length of the first edge of the first triangle: ", tp.LengthOfEdge(0, 0)
-    print "Average length of edges: ", tp.AverageEdgeLength()
-    print "Median length of edges: ", tp.MedianEdgeLength()
-    print "Removing triangles with edges larger than ", 2.0
-    print "Number of triangles removed: ", tp.TrimEdgesByLength(2.0)
+
+    print(list(map(tp.IsPointInTriangle, 0.5 * ones((tp.NumberOfTriangles, 1)), 0.5 * ones((tp.NumberOfTriangles, 1)),
+                   range(tp.NumberOfTriangles))))
+
+    print("Number of points:", tp.Points.Size)
+    print("Number of triangles:", tp.NumberOfTriangles)
+    print("Area of first triangle:", tp.AreaOfTriangle(0))
+    print("Total area of all triangles:", tp.TotalArea())
+    print("Average area of triangles:", tp.AverageTriangleArea())
+    print("Median area of triangles:", tp.MedianTriangleArea())
+    print("Length of the first edge of the first triangle: ", tp.LengthOfEdge(0, 0))
+    print("Average length of edges: ", tp.AverageEdgeLength())
+    print("Median length of edges: ", tp.MedianEdgeLength())
+    print("Removing triangles with edges larger than ", 2.0)
+    print("Number of triangles removed: ", tp.TrimEdgesByLength(2.0))

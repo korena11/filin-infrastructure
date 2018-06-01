@@ -68,6 +68,7 @@
                         class="nb">max</span> <span class="k">as</span> <span class="n">npmax</span>
 <span class="kn">from</span> <span class="nn">pyproj</span> <span class="k">import</span> <span
                         class="n">Proj</span><span class="p">,</span> <span class="n">transform</span>
+
 <span class="kn">from</span> <span class="nn">BaseData</span> <span class="k">import</span> <span
                         class="n">BaseData</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
@@ -96,8 +97,8 @@
 
     <span class="c1"># transformation to convert pixel to world coordinates</span>
     <span class="n">__geoTransform</span> <span class="o">=</span> <span class="p">(</span><span
-            class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span
-            class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+            class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1">#Lidar data info</span>
     <span class="n">__dataOrigin</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="c1"># A string indicating the point acquiring means: &#39;terrestrial&#39;,</span>
@@ -107,7 +108,6 @@
     <span class="n">__measurement_accuracy</span><span class="o">=</span> <span class="mf">0.15</span> <span class="c1"># The accuracy of a depth/height/range measurement</span>
     <span class="n">__mean_roughness</span> <span class="o">=</span> <span class="o">.</span><span class="mi">02</span> <span
             class="c1"># roughness estimation of the raster data</span>
-
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
             class="p">,</span> <span class="n">data</span><span class="p">,</span> <span
@@ -468,9 +468,9 @@
                                                                                         <span class="p">(</span><span
             class="n">row</span> <span class="o">-</span> <span class="n">intRow</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>
-                    <span class="nb">print</span> <span class="n">row</span><span class="p">,</span> <span
-            class="n">col</span><span class="p">,</span> <span class="n">intRow</span><span class="p">,</span> <span
-            class="n">intCol</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span
+            class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">intRow</span><span
+            class="p">,</span> <span class="n">intCol</span><span class="p">)</span>
                     <span class="k">return</span> <span class="kc">None</span>
             <span class="c1"># elif method == &#39;bicubic&#39;:</span>
             <span class="c1">#     intRow, intCol = floor(row), floor(col)</span>

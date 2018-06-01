@@ -1,4 +1,4 @@
-from MyTools import CreateFilename
+from IO_Tools import CreateFilename
 from PointSet import PointSet
 from RasterData import RasterData
 
@@ -79,7 +79,7 @@ class BaseProperty(object):
             attrs = self.__dict__
 
             # the group name will be according to the property class name
-            groupname = attrs.keys()[0].split('_')[1]
+            groupname = list(attrs.keys())[0].split('_')[1]
             property_group = f.create_group(groupname)
 
             for key in attrs:

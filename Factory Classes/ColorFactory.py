@@ -1,13 +1,40 @@
-from numpy import nonzero, zeros, uint8 #logical_and
+from numpy import nonzero, zeros, uint8  # logical_and
 
 from ColorProperty import ColorProperty
+from PointSet import PointSet
 
 
 class ColorFactory:
     """
     Color a PointSet using different methods
     """
-        
+
+    @staticmethod
+    def assignColor(points, colors):
+        """
+        Assigns color to PointSet
+
+        :param points: The PointSet to which the color is added
+        :param colors: The colors added
+
+        :type points: PointSet
+        :type colors: np.array
+
+
+        :return: the color property of the PointSet
+
+        :rtype: ColorProperty
+
+        """
+        color_size = len(colors)
+
+        if color_size != points.Size:
+            raise ValueError("Colors are not in the size of the PointSet", color_size, points.Size)
+
+        colorProp = ColorProperty(points, colors)
+        return colorProp
+
+
     @staticmethod
     def ProjectImages(points, images, matrices):
         """

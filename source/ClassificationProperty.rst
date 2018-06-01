@@ -1,11 +1,12 @@
 Classification Property Documentation
 =====================================
 
+
 .. autoclass:: ClassificationProperty.ClassificationProperty
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: ClassificationProperty.ClassificationProperty
 :attributes:

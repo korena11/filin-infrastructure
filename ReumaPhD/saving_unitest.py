@@ -26,4 +26,4 @@ if __name__ == '__main__':
     # b.save(filename = r'savedProperty\temp.h5')
     raster = IOFactory.load(r'savedProperty\raster6.h5', RasterData)
     pts2 = IOFactory.load(r'savedProperty\color4.h5', ColorProperty)
-    print 'hello'
+    print('hello')

@@ -1,11 +1,12 @@
 Triangulation Property Documentation
 =====================================
 
+
 .. autoclass:: TriangulationProperty.TriangulationProperty
 :members:
        :undoc-members:
 
-    		.. rubric:: Attributes
+        	.. rubric:: Attributes
 
 		.. autoautosummary:: TriangulationProperty.TriangulationProperty
 :attributes:

@@ -230,7 +230,7 @@ class RasterData(BaseData):
                     values[otherPoints] = a + b * (col - intCol) + c * (row - intRow) + d * (col - intCol) * \
                                                                                         (row - intRow)
                 except:
-                    print row, col, intRow, intCol
+                    print(row, col, intRow, intCol)
                     return None
             # elif method == 'bicubic':
             #     intRow, intCol = floor(row), floor(col)

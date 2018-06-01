@@ -26,8 +26,8 @@ from matplotlib import pyplot as plt
 import scipy.linalg as LA
 
 import cv2
-import MyTools as mt
-import LatexUtils as lu
+from . import MyTools as mt
+from . import LatexUtils as lu
 import warnings
 
 def bayesian(image, **kwargs):
@@ -96,7 +96,7 @@ def bayesian(image, **kwargs):
         M_n = np.cov(segment_pix) + 1e-7 * np.eye(9)
 
         if verbose:
-            print mt.is_pos_semidef(M_n)
+            print(mt.is_pos_semidef(M_n))
         #    print lu.matrix_latex(M_n)
         M.append(M_n)
         u.append(segment_pix)
@@ -367,7 +367,7 @@ def __dcolor(p_i, image, image_feature, **kwargs):
     j = K_closest % n
 
     if verbose:
-        print dcolors[i,j]
+        print(dcolors[i,j])
     return dcolors[i, j], i, j
 
 def __dissimilarity(A, B, **kwargs):
@@ -382,8 +382,8 @@ def __dissimilarity(A, B, **kwargs):
     """
     verbose = kwargs.get('verbose', False)
     if verbose:
-        print lu.matrix_latex(A)
-        print lu.matrix_latex(B)
+        print(lu.matrix_latex(A))
+        print(lu.matrix_latex(B))
 
     #  solve e.values for: A x = lambda B x
     eigs = LA.eigvals(A, B)
@@ -399,13 +399,13 @@ if __name__ == '__main__':
     img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/mult1.png'), cv2.COLOR_BGR2RGB)
     sigma = 2.5
 
-    print '-'*20, 'frequency tuned', '-'*20
+    print('-'*20, 'frequency tuned', '-'*20)
     s1 = distance_based(img, filter_sigma = [sigma, 1.6*sigma, 1.6*2*sigma, 1.6*3*sigma],
                        feature='normals')
 
-    print '-' * 20, 'local method', '-' * 20
+    print('-' * 20, 'local method', '-' * 20)
     s2 = distance_based(img, filter_size = 5, method='local', feature ='normals')
-    print '-' * 20, 'context aware', '-' * 20
+    print('-' * 20, 'context aware', '-' * 20)
     s3 = distance_based(img, filter_size = 150, method='context', feature = 'pixel_val', verbose= False, scales_number = 4)
     s3[s3<1.e-5] = 0
 

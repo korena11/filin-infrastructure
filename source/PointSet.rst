@@ -6,7 +6,7 @@ PointSet class
 :members:
        :undoc-members:
 
-        		.. rubric:: Attributes
+            .. rubric:: Attributes
 
 		.. autoautosummary:: PointSet.PointSet
 :attributes:

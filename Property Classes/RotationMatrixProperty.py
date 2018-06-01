@@ -4,6 +4,7 @@ import numpy as np
 
 from BaseProperty import BaseProperty
 
+
 class RotationMatrixProperty( BaseProperty ):
     """
     .. warning:: Now only implemented for Euler angles.
@@ -53,7 +54,7 @@ class RotationMatrixProperty( BaseProperty ):
         """
         Points' rotation matrix with respect to reference pointset
         """
-        print self.__rotationType
+        print(self.__rotationType)
         return self.__rotation_matrix
 
     def EulerAngles_from_R(self, dtype = 'degrees'):

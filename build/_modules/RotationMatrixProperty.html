@@ -51,11 +51,12 @@
 
                 <h1>Source code for RotationMatrixProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
-                        class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span
+                        class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <div class="viewcode-block" id="RotationMatrixProperty"><a class="viewcode-back"
                                                            href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty">[docs]</a><span
@@ -65,13 +66,13 @@
 <span class="sd">    .. warning:: Now only implemented for Euler angles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">__rotationType</span> <span class="o">=</span> <span class="s1">&#39;euler&#39;</span> <span
+    <span class="n">__rotationType</span> <span class="o">=</span> <span class="s1">&#39;euler&#39;</span>  <span
             class="c1"># The type of rotation matrix (euler, quaternion, axis and rotation, etc.)</span>
 
     <span class="c1"># TODO: add angles extraction in case of other rotations than &quot;euler&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span> <span
-            class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
             class="n">rotation_matrix</span><span class="p">,</span> <span class="n">rotation_axis</span> <span
             class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RotationMatrixProperty</span><span
@@ -122,8 +123,7 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No rotation type was set for the matrix, but the matrix has&#39;</span>
-                     <span class="s1">&#39;axis of rotation Default is Euler Rotation Matrix&#39;</span> <span
-            class="p">)</span></div>
+                     <span class="s1">&#39;axis of rotation Default is Euler Rotation Matrix&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">RotationMatrix</span><span class="p">(</span> <span
@@ -131,11 +131,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Points&#39; rotation matrix with respect to reference pointset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__rotationType</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">__rotationType</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotation_matrix</span>
 
-        
 <div class="viewcode-block" id="RotationMatrixProperty.EulerAngles_from_R"><a class="viewcode-back"
                                                                               href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty.EulerAngles_from_R">[docs]</a>    <span
         class="k">def</span> <span class="nf">EulerAngles_from_R</span><span class="p">(</span><span
@@ -205,9 +204,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">omega</span><span class="p">,</span> <span
             class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div></div>
-
-
-        
 </pre>
                 </div>
 

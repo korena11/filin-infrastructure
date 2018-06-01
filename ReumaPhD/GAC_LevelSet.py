@@ -12,9 +12,9 @@ if platform.system() == 'Linux':
 
     matplotlib.use('TkAgg')
 
-import Saliency as sl
+from . import Saliency as sl
 from matplotlib import pyplot as plt
-import MyTools as mt
+from . import MyTools as mt
 import numpy as np
 import cv2
 from skimage import measure
@@ -197,16 +197,16 @@ def geometricActiveContours(img, phi, **kwargs):
     region_inputs = {'region': 0,
                      'weight': 1}
     # updating inputs:
-    if 'GAC_inputs' in kwargs.keys():
+    if 'GAC_inputs' in list(kwargs.keys()):
         GAC_inputs.update(kwargs['GAC_inputs'])
 
-    if 'img_grad' in kwargs.keys():
+    if 'img_grad' in list(kwargs.keys()):
         gradient_inputs.update(kwargs['img_grad'])
 
-    if 'blur' in kwargs.keys():
+    if 'blur' in list(kwargs.keys()):
         blurring_inputs.update(kwargs['blur'])
 
-    if 'region' in kwargs.keys():
+    if 'region' in list(kwargs.keys()):
         region_inputs.update(kwargs['region'])
 
     alpha = GAC_inputs['alpha']
@@ -334,17 +334,17 @@ def geodesicActiveContours(img, phi, **kwargs):
     blurring_inputs = {'ksize': (0,0),
                        'sigma': 2.5}
     # updating inputs:
-    if 'GAC_inputs' in kwargs.keys():
+    if 'GAC_inputs' in list(kwargs.keys()):
         GAC_inputs.update(kwargs['GAC_inputs'])
 
     eps = GAC_inputs['epsilon']
     beta = GAC_inputs['beta']
     stepsize = GAC_inputs['stepsize']
 
-    if 'img_grad' in kwargs.keys():
+    if 'img_grad' in list(kwargs.keys()):
         gradient_inputs.update(kwargs['img_grad'])
 
-    if 'blur' in kwargs.keys():
+    if 'blur' in list(kwargs.keys()):
         blurring_inputs.update(kwargs['blur'])
 
     blur_ksize = blurring_inputs['ksize']

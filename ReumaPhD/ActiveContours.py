@@ -18,8 +18,8 @@ from matplotlib import pyplot as plt
 from numpy import sin, cos, pi
 from scipy.ndimage import filters
 
-from ContourDevelopment import getValueSubpix
-from MyTools import imshow
+from .ContourDevelopment import getValueSubpix
+from .MyTools import imshow
 
 
 def createGaussianImage(gridSpacing = .025, noise = 0.01):
@@ -229,11 +229,11 @@ if __name__ == '__main__':
     plt.plot(c[:, 0], c[:, 1], '-r')
 
     epsilon = 1000
-    iternum = range(500)
+    iternum = list(range(500))
     for i in iternum:
         # external force - using energy_image
-        fx = np.array(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0]))
-        fy = np.array(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0]))
+        fx = np.array(list(map(partial(getValueSubpix, energy_image_x), c[:, 1], c[:, 0])))
+        fy = np.array(list(map(partial(getValueSubpix, energy_image_y), c[:, 1], c[:, 0])))
 
         # internal force - solving the (I-timeStep * A) = x, +timeStep * fx,y
         # contour movement

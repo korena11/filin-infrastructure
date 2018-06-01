@@ -14,9 +14,9 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-import MyTools as mt
+from . import MyTools as mt
 from IOFactory import IOFactory
-from LevelSetFactory import LevelSetFactory
+from .LevelSetFactory import LevelSetFactory
 from RasterVisualizations import RasterVisualization as rv
 
 # Classification codes

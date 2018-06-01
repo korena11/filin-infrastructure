@@ -51,12 +51,12 @@
 
                 <h1>Source code for PanoramaProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span
-                        class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
+
 
 <div class="viewcode-block" id="PanoramaProperty"><a class="viewcode-back"
                                                      href="../PanoramaProperty.html#PanoramaProperty.PanoramaProperty">[docs]</a><span
@@ -80,11 +80,12 @@
     <span class="n">__elevationSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the elevation angle direction  </span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">points</span><span class="p">,</span>  <span class="n">rowIndexes</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">columnIndexes</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">panoramaData</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">):</span>
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
+            class="n">rowIndexes</span> <span class="o">=</span> <span class="kc">None</span><span
+            class="p">,</span> <span class="n">columnIndexes</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">panoramaData</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constuctor - Creates a panoramic view of the data sent</span>
 
@@ -151,11 +152,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__panoramaData</span>
 
-<div class="viewcode-block" id="PanoramaProperty.setValues"><a class="viewcode-back"
-                                                               href="../PanoramaProperty.html#PanoramaProperty.PanoramaProperty.setValues">[docs]</a>    <span
-        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
-        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
-        class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span
+            class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the values into the panoramaProperty object</span>
 
@@ -204,45 +203,47 @@
 
         <span class="c1"># TODO: ORDER PLEASE!</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;dataType&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
-            class="p">()):</span>
+            class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span
+            class="o">.</span><span class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dataType</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span
             class="s1">&#39;dataType&#39;</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;minAzimuth&#39;</span> <span class="ow">in</span> <span
-            class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span
+            class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__minAzimuth</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;minAzimuth&#39;</span><span
             class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;maxAzimuth&#39;</span> <span class="ow">in</span> <span
-            class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span
+            class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__maxAzimuth</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;maxAzimuth&#39;</span><span
             class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;minElevation&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
-            class="p">()):</span>
+            class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span
+            class="o">.</span><span class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__minElevation</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;minElevation&#39;</span><span
             class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;maxElevation&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
-            class="p">()):</span>
+            class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span
+            class="o">.</span><span class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__maxElevation</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;maxElevation&#39;</span><span
             class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;azimuthSpacing&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
-            class="p">()):</span>
+            class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span
+            class="o">.</span><span class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthSpacing</span> <span class="o">=</span> <span
             class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;azimuthSpacing&#39;</span><span
             class="p">]</span>
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;elevationSpacing&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
-            class="p">()):</span>
+            class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span
+            class="o">.</span><span class="n">keys</span><span class="p">())):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__elevationSpacing</span> <span
             class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;elevationSpacing&#39;</span><span
-            class="p">]</span></div></div>
+            class="p">]</span></div>
 </pre>
                 </div>
 
