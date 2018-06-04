@@ -53,20 +53,25 @@
                 <div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
                         class="nn">np</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
 <div class="viewcode-block" id="TransformationMatrixProperty"><a class="viewcode-back"
                                                                  href="../TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty">[docs]</a><span
-        class="k">class</span> <span class="nc">TransformationMatrixProperty</span><span class="p">:</span>
+        class="k">class</span> <span class="nc">TransformationMatrixProperty</span><span class="p">(</span><span
+        class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class represents a 4x4 3D transformation matrix</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">e00</span><span class="p">,</span> <span class="n">e01</span><span
-            class="p">,</span> <span class="n">e02</span><span class="p">,</span> <span class="n">e10</span><span
-            class="p">,</span> <span class="n">e11</span><span class="p">,</span> <span class="n">e12</span><span
-            class="p">,</span> <span class="n">e20</span><span class="p">,</span> <span class="n">e21</span><span
-            class="p">,</span> <span class="n">e22</span><span class="p">):</span>
-        
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">e00</span><span
+            class="p">,</span> <span class="n">e01</span><span class="p">,</span> <span class="n">e02</span><span
+            class="p">,</span> <span class="n">e10</span><span class="p">,</span> <span class="n">e11</span><span
+            class="p">,</span> <span class="n">e12</span><span class="p">,</span> <span class="n">e20</span><span
+            class="p">,</span> <span class="n">e21</span><span class="p">,</span> <span class="n">e22</span><span
+            class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TransformationMatrixProperty</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
         <span class="n">transformMatrix</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span
             class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span

@@ -6,14 +6,14 @@ Normals Property Documentation
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+    	.. rubric:: Attributes
 
-		.. autoautosummary:: NormalsProperty.NormalsProperty
+	.. autoautosummary:: NormalsProperty.NormalsProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: NormalsProperty.NormalsProperty
+    	.. rubric:: Methods
+
+	.. autoautosummary:: NormalsProperty.NormalsProperty
 :methods:
 
 

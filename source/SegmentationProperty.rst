@@ -1,18 +1,17 @@
 Segmentation Property Documentation
 =====================================
 
-
 .. autoclass:: SegmentationProperty.SegmentationProperty
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+        .. rubric:: Attributes
 
-		.. autoautosummary:: SegmentationProperty.SegmentationProperty
+    .. autoautosummary:: SegmentationProperty.SegmentationProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: SegmentationProperty.SegmentationProperty
+        .. rubric:: Methods
+
+    .. autoautosummary:: SegmentationProperty.SegmentationProperty
 :methods:
 

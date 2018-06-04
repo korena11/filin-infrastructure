@@ -1,19 +1,19 @@
 Color Property Documentation
-=====================================
+==============================
 
 
 .. autoclass:: ColorProperty.ColorProperty
-	:members:
-    :undoc-members:
+:members:
+	   :undoc-members:
 
-        	.. rubric:: Attributes
+	  	.. rubric:: Attributes
 
-		.. autoautosummary:: ColorProperty.ColorProperty
+	.. autoautosummary:: ColorProperty.ColorProperty
 :attributes:
-			
+
 		.. rubric:: Methods
 
-		.. autoautosummary:: ColorProperty.ColorProperty
+	.. autoautosummary:: ColorProperty.ColorProperty
 :methods:
 
 

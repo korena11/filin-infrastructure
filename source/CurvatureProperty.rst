@@ -6,14 +6,14 @@ Curvature Property Documentation
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+    	.. rubric:: Attributes
 
-		.. autoautosummary:: CurvatureProperty.CurvatureProperty
+	.. autoautosummary:: CurvatureProperty.CurvatureProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: CurvatureProperty.CurvatureProperty
+    	.. rubric:: Methods
+
+	.. autoautosummary:: CurvatureProperty.CurvatureProperty
 :methods:
 
 

@@ -75,7 +75,174 @@
                         <dd><p>Holds a subset of a PointSet</p>
                             <p>Provides the same interface as PointSet</p>
                             <blockquote>
-                                <div></div>
+                                <div><p class="rubric">Attributes</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span class="pre">FieldsDimension</span></code>
+                                            </td>
+                                            <td>Return number of columns (channels)</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.GetIndices"
+                                                   title="PointSubSet.PointSubSet.GetIndices"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">GetIndices</span></code></a></td>
+                                            <td>Return points&#8217; indices</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Intensity"
+                                                   title="PointSubSet.PointSubSet.Intensity"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">Intensity</span></code></a></td>
+                                            <td>Return nX1 ndarray of intensity values</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.RGB"
+                                                   title="PointSubSet.PointSubSet.RGB"><code
+                                                    class="xref py py-obj docutils literal"><span class="pre">RGB</span></code></a>
+                                            </td>
+                                            <td>Return nX3 ndarray of rgb values</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Size"
+                                                   title="PointSubSet.PointSubSet.Size"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">Size</span></code></a></td>
+                                            <td>Return number of points</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.X"
+                                                   title="PointSubSet.PointSubSet.X"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">X</span></code></a></td>
+                                            <td>Return nX1 ndarray of X coordinate</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Y"
+                                                   title="PointSubSet.PointSubSet.Y"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">Y</span></code></a></td>
+                                            <td>Return nX1 ndarray of Y coordinate</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Z"
+                                                   title="PointSubSet.PointSubSet.Z"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">Z</span></code></a></td>
+                                            <td>Return nX1 ndarray of Z coordinate</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">data</span></code></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">path</span></code></td>
+                                            <td>Path to datafile, if exists</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="rubric">Methods</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])
+                                            </td>
+                                            <td>Add data to a field</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">GetPoint</span></code>(index)
+                                            </td>
+                                            <td>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">param index:</th>
+                                                        <td class="field-body">the index of the point to return</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.ToNumpy"
+                                                   title="PointSubSet.PointSubSet.ToNumpy"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">ToNumpy</span></code></a>()
+                                            </td>
+                                            <td>Return the points as numpy nX3 ndarray (incase we change the type of
+                                                __xyz in the future)
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">ToPandas</span></code>()
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.ToPolyData"
+                                                   title="PointSubSet.PointSubSet.ToPolyData"><code
+                                                    class="xref py py-obj docutils literal"><span
+                                                    class="pre">ToPolyData</span></code></a>()
+                                            </td>
+                                            <td>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span class="pre">UpdateFields</span></code>(**kwargs)
+                                            </td>
+                                            <td>Update a field within the PointSet</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">save</span></code>(path_or_buf,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Save the PointSet in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">setPath</span></code>(path)
+                                            </td>
+                                            <td>Sets path to dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal"><span class="pre">setValues</span></code>(**kwargs)
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal"><span
+                                                    class="pre">setdata</span></code>(data)
+                                            </td>
+                                            <td>Sets the data to the dataset</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </blockquote>
                             <dl class="attribute">
                                 <dt id="PointSubSet.PointSubSet.GetIndices">

@@ -1,19 +1,18 @@
 PointSet class
 ================
 
-
 .. autoclass:: PointSet.PointSet
 :members:
        :undoc-members:
 
-            .. rubric:: Attributes
+        .. rubric:: Attributes
 
-		.. autoautosummary:: PointSet.PointSet
+    .. autoautosummary:: PointSet.PointSet
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: PointSet.PointSet
+        .. rubric:: Methods
+
+    .. autoautosummary:: PointSet.PointSet
 :methods:
 			
 	
@@ -23,8 +22,6 @@ PointSubSet
 When a subset of the PointSet is required, a subclass is set use 
 	
 .. toctree::
-	:maxdepth: 3
-	
-	PointSubSet
-	
-	
+:maxdepth: 3
+
+        PointSubSet

@@ -1,8 +1,8 @@
-from mayavi import mlab
-import matplotlib.pyplot as plt
-from mayavi import mlab
-from mayavi.core import lut_manager
-from mayavi.mlab import quiver3d
+# from mayavi import mlab
+# import matplotlib.pyplot as plt
+# from mayavi import mlab
+# from mayavi.core import lut_manager
+# from mayavi.mlab import quiver3d
 from numpy import tile, asarray, expand_dims, uint8
 from scipy.ndimage import morphology as morph
 

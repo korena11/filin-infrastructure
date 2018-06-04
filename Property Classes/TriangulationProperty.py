@@ -182,8 +182,8 @@ class TriangulationProperty(BaseProperty):
         '''
         if (triangleIndex < 0 or triangleIndex >= self.__numTriangles):
             return -1
-        
-        trianglePoints = self._BaseProperty__points.ToNumpy()[self.__trianglesIndices[triangleIndex]]
+
+        trianglePoints = self.Points.ToNumpy()[self.__trianglesIndices[triangleIndex]]
         rolledTrianglePoints = roll(trianglePoints, -1, axis=0)
         
         # Calculating perpendicular distances of the point from all of the triangle edges

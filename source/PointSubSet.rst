@@ -6,12 +6,12 @@ PointSubSet class
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+       	.. rubric:: Attributes
 
-		.. autoautosummary:: PointSubSet.PointSubSet
+	.. autoautosummary:: PointSubSet.PointSubSet
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: PointSubSet.PointSubSet
+    	.. rubric:: Methods
+
+	.. autoautosummary:: PointSubSet.PointSubSet
 :methods:

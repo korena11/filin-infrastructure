@@ -69,10 +69,12 @@
                         class="n">savetxt</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
 
+<span class="kn">import</span> <span class="nn">ReadFunctions</span>
 <span class="kn">from</span> <span class="nn">BaseData</span> <span class="k">import</span> <span
                         class="n">BaseData</span>
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
+<span class="kn">from</span> <span class="nn">IO_Tools</span> <span class="k">import</span> <span class="n">CreateFilename</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
@@ -84,9 +86,6 @@
 <span class="kn">from</span> <span class="nn">shapefile</span> <span class="k">import</span> <span
                         class="n">Writer</span><span class="p">,</span> <span class="n">Reader</span><span
                         class="p">,</span> <span class="n">POINTZ</span>
-<span class="kn">from</span> <span class="nn">IO_Tools</span> <span class="k">import</span> <span class="n">CreateFilename</span>
-<span class="kn">import</span> <span class="nn">ReadFunctions</span>
-
 
 
 <div class="viewcode-block" id="IOFactory"><a class="viewcode-back"
@@ -958,8 +957,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">pointSetList</span><span class="p">[</span><span
             class="mi">0</span><span class="p">]</span>
-
-
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__splitPtsString</span><span class="p">(</span><span

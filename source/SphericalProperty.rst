@@ -4,16 +4,16 @@ Spherical Property Documentation
 
 .. autoclass:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :members:
-       :undoc-members:
+	   :undoc-members:
 
-        	.. rubric:: Attributes
+	    .. rubric:: Attributes
 
-		.. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
+    .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
+	    .. rubric:: Methods
+
+    .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
 :methods:
 
 

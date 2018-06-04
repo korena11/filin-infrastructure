@@ -6,7 +6,7 @@ Rotation Property Documentation
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+          	.. rubric:: Attributes
 
 		.. autoautosummary:: RotationMatrixProperty.RotationMatrixProperty
 :attributes:

@@ -4,16 +4,16 @@ Transformation Matrix Property Documentation
 
 .. autoclass:: TransformationMatrixProperty.TransformationMatrixProperty
 :members:
-       :undoc-members:
+	   :undoc-members:
 
-        	.. rubric:: Attributes
+	    .. rubric:: Attributes
 
-		.. autoautosummary:: TransformationMatrixProperty.TransformationMatrixProperty
+    .. autoautosummary:: TransformationMatrixProperty.TransformationMatrixProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: TransformationMatrixProperty.TransformationMatrixProperty
+	    .. rubric:: Methods
+
+    .. autoautosummary:: TransformationMatrixProperty.TransformationMatrixProperty
 :methods:
 
 

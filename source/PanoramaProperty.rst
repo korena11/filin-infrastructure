@@ -3,17 +3,17 @@ Panorama Property Documentation
 
 
 .. autoclass:: PanoramaProperty.PanoramaProperty
-	:members:
-    :undoc-members:
+:members:
+       :undoc-members:
 
-        	.. rubric:: Attributes
+       	.. rubric:: Attributes
 
-		.. autoautosummary:: PanoramaProperty.PanoramaProperty
+	.. autoautosummary:: PanoramaProperty.PanoramaProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: PanoramaProperty.PanoramaProperty
+    	.. rubric:: Methods
+
+	.. autoautosummary:: PanoramaProperty.PanoramaProperty
 :methods:
 
 

@@ -1,17 +1,16 @@
 RasterData class
 ==================
 
-
 .. autoclass:: RasterData.RasterData
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+        .. rubric:: Attributes
 
-		.. autoautosummary:: RasterData.RasterData
+    .. autoautosummary:: RasterData.RasterData
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: RasterData.RasterData
+        .. rubric:: Methods
+
+    .. autoautosummary:: RasterData.RasterData
 :methods:

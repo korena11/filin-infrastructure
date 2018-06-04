@@ -1,17 +1,17 @@
 Triangulation Property Documentation
 =====================================
 
-
 .. autoclass:: TriangulationProperty.TriangulationProperty
 :members:
        :undoc-members:
 
-        	.. rubric:: Attributes
+        .. rubric:: Attributes
 
-		.. autoautosummary:: TriangulationProperty.TriangulationProperty
+    .. autoautosummary:: TriangulationProperty.TriangulationProperty
 :attributes:
-			
-		.. rubric:: Methods
 
-		.. autoautosummary:: TriangulationProperty.TriangulationProperty
+        .. rubric:: Methods
+
+    .. autoautosummary:: TriangulationProperty.TriangulationProperty
 :methods:
+

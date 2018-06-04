@@ -1,5 +1,6 @@
 from BaseProperty import BaseProperty
 
+
 class ColorProperty(BaseProperty):
     __rgb = None
 
