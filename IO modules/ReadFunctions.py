@@ -8,6 +8,7 @@ import numpy as np
 
 from ColorFactory import ColorFactory
 from PointSet import PointSet
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 def ReadPts(filename, *args, **kwargs):
@@ -121,7 +122,7 @@ def ReadPts(filename, *args, **kwargs):
         return pointsetlist, colorslist
 
 
-def ReadPtx(filename, pointsetlist = None):
+def ReadPtx(filename, **kwargs):
     """
     Reads .ptx file, created by Leica Cyclone
 
@@ -129,10 +130,17 @@ def ReadPtx(filename, pointsetlist = None):
     https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2
 
     :param filename: path to file + file
+
+    *Optionals*
+
     :param pointsetlist: list that holds all the uploaded PointSet
+    :param colorlist: list that holds all the color properties that relate to the PointSet
+    :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet
 
     :type filename: str
     :type pointsetlist: list
+    :type colorlist: list of ColorProperty
+    :type trasnformationMatrices: list of TransformationMatrixProperty
 
     :return: pointSet list
 
@@ -140,8 +148,11 @@ def ReadPtx(filename, pointsetlist = None):
 
     .. warning:: Doesn't read the transformation matrices.
     """
+    pointsetlist = kwargs.get('pointsetlist', [])
+    colorslist = kwargs.get('colorlist', [])
+    translist = kwargs.get('transformationMatrices', [])
 
-    # Opening file and reading all lines from it
+    # Open file and read lines from it
     with open(filename) as fin:
         lines = fin.readlines()
 
@@ -154,8 +165,28 @@ def ReadPtx(filename, pointsetlist = None):
         batch_size = num_cols * num_rows
 
         while batch_size > 0:
-            transformationMatrix = np.array(float(lines[batch_start + 6: batch_start + 10]))
-            print('hello')
+            transformationMatrix = np.array(
+                [__splitPtsString(line) for line in lines[batch_start + 6:batch_start + 10]])
+            pt_batch = np.array([__splitPtsString(line) for line
+                                 in lines[batch_start + 10: batch_size + batch_start]])
+
+            pointsetlist.append(PointSet(pt_batch))
+            translist.append(TransformationMatrixProperty(pointsetlist[-1], ))
+            dimension = pt_batch.shape[1]
+            if dimension == 7:
+                # the data includes RGB
+                colors_batch = pt_batch[:, 4:]
+                try:
+                    colorslist.append(ColorFactory.assignColor(pointsetlist[-1], colors_batch))
+                except TypeError:
+                    print("No colors list has been assigned.")
+            if dimension >= 4:
+                # the data includes intensity
+                intensity_batch = pt_batch[:, 3]
+                pointsetlist[-1].setValues(intensity = intensity_batch)
+
+
+
 
     # Removing header line
     data = []
@@ -205,5 +236,6 @@ def __splitPtsString(line):
     :rtype: np.array
 
     """
+
     tmp = line.split()
     return np.array(list(map(float, tmp)))
