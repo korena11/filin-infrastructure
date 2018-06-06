@@ -72,9 +72,9 @@ class TransformationMatrixProperty(BaseProperty):
         """
         return self.__transformMatrix[:3, :dimensions]
 
-    def EulerAngles_from_R(self, dtype = 'degrees'):
+    def eulerAngles_from_R(self, dtype = 'degrees'):
         """
-        Extracts rotation angles from the rotation matrix
+        Extracts euler rotation angles from the rotation matrix
 
         .. warning:: The angles returned are subjected to ambiguity
 
@@ -89,12 +89,7 @@ class TransformationMatrixProperty(BaseProperty):
         """
 
         warn('The angles may contain ambiguity')
-        if self.__rotationType == 'euler':
-            R = self.__rotation_matrix
-        else:
-            pass
-            # TODO: add the quaternion or other rotation options
-
+        R = self.__transformMatrix[:3, :3]
         phi = np.arcsin(R[0, 2])
 
         if phi >= np.pi:

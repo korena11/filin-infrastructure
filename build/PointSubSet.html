@@ -26,9 +26,6 @@
     <script type="text/javascript"
             src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="infragit 1a documentation" href="index.html"/>
-    <link rel="up" title="PointSet class" href="PointSet.html"/>
-    <link rel="next" title="RasterData class" href="RasterData.html"/>
-    <link rel="prev" title="PointSet class" href="PointSet.html"/>
 </head>
 <body role="document">
 <div class="related" role="navigation" aria-label="related navigation">
@@ -41,16 +38,7 @@
             <a href="py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="right">
-            <a href="RasterData.html" title="RasterData class"
-               accesskey="N">next</a> |
-        </li>
-        <li class="right">
-            <a href="PointSet.html" title="PointSet class"
-               accesskey="P">previous</a> |
-        </li>
         <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="PointSet.html" accesskey="U">PointSet class</a> &#187;</li>
     </ul>
 </div>
 
@@ -74,291 +62,56 @@
                         </dt>
                         <dd><p>Holds a subset of a PointSet</p>
                             <p>Provides the same interface as PointSet</p>
-                            <blockquote>
-                                <div><p class="rubric">Attributes</p>
-                                    <table border="1" class="longtable docutils">
-                                        <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
-                                        </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal"><span class="pre">FieldsDimension</span></code>
-                                            </td>
-                                            <td>Return number of columns (channels)</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.GetIndices"
-                                                   title="PointSubSet.PointSubSet.GetIndices"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">GetIndices</span></code></a></td>
-                                            <td>Return points&#8217; indices</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Intensity"
-                                                   title="PointSubSet.PointSubSet.Intensity"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Intensity</span></code></a></td>
-                                            <td>Return nX1 ndarray of intensity values</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.RGB"
-                                                   title="PointSubSet.PointSubSet.RGB"><code
-                                                    class="xref py py-obj docutils literal"><span class="pre">RGB</span></code></a>
-                                            </td>
-                                            <td>Return nX3 ndarray of rgb values</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Size"
-                                                   title="PointSubSet.PointSubSet.Size"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Size</span></code></a></td>
-                                            <td>Return number of points</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.X"
-                                                   title="PointSubSet.PointSubSet.X"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">X</span></code></a></td>
-                                            <td>Return nX1 ndarray of X coordinate</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Y"
-                                                   title="PointSubSet.PointSubSet.Y"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Y</span></code></a></td>
-                                            <td>Return nX1 ndarray of Y coordinate</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Z"
-                                                   title="PointSubSet.PointSubSet.Z"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">Z</span></code></a></td>
-                                            <td>Return nX1 ndarray of Z coordinate</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">data</span></code></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">path</span></code></td>
-                                            <td>Path to datafile, if exists</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <p class="rubric">Methods</p>
-                                    <table border="1" class="longtable docutils">
-                                        <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
-                                        </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])
-                                            </td>
-                                            <td>Add data to a field</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">GetPoint</span></code>(index)
-                                            </td>
-                                            <td>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">param index:</th>
-                                                        <td class="field-body">the index of the point to return</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.ToNumpy"
-                                                   title="PointSubSet.PointSubSet.ToNumpy"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">ToNumpy</span></code></a>()
-                                            </td>
-                                            <td>Return the points as numpy nX3 ndarray (incase we change the type of
-                                                __xyz in the future)
-                                            </td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">ToPandas</span></code>()
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.ToPolyData"
-                                                   title="PointSubSet.PointSubSet.ToPolyData"><code
-                                                    class="xref py py-obj docutils literal"><span
-                                                    class="pre">ToPolyData</span></code></a>()
-                                            </td>
-                                            <td>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">Returns:</th>
-                                                        <td class="field-body"></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span class="pre">UpdateFields</span></code>(**kwargs)
-                                            </td>
-                                            <td>Update a field within the PointSet</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">save</span></code>(path_or_buf,&nbsp;**kwargs)
-                                            </td>
-                                            <td>Save the PointSet in either json or hdf5.</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">setPath</span></code>(path)
-                                            </td>
-                                            <td>Sets path to dataset</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal"><span class="pre">setValues</span></code>(**kwargs)
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal"><span
-                                                    class="pre">setdata</span></code>(data)
-                                            </td>
-                                            <td>Sets the data to the dataset</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </blockquote>
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.GetIndices">
-                                    <code class="descname">GetIndices</code><a class="headerlink"
-                                                                               href="#PointSubSet.PointSubSet.GetIndices"
-                                                                               title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Return points&#8217; indices</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.Intensity">
-                                    <code class="descname">Intensity</code><a class="headerlink"
-                                                                              href="#PointSubSet.PointSubSet.Intensity"
-                                                                              title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Return nX1 ndarray of intensity values</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.RGB">
-                                    <code class="descname">RGB</code><a class="headerlink"
-                                                                        href="#PointSubSet.PointSubSet.RGB"
-                                                                        title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Return nX3 ndarray of rgb values</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.Size">
-                                    <code class="descname">Size</code><a class="headerlink"
-                                                                         href="#PointSubSet.PointSubSet.Size"
-                                                                         title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Return number of points</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="method">
-                                <dt id="PointSubSet.PointSubSet.ToNumpy">
-                                    <code class="descname">ToNumpy</code><span class="sig-paren">(</span><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="_modules/PointSubSet.html#PointSubSet.ToNumpy"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#PointSubSet.PointSubSet.ToNumpy"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the
-                                    future)</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Return:</th>
-                                            <td class="field-body"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="method">
-                                <dt id="PointSubSet.PointSubSet.ToPolyData">
-                                    <code class="descname">ToPolyData</code><span class="sig-paren">(</span><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="_modules/PointSubSet.html#PointSubSet.ToPolyData"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#PointSubSet.PointSubSet.ToPolyData"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body">tvtk.PolyData of the current PointSet</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.X">
-                                    <code class="descname">X</code><a class="headerlink"
-                                                                      href="#PointSubSet.PointSubSet.X"
-                                                                      title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Return nX1 ndarray of X coordinate</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.Y">
-                                    <code class="descname">Y</code><a class="headerlink"
-                                                                      href="#PointSubSet.PointSubSet.Y"
-                                                                      title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Return nX1 ndarray of Y coordinate</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="attribute">
-                                <dt id="PointSubSet.PointSubSet.Z">
-                                    <code class="descname">Z</code><a class="headerlink"
-                                                                      href="#PointSubSet.PointSubSet.Z"
-                                                                      title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Return nX1 ndarray of Z coordinate</p>
-                                </dd>
-                            </dl>
-
                         </dd>
                     </dl>
 
+                    <table class="docutils field-list" frame="void" rules="none">
+                        <col class="field-name"/>
+                        <col class="field-body"/>
+                        <tbody valign="top">
+                        <tr class="field-odd field">
+                            <th class="field-name">members:</th>
+                            <td class="field-body">
+                                <table class="first docutils field-list" frame="void" rules="none">
+                                    <col class="field-name"/>
+                                    <col class="field-body"/>
+                                    <tbody valign="top">
+                                    <tr class="field-odd field">
+                                        <th class="field-name">undoc-members:</th>
+                                        <td class="field-body"><p class="first rubric">Attributes</p>
+                                            <table border="1" class="longtable docutils">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="90%"/>
+                                                </colgroup>
+                                                <tbody valign="top">
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="field-even field">
+                            <th class="field-name">attributes:</th>
+                            <td class="field-body"><p class="first rubric">Methods</p>
+                                <table border="1" class="longtable docutils">
+                                    <colgroup>
+                                        <col width="10%"/>
+                                        <col width="90%"/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr class="field-odd field">
+                            <th class="field-name">methods:</th>
+                            <td class="field-body"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
 
@@ -367,12 +120,6 @@
     </div>
     <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="PointSet.html"
-                                  title="previous chapter">PointSet class</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="RasterData.html"
-                                  title="next chapter">RasterData class</a></p>
             <div role="note" aria-label="source link">
                 <h3>This Page</h3>
                 <ul class="this-page-menu">
@@ -404,16 +151,7 @@
             <a href="py-modindex.html" title="Python Module Index"
             >modules</a> |
         </li>
-        <li class="right">
-            <a href="RasterData.html" title="RasterData class"
-            >next</a> |
-        </li>
-        <li class="right">
-            <a href="PointSet.html" title="PointSet class"
-            >previous</a> |
-        </li>
         <li class="nav-item nav-item-0"><a href="index.html">infragit 1a documentation</a> &#187;</li>
-        <li class="nav-item nav-item-1"><a href="PointSet.html">PointSet class</a> &#187;</li>
     </ul>
 </div>
 <div class="footer" role="contentinfo">

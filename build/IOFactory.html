@@ -624,6 +624,141 @@
                         </dd>
                     </dl>
 
+                    <span class="target" id="module-ReadFunctions"></span>
+                    <p>Functions for reading files</p>
+                    <dl class="function">
+                        <dt id="ReadFunctions.ReadPts">
+                            <code class="descclassname">ReadFunctions.</code><code class="descname">ReadPts</code><span
+                                class="sig-paren">(</span><em>filename</em>, <em>*args</em>, <em>**kwargs</em><span
+                                class="sig-paren">)</span><a class="reference internal"
+                                                             href="_modules/ReadFunctions.html#ReadPts"><span
+                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                            href="#ReadFunctions.ReadPts"
+                                                                            title="Permalink to this definition">¶</a>
+                        </dt>
+                        <dd><p>Reading points from .pts file. If the pts file holds more than one PointSet merge into
+                            one PointSet (unless told
+                            otherwise).</p>
+                            <table class="docutils field-list" frame="void" rules="none">
+                                <col class="field-name"/>
+                                <col class="field-body"/>
+                                <tbody valign="top">
+                                <tr class="field-odd field">
+                                    <th class="field-name">Parameters:</th>
+                                    <td class="field-body">
+                                        <ul class="first last simple">
+                                            <li><strong>fileName</strong> &#8211; name of .pts file</li>
+                                            <li><strong>pointsetlist</strong> &#8211; placeholder for created PointSet
+                                                objects
+                                            </li>
+                                            <li><strong>colorslist</strong> &#8211; placeholder for ColorProperty for
+                                                PointSet object(s)
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p><strong>Optionals</strong></p>
+                            <table class="docutils field-list" frame="void" rules="none">
+                                <col class="field-name"/>
+                                <col class="field-body"/>
+                                <tbody valign="top">
+                                <tr class="field-odd field">
+                                    <th class="field-name">Parameters:</th>
+                                    <td class="field-body"><strong>merge</strong> (<a class="reference external"
+                                                                                      href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                      title="(in Python v3.6)"><em>bool</em></a>)
+                                        &#8211; merge points in file into one PointSet or not. Default: True.
+                                    </td>
+                                </tr>
+                                <tr class="field-even field">
+                                    <th class="field-name">Returns:</th>
+                                    <td class="field-body">The created PointSet or the list of the PointSets created and
+                                        the ColorProperty that belongs to it
+                                    </td>
+                                </tr>
+                                <tr class="field-odd field">
+                                    <th class="field-name">Return type:</th>
+                                    <td class="field-body"><a class="reference external"
+                                                              href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                              title="(in Python v3.6)">tuple</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </dd>
+                    </dl>
+
+                    <dl class="function">
+                        <dt id="ReadFunctions.ReadPtx">
+                            <code class="descclassname">ReadFunctions.</code><code class="descname">ReadPtx</code><span
+                                class="sig-paren">(</span><em>filename</em>, <em>**kwargs</em><span
+                                class="sig-paren">)</span><a class="reference internal"
+                                                             href="_modules/ReadFunctions.html#ReadPtx"><span
+                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                            href="#ReadFunctions.ReadPtx"
+                                                                            title="Permalink to this definition">¶</a>
+                        </dt>
+                        <dd><p>Reads .ptx file, created by Leica Cyclone</p>
+                            <p>File is build according to:
+                                <a class="reference external"
+                                   href="https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2">https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2</a>
+                            </p>
+                            <table class="docutils field-list" frame="void" rules="none">
+                                <col class="field-name"/>
+                                <col class="field-body"/>
+                                <tbody valign="top">
+                                <tr class="field-odd field">
+                                    <th class="field-name">Parameters:</th>
+                                    <td class="field-body"><strong>filename</strong> &#8211; path to file + file</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p><em>Optionals</em></p>
+                            <table class="docutils field-list" frame="void" rules="none">
+                                <col class="field-name"/>
+                                <col class="field-body"/>
+                                <tbody valign="top">
+                                <tr class="field-odd field">
+                                    <th class="field-name">Parameters:</th>
+                                    <td class="field-body">
+                                        <ul class="first simple">
+                                            <li><strong>pointsetlist</strong> (<a class="reference external"
+                                                                                  href="https://docs.python.org/3/library/stdtypes.html#list"
+                                                                                  title="(in Python v3.6)"><em>list</em></a>)
+                                                &#8211; list that holds all the uploaded PointSet
+                                            </li>
+                                            <li><strong>colorlist</strong> (<em>list of ColorProperty</em>) &#8211; list
+                                                that holds all the color properties that relate to the PointSet
+                                            </li>
+                                            <li><strong>transformationMatrices</strong> &#8211; list that holds all the
+                                                transformation properties that relate to the PointSet
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr class="field-even field">
+                                    <th class="field-name">Returns:</th>
+                                    <td class="field-body"><p class="first">pointSet list</p>
+                                    </td>
+                                </tr>
+                                <tr class="field-odd field">
+                                    <th class="field-name">Return type:</th>
+                                    <td class="field-body"><p class="first last"><a class="reference external"
+                                                                                    href="https://docs.python.org/3/library/stdtypes.html#list"
+                                                                                    title="(in Python v3.6)">list</a>
+                                    </p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="admonition warning">
+                                <p class="first admonition-title">Warning</p>
+                                <p class="last">Doesn&#8217;t read the transformation matrices.</p>
+                            </div>
+                        </dd>
+                    </dl>
+
                 </div>
 
 
