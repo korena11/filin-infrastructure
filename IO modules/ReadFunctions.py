@@ -8,6 +8,7 @@ import numpy as np
 
 from ColorFactory import ColorFactory
 from PointSet import PointSet
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 def ReadPts(filename, *args, **kwargs):
@@ -30,9 +31,9 @@ def ReadPts(filename, *args, **kwargs):
     :type colorslist: list
     :type merge: bool
 
-    :return: The created PointSet or the list of the PointSets created and the ColorProperty that belongs to it
+    :return: The created PointSet or the list of the PointSets
 
-    :rtype: tuple
+    :rtype: PointSet or list
 
     """
     colorProp = None
@@ -103,7 +104,7 @@ def ReadPts(filename, *args, **kwargs):
                     print("No pointset list has been assigned.")
 
     if merge:
-        points = PointSet(np.array(pts)[0], path = filename)
+        points = PointSet(np.concatenate(np.array(pts)), path = filename)
 
         if len(intensity) == len(pts):
             points.AddData2Fields(np.array(intensity)[0], field = 'intensity')
@@ -115,13 +116,13 @@ def ReadPts(filename, *args, **kwargs):
         else:
             warnings.warn('Some points don''t have color values. No color property created')
 
-        return points, colorProp
+        return points
 
     else:
-        return pointsetlist, colorslist
+        return pointsetlist
 
 
-def ReadPtx(filename, pointsetlist = None):
+def ReadPtx(filename, **kwargs):
     """
     Reads .ptx file, created by Leica Cyclone
 
@@ -129,19 +130,33 @@ def ReadPtx(filename, pointsetlist = None):
     https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2
 
     :param filename: path to file + file
+
+    *Optionals*
+
     :param pointsetlist: list that holds all the uploaded PointSet
+    :param colorlist: list that holds all the color properties that relate to the PointSet
+    :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet
+    :param removeEmpty: flag to remove or leave empty points. Default: True
 
     :type filename: str
     :type pointsetlist: list
+    :type colorlist: list of ColorProperty
+    :type trasnformationMatrices: list of TransformationMatrixProperty
+    :type removeEmpty: bool
 
     :return: pointSet list
 
     :rtype: list
 
     .. warning:: Doesn't read the transformation matrices.
-    """
 
-    # Opening file and reading all lines from it
+    """
+    pointsetlist = kwargs.get('pointsetlist', [])
+    colorslist = kwargs.get('colorlist', [])
+    translist = kwargs.get('transformationMatrices', [])
+    remove_empty = kwargs.get('removeEmpty', True)
+
+    # Open file and read lines from it
     with open(filename) as fin:
         lines = fin.readlines()
 
@@ -154,45 +169,42 @@ def ReadPtx(filename, pointsetlist = None):
         batch_size = num_cols * num_rows
 
         while batch_size > 0:
-            transformationMatrix = np.array(float(lines[batch_start + 6: batch_start + 10]))
-            print('hello')
+            # read transformation matrix lines of the current point cloud
+            transformationMatrix = np.array(
+                [__splitPtsString(line) for line in lines[batch_start + 6:batch_start + 10]])
+            # read current point cloud
+            pt_batch = np.array([__splitPtsString(line) for line
+                                 in lines[batch_start + 10: batch_size + batch_start]])
 
-    # Removing header line
-    data = []
-    #         currentLines = lines[10::]
-    # Converting lines to 3D Cartesian coordinates Data
-    linesLen = [len(x) for x in lines]
-    line2del = (np.where(np.asarray(linesLen) < 5)[0])
+            # if remove_empty is True - delete all empty points from cloud:
+            if remove_empty:
+                empty_indices = np.nonzero(pt_batch[:, :3] == np.array([0, 0, 0]))
+                pt_batch = np.delete(pt_batch, np.unique(empty_indices), axis = 0)
 
-    if len(line2del) > 1 and line2del[0] - line2del[1] == -1:
-        line2del = line2del[-2::-2]  # there two lines one after another with length 1, we need the first one
-    for i2del in line2del:
-        del lines[i2del:i2del + 10]
-    data = list(map(__splitPtsString, lines))
-    line2del = np.where(np.asarray(data)[:, 0:4] == [0, 0, 0, 0.5])[0]
-    data = np.delete(data, line2del, 0)
+            pointsetlist.append(PointSet(pt_batch, path = filename, intensity = pt_batch[:, 3]))
+            translist.append(TransformationMatrixProperty(pointsetlist[-1],
+                                                          transformationMatrix = transformationMatrix))
+            dimension = pt_batch.shape[1]
+            if dimension == 7:
+                # the data includes RGB
+                colors_batch = pt_batch[:, 4:]
+                try:
+                    colorslist.append(ColorFactory.assignColor(pointsetlist[-1], colors_batch))
+                except TypeError:
+                    print("No colors list has been assigned.")
 
-    data = np.array(data)
+            # initialize for next batch.
+            batch_start += batch_size + 10
+            if batch_start < len(lines) - 10:
+                num_cols = int(lines[batch_start])
+                num_rows = int(lines[batch_start + 1])
 
-    xyz = np.asarray(data[:, 0:3])
-    if data.shape[1] == 6:
-        rgb = np.asarray(data[:, 3:6], dtype = np.uint8)
-        pointSet = PointSet(xyz, rgb = rgb)
-    if data.shape[1] == 7:
-        rgb = np.asarray(data[:, 4:7], dtype = np.uint8)
-        intensity = np.asarray(data[:, 3], dtype = np.int)
-        pointSet = PointSet(xyz, rgb = rgb, intensity = intensity)
-    if data.shape[1] == 4 or data.shape[1] == 7:
-        intensity = np.asarray(data[:, 3], dtype = np.int)
-        pointSet = PointSet(xyz, intensity = intensity)
+                # number of points in the first batch
+                batch_size = num_cols * num_rows
+            else:
+                batch_size = 0
 
-    pointSet.setPath(filename)
-    # Create the List of PointSet object
-    pointsetlist.append(pointSet)
-
-    del lines
-
-    return len(pointsetlist)
+    return pointsetlist
 
 def __splitPtsString(line):
     """
@@ -205,5 +217,6 @@ def __splitPtsString(line):
     :rtype: np.array
 
     """
+
     tmp = line.split()
     return np.array(list(map(float, tmp)))

@@ -1,3 +1,5 @@
+from warnings import warn
+
 import numpy as np
 
 from BaseProperty import BaseProperty
@@ -8,11 +10,12 @@ class TransformationMatrixProperty(BaseProperty):
     This class represents a 4x4 3D transformation matrix
     """
     __transformMatrix = np.array(np.zeros((4, 4)))
-    __rotationMatrix = None
-    __translationMatrix = np.array(np.zeros(1, 3))
+
 
     def __init__(self, points, **kwargs):
         super(TransformationMatrixProperty, self).__init__(points)
+        if 'transformationMatrix' in kwargs:
+            self.setValues(kwargs['transformationMatrix'])
 
     def setValues(self, *args, **kwargs):
         """
@@ -31,10 +34,78 @@ class TransformationMatrixProperty(BaseProperty):
 
         """
         if args:
-            self.transformMatrix = args[0]
+            self.__transformMatrix = args[0]
 
+        if 'translationMatrix' in kwargs:
+            shape = kwargs['translationMatrix']
+            self.__transformMatrix[-1, :shape[0]] = kwargs['translationMatrix']
 
+        if 'rotationMatrix' in kwargs:
+            shape = kwargs['rotationMatrix']
+            self.__transformMatrix[:3, :shape[1]] = kwargs['rotationMatrix']
 
+    @property
+    def transformationMatrix(self):
+        return self.__transformMatrix
+
+    @property
+    def translationMatrix(self, dimensions = 3):
+        """
+        Points' translation matrix with respect to reference pointset
+
+        :param dimensions: the dimensions of the returned vector. Either 3 or 4
+
+        :type dimensions: int
+
+        """
+        return self.__transformMatrix[-1, :dimensions]
+
+    @property
+    def rotationMatrix(self, dimensions = 3):
+        """
+        Points' rotation matrix with respect to reference pointset
+
+        :param dimensions: the dimensions of the returned vector. Either 3 or 4
+
+        :type dimensions: int
+
+        """
+        return self.__transformMatrix[:3, :dimensions]
+
+    def eulerAngles_from_R(self, dtype = 'degrees'):
+        """
+        Extracts euler rotation angles from the rotation matrix
+
+        .. warning:: The angles returned are subjected to ambiguity
+
+        :param dtype: the output in 'degrees' or 'radians' (default 'degrees')
+
+        :type dtype: str
+
+        :return:  (omega, phi, kappa) according to the dtype
+
+        :rtype: tuple
+
+        """
+
+        warn('The angles may contain ambiguity')
+        R = self.__transformMatrix[:3, :3]
+        phi = np.arcsin(R[0, 2])
+
+        if phi >= np.pi:
+            n = 1
+            phi = np.pi - phi
+        else:
+            n = 0
+
+        omega = np.arctan(-R[1, 2] / R[2, 2]) + np.pi * n
+        kappa = np.arctan2(-R[0, 1], R[0, 0]) + np.pi * n
+
+        if dtype == 'degrees':
+            return np.degrees(omega), np.degrees(phi), np.degrees(kappa)
+
+        else:
+            return omega, phi, kappa
 
     @staticmethod
     def FromFile():

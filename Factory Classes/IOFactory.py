@@ -7,7 +7,7 @@ from traceback import print_tb
 
 import h5py
 import numpy as np
-from numpy import array, asarray, hstack, tile, ndarray, where, savetxt
+from numpy import array, hstack, tile, ndarray, savetxt
 from osgeo import gdal
 
 import ReadFunctions
@@ -119,7 +119,7 @@ class IOFactory:
         :param fileName: name of .pts file
 
         :param pointsetlist: placeholder for created PointSet objects
-        :param colorslist: placeholder for ColorProperty for PointSet object(s)
+        :param colorlist: placeholder for ColorProperty for PointSet object(s)
 
 
         **Optionals**
@@ -139,76 +139,36 @@ class IOFactory:
 
 
     @classmethod
-    def ReadPtx(cls, fileName, pointSetList):
+    def ReadPtx(cls, filename, **kwargs):
+
         """
-        Reading points from .ptx file
-        Creates one or more PointSet objects, returned through pointSetList 
-        
-        :param fileName: name of .ptx file
-        :param pointSetList: place holder for created PointSet objects
+        Reads .ptx file, created by Leica Cyclone
 
-        :type fileName: str
-        :type pointSetList: list
-            
-        :return: Number of PointSet objects created
-        :rtype: int
- 
+        File is build according to:
+        https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2
+
+        :param filename: path to file + file
+
+        *Optionals*
+
+        :param pointsetlist: list that holds all the uploaded PointSet
+        :param colorlist: list that holds all the color properties that relate to the PointSet
+        :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet
+
+        :type filename: str
+        :type pointsetlist: list
+        :type colorlist: list of ColorProperty
+        :type trasnformationMatrices: list of TransformationMatrixProperty
+
+        :return: pointSet list
+
+        :rtype: list
+
+        .. warning:: Doesn't read the transformation matrices.
+
         """
-        pointSet = None
-        # Opening file and reading all lines from it
-        fin = open(fileName)
-        fileLines = fin.read()
-        fin.close()
+        return ReadFunctions.ReadPtx(filename, **kwargs)
 
-        # Splitting into list of lines 
-        lines = split(fileLines, '\n')
-        del fileLines
-
-        # Removing the last line if it is empty
-        while (True):
-            numLines = len(lines)
-            if lines[numLines - 1] == "":
-                numLines -= 1
-                lines = lines[0: numLines]
-            else:
-                break
-
-        # Removing header line
-        data = []
-        #         currentLines = lines[10::]
-        # Converting lines to 3D Cartesian coordinates Data     
-        linesLen = [len(x) for x in lines]
-        line2del = (where(np.asarray(linesLen) < 5)[0])
-
-        if len(line2del) > 1 and line2del[0] - line2del[1] == -1:
-            line2del = line2del[-2::-2]  # there two lines one after another with length 1, we need the first one
-        for i2del in line2del:
-            del lines[i2del:i2del + 10]
-        data = list(map(cls.__splitPtsString, lines))
-        line2del = where(asarray(data)[:, 0:4] == [0, 0, 0, 0.5])[0]
-        data = np.delete(data, line2del, 0)
-
-        data = array(data)
-
-        xyz = asarray(data[:, 0:3])
-        if data.shape[1] == 6:
-            rgb = np.asarray(data[:, 3:6], dtype = np.uint8)
-            pointSet = PointSet(xyz, rgb = rgb)
-        if data.shape[1] == 7:
-            rgb = np.asarray(data[:, 4:7], dtype = np.uint8)
-            intensity = np.asarray(data[:, 3], dtype = np.int)
-            pointSet = PointSet(xyz, rgb = rgb, intensity = intensity)
-        if data.shape[1] == 4 or data.shape[1] == 7:
-            intensity = np.asarray(data[:, 3], dtype = np.int)
-            pointSet = PointSet(xyz, intensity = intensity)
-
-        pointSet.setPath(fileName)
-        # Create the List of PointSet object            
-        pointSetList.append(pointSet)
-
-        del lines
-
-        return len(pointSetList)
 
     @classmethod
     def ReadXYZ(cls, fileName, pointSetList):
