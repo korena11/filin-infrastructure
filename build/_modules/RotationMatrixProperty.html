@@ -56,12 +56,13 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">TransformationMatrixProperty</span> <span class="k">import</span> <span
+                        class="n">TransformationMatrixProperty</span>
 
 
 <div class="viewcode-block" id="RotationMatrixProperty"><a class="viewcode-back"
                                                            href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty">[docs]</a><span
-        class="k">class</span> <span class="nc">RotationMatrixProperty</span><span class="p">(</span> <span class="n">BaseProperty</span> <span
+        class="k">class</span> <span class="nc">RotationMatrixProperty</span><span class="p">(</span><span class="n">TransformationMatrixProperty</span><span
         class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    .. warning:: Now only implemented for Euler angles.</span>
@@ -76,7 +77,7 @@
             class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
             class="n">rotation_matrix</span><span class="p">,</span> <span class="n">rotation_axis</span> <span
             class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">RotationMatrixProperty</span><span
+        <span class="nb">super</span><span class="p">(</span><span class="n">TransformationMatrixProperty</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
@@ -84,11 +85,9 @@
             class="p">(</span><span class="n">rotation_matrix</span><span class="p">,</span> <span class="n">rotation_axis</span><span
             class="p">)</span>
 
-<div class="viewcode-block" id="RotationMatrixProperty.setValues"><a class="viewcode-back"
-                                                                     href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty.setValues">[docs]</a>    <span
-        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
-        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
-        class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span
+            class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sets the rotation matrix for the RotationMatrixProperty object</span>
 
@@ -124,7 +123,7 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No rotation type was set for the matrix, but the matrix has&#39;</span>
-                     <span class="s1">&#39;axis of rotation Default is Euler Rotation Matrix&#39;</span><span class="p">)</span></div>
+                     <span class="s1">&#39;axis of rotation Default is Euler Rotation Matrix&#39;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">RotationMatrix</span><span class="p">(</span> <span
@@ -136,11 +135,9 @@
             class="n">__rotationType</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotation_matrix</span>
 
-<div class="viewcode-block" id="RotationMatrixProperty.EulerAngles_from_R"><a class="viewcode-back"
-                                                                              href="../RotationProperty.html#RotationMatrixProperty.RotationMatrixProperty.EulerAngles_from_R">[docs]</a>    <span
-        class="k">def</span> <span class="nf">EulerAngles_from_R</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span
-        class="s1">&#39;degrees&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">EulerAngles_from_R</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span
+            class="s1">&#39;degrees&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extracts rotation angles from the rotation matrix</span>
 
@@ -204,7 +201,7 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">omega</span><span class="p">,</span> <span
-            class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div></div>
+            class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div>
 </pre>
                 </div>
 

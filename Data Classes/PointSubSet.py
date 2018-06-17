@@ -1,6 +1,8 @@
-from tvtk.api import tvtk
+# from tvtk.api import tvtk
 from numpy import arange, array
+
 from PointSet import PointSet
+
 
 class PointSubSet(PointSet):
     """

@@ -1,7 +1,7 @@
 import numpy as np
 
 from PointSet import PointSet
-from RotationMatrixProperty import RotationMatrixProperty
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 class RotationMatrixFactory(object):
@@ -35,7 +35,7 @@ class RotationMatrixFactory(object):
                       [h * v[0] * v[1] + v[2], c + h * v[1] ** 2, h * v[1] * v[2] - v[0]],
                       [h * v[0] * v[2] - v[1], h * v[1] * v[2] + v[0], c + h * v[2] ** 2]])
 
-        return RotationMatrixProperty(points, R)
+        return TransformationMatrixProperty(points, rotationMatrix = R)
 
     @staticmethod
     def Rotation_EulerAngles(points, angles):

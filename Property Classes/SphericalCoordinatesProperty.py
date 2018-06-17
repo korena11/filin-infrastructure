@@ -1,7 +1,9 @@
 from numpy import zeros, arange, array
-from tvtk.api import tvtk
 
 from BaseProperty import BaseProperty
+
+
+# from tvtk.api import tvtk
 
 
 class SphericalCoordinatesProperty(BaseProperty):

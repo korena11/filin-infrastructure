@@ -4,14 +4,14 @@ Eigen Property Documentation
 
 .. autoclass:: EigenProperty.EigenProperty
 :members:
-	   :undoc-members:
+        :undoc-members:
 
-	    .. rubric:: Attributes
+        .. rubric:: Attributes
 
     .. autoautosummary:: EigenProperty.EigenProperty
 :attributes:
 
-	    .. rubric:: Methods
+        .. rubric:: Methods
 
     .. autoautosummary:: EigenProperty.EigenProperty
 :methods:

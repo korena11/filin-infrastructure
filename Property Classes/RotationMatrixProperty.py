@@ -2,10 +2,10 @@ from warnings import warn
 
 import numpy as np
 
-from BaseProperty import BaseProperty
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
-class RotationMatrixProperty( BaseProperty ):
+class RotationMatrixProperty(TransformationMatrixProperty):
     """
     .. warning:: Now only implemented for Euler angles.
     """
@@ -15,7 +15,7 @@ class RotationMatrixProperty( BaseProperty ):
     # TODO: add angles extraction in case of other rotations than "euler"
 
     def __init__(self, points, rotation_matrix, rotation_axis = None):
-        super(RotationMatrixProperty, self).__init__(points)
+        super(TransformationMatrixProperty, self).__init__(points)
 
         self.setValues(rotation_matrix, rotation_axis)
 
