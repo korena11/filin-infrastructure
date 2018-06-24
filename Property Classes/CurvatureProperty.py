@@ -22,6 +22,9 @@ class CurvatureProperty( BaseProperty ):
         """
         self.__curvature = args[0]
 
+    def getValues(self):
+        return self.__curvature
+
     @property
     def Curvature( self ):
         """

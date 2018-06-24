@@ -117,11 +117,17 @@ class PointSet(BaseData):
 
         return np.array(self.data)
 
+    def ToGeoPandas(self):
+        """
+        :return: pointSet as GeoPandas (geoseries) object (Points)
+        :rtype: geopandas.geoseries
 
-    @classmethod
-    def ToPandas(cls):
-        # TODO add this method
-        pass
+        """
+        import shapely.geometry as geometry
+
+        geometryPoints = geometry.Point()
+
+
 
     def GetPoint(self, index):
         """

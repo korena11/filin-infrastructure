@@ -4,6 +4,7 @@ Functions for reading files
 
 import warnings
 
+# from laspy.file import file
 import numpy as np
 
 from ColorFactory import ColorFactory
@@ -205,6 +206,16 @@ def ReadPtx(filename, **kwargs):
                 batch_size = 0
 
     return pointsetlist
+
+
+def ReadLAS(filename):
+    """
+    .. warning:: Not implemented.
+    :param filename:
+    :return:
+    """
+    pass
+
 
 def __splitPtsString(line):
     """

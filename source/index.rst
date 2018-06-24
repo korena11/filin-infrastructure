@@ -31,7 +31,7 @@ This project is implemented for Python 3.6
 - pyProj
 - vtk
 - opencv
-
+- geopandas
 
 
 Indices and tables

@@ -28,3 +28,6 @@ class ColorProperty(BaseProperty):
         :return:
         """
         self.__rgb = args[0]
+
+    def getValues(self):
+        return self.__rgb

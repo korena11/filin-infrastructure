@@ -1,9 +1,11 @@
+from warnings import warn
+
 from numpy import min, max, int
 
 from BaseProperty import BaseProperty
 from ColorProperty import ColorProperty
 from NormalsProperty import NormalsProperty
-from PanoramaProperty import PanoramaProperty
+from Panoramas.PanoramaProperty import PanoramaProperty
 from PointSet import PointSet
 from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
@@ -13,74 +15,99 @@ from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 class PanoramaFactory:
     """
     Creates a panoramic view from point set based on a certain property (e.g. range, intesity, etc.)
-    The panoramic view is stored as a PanoramProperty object
+    The panoramic view is stored as a PanoramaProperty object
     """
 
     @classmethod
-    def CreatePanorama(cls, points, _property = 'range', azimuthSpacing = 0.057, elevationSpacing = 0.057):
+    def CreatePanorama_byPoints(cls, points, **kwargs):
         """
-        Creating a PanoramProperty object from a point set based on certain propery
+        Creating a PanoramaProperty object from a point set based on certain property
         
-        :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or any other BaseProperty-derived objects
-        :param _property: The property to create the panorama according to. Can be: 'range', 'intensity', 'color', 'segmentation', 'normals'
-        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
-        :param elevationSpacing: The spacing between two points of the point set in the elevation direction (scan property)
+        :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or
+        BaseProperty-derived objects
 
-        :type points: SphericalCoordinatesProperty
+        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
+        :param elevationSpacing: The spacing between two points of the point set in the elevation direction
+        :param intensity: if the pixel's value should be the intensity value.
+
         :type points: PointSet
-        :type _property: str
         :type azimuthSpacing: float
         :type elevationSpacing: float
+        :type intensity: bool
 
         :return: panorama_property
         :rtype: PanoramaProperty
 
         """
-        if (isinstance(points, SphericalCoordinatesProperty)):
-            sphCoords = points
-        else:
+        self.azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
+        elevationSpacing = kwargs.get('elevationSpacing', 0.057)
+        intensity = kwargs.get('intensity', False)
+
+        try:
             # Calculating the spherical coordinates of the point set
             sphCoords = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(points)
+        except:
+            warn('Expected PointSet, got property instead')
+            return 1
 
-        # Retrieving the original point set
-        if (isinstance(points, BaseProperty)):
-            pointSet = points.Points
-        else:
-            pointSet = points
 
-        # Finding the boundaries of the panorama
-        minAz = min(sphCoords.Azimuths)
-        maxAz = max(sphCoords.Azimuths)
-        minEl = min(sphCoords.ElevationAngles)
-        maxEl = max(sphCoords.ElevationAngles)
 
-        # Calculating the location of each point in the panorama
-        azimuthIndexes = int((sphCoords.Azimuths - minAz) / azimuthSpacing)
-        elevationIndexes = int((maxEl - sphCoords.ElevationAngles) / elevationSpacing)
 
         # Creating the panorams based on the requested property
-        if (_property == 'range'):  # Creating a range panorama
-            return PanoramaProperty(pointSet, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
-                                    panoramaData = _property, minAzimuth = minAz, maxAzimuth = maxAz,
+        if not intensity:
+            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
+                                    panoramaData = property, minAzimuth = minAz, maxAzimuth = maxAz,
                                     minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                     elevationSpacing = elevationSpacing)
 
-        elif (_property == 'intensity'):  # Creating an inensity panorama
-            return PanoramaProperty(pointSet, elevationIndexes, azimuthIndexes, pointSet.Intensity,
-                                    panoramaData = _property, minAzimuth = minAz, maxAzimuth = maxAz,
+        else:  # Creating an inensity panorama
+            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,
+                                    panoramaData = property, minAzimuth = minAz, maxAzimuth = maxAz,
                                     minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                     elevationSpacing = elevationSpacing)
 
-        elif (_property == 'color'):  # Creating a panorama based on the colors of point set
+    @classmethod
+    def CreatePanorama_byProperty(cls, property, **kwargs):
+        """
+        Creates panorama with the property as the values of the pixels.
 
+        :param property: any PointSet property according to which the pixel's value should be
+        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
+        :param elevationSpacing: The spacing between two points of the point set in the elevation direction
+        :param intensity: if the pixel's value should be the intensity value.
+
+        :type property: BaseProperty
+        :type azimuthSpacing: float
+        :type elevationSpacing: float
+        :type inensity: bool
+
+        :return: panorama_property
+        :rtype: PanoramaProperty
+
+        """
+        azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
+        elevationSpacing = kwargs.get('elevationSpacing', 0.057)
+        intensity = kwargs.get('intensity', False)
+
+        if isinstance(property, SphericalCoordinatesProperty):
+            sphCoords = property
+
+        else:
+            sphCoords = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(property.Points)
+
+        if not intensity:
+            return PanoramaProperty(property.Points, )
+
+
+        elif (property == 'color'):  # Creating a panorama based on the colors of point set
             # Checking if the input 'points' object is an instance of either ColorProperty or SegmenationProperty which have color data
             if (isinstance(points, ColorProperty) or isinstance(points, SegmentationProperty)):
-                return PanoramaProperty(pointSet, elevationIndexes, azimuthIndexes, points.RGB,
-                                        panoramaData = _property, minAzimuth = minAz, maxAzimuth = maxAz,
+                return PanoramaProperty(points, elevationIndexes, azimuthIndexes, points.RGB,
+                                        panoramaData = property, minAzimuth = minAz, maxAzimuth = maxAz,
                                         minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
                                         elevationSpacing = elevationSpacing)
 
-            # Checking if the original PointSet has color data in it 
+            # Checking if the original PointSet has color data in it
             elif (pointSet.RGB != None):
                 return PanoramaProperty(pointSet, elevationIndexes, azimuthIndexes, pointSet.RGB,
                                         panoramaData = _property, minAzimuth = minAz, maxAzimuth = maxAz,
@@ -117,6 +144,25 @@ class PanoramaFactory:
                 print("Panorama was not created")
                 return None
 
+    @staticmethod
+    def __computePanoramaIndices(sphCoords, azimuthSpacing, elevationSpacing):
+        """
+        Find the boundaries and the indices of the panorama
+
+        :return: tuple
+        """
+
+        # Finding the boundaries of the panorama
+        minAz = min(sphCoords.Azimuths)
+        maxAz = max(sphCoords.Azimuths)
+        minEl = min(sphCoords.ElevationAngles)
+        maxEl = max(sphCoords.ElevationAngles)
+
+        # Calculating the location of each point in the panorama
+        azimuthIndexes = ((sphCoords.Azimuths - minAz) / azimuthSpacing).astype(int)
+        elevationIndexes = ((maxEl - sphCoords.ElevationAngles) / elevationSpacing).astype(int)
+
+        return
 
 if __name__ == '__main__':
     from IOFactory import IOFactory

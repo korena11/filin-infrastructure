@@ -50,6 +50,9 @@ class EigenProperty(BaseProperty):
         if 'eigenVectors' in kwargs:
             self.__eigenVectors = kwargs['eigenVectors']
 
+    def getValues(self):
+        return self.__eigenValues
+
     @property
     def eigenValues(self):
         return self.__eigenValues

@@ -132,7 +132,7 @@ class IOFactory:
 
         :return: The created PointSet or the list of the PointSets created and the ColorProperty that belongs to it
 
-        :rtype: tuple
+        :rtype: PointSet
 
         """
         return ReadFunctions.ReadPts(filename, *args, **kwargs)

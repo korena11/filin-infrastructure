@@ -1,7 +1,7 @@
 from numpy import ones
 
 from BaseProperty import BaseProperty
-from PointSet import PointSet
+from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 
 
 class PanoramaProperty(BaseProperty):
@@ -21,23 +21,23 @@ class PanoramaProperty(BaseProperty):
     __azimuthSpacing = 0.057  # The spacing between points in the azimuth direction
     __elevationSpacing = 0.057  # The spacing between points in the elevation angle direction  
 
-    def __init__(self, points, rowIndexes = None, columnIndexes = None, panoramaData = None, **kwargs):
+    def __init__(self, sphericalCoordinates, rowIndexes = None, columnIndexes = None, panoramaData = None, **kwargs):
         """
         Constuctor - Creates a panoramic view of the data sent
 
-            :param points: PointSet object from which the panorama will be created
+            :param sphericalCoordinates: SphericalCoordinates property
             :param panoramaData: The data to be represented as a panorama (e.g. range, intesity, etc.). Default: range
             :param rowIndexes: The row indices of the points in the point set based on the elevation angles
-            :param columnIndexs: The column indices of the points in the point set based on the azimuth angles
+            :param columnIndexes: The column indices of the points in the point set based on the azimuth angles
 
 
-            :type points: PointSet
+            :type sphericalCoordinates: SphericalCoordinatesProperty
             :type rowIndexes: int
             :type columnIndexes: int
             :type panoramaData: np.array
 
         """
-        super(PanoramaProperty, self).__init__(points)
+        super(PanoramaProperty, self).__init__(sphericalCoordinates.Points)
 
         numRows = int((self.__maxElevation - self.__minElevation) / self.__elevationSpacing) + 1
         numColumns = int((self.__maxAzimuth - self.__minAzimuth) / self.__azimuthSpacing) + 1
@@ -99,17 +99,17 @@ class PanoramaProperty(BaseProperty):
         self.__columnIndexes = args[2]
 
         # TODO: ORDER PLEASE!
-        if ('dataType' in list(kwargs.keys())):
+        if 'dataType' in list(kwargs.keys()):
             self.__dataType = kwargs['dataType']
-        if ('minAzimuth' in list(kwargs.keys())):
+        if 'minAzimuth' in list(kwargs.keys()):
             self.__minAzimuth = kwargs['minAzimuth']
-        if ('maxAzimuth' in list(kwargs.keys())):
+        if 'maxAzimuth' in list(kwargs.keys()):
             self.__maxAzimuth = kwargs['maxAzimuth']
-        if ('minElevation' in list(kwargs.keys())):
+        if 'minElevation' in list(kwargs.keys()):
             self.__minElevation = kwargs['minElevation']
-        if ('maxElevation' in list(kwargs.keys())):
+        if 'maxElevation' in list(kwargs.keys()):
             self.__maxElevation = kwargs['maxElevation']
-        if ('azimuthSpacing' in list(kwargs.keys())):
+        if 'azimuthSpacing' in list(kwargs.keys()):
             self.__azimuthSpacing = kwargs['azimuthSpacing']
-        if ('elevationSpacing' in list(kwargs.keys())):
+        if 'elevationSpacing' in list(kwargs.keys()):
             self.__elevationSpacing = kwargs['elevationSpacing']

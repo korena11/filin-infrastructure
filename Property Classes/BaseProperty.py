@@ -54,6 +54,16 @@ class BaseProperty(object):
         """
         pass
 
+    def getValues(self):
+        """
+        Get a specific characteristic value of the property
+
+        :return: value for each point
+
+        :rtype: np.array
+
+        """
+
     def save(self, filename, **kwargs):
         """
         Save the property in either json or hdf5.

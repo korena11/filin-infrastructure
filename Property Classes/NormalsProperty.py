@@ -24,6 +24,9 @@ class NormalsProperty(BaseProperty):
         """
         self.__normals = args[0]
 
+    def getValues(self):
+        return self.__normals
+
     @property  
     def dX(self):
         """
