@@ -39,9 +39,12 @@ def ReadPts(filename, *args, **kwargs):
     """
     colorProp = None
 
-    if args:
+    if len(args) == 2:
         pointsetlist = args[0]
         colorslist = args[1]
+
+    elif len(args) == 1:
+        pointsetlist = args[0]
 
     merge = kwargs.get('merge', True)
 
@@ -113,7 +116,7 @@ def ReadPts(filename, *args, **kwargs):
             warnings.warn('Some points don''t have intensity values. None was assigned to PointSet')
 
         if len(colors) == len(pts):
-            colorProp = ColorFactory.assignColor(points, np.array(colors)[0])
+            colorslist = ColorFactory.assignColor(points, np.array(colors)[0])
         else:
             warnings.warn('Some points don''t have color values. No color property created')
 

@@ -11,7 +11,6 @@ class PanoramaProperty(BaseProperty):
 
     __rowIndexes = None  # An array of indexes corresponding to the row number to which each point belongs to
     __columnIndexes = None  # An array of indexes corresponding to the column number to which each point belongs to
-    __dataType = ""  # A string indicating the type of data stored in the panoramic view (e.g. range, intensity, etc.)
     __panoramaData = None  # A m-by-n-by-p array in which the panorama is stored
     __voidData = 250  # A number indicating missing data in the panorama
     __minAzimuth = 0  # The minimal azimuth value
@@ -39,6 +38,8 @@ class PanoramaProperty(BaseProperty):
         """
         super(PanoramaProperty, self).__init__(sphericalCoordinates.Points)
 
+        self.setValues(**kwargs)
+
         numRows = int((self.__maxElevation - self.__minElevation) / self.__elevationSpacing) + 1
         numColumns = int((self.__maxAzimuth - self.__minAzimuth) / self.__azimuthSpacing) + 1
 
@@ -56,17 +57,13 @@ class PanoramaProperty(BaseProperty):
         """
         return self.__panoramaData
 
-    def setValues(self, *args, **kwargs):
+    def setValues(self, **kwargs):
         """
-        Sets the values into the panoramaProperty object
+        Sets values into the panoramaProperty object
 
-        :param panoramaData: The data to be represented as a panorama (e.g. range, intesity, etc.). Default: range
+        :param panoramaData: The data to be represented as a panorama (e.g. range, intensity, etc.). Default: range
         :param rowIndexes: The row indices of the points in the point set based on the elevation angles
         :param columnIndexs: The column indices of the points in the point set based on the azimuth angles
-
-        **Optionals**
-
-        :param dataType: A string indicating the type of data stored in the panoramic view (e.g. 'range', 'intensity', etc.)
         :param minAzimuth: The minimal azimuth value
         :param maxAzimuth: The maximal azimuth value
         :param minElevation: The minimal elevation value
@@ -92,24 +89,17 @@ class PanoramaProperty(BaseProperty):
                     * High: 0.028 deg
                     * Highest: *TO ADD*
 
-
         """
-        self.__panoramaData = args[0]
-        self.__rowIndexes = args[1]
-        self.__columnIndexes = args[2]
 
-        # TODO: ORDER PLEASE!
-        if 'dataType' in list(kwargs.keys()):
-            self.__dataType = kwargs['dataType']
-        if 'minAzimuth' in list(kwargs.keys()):
-            self.__minAzimuth = kwargs['minAzimuth']
-        if 'maxAzimuth' in list(kwargs.keys()):
-            self.__maxAzimuth = kwargs['maxAzimuth']
-        if 'minElevation' in list(kwargs.keys()):
-            self.__minElevation = kwargs['minElevation']
-        if 'maxElevation' in list(kwargs.keys()):
-            self.__maxElevation = kwargs['maxElevation']
-        if 'azimuthSpacing' in list(kwargs.keys()):
-            self.__azimuthSpacing = kwargs['azimuthSpacing']
-        if 'elevationSpacing' in list(kwargs.keys()):
-            self.__elevationSpacing = kwargs['elevationSpacing']
+        self.__maxAzimuth = kwargs.get('maxAzimuth', 360.)
+        self.__minAzimuth = kwargs.get('minAzimuth', 0.)
+        self.__minElevation = kwargs.get('minElevation', -45.)
+        self.__maxElevation = kwargs.get('maxElevation', 90.)
+
+        self.__azimuthSpacing = kwargs.get('azimuthSpacing', .057)
+        self.__elevationSpacing = kwargs.get('elevationSpacing', .057)
+        self.__voidData = kwargs.get('voidData', 250)
+
+        self.__columnIndexes = kwargs.get('columnIndexes', self.__columnIndexes)
+        self.__rowIndexes = kwargs.get('rowIndexes', self.__rowIndexes)
+        self.__panoramaData = kwargs.get('panoramaData', self.__panoramaData)
