@@ -204,6 +204,7 @@ def computeImageDerivatives(img, order, **kwargs):
               'window': (0,0)}
     params.update(kwargs)
     ksize = params['ksize']
+
     img = np.float64(img)
 
     img_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = ksize)

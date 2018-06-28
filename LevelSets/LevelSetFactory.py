@@ -10,38 +10,42 @@ from matplotlib import pyplot as plt
 from skimage import measure
 
 import MyTools as mt
-from LevelSets import Saliency as sl
+import Saliency as sl
+from LevelSetFunction import LevelSetFunction
 from RasterData import RasterData
-from .LevelSetFunction import LevelSetFunction
 
 EPS = np.finfo(float).eps
 
 
 class LevelSetFactory:
     # General initializations
-    processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
-    flow_types = {'geodesic': 1.}
-    regularization_epsilon = EPS
+    __processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
+    __flow_types = {'geodesic': 1.}
+    __regularization_epsilon = EPS
+    __iterations = 150
+    __step = 1.  # step size
 
-    iterations = 150
-    step = 1.  # step size
-    gvf_w = 1.
-    vo_w = 1.
-    region_w = 1.
-    chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
+    # Weighting initializations
+    __gvf_w = 1.
+    __vo_w = 1.
+    __region_w = 1.
+    __chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
 
     # Level set initializations
     __phi = []  # LevelSetFunction
-    img = None  # the analyzed image (of the data)
-    img_rgb = 0
-    region = None  # region constraint
+    __img = None  # the analyzed image (of the data)
+    __img_rgb = 0
 
-    imgGradient = None  # gradient of the analyzed image
-    g = None  # internal force
-    g_x = g_y = None  # g derivatives
+    # Constraints initializations
+    __imgGradient = None  #
 
-    f = None  # external force (for GVF)
-    f_x = f_y = None
+    __g = None  # internal force
+    __g_x = __g_y = None  # g derivatives
+
+    __region = None  # region constraint
+
+    __f = None  # external force (for GVF)
+    __f_x = __f_y = None
     __psi = []  # internal force, for open contours;  LevelSetFunction
 
     def __init__(self, img, **kwargs):
@@ -51,48 +55,328 @@ class LevelSetFactory:
         :param img: the image upon which the level set is started.
         :param imb_rgb: an rgb image if exists
         :param step: time step for advancing the level set function.
+        :param flow_types: the flow types according to which the level set moves with their weights. According to
+        :py:meth:`~LevelSetFactory.LevelSetFactory.flow`
+        :param weights: all weights to move the level set. According to
+        :py:meth:`~LevelSetFactory.LevelSetFactory.set_weights`
+
+        :type img: np.array
+        :type img_rgb: np.array
+        :type step: float
+        :type flow_types: dict
+        :type weights: dict
+
         """
-        step = kwargs.get('step', 0.05)
-        self.step = step
+
+        self.__step = kwargs.get('step', 0.05)
         if 'img_rgb' in list(kwargs.keys()):
-            self.img_rgb = kwargs['img_rgb']
+            self.__img_rgb = kwargs['img_rgb']
 
         if isinstance(img, RasterData):
-            self.img = img.data
+            self.__img = img.data
             self.data = img
         else:
-            self.img = img
+            self.__img = img
+
+        self.__phi = [LevelSetFunction(np.zeros(img.shape))]
+        self.__psi = [LevelSetFunction(np.zeros(img.shape))]
+
+        if 'weights' in list(kwargs.keys()):
+            self.set_weights(**kwargs['weights'])
+
+        if 'flow_types' in list(kwargs.keys()):
+            self.set_flow_types(**kwargs['flow_types'])
+
+    @property
+    def processing_props(self):
+        return self.__processing_props
+
+    @property
+    def flow_types(self):
+        """
+        Types of flow used to progress the curves
+
+        Default: {"geodesic"}
+
+        :rtype: dict
+        """
+        return self.__flow_types
+
+    def set_flow_types(self, **kwargs):
+        """
+        Set the flow types and their weights according to which the level set will move
+
+        Options are as in :py:meth:`~LevelSetFactory.LevelSetFactory.flow`
+
+        For example:
+
+        .. code-block:: python
+
+            {'geodesic': 1., 'curvature': .2, 'equi-affine': 0.5}
+
+        """
+        flow_types = {'geodesic': 1.,
+                      'curvature': 0.,
+                      'equi-affine': 0.,
+                      'band': 0.}
+        flow_types.update(kwargs)
+        self.__flow_types = flow_types
+
+    @property
+    def regularization_epsilon(self):
+        """
+
+        :rtype: float
+        """
+        return self.__regularization_epsilon
+
+    @property
+    def iterations(self):
+        """
+        Number of iterations for the level set
+
+        Default: 150
+
+        :rtype: int
+
+        """
+        return self.__iterations
+
+    @property
+    def step(self):
+        """
+        Step size for the level set progression
+
+        Default: 0.05
+
+        :rtype: float
+        """
+        return self.__step
+
+    @property
+    def gvf_w(self):
+        """
+        Gradient vector flow weight
+
+        Default: 1.
+
+        :rtype: float
+
+        """
+        return self.__gvf_w
+
+    @property
+    def vo_w(self):
+        """
+        Open velocity flow weight
+
+        Default: 1.
+
+        :rtype: float
+
+        """
+        return self.__vo_w
+
+    @property
+    def region_w(self):
+        """
+        Region weight
+
+        Default: 1.
+
+        :rtype: float
+
+        """
+        return self.__region_w
+
+    @property
+    def chanvese_w(self):
+        """
+        Chan-Vese weights: area, length, inside and outside weights
+
+        Default:
+        * length, inside and outside weights: 1.
+        * area: 0.
+
+        :rtype: dict
+
+        """
+        return self.__chanvese_w
+
+    def set_weights(self, **kwargs):
+        """
+        Set weights for constraints.
+
+        :param chanvese_w: area_w, length_w, inside_w and outside_w
+        :param gvf_w: gradient vector flow weight
+        :param vo_w: open contour weight (Not working at the moment)
+        :param region_w: region constraint weight
+
+        :type chanvese_w: dict
+        :type gvf_w: float
+        :type vo_w: float
+        :type region_w: float
+
+        """
+        inputs = {'gvf_w': 1.,
+                  'vo_w': 0.,
+                  'region_w': 1.,
+                  'chanvese_w': {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}}
+
+        inputs.update(kwargs)
+        self.__chanvese_w = inputs['chanvese_w']
+        self.__region_w = inputs['region_w']
+        self.__gvf_w = inputs['gvf_w']
+        self.__vo_w = inputs['vo_w']
+
+    @property
+    def img(self):
+        """
+        The analyzed image (of the data)
+
+        :rtype: np.array
+
+        """
+        return self.__img
+
+    @property
+    def img_rgb(self):
+        """
+        The analyzed img rgb representation (if exists, otherwise: 0.)
+
+        Default: 0
+
+        :rtype: np.array or 0
+
+        """
+        return self.__img_rgb
+
+    @property
+    def region(self):
+        """
+        Region constraint
+
+        :rtype: np.array
+
+        """
+        return self.__region
+
+    @property
+    def imgGradient(self):
+        """
+        Gradient of the analyzed image
+
+        :rtype: np.array
+        """
+        return self.__imgGradient
+
+    @property
+    def g(self):
+        """
+        Internal force (usually edge function)
+
+        :rtype: np.array
+        """
+        return self.__g
+
+    @property
+    def g_x(self):
+        """
+        First order derivative of the internal force
+
+        :rtype: np.array
+        """
+        return self.__g_x
+
+    @property
+    def g_y(self):
+        """
+        First order derivative of the internal force
+
+        :rtype: np.array
+        """
+        return self.__g_y
+
+    @property
+    def f(self):
+        """
+        External force (for gradient vector flow)
+
+        :rtype: np.array
+        """
+        return self.__g
+
+    @property
+    def f_x(self):
+        """
+        First order derivative of the external force
+
+        :rtype: np.array
+        """
+        return self.__g_x
+
+    @property
+    def f_y(self):
+        """
+        First order derivative of the external force
+
+        :rtype: np.array
+        """
+        return self.__g_y
+
+    @property
+    def phi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__phi
+        """
+
+        return self.__phi[index]
+
+    @property
+    def psi(self, index = 0):
+        """
+        Returns the level set function phi according to the index
+        :return: LevelSetFunction self.__psi
+        """
+
+        return self.__psi[index]
+
 
     def init_phi(self, **kwargs):
         r"""
         Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
         phi(x,y,t) = 0 is the curve.
+
         The function has the following characteristics:
-        .. math:: \begin{cases}
-            phi(x,y,t) > 0 & \forall (x,y) \in \Omega \\
-            phi(x,y,t) < 0 & \forall (x,y) \not\in \Omega \\
-            phi(x,y,t) = 0 & \forall (x,y) on curve \\
 
-        *characteristics of the function*
-            :param processing_props: properties for gradient and differentiation:
-                'gradientType' - distance computation method
-                'sigma' - for smoothing
-                'ksize' - for smoothing
+        .. math::
+            \begin{cases}
+             \phi(x,y,t) > 0 & \forall (x,y) \in \Omega \\
+             \phi(x,y,t) < 0 & \forall (x,y) \not\in \Omega \\
+             \phi(x,y,t) = 0 & \forall (x,y) \textrm{ on curve} \\
+             \end{cases}
 
-            :param width: the width of the area inside the curve
-            :param height: the height of the area inside the curve
-            :param start: starting point for the inside area of the curve (x_start, y_start)
-            :param reularization: regularizataion note for heaviside function
-            :param function_type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+        **Characteristics of the function**
 
-            :type processing_props: dict
-            :type width: int
-            :type height: int
-            :type function_type: str
-            :type start: tuple
-            :type regularization: int 0,1,2
+        :param processing_props: properties for gradient and differentiation:
+            - 'gradientType' - distance computation method
+            - 'sigma' - for smoothing
+            - 'ksize' - for smoothing
 
-        :return:
+        :param width: the width of the area inside the curve
+        :param height: the height of the area inside the curve
+        :param start: starting point for the inside area of the curve (x_start, y_start)
+        :param reularization: regularizataion note for heaviside function
+        :param function_type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+
+        :type processing_props: dict
+        :type width: int
+        :type height: int
+        :type function_type: str
+        :type start: tuple
+        :type regularization: int 0,1,2
+
         """
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
         processing_props.update(kwargs['processing_props'])
@@ -111,6 +395,9 @@ class LevelSetFactory:
         xx, yy = np.meshgrid(x, y)
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
+
+        if np.all(self.__phi[0].value == 0):
+            self.__phi = []
 
         self.__phi.append(
             LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), regularization_note = regularization,
@@ -132,25 +419,12 @@ class LevelSetFactory:
         xx, yy = np.meshgrid(x, y)
         dists = np.sqrt(xx ** 2 + yy ** 2)
         dists /= np.linalg.norm(dists)
+        if np.all(self.__psi[0].value == 0):
+            self.__psi = []
+
         self.__psi.append(LevelSetFunction(psi * dists, self.processing_props))
 
-    @property
-    def phi(self, index = 0):
-        """
-        Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__phi
-        """
 
-        return self.__phi[index]
-
-    @property
-    def psi(self, index = 0):
-        """
-        Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__psi
-        """
-
-        return self.__psi[index]
 
     def init_g(self, g, **kwargs):
         """
@@ -159,8 +433,8 @@ class LevelSetFactory:
         :param kwargs: gradient process dictionary
 
         """
-        self.g = g
-        self.g_x, self.g_y = mt.computeImageDerivatives(g, 1, **kwargs)
+        self.__g = g
+        self.__g_x, self.__g_y = mt.computeImageDerivatives(g, 1, **kwargs)
 
     def init_f(self, f, **kwargs):
         """
@@ -169,30 +443,30 @@ class LevelSetFactory:
         :param kwargs: gradient process dictionary
 
         """
-        self.f = f
-        self.f_x, self.f_y = mt.computeImageDerivatives(f, 1, **kwargs)
+        self.__f = f
+        self.__f_x, self.__f_y = mt.computeImageDerivatives(f, 1, **kwargs)
 
-    def init_region(self, method, **kwargs):
+    def init_region(self, region_method, **kwargs):
         """
         Initializes region function
+
         :param kwargs:
-            :param method: type of the region wanted: 'classification', 'saliency'
+        :param region_method: type of the region wanted: 'classification', 'saliency'.
 
-            inputs according to method:
-            saliency:
-                    inputs according to Saliency class
-            classification:
-            :param winSizes: array or list with different window sizes for classification
-            :param class: the classes which are looked for.
+        *Inputs according to method:*
 
-            :param
+        - saliency: inputs according to :py:meth:`~Saliency.distance_based`
 
-        :return:
+        - classification:
+
+        :param winSizes: array or list with different window sizes for classification
+        :param class: the classes which are looked for.
+
         """
         sigma = kwargs.get('sigma', 2.5)
-        if method == 'saliency':
+        if region_method == 'saliency':
             inputs = {'feature': 'normals',
-                      'saliency_method': 'frequency',
+                      'method': 'frequency',
                       'dist_type': 'Euclidean',
                       'filter_sigma': [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
                       'filter_size': 0,
@@ -200,8 +474,8 @@ class LevelSetFactory:
                       'verbose': True}
             inputs.update(kwargs)
 
-            region = sl.distance_based(self.img_rgb, **inputs)
-        elif method == 'classification':
+            region = sl.distance_based(self.img, **inputs)
+        elif region_method == 'classification':
             inputs = {'winSizes', np.linspace(0.1, 10, 5),
                       'class', 1}
             inputs.update(kwargs)
@@ -212,31 +486,43 @@ class LevelSetFactory:
 
         region = 255 - cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
-        self.region = region
+        self.__region = region
+
+    def update_region(self, new_region):
+        """
+        Updates the region according to a given new_region
+
+        :param new_region: the new region according to which the level set should progress
+
+        :type new_region: np.array
+
+
+        """
+        self.__region = new_region
 
     def flow(self, flow_type, function, *args, **kwargs):
         r"""
         Return the flow of the level set according to the type wanted
 
         :param flow_type: can be one of the following:
-            'constant':
+            - 'constant':
 
-            .. math:: Ct = N \Rightarrow phi_t = |\nabla \varphi|
+               .. math:: Ct = N \Rightarrow phi_t = |\nabla \varphi|
 
-            'curvature':
+            - 'curvature':
 
-            .. math:: Ct = kN \Rightarrow phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
+               .. math:: Ct = kN \Rightarrow phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
 
-            'equi-affine':
+            - 'equi-affine':
 
-             .. math:: Ct = k^(1/3) N \Rightarrow phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
+                .. math:: Ct = k^(1/3) N \Rightarrow phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
 
-            'geodesic': geodesic active contours, according to Casselles et al., 1997
+            - 'geodesic': geodesic active contours, according to Casselles et al., 1997
 
-             .. math::  Ct = (g(I)k -\nabla(g(I))N)N \Rightarrow
+                .. math::  Ct = (g(I)k -\nabla(g(I))N)N \Rightarrow
                         phi_t = [g(I)*div(\nabla \varphi / |\nabla \varphi|))^(1/3))*|\nabla \varphi|
 
-            'band': band velocity, according to Li et al., 2006.
+            - 'band': band velocity, according to Li et al., 2006.
 
         :param function: the level set according to which the flow goes (usually phi)
         :param open_flag: boolean for open flag
@@ -249,10 +535,11 @@ class LevelSetFactory:
         :param ksize: kernel size, for blurring and derivatives
         :param regularization: regularization note for heaviside and dirac
 
-        *Band velocity optionals*
+        **Band velocity optionals**
+
         :param band_width: the width of the contour. default: 5
         :param threshold: for when the velocity equals zero. default: 0.5
-        :param stepsize. default 0.05
+        :param stepsize: default 0.05
 
         :type flow_type: str
         :type function: LevelSetFunction
@@ -285,7 +572,8 @@ class LevelSetFactory:
         if flow_type == 'geodesic':
             # !! pay attention, if self.g is constant - then this flow is actually curvature flow !!
 
-            flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y * function._y)
+            flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
+                                                                    function._y)
             if open_flag:
                 psi_t = self.g * self.phi.kappa * self.psi.norm_nabla + (
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
@@ -468,14 +756,18 @@ class LevelSetFactory:
         return grad_psi_grad_phi / (self.phi.norm_nabla + EPS)
 
     def moveLS(self, **kwargs):
-        """
+        r"""
         The function that moves the level set until the desired contour is reached
 
         :param flow_type -  flow types and their weight (string, weight):
+
         'constant', 'curvature', 'equi-affine', 'geodesic', 'chan-vese', 'band'
 
-        *NOTE: The 'chan-vese' flow requires weights (chanvese_w), for the four components of the model:
-         {area_w, length_w, inside_w, outside_w} (dictionary)
+        .. note:: The 'chan-vese' flow requires weights (chanvese_w), for the four components of the model:
+
+        .. code-block:: python
+
+            {area_w, length_w, inside_w, outside_w}
 
         :param gvf_flag: flag to add gradient vector flow
         :param open_flag: flag for open contours
@@ -512,8 +804,9 @@ class LevelSetFactory:
         mt.imshow(self.phi.value)
         fig3, ax3 = plt.subplots(num = 'kappa')
         mt.imshow(self.phi.kappa)
-        fig4, ax4 = plt.subplots(num = 'psi')
-        mt.imshow(self.psi.value)
+        if open_flag:
+            fig4, ax4 = plt.subplots(num = 'psi')
+            mt.imshow(self.psi.value)
 
         for i in range(iterations):
             if verbose:
@@ -566,7 +859,7 @@ class LevelSetFactory:
 
             phi_t = self.step * (intrinsic - extrinsic)
             self.phi.update(
-                cv2.GaussianBlur(self.phi.value + phi_t, (processing_props['ksize'], processing_props['ksize']),
+                cv2.GaussianBlur((self.phi.value + phi_t), (processing_props['ksize'], processing_props['ksize']),
                                  processing_props['sigma']), epsilon = regularization_epsilon)
             if np.max(np.abs(phi_t)) <= 5e-5:
                 print('done')

@@ -3,7 +3,7 @@ from warnings import warn
 from numpy import min, max, int
 
 from BaseProperty import BaseProperty
-from Panoramas.PanoramaProperty import PanoramaProperty
+from PanoramaProperty import PanoramaProperty
 from PointSet import PointSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
@@ -27,10 +27,15 @@ class PanoramaFactory:
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
 
+         **Optionals**
+
+        :param void_as_mean: flag to determine the void value as the mean value of the ranges
+
         :type points: PointSet
         :type azimuthSpacing: float
         :type elevationSpacing: float
         :type intensity: bool
+        :type void_as_mean: bool
 
         :return: panorama_property
         :rtype: PanoramaProperty
@@ -39,6 +44,7 @@ class PanoramaFactory:
         azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
         elevationSpacing = kwargs.get('elevationSpacing', 0.057)
         intensity = kwargs.get('intensity', False)
+        void_as_mean = kwargs.get('void_as_mean', False)
 
         try:
             # Calculating the spherical coordinates of the point set
@@ -54,15 +60,20 @@ class PanoramaFactory:
         # Create the panorama
         if not intensity:
             # range as pixel value
-            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
-                                    minAzimuth = minAz, maxAzimuth = maxAz,
-                                    minElevation = minEl, maxElevation = maxEl, **kwargs)
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
+                                        minAzimuth = minAz, maxAzimuth = maxAz,
+                                        minElevation = minEl, maxElevation = maxEl, **kwargs)
 
         else:
             #  intensity as pixel value
-            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,
-                                    minAzimuth = minAz, maxAzimuth = maxAz,
-                                    minElevation = minEl, maxElevation = maxEl, **kwargs)
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,
+                                        minAzimuth = minAz, maxAzimuth = maxAz,
+                                        minElevation = minEl, maxElevation = maxEl, **kwargs)
+        if void_as_mean:
+            void = cls.__compute_void_as_mean(sphCoords.Ranges)
+            panorama.setValues(voidData = void)
+
+        return panorama
 
     @classmethod
     def CreatePanorama_byProperty(cls, pointSet_property, **kwargs):
@@ -74,10 +85,15 @@ class PanoramaFactory:
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
 
+        **Optionals**
+
+        :param void_as_mean: flag to determine the void value as the mean value of the ranges
+
         :type pointSet_property: BaseProperty
         :type azimuthSpacing: float
         :type elevationSpacing: float
         :type inensity: bool
+        :type void_as_mean: bool
 
         :return: panorama_property
         :rtype: PanoramaProperty
@@ -86,6 +102,7 @@ class PanoramaFactory:
         azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
         elevationSpacing = kwargs.get('elevationSpacing', 0.057)
         intensity = kwargs.get('intensity', False)
+        void_as_mean = kwargs.get('void_as_mean', False)
 
         if isinstance(pointSet_property, SphericalCoordinatesProperty):
             sphCoords = pointSet_property
@@ -98,16 +115,31 @@ class PanoramaFactory:
                                          elevationSpacing = elevationSpacing)
 
         if not intensity:
-            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
-                                    minAzimuth = minAz, maxAzimuth = maxAz,
-                                    minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                    elevationSpacing = elevationSpacing)
-
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
+                                        minAzimuth = minAz, maxAzimuth = maxAz,
+                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
+                                        elevationSpacing = elevationSpacing)
         else:
-            return PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.Points.Intensity,
-                                    minAzimuth = minAz, maxAzimuth = maxAz,
-                                    minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                    elevationSpacing = elevationSpacing)
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.Points.Intensity,
+                                        minAzimuth = minAz, maxAzimuth = maxAz,
+                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
+                                        elevationSpacing = elevationSpacing)
+
+        if void_as_mean:
+            void = cls.__compute_void_as_mean(sphCoords.Ranges)
+            panorama.setValues(voidData = void)
+
+        return panorama
+
+    @classmethod
+    def __compute_void_as_mean(cls, ranges):
+        """
+        Sets the void value as the mean value of the ranges
+
+        """
+        import numpy as np
+        void_value = np.mean(ranges)
+        return void_value
 
     @staticmethod
     def __computePanoramaIndices(sphCoords, azimuthSpacing, elevationSpacing):

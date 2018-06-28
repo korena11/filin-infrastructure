@@ -65,14 +65,13 @@ class Visualization:
         """
         Render a PointSet object as points
         Can use/render the following attributes
-            rgb color of each point 
-            intensity of each point
-            Normal for each point                 
+        - rgb color of each point
+        - intensity of each point
+        - Normal for each point
         
-        Args:
-            points (PointSet/PointSubSet):
-            
-            renderFlag (str): how to render the points. Can be one of:
+
+        :param points: (PointSet/PointSubSet):
+        :param renderFlag: (str): how to render the points. Can be one of:
                 'rgb': color the points using the original rgb values
                 'intensity': color the points using the original intensity values
                 'segmentation': color the points using segmentation results and given colormap
@@ -80,17 +79,25 @@ class Visualization:
                 'color': render all points using this color
                 'parametericColor': render accoding to given parameter
             
-            color (3-tuple): color used to render points in case renderFlag = 'color'     
+        :param color: (3-tuple): color used to render points in case renderFlag = 'color'
             
-            _figure (mlab.figure, optional): Mayavi scene
+        :param _figure (mlab.figure, optional): Mayavi scene
             
-            Optional Property objects:
+        **Optional Property objects**
             
-            segmentationProperty (SegmentationProperty, optional)            
-            normalsProperty (NormalsProperty, optional)     
-            colorProperty
-            
-            pointSize (float, optional): size of the points when rendered
+        :param segmentationProperty: (SegmentationProperty, optional)
+        :param normalsProperty: (NormalsProperty, optional)
+        :param colorProperty:
+        :param pointSize: (float, optional): size of the points when rendered
+
+        :type points: PointSet
+        :type renderFlag: str
+        :type color: tuple
+        :type _figure: mlab.figure
+        :type segmentationProperty: SegmentationProperty
+        :type normalsProperty: NormalsProperty
+        :type colorProperty: ColorProperty
+
         """                        
         if ( points == None or ( ( isinstance( points, PointSet ) or isinstance( points, PointSubSet ) ) and points.Size == 0 ) or
             ( isinstance( points, BaseProperty ) and points.Points.Size == 0 ) ):

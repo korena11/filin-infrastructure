@@ -51,17 +51,17 @@
 
                 <h1>Source code for PanoramaFactory</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="nb">min</span><span
-                        class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span
-                        class="nb">int</span>
+<span></span><span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span
+                        class="n">warn</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+                        class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span
+                        class="p">,</span> <span class="nb">int</span>
 
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
-<span class="kn">from</span> <span class="nn">NormalsProperty</span> <span class="k">import</span> <span class="n">NormalsProperty</span>
 <span class="kn">from</span> <span class="nn">PanoramaProperty</span> <span class="k">import</span> <span class="n">PanoramaProperty</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                         class="n">PointSet</span>
-<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                         class="n">SphericalCoordinatesFactory</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
@@ -69,58 +69,199 @@
 
 
 <div class="viewcode-block" id="PanoramaFactory"><a class="viewcode-back"
-                                                    href="../PanoramaFactory.html#PanoramaFactory.PanoramaFactory">[docs]</a><span
+                                                    href="../Factories/PanoramaFactory.html#PanoramaFactory.PanoramaFactory">[docs]</a><span
         class="k">class</span> <span class="nc">PanoramaFactory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a panoramic view from point set based on a certain property (e.g. range, intesity, etc.)</span>
-<span class="sd">    The panoramic view is stored as a PanoramProperty object</span>
+<span class="sd">    The panoramic view is stored as a PanoramaProperty object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="PanoramaFactory.CreatePanorama"><a class="viewcode-back"
-                                                                   href="../PanoramaFactory.html#PanoramaFactory.PanoramaFactory.CreatePanorama">[docs]</a>    <span
-        class="k">def</span> <span class="nf">CreatePanorama</span><span class="p">(</span><span
+<div class="viewcode-block" id="PanoramaFactory.CreatePanorama_byPoints"><a class="viewcode-back"
+                                                                            href="../Factories/PanoramaFactory.html#PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints">[docs]</a>    <span
+        class="k">def</span> <span class="nf">CreatePanorama_byPoints</span><span class="p">(</span><span
         class="n">cls</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-        class="n">_property</span> <span class="o">=</span> <span class="s1">&#39;range&#39;</span><span
-        class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span
-        class="mf">0.057</span><span class="p">,</span> <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-        class="mf">0.057</span><span class="p">):</span>
+        class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Creating a PanoramProperty object from a point set based on certain propery</span>
+<span class="sd">        Creating a PanoramaProperty object from a point set based on certain property</span>
 <span class="sd">        </span>
-<span class="sd">        :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or any other BaseProperty-derived objects</span>
-<span class="sd">        :param _property: The property to create the panorama according to. Can be: &#39;range&#39;, &#39;intensity&#39;, &#39;color&#39;, &#39;segmentation&#39;, &#39;normals&#39;</span>
-<span class="sd">        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)</span>
-<span class="sd">        :param elevationSpacing: The spacing between two points of the point set in the elevation direction (scan property)</span>
+<span class="sd">        :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or</span>
+<span class="sd">        BaseProperty-derived objects</span>
 
-<span class="sd">        :type points: SphericalCoordinatesProperty</span>
+<span class="sd">        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)</span>
+<span class="sd">        :param elevationSpacing: The spacing between two points of the point set in the elevation direction</span>
+<span class="sd">        :param intensity: if the pixel&#39;s value should be the intensity value.</span>
+
 <span class="sd">        :type points: PointSet</span>
-<span class="sd">        :type _property: str</span>
 <span class="sd">        :type azimuthSpacing: float</span>
 <span class="sd">        :type elevationSpacing: float</span>
+<span class="sd">        :type intensity: bool</span>
 
 <span class="sd">        :return: panorama_property</span>
 <span class="sd">        :rtype: PanoramaProperty</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span
-            class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">SphericalCoordinatesProperty</span><span
-            class="p">)):</span>
-            <span class="n">sphCoords</span> <span class="o">=</span> <span class="n">points</span>
-        <span class="k">else</span><span class="p">:</span>
+        <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;azimuthSpacing&#39;</span><span
+            class="p">,</span> <span class="mf">0.057</span><span class="p">)</span>
+        <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elevationSpacing&#39;</span><span
+            class="p">,</span> <span class="mf">0.057</span><span class="p">)</span>
+        <span class="n">intensity</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;intensity&#39;</span><span class="p">,</span> <span class="kc">False</span><span
+            class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Calculating the spherical coordinates of the point set</span>
             <span class="n">sphCoords</span> <span class="o">=</span> <span class="n">SphericalCoordinatesFactory</span><span
             class="o">.</span><span class="n">CartesianToSphericalCoordinates</span><span class="p">(</span><span
             class="n">points</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Expected PointSet, got property instead&#39;</span><span
+            class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
-        <span class="c1"># Retrieving the original point set</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span
-            class="p">(</span><span class="n">points</span><span class="p">,</span> <span
-            class="n">BaseProperty</span><span class="p">)):</span>
-            <span class="n">pointSet</span> <span class="o">=</span> <span class="n">points</span><span
-            class="o">.</span><span class="n">Points</span>
+        <span class="p">(</span><span class="n">minAz</span><span class="p">,</span> <span class="n">maxAz</span><span
+            class="p">),</span> <span class="p">(</span><span class="n">minEl</span><span class="p">,</span> <span
+            class="n">maxEl</span><span class="p">),</span> <span class="p">(</span><span
+            class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">)</span> <span class="o">=</span> \
+            <span class="n">cls</span><span class="o">.</span><span class="n">__computePanoramaIndices</span><span
+            class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span
+            class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
+            class="p">,</span>
+                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
+            class="n">elevationSpacing</span><span class="p">)</span>
+
+        <span class="c1"># Create the panorama</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">intensity</span><span class="p">:</span>
+            <span class="c1"># range as pixel value</span>
+            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
+            class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
+            class="n">sphCoords</span><span class="o">.</span><span class="n">Ranges</span><span class="p">,</span>
+                                    <span class="n">minAzimuth</span> <span class="o">=</span> <span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
+            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
+                                    <span class="n">minElevation</span> <span class="o">=</span> <span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
+            class="n">maxEl</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">)</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">pointSet</span> <span class="o">=</span> <span class="n">points</span>
+            <span class="c1">#  intensity as pixel value</span>
+            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
+            class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">Intensity</span><span class="p">,</span>
+                                    <span class="n">minAzimuth</span> <span class="o">=</span> <span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
+            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
+                                    <span class="n">minElevation</span> <span class="o">=</span> <span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
+            class="n">maxEl</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">)</span></div>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="PanoramaFactory.CreatePanorama_byProperty"><a class="viewcode-back"
+                                                                              href="../Factories/PanoramaFactory.html#PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty">[docs]</a>    <span
+        class="k">def</span> <span class="nf">CreatePanorama_byProperty</span><span class="p">(</span><span class="n">cls</span><span
+        class="p">,</span> <span class="n">pointSet_property</span><span class="p">,</span> <span
+        class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates panorama with the property as the values of the pixels.</span>
+
+<span class="sd">        :param pointSet_property: any PointSet property according to which the pixel&#39;s value should be</span>
+<span class="sd">        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)</span>
+<span class="sd">        :param elevationSpacing: The spacing between two points of the point set in the elevation direction</span>
+<span class="sd">        :param intensity: if the pixel&#39;s value should be the intensity value.</span>
+
+<span class="sd">        :type pointSet_property: BaseProperty</span>
+<span class="sd">        :type azimuthSpacing: float</span>
+<span class="sd">        :type elevationSpacing: float</span>
+<span class="sd">        :type inensity: bool</span>
+
+<span class="sd">        :return: panorama_property</span>
+<span class="sd">        :rtype: PanoramaProperty</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;azimuthSpacing&#39;</span><span
+            class="p">,</span> <span class="mf">0.057</span><span class="p">)</span>
+        <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elevationSpacing&#39;</span><span
+            class="p">,</span> <span class="mf">0.057</span><span class="p">)</span>
+        <span class="n">intensity</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;intensity&#39;</span><span class="p">,</span> <span class="kc">False</span><span
+            class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pointSet_property</span><span
+            class="p">,</span> <span class="n">SphericalCoordinatesProperty</span><span class="p">):</span>
+            <span class="n">sphCoords</span> <span class="o">=</span> <span class="n">pointSet_property</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sphCoords</span> <span class="o">=</span> <span class="n">SphericalCoordinatesFactory</span><span
+            class="o">.</span><span class="n">CartesianToSphericalCoordinates</span><span class="p">(</span><span
+            class="n">pointSet_property</span><span class="o">.</span><span class="n">Points</span><span
+            class="p">)</span>
+
+        <span class="p">(</span><span class="n">minAz</span><span class="p">,</span> <span class="n">maxAz</span><span
+            class="p">),</span> <span class="p">(</span><span class="n">minEl</span><span class="p">,</span> <span
+            class="n">maxEl</span><span class="p">),</span> <span class="p">(</span><span
+            class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">)</span> <span class="o">=</span> \
+            <span class="n">cls</span><span class="o">.</span><span class="n">__computePanoramaIndices</span><span
+            class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span
+            class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
+            class="p">,</span>
+                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
+            class="n">elevationSpacing</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">intensity</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
+            class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">pointSet_property</span><span
+            class="o">.</span><span class="n">getValues</span><span class="p">(),</span>
+                                    <span class="n">minAzimuth</span> <span class="o">=</span> <span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
+            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
+                                    <span class="n">minElevation</span> <span class="o">=</span> <span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
+            class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span> <span
+            class="o">=</span> <span class="n">azimuthSpacing</span><span class="p">,</span>
+                                    <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">elevationSpacing</span><span
+            class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
+            class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">pointSet_property</span><span
+            class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">Intensity</span><span
+            class="p">,</span>
+                                    <span class="n">minAzimuth</span> <span class="o">=</span> <span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
+            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
+                                    <span class="n">minElevation</span> <span class="o">=</span> <span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
+            class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span> <span
+            class="o">=</span> <span class="n">azimuthSpacing</span><span class="p">,</span>
+                                    <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">elevationSpacing</span><span
+            class="p">)</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__computePanoramaIndices</span><span class="p">(</span><span class="n">sphCoords</span><span
+            class="p">,</span> <span class="n">azimuthSpacing</span><span class="p">,</span> <span class="n">elevationSpacing</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the boundaries and the indices of the panorama</span>
+
+<span class="sd">        :return: (minAz, maxAz), (minEl, maxEl), (azimuthIndexes, elevationIndexes)</span>
+
+<span class="sd">        :rtype: tuple</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Finding the boundaries of the panorama</span>
         <span class="n">minAz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span
@@ -135,188 +276,23 @@
             class="p">)</span>
 
         <span class="c1"># Calculating the location of each point in the panorama</span>
-        <span class="n">azimuthIndexes</span> <span class="o">=</span> <span class="nb">int</span><span
-            class="p">((</span><span class="n">sphCoords</span><span class="o">.</span><span
-            class="n">Azimuths</span> <span class="o">-</span> <span class="n">minAz</span><span
-            class="p">)</span> <span class="o">/</span> <span class="n">azimuthSpacing</span><span class="p">)</span>
-        <span class="n">elevationIndexes</span> <span class="o">=</span> <span class="nb">int</span><span
-            class="p">((</span><span class="n">maxEl</span> <span class="o">-</span> <span
-            class="n">sphCoords</span><span class="o">.</span><span class="n">ElevationAngles</span><span
-            class="p">)</span> <span class="o">/</span> <span class="n">elevationSpacing</span><span class="p">)</span>
-
-        <span class="c1"># Creating the panorams based on the requested property</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">_property</span> <span
-            class="o">==</span> <span class="s1">&#39;range&#39;</span><span class="p">):</span>  <span class="c1"># Creating a range panorama</span>
-            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">sphCoords</span><span class="o">.</span><span class="n">Ranges</span><span class="p">,</span>
-                                    <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                    <span class="n">minElevation</span> <span class="o">=</span> <span
-            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
-            class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span> <span
-            class="o">=</span> <span class="n">azimuthSpacing</span><span class="p">,</span>
-                                    <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">elevationSpacing</span><span
+        <span class="n">azimuthIndexes</span> <span class="o">=</span> <span class="p">((</span><span class="n">sphCoords</span><span
+            class="o">.</span><span class="n">Azimuths</span> <span class="o">-</span> <span class="n">minAz</span><span
+            class="p">)</span> <span class="o">/</span> <span class="n">azimuthSpacing</span><span
+            class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span
+            class="nb">int</span><span class="p">)</span>
+        <span class="n">elevationIndexes</span> <span class="o">=</span> <span class="p">((</span><span
+            class="n">maxEl</span> <span class="o">-</span> <span class="n">sphCoords</span><span
+            class="o">.</span><span class="n">ElevationAngles</span><span class="p">)</span> <span
+            class="o">/</span> <span class="n">elevationSpacing</span><span class="p">)</span><span
+            class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span
             class="p">)</span>
 
-        <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
-            class="o">==</span> <span class="s1">&#39;intensity&#39;</span><span class="p">):</span>  <span class="c1"># Creating an inensity panorama</span>
-            <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">pointSet</span><span class="o">.</span><span class="n">Intensity</span><span class="p">,</span>
-                                    <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                    <span class="n">minElevation</span> <span class="o">=</span> <span
-            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span
-            class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span> <span
-            class="o">=</span> <span class="n">azimuthSpacing</span><span class="p">,</span>
-                                    <span class="n">elevationSpacing</span> <span class="o">=</span> <span class="n">elevationSpacing</span><span
-            class="p">)</span>
-
-        <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
-            class="o">==</span> <span class="s1">&#39;color&#39;</span><span class="p">):</span>  <span class="c1"># Creating a panorama based on the colors of point set</span>
-
-            <span class="c1"># Checking if the input &#39;points&#39; object is an instance of either ColorProperty or SegmenationProperty which have color data</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span
-            class="n">points</span><span class="p">,</span> <span class="n">ColorProperty</span><span class="p">)</span> <span
-            class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span
-            class="p">,</span> <span class="n">SegmentationProperty</span><span class="p">)):</span>
-                <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">points</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span>
-                                        <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
-
-            <span class="c1"># Checking if the original PointSet has color data in it </span>
-            <span class="k">elif</span> <span class="p">(</span><span class="n">pointSet</span><span
-            class="o">.</span><span class="n">RGB</span> <span class="o">!=</span> <span class="kc">None</span><span
-            class="p">):</span>
-                <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">pointSet</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span>
-                                        <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Color data cannot be derived from the sent data type: &quot;</span><span
-            class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
-            class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
-            class="p">)</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
-            class="o">==</span> <span class="s1">&#39;segmentation&#39;</span><span class="p">):</span>  <span
-            class="c1"># Creating a panorama based on the segmentation of point set</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span
-            class="n">points</span><span class="p">,</span>
-                           <span class="n">SegmentationProperty</span><span class="p">)):</span>  <span class="c1"># Checking if the input &#39;points&#39; object is an instance of SegmenationProperty</span>
-                <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">points</span><span class="o">.</span><span class="n">RGB</span><span class="p">,</span>
-                                        <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Segmentation data cannot be derived from the sent data type: &quot;</span><span
-            class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
-            class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
-            class="p">)</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">elif</span> <span class="p">(</span><span class="n">_property</span> <span
-            class="o">==</span> <span class="s1">&#39;normals&#39;</span><span class="p">):</span>  <span class="c1"># Creating a panorama based on the normals of point set</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span
-            class="n">points</span><span class="p">,</span>
-                           <span class="n">NormalsProperty</span><span class="p">)):</span>  <span class="c1"># Checking if the input &#39;points&#39; object is an instance of NormalsProperty</span>
-                <span class="k">return</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
-            class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span
-            class="n">points</span><span class="o">.</span><span class="n">Normals</span><span class="p">,</span>
-                                        <span class="n">panoramaData</span> <span class="o">=</span> <span class="n">_property</span><span
-            class="p">,</span> <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Normals data cannot be derived from the sent data type: &quot;</span><span
-            class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">points</span><span
-            class="p">))</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Panorama was not created&quot;</span><span
-            class="p">)</span>
-                <span class="k">return</span> <span class="kc">None</span></div></div>
-
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span
-                        class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">IOFactory</span> <span class="k">import</span> <span class="n">IOFactory</span>
-    <span class="kn">from</span> <span class="nn">Visualization</span> <span class="k">import</span> <span class="n">Visualization</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-    <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">fileName</span> <span class="o">=</span> <span class="s1">r&#39;D:\Documents\Pointsets\bonim_5_big.pts&#39;</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reading from file&#39;</span><span
-                        class="p">)</span>
-    <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span
-                        class="n">fileName</span><span class="p">,</span> <span class="n">pointSetList</span><span
-                        class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Creating Panorama&#39;</span><span
-                        class="p">)</span>
-    <span class="n">pano</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span
-                        class="o">.</span><span class="n">CreatePanorama</span><span class="p">(</span><span class="n">pointSetList</span><span
-                        class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Showing Panorama&#39;</span><span
-                        class="p">)</span>
-    <span class="n">Visualization</span><span class="o">.</span><span class="n">ShowPanorama</span><span
-                        class="p">(</span><span class="n">pano</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span
-                        class="p">)</span>
-
-    <span class="c1">#     pano = PanoramaFactory.CreatePanorama( pointSetList[0], &#39;intensity&#39; )</span>
-    <span class="c1">#     Visualization.ShowPanorama( pano, &#39;gray&#39; )</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">minAz</span><span class="p">,</span> <span
+            class="n">maxAz</span><span class="p">),</span> <span class="p">(</span><span class="n">minEl</span><span
+            class="p">,</span> <span class="n">maxEl</span><span class="p">),</span> <span class="p">(</span><span
+            class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">elevationIndexes</span><span
+            class="p">)</span></div>
 </pre>
                 </div>
 

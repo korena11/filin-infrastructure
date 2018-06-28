@@ -43,6 +43,9 @@ sys.path.insert(0, os.path.abspath('../Property Classes'))
 sys.path.insert(0, os.path.abspath('../Factory Classes'))
 sys.path.insert(0, os.path.abspath('../Visualization Classes'))
 sys.path.insert(0, os.path.abspath('../IO modules'))
+sys.path.insert(0, os.path.abspath('../Panoramas'))
+sys.path.insert(0, os.path.abspath('../LevelSets'))
+sys.path.insert(0, os.path.abspath('../ReumaPhD'))
 sys.path.insert(0, os.path.abspath('../Third Party'))
 
 extensions = [
@@ -362,6 +365,10 @@ texinfo_documents = [
 #
 # texinfo_no_detailmenu = False
 
+# -----------------------------------------------------------------------------
+# Autosummary
+# -----------------------------------------------------------------------------
+
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}
@@ -397,7 +404,6 @@ class AutoAutoSummary(Autosummary):
 
         try:
             (module_name, class_name) = clazz.rsplit('.', 1)
-            print class_name
 
             m = __import__(module_name, globals(), locals(), [class_name])
             c = getattr(m, class_name)
@@ -410,7 +416,6 @@ class AutoAutoSummary(Autosummary):
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
         except:
             module_name = clazz
-            print module_name
             m = __import__(module_name, globals(), locals())
             c = getattr(m, class_name)
             if 'functions' in self.options:

@@ -1,5 +1,9 @@
 """
-Functions for reading files
+Reading Functions
+=================
+
+Specific functions for file reading. Called from the IOFactory
+
 """
 
 import warnings

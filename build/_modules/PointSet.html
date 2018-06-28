@@ -64,8 +64,7 @@
 <span class="c1"># from vtk.api import vtk</span>
 
 
-<div class="viewcode-block" id="PointSet"><a class="viewcode-back"
-                                             href="../PointSet.html#PointSet.PointSet">[docs]</a><span
+<div class="viewcode-block" id="PointSet"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet">[docs]</a><span
         class="k">class</span> <span class="nc">PointSet</span><span class="p">(</span><span
         class="n">BaseData</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; </span>
@@ -197,7 +196,7 @@
 
 
 <div class="viewcode-block" id="PointSet.ToNumpy"><a class="viewcode-back"
-                                                     href="../PointSet.html#PointSet.PointSet.ToNumpy">[docs]</a>    <span
+                                                     href="../Datasets/PointSet.html#PointSet.PointSet.ToNumpy">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -208,17 +207,25 @@
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
             class="p">)</span></div>
 
+<div class="viewcode-block" id="PointSet.ToGeoPandas"><a class="viewcode-back"
+                                                         href="../Datasets/PointSet.html#PointSet.PointSet.ToGeoPandas">[docs]</a>    <span
+        class="k">def</span> <span class="nf">ToGeoPandas</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: pointSet as GeoPandas (geoseries) object (Points)</span>
+<span class="sd">        :rtype: geopandas.geoseries</span>
 
-    <span class="nd">@classmethod</span>
-<div class="viewcode-block" id="PointSet.ToPandas"><a class="viewcode-back"
-                                                      href="../PointSet.html#PointSet.PointSet.ToPandas">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ToPandas</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">):</span>
-        <span class="c1"># TODO add this method</span>
-        <span class="k">pass</span></div>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span
+            class="nn">geometry</span>
+
+        <span class="n">geometryPoints</span> <span class="o">=</span> <span class="n">geometry</span><span
+            class="o">.</span><span class="n">Point</span><span class="p">()</span></div>
+
+
 
 <div class="viewcode-block" id="PointSet.GetPoint"><a class="viewcode-back"
-                                                      href="../PointSet.html#PointSet.PointSet.GetPoint">[docs]</a>    <span
+                                                      href="../Datasets/PointSet.html#PointSet.PointSet.GetPoint">[docs]</a>    <span
         class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -232,7 +239,7 @@
             class="p">:]</span></div>
 
 <div class="viewcode-block" id="PointSet.UpdateFields"><a class="viewcode-back"
-                                                          href="../PointSet.html#PointSet.PointSet.UpdateFields">[docs]</a>    <span
+                                                          href="../Datasets/PointSet.html#PointSet.PointSet.UpdateFields">[docs]</a>    <span
         class="k">def</span> <span class="nf">UpdateFields</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
         class="p">):</span>
@@ -271,7 +278,7 @@
 
 
 <div class="viewcode-block" id="PointSet.AddData2Fields"><a class="viewcode-back"
-                                                            href="../PointSet.html#PointSet.PointSet.AddData2Fields">[docs]</a>    <span
+                                                            href="../Datasets/PointSet.html#PointSet.PointSet.AddData2Fields">[docs]</a>    <span
         class="k">def</span> <span class="nf">AddData2Fields</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span
         class="n">field</span> <span class="o">=</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">):</span>
@@ -301,7 +308,7 @@
             class="n">data</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="PointSet.ToPolyData"><a class="viewcode-back"
-                                                        href="../PointSet.html#PointSet.PointSet.ToPolyData">[docs]</a>    <span
+                                                        href="../Datasets/PointSet.html#PointSet.PointSet.ToPolyData">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

@@ -53,14 +53,17 @@
                 <div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span
                         class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span
-                        class="n">array</span>
-<span class="kn">from</span> <span class="nn">tvtk.api</span> <span class="k">import</span> <span class="n">tvtk</span>
+                        class="n">array</span><span class="p">,</span> <span class="n">cos</span><span
+                        class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
 
+<span class="c1"># from tvtk.api import tvtk</span>
+
+
 <div class="viewcode-block" id="SphericalCoordinatesProperty"><a class="viewcode-back"
-                                                                 href="../SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty">[docs]</a><span
+                                                                 href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty">[docs]</a><span
         class="k">class</span> <span class="nc">SphericalCoordinatesProperty</span><span class="p">(</span><span
         class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -87,7 +90,7 @@
             class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SphericalCoordinatesProperty.setValues"><a class="viewcode-back"
-                                                                           href="../SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues">[docs]</a>    <span
+                                                                           href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.setValues">[docs]</a>    <span
         class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
         class="n">kwargs</span><span class="p">):</span>
@@ -124,6 +127,13 @@
             class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">distances</span></div>
 
+<div class="viewcode-block" id="SphericalCoordinatesProperty.getValues"><a class="viewcode-back"
+                                                                           href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">getValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthElevationRange</span><span
+            class="p">[:,</span> <span class="mi">2</span><span class="p">]</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">XYZ</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
@@ -159,7 +169,7 @@
     
     
 <div class="viewcode-block" id="SphericalCoordinatesProperty.ToNumpy"><a class="viewcode-back"
-                                                                         href="../SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy">[docs]</a>    <span
+                                                                         href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         
@@ -167,7 +177,7 @@
     
    
 <div class="viewcode-block" id="SphericalCoordinatesProperty.ToPolyData"><a class="viewcode-back"
-                                                                            href="../SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData">[docs]</a>    <span
+                                                                            href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -193,7 +203,56 @@
         <span class="n">_polyData</span><span class="o">.</span><span class="n">verts</span> <span
             class="o">=</span> <span class="n">verts</span>
         
-        <span class="k">return</span> <span class="n">_polyData</span></div></div>
+        <span class="k">return</span> <span class="n">_polyData</span></div>
+
+<div class="viewcode-block" id="SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><a class="viewcode-back"
+                                                                                                 href="../Properties/SphericalProperty.html#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates">[docs]</a>    <span
+        class="k">def</span> <span class="nf">SphericalToCartesianCoordinates</span><span class="p">(</span><span
+        class="n">points</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Spherical to Cartesian coordinates</span>
+
+<span class="sd">        :param points: spherical coordinates (az,el,r)</span>
+
+<span class="sd">        :return: points in cartesian coordinates</span>
+
+<span class="sd">        :rtype: PointSet</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
+            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span
+            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
+            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
+            class="mi">180</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span
+            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span
+            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
+            class="mi">180</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
+            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span
+            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
+            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
+            class="mi">180</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span
+            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span
+            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
+            class="mi">180</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
+            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span
+            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
+            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
+            class="mi">180</span><span class="p">)</span>
+
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span
+            class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span
+            class="mi">3</span><span class="p">))</span>
+        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span
+            class="o">=</span> <span class="n">x</span>
+        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span
+            class="o">=</span> <span class="n">y</span>
+        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span
+            class="o">=</span> <span class="n">z</span>
+
+        <span class="k">return</span> <span class="n">PointSet</span><span class="p">(</span><span
+            class="n">xyz</span><span class="p">)</span></div></div>
 </pre>
                 </div>
 

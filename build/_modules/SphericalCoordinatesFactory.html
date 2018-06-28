@@ -53,18 +53,14 @@
                 <div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">sqrt</span><span
                         class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span
-                        class="n">arctan2</span><span class="p">,</span> <span class="n">cos</span><span
-                        class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span
-                        class="n">zeros</span>
+                        class="n">arctan2</span>
 
-<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
-                        class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
                         class="n">SphericalCoordinatesProperty</span>
 
 
 <div class="viewcode-block" id="SphericalCoordinatesFactory"><a class="viewcode-back"
-                                                                href="../SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory">[docs]</a><span
+                                                                href="../Factories/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory">[docs]</a><span
         class="k">class</span> <span class="nc">SphericalCoordinatesFactory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    SphericalCoordinatesFactory</span>
@@ -72,7 +68,7 @@
     
     <span class="nd">@staticmethod</span>
 <div class="viewcode-block" id="SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><a class="viewcode-back"
-                                                                                                href="../SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">[docs]</a>    <span
+                                                                                                href="../Factories/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">[docs]</a>    <span
         class="k">def</span> <span class="nf">CartesianToSphericalCoordinates</span><span class="p">(</span><span
         class="n">points</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -106,57 +102,7 @@
         
         <span class="k">return</span> <span class="n">SphericalCoordinatesProperty</span><span class="p">(</span><span
             class="n">points</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span
-            class="n">el</span><span class="p">,</span> <span class="n">dis</span><span class="p">)</span></div>
-    
-    <span class="nd">@staticmethod</span>
-<div class="viewcode-block" id="SphericalCoordinatesFactory.SphericalToCartesianCoordinates"><a class="viewcode-back"
-                                                                                                href="../SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.SphericalToCartesianCoordinates">[docs]</a>    <span
-        class="k">def</span> <span class="nf">SphericalToCartesianCoordinates</span><span class="p">(</span><span
-        class="n">points</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        SphericalToCartesainCoordinates</span>
-
-<span class="sd">        :param points: spherical coordinates (az,el,r)</span>
-
-<span class="sd">        :return: points in cartesian coordinates</span>
-<span class="sd">        :rtype: PointSet</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
-            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span
-            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
-            class="mi">180</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span
-            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span
-            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
-            class="mi">180</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
-            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span
-            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
-            class="mi">180</span><span class="p">)</span> <span class="o">*</span> <span class="n">sin</span><span
-            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">0</span><span
-            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
-            class="mi">180</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span
-            class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span
-            class="p">(</span><span class="n">points</span><span class="p">[:,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span
-            class="mi">180</span><span class="p">)</span>
-        
-        <span class="n">xyz</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span
-            class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span
-            class="mi">3</span><span class="p">))</span>
-        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span
-            class="o">=</span> <span class="n">x</span>
-        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span
-            class="o">=</span> <span class="n">y</span>
-        <span class="n">xyz</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span
-            class="o">=</span> <span class="n">z</span>
-        
-        <span class="k">return</span> <span class="n">PointSet</span><span class="p">(</span><span
-            class="n">xyz</span><span class="p">)</span></div></div>
-        
-        
+            class="n">el</span><span class="p">,</span> <span class="n">dis</span><span class="p">)</span></div></div>
 </pre>
                 </div>
 

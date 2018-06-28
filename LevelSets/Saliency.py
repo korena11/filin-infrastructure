@@ -1,16 +1,21 @@
 '''
-infraGit
-photo-lab-3\Reuma
-27, Sep, 2017 
+|today|
 
-Encompasses multiple kinds of saliencies given an image:
-** Distance based **
+.. sectionauthor:: Reuma
+
+
+Implementation of multiple kinds of saliencies given an image:
+
+**Distance based**
+
 1. Achanta, R., Hemami, S., Estrada, F., and Susstrunk S. 2009. Frequency tuned salient region detection.
 2. Achanta, R., Estrada, F., Wils, P., and Susstrunk S. 2008. Salient region detection and segmentation.
 3. Goferman, S., Zelnik-Manor, L., Tal, A.,2012. Context-aware saliency detection.
 
-** Bayesian saliency
+**Bayesian saliency**
+
 4. Xie, Y., Lu, J., and Yang M.H. 2013. Bayesian saliency via low and mid level cues.
+
 
 '''
 
@@ -26,8 +31,8 @@ from matplotlib import pyplot as plt
 import scipy.linalg as LA
 
 import cv2
-from ReumaPhD import MyTools as mt
-from ReumaPhD import LatexUtils as lu
+import MyTools as mt
+import LatexUtils as lu
 import warnings
 
 
@@ -35,6 +40,7 @@ def bayesian(image, **kwargs):
     """
     Saliency computed according to:
     Xie, Y., Lu, J., and Yang M.H. 2013. Bayesian saliency via low and mid level cues.
+
     :param image:
     :param numSegments: number of segments in the superpixel segmentation. defualt: 200
     :param sigma: sigma for the segmentation (???). default: 5
@@ -42,6 +48,7 @@ def bayesian(image, **kwargs):
     :param sigma_dev: sigma for image derivatives. default: 2.5
     :param rho: small constant. default: 0.5
     :param verbose: print or show inter-running debug results
+
     :return:
     """
     from skimage.segmentation import slic
@@ -126,30 +133,53 @@ def bayesian(image, **kwargs):
 def distance_based(image, **kwargs):
     '''
     Computes saliency map according to distance methods
+
     :param image: the image to which the saliency map is computed
     :param feature: according to which feature vector the saliency is computed:
-                    'pixel_val' - the value of the pixel itself
-                    'LAB' - a feature vector using CIElab color space
-                    'normals' - a feature vector using point's normals
-    :param method: the method according to which the distance is computed
-                   'frequency' - the distance between blurred and unblurred image (Achanta et al., 2009)
-                   'local' - the distance between regions (Achanta et al., 2008)
-                   'context' - distance between regions and position (Goferman et al., 2012)
+
+                    - 'pixel_val' - the value of the pixel itself
+                    - 'LAB' - a feature vector using CIElab color space
+                    - 'normals' - a feature vector using point's normals
+
+    :param method: The method according to which the distance is computed:
+
+                   - *'frequency'* - the distance between blurred and unblurred image (Achanta et al., 2009)
+
+                   .. code-block:: python
+
+                       s1 = distance_based(img, filter_sigma = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
+                        feature = 'normals')
+
+                   - *'local'* - the distance between regions (Achanta et al., 2008)
+
+                   .. code-block:: python
+
+                       s2 = distance_based(img, filter_size = 5, method = 'local', feature = 'normals')
+
+                   - *'context'* - distance between regions and position (Goferman et al., 2012)
+
+                       :param scales_number: the number of scales that should be computed. default 3.
+                       :param kpatches: the number of minimum distance patches,  dtype = int. default: 64
+                       :param c: a constant; default: 3 (paper implementation)
+
+                   .. code-block:: python
+
+                       s3 = distance_based(img, filter_size = 150, method = 'context', feature = 'pixel_val', verbose = False,
+                        scales_number = 4)
+                       s3[s3 < 1.e-5] = 0
+
     :param verbose: Print debugging prints. boolean. Default True
     :param dist_type: the distance measure:
-                        'L1' ** SHOULD BE ADDED **
-                        'Euclidean'
-                        'Mahalonobis' - ** SHOULD BE ADDED **
+
+                        - 'L1' ** SHOULD BE ADDED **
+                        - 'Euclidean'
+                        - 'Mahalonobis' - ** SHOULD BE ADDED **
+
     :param filter_sigma: (for global method) size of the filter(s)
     :param region_size: (for local and context aware methods) size of the region(s)/patch(es)
 
-    ** for context aware method:
-    :param scales_number: the number of scales that should be computed. default 3.
-    :param kpatches: the number of minimum distance patches,  dtype = int. default: 64
-    :param c: a constant; default: 3 (paper implementation)
-
-
     :return: saliency map
+
     '''
 
     inputs = {'feature': 'pixel_val',
@@ -182,7 +212,11 @@ def distance_based(image, **kwargs):
     if img_feature == 'LAB':
         image = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
     else:
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        if image.max() == 250 and image.dtype == 'float64':
+            # TODO: need to see what happens in other cases
+            image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2GRAY)
+        else:
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
     # if the image feature is normals, either the normals are computed in advance and are given to the function or
     # they are computed here.
@@ -293,6 +327,7 @@ def __contextAware(image, ksize, image_feature, **kwargs):
     :param verbose: print debugging prints
 
     :return: saliency map of the given image
+
     """
     K = kwargs.get('kpatches', 64)
     c = kwargs.get('c', 3.)
@@ -344,12 +379,14 @@ def __contextAware(image, ksize, image_feature, **kwargs):
 def __dcolor(p_i, image, image_feature, **kwargs):
     '''
     computes the most similar patch to a patch i and their indices
+
     :param p_i: the patch to which the comparison is made
     :param vector: all other patches
     :param image_feature: the feature according to which the dcolor is computed
     :param kpatches: the number of minimum distance patches,  dtype = int
 
     :return: a vector of K most similar dcolors; a vector of K most similar indices
+
     '''
 
     K = kwargs.get('kpatches', 64)
@@ -387,6 +424,7 @@ def __dissimilarity(A, B, **kwargs):
     :param verbose: print intre running
 
     :return: dissimilarity measure between A and B
+
     """
     verbose = kwargs.get('verbose', False)
     if verbose:

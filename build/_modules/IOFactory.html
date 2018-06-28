@@ -62,11 +62,9 @@
 <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
-                        class="n">array</span><span class="p">,</span> <span class="n">asarray</span><span
-                        class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span
-                        class="n">tile</span><span class="p">,</span> <span class="n">ndarray</span><span
-                        class="p">,</span> <span class="n">where</span><span class="p">,</span> <span
-                        class="n">savetxt</span>
+                        class="n">array</span><span class="p">,</span> <span class="n">hstack</span><span
+                        class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span
+                        class="n">ndarray</span><span class="p">,</span> <span class="n">savetxt</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
 
 <span class="kn">import</span> <span class="nn">ReadFunctions</span>
@@ -89,8 +87,8 @@
 
 
 <div class="viewcode-block" id="IOFactory"><a class="viewcode-back"
-                                              href="../IOFactory.html#IOFactory.IOFactory">[docs]</a><span class="k">class</span> <span
-        class="nc">IOFactory</span><span class="p">:</span>
+                                              href="../Factories/IOFactory.html#IOFactory.IOFactory">[docs]</a><span
+        class="k">class</span> <span class="nc">IOFactory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class for loading and saving point clouds or rasters from files</span>
 
@@ -105,7 +103,7 @@
     <span class="c1"># ---------------------------READ -------------------------------</span>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.load"><a class="viewcode-back"
-                                                   href="../IOFactory.html#IOFactory.IOFactory.load">[docs]</a>    <span
+                                                   href="../Factories/IOFactory.html#IOFactory.IOFactory.load">[docs]</a>    <span
         class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
         class="n">kwargs</span><span class="p">):</span>
@@ -148,7 +146,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadHDF"><a class="viewcode-back"
-                                                      href="../IOFactory.html#IOFactory.IOFactory.ReadHDF">[docs]</a>    <span
+                                                      href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadHDF">[docs]</a>    <span
         class="k">def</span> <span class="nf">ReadHDF</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">classname</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -230,7 +228,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadPts"><a class="viewcode-back"
-                                                      href="../IOFactory.html#IOFactory.IOFactory.ReadPts">[docs]</a>    <span
+                                                      href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadPts">[docs]</a>    <span
         class="k">def</span> <span class="nf">ReadPts</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span
         class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
@@ -242,7 +240,7 @@
 <span class="sd">        :param fileName: name of .pts file</span>
 
 <span class="sd">        :param pointsetlist: placeholder for created PointSet objects</span>
-<span class="sd">        :param colorslist: placeholder for ColorProperty for PointSet object(s)</span>
+<span class="sd">        :param colorlist: placeholder for ColorProperty for PointSet object(s)</span>
 
 
 <span class="sd">        **Optionals**</span>
@@ -255,7 +253,7 @@
 
 <span class="sd">        :return: The created PointSet or the list of the PointSets created and the ColorProperty that belongs to it</span>
 
-<span class="sd">        :rtype: tuple</span>
+<span class="sd">        :rtype: PointSet</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">ReadPts</span><span
@@ -266,157 +264,45 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadPtx"><a class="viewcode-back"
-                                                      href="../IOFactory.html#IOFactory.IOFactory.ReadPtx">[docs]</a>    <span
+                                                      href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadPtx">[docs]</a>    <span
         class="k">def</span> <span class="nf">ReadPtx</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
-        class="n">pointSetList</span><span class="p">):</span>
+        class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Reading points from .ptx file</span>
-<span class="sd">        Creates one or more PointSet objects, returned through pointSetList </span>
-<span class="sd">        </span>
-<span class="sd">        :param fileName: name of .ptx file</span>
-<span class="sd">        :param pointSetList: place holder for created PointSet objects</span>
+<span class="sd">        Reads .ptx file, created by Leica Cyclone</span>
 
-<span class="sd">        :type fileName: str</span>
-<span class="sd">        :type pointSetList: list</span>
-<span class="sd">            </span>
-<span class="sd">        :return: Number of PointSet objects created</span>
-<span class="sd">        :rtype: int</span>
-<span class="sd"> </span>
+<span class="sd">        File is build according to:</span>
+<span class="sd">        https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2</span>
+
+<span class="sd">        :param filename: path to file + file</span>
+
+<span class="sd">        *Optionals*</span>
+
+<span class="sd">        :param pointsetlist: list that holds all the uploaded PointSet</span>
+<span class="sd">        :param colorlist: list that holds all the color properties that relate to the PointSet</span>
+<span class="sd">        :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet</span>
+
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :type pointsetlist: list</span>
+<span class="sd">        :type colorlist: list of ColorProperty</span>
+<span class="sd">        :type trasnformationMatrices: list of TransformationMatrixProperty</span>
+
+<span class="sd">        :return: pointSet list</span>
+
+<span class="sd">        :rtype: list</span>
+
+<span class="sd">        .. warning:: Doesn&#39;t read the transformation matrices.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pointSet</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="c1"># Opening file and reading all lines from it</span>
-        <span class="n">fin</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span
-            class="n">fileName</span><span class="p">)</span>
-        <span class="n">fileLines</span> <span class="o">=</span> <span class="n">fin</span><span
-            class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">fin</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">ReadPtx</span><span
+            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">)</span></div>
 
-        <span class="c1"># Splitting into list of lines </span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span
-            class="n">fileLines</span><span class="p">,</span> <span class="s1">&#39;</span><span
-            class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">fileLines</span>
-
-        <span class="c1"># Removing the last line if it is empty</span>
-        <span class="k">while</span> <span class="p">(</span><span class="kc">True</span><span class="p">):</span>
-            <span class="n">numLines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span
-            class="n">lines</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span
-            class="n">numLines</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span
-            class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">numLines</span> <span class="o">-=</span> <span class="mi">1</span>
-                <span class="n">lines</span> <span class="o">=</span> <span class="n">lines</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">:</span> <span class="n">numLines</span><span
-            class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">break</span>
-
-        <span class="c1"># Removing header line</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1">#         currentLines = lines[10::]</span>
-        <span class="c1"># Converting lines to 3D Cartesian coordinates Data     </span>
-        <span class="n">linesLen</span> <span class="o">=</span> <span class="p">[</span><span
-            class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span
-            class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lines</span><span
-            class="p">]</span>
-        <span class="n">line2del</span> <span class="o">=</span> <span class="p">(</span><span
-            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
-            class="n">asarray</span><span class="p">(</span><span class="n">linesLen</span><span
-            class="p">)</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)[</span><span
-            class="mi">0</span><span class="p">])</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span
-            class="n">line2del</span><span class="p">)</span> <span class="o">&gt;</span> <span
-            class="mi">1</span> <span class="ow">and</span> <span class="n">line2del</span><span class="p">[</span><span
-            class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">line2del</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span
-            class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="n">line2del</span> <span class="o">=</span> <span class="n">line2del</span><span
-            class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">::</span><span class="o">-</span><span
-            class="mi">2</span><span class="p">]</span>  <span class="c1"># there two lines one after another with length 1, we need the first one</span>
-        <span class="k">for</span> <span class="n">i2del</span> <span class="ow">in</span> <span
-            class="n">line2del</span><span class="p">:</span>
-            <span class="k">del</span> <span class="n">lines</span><span class="p">[</span><span
-            class="n">i2del</span><span class="p">:</span><span class="n">i2del</span> <span class="o">+</span> <span
-            class="mi">10</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span
-            class="n">__splitPtsString</span><span class="p">,</span> <span class="n">lines</span><span
-            class="p">))</span>
-        <span class="n">line2del</span> <span class="o">=</span> <span class="n">where</span><span
-            class="p">(</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span
-            class="p">)[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span
-            class="p">]</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span
-            class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span
-            class="p">,</span> <span class="mf">0.5</span><span class="p">])[</span><span class="mi">0</span><span
-            class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span
-            class="n">line2del</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="n">data</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span
-            class="n">data</span><span class="p">)</span>
-
-        <span class="n">xyz</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">(</span><span
-            class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span
-            class="mi">3</span><span class="p">])</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span
-            class="mi">6</span><span class="p">:</span>
-            <span class="n">rgb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span
-            class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span
-            class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">uint8</span><span class="p">)</span>
-            <span class="n">pointSet</span> <span class="o">=</span> <span class="n">PointSet</span><span
-            class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">rgb</span> <span
-            class="o">=</span> <span class="n">rgb</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span
-            class="mi">7</span><span class="p">:</span>
-            <span class="n">rgb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span
-            class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span
-            class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">uint8</span><span class="p">)</span>
-            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span
-            class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span> <span
-            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span
-            class="p">)</span>
-            <span class="n">pointSet</span> <span class="o">=</span> <span class="n">PointSet</span><span
-            class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">rgb</span> <span
-            class="o">=</span> <span class="n">rgb</span><span class="p">,</span> <span class="n">intensity</span> <span
-            class="o">=</span> <span class="n">intensity</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span
-            class="mi">4</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span
-            class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span
-            class="o">==</span> <span class="mi">7</span><span class="p">:</span>
-            <span class="n">intensity</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span
-            class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">dtype</span> <span
-            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span
-            class="p">)</span>
-            <span class="n">pointSet</span> <span class="o">=</span> <span class="n">PointSet</span><span
-            class="p">(</span><span class="n">xyz</span><span class="p">,</span> <span class="n">intensity</span> <span
-            class="o">=</span> <span class="n">intensity</span><span class="p">)</span>
-
-        <span class="n">pointSet</span><span class="o">.</span><span class="n">setPath</span><span
-            class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-        <span class="c1"># Create the List of PointSet object            </span>
-        <span class="n">pointSetList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
-            class="n">pointSet</span><span class="p">)</span>
-
-        <span class="k">del</span> <span class="n">lines</span>
-
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
-            class="n">pointSetList</span><span class="p">)</span></div>
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadXYZ"><a class="viewcode-back"
-                                                      href="../IOFactory.html#IOFactory.IOFactory.ReadXYZ">[docs]</a>    <span
+                                                      href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadXYZ">[docs]</a>    <span
         class="k">def</span> <span class="nf">ReadXYZ</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
         class="n">pointSetList</span><span class="p">):</span>
@@ -479,7 +365,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadShapeFile"><a class="viewcode-back"
-                                                            href="../IOFactory.html#IOFactory.IOFactory.ReadShapeFile">[docs]</a>    <span
+                                                            href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadShapeFile">[docs]</a>    <span
         class="k">def</span> <span class="nf">ReadShapeFile</span><span class="p">(</span><span
         class="n">cls</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
         class="n">pointSetList</span><span class="p">):</span>
@@ -519,7 +405,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.rasterFromGDAL"><a class="viewcode-back"
-                                                             href="../IOFactory.html#IOFactory.IOFactory.rasterFromGDAL">[docs]</a>    <span
+                                                             href="../Factories/IOFactory.html#IOFactory.IOFactory.rasterFromGDAL">[docs]</a>    <span
         class="k">def</span> <span class="nf">rasterFromGDAL</span><span class="p">(</span><span
         class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -545,7 +431,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.rasterFromAscFile"><a class="viewcode-back"
-                                                                href="../IOFactory.html#IOFactory.IOFactory.rasterFromAscFile">[docs]</a>    <span
+                                                                href="../Factories/IOFactory.html#IOFactory.IOFactory.rasterFromAscFile">[docs]</a>    <span
         class="k">def</span> <span class="nf">rasterFromAscFile</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">projection</span> <span
         class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -632,7 +518,7 @@
     <span class="c1"># ---------------------------WRITE -------------------------------</span>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.saveProperty"><a class="viewcode-back"
-                                                           href="../IOFactory.html#IOFactory.IOFactory.saveProperty">[docs]</a>    <span
+                                                           href="../Factories/IOFactory.html#IOFactory.IOFactory.saveProperty">[docs]</a>    <span
         class="k">def</span> <span class="nf">saveProperty</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="nb">property</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -664,7 +550,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.WriteToPts"><a class="viewcode-back"
-                                                         href="../IOFactory.html#IOFactory.IOFactory.WriteToPts">[docs]</a>    <span
+                                                         href="../Factories/IOFactory.html#IOFactory.IOFactory.WriteToPts">[docs]</a>    <span
         class="k">def</span> <span class="nf">WriteToPts</span><span class="p">(</span><span class="n">cls</span><span
         class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">path</span><span
         class="p">):</span>
@@ -744,7 +630,7 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.WriteToShapeFile"><a class="viewcode-back"
-                                                               href="../IOFactory.html#IOFactory.IOFactory.WriteToShapeFile">[docs]</a>    <span
+                                                               href="../Factories/IOFactory.html#IOFactory.IOFactory.WriteToShapeFile">[docs]</a>    <span
         class="k">def</span> <span class="nf">WriteToShapeFile</span><span class="p">(</span><span
         class="n">cls</span><span class="p">,</span> <span class="n">pointSet</span><span class="p">,</span> <span
         class="n">fileName</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span

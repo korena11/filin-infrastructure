@@ -13,16 +13,13 @@ Contents:
 =========
 
 .. toctree::
-	:maxdepth: 3
 
-	PointSet
+    Datasets/PointSet
+    Datasets/RasterData
+    Properties/BaseProperty
+    Factories/Factories
+    LevelSets/LevelSets
 
-	RasterData
-
-	BaseProperty
-
-	Factories
-	   
 	   
 Dependencies
 ============
