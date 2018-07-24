@@ -1,12 +1,11 @@
 # Class PointSet hold a set of un-ordered 2D or 3D points.
 
+# General Imports
 import numpy as np
-from numpy import vstack, hstack
 
+import VisualizationUtils
+# Framework Imports
 from BaseData import BaseData
-
-
-# from vtk.api import vtk
 
 
 class PointSet(BaseData):
@@ -34,7 +33,7 @@ class PointSet(BaseData):
         :param intensity: intensity values for each point(optional)
         :param path: path to PointSet file
 
-        :type points: np.array
+        :type points: np.ndarray
         :type intensity: int
         :type path: str
 
@@ -109,14 +108,12 @@ class PointSet(BaseData):
         """
         return self.data[:, 2]
 
-
     def ToNumpy(self):
         """
         :return: points as numpy nX3 ndarray
         """
 
         return np.array(self.data)
-
 
     @classmethod
     def ToPandas(cls):
@@ -154,33 +151,33 @@ class PointSet(BaseData):
         if 'XYZ' in kwargs:
             self.data[:, :] = kwargs['XYZ']
 
-
-    def AddData2Fields(self, data, field = 'XYZ'):
+    def AddData2Fields(self, data, field='XYZ'):
         '''
         Add data to a field
         '''
 
         if field == 'XYZ' or field == 'xyz':
-            self.setdata(vstack((self.data, data)))
+            self.setdata(np.vstack((self.data, data)))
 
         if field == 'Intensity' or field == 'intensity':
             if self.__intensity is None:
                 self.__intensity = data
             else:
-                self.__intensity = hstack((self.__intensity, data))
+                self.__intensity = np.hstack((self.__intensity, data))
 
     def ToPolyData(self):
         """
-        Create and return PolyData object
+        Create and return vtkPolyData object
 
-        :return tvtk.PolyData of the current PointSet
+        :return vtk.vtkPolyData of the current PointSet
 
         """
+        numpy_points = self.ToNumpy()
+        vtkPolyData = VisualizationUtils.MakeVTKPointsMesh(numpy_points)
 
-        # _polyData = tvtk.PolyData(points = array(self.data, 'f'))
-        # verts = arange(0, self.data.shape[0], 1)
-        # verts.shape = (self.data.shape[0], 1)
-        # _polyData.verts = verts
-        #
-        # return _polyData
-        #
+        return vtkPolyData
+
+        # # Using vtkInterface Library
+        # vtkPolyData = vtkInterface.PolyData()
+        # vtkPolyData.SetNumpyPoints(self.ToNumpy())
+        # return vtkPolyData
