@@ -19,6 +19,7 @@ Contents:
     Properties/BaseProperty
     Factories/Factories
     LevelSets/LevelSets
+    Utils/EigenFactory
 
 	   
 Dependencies

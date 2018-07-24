@@ -54,6 +54,17 @@ class BaseProperty(object):
         """
         pass
 
+    @property
+    def Size(self):
+        """
+        Return the size of the property
+        """
+        if isinstance(self.__dataset, RasterData):
+            return self.__dataset.cols * self.__dataset.rows
+
+        elif isinstance(self.__dataset, PointSet):
+            return self.__dataset.Size
+
     def getValues(self):
         """
         Get a specific characteristic value of the property

@@ -38,15 +38,17 @@ from sphinx.ext.autosummary import Autosummary
 from sphinx.ext.autosummary import get_documenter
 from sphinx.util.inspect import safe_getattr
 
-sys.path.insert(0, os.path.abspath('../Data Classes'))
-sys.path.insert(0, os.path.abspath('../Property Classes'))
-sys.path.insert(0, os.path.abspath('../Factory Classes'))
-sys.path.insert(0, os.path.abspath('../Visualization Classes'))
-sys.path.insert(0, os.path.abspath('../IO modules'))
-sys.path.insert(0, os.path.abspath('../Panoramas'))
-sys.path.insert(0, os.path.abspath('../LevelSets'))
-sys.path.insert(0, os.path.abspath('../ReumaPhD'))
-sys.path.insert(0, os.path.abspath('../Third Party'))
+sys.path.insert(0, os.path.abspath('../../..'))
+sys.path.insert(0, os.path.abspath('../../Property Classes'))
+sys.path.insert(0, os.path.abspath('../../Data Classes'))
+sys.path.insert(0, os.path.abspath('../../Factory Classes'))
+sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
+sys.path.insert(0, os.path.abspath('../../IO modules'))
+sys.path.insert(0, os.path.abspath('../../Panoramas'))
+sys.path.insert(0, os.path.abspath('../../LevelSets'))
+sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
+sys.path.insert(0, os.path.abspath('../../Third Party'))
+sys.path.insert(0, os.path.abspath('../../Utils'))
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -57,7 +59,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.autosummary'
+    'sphinx.ext.autosummary',
+    'sphinxcontrib.bibtex'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

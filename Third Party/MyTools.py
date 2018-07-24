@@ -186,7 +186,8 @@ def curveCentralDerivatives(c, repartition = 5):
 
 def computeImageDerivatives(img, order, **kwargs):
     """
-        Computes image derivatives up to order 2
+        Computes image derivatives up to order 2. Normalizes the derivatives.
+
         :param img: the image to which the derivatives should be computed
         :param order: order needed (1 or 2)
         :param ksize: filter kernel size (3,and up)

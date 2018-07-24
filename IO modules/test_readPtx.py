@@ -13,8 +13,8 @@ class TestReadPtx(TestCase):
         colorslist = []
         transMatrices = []
         filename = r'test_ptx2.ptx'
-        ReadFunctions.ReadPtx(filename, pointsetlist = pointsetlist, colorlist = colorslist,
-                              transformationMatrices = transMatrices)
+        ReadFunctions.ReadPtx(filename, pointsetlist = pointsetlist, colorslist = colorslist,
+                              trasformationMatrices = transMatrices)
 
         self.assertIsInstance(pointsetlist[0], PointSet, 'Point set was not loaded into PointSet')
         self.assertIsNotNone(pointsetlist[0].Intensity, 'Intensity was not loaded')
@@ -34,8 +34,8 @@ class TestReadPtx(TestCase):
         pointsetlist = []
         colorslist = []
         transMatrices = []
-        IOFactory.ReadPtx(r'test_ptx2.ptx', pointsetlist = pointsetlist, colorlist = colorslist,
-                          transformationMatrices = transMatrices)
+        IOFactory.ReadPtx(r'test_ptx2.ptx', pointsetlist = pointsetlist, colorslist = colorslist,
+                          trasformationMatrices = transMatrices)
 
         self.assertIsInstance(pointsetlist[0], PointSet, 'Point set was not loaded into PointSet')
         self.assertIsNotNone(pointsetlist[0].Intensity, 'Intensity was not loaded')
@@ -56,8 +56,8 @@ class TestReadPtx(TestCase):
         pointsetlist_pts = []
         colorslist_pts = []
 
-        IOFactory.ReadPtx(r'test_ptx2.ptx', pointsetlist = pointsetlist_ptx, colorlist = colorslist_ptx,
-                          transformationMatrices = transMatrices_ptx)
+        IOFactory.ReadPtx(r'test_ptx2.ptx', pointsetlist = pointsetlist_ptx, colorslist = colorslist_ptx,
+                          trasformationMatrices = transMatrices_ptx)
 
         IOFactory.ReadPts(r'test_pts2.pts', pointsetlist_pts, colorslist_pts, merge = False)
 

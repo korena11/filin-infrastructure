@@ -37,7 +37,7 @@ class IOFactory:
 
     # ---------------------------READ -------------------------------
     @classmethod
-    def load(cls, filename, **kwargs):
+    def load(cls, filename, classname, **kwargs):
         """
         Loads an object file (json or hdf5)
 
@@ -56,7 +56,6 @@ class IOFactory:
         f, ext = CreateFilename(filename, mode = 'r')
         if ext == 'h5':
             try:
-                classname = kwargs['classname']
                 obj = cls.ReadHDF(f, classname, **kwargs)
             except:
                 warnings.warn('No class type assigned for hdf file')
@@ -111,18 +110,17 @@ class IOFactory:
         return obj
 
     @classmethod
-    def ReadPts(cls, filename, *args, **kwargs):
+    def ReadPts(cls, filename, pointsetlist = list(), colorslist = list(), merge = True):
         """
          Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
         otherwise).
 
         :param fileName: name of .pts file
 
-        :param pointsetlist: placeholder for created PointSet objects
-        :param colorlist: placeholder for ColorProperty for PointSet object(s)
-
-
         **Optionals**
+
+        :param pointsetlist: placeholder for created PointSet objects
+        :param colorslist: placeholder for ColorProperty for PointSet object(s)
         :param merge: merge points in file into one PointSet or not. Default: True.
 
         :type filename: str
@@ -135,16 +133,17 @@ class IOFactory:
         :rtype: PointSet
 
         """
-        return ReadFunctions.ReadPts(filename, *args, **kwargs)
+        return ReadFunctions.ReadPts(filename, pointsetlist, colorslist, merge)
 
 
     @classmethod
-    def ReadPtx(cls, filename, **kwargs):
+    def ReadPtx(cls, filename, pointsetlist = list(), colorslist = list(), trasformationMatrices = list(),
+                remove_empty = True):
 
         """
         Reads .ptx file, created by Leica Cyclone
 
-        File is build according to:
+        File is built according to:
         https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2
 
         :param filename: path to file + file
@@ -152,12 +151,12 @@ class IOFactory:
         *Optionals*
 
         :param pointsetlist: list that holds all the uploaded PointSet
-        :param colorlist: list that holds all the color properties that relate to the PointSet
+        :param colorslist: list that holds all the color properties that relate to the PointSet
         :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet
 
         :type filename: str
         :type pointsetlist: list
-        :type colorlist: list of ColorProperty
+        :type colorslist: list of ColorProperty.ColorProperty
         :type trasnformationMatrices: list of TransformationMatrixProperty
 
         :return: pointSet list
@@ -167,21 +166,21 @@ class IOFactory:
         .. warning:: Doesn't read the transformation matrices.
 
         """
-        return ReadFunctions.ReadPtx(filename, **kwargs)
+        return ReadFunctions.ReadPtx(filename, pointsetlist, colorslist, trasformationMatrices, remove_empty)
 
 
     @classmethod
-    def ReadXYZ(cls, fileName, pointSetList):
+    def ReadXYZ(cls, fileName, pointsetlist = list(), merge = True):
         """
         Reading points from .xyz file
         Creates one PointSet objects returned through pointSetList
         
 
         :param fileName: name of .xyz file
-        :param pointSetList: place holder for created PointSet object
+        :param pointsetlist: place holder for created PointSet object
 
         :type fileName: str
-        :type pointSetList: list
+        :type pointsetlist: list
             
         :return: Number of PointSet objects created
 
@@ -200,9 +199,11 @@ class IOFactory:
 
         pointSet = PointSet(xyz)
         pointSet.setPath(fileName)
-        pointSetList.append(pointSet)
+        pointsetlist.append(pointSet)
 
-        return len(pointSetList)
+        if merge:
+            pointsetlist = np.array(pointsetlist)
+        return len(pointsetlist)
 
     @classmethod
     def ReadShapeFile(cls, fileName, pointSetList):

@@ -1,6 +1,7 @@
 from numpy import zeros, arange, array, cos, pi, sin
 
 from BaseProperty import BaseProperty
+from PointSet import PointSet
 
 
 # from tvtk.api import tvtk
@@ -54,10 +55,6 @@ class SphericalCoordinatesProperty(BaseProperty):
     def XYZ(self):
         return self.Points.ToNumpy()
 
-    @property
-    def Size(self):
-        return self.__dataset.Size
-    
     @property
     def Azimuths(self):
         
