@@ -195,7 +195,7 @@ def distance_based(image, **kwargs):
     img_feature = inputs['feature']
     sigma_flag = True
     s = None
-
+    image = image.astype(np.float32)
     if inputs['filter_sigma'] != 0:
         filters = inputs['filter_sigma']
         sigma_flag = True  # whether sigma or size were sent
@@ -212,11 +212,7 @@ def distance_based(image, **kwargs):
     if img_feature == 'LAB':
         image = cv2.cvtColor(image, cv2.COLOR_RGB2LAB)
     else:
-        if image.max() == 250 and image.dtype == 'float64':
-            # TODO: need to see what happens in other cases
-            image = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_RGB2GRAY)
-        else:
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 
     # if the image feature is normals, either the normals are computed in advance and are given to the function or
     # they are computed here.

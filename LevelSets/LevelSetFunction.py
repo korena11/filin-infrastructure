@@ -156,7 +156,6 @@ class LevelSetFunction(object):
         """
         return self.__yy
 
-
     def __ls_derivatives_curvature(self, **kwargs):
         """
         Computes and updates the level set function derivatives and curvature
@@ -194,48 +193,36 @@ class LevelSetFunction(object):
         self.compute_dirac_delta(**kwargs)
 
     @staticmethod
-    def build_function(func_shape, **kwargs):
+    def dist_from_circle(center_pt, radius, func_shape, **kwargs):
         """
-        :param func_shape: shape of the function (tuple) (num_row, num_col)
+        Build a Lipshitz distance function from a circle, with a specific size
 
-        **characteristics of the function:**
+        .. math::
+             \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
 
-        :param width: the width of the area inside the curve
-        :param height: the height of the area inside the curve
-        :param type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+
+        :param center_pt:  center of the circle
+        :param radius:  radius of the circle
+        :param func_shape: size of the function (height, width)
+        :param ksize: the kernel size for later processing. Default: 5
+
+        :type center_pt: tuple
+        :type radius: int
+        :type func_shape: tuple
+
+        :return: a level set function that its zero-set is the defined circle (approximately)
+
+        :rtype: np.array
 
         """
-        func_type = kwargs.get('func_type', 'rectangle')
+        height = func_shape[0]
+        width = func_shape[1]
+        ksize = kwargs.get('ksize', 5)
+        x = np.arange(width)
+        y = np.arange(height)
+        xx, yy = np.meshgrid(ksize * x, ksize * y)
 
-        func_width = func_shape[1]
-        func_height = func_shape[0]
-
-        width = int(kwargs.get('width', func_width / 4))
-        height = int(kwargs.get('height', func_height / 4))
-
-        start_point = kwargs.get('start', (func_height / 2 - height, func_width / 2 - width))
-
-        # phi(x,y,t) < 0 for (x,y) \not\in \Omega
-        phi = -np.ones(func_shape)
-
-        if func_type == 'rectangle':
-            # phi(x,y,t) > 0 for (x,y) \in \Omega
-            phi[start_point[0]: start_point[0] + 2 * height, start_point[1]:start_point[1] + 2 * width] = 1
-
-            # phi(x,y,t) = 0 for (x,y) on curve
-            phi[start_point[0]: start_point[0] + 2 * height, start_point[1]] = 0
-            phi[start_point[0]: start_point[0] + 2 * height, start_point[1] + 2 * width - 1] = 0
-
-            phi[start_point[0], start_point[1]:start_point[1] + 2 * width - 1] = 0
-            phi[start_point[0] + 2 * height, start_point[1]:start_point[1] + 2 * width - 1] = 0
-
-        elif func_type == 'horizontal':
-            phi[start_point[0], :] = 0
-            phi[:start_point[0], :] = 1
-
-        elif func_type == 'vertical':
-            phi[:, start_point[1]] = 0
-            phi[:, :start_point[1]] = 1
+        phi = radius - np.sqrt((xx - center_pt[1] * ksize) ** 2 + (yy - center_pt[0] * ksize) ** 2)
 
         return phi
 
@@ -317,13 +304,14 @@ class LevelSetFunction(object):
                 .. math::
                    d(x) = \frac{1}{\pi}\frac{\epsilon}{\epsilon^2 + x^2}
 
+            - '3' - replace dirac-delta with :math:`|\nabla \phi|`
 
         :param epsilon: for the 1st and 2nd regularizations
 
         :return: the dirac delta function. Also updates the class
 
         """
-        epsilon = kwargs.get('epsilon', EPS)
+        epsilon = kwargs.get('epsilon', 1)
         regularization_note = kwargs.get('regularization_note', self.regularization_note)
 
         d = np.zeros(self.value.shape)
@@ -340,6 +328,9 @@ class LevelSetFunction(object):
 
         elif regularization_note == 2:
             d = 1 / np.pi * epsilon / (epsilon ** 2 + x ** 2)
+
+        elif regularization_note == 3:
+            d = self.norm_nabla
 
         self.__dirac_delta = d
         return d

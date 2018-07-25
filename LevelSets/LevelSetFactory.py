@@ -27,7 +27,7 @@ class LevelSetFactory:
 
     # Weighting initializations
     __gvf_w = 1.
-    __vo_w = 1.
+    __vo_w = 0.
     __region_w = 1.
     __chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
 
@@ -80,6 +80,10 @@ class LevelSetFactory:
 
         self.__phi = [LevelSetFunction(np.zeros(img.shape))]
         self.__psi = [LevelSetFunction(np.zeros(img.shape))]
+        self.__region = np.zeros(img.shape)
+        self.__f = np.zeros(img.shape)
+        self.__g = np.zeros(img.shape)
+
 
         if 'weights' in list(kwargs.keys()):
             self.set_weights(**kwargs['weights'])
@@ -112,12 +116,13 @@ class LevelSetFactory:
 
         .. code-block:: python
 
-            {'geodesic': 1., 'curvature': .2, 'equi-affine': 0.5}
+            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})
 
         """
         flow_types = {'geodesic': 1.,
                       'curvature': 0.,
-                      'equi-affine': 0.,
+                      'equi_affine': 0.,
+                      'chan_vese': 0.,
                       'band': 0.}
         flow_types.update(kwargs)
         self.__flow_types = flow_types
@@ -195,8 +200,9 @@ class LevelSetFactory:
         Chan-Vese weights: area, length, inside and outside weights
 
         Default:
-        * length, inside and outside weights: 1.
-        * area: 0.
+
+           * length, inside and outside weights: 1.
+           * area: 0.
 
         :rtype: dict
 
@@ -222,6 +228,10 @@ class LevelSetFactory:
                   'vo_w': 0.,
                   'region_w': 1.,
                   'chanvese_w': {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}}
+        if 'chanvese_w' in kwargs:
+            chanvese_w = inputs['chanvese_w']
+            chanvese_w.update(kwargs['chanvese_w'])
+            kwargs['chanvese_w'] = chanvese_w
 
         inputs.update(kwargs)
         self.__chanvese_w = inputs['chanvese_w']
@@ -357,6 +367,8 @@ class LevelSetFactory:
              \phi(x,y,t) = 0 & \forall (x,y) \textrm{ on curve} \\
              \end{cases}
 
+        with :math:`\left| \nabla \phi \right| = 1`
+
         **Characteristics of the function**
 
         :param processing_props: properties for gradient and differentiation:
@@ -364,43 +376,37 @@ class LevelSetFactory:
             - 'sigma' - for smoothing
             - 'ksize' - for smoothing
 
-        :param width: the width of the area inside the curve
-        :param height: the height of the area inside the curve
-        :param start: starting point for the inside area of the curve (x_start, y_start)
-        :param reularization: regularizataion note for heaviside function
-        :param function_type: 'rectangle' (default); 'vertical' or 'horizontal' (for open contours)
+        :param radius: if the curve is a circle, the radius should be specified.
+        :param center_pt: if the curve is a circle, the center point should be specified.
+        :param reularization_note: regularization note for heaviside function
+        :param function_type: 'circle' (default); 'vertical' or 'horizontal' (for open contours)
 
         :type processing_props: dict
-        :type width: int
-        :type height: int
+        :type radius: int
+        :type center_pt: tuple
         :type function_type: str
         :type start: tuple
-        :type regularization: int 0,1,2
+        :type regularization_note: int 0,1,2
 
         """
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
         processing_props.update(kwargs['processing_props'])
         img_height, img_width = self.img.shape[:2]
-        width = kwargs.get('width', img_width / 4)
-        height = kwargs.get('height', img_height / 4)
-        func_type = kwargs.get('function_type', 'rectangle')
-        start_point = kwargs.get('start', (img_height / 2 - height, img_width / 2 - width))
+        radius = kwargs.get('radius', np.int(img_width / 4))
+        center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
+        func_type = kwargs.get('function_type', 'circle')
+
         regularization = kwargs.get('regularization_note', 0)
 
-        phi = LevelSetFunction.build_function(self.img.shape[:2], func_type = func_type,
-                                              height = height, width = width, start = start_point)
-
-        x = np.arange(img_width)
-        y = np.arange(img_height)
-        xx, yy = np.meshgrid(x, y)
-        dists = np.sqrt(xx ** 2 + yy ** 2)
-        dists /= np.linalg.norm(dists)
+        if func_type == 'circle':
+            phi = LevelSetFunction.dist_from_circle(center_pt, radius, (img_height, img_width),
+                                                    ksize = processing_props['ksize'])
 
         if np.all(self.__phi[0].value == 0):
             self.__phi = []
 
         self.__phi.append(
-            LevelSetFunction(cv2.GaussianBlur(phi * dists, (9, 9), 0), regularization_note = regularization,
+            LevelSetFunction(phi, regularization_note = regularization,
                              epsilon = 1e-8,
                              **processing_props))
 
@@ -507,22 +513,25 @@ class LevelSetFactory:
         :param flow_type: can be one of the following:
             - 'constant':
 
-               .. math:: Ct = N \Rightarrow phi_t = |\nabla \varphi|
+               .. math:: C_t = N \Rightarrow \phi_t = |\nabla \varphi|
 
             - 'curvature':
 
-               .. math:: Ct = kN \Rightarrow phi_t = div(\nabla \varphi / |\nabla \varphi|)|\nabla \varphi|
+               .. math:: C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|
 
-            - 'equi-affine':
+            - 'equi_affine':
 
-                .. math:: Ct = k^(1/3) N \Rightarrow phi_t = (div(\nabla \varphi / |\nabla \varphi|))^(1/3)*|\nabla \varphi|
+                .. math:: C_t = k^{1/3} N \Rightarrow
+                        \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
             - 'geodesic': geodesic active contours, according to Casselles et al., 1997
 
-                .. math::  Ct = (g(I)k -\nabla(g(I))N)N \Rightarrow
-                        phi_t = [g(I)*div(\nabla \varphi / |\nabla \varphi|))^(1/3))*|\nabla \varphi|
+                .. math::  C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
+                        \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
             - 'band': band velocity, according to Li et al., 2006.
+
+            - 'chan_vese':
 
         :param function: the level set according to which the flow goes (usually phi)
         :param open_flag: boolean for open flag
@@ -566,7 +575,7 @@ class LevelSetFactory:
         if flow_type == 'curvature':
             flow = function.kappa * function.norm_nabla
 
-        if flow_type == 'equi-affine':
+        if flow_type == 'equi_affine':
             flow = np.cbrt(function.kappa) * function.norm_nabla
 
         if flow_type == 'geodesic':
@@ -579,7 +588,7 @@ class LevelSetFactory:
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
                 self.psi.update(self.psi.value - psi_t, regularization_note = processing_props['regularization'])
 
-        if flow_type == 'chan-vese':
+        if flow_type == 'chan_vese':
 
             img = self.img
 
@@ -591,9 +600,9 @@ class LevelSetFactory:
             if np.isnan(c2):
                 c2 = 0
             weights = self.chanvese_w
-            flow = self.phi.dirac_delta * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
-                                           weights['inside_w'] * (img - c1) ** 2 +
-                                           weights['outside_w'] * (img - c2) ** 2)
+            flow = self.phi.norm_nabla * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
+                                          weights['inside_w'] * (img - c1) ** 2 +
+                                          weights['outside_w'] * (img - c2) ** 2)
 
         if flow_type == 'band':
             vb = self.__compute_vb(**processing_props)
@@ -795,10 +804,11 @@ class LevelSetFactory:
         region_w = self.region_w
         processing_props = self.processing_props
 
-        fig, ax = plt.subplots(num = 1)
+        fig, ax = plt.subplots(num = 'img')
         if np.any(self.img_rgb) != 0:
             mt.imshow(self.img_rgb)
         else:
+
             mt.imshow(self.img)
         ax2 = plt.figure("phi")
         mt.imshow(self.phi.value)
@@ -858,12 +868,16 @@ class LevelSetFactory:
             plt.pause(.5e-10)
 
             phi_t = self.step * (intrinsic - extrinsic)
+            Phi = LevelSetFunction(self.phi.value + phi_t)
+
+            Phi_t = np.sign(Phi.value) * (1 - (np.sqrt(Phi._x ** 2 + Phi._y ** 2)))
+
             self.phi.update(
-                cv2.GaussianBlur((self.phi.value + phi_t), (processing_props['ksize'], processing_props['ksize']),
+                cv2.GaussianBlur((Phi.value + Phi_t), (processing_props['ksize'], processing_props['ksize']),
                                  processing_props['sigma']), epsilon = regularization_epsilon)
-            if np.max(np.abs(phi_t)) <= 5e-5:
-                print('done')
-                return
+            # if np.max(np.abs(phi_t)) <= 5e-5:
+            #     print('done')
+            #     return
             plt.figure('phi')
             mt.imshow(self.phi.value)
 
@@ -871,7 +885,7 @@ class LevelSetFactory:
             #     for curve in l_curve:
             #         self.phi.value[curve._y.astype('int'), curve._x.astype('int')] = 0
 
-            plt.figure(1)
+            plt.figure('img')
             if open_flag:
                 _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed,
                                             open = True)

@@ -117,6 +117,15 @@ class PointSet(BaseData):
 
         return np.array(self.data)
 
+    def ToRDD(self):
+        """
+        Convert PointSet into pySpark Resilient Destributed Dataset (RDD)
+
+        """
+        import pyspark
+        return pyspark.SparkContext.parallelize([self.X, self.Y, self.Z])
+
+    #
     def ToGeoPandas(self):
         """
         :return: pointSet as GeoPandas (geoseries) object (Points)
