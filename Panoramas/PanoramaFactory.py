@@ -16,13 +16,13 @@ class PanoramaFactory:
     """
 
     @classmethod
-    def CreatePanorama_byPoints(cls, points, **kwargs):
+    def CreatePanorama_byPoints(cls, points, azimuthSpacing = 0.057, elevationSpacing = 0.057,
+                                intensity = False, **kwargs):
         """
-        Creating a PanoramaProperty object from a point set based on certain property
+        Create a PanoramaProperty object from a point set based on certain property
         
         :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or
-        BaseProperty-derived objects
-
+           BaseProperty-derived objects
         :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
@@ -41,9 +41,7 @@ class PanoramaFactory:
         :rtype: PanoramaProperty
 
         """
-        azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
-        elevationSpacing = kwargs.get('elevationSpacing', 0.057)
-        intensity = kwargs.get('intensity', False)
+
         void_as_mean = kwargs.get('void_as_mean', False)
 
         try:
@@ -76,7 +74,8 @@ class PanoramaFactory:
         return panorama
 
     @classmethod
-    def CreatePanorama_byProperty(cls, pointSet_property, **kwargs):
+    def CreatePanorama_byProperty(cls, pointSet_property, azimuthSpacing = 0.057, elevationSpacing = 0.057,
+                                  intensity = False, **kwargs):
         """
         Creates panorama with the property as the values of the pixels.
 
@@ -99,9 +98,7 @@ class PanoramaFactory:
         :rtype: PanoramaProperty
 
         """
-        azimuthSpacing = kwargs.get('azimuthSpacing', 0.057)
-        elevationSpacing = kwargs.get('elevationSpacing', 0.057)
-        intensity = kwargs.get('intensity', False)
+
         void_as_mean = kwargs.get('void_as_mean', False)
 
         if isinstance(pointSet_property, SphericalCoordinatesProperty):

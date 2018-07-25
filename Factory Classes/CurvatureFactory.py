@@ -1,4 +1,3 @@
-# from CurvatureProperty import CurvatureProperty
 import numpy as np
 
 from EigenFactory import EigenFactory
@@ -6,7 +5,7 @@ from NeighborsFactory import NeighborsFactory
 from RotationMatrixFactory import RotationMatrixFactory
 
 
-class CurvatureFactory:
+class CurvatureFactory():
     '''
     curvature parameters computation
     '''
@@ -74,7 +73,9 @@ class CurvatureFactory:
         :param pnt: array 3x1 point of interest
         :param points: pointset
         :param rad: radius of the neighborhood
+
         :return: principal curvatures
+
         '''
         # find point's neighbors in a radius
         neighbor = NeighborsFactory.GetNeighborsIn3dRange_KDtree(pnt, points, rad, tree)

@@ -1,4 +1,4 @@
-from mayavi import mlab
+# from mayavi import mlab
 from numpy import array
 
 from PointSet import PointSet

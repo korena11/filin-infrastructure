@@ -21,7 +21,7 @@ class TestPanoramaFactory(TestCase):
         try:
             ptslist = []
             colorlist = []
-            pts = IOFactory.ReadPtx(r'D:\Documents\Python Scripts\infragit\IO modules\test_ptx2.ptx', merge = False)
+            pts = IOFactory.ReadPtx(r'D:\Documents\Python Scripts\infragit\IO modules\test_ptx2.ptx')
             pts_pano = pf.CreatePanorama_byPoints(pts[0], elevationSpacing = 0.111, azimuthSpacing = 0.115,
                                                   voidData = 0,
                                                   intensity = True)

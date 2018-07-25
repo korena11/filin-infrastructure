@@ -1,0 +1,17 @@
+Curvature Factory Documentation
+=====================================
+
+
+.. autoclass:: CurvatureFactory.CurvatureFactory
+:members:
+       :undoc-members:
+
+        .. rubric:: Attributes
+
+    .. autoautosummary:: CurvatureFactory.CurvatureFactory
+:attributes:
+
+        .. rubric:: Methods
+
+    .. autoautosummary:: CurvatureFactory.CurvatureFactory
+:methods:

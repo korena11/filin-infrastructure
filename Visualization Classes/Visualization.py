@@ -13,39 +13,6 @@ from SegmentationProperty import SegmentationProperty
 
 class VisualizationVTK:
     """
-    In order to show PointSet
-
-    One viewport, binding two Pointsets
-
-    .. code-block:: py
-
-        visualization_object = VisualizationVTK(number_of_viewports=1)
-        visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
-        visualization_object.Bind(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
-        visualization_object.Bind(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
-
-    Two viewports, binding two halves with two Pointsets in each half.
-
-    .. code-block:: py
-
-        visualization_object = VisualizationVTK(number_of_viewports=2, two_viewports_vertical_horizontal='V')
-        visualization_object.SetRenderWindowName("Test - Two Viewport. PointSet and PointSubSet. Uniform Color.")
-        visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
-
-        visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
-        visualization_object.BindSecondHalf(input_data=pointsubset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
-        visualization_object.BindSecondHalf(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
-
-    Four viewports, binding four quarters each with a Pointset or a PointSubSet
-
-    .. code-block:: py
-
-        visualization_object = VisualizationVTK(number_of_viewports=4)
-        visualization_object.SetRenderWindowName("Test - Four Viewport. PointSet and PointSubSet. Uniform Color.")
-        visualization_object.BindTopLeft(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
-        visualization_object.BindTopRight(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=False)
-        visualization_object.BindBottomLeft(input_data=pointsubset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
-        visualization_object.BindBottomRight(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=False)
 
     """
     def __init__(self, number_of_view_ports=1, two_viewports_vertical_horizontal='H'):
@@ -58,6 +25,9 @@ class VisualizationVTK:
         self.InitializeParametersVTK()
 
     def set_number_of_viewports(self):
+        """
+        Sectioning the the rendering view according to the number_of_viewports
+        """
         if self.number_of_view_ports not in (1, 2, 4):
             raise ValueError('Number of supported viewports can be [1, 2, 4].')
 
@@ -126,7 +96,7 @@ class VisualizationVTK:
         if render_flag == 'color':
             scalars = np.asarray(np.tile(color, (numPoints, 1)), dtype=np.uint8)
 
-        elif render_flag == 'externRgb' and isinstance(input_data, ColorProperty):
+        elif render_flag == 'externrgb' and isinstance(input_data, ColorProperty):
             scalars = input_data.RGB
 
         elif render_flag == 'rgb' and (
@@ -164,6 +134,27 @@ class VisualizationVTK:
 
     # region  # Region: Binding Functions
     def Bind(self, input_data, renderFlag='color', color=(255, 255, 255), new_layer=False):
+        """
+        Populates the render view (when only one viewport is in use)
+
+        :param input_data: points
+        :param renderFlag: the property according to which the color will be shown
+           - 'color'
+           - 'rgb'
+           - 'externrgb'
+           - 'intensity'
+           - 'height'
+           - 'segmentation'
+           - 'parametricColor'
+
+        :param color: if specific colors are in use. If 'color' was chosen in renderFlag then this color will be used
+        :param new_layer: flag to overwrite what's in the window. Default: False
+
+        :type input_data: PointSet or BaseProperty
+        :type renderFlag: str
+        :type color: tuple
+        :type new_layer: bool
+        """
         self.BindTopLeftData(input_data, renderFlag, color, new_layer=new_layer)
 
     # ----- #

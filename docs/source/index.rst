@@ -20,16 +20,24 @@ Contents:
     Factories/Factories
     LevelSets/LevelSets
     Utils/EigenFactory
-
+    Visualizations/Visualization
 	   
 Dependencies
 ============
 This project is implemented for Python 3.6 
 
-- pyProj
-- vtk
-- opencv
-- geopandas
+- `pyProj <https://pypi.org/project/pyproj/>`.
+   Installation via `pip install pyproj`
+- `vtk <https://pypi.org/project/vtk/>`
+   Installation via `pip install vtk`
+- `opencv <https://pypi.org/project/opencv-python/>`
+   Installation via `pip install opencv-python`
+- `geopandas <http://geopandas.org/>`
+   Installation via `conda install -c conda-forge geopandas`
+- `gdal <https://pypi.org/project/GDAL/>`
+   Installation via `pip install GDAL`
+- `pyspark <https://pypi.org/project/pyspark/>` make sure you have Java 8 or higher installed on your computer.
+   Installation via `pip install pyspark`
 
 
 Indices and tables

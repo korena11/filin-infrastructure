@@ -1,35 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
     <title>PanoramaProperty &#8212; infragit 1a documentation</title>
-
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
-
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1a',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
-    <link rel="up" title="Module code" href="index.html"/>
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
 </head>
-<body role="document">
+<body>
 <div class="related" role="navigation" aria-label="related navigation">
     <h3>Navigation</h3>
     <ul>
@@ -52,12 +41,14 @@
 
                 <h1>Source code for PanoramaProperty</h1>
                 <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
+                        class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
+
 <span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
                         class="n">SphericalCoordinatesProperty</span>
-<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 
 
 <div class="viewcode-block" id="PanoramaProperty"><a class="viewcode-back"
@@ -71,7 +62,7 @@
     <span class="n">__rowIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the row number to which each point belongs to</span>
     <span class="n">__columnIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the column number to which each point belongs to</span>
     <span class="n">__panoramaData</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the panorama is stored</span>
-    <span class="n">__panoramaIndex</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># A m-by-n-by-p array in which the indices of the points are stored</span>
+    <span class="n">__panoramaIndex</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the indices of the points are stored</span>
     <span class="n">__voidData</span> <span class="o">=</span> <span class="mi">250</span>  <span class="c1"># A number indicating missing data in the panorama</span>
     <span class="n">__minAzimuth</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># The minimal azimuth value</span>
     <span class="n">__maxAzimuth</span> <span class="o">=</span> <span class="mi">360</span>  <span class="c1"># The maximal azimuth value</span>
@@ -105,8 +96,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PanoramaProperty</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
-            class="n">__init__</span><span class="p">(</span><span class="n">sphericalCoordinates</span><span class="o">.</span><span
-            class="n">Points</span><span class="p">)</span>
+            class="fm">__init__</span><span class="p">(</span><span class="n">sphericalCoordinates</span><span
+            class="o">.</span><span class="n">Points</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
             class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -128,7 +119,6 @@
             class="o">.</span><span class="n">min_azimuth</span><span class="p">)</span> <span class="o">/</span> <span
             class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span
             class="o">+</span> <span class="mi">1</span>
-
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">panoramaData</span><span
             class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span
@@ -170,7 +160,7 @@
             class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">int</span><span class="p">)</span>
         <span class="n">panoramaIndex</span><span class="p">[:]</span> <span class="o">=</span> <span
-            class="n">np</span><span class="o">.</span><span class="n">nan</span>
+            class="n">np</span><span class="o">.</span><span class="n">inf</span>
 
         <span class="n">pts_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
@@ -183,6 +173,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span> <span
             class="o">=</span> <span class="n">panoramaIndex</span>
         <span class="k">return</span> <span class="n">panoramaIndex</span></div>
+
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">PanoramaImage</span><span class="p">(</span><span class="bp">self</span><span
@@ -415,8 +407,6 @@
             class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span
             class="n">ind</span><span class="p">)</span></div></div>
 
-
-
         <span class="c1"># # 1. find the limits of the image</span>
         <span class="c1"># left_azimuthMin = np.array([self.column_indexes.min(),</span>
         <span class="c1">#                             self.row_indexes[</span>
@@ -450,12 +440,14 @@
         <div class="sphinxsidebarwrapper">
             <div id="searchbox" style="display: none" role="search">
                 <h3>Quick search</h3>
-                <form class="search" action="../search.html" method="get">
-                    <div><input type="text" name="q"/></div>
-                    <div><input type="submit" value="Go"/></div>
-                    <input type="hidden" name="check_keywords" value="yes"/>
-                    <input type="hidden" name="area" value="default"/>
-                </form>
+                <div class="searchformwrapper">
+                    <form class="search" action="../search.html" method="get">
+                        <input type="text" name="q"/>
+                        <input type="submit" value="Go"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
             </div>
             <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -478,7 +470,7 @@
 </div>
 <div class="footer" role="contentinfo">
     &#169; Copyright 2018, Sagi Students.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
 </div>
 </body>
 </html>

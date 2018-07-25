@@ -1,0 +1,17 @@
+Triangulation Factory Documentation
+=====================================
+
+
+.. autoclass:: TriangulationFactory.TriangulationFactory
+:members:
+       :undoc-members:
+
+        .. rubric:: Attributes
+
+    .. autoautosummary:: TriangulationFactory.TriangulationFactory
+:attributes:
+
+        .. rubric:: Methods
+
+    .. autoautosummary:: TriangulationFactory.TriangulationFactory
+:methods:

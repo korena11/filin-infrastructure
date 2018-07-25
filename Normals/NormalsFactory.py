@@ -57,11 +57,6 @@ class NormalsFactory:
         panorama_by_index = panorama.indexes_to_panorama()
 
 
-
-
-
-
-    
     @staticmethod
     def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
         

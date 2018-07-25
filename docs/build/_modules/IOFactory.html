@@ -1,35 +1,24 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
     <title>IOFactory &#8212; infragit 1a documentation</title>
-
     <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
-
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '1a',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-
-    </script>
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript"
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
-    <link rel="up" title="Module code" href="index.html"/>
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
 </head>
-<body role="document">
+<body>
 <div class="related" role="navigation" aria-label="related navigation">
     <h3>Navigation</h3>
     <ul>
@@ -102,12 +91,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># ---------------------------READ -------------------------------</span>
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.load"><a class="viewcode-back"
                                                    href="../Factories/IOFactory.html#IOFactory.IOFactory.load">[docs]</a>    <span
-        class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
-        class="n">kwargs</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span
+            class="n">classname</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads an object file (json or hdf5)</span>
 
@@ -130,9 +120,7 @@
         <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span
             class="s1">&#39;h5&#39;</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">classname</span> <span class="o">=</span> <span class="n">kwargs</span><span
-            class="p">[</span><span class="s1">&#39;classname&#39;</span><span class="p">]</span>
-                <span class="n">obj</span> <span class="o">=</span> <span class="n">cls</span><span
+                <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">ReadHDF</span><span class="p">(</span><span class="n">f</span><span
             class="p">,</span> <span class="n">classname</span><span class="p">,</span> <span class="o">**</span><span
             class="n">kwargs</span><span class="p">)</span>
@@ -145,12 +133,12 @@
 
         <span class="k">return</span> <span class="n">obj</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadHDF"><a class="viewcode-back"
                                                       href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadHDF">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ReadHDF</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">classname</span><span
-        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadHDF</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">classname</span><span
+            class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="nb">print</span><span class="p">((</span><span class="s2">&quot;Keys: </span><span
             class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span
@@ -183,7 +171,7 @@
 
             <span class="n">group</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span
             class="n">group_name</span><span class="p">]</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span
+            <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span
             class="n">__loadata_hdf5</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span
             class="n">loaded_classname</span><span class="p">)</span>
 
@@ -227,24 +215,25 @@
 
         <span class="k">return</span> <span class="n">obj</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadPts"><a class="viewcode-back"
                                                       href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadPts">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ReadPts</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span
-        class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
-        class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadPts</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span
+            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span> <span class="n">colorslist</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span> <span class="n">merge</span> <span class="o">=</span> <span class="kc">True</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told</span>
+<span class="sd">        Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told</span>
 <span class="sd">        otherwise).</span>
 
 <span class="sd">        :param fileName: name of .pts file</span>
 
-<span class="sd">        :param pointsetlist: placeholder for created PointSet objects</span>
-<span class="sd">        :param colorlist: placeholder for ColorProperty for PointSet object(s)</span>
-
-
 <span class="sd">        **Optionals**</span>
+
+<span class="sd">        :param pointsetlist: placeholder for created PointSet objects</span>
+<span class="sd">        :param colorslist: placeholder for ColorProperty for PointSet object(s)</span>
 <span class="sd">        :param merge: merge points in file into one PointSet or not. Default: True.</span>
 
 <span class="sd">        :type filename: str</span>
@@ -258,22 +247,27 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">ReadPts</span><span
-            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span
-            class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
-            class="p">)</span></div>
+            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span
+            class="n">pointsetlist</span><span class="p">,</span> <span class="n">colorslist</span><span
+            class="p">,</span> <span class="n">merge</span><span class="p">)</span></div>
 
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadPtx"><a class="viewcode-back"
                                                       href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadPtx">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ReadPtx</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
-        class="n">kwargs</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadPtx</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span
+            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span> <span class="n">colorslist</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span> <span class="n">trasformationMatrices</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span>
+                <span class="n">remove_empty</span> <span class="o">=</span> <span class="kc">True</span><span
+            class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads .ptx file, created by Leica Cyclone</span>
 
-<span class="sd">        File is build according to:</span>
+<span class="sd">        File is built according to:</span>
 <span class="sd">        https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2</span>
 
 <span class="sd">        :param filename: path to file + file</span>
@@ -281,12 +275,12 @@
 <span class="sd">        *Optionals*</span>
 
 <span class="sd">        :param pointsetlist: list that holds all the uploaded PointSet</span>
-<span class="sd">        :param colorlist: list that holds all the color properties that relate to the PointSet</span>
+<span class="sd">        :param colorslist: list that holds all the color properties that relate to the PointSet</span>
 <span class="sd">        :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet</span>
 
 <span class="sd">        :type filename: str</span>
 <span class="sd">        :type pointsetlist: list</span>
-<span class="sd">        :type colorlist: list of ColorProperty</span>
+<span class="sd">        :type colorslist: list of ColorProperty.ColorProperty</span>
 <span class="sd">        :type trasnformationMatrices: list of TransformationMatrixProperty</span>
 
 <span class="sd">        :return: pointSet list</span>
@@ -297,26 +291,30 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">ReadPtx</span><span
-            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">)</span></div>
+            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span
+            class="n">pointsetlist</span><span class="p">,</span> <span class="n">colorslist</span><span
+            class="p">,</span> <span class="n">trasformationMatrices</span><span class="p">,</span> <span class="n">remove_empty</span><span
+            class="p">)</span></div>
 
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadXYZ"><a class="viewcode-back"
                                                       href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadXYZ">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ReadXYZ</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
-        class="n">pointSetList</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadXYZ</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
+            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(),</span> <span class="n">merge</span> <span class="o">=</span> <span class="kc">True</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reading points from .xyz file</span>
 <span class="sd">        Creates one PointSet objects returned through pointSetList</span>
 <span class="sd">        </span>
 
 <span class="sd">        :param fileName: name of .xyz file</span>
-<span class="sd">        :param pointSetList: place holder for created PointSet object</span>
+<span class="sd">        :param pointsetlist: place holder for created PointSet object</span>
 
 <span class="sd">        :type fileName: str</span>
-<span class="sd">        :type pointSetList: list</span>
+<span class="sd">        :type pointsetlist: list</span>
 <span class="sd">            </span>
 <span class="sd">        :return: Number of PointSet objects created</span>
 
@@ -358,18 +356,22 @@
             class="n">xyz</span><span class="p">)</span>
         <span class="n">pointSet</span><span class="o">.</span><span class="n">setPath</span><span
             class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-        <span class="n">pointSetList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+        <span class="n">pointsetlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
             class="n">pointSet</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">merge</span><span class="p">:</span>
+            <span class="n">pointsetlist</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">array</span><span class="p">(</span><span
+            class="n">pointsetlist</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
-            class="n">pointSetList</span><span class="p">)</span></div>
+            class="n">pointsetlist</span><span class="p">)</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.ReadShapeFile"><a class="viewcode-back"
                                                             href="../Factories/IOFactory.html#IOFactory.IOFactory.ReadShapeFile">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ReadShapeFile</span><span class="p">(</span><span
-        class="n">cls</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
-        class="n">pointSetList</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadShapeFile</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
+            class="n">pointSetList</span><span class="p">):</span>
         <span class="c1"># TODO: make small functions from other kinds of shapefiles rather than polylines</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         Importing points from shapefiles</span>
@@ -389,7 +391,7 @@
             <span class="n">shapeRecord</span> <span class="o">=</span> <span class="n">shape</span><span
             class="o">.</span><span class="n">shapeRecords</span><span class="p">()</span>
             <span class="n">polylinePoints</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">cls</span><span
+            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="bp">cls</span><span
             class="o">.</span><span class="n">__ConvertRecodrsToPoints</span><span class="p">,</span> <span class="n">shapeRecord</span><span
             class="p">))</span>
 
@@ -404,11 +406,11 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.rasterFromGDAL"><a class="viewcode-back"
                                                              href="../Factories/IOFactory.html#IOFactory.IOFactory.rasterFromGDAL">[docs]</a>    <span
-        class="k">def</span> <span class="nf">rasterFromGDAL</span><span class="p">(</span><span
-        class="n">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">rasterFromGDAL</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span
             class="n">Open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -430,12 +432,12 @@
             class="p">()[</span><span class="mi">2</span><span class="p">])</span>
             <span class="k">return</span> <span class="kc">None</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.rasterFromAscFile"><a class="viewcode-back"
                                                                 href="../Factories/IOFactory.html#IOFactory.IOFactory.rasterFromAscFile">[docs]</a>    <span
-        class="k">def</span> <span class="nf">rasterFromAscFile</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">projection</span> <span
-        class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">rasterFromAscFile</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span
+            class="n">projection</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads raster from .txt or .asc files</span>
 
@@ -517,12 +519,13 @@
             class="o">=</span> <span class="n">path</span><span class="p">)</span></div>
 
     <span class="c1"># ---------------------------WRITE -------------------------------</span>
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.saveProperty"><a class="viewcode-back"
                                                            href="../Factories/IOFactory.html#IOFactory.IOFactory.saveProperty">[docs]</a>    <span
-        class="k">def</span> <span class="nf">saveProperty</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="nb">property</span><span
-        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">saveProperty</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span
+            class="nb">property</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Saves a property to hdf5 or json file</span>
 
@@ -549,12 +552,12 @@
             <span class="nb">print</span> <span class="p">(</span><span
             class="s1">&#39;Unable to save the file&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.WriteToPts"><a class="viewcode-back"
                                                          href="../Factories/IOFactory.html#IOFactory.IOFactory.WriteToPts">[docs]</a>    <span
-        class="k">def</span> <span class="nf">WriteToPts</span><span class="p">(</span><span class="n">cls</span><span
-        class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">path</span><span
-        class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">WriteToPts</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
+            class="n">path</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Write to pts file</span>
 
@@ -629,13 +632,13 @@
             class="n">newline</span> <span class="o">=</span> <span class="s1">&#39;</span><span
             class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
-    <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="IOFactory.WriteToShapeFile"><a class="viewcode-back"
                                                                href="../Factories/IOFactory.html#IOFactory.IOFactory.WriteToShapeFile">[docs]</a>    <span
-        class="k">def</span> <span class="nf">WriteToShapeFile</span><span class="p">(</span><span
-        class="n">cls</span><span class="p">,</span> <span class="n">pointSet</span><span class="p">,</span> <span
-        class="n">fileName</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
-        class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">WriteToShapeFile</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">pointSet</span><span class="p">,</span> <span
+            class="n">fileName</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exporting points to shapefile</span>
 <span class="sd">        </span>
@@ -759,7 +762,7 @@
 
     <span class="c1"># ---------------------------PRIVATES -------------------------------</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__ConvertRecodrsToPoints</span><span class="p">(</span><span class="n">cls</span><span
+    <span class="k">def</span> <span class="nf">__ConvertRecodrsToPoints</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">shapeRecord</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">        Converting polyline into points</span>
@@ -774,8 +777,8 @@
         <span class="k">return</span> <span class="n">points</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__mergePntList</span><span class="p">(</span><span
-            class="n">cls</span><span class="p">,</span> <span class="n">pointSetList</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__mergePntList</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">pointSetList</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Merging several pointsets</span>
 
@@ -847,7 +850,7 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__splitPtsString</span><span class="p">(</span><span
-            class="n">cls</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+            class="bp">cls</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Extracting from a string the Data of a point (3D coordinates, intensity, color)</span>
 
@@ -867,8 +870,8 @@
         <span class="c1"># return [float(x) for x in split(line, &#39; &#39;)]</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__loadata_hdf5</span><span class="p">(</span><span
-            class="n">cls</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span
+    <span class="k">def</span> <span class="nf">__loadata_hdf5</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">group</span><span class="p">,</span> <span
             class="n">classname</span><span class="p">,</span> <span class="o">**</span><span
             class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -929,23 +932,23 @@
                         <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span
             class="s1">&#39;pts&#39;</span><span class="p">:</span>
-                            <span class="n">dataset</span> <span class="o">=</span> <span class="n">cls</span><span
+                            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="n">dataset</span><span
             class="p">,</span> <span class="n">merge</span> <span class="o">=</span> <span class="kc">True</span><span
             class="p">)</span>
                         <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span
             class="s1">&#39;ptx&#39;</span><span class="p">:</span>
-                            <span class="n">dataset</span> <span class="o">=</span> <span class="n">cls</span><span
+                            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">ReadPtx</span><span class="p">(</span><span class="n">dataset</span><span
             class="p">,</span> <span class="n">pointSetList</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span
             class="s1">&#39;xyz&#39;</span><span class="p">:</span>
-                            <span class="n">dataset</span> <span class="o">=</span> <span class="n">cls</span><span
+                            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">ReadXYZ</span><span class="p">(</span><span class="n">dataset</span><span
             class="p">,</span> <span class="n">pointSetList</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span
             class="s1">&#39;shp&#39;</span><span class="p">:</span>
-                            <span class="n">dataset</span> <span class="o">=</span> <span class="n">cls</span><span
+                            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">ReadShapeFile</span><span class="p">(</span><span class="n">dataset</span><span
             class="p">,</span> <span class="n">pointSetList</span><span class="p">)</span>
 
@@ -962,7 +965,7 @@
                             <span class="k">except</span><span class="p">:</span>
                                 <span class="n">spatialReference</span> <span class="o">=</span> <span
             class="kc">None</span>
-                            <span class="n">dataset</span> <span class="o">=</span> <span class="n">cls</span><span
+                            <span class="n">dataset</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">rasterFromAscFile</span><span class="p">(</span><span
             class="n">dataset</span><span class="p">,</span> <span class="n">spatialReference</span><span
             class="p">)</span>
@@ -1010,7 +1013,7 @@
                 <span class="k">return</span> <span class="n">params</span></div>
 
 
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span
                         class="p">:</span>
     <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># ====================Point cloud test=================================</span>
@@ -1019,7 +1022,7 @@
     <span class="c1"># ===========================================================================</span>
 
     <span class="c1"># =================shapefile test==================================</span>
-    <span class="n">polylineFileName</span> <span class="o">=</span> <span class="s1">r&#39;E:\My Documents\Projects\IOLR\HaBonim\polyRimSample.shp&#39;</span>
+    <span class="n">polylineFileName</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;E:\My Documents\Projects\IOLR\HaBonim\polyRimSample.shp&#39;</span>
     <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadShapeFile</span><span class="p">(</span><span
                         class="n">polylineFileName</span><span class="p">,</span> <span
                         class="n">pointSetList</span><span class="p">)</span>
@@ -1033,12 +1036,14 @@
         <div class="sphinxsidebarwrapper">
             <div id="searchbox" style="display: none" role="search">
                 <h3>Quick search</h3>
-                <form class="search" action="../search.html" method="get">
-                    <div><input type="text" name="q"/></div>
-                    <div><input type="submit" value="Go"/></div>
-                    <input type="hidden" name="check_keywords" value="yes"/>
-                    <input type="hidden" name="area" value="default"/>
-                </form>
+                <div class="searchformwrapper">
+                    <form class="search" action="../search.html" method="get">
+                        <input type="text" name="q"/>
+                        <input type="submit" value="Go"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
             </div>
             <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -1061,7 +1066,7 @@
 </div>
 <div class="footer" role="contentinfo">
     &#169; Copyright 2018, Sagi Students.
-    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
 </div>
 </body>
 </html>

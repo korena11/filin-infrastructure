@@ -38,12 +38,13 @@ from sphinx.ext.autosummary import Autosummary
 from sphinx.ext.autosummary import get_documenter
 from sphinx.util.inspect import safe_getattr
 
-sys.path.insert(0, os.path.abspath('../../..'))
+sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../Property Classes'))
 sys.path.insert(0, os.path.abspath('../../Data Classes'))
 sys.path.insert(0, os.path.abspath('../../Factory Classes'))
 sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
 sys.path.insert(0, os.path.abspath('../../IO modules'))
+sys.path.insert(0, os.path.abspath('../../Normals'))
 sys.path.insert(0, os.path.abspath('../../Panoramas'))
 sys.path.insert(0, os.path.abspath('../../LevelSets'))
 sys.path.insert(0, os.path.abspath('../../ReumaPhD'))

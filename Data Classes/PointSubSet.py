@@ -87,8 +87,8 @@ class PointSubSet(PointSet):
 
     def ToPolyData(self):
         """
-        :Returns:
-            tvtk.PolyData of the current PointSet
+        :return: tvtk.PolyData of the current PointSet
+
         """
 
         numpy_points = self.pointSet.ToNumpy()[self.indices, :]

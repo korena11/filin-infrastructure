@@ -112,7 +112,7 @@ class IOFactory:
     @classmethod
     def ReadPts(cls, filename, pointsetlist = list(), colorslist = list(), merge = True):
         """
-         Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
+        Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
         otherwise).
 
         :param fileName: name of .pts file

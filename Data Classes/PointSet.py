@@ -3,6 +3,7 @@
 import numpy as np
 from numpy import vstack, hstack
 
+import VisualizationUtils
 from BaseData import BaseData
 
 
@@ -186,16 +187,12 @@ class PointSet(BaseData):
 
     def ToPolyData(self):
         """
-        Create and return PolyData object
+        Create and return vtkPolyData object
 
-        :return tvtk.PolyData of the current PointSet
+        :return vtk.vtkPolyData of the current PointSet
 
         """
+        numpy_points = self.ToNumpy()
+        vtkPolyData = VisualizationUtils.MakeVTKPointsMesh(numpy_points)
 
-        # _polyData = tvtk.PolyData(points = array(self.data, 'f'))
-        # verts = arange(0, self.data.shape[0], 1)
-        # verts.shape = (self.data.shape[0], 1)
-        # _polyData.verts = verts
-        #
-        # return _polyData
-        #
+        return vtkPolyData
