@@ -1,9 +1,14 @@
 """
-Functions for reading files
+Reading Functions
+=================
+
+Specific functions for file reading. Called from the IOFactory
+
 """
 
 import warnings
 
+# from laspy.file import file
 import numpy as np
 
 from ColorFactory import ColorFactory
@@ -11,18 +16,16 @@ from PointSet import PointSet
 from TransformationMatrixProperty import TransformationMatrixProperty
 
 
-def ReadPts(filename, *args, **kwargs):
+def ReadPts(filename, pointsetlist = list(), colorslist = list(), merge = True):
     """
     Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
     otherwise).
 
     :param fileName: name of .pts file
 
+    **Optionals**
     :param pointsetlist: placeholder for created PointSet objects
     :param colorslist: placeholder for ColorProperty for PointSet object(s)
-
-
-    **Optionals**
 
     :param merge: merge points in file into one PointSet or not. Default: True.
 
@@ -37,12 +40,6 @@ def ReadPts(filename, *args, **kwargs):
 
     """
     colorProp = None
-
-    if args:
-        pointsetlist = args[0]
-        colorslist = args[1]
-
-    merge = kwargs.get('merge', True)
 
     # Opening file and reading all lines from it
     with open(filename, 'r') as fin:
@@ -112,7 +109,7 @@ def ReadPts(filename, *args, **kwargs):
             warnings.warn('Some points don''t have intensity values. None was assigned to PointSet')
 
         if len(colors) == len(pts):
-            colorProp = ColorFactory.assignColor(points, np.array(colors)[0])
+            colorslist = ColorFactory.assignColor(points, np.array(colors)[0])
         else:
             warnings.warn('Some points don''t have color values. No color property created')
 
@@ -122,7 +119,8 @@ def ReadPts(filename, *args, **kwargs):
         return pointsetlist
 
 
-def ReadPtx(filename, **kwargs):
+def ReadPtx(filename, pointsetlist = list(), colorslist = list(), trasformationMatrices = list(),
+            remove_empty = True):
     """
     Reads .ptx file, created by Leica Cyclone
 
@@ -134,13 +132,13 @@ def ReadPtx(filename, **kwargs):
     *Optionals*
 
     :param pointsetlist: list that holds all the uploaded PointSet
-    :param colorlist: list that holds all the color properties that relate to the PointSet
+    :param colorslist: list that holds all the color properties that relate to the PointSet
     :param transformationMatrices: list that holds all the transformation properties that relate to the PointSet
     :param removeEmpty: flag to remove or leave empty points. Default: True
 
     :type filename: str
     :type pointsetlist: list
-    :type colorlist: list of ColorProperty
+    :type colorslist: list of ColorProperty
     :type trasnformationMatrices: list of TransformationMatrixProperty
     :type removeEmpty: bool
 
@@ -151,10 +149,6 @@ def ReadPtx(filename, **kwargs):
     .. warning:: Doesn't read the transformation matrices.
 
     """
-    pointsetlist = kwargs.get('pointsetlist', [])
-    colorslist = kwargs.get('colorlist', [])
-    translist = kwargs.get('transformationMatrices', [])
-    remove_empty = kwargs.get('removeEmpty', True)
 
     # Open file and read lines from it
     with open(filename) as fin:
@@ -182,8 +176,8 @@ def ReadPtx(filename, **kwargs):
                 pt_batch = np.delete(pt_batch, np.unique(empty_indices), axis = 0)
 
             pointsetlist.append(PointSet(pt_batch, path = filename, intensity = pt_batch[:, 3]))
-            translist.append(TransformationMatrixProperty(pointsetlist[-1],
-                                                          transformationMatrix = transformationMatrix))
+            trasformationMatrices.append(TransformationMatrixProperty(pointsetlist[-1],
+                                                                      transformationMatrix = transformationMatrix))
             dimension = pt_batch.shape[1]
             if dimension == 7:
                 # the data includes RGB
@@ -205,6 +199,16 @@ def ReadPtx(filename, **kwargs):
                 batch_size = 0
 
     return pointsetlist
+
+
+def ReadLAS(filename):
+    """
+    .. warning:: Not implemented.
+    :param filename:
+    :return:
+    """
+    pass
+
 
 def __splitPtsString(line):
     """

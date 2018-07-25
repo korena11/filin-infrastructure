@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>TransformationMatrixProperty &#8212; infragit 1a documentation</title>
+
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
+    <link rel="up" title="Module code" href="index.html"/>
+</head>
+<body role="document">
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="../genindex.html" title="General Index"
+               accesskey="I">index</a></li>
+        <li class="right">
+            <a href="../py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
+    </ul>
+</div>
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+            <div class="body" role="main">
+
+                <h1>Source code for TransformationMatrixProperty</h1>
+                <div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span
+                        class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+
+
+<div class="viewcode-block" id="TransformationMatrixProperty"><a class="viewcode-back"
+                                                                 href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty">[docs]</a><span
+        class="k">class</span> <span class="nc">TransformationMatrixProperty</span><span class="p">(</span><span
+        class="n">BaseProperty</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents a 4x4 3D transformation matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__transformMatrix</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span
+            class="p">,</span> <span class="mi">4</span><span class="p">)))</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TransformationMatrixProperty</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;transformationMatrix&#39;</span> <span
+            class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
+            class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;transformationMatrix&#39;</span><span
+            class="p">])</span>
+
+<div class="viewcode-block" id="TransformationMatrixProperty.setValues"><a class="viewcode-back"
+                                                                           href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the rotation and translation matrices</span>
+
+<span class="sd">        :param transformationMatrix: 4x4 transformation matrix</span>
+
+<span class="sd">        *Options*</span>
+
+<span class="sd">        :param translationMatrix: 1x3 translation matrix</span>
+<span class="sd">        :param rotationMatrix: 3x3 rotation.</span>
+
+<span class="sd">        :type transormationMatrix: np.array</span>
+<span class="sd">        :type translationMatrix: np.array</span>
+<span class="sd">        :type rotationMatrix: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span> <span
+            class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;translationMatrix&#39;</span> <span class="ow">in</span> <span
+            class="n">kwargs</span><span class="p">:</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="p">[</span><span class="s1">&#39;translationMatrix&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span><span class="p">[</span><span
+            class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">shape</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;translationMatrix&#39;</span><span
+            class="p">]</span>
+
+        <span class="k">if</span> <span class="s1">&#39;rotationMatrix&#39;</span> <span class="ow">in</span> <span
+            class="n">kwargs</span><span class="p">:</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="p">[</span><span class="s1">&#39;rotationMatrix&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span><span class="p">[:</span><span
+            class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="n">shape</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;rotationMatrix&#39;</span><span
+            class="p">]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transformationMatrix</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">translationMatrix</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span> <span
+            class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Points&#39; translation matrix with respect to reference pointset</span>
+
+<span class="sd">        :param dimensions: the dimensions of the returned vector. Either 3 or 4</span>
+
+<span class="sd">        :type dimensions: int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span><span
+            class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span
+            class="n">dimensions</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotationMatrix</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">dimensions</span> <span
+            class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Points&#39; rotation matrix with respect to reference pointset</span>
+
+<span class="sd">        :param dimensions: the dimensions of the returned vector. Either 3 or 4</span>
+
+<span class="sd">        :type dimensions: int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transformMatrix</span><span
+            class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span
+            class="n">dimensions</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TransformationMatrixProperty.eulerAngles_from_R"><a class="viewcode-back"
+                                                                                    href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R">[docs]</a>    <span
+        class="k">def</span> <span class="nf">eulerAngles_from_R</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span
+        class="s1">&#39;degrees&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts euler rotation angles from the rotation matrix</span>
+
+<span class="sd">        .. warning:: The angles returned are subjected to ambiguity</span>
+
+<span class="sd">        :param dtype: the output in &#39;degrees&#39; or &#39;radians&#39; (default &#39;degrees&#39;)</span>
+
+<span class="sd">        :type dtype: str</span>
+
+<span class="sd">        :return:  (omega, phi, kappa) according to the dtype</span>
+
+<span class="sd">        :rtype: tuple</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">warn</span><span class="p">(</span><span
+            class="s1">&#39;The angles may contain ambiguity&#39;</span><span class="p">)</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__transformMatrix</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span
+            class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arcsin</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">phi</span> <span class="o">&gt;=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">pi</span> <span class="o">-</span> <span class="n">phi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arctan</span><span class="p">(</span><span class="o">-</span><span class="n">R</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span
+            class="p">]</span> <span class="o">/</span> <span class="n">R</span><span class="p">[</span><span
+            class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span
+            class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span
+            class="o">*</span> <span class="n">n</span>
+        <span class="n">kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">R</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span
+            class="p">],</span> <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span
+            class="n">n</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;degrees&#39;</span><span
+            class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">degrees</span><span class="p">(</span><span class="n">omega</span><span class="p">),</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span
+            class="n">phi</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">degrees</span><span class="p">(</span><span class="n">kappa</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">omega</span><span class="p">,</span> <span
+            class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="TransformationMatrixProperty.FromFile"><a class="viewcode-back"
+                                                                          href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.FromFile">[docs]</a>    <span
+        class="k">def</span> <span class="nf">FromFile</span><span class="p">():</span>
+        <span class="k">pass</span></div></div>
+</pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <div id="searchbox" style="display: none" role="search">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <div><input type="text" name="q"/></div>
+                    <div><input type="submit" value="Go"/></div>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="../genindex.html" title="General Index"
+            >index</a></li>
+        <li class="right">
+            <a href="../py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
+    </ul>
+</div>
+<div class="footer" role="contentinfo">
+    &#169; Copyright 2018, Sagi Students.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+</div>
+</body>
+</html>

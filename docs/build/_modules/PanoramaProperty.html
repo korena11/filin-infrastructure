@@ -1,0 +1,484 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <title>PanoramaProperty &#8212; infragit 1a documentation</title>
+
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1a',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="infragit 1a documentation" href="../index.html"/>
+    <link rel="up" title="Module code" href="index.html"/>
+</head>
+<body role="document">
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="../genindex.html" title="General Index"
+               accesskey="I">index</a></li>
+        <li class="right">
+            <a href="../py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li>
+    </ul>
+</div>
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+            <div class="body" role="main">
+
+                <h1>Source code for PanoramaProperty</h1>
+                <div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ones</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
+                        class="n">SphericalCoordinatesProperty</span>
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+
+
+<div class="viewcode-block" id="PanoramaProperty"><a class="viewcode-back"
+                                                     href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty">[docs]</a><span
+        class="k">class</span> <span class="nc">PanoramaProperty</span><span class="p">(</span><span class="n">BaseProperty</span><span
+        class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A panoramic representation of the point set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__rowIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the row number to which each point belongs to</span>
+    <span class="n">__columnIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the column number to which each point belongs to</span>
+    <span class="n">__panoramaData</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the panorama is stored</span>
+    <span class="n">__panoramaIndex</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># A m-by-n-by-p array in which the indices of the points are stored</span>
+    <span class="n">__voidData</span> <span class="o">=</span> <span class="mi">250</span>  <span class="c1"># A number indicating missing data in the panorama</span>
+    <span class="n">__minAzimuth</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># The minimal azimuth value</span>
+    <span class="n">__maxAzimuth</span> <span class="o">=</span> <span class="mi">360</span>  <span class="c1"># The maximal azimuth value</span>
+    <span class="n">__minElevation</span> <span class="o">=</span> <span class="o">-</span><span
+            class="mi">45</span>  <span class="c1"># The minimal elevation angle value</span>
+    <span class="n">__maxElevation</span> <span class="o">=</span> <span class="mi">90</span>  <span class="c1"># The maximal elevation angle value</span>
+    <span class="n">__azimuthSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the azimuth direction</span>
+    <span class="n">__elevationSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the elevation angle direction</span>
+
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">,</span> <span class="n">sphericalCoordinates</span><span class="p">,</span> <span class="n">rowIndexes</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">columnIndexes</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">panoramaData</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constuctor - Creates a panoramic view of the data sent</span>
+
+<span class="sd">        :param sphericalCoordinates: SphericalCoordinates property</span>
+<span class="sd">        :param panoramaData: data to be represented as a panorama (e.g. range, intensity, etc.). Default: range</span>
+<span class="sd">        :param rowIndexes: row indices of the points in the point set based on the elevation angles</span>
+<span class="sd">        :param columnIndexes: column indices of the points in the point set based on the azimuth angles</span>
+
+
+<span class="sd">        :type sphericalCoordinates: SphericalCoordinatesProperty</span>
+<span class="sd">        :type rowIndexes: int</span>
+<span class="sd">        :type columnIndexes: int</span>
+<span class="sd">        :type panoramaData: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PanoramaProperty</span><span
+            class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
+            class="n">__init__</span><span class="p">(</span><span class="n">sphericalCoordinates</span><span class="o">.</span><span
+            class="n">Points</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__columnIndexes</span> <span
+            class="o">=</span> <span class="n">columnIndexes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rowIndexes</span> <span class="o">=</span> <span
+            class="n">rowIndexes</span>
+
+        <span class="n">numRows</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_elevation</span> <span
+            class="o">-</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">min_elevation</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">elevation_spacing</span><span class="p">)</span> <span class="o">+</span> <span
+            class="mi">1</span>
+        <span class="n">numColumns</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">((</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">max_azimuth</span> <span class="o">-</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">min_azimuth</span><span class="p">)</span> <span class="o">/</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span
+            class="o">+</span> <span class="mi">1</span>
+
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">panoramaData</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span
+            class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span> <span
+            class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">void_data</span> <span class="o">*</span> <span class="n">ones</span><span
+            class="p">((</span><span class="n">numRows</span><span class="p">,</span> <span
+            class="n">numColumns</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span><span
+            class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
+            class="n">columnIndexes</span><span class="p">]</span> <span class="o">=</span> <span
+            class="n">panoramaData</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span> <span
+            class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">void_data</span> <span class="o">*</span> <span class="n">ones</span><span
+            class="p">((</span><span class="n">numRows</span><span class="p">,</span> <span
+            class="n">numColumns</span><span class="p">,</span> <span class="n">panoramaData</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span
+            class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span><span
+            class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
+            class="n">columnIndexes</span><span class="p">,</span> <span class="p">:]</span> <span
+            class="o">=</span> <span class="n">panoramaData</span><span class="p">[:,</span> <span class="p">:]</span>
+
+<div class="viewcode-block" id="PanoramaProperty.indexes_to_panorama"><a class="viewcode-back"
+                                                                         href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.indexes_to_panorama">[docs]</a>    <span
+        class="k">def</span> <span class="nf">indexes_to_panorama</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Arrange the points&#39; indices into the panorama structure</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># set so that unfilled cells will be NaN</span>
+        <span class="n">panoramaIndex</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">getValues</span><span class="o">.</span><span class="n">shape</span><span
+            class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">panoramaIndex</span><span class="p">[:]</span> <span class="o">=</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="n">pts_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">Points</span><span class="o">.</span><span class="n">Size</span><span class="p">)</span>
+        <span class="n">panoramaIndex</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">row_indexes</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">column_indexes</span><span class="p">]</span> <span
+            class="o">=</span> <span class="n">pts_index</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span> <span
+            class="o">=</span> <span class="n">panoramaIndex</span>
+        <span class="k">return</span> <span class="n">panoramaIndex</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">PanoramaImage</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the panorama image</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__panoramaData</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">azimuth_spacing</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Azimuth angle resolution size</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthSpacing</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">elevation_spacing</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Elevation angle resolution size</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__elevationSpacing</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">column_indexes</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The column index of each point</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__columnIndexes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">row_indexes</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The row index of each point</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__rowIndexes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_azimuth</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maximal azimuth value in data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__maxAzimuth</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">min_azimuth</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Minimal azimuth value in data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__minAzimuth</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">max_elevation</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maximal elevation value in data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__maxElevation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">min_elevation</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Minimal elevation value in data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__minElevation</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">getValues</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__panoramaData</span>
+
+<div class="viewcode-block" id="PanoramaProperty.setValues"><a class="viewcode-back"
+                                                               href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets values into the panoramaProperty object</span>
+
+<span class="sd">        :param panoramaData: The data to be represented as a panorama (e.g. range, intensity, etc.). Default: range</span>
+<span class="sd">        :param rowIndexes: The row indices of the points in the point set based on the elevation angles</span>
+<span class="sd">        :param columnIndexs: The column indices of the points in the point set based on the azimuth angles</span>
+<span class="sd">        :param minAzimuth: The minimal azimuth value</span>
+<span class="sd">        :param maxAzimuth: The maximal azimuth value</span>
+<span class="sd">        :param minElevation: The minimal elevation value</span>
+<span class="sd">        :param maxElevation: The maximal elevation value</span>
+<span class="sd">        :param azimuthSpacing: The measurements&#39; angular resolution in the azimuth direction.</span>
+<span class="sd">        :param elevationSpacing:  The measurements&#39; angular resolution in the elevation angle direction</span>
+
+<span class="sd">        :type rowIndexes: int</span>
+<span class="sd">        :type columnIndexes: int</span>
+<span class="sd">        :type panoramaData: np.array</span>
+<span class="sd">        :type dataType: str</span>
+<span class="sd">        :type minAzimuth: float</span>
+<span class="sd">        :type maxAzimuth: float</span>
+<span class="sd">        :type minElevation: float</span>
+<span class="sd">        :type maxElevation: float</span>
+<span class="sd">        :type azimuthSpacing: float</span>
+<span class="sd">        :type elevationSpacing: float</span>
+
+<span class="sd">        .. note:: For the Scanstation C10 the measurements&#39; angular resolution for both elevation and azimuth directions:</span>
+
+<span class="sd">            * Low: 0.11 deg</span>
+<span class="sd">            * Medium: 0.057 deg</span>
+<span class="sd">            * High: 0.028 deg</span>
+<span class="sd">            * Highest: *TO ADD*</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxAzimuth</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;maxAzimuth&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__maxAzimuth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__minAzimuth</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;minAzimuth&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__minAzimuth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__minElevation</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;minElevation&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__minElevation</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__maxElevation</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;maxElevation&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__maxElevation</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__azimuthSpacing</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;azimuthSpacing&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__azimuthSpacing</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__elevationSpacing</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;elevationSpacing&#39;</span><span class="p">,</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__elevationSpacing</span><span
+            class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__voidData</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;voidData&#39;</span><span class="p">,</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__voidData</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__columnIndexes</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;columnIndexes&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__columnIndexes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rowIndexes</span> <span class="o">=</span> <span
+            class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;rowIndexes&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__rowIndexes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;panoramaData&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__panoramaData</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">void_data</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Value set for void areas</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__voidData</span>
+
+<div class="viewcode-block" id="PanoramaProperty.extract_area"><a class="viewcode-back"
+                                                                  href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.extract_area">[docs]</a>    <span
+        class="k">def</span> <span class="nf">extract_area</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">left_top_corner</span><span
+        class="p">,</span> <span class="n">right_bottom_corner</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new panorama according to a bounding box</span>
+
+<span class="sd">        :param left_top_corner: (row, column) of the left top corner of the extracted area</span>
+<span class="sd">        :param right_bottom_corner: (row, column) of the right bottom corner of the extracted area</span>
+
+<span class="sd">        :type left_top_corner: tuple</span>
+<span class="sd">        :type right_bottom_corner: tuple</span>
+
+<span class="sd">        :return: a pointsubset according to the bounding box</span>
+<span class="sd">        :rtype: PointSubSet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">row_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">nonzero</span><span class="p">((</span><span class="n">left_top_corner</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">row_indexes</span><span
+            class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">row_indexes</span> <span class="o">&lt;</span> <span class="n">right_bottom_corner</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">col_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">nonzero</span><span class="p">((</span><span class="n">left_top_corner</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">column_indexes</span><span class="p">)</span> <span
+            class="o">*</span>
+                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">column_indexes</span> <span class="o">&lt;</span> <span class="n">right_bottom_corner</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">intersect1d</span><span class="p">(</span><span class="n">row_ind</span><span
+            class="p">,</span> <span class="n">col_ind</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PointSubSet</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span
+            class="n">ind</span><span class="p">)</span></div></div>
+
+
+
+        <span class="c1"># # 1. find the limits of the image</span>
+        <span class="c1"># left_azimuthMin = np.array([self.column_indexes.min(),</span>
+        <span class="c1">#                             self.row_indexes[</span>
+        <span class="c1">#                                 self.column_indexes == self.column_indexes.min()][0]])</span>
+        <span class="c1"># left_elevationMin = np.array([self.column_indexes[self.row_indexes == self.row_indexes.min()][0],</span>
+        <span class="c1">#                               self.row_indexes.min()])</span>
+        <span class="c1">#</span>
+        <span class="c1"># right_azimuthMax = np.array([self.column_indexes.max(),</span>
+        <span class="c1">#                              self.row_indexes[</span>
+        <span class="c1">#                                  self.column_indexes == self.column_indexes.max()][0]])</span>
+        <span class="c1"># right_elevationMax = np.array([self.column_indexes[self.row_indexes == self.row_indexes.max()][0],</span>
+        <span class="c1">#                                self.row_indexes.max()])</span>
+        <span class="c1"># bounding = np.vstack((left_azimuthMin, right_azimuthMax, left_elevationMin, right_elevationMax))</span>
+        <span class="c1"># x_left = bounding[np.nonzero(bounding == bounding.min(axis = 0)[0])[0], 1]</span>
+        <span class="c1"># x_right = bounding[np.nonzero(bounding == bounding.max(axis = 0)[0])[0], 1]</span>
+        <span class="c1">#</span>
+        <span class="c1"># y_top = bounding[np.nonzero(bounding == bounding.min(axis = 0)[1])[0], 0]</span>
+        <span class="c1"># y_bottom = bounding[np.nonzero(bounding == bounding.max(axis = 0)[1])[0], 0]</span>
+        <span class="c1"># # 2. find the points within the limits</span>
+        <span class="c1"># index_column_indexes = np.nonzero(np.where(min(x_left, x_right) &lt; self.column_indexes) and</span>
+        <span class="c1">#                                   np.where(self.column_indexes &lt; max(x_right, x_left)))</span>
+        <span class="c1"># index_elevations = np.nonzero(np.where(min(y_top, y_bottom) &lt; self.row_indexes) and</span>
+        <span class="c1">#                               np.where(self.row_indexes &lt; max(y_bottom, y_top)))</span>
+</pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <div id="searchbox" style="display: none" role="search">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <div><input type="text" name="q"/></div>
+                    <div><input type="submit" value="Go"/></div>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="related" role="navigation" aria-label="related navigation">
+    <h3>Navigation</h3>
+    <ul>
+        <li class="right" style="margin-right: 10px">
+            <a href="../genindex.html" title="General Index"
+            >index</a></li>
+        <li class="right">
+            <a href="../py-modindex.html" title="Python Module Index"
+            >modules</a> |
+        </li>
+        <li class="nav-item nav-item-0"><a href="../index.html">infragit 1a documentation</a> &#187;</li>
+        <li class="nav-item nav-item-1"><a href="index.html">Module code</a> &#187;</li>
+    </ul>
+</div>
+<div class="footer" role="contentinfo">
+    &#169; Copyright 2018, Sagi Students.
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+</div>
+</body>
+</html>
