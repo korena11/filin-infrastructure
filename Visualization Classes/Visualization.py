@@ -12,6 +12,42 @@ from SegmentationProperty import SegmentationProperty
 
 
 class VisualizationVTK:
+    """
+    In order to show PointSet
+
+    One viewport, binding two Pointsets
+
+    .. code-block:: py
+
+        visualization_object = VisualizationVTK(number_of_viewports=1)
+        visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
+        visualization_object.Bind(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.Bind(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
+
+    Two viewports, binding two halves with two Pointsets in each half.
+
+    .. code-block:: py
+
+        visualization_object = VisualizationVTK(number_of_viewports=2, two_viewports_vertical_horizontal='V')
+        visualization_object.SetRenderWindowName("Test - Two Viewport. PointSet and PointSubSet. Uniform Color.")
+        visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+
+        visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
+        visualization_object.BindSecondHalf(input_data=pointsubset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.BindSecondHalf(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
+
+    Four viewports, binding four quarters each with a Pointset or a PointSubSet
+
+    .. code-block:: py
+
+        visualization_object = VisualizationVTK(number_of_viewports=4)
+        visualization_object.SetRenderWindowName("Test - Four Viewport. PointSet and PointSubSet. Uniform Color.")
+        visualization_object.BindTopLeft(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.BindTopRight(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=False)
+        visualization_object.BindBottomLeft(input_data=pointsubset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.BindBottomRight(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=False)
+
+    """
     def __init__(self, number_of_view_ports=1, two_viewports_vertical_horizontal='H'):
         # Setting Viewports
         self.number_of_view_ports = number_of_view_ports
