@@ -48,6 +48,7 @@ class VisualizationVTK:
         visualization_object.BindBottomRight(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=False)
 
     """
+
     def __init__(self, number_of_view_ports=1, two_viewports_vertical_horizontal='H'):
         # Setting Viewports
         self.number_of_view_ports = number_of_view_ports
@@ -80,10 +81,17 @@ class VisualizationVTK:
                     raise ValueError('Split Two Viewports Options: \'V\' - Vertical. \'H\' - Horizontal.')
 
             else:
+                # # This way index 0 is bottom left. Index 4 is top right
+                # self.x_mins = [0, .5, 0, .5]
+                # self.x_maxs = [0.5, 1, 0.5, 1]
+                # self.y_mins = [0, 0, .5, .5]
+                # self.y_maxs = [0.5, 0.5, 1, 1]
+
+                # This way index 0 is top left. Index 4 is bottom right
                 self.x_mins = [0, .5, 0, .5]
                 self.x_maxs = [0.5, 1, 0.5, 1]
-                self.y_mins = [0, 0, .5, .5]
-                self.y_maxs = [0.5, 0.5, 1, 1]
+                self.y_mins = [.5, .5, 0, 0]
+                self.y_maxs = [1, 1, .5, .5]
 
     def InitializeParametersVTK(self):
         '''
@@ -214,13 +222,68 @@ class VisualizationVTK:
     def SetRenderWindowName(self, nameOfRenderWindow):
         self.vtkRenderWindow.SetWindowName(str(nameOfRenderWindow))
 
+    def SetRenderWindowBackgroundColor(self, color):
+        '''
+
+        Change each render window background.
+
+        - Example Four Viewports
+
+        Set same background color:
+
+        .. code-block:: py
+
+            visualization_object = VisualizationVTK(number_of_viewports=4)
+            background_color = (255, 0, 0)
+            visualization_object.SetRenderWindowBackgroundColor(background_color)
+
+        Set TopLeft renderer to Red, BottomRight to Blue, other two remain default background color (black)
+
+        .. code-block:: py
+
+            visualization_object = VisualizationVTK(number_of_viewports=4)
+            background_color = [(255, 0, 0), None, None, (0, 0, 255)]
+            visualization_object.SetRenderWindowBackgroundColor(background_color)
+
+        :param color: Tuple of ints (255, 255, 255) or List of tuples of ints ((255, 255, 255), (0, 0, 255))
+        :return:
+        '''
+        if not isinstance(color[0], tuple):
+            color = [color]
+        for ind in range(len(self.listVTKRenderers)):
+            current_renderer = self.listVTKRenderers[ind]
+            current_color = color[ind % len(color)]
+            if current_color is None:
+                current_color = (0, 0, 0)
+            current_renderer.SetBackground(current_color)
+
     def Show(self):
         self.vtkRenderWindowInteractor.Initialize()
         self.vtkRenderWindow.Render()
         self.vtkRenderWindowInteractor.Start()
 
 
+def TestBackgroundColors():
+    visualization_object = VisualizationVTK(number_of_view_ports=4)
+    visualization_object.SetRenderWindowName("Red Background Color for All.")
+    background_color = (255, 0, 0)
+    visualization_object.SetRenderWindowBackgroundColor(background_color)
+    visualization_object.Show()
+
+    visualization_object.SetRenderWindowName("TopLeft is Red, BottomRight is Blue, rest are default (black).")
+    background_color = [(255, 0, 0), None, None, (0, 0, 255)]
+    visualization_object.SetRenderWindowBackgroundColor(background_color)
+    visualization_object.Show()
+
+    visualization_object.SetRenderWindowName("Each quarter different color.")
+    background_color = [(255, 0, 0), (0, 255, 0), (0, 255, 255), (0, 0, 255)]
+    visualization_object.SetRenderWindowBackgroundColor(background_color)
+    visualization_object.Show()
+
+
 if __name__ == '__main__':
+    # TestBackgroundColors()
+
     points1 = (np.random.rand(1000, 3) - 0.5) * 1000.0
     pointset1 = PointSet(points=points1)
     pointsubset1 = PointSubSet(points=pointset1, indices=list(range(0, len(points1), 3)))
@@ -233,6 +296,8 @@ if __name__ == '__main__':
     # Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4
     visualization_object = VisualizationVTK(number_of_viewports, two_viewports_vertical_horizontal='V')
     visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
+    visualization_object.SetRenderWindowBackgroundColor([(0, 0, 255), None])
+
     visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
     visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
 
