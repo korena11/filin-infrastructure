@@ -17,7 +17,7 @@ from RasterData import RasterData
 EPS = np.finfo(float).eps
 
 
-class LevelSetFactory:
+class LevelSetFlow:
     # General initializations
     __processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
     __flow_types = {'geodesic': 1.}
@@ -32,7 +32,7 @@ class LevelSetFactory:
     __chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
 
     # Level set initializations
-    __phi = []  # LevelSetFunction
+    __Phi = []  # LevelSetFunction
     __img = None  # the analyzed image (of the data)
     __img_rgb = 0
 
@@ -78,7 +78,7 @@ class LevelSetFactory:
         else:
             self.__img = img
 
-        self.__phi = [LevelSetFunction(np.zeros(img.shape))]
+        self.__Phi = [LevelSetFunction(np.zeros(img.shape))]
         self.__psi = [LevelSetFunction(np.zeros(img.shape))]
         self.__region = np.zeros(img.shape)
         self.__f = np.zeros(img.shape)
@@ -334,14 +334,13 @@ class LevelSetFactory:
         """
         return self.__g_y
 
-    @property
     def phi(self, index = 0):
         """
         Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__phi
+        :return: LevelSetFunction self.__Phi
         """
 
-        return self.__phi[index]
+        return self.__Phi[index]
 
     @property
     def psi(self, index = 0):
@@ -402,10 +401,10 @@ class LevelSetFactory:
             phi = LevelSetFunction.dist_from_circle(center_pt, radius, (img_height, img_width),
                                                     ksize = processing_props['ksize'])
 
-        if np.all(self.__phi[0].value == 0):
-            self.__phi = []
+        if np.all(self.__Phi[0].value == 0):
+            self.__Phi = []
 
-        self.__phi.append(
+        self.__Phi.append(
             LevelSetFunction(phi, regularization_note = regularization,
                              epsilon = 1e-8,
                              **processing_props))
@@ -429,8 +428,6 @@ class LevelSetFactory:
             self.__psi = []
 
         self.__psi.append(LevelSetFunction(psi * dists, self.processing_props))
-
-
 
     def init_g(self, g, **kwargs):
         """
@@ -584,33 +581,104 @@ class LevelSetFactory:
             flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
                                                                     function._y)
             if open_flag:
-                psi_t = self.g * self.phi.kappa * self.psi.norm_nabla + (
+                psi_t = self.g * self.phi().kappa * self.psi.norm_nabla + (
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
                 self.psi.update(self.psi.value - psi_t, regularization_note = processing_props['regularization'])
 
-        if flow_type == 'chan_vese':
-
-            img = self.img
-
-            c1 = np.sum(img * self.phi.heaviside) / np.sum(self.phi.heaviside)
-            c2 = np.sum(img * (1 - self.phi.heaviside)) / np.sum(1 - self.phi.heaviside)
-
-            if np.isnan(c1):
-                c1 = 0
-            if np.isnan(c2):
-                c2 = 0
-            weights = self.chanvese_w
-            flow = self.phi.norm_nabla * (weights['length_w'] * self.phi.kappa - weights['area_w'] -
-                                          weights['inside_w'] * (img - c1) ** 2 +
-                                          weights['outside_w'] * (img - c2) ** 2)
-
         if flow_type == 'band':
             vb = self.__compute_vb(**processing_props)
-            flow = vb * self.phi.norm_nabla
+            flow = vb * self.phi().norm_nabla
             psi_t = vb * self.psi.norm_nabla
             self.psi.update(self.psi.value + psi_t, **processing_props)
 
         return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
+
+    def mumfordshah_flow(self, img = True, nu = 1):
+        """
+        Computes the Mumford-Shah flow for a multi-phase level set, according to :cite:`vese.chan2002`.
+
+        Updates the self.Phi variable for
+
+        :param img: the specific image upon which the level sets are computed
+        :param nu: the length weight
+
+        :type img: np.array
+        :type nu: float
+
+        :return: phi_t - the flows that move the level set
+        """
+
+        if img:
+            img = self.img
+
+        m_levelsets = len(self.__Phi)
+        n_phases = 2 ** m_levelsets
+        kappas = []
+        combinations = '01' * m_levelsets
+
+        import itertools
+
+        combinations = itertools.combinations(combinations, m_levelsets)
+        kappa_flag = True
+        for combination in combinations:
+            dPhi = self.__ms_element(combination, img)
+
+    def __ms_element(self, combination, img):
+        """
+        An element for summation within the Mumford-Shah model.
+
+        For example, for a 3-phase model, with a unison of the three level sets (all inside):
+
+        ..math::
+
+            \begin{eqnarray}
+            \phi_{1t}\rightarrow(u_{0} - c_{000})^2 \delta(\phi_1)H(\phi_2)H(\phi_3) \\
+            \phi_{2t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)\delta(\phi_2)H(\phi_3) \\
+            \phi_{3t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)H(\phi_2)\delta(\phi_3) \\
+
+        This method comoputes the constant of the region, according to the image
+
+        :param combination: the current combination of the level-sets (e.g., '000', '001', '101')
+        :param img: the image upon which the level set is moving (for the specific channel)
+
+        :type combination: tuple
+        :type img: np.array
+
+        :return: the elements for summation for each level set
+
+        :rtype: list
+
+        """
+
+        H = []
+        diracs = []
+        mult_dirac = []
+        dPhi = np.zeros((img.shape, len(combination)))
+        for index in combination:
+            i = int(index)
+            if i == 0:  # inside the level set
+                H.append(self.phi(i).heaviside)
+                diracs.append(self.phi(i).dirac_delta)
+            else:
+                H.append(1 - self.phi(i).heaviside)
+                diracs.append(-self.phi(i).dirac_delta)
+
+        import functools
+        mult = functools.reduce(lambda x, y: x * y, H)
+        c = np.sum(img * mult) / (np.sum(mult))
+
+        for index in combination:
+            i = int(index)
+            mult_ind = np.ones((len(combination)))
+            mult_ind[i] = 0
+            H_ = np.array(H) * mult_ind[:, None, None]
+            H_ = functools.reduce(lambda x, y: x * y, H_)
+            mult_dirac.append(diracs[i] * H_)
+            dPhi[:, :, i] += (img - c) ** 2 * mult_dirac[i]
+
+        return dPhi
+
+
 
     def __drawContours(self, function, ax, **kwargs):
         """
@@ -694,7 +762,7 @@ class LevelSetFactory:
         band_width = kwargs.get('band_width', 1.e-3)
         threshold = kwargs.get('threshold', 0.5)
         tau = kwargs.get('stepsize', 0.05)
-        phi = self.phi.value
+        phi = self.phi().value
 
         # Define the areas for R and R'
         R = (phi > 0) * (phi <= band_width)
@@ -709,7 +777,7 @@ class LevelSetFactory:
         vb[vb < threshold] = 0
         vb *= tau
         #  vb[np.where(phi != 0)] = 0
-        return vb * self.phi.kappa
+        return vb * self.phi().kappa
 
     def __compute_vt(self, vectorField, **kwargs):
         """
@@ -739,7 +807,7 @@ class LevelSetFactory:
         laplacian_vy = cv2.Laplacian(vectorField[:, :, 1], cv2.CV_64F)
 
         # compute the functions that are part of the vt computation
-        g = np.exp(-nabla_edge / (self.phi.kappa + EPS) ** 2)
+        g = np.exp(-nabla_edge / (self.phi().kappa + EPS) ** 2)
         h = 1 - g
 
         vx_t = g * laplacian_vx - h * (vectorField[:, :, 0] - self.f)
@@ -760,9 +828,9 @@ class LevelSetFactory:
         """
         psi = kwargs.get('function', self.psi)  # if no other function is given it will be moving according to psi
 
-        grad_psi_grad_phi = psi._x * self.phi._x + psi._y * self.phi._y
+        grad_psi_grad_phi = psi._x * self.phi()._x + psi._y * self.phi()._y
 
-        return grad_psi_grad_phi / (self.phi.norm_nabla + EPS)
+        return grad_psi_grad_phi / (self.phi().norm_nabla + EPS)
 
     def moveLS(self, **kwargs):
         r"""
@@ -811,9 +879,9 @@ class LevelSetFactory:
 
             mt.imshow(self.img)
         ax2 = plt.figure("phi")
-        mt.imshow(self.phi.value)
+        mt.imshow(self.phi().value)
         fig3, ax3 = plt.subplots(num = 'kappa')
-        mt.imshow(self.phi.kappa)
+        mt.imshow(self.phi().kappa)
         if open_flag:
             fig4, ax4 = plt.subplots(num = 'psi')
             mt.imshow(self.psi.value)
@@ -831,20 +899,20 @@ class LevelSetFactory:
             for item in list(flow_types.keys()):
                 if flow_types[item] == 0:
                     continue
-                intrinsic += flow_types[item] * self.flow(item, self.phi, open_flag, processing_props)
+                intrinsic += flow_types[item] * self.flow(item, self.phi(), open_flag, processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
                         print(i)
 
             # region force
-            intrinsic += region_w * self.region * self.phi.norm_nabla
+            intrinsic += region_w * self.region * self.phi().norm_nabla
 
             # open contour
             if open_flag:
                 #     band_props.update(processing_props)
                 #     vb = self.__compute_vb(**band_props)
-                #     intrinsic += vb * self.phi.norm_nabla
+                #     intrinsic += vb * self.phi().norm_nabla
                 #     psi_t = band_w * vb * self.psi.norm_nabla + flow_types['geodesic']*self.flow('geodesic', self.psi, **processing_props)
                 #     self.psi.update(
                 #         cv2.GaussianBlur(self.psi.value - psi_t, (processing_props['ksize'], processing_props['ksize']),
@@ -857,41 +925,41 @@ class LevelSetFactory:
             v = np.stack((self.f_x, self.f_y), axis = 2)
             vt = self.__compute_vt(v, **processing_props)
             v += vt
-            extrinsic = (v[:, :, 0] * self.phi._x + v[:, :, 1] * self.phi._y) * gvf_w
+            extrinsic = (v[:, :, 0] * self.phi()._x + v[:, :, 1] * self.phi()._y) * gvf_w
 
             # for constrained contours
             extrinsic += self.__compute_vo() * vo_w
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
             plt.figure('kappa')
-            mt.imshow(self.phi.kappa)
+            mt.imshow(self.phi().kappa)
             plt.pause(.5e-10)
 
             phi_t = self.step * (intrinsic - extrinsic)
-            Phi = LevelSetFunction(self.phi.value + phi_t)
+            Phi = LevelSetFunction(self.phi().value + phi_t)
 
             Phi_t = np.sign(Phi.value) * (1 - (np.sqrt(Phi._x ** 2 + Phi._y ** 2)))
 
-            self.phi.update(
+            self.phi().update(
                 cv2.GaussianBlur((Phi.value + Phi_t), (processing_props['ksize'], processing_props['ksize']),
                                  processing_props['sigma']), epsilon = regularization_epsilon)
             # if np.max(np.abs(phi_t)) <= 5e-5:
             #     print('done')
             #     return
             plt.figure('phi')
-            mt.imshow(self.phi.value)
+            mt.imshow(self.phi().value)
 
             # if open_flag:
             #     for curve in l_curve:
-            #         self.phi.value[curve._y.astype('int'), curve._x.astype('int')] = 0
+            #         self.phi().value[curve._y.astype('int'), curve._x.astype('int')] = 0
 
             plt.figure('img')
             if open_flag:
-                _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed,
+                _, ax = self.__drawContours(self.phi().value, ax, color = 'r', image = img_showed,
                                             open = True)
 
             else:
-                _, ax = self.__drawContours(self.phi.value, ax, color = 'r', image = img_showed)
+                _, ax = self.__drawContours(self.phi().value, ax, color = 'r', image = img_showed)
             plt.pause(.5e-10)
         plt.show()
         print('Done')
