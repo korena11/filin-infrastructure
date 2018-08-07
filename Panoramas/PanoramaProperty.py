@@ -185,8 +185,6 @@ class PanoramaProperty(BaseProperty):
             * Medium: 0.057 deg
             * High: 0.028 deg
             * Highest: *TO ADD*
-
-
         """
 
         self.__maxAzimuth = kwargs.get('maxAzimuth', self.__maxAzimuth)
@@ -231,26 +229,3 @@ class PanoramaProperty(BaseProperty):
         ind = np.intersect1d(row_ind, col_ind)
         return PointSubSet(self.Points, ind)
 
-        # # 1. find the limits of the image
-        # left_azimuthMin = np.array([self.column_indexes.min(),
-        #                             self.row_indexes[
-        #                                 self.column_indexes == self.column_indexes.min()][0]])
-        # left_elevationMin = np.array([self.column_indexes[self.row_indexes == self.row_indexes.min()][0],
-        #                               self.row_indexes.min()])
-        #
-        # right_azimuthMax = np.array([self.column_indexes.max(),
-        #                              self.row_indexes[
-        #                                  self.column_indexes == self.column_indexes.max()][0]])
-        # right_elevationMax = np.array([self.column_indexes[self.row_indexes == self.row_indexes.max()][0],
-        #                                self.row_indexes.max()])
-        # bounding = np.vstack((left_azimuthMin, right_azimuthMax, left_elevationMin, right_elevationMax))
-        # x_left = bounding[np.nonzero(bounding == bounding.min(axis = 0)[0])[0], 1]
-        # x_right = bounding[np.nonzero(bounding == bounding.max(axis = 0)[0])[0], 1]
-        #
-        # y_top = bounding[np.nonzero(bounding == bounding.min(axis = 0)[1])[0], 0]
-        # y_bottom = bounding[np.nonzero(bounding == bounding.max(axis = 0)[1])[0], 0]
-        # # 2. find the points within the limits
-        # index_column_indexes = np.nonzero(np.where(min(x_left, x_right) < self.column_indexes) and
-        #                                   np.where(self.column_indexes < max(x_right, x_left)))
-        # index_elevations = np.nonzero(np.where(min(y_top, y_bottom) < self.row_indexes) and
-        #                               np.where(self.row_indexes < max(y_bottom, y_top)))

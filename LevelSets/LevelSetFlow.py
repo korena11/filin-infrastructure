@@ -617,11 +617,26 @@ class LevelSetFlow:
         combinations = '01' * m_levelsets
 
         import itertools
-
+        counter = 0
         combinations = itertools.combinations(combinations, m_levelsets)
-        kappa_flag = True
+        kappa_flag = False
         for combination in combinations:
             dPhi = self.__ms_element(combination, img)
+
+            for i in combination:
+                i = int(i)
+                self.phi(i).move_function(dPhi[i])
+                counter += 1
+
+                if counter > m_levelsets:
+                    kappa_flag = False
+
+                if kappa_flag:
+                    self.phi(i).move_function(nu * self.phi(i).norm_nabla)
+
+
+
+
 
     def __ms_element(self, combination, img):
         """

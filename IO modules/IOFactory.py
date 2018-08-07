@@ -543,10 +543,10 @@ class IOFactory:
 if __name__ == "__main__":
     pointSetList = []
     # ====================Point cloud test=================================
-    # fileName = '..\Sample Data\Geranium2Clouds.pts'
-    # IOFactory.ReadPts(fileName, pointSetList)
+    fileName = r'D:\OwnCloud\Data\PCLs\gesher_wall.pts'
+    IOFactory.ReadPts(fileName, pointSetList)
     # ===========================================================================
 
     # =================shapefile test==================================
-    polylineFileName = r'E:\My Documents\Projects\IOLR\HaBonim\polyRimSample.shp'
-    IOFactory.ReadShapeFile(polylineFileName, pointSetList)
+    # polylineFileName = r'E:\My Documents\Projects\IOLR\HaBonim\polyRimSample.shp'
+    # IOFactory.ReadShapeFile(polylineFileName, pointSetList)

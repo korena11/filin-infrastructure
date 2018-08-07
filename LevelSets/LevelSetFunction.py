@@ -192,6 +192,18 @@ class LevelSetFunction(object):
         self.compute_heaviside(**kwargs)
         self.compute_dirac_delta(**kwargs)
 
+    def move_function(self, dphi):
+        """
+        Adds dphi to the level set function
+
+        :param dphi: the delta to add to the current function
+
+        :type dphi: np.array
+
+        """
+        new_phi = self.value + dphi
+        self.update(new_phi)
+
     @staticmethod
     def dist_from_circle(center_pt, radius, func_shape, **kwargs):
         """
