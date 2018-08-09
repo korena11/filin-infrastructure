@@ -29,7 +29,6 @@ class LevelSetFlow:
     __gvf_w = 1.
     __vo_w = 0.
     __region_w = 1.
-    __chanvese_w = {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}
 
     # Level set initializations
     __Phi = []  # LevelSetFunction
@@ -92,6 +91,16 @@ class LevelSetFlow:
             self.set_flow_types(**kwargs['flow_types'])
 
     @property
+    def num_ls(self):
+        """
+        Number of level sets in the flow
+
+        :return: int
+
+        """
+        return len(self.__Phi)
+
+    @property
     def processing_props(self):
         return self.__processing_props
 
@@ -122,7 +131,6 @@ class LevelSetFlow:
         flow_types = {'geodesic': 1.,
                       'curvature': 0.,
                       'equi_affine': 0.,
-                      'chan_vese': 0.,
                       'band': 0.}
         flow_types.update(kwargs)
         self.__flow_types = flow_types
@@ -227,14 +235,9 @@ class LevelSetFlow:
         inputs = {'gvf_w': 1.,
                   'vo_w': 0.,
                   'region_w': 1.,
-                  'chanvese_w': {'area_w': 0., 'length_w': 1., 'inside_w': 1., 'outside_w': 1.}}
-        if 'chanvese_w' in kwargs:
-            chanvese_w = inputs['chanvese_w']
-            chanvese_w.update(kwargs['chanvese_w'])
-            kwargs['chanvese_w'] = chanvese_w
+                  }
 
         inputs.update(kwargs)
-        self.__chanvese_w = inputs['chanvese_w']
         self.__region_w = inputs['region_w']
         self.__gvf_w = inputs['gvf_w']
         self.__vo_w = inputs['vo_w']
@@ -528,11 +531,9 @@ class LevelSetFlow:
 
             - 'band': band velocity, according to Li et al., 2006.
 
-            - 'chan_vese':
-
         :param function: the level set according to which the flow goes (usually phi)
         :param open_flag: boolean for open flag
-        :param chanvese_w: weights for chan vese flow: area_w, length_w, inside_w, outside_w
+
 
         **Optionals**
 
@@ -550,7 +551,6 @@ class LevelSetFlow:
         :type flow_type: str
         :type function: LevelSetFunction
         :type open_flag: bool
-        :type chanvese_w: dict
         :type gradientType: dict
         :type sigma: float
         :type regularization: int 0,1,2
@@ -612,7 +612,7 @@ class LevelSetFlow:
             img = self.img
         Phi = self.__Phi
 
-        m_levelsets = len(Phi)
+        m_levelsets = self.num_ls
         n_phases = 2 ** m_levelsets
         combinations = '01' * m_levelsets
         # fig, ax = plt.subplots(num = 'panorama')
@@ -686,7 +686,7 @@ class LevelSetFlow:
         mult = functools.reduce(lambda x, y: x * y, H)
         c = np.sum(img * mult) / (np.sum(mult))
 
-        for index in range(len(self.__Phi)):
+        for index in range(self.num_ls):
             i = int(index)
             H_ = H.copy()
             H_.pop(i)
@@ -698,8 +698,6 @@ class LevelSetFlow:
             dPhi[:, :, i] += (img - c) ** 2 * mult_dirac[i]
 
         return dPhi
-
-
 
     def __drawContours(self, function, ax, **kwargs):
         """
@@ -916,19 +914,22 @@ class LevelSetFlow:
             extrinsic = np.zeros(self.img.shape[:2])
 
             # ---------- intrinsic movement ----------
+
             # regular flows
             for item in list(flow_types.keys()):
                 if flow_types[item] == 0:
                     continue
-                intrinsic += flow_types[item] * self.flow(item, self.phi(), open_flag, processing_props)
+                for i in range(self.num_ls):
+                    intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
                         print(i)
 
+
             # region force
-            intrinsic += region_w * self.region * self.phi().norm_nabla
-            self.mumfordshah_flow()
+            for i in range(self.num_ls):
+                intrinsic += region_w * self.region * self.phi(i).norm_nabla
 
             # open contour
             if open_flag:
@@ -947,24 +948,27 @@ class LevelSetFlow:
             v = np.stack((self.f_x, self.f_y), axis = 2)
             vt = self.__compute_vt(v, **processing_props)
             v += vt
-            extrinsic = (v[:, :, 0] * self.phi()._x + v[:, :, 1] * self.phi()._y) * gvf_w
+            for i in range(self.num_ls):
+                extrinsic = (v[:, :, 0] * self.phi(i)._x + v[:, :, 1] * self.phi(i)._y) * gvf_w
 
-            # for constrained contours
-            extrinsic += self.__compute_vo() * vo_w
+                # for constrained contours
+                extrinsic += self.__compute_vo() * vo_w
+                phi_t = self.step * (intrinsic - extrinsic)
+                Phi = LevelSetFunction(self.phi(i).value + phi_t)
+
+                Phi_t = np.sign(Phi.value) * (1 - (np.sqrt(Phi._x ** 2 + Phi._y ** 2)))
+
+                self.phi(i).update(
+                    cv2.GaussianBlur((Phi.value + Phi_t), (processing_props['ksize'], processing_props['ksize']),
+                                     processing_props['sigma']), epsilon = regularization_epsilon)
+            self.mumfordshah_flow()
+
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
             plt.figure('kappa')
             mt.imshow(self.phi().kappa)
             plt.pause(.5e-10)
 
-            phi_t = self.step * (intrinsic - extrinsic)
-            Phi = LevelSetFunction(self.phi().value + phi_t)
-
-            Phi_t = np.sign(Phi.value) * (1 - (np.sqrt(Phi._x ** 2 + Phi._y ** 2)))
-
-            self.phi().update(
-                cv2.GaussianBlur((Phi.value + Phi_t), (processing_props['ksize'], processing_props['ksize']),
-                                 processing_props['sigma']), epsilon = regularization_epsilon)
             # if np.max(np.abs(phi_t)) <= 5e-5:
             #     print('done')
             #     return
@@ -977,11 +981,10 @@ class LevelSetFlow:
 
             plt.figure('img')
             if open_flag:
-                _, ax = self.__drawContours(self.phi().value, ax, color = 'r', image = img_showed,
-                                            open = True)
-
+                _, ax = mt.draw_contours(self.phi().value, ax, color = 'r', img = img_showed,
+                                         open = True)
             else:
-                colors = 'rgbm'
+                colors = 'rbgm'
                 for i in range(len(self.__Phi)):
                     if i > 0:
                         _, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = True,
