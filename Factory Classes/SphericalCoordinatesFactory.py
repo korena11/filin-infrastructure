@@ -24,14 +24,14 @@ class SphericalCoordinatesFactory:
         :return: spherical coordinates property in degrees
         :rtype: SphericalCoordinatesProperty
         """
+
         x = points.X
         y = points.Y
         z = points.Z
 
         azimuth = ceval('arctan2(y,x)')
-        xy2 = ceval('x**2 + y**2')
-        elevation = ceval('arctan2(z, sqrt(xy2))')
-        range = eval('sqrt(xy2 + z**2)')
+        elevation = ceval('arctan2(z, sqrt(x**2+y**2))')
+        range = eval('sqrt(x**2+y**2+z**2)')
 
         elevation *= 180. / pi
         azimuth *= 180. / pi

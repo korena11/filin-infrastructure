@@ -610,32 +610,36 @@ class LevelSetFlow:
 
         if img:
             img = self.img
+        Phi = self.__Phi
 
-        m_levelsets = len(self.__Phi)
+        m_levelsets = len(Phi)
         n_phases = 2 ** m_levelsets
-        kappas = []
         combinations = '01' * m_levelsets
+        # fig, ax = plt.subplots(num = 'panorama')
 
         import itertools
         counter = 0
         combinations = itertools.combinations(combinations, m_levelsets)
-        kappa_flag = False
+        kappa_flag = True
         for combination in combinations:
             dPhi = self.__ms_element(combination, img)
 
-            for i in combination:
+            for i in range(m_levelsets):
                 i = int(i)
-                self.phi(i).move_function(dPhi[i])
+                Phi[i].move_function(dPhi[:, :, i])
                 counter += 1
 
                 if counter > m_levelsets:
                     kappa_flag = False
 
                 if kappa_flag:
-                    self.phi(i).move_function(nu * self.phi(i).norm_nabla)
+                    Phi[i].move_function(nu * self.phi(i).kappa)
 
+        self.__Phi = Phi
 
-
+        # mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = 'b')
+        # mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = 'r')
+        # plt.pause(.5e-10)
 
 
     def __ms_element(self, combination, img):
@@ -668,7 +672,7 @@ class LevelSetFlow:
         H = []
         diracs = []
         mult_dirac = []
-        dPhi = np.zeros((img.shape, len(combination)))
+        dPhi = np.zeros((img.shape[0], img.shape[1], len(combination)))
         for index in combination:
             i = int(index)
             if i == 0:  # inside the level set
@@ -682,12 +686,14 @@ class LevelSetFlow:
         mult = functools.reduce(lambda x, y: x * y, H)
         c = np.sum(img * mult) / (np.sum(mult))
 
-        for index in combination:
+        for index in range(len(self.__Phi)):
             i = int(index)
-            mult_ind = np.ones((len(combination)))
-            mult_ind[i] = 0
-            H_ = np.array(H) * mult_ind[:, None, None]
-            H_ = functools.reduce(lambda x, y: x * y, H_)
+            H_ = H.copy()
+            H_.pop(i)
+            if len(H_) > 1:
+                H_ = functools.reduce(lambda x, y: x * y, H_)
+            else:
+                H_ = H_[0]
             mult_dirac.append(diracs[i] * H_)
             dPhi[:, :, i] += (img - c) ** 2 * mult_dirac[i]
 
@@ -891,8 +897,8 @@ class LevelSetFlow:
         if np.any(self.img_rgb) != 0:
             mt.imshow(self.img_rgb)
         else:
-
             mt.imshow(self.img)
+
         ax2 = plt.figure("phi")
         mt.imshow(self.phi().value)
         fig3, ax3 = plt.subplots(num = 'kappa')
@@ -922,6 +928,7 @@ class LevelSetFlow:
 
             # region force
             intrinsic += region_w * self.region * self.phi().norm_nabla
+            self.mumfordshah_flow()
 
             # open contour
             if open_flag:
@@ -974,7 +981,14 @@ class LevelSetFlow:
                                             open = True)
 
             else:
-                _, ax = self.__drawContours(self.phi().value, ax, color = 'r', image = img_showed)
+                colors = 'rgbm'
+                for i in range(len(self.__Phi)):
+                    if i > 0:
+                        _, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = True,
+                                                 color = colors[i])
+                    else:
+                        _, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = False,
+                                                 color = colors[i])
             plt.pause(.5e-10)
         plt.show()
         print('Done')

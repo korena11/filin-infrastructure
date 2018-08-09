@@ -48,7 +48,7 @@ class LevelSetFunction(object):
         :rtype: LevelSetFunction
 
         """
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 1}
         self.__processing_props = processing_props
         self.__value = function
         self.__ls_derivatives_curvature()
@@ -201,7 +201,8 @@ class LevelSetFunction(object):
         :type dphi: np.array
 
         """
-        new_phi = self.value + dphi
+        new_phi = cv2.GaussianBlur(self.value + dphi, (self.processing_props['ksize'], self.processing_props['ksize']),
+                                   self.processing_props['sigma'])
         self.update(new_phi)
 
     @staticmethod

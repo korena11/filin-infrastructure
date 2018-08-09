@@ -17,6 +17,7 @@ from numpy.linalg import norm
 from scipy.interpolate import interp1d
 from scipy.ndimage import filters
 import h5py
+from skimage import measure
 
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):
@@ -365,6 +366,51 @@ def intersect2d(a, b, **kwargs):
     return c.view(a.dtype).reshape(-1, byaxis)
 
 
+def draw_contours(function, ax, img, hold = False, **kwargs):
+    """
+    Draws the contours of a specific iteration
+
+    :param function: the function which contours should be drawn
+    :param image: the image on which the contours will be drawn
+    :param hold: erase image from previous drawings or not. Default: False
+    :param color: the color which the contour will be drawn. Default: blue
+
+    :return: the figure
+
+    """
+
+    if not hold:
+        ax.cla()
+    # ax.axis("off")
+
+    ax.set_ylim([img.shape[0], 0])
+    ax.set_xlim([0, img.shape[1]])
+
+    color = kwargs.get('color', 'b')
+
+    function_binary = function.copy()
+
+    # segmenting and presenting the found areas
+    function_binary[np.where(function > 0)] = 0
+    function_binary[np.where(function < 0)] = 1
+    function_binary = np.uint8(function_binary)
+
+    contours = measure.find_contours(function, 0.)
+    blob_labels = measure.label(function_binary, background = 0)
+    label_props = measure.regionprops(blob_labels)
+
+    #     contours = chooseLargestContours(contours, label_props, 1)
+    if not hold:
+        imshow(img)
+    l_curve = []
+
+    for c in contours:
+        c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
+
+        curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
+        l_curve.append(curve)
+
+    return l_curve, ax
 
 
 

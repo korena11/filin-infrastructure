@@ -19,7 +19,7 @@ class PanoramaFactory:
     def CreatePanorama_byPoints(cls, points, azimuthSpacing = 0.057, elevationSpacing = 0.057,
                                 intensity = False, **kwargs):
         """
-        Create a PanoramaProperty object from a point set based on certain property
+        Create a PanoramaProperty object from a point set based on according to range or intensity
         
         :param points: The point set to create the panorama from can be either a PointSet, PointSubSet or
            BaseProperty-derived objects
@@ -48,7 +48,7 @@ class PanoramaFactory:
             # Calculating the spherical coordinates of the point set
             sphCoords = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(points)
         except:
-            warn('Expected PointSet, got property instead')
+            warn('Did not convert to spherical coordinates')
             return 1
 
         (minAz, maxAz), (minEl, maxEl), (azimuthIndexes, elevationIndexes) = \
@@ -60,13 +60,15 @@ class PanoramaFactory:
             # range as pixel value
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
                                         minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, **kwargs)
+                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
+                                        elevationSpacing = elevationSpacing, **kwargs)
 
         else:
             #  intensity as pixel value
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,
                                         minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, **kwargs)
+                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
+                                        elevationSpacing = elevationSpacing, **kwargs)
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)
             panorama.setValues(voidData = void)
