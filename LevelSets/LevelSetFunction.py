@@ -201,7 +201,10 @@ class LevelSetFunction(object):
         :type dphi: np.array
 
         """
-        new_phi = cv2.GaussianBlur(self.value + dphi, (self.processing_props['ksize'], self.processing_props['ksize']),
+        Phi_temp = LevelSetFunction(self.value + dphi)
+        Phi_t = np.sign(Phi_temp.value) * (1 - (np.sqrt(Phi_temp._x ** 2 + Phi_temp._y ** 2)))
+        new_phi = cv2.GaussianBlur(Phi_temp.value + Phi_t,
+                                   (self.processing_props['ksize'], self.processing_props['ksize']),
                                    self.processing_props['sigma'])
         self.update(new_phi)
 
@@ -270,7 +273,7 @@ class LevelSetFunction(object):
         :return: the heaviside function. Also updates the class.
 
         """
-        epsilon = kwargs.get('epsilon')
+        epsilon = kwargs.get('epsilon', 1e-08)
         regularization_note = kwargs.get('regularization_note', self.regularization_note)
 
         H = np.zeros(self.value.shape)

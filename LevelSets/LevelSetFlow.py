@@ -32,7 +32,7 @@ class LevelSetFlow:
 
     # Level set initializations
     __Phi = []  # LevelSetFunction
-    __img = None  # the analyzed image (of the data)
+    __img = []  # the analyzed image (of the data)
     __img_rgb = 0
 
     # Constraints initializations
@@ -72,16 +72,19 @@ class LevelSetFlow:
             self.__img_rgb = kwargs['img_rgb']
 
         if isinstance(img, RasterData):
-            self.__img = img.data
-            self.data = img
+            self.__img.append(img.data)
+            # self.data = img
         else:
-            self.__img = img
+            if isinstance(img, list):
+                self.__img = img
+            else:
+                self.__img.append(img)
 
-        self.__Phi = [LevelSetFunction(np.zeros(img.shape))]
-        self.__psi = [LevelSetFunction(np.zeros(img.shape))]
-        self.__region = np.zeros(img.shape)
-        self.__f = np.zeros(img.shape)
-        self.__g = np.zeros(img.shape)
+        self.__Phi = [LevelSetFunction(np.zeros(self.img().shape))]
+        self.__psi = [LevelSetFunction(np.zeros(self.img().shape))]
+        self.__region = np.zeros(self.img().shape)
+        self.__f = np.zeros(self.img().shape)
+        self.__g = np.zeros(self.img().shape)
 
 
         if 'weights' in list(kwargs.keys()):
@@ -89,6 +92,7 @@ class LevelSetFlow:
 
         if 'flow_types' in list(kwargs.keys()):
             self.set_flow_types(**kwargs['flow_types'])
+
 
     @property
     def num_ls(self):
@@ -202,31 +206,14 @@ class LevelSetFlow:
         """
         return self.__region_w
 
-    @property
-    def chanvese_w(self):
-        """
-        Chan-Vese weights: area, length, inside and outside weights
-
-        Default:
-
-           * length, inside and outside weights: 1.
-           * area: 0.
-
-        :rtype: dict
-
-        """
-        return self.__chanvese_w
-
     def set_weights(self, **kwargs):
         """
         Set weights for constraints.
 
-        :param chanvese_w: area_w, length_w, inside_w and outside_w
         :param gvf_w: gradient vector flow weight
         :param vo_w: open contour weight (Not working at the moment)
         :param region_w: region constraint weight
 
-        :type chanvese_w: dict
         :type gvf_w: float
         :type vo_w: float
         :type region_w: float
@@ -242,15 +229,18 @@ class LevelSetFlow:
         self.__gvf_w = inputs['gvf_w']
         self.__vo_w = inputs['vo_w']
 
-    @property
-    def img(self):
+    def img(self, index = 0):
         """
-        The analyzed image (of the data)
+        The analyzed image (of the data). Multiple can exist.
 
-        :rtype: np.array
+        :param index: the index of the analyzed images.
+
+        :type index: int
+
+        :rtype: np.ndarray
 
         """
-        return self.__img
+        return self.__img[index]
 
     @property
     def img_rgb(self):
@@ -340,6 +330,11 @@ class LevelSetFlow:
     def phi(self, index = 0):
         """
         Returns the level set function phi according to the index
+
+        :param index: the number of the level set
+
+        :type index: int
+
         :return: LevelSetFunction self.__Phi
         """
 
@@ -393,7 +388,7 @@ class LevelSetFlow:
         """
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
         processing_props.update(kwargs['processing_props'])
-        img_height, img_width = self.img.shape[:2]
+        img_height, img_width = self.img().shape[:2]
         radius = kwargs.get('radius', np.int(img_width / 4))
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
         func_type = kwargs.get('function_type', 'circle')
@@ -411,6 +406,17 @@ class LevelSetFlow:
             LevelSetFunction(phi, regularization_note = regularization,
                              epsilon = 1e-8,
                              **processing_props))
+
+    def init_img(self, img, **kwargs):
+        """
+        Set more images for the level set flow, according to which the flow will move (each of the Phi's)
+
+        .. warning::
+            When initializing a second+ image, one should make sure that
+        :param img: the next image to set
+
+        """
+        self.__img.append(img)
 
     def init_psi(self, psi, **kwargs):
         """
@@ -456,8 +462,10 @@ class LevelSetFlow:
         """
         Initializes region function
 
-        :param kwargs:
         :param region_method: type of the region wanted: 'classification', 'saliency'.
+        :param img_index: the self.img according to which the region will be computed
+
+        :type img_index: int
 
         *Inputs according to method:*
 
@@ -470,6 +478,8 @@ class LevelSetFlow:
 
         """
         sigma = kwargs.get('sigma', 2.5)
+        index = kwargs.get('img_index', 0)
+
         if region_method == 'saliency':
             inputs = {'feature': 'normals',
                       'method': 'frequency',
@@ -480,14 +490,14 @@ class LevelSetFlow:
                       'verbose': True}
             inputs.update(kwargs)
 
-            region = sl.distance_based(self.img, **inputs)
+            region = sl.distance_based(self.img(index), **inputs)
         elif region_method == 'classification':
             inputs = {'winSizes', np.linspace(0.1, 10, 5),
                       'class', 1}
             inputs.update(kwargs)
 
             from ClassificationFactory import ClassificationFactory as Cf
-            classified, percentMap = Cf.SurfaceClassification(self.img, inputs['winSizes'])
+            classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
         region = 255 - cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
@@ -609,7 +619,10 @@ class LevelSetFlow:
         """
 
         if img:
-            img = self.img
+            images = self.__img
+        else:
+            images = img
+
         Phi = self.__Phi
 
         m_levelsets = self.num_ls
@@ -619,28 +632,30 @@ class LevelSetFlow:
 
         import itertools
         counter = 0
-        combinations = itertools.combinations(combinations, m_levelsets)
+
         kappa_flag = True
-        for combination in combinations:
-            dPhi = self.__ms_element(combination, img)
 
-            for i in range(m_levelsets):
-                i = int(i)
-                Phi[i].move_function(dPhi[:, :, i])
-                counter += 1
+        for img in images:
+            combinations = itertools.combinations(combinations, m_levelsets)
+            for combination in combinations:
+                dPhi = self.__ms_element(combination, img)
 
-                if counter > m_levelsets:
-                    kappa_flag = False
+                for i in range(m_levelsets):
+                    i = int(i)
+                    Phi[i].move_function(dPhi[:, :, i])
+                    counter += 1
 
-                if kappa_flag:
-                    Phi[i].move_function(nu * self.phi(i).kappa)
+                    if counter > m_levelsets:
+                        kappa_flag = False
+
+                    if kappa_flag:
+                        Phi[i].move_function(nu * self.phi(i).kappa)
 
         self.__Phi = Phi
 
         # mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = 'b')
         # mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = 'r')
         # plt.pause(.5e-10)
-
 
     def __ms_element(self, combination, img):
         """
@@ -692,9 +707,14 @@ class LevelSetFlow:
             H_.pop(i)
             if len(H_) > 1:
                 H_ = functools.reduce(lambda x, y: x * y, H_)
+                mult_dirac.append(diracs[i] * H_)
+
+            elif len(H_) == 0:
+                mult_dirac = [diracs[i]]
+
             else:
                 H_ = H_[0]
-            mult_dirac.append(diracs[i] * H_)
+                mult_dirac.append(diracs[i] * H_)
             dPhi[:, :, i] += (img - c) ** 2 * mult_dirac[i]
 
         return dPhi
@@ -787,11 +807,11 @@ class LevelSetFlow:
         R = (phi > 0) * (phi <= band_width)
         R_ = (phi >= -band_width) * (phi < 0)
 
-        SR = np.zeros(self.img.shape[:2])
-        SR_ = np.zeros(self.img.shape[:2])
+        SR = np.zeros(self.img().shape[:2])
+        SR_ = np.zeros(self.img().shape[:2])
 
-        SR[R] = np.mean(self.img[R])
-        SR_[R_] = np.mean(self.img[R_])
+        SR[R] = np.mean(self.img()[R])
+        SR_[R_] = np.mean(self.img()[R_])
         vb = 1 - (SR_ - SR) / (np.linalg.norm(SR + SR_) + EPS)
         vb[vb < threshold] = 0
         vb *= tau
@@ -867,6 +887,7 @@ class LevelSetFlow:
 
         :param gvf_flag: flag to add gradient vector flow
         :param open_flag: flag for open contours
+        :param mumford_shah: flag for mumford_shah flow
 
         :return the contours after level set
 
@@ -874,6 +895,10 @@ class LevelSetFlow:
         # ------inputs--------
         verbose = kwargs.get('verbose', False)
         open_flag = kwargs.get('open_flag', False)
+        mumford_shah_flag = kwargs.get('mumford_shah', False)
+        nu = 1.
+        if mumford_shah_flag:
+            nu = kwargs.get('nu', 1.)
         if np.any(self.img_rgb) != 0:
             temp = self.img_rgb
         else:
@@ -910,10 +935,12 @@ class LevelSetFlow:
                 print(i)
                 if i > 26:
                     print('hello')
-            intrinsic = np.zeros(self.img.shape[:2])
-            extrinsic = np.zeros(self.img.shape[:2])
+            intrinsic = np.zeros(self.img().shape[:2])
+            extrinsic = np.zeros(self.img().shape[:2])
 
             # ---------- intrinsic movement ----------
+            if mumford_shah_flag:
+                self.mumfordshah_flow(nu)
 
             # regular flows
             for item in list(flow_types.keys()):
@@ -925,7 +952,6 @@ class LevelSetFlow:
                 if verbose:
                     if np.any(intrinsic > 20):
                         print(i)
-
 
             # region force
             for i in range(self.num_ls):
@@ -954,14 +980,7 @@ class LevelSetFlow:
                 # for constrained contours
                 extrinsic += self.__compute_vo() * vo_w
                 phi_t = self.step * (intrinsic - extrinsic)
-                Phi = LevelSetFunction(self.phi(i).value + phi_t)
-
-                Phi_t = np.sign(Phi.value) * (1 - (np.sqrt(Phi._x ** 2 + Phi._y ** 2)))
-
-                self.phi(i).update(
-                    cv2.GaussianBlur((Phi.value + Phi_t), (processing_props['ksize'], processing_props['ksize']),
-                                     processing_props['sigma']), epsilon = regularization_epsilon)
-            self.mumfordshah_flow()
+                self.phi(i).move_function(phi_t)
 
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
