@@ -2,5 +2,5 @@ Saliency computations
 ======================
 
 .. automodule:: Saliency
-:members:
+    :members:
 

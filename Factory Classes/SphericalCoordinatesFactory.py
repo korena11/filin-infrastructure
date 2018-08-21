@@ -48,6 +48,7 @@ class SphericalCoordinatesFactory:
         :param z:
 
         :return: spherical coordinates
+        
         """
 
         azimuth = np.arctan2(y, x)

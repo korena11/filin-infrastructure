@@ -1,16 +1,16 @@
 LevelSet Function
 ==================
 .. autoclass:: LevelSetFunction.LevelSetFunction
-:members:
-        :undoc-members:
+    :members:
+    :undoc-members:
 
 
-        .. rubric:: Attributes
-
-    .. autoautosummary:: LevelSetFunction.LevelSetFunction
-:attributes:
-
-        .. rubric:: Methods
+    .. rubric:: Attributes
 
     .. autoautosummary:: LevelSetFunction.LevelSetFunction
-:methods:
+        :attributes:
+
+    .. rubric:: Methods
+
+    .. autoautosummary:: LevelSetFunction.LevelSetFunction
+        :methods:

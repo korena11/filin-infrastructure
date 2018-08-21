@@ -203,7 +203,7 @@ class LevelSetFunction(object):
         """
         Phi_temp = LevelSetFunction(self.value + dphi)
         Phi_t = np.sign(Phi_temp.value) * (1 - (np.sqrt(Phi_temp._x ** 2 + Phi_temp._y ** 2)))
-        new_phi = cv2.GaussianBlur(Phi_temp.value + Phi_t,
+        new_phi = cv2.GaussianBlur(Phi_temp.value,
                                    (self.processing_props['ksize'], self.processing_props['ksize']),
                                    self.processing_props['sigma'])
         self.update(new_phi)
@@ -214,7 +214,7 @@ class LevelSetFunction(object):
         Build a Lipshitz distance function from a circle, with a specific size
 
         .. math::
-             \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
+           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
 
 
         :param center_pt:  center of the circle

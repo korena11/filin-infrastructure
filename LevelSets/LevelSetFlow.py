@@ -387,7 +387,8 @@ class LevelSetFlow:
 
         """
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
-        processing_props.update(kwargs['processing_props'])
+        if 'processing_props' in kwargs:
+            processing_props.update(kwargs['processing_props'])
         img_height, img_width = self.img().shape[:2]
         radius = kwargs.get('radius', np.int(img_width / 4))
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
@@ -413,6 +414,7 @@ class LevelSetFlow:
 
         .. warning::
             When initializing a second+ image, one should make sure that
+
         :param img: the next image to set
 
         """
@@ -500,7 +502,9 @@ class LevelSetFlow:
             classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
-        region = 255 - cv2.GaussianBlur(region, ksize = (3, 3), sigmaX = sigma)
+        region = 255 - cv2.GaussianBlur(region,
+                                        ksize = (self.processing_props['ksize'], self.processing_props['ksize']),
+                                        sigmaX = self.processing_props['sigma'])
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 
@@ -534,12 +538,12 @@ class LevelSetFlow:
                 .. math:: C_t = k^{1/3} N \Rightarrow
                         \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
-            - 'geodesic': geodesic active contours, according to Casselles et al., 1997
+            - 'geodesic': geodesic active contours, according to :cite:`Caselles.etal1997`
 
                 .. math::  C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
                         \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
-            - 'band': band velocity, according to Li et al., 2006.
+            - 'band': band velocity, according to :cite:`Li.etal2006`
 
         :param function: the level set according to which the flow goes (usually phi)
         :param open_flag: boolean for open flag
@@ -605,7 +609,7 @@ class LevelSetFlow:
 
     def mumfordshah_flow(self, img = True, nu = 1):
         """
-        Computes the Mumford-Shah flow for a multi-phase level set, according to :cite:`vese.chan2002`.
+        Computes the Mumford-Shah flow for a multi-phase level set, according to :cite:`Vese.Chan2002`.
 
         Updates the self.Phi variable for
 
@@ -627,7 +631,7 @@ class LevelSetFlow:
 
         m_levelsets = self.num_ls
         n_phases = 2 ** m_levelsets
-        combinations = '01' * m_levelsets
+        _combinations = '01' * m_levelsets
         # fig, ax = plt.subplots(num = 'panorama')
 
         import itertools
@@ -636,7 +640,7 @@ class LevelSetFlow:
         kappa_flag = True
 
         for img in images:
-            combinations = itertools.combinations(combinations, m_levelsets)
+            combinations = itertools.combinations(_combinations, m_levelsets)
             for combination in combinations:
                 dPhi = self.__ms_element(combination, img)
 
@@ -687,19 +691,22 @@ class LevelSetFlow:
         H = []
         diracs = []
         mult_dirac = []
-        dPhi = np.zeros((img.shape[0], img.shape[1], len(combination)))
-        for index in combination:
-            i = int(index)
+        dPhi = np.zeros((img.shape[0], img.shape[1], self.num_ls))
+        for index in range(self.num_ls):
+            i = int(combination[index])
             if i == 0:  # inside the level set
-                H.append(self.phi(i).heaviside)
-                diracs.append(self.phi(i).dirac_delta)
+                H.append(self.phi(index).heaviside)
+                diracs.append(self.phi(index).dirac_delta)
             else:
-                H.append(1 - self.phi(i).heaviside)
-                diracs.append(-self.phi(i).dirac_delta)
+                H.append(1 - self.phi(index).heaviside)
+                diracs.append(-self.phi(index).dirac_delta)
 
         import functools
         mult = functools.reduce(lambda x, y: x * y, H)
-        c = np.sum(img * mult) / (np.sum(mult))
+        if np.all(mult == 0):
+            c = 0
+        else:
+            c = np.sum(img * mult) / (np.sum(mult))
 
         for index in range(self.num_ls):
             i = int(index)

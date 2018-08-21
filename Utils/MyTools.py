@@ -52,55 +52,6 @@ def im2double(img):
     return out
 
 
-def linearImageCorrection(img, contrast = 1, brightness = 0):
-    '''
-
-    @param img: the image for contrast manipulation
-    @param contrast: the contrast parameter
-    @param brightness: the brightness parameter
-
-    @return: image after contrast manipulation
-    '''
-
-    correctedImage = img * contrast + brightness
-
-    if img.dtype == 'float':
-        return im2double(correctedImage)
-    else:
-        return correctedImage.astype(img.dtype)
-
-
-def imageCorrection(img, phi = 1, theta = 1, contrastType = 'decrease'):
-    '''
-
-    @param img: the image for contrast manipulation
-    @param contrast:  decrease intensity - dark pixels become much darker and bright pixels become slightly dark OR
-                      increase intensity - dark pixels become much brighter, bright pixels become slightly bright
-    @param phi, theta: parameters for manipulating data
-
-    @return: image after contrast manipulation
-    '''
-
-    if img.dtype == 'uint8':
-        maxIntensity = 255.0
-    else:
-        maxIntensity = 1.0
-
-    # TODO other types
-
-    x = np.linspace(0, maxIntensity)
-
-    if contrastType == 'decrease':
-        correctedImage = (maxIntensity / phi) * (img / (maxIntensity / theta)) ** 2
-    elif contrastType == 'increase':
-        correctedImage = (maxIntensity / phi) * (img / (maxIntensity / theta)) ** 0.5
-
-    if img.dtype == 'float':
-        return im2double(correctedImage)
-    else:
-        return correctedImage.astype(img.dtype)
-
-
 def computeImageGradient(I, **kwargs):
     '''
     Computes the gradient to a given image
@@ -109,26 +60,28 @@ def computeImageGradient(I, **kwargs):
     :param ksize: kernel size, for blurring and derivatives
     :param sigma: sigma for LoG gradient
     :param gradientType: 'L1' L1 norm of grad(I); 'L2' L2-norm of grad(I); 'LoG' Laplacian of gaussian
+
     :return: an image of the gradient magnitude
     '''
 
-    ksize = kwargs.get('ksize', 5)
+    ksize = int(kwargs.get('ksize', 5))
     gradientType = kwargs.get('gradientType', 'L1')
     sigma = kwargs.get('sigma', 2.5)
+
     gradient = None
 
-    img = cv2.GaussianBlur(I, (0, 0), sigma)
+    img = cv2.GaussianBlur(I, (ksize, ksize), sigma)
 
     # compute image gradient
     dx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = ksize)
     dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
 
     if gradientType == 'L1':
-        gradient = cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (0, 0), sigma)  # L1-norm of grad(I)
+        gradient = cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (ksize, ksize), sigma)  # L1-norm of grad(I)
     elif gradientType == 'L2':
-        gradient = cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (0, 0), sigma)
+        gradient = cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (ksize, ksize), sigma)
     elif gradientType == 'LoG':
-        gradient = cv2.GaussianBlur(filters.gaussian_laplace(I, sigma), (0, 0), sigma)
+        gradient = cv2.GaussianBlur(filters.gaussian_laplace(I, sigma), (ksize, ksize), sigma)
 
     # return cv2.normalize((gradient).astype('float'), None, 0.0,1.0, cv2.NORM_MINMAX)
     return gradient
@@ -322,55 +275,55 @@ def intersect2d(a, b, **kwargs):
     aa = a.copy()
     bb = b.copy()
     c = np.intersect1d(aa.view(dtype), bb.view(dtype))
-
-    def CreateFilename(filename, mode = 'w', **kwargs):
-        """
-       Checks or creates a file object according to specifications given.
-           Default is hdf5.
-
-       .. warning:: Need to be implemented for other formats than hdf5
-
-       :param filename: can be a filename or a path and filename, with or without extension.
-       :param mode: is an optional string that specifies the mode in which the file is opened.
-        It defaults to 'w' which means open for writing in text mode.
-
-       :param extension: 'h5', 'json', 'shp', 'pts', etc...
-
-       :type filename: str
-       :type mode: str
-       :type extension: str
-
-       :return: a file object (according to the extension) and its extension
-
-       """
-
-        import re
-
-        matched = re.match('(.*)\.([a-z].*)', filename)
-
-        if matched is None:
-            # if no extension is in filename, add
-            extension = kwargs.get('extension', 'h5')  # if no extension given - default is h5
-
-            filename = filename + '.' + extension
-        else:
-            # otherwise - use the extension in filename
-            extension = matched.group(2)
-
-        if extension == 'h5':
-            return (h5py.File(filename, mode), extension)
-
-        else:  # change if needed
-            return (open(filename, mode), extension)
-
     return c.view(a.dtype).reshape(-1, byaxis)
 
 
-def draw_contours(function, ax, img, hold = False, **kwargs):
+def CreateFilename(filename, mode = 'w', **kwargs):
+    """
+   Checks or creates a file object according to specifications given.
+       Default is hdf5.
+
+   .. warning:: Need to be implemented for other formats than hdf5
+
+   :param filename: can be a filename or a path and filename, with or without extension.
+   :param mode: is an optional string that specifies the mode in which the file is opened.
+    It defaults to 'w' which means open for writing in text mode.
+
+   :param extension: 'h5', 'json', 'shp', 'pts', etc...
+
+   :type filename: str
+   :type mode: str
+   :type extension: str
+
+   :return: a file object (according to the extension) and its extension
+
+   """
+
+    import re
+
+    matched = re.match('(.*)\.([a-z].*)', filename)
+
+    if matched is None:
+        # if no extension is in filename, add
+        extension = kwargs.get('extension', 'h5')  # if no extension given - default is h5
+
+        filename = filename + '.' + extension
+    else:
+        # otherwise - use the extension in filename
+        extension = matched.group(2)
+
+    if extension == 'h5':
+        return (h5py.File(filename, mode), extension)
+
+    else:  # change if needed
+        return (open(filename, mode), extension)
+
+
+def draw_contours(func, ax, img, hold = False, **kwargs):
     """
     Draws the contours of a specific iteration
 
-    :param function: the function which contours should be drawn
+    :param func: the function which contours should be drawn
     :param image: the image on which the contours will be drawn
     :param hold: erase image from previous drawings or not. Default: False
     :param color: the color which the contour will be drawn. Default: blue
@@ -388,14 +341,14 @@ def draw_contours(function, ax, img, hold = False, **kwargs):
 
     color = kwargs.get('color', 'b')
 
-    function_binary = function.copy()
+    function_binary = func.copy()
 
     # segmenting and presenting the found areas
-    function_binary[np.where(function > 0)] = 0
-    function_binary[np.where(function < 0)] = 1
+    function_binary[np.where(func > 0)] = 0
+    function_binary[np.where(func < 0)] = 1
     function_binary = np.uint8(function_binary)
 
-    contours = measure.find_contours(function, 0.)
+    contours = measure.find_contours(func, 0.)
     blob_labels = measure.label(function_binary, background = 0)
     label_props = measure.regionprops(blob_labels)
 

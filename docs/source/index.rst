@@ -26,18 +26,28 @@ Dependencies
 ============
 This project is implemented for Python 3.6 
 
-- `pyProj <https://pypi.org/project/pyproj/>`.
+- `pyProj <https://jswhit.github.io/pyproj/>`_.
    Installation via `pip install pyproj`
-- `vtk <https://pypi.org/project/vtk/>`
+- `vtk <https://www.vtk.org/>`_
    Installation via `pip install vtk`
-- `opencv <https://pypi.org/project/opencv-python/>`
+- `opencv <https://opencv.org/>`_
    Installation via `pip install opencv-python`
-- `geopandas <http://geopandas.org/>`
+- `geopandas <http://geopandas.org/>`_
    Installation via `conda install -c conda-forge geopandas`
-- `gdal <https://pypi.org/project/GDAL/>`
+- `gdal <https://www.gdal.org/>`_
    Installation via `pip install GDAL`
-- `pyspark <https://pypi.org/project/pyspark/>` make sure you have Java 8 or higher installed on your computer.
+- `pyspark <https://spark.apache.org/docs/0.9.0/python-programming-guide.html>`_
+   Make sure you have Java 8 or higher installed on your computer.
+
    Installation via `pip install pyspark`
+
+References
+----------
+
+.. bibliography:: refs1.bib
+   :style: plain
+   :cited:
+
 
 
 Indices and tables
