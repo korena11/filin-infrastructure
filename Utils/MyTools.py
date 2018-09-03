@@ -324,13 +324,21 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
     Draws the contours of a specific iteration
 
     :param func: the function which contours should be drawn
+    :param ax: the axes to draw upon
     :param image: the image on which the contours will be drawn
     :param hold: erase image from previous drawings or not. Default: False
-    :param color: the color which the contour will be drawn. Default: blue
+    :param color: the color which the contour will be drawn. Default: random for each curve (send True)
+
+    :type func: np.ndarray
+    :type ax: plt.axes
+    :type hold: bool
+    :type color: str or bool
+
 
     :return: the figure
 
     """
+    import random
 
     if not hold:
         ax.cla()
@@ -339,7 +347,7 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
     ax.set_ylim([img.shape[0], 0])
     ax.set_xlim([0, img.shape[1]])
 
-    color = kwargs.get('color', 'b')
+    color = kwargs.get('color', True)
 
     function_binary = func.copy()
 
@@ -359,12 +367,13 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
 
     for c in contours:
         c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
+        if color:
+            color = (random.random(), random.random(), random.random())
 
         curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
         l_curve.append(curve)
 
     return l_curve, ax
-
 
 
 if __name__ == '__main__':

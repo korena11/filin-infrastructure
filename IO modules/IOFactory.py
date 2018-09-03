@@ -20,7 +20,7 @@ from PointSubSet import PointSubSet
 from RasterData import RasterData
 from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-from shapefile import Writer, Reader, POINTZ
+from shapefile import Writer, Reader, POINTZ, POLYGON
 
 
 class IOFactory:
@@ -333,16 +333,19 @@ class IOFactory:
             savetxt(f_handle, data, fmt, delimiter = '\t', newline = '\n')
 
     @classmethod
-    def WriteToShapeFile(cls, pointSet, fileName, **kwargs):
+    def WriteToShapeFile(cls, pointSet, fileName, colors = None, **kwargs):
         """
         Exporting points to shapefile
         
         :param pointSet: A PointSet\PointSubSet object with the points to be extracted
         :param fileName: Full path and name of the shapefile to be created (not including the extension)
         :param kwargs: Additional properties can be sent using kwargs which will be added as attributes in the shapfile
+        :param colors: ColorProperty object with the points colors
 
         :type pointSet: PointSet or PointSubSet
         :type fileName: str
+        :type colors: ColorProperty
+
 
         :return:
 
@@ -354,25 +357,27 @@ class IOFactory:
 
         attributes = pointSet.ToNumpy
 
-        if (pointSet.Intensity != None):
+        if pointSet.Intensity != None:
             fieldList.append('intensity')
             attributes = hstack([attributes, pointSet.Intensity.reshape((pointSet.Size, 1))])
-        if (pointSet.RGB != None):
+        if (colors != None):
             fieldList.append('r')
             fieldList.append('g')
             fieldList.append('b')
-            attributes = hstack([attributes, pointSet.RGB])
+            attributes = hstack([attributes, colors.RGB])
 
         for auxPropertyName, auxProperty in kwargs.items():
             if (isinstance(auxProperty, ColorProperty)):
                 fieldList.append(auxPropertyName + '_r')
                 fieldList.append(auxPropertyName + '_g')
                 fieldList.append(auxPropertyName + '_b')
-                attributes = hstack([attributes, pointSet.RGB])
+                attributes = hstack([attributes, colors.RGB])
+
             elif (isinstance(auxProperty, SegmentationProperty)):
                 fieldList.append('labels_' + auxPropertyName)
                 attributes = hstack([attributes,
                                      auxProperty.GetAllSegments.reshape((pointSet.Size, 1))])
+
             elif (isinstance(auxProperty, SphericalCoordinatesProperty)):
                 fieldList.append('azimuth')
                 fieldList.append('elevationAngle')
@@ -393,6 +398,26 @@ class IOFactory:
 
         w.save(fileName)
 
+    @staticmethod
+    def curve2shp(curves, filename):
+        """
+        Turn curves to shapefiles
+
+        :param curves: curves as represented by matplotlib.plot
+        :param filename: file to save the curve
+        :return:
+        """
+
+        w = Writer(POLYGON)
+
+        w.field('Area', 'F')
+        w.field('Circumference', 'F')
+
+        w.poly(curves)
+        w.records = str(range(len(curves)))
+        w.save(filename)
+
+
     # ---------------------------PRIVATES -------------------------------
     @classmethod
     def __ConvertRecodrsToPoints(cls, shapeRecord):
@@ -406,58 +431,7 @@ class IOFactory:
         points = array(shapeRecord.shape.points)
         return points
 
-    @classmethod
-    def __mergePntList(cls, pointSetList):
-        '''
-        Merging several pointsets
-
-        :param pointSetList: a list of PointSets
-
-        :return refPntSet: merged PointSet
-
-        '''
-        # TODO: changed from MegrePntList to __MergePntList. CHECK WHERE WAS IN USE!
-
-        list_length = len(pointSetList)
-        if list_length > 1:
-            refPntSet = pointSetList[0]
-            fields_num = refPntSet.FieldsDimension
-            refPntSet.setPath(pointSetList[0].path)
-
-            for pntSet in pointSetList[1::]:
-                if fields_num == 7:
-                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field = 'XYZ')
-                    refPntSet.AddData2Fields(pntSet.RGB, field = 'RGB')
-                    refPntSet.AddData2Fields(pntSet.Intensity, field = 'Intensity')
-                elif fields_num == 6:
-                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field = 'XYZ')
-                    refPntSet.AddData2Fields(pntSet.RGB, field = 'RGB')
-                elif fields_num == 4:
-                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field = 'XYZ')
-                    refPntSet.AddData2Fields(pntSet.Intensity, field = 'Intensity')
-                else:
-                    refPntSet.AddData2Fields(pntSet.ToNumpy(), field = 'XYZ')
-
-            return refPntSet
-        else:
-            return pointSetList[0]
-
-    @classmethod
-    def __splitPtsString(cls, line):
-        """
-        Extracting from a string the Data of a point (3D coordinates, intensity, color)
-
-        :param line: A string containing a line from a .pts file
-
-        :return: all existing Data of a point
-
-        :rtype: ndarray
-
-        """
-        tmp = split(line, ' ')
-        return list(map(float, tmp))
-
-        # return [float(x) for x in split(line, ' ')]
+    # return [float(x) for x in split(line, ' ')]
 
     @classmethod
     def __loadata_hdf5(cls, group, classname, **kwargs):

@@ -223,7 +223,7 @@ def distance_based(image, **kwargs):
             img_x, img_y = mt.computeImageDerivatives(image, 1)
             normals_image = np.stack((img_x, img_y), axis = 2)
 
-    # -------- Freuquency tuned saliency - Achanta et al 2009 ---------------
+    # -------- Frequency tuned saliency - Achanta et al 2009 ---------------
     if inputs['method'] == 'frequency' and img_feature != 'normals':
         s = __frequencyTuned(image, sigma_flag, filters)
     elif inputs['method'] == 'frequency' and img_feature == 'normals':
