@@ -68,6 +68,7 @@ class LevelSetFlow:
         """
 
         self.__step = kwargs.get('step', 0.05)
+        self.__iterations = kwargs.get('iterations', 150)
         if 'img_rgb' in list(kwargs.keys()):
             self.__img_rgb = kwargs['img_rgb']
 
@@ -640,6 +641,12 @@ class LevelSetFlow:
         kappa_flag = True
 
         for img in images:
+            if img.ndim == 3:
+                image = cv2.cvtColor(img.astype(np.float32), cv2.COLOR_RGB2LAB)
+                images.append(image[:, :, 0])
+                images.append(image[:, :, 1])
+                images.append(image[:, :, 2])
+                continue
             combinations = itertools.combinations(_combinations, m_levelsets)
             for combination in combinations:
                 dPhi = self.__ms_element(combination, img)
@@ -938,6 +945,7 @@ class LevelSetFlow:
             mt.imshow(self.psi.value)
 
         for i in range(iterations):
+            print(i)
             if verbose:
                 print(i)
                 if i > 26:
@@ -1021,3 +1029,4 @@ class LevelSetFlow:
             plt.pause(.5e-10)
         plt.show()
         print('Done')
+        # return l_curve

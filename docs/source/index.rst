@@ -1,4 +1,3 @@
-
 Welcome to Filin Students' infrastucture documentation!
 ========================================================
 
@@ -8,6 +7,8 @@ The infrastucture is object oriented. There are three data-set object ( :class:`
 The Property objects relate to the data-set, and are built by a Factory object. In each Factory there several functions that build the same property, but with a different algorithm. 
 
 Visualization is applicable through Visualization Classes. 
+
+Other general utilities are in :py:mod:`~MyTools`.
 
 Contents:
 =========
@@ -20,6 +21,7 @@ Contents:
     Factories/Factories
     LevelSets/LevelSets
     Utils/EigenFactory
+    Utils/Utils
     Visualizations/Visualization
 	   
 Dependencies

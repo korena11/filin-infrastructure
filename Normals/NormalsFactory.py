@@ -62,20 +62,20 @@ class NormalsFactory:
         """
         import MyTools as mt
         # Local derivatives (according to Zeibak p. 56)
-        fxx, fxy = mt.computeImageDerivatives(x, order = 2)
-        fyx, fyy = mt.computeImageDerivatives(y, order = 1)
-        fzx, fzy = mt.computeImageDerivatives(z, order = 1)
+        dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order = 1)
+        dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order = 1)
+        dfz_daz, dfz_delevation = mt.computeImageDerivatives(z, order = 1)
 
         v1 = np.zeros((x.shape[0], x.shape[1], 3))
         v2 = np.zeros((x.shape[0], x.shape[1], 3))
 
-        v1[:, :, 0] = fxx
-        v1[:, :, 1] = fyx
-        v1[:, :, 2] = fzx
+        v1[:, :, 0] = dfx_delevation
+        v1[:, :, 1] = dfy_delevation
+        v1[:, :, 2] = dfz_delevation
 
-        v2[:, :, 0] = fxy
-        v2[:, :, 1] = fyy
-        v2[:, :, 2] = fzy
+        v2[:, :, 0] = dfx_daz
+        v2[:, :, 1] = dfy_daz
+        v2[:, :, 2] = dfz_daz
 
         cross_vec = np.cross(v1, v2, axis = 2)
         n = cross_vec / np.linalg.norm(cross_vec, axis = 2)[:, :, None]

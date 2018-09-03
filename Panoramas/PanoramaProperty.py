@@ -220,6 +220,8 @@ class PanoramaProperty(BaseProperty):
 
         :return: a pointsubset according to the bounding box
         :rtype: PointSubSet
+
+        :TODO: Return panorama property of the subset and not the subset
         """
 
         row_ind = np.nonzero((left_top_corner[0] < self.row_indexes) * (self.row_indexes < right_bottom_corner[0]))
