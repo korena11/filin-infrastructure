@@ -1021,12 +1021,12 @@ class LevelSetFlow:
                 colors = 'rbgm'
                 for i in range(len(self.__Phi)):
                     if i > 0:
-                        _, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = True,
-                                                 color = colors[i])
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = True,
+                                                       color = colors[i])
                     else:
-                        _, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = False,
-                                                 color = colors[i])
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = False,
+                                                       color = colors[i])
             plt.pause(.5e-10)
         plt.show()
         print('Done')
-        # return l_curve
+        return l_curve

@@ -127,15 +127,28 @@ class PointSet(BaseData):
         return pyspark.SparkContext.parallelize([self.X, self.Y, self.Z])
 
     #
-    def ToGeoPandas(self):
+    def ToGeoPandas(self, crs = None):
         """
+        :param crs: coordinate spatial reference, if exists
+
         :return: pointSet as GeoPandas (geoseries) object (Points)
         :rtype: geopandas.geoseries
 
-        """
-        import shapely.geometry as geometry
 
-        geometryPoints = geometry.Point()
+        #TODO: there might be a smarter way to do it
+
+        """
+        from pandas import DataFrame
+        from geopandas import GeoDataFrame
+        from shapely.geometry import Point
+
+        # Transform to pandas DataFrame
+        pts = DataFrame(self.ToNumpy())
+
+        # Transform to geopandas GeoDataFrame
+        geometry = [Point(xyz) for xyz in zip(self.X, self.Y, self.Z)]
+        geodf = GeoDataFrame(pts, crs = crs, geometry = geometry)
+        return geodf
 
 
 

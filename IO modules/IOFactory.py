@@ -20,7 +20,7 @@ from PointSubSet import PointSubSet
 from RasterData import RasterData
 from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-from shapefile import Writer, Reader, POINTZ, POLYGON
+from shapefile import Writer, Reader, POINTZ
 
 
 class IOFactory:
@@ -408,14 +408,17 @@ class IOFactory:
         :return:
         """
 
-        w = Writer(POLYGON)
-
-        w.field('Area', 'F')
-        w.field('Circumference', 'F')
-
-        w.poly(curves)
-        w.records = str(range(len(curves)))
-        w.save(filename)
+        # w = Writer(POLYGON)
+        #
+        # w.field('Area', 'F')
+        # w.field('Circumference', 'F')
+        #
+        # for i in curves:
+        #
+        #
+        # w.poly(curves)
+        # w.records = str(range(len(curves)))
+        # w.save(filename)
 
 
     # ---------------------------PRIVATES -------------------------------

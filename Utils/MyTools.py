@@ -18,6 +18,9 @@ from scipy.interpolate import interp1d
 from scipy.ndimage import filters
 import h5py
 from skimage import measure
+import geopandas as gpd
+import pandas as pd
+from shapely.geometry import Polygon
 
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):
@@ -374,6 +377,44 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
         l_curve.append(curve)
 
     return l_curve, ax
+
+
+def curve2D_toGeoSeries(curve):
+    """
+    Transforms a 2D line to a geopandas GeoSeries
+
+    :param curve: pyplot.2Dline
+
+    :return: geopandas GeoSeries of a polygon
+    """
+
+    xy = curve.get_path().vertices
+    if np.all(xy[-1, :] == xy[0, :]):
+        xy = xy[1:, :]
+    polygon = Polygon(xy)
+    if not polygon.is_valid:
+        polygon = polygon.buffer(0)
+    return polygon
+
+
+def curves2D_toGeoDataframe(curves):
+    """
+    Transforms multiple 2D lines to geopandas GeoDataFrame
+    :param curves: list of pyplot.lines.Line2D
+
+    :type curves: list
+
+    :return: geodataframe of the polygons
+
+    :rtype: gpd.GeoDataFrame
+
+    """
+
+    geometry = [curve2D_toGeoSeries(curve) for curve in curves]
+
+    df = pd.DataFrame({'id': range(len(geometry)), 'coordinates': geometry})
+    return gpd.GeoDataFrame(df, geometry = 'coordinates')
+
 
 
 if __name__ == '__main__':
