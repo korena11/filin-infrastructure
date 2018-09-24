@@ -8,6 +8,7 @@ import re
 import warnings
 
 import h5py
+import numpy as np
 
 from IO_Tools import CreateFilename
 
@@ -114,12 +115,15 @@ class BaseData(object):
                         save_dataset = True
 
                     if not save_dataset:
-                        data_group.attrs.create(key, self.path)
+                        data_group.attrs.create(key, np.string_(self.path))
                         continue
 
                 if dataset_attributes[key] is not None:
                     try:
-                        data_group.attrs.create(key, dataset_attributes[key])
+                        if isinstance(dataset_attributes[key], str):
+                            data_group.attrs.create(key, np.string_(dataset_attributes[key]))
+                        else:
+                            data_group.attrs.create(key, dataset_attributes[key])
 
                     except:
                         print("{name} attribute will be saved in a differernt group".format(name = keyname))

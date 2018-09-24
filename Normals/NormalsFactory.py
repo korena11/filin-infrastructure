@@ -1,8 +1,12 @@
 # import mayavi.mlab as mlab
+from warnings import warn
+
 import numpy as np
 from numpy import dtype, genfromtxt, nonzero, mean, sum
+from sklearn.neighbors import BallTree, KDTree
 
 from Normals.NormalsProperty import NormalsProperty
+from PointSet import PointSet
 
 
 class NormalsFactory:
@@ -34,6 +38,118 @@ class NormalsFactory:
         normals = NormalsProperty(points, dxdydz)
         
         return normals
+
+    @staticmethod
+    def normalsPCA(pointset, tree = None, radius = None, k_neighbors = None, **kwargs):
+        """
+        Computes the normals for each point in the pointset via PCA
+
+        :param pointset: points to compute their normals
+        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be
+        build here.
+
+        *One of these should be passed*
+
+        :param radius: the radius in which the neighbors should be found
+        :param k_neighbors: number of neighbors
+
+        **Optionals**
+        :param leaf_size: for ball-tree construction. Default: 40
+        :param metric: for ball-tree construction. Deafault: 'minkowski'
+
+        :type pointset: PointSet
+        :type tree: BallTree or KDTree
+        :type radius: float
+        :type k_neighbors: int
+        :type leaf_size: int
+        :type metric: str
+
+        :return: normals for each point
+        :rtype: NormalsProperty
+
+        """
+        leaf_size = kwargs.get('leaf_size', 40)
+        metric = kwargs.get('metric', 'minkowski')
+        normals = []
+
+        # Build tree if no tree was passed
+        if tree is None:
+            tree = BallTree(pointset.ToNumpy(), leaf_size = leaf_size, metric = metric)
+        points = pointset.ToNumpy()
+        for pt in points:
+
+            # first try by radius
+            try:
+                neighbors_ind = tree.query_radius([pt], r = radius)
+
+            # if no radius given, try by number of neighbors
+            except TypeError:
+                try:
+                    dist, neighbors_ind = tree.query([pt], k = k_neighbors)
+                except TypeError:
+                    warn('Size of radius or number of neighbors are required')
+                    return -1
+
+            normals.append(NormalsFactory.__normal_perPoint_PCA(pt, points[neighbors_ind[0].astype(int), :]))
+
+        return NormalsProperty(pointset, np.array(normals))
+
+    @staticmethod
+    def __normal_perPoint_PCA(pt, neighbors):
+        r"""
+        Compute the normal at each point according to its neighbors, via PCA
+
+        Using pt as the point where the normal should be computed, the vectors :math:`y` from it are computed
+
+        ..math::
+
+            y_i = x_i - pt
+
+        minimizing
+
+        ..math::
+
+            \min_{||{\bf n}||=1} \sum_{i=1}^n\left({\bf y}_i^T{\bf n}\right)^2
+
+        we get:
+
+        ..math::
+
+            \begin{eqnarray}
+            f({\bf n}) = {\bf n}^T{\bf Sn} \qquad ({\bf S}={\bf YY^T} \\
+            \min f({\bf n})  \quad s.t. {\bf n}^T{\bf n})=1
+
+        Using Lagrange multipliers we get:
+
+        ..math::
+
+            {\bf Sn|=\lambda {\bf n}
+
+        which means that :math:`{\bf n}` is the eigenvector of :math:`{\bf S}` with the smallest eigenvalue
+
+        :param pt: x,y,z point
+        :param neighbors: [x,y,z] points that were selected as neighbors
+
+        :type pt: np.ndarray
+        :type neighbors: np.ndarray
+
+        :return: normal to the point
+        :rtype: np.ndarray
+        """
+
+        y = neighbors - pt
+
+        # try:
+        #     u, s, vh = np.linalg.svd(y.T)
+        #     return u[:, -1]
+        # except:
+        eigval, eigvec = np.linalg.eig(y.T.dot(y))
+        return eigvec[:, np.argmin(eigval)]
+
+
+
+
+
 
     @staticmethod
     def normalsComputation_in_raster(x, y, z):

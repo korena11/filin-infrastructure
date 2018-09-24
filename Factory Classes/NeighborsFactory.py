@@ -103,7 +103,7 @@ class NeighborsFactory:
         l = tree.query(pnt, pSize, p = 2, distance_upper_bound = radius)
         #         neighbor = PointSubSet(pntSet, l[1][where(l[0] != inf)[0]])
         neighbor = l[1][where(l[0] != inf)[0]]
-        return PointSubSet(pntSet, neighbor)
+        return PointSubSet(pntSet, neighbor), tree
 
     @staticmethod
     def GetNeighborsIn3dRange_BallTree(pnt, pntSet, radius, tree = None, num_neighbor = None):
