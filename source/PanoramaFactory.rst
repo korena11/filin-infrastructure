@@ -1,0 +1,17 @@
+Panorama Factory Documentation
+=====================================
+
+
+.. autoclass:: PanoramaFactory.PanoramaFactory
+:members:
+       :undoc-members:
+
+    	.. rubric:: Attributes
+
+	.. autoautosummary:: PanoramaFactory.PanoramaFactory
+:attributes:
+
+    	.. rubric:: Methods
+
+	.. autoautosummary:: PanoramaFactory.PanoramaFactory
+:methods:

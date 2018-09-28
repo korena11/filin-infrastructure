@@ -1,4 +1,6 @@
-from numpy import sqrt, pi, arctan2, cos, sin, zeros
+import numexpr as ne
+import numpy as np
+from numpy import pi
 
 from PointSet import PointSet
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
@@ -10,41 +12,70 @@ class SphericalCoordinatesFactory:
     """    
     
     @staticmethod
-    def CartesianToSphericalCoordinates(points):
+    def CartesianToSphericalCoordinates(points, ceval = ne.evaluate):
         """
         CartesianToSphericalCoordinates
+
+        :param points: a pointset containing the points to transform to spherical
+        :param ceval: backend to use:
+                 - eval: pure Numpy
+                 - numexpr.evaluate (default): Numexpr (faster for large arrays)
+
+        :return: spherical coordinates property in degrees
+        :rtype: SphericalCoordinatesProperty
         """
-        
-        horizontalSquaredDistance = points.X ** 2 + points.Y ** 2
-        
-        dis = sqrt(horizontalSquaredDistance + points.Z ** 2)
-        
-        el = arctan2(points.Z, sqrt(horizontalSquaredDistance)) * 180 / pi
-         
-        az = arctan2(points.Y, points.X) * 180 / pi
-        az[az < 0 ] = 360 + az[az < 0]
-        
-        return SphericalCoordinatesProperty(points, az, el, dis)
-    
+        x = points.X
+        y = points.Y
+        z = points.Z
+
+        azimuth = ceval('arctan2(y,x)')
+        elevation = ceval('arctan2(z, sqrt(x**2+y**2))')
+        range = eval('sqrt(x**2+y**2+z**2)')
+
+        elevation *= 180. / pi
+        azimuth *= 180. / pi
+        azimuth[azimuth < 0] = 360. + azimuth[azimuth < 0]
+
+        return SphericalCoordinatesProperty(points, azimuth, elevation, range)
+
     @staticmethod
-    def SphericalToCartesianCoordinates(points):
+    def cart2sph_elementwise(x, y, z):
         """
-        SphericalToCartesainCoordinates
+        Cartesian to spherical transformation for RDD use.
 
-        :param points: spherical coordinates (az,el,r)
+        :param x:
+        :param y:
+        :param z:
 
-        :return: points in cartesian coordinates
-        :rtype: PointSet
+        :return: spherical coordinates
+        
         """
-        x = points[:, 2] * cos(points[:, 1] * pi / 180) * cos(points[:, 0] * pi / 180) 
-        y = points[:, 2] * cos(points[:, 1] * pi / 180) * sin(points[:, 0] * pi / 180)
-        z = points[:, 2] * sin(points[:, 1] * pi / 180)
-        
-        xyz = zeros((len(x), 3))
-        xyz[:, 0] = x
-        xyz[:, 1] = y
-        xyz[:, 2] = z
-        
-        return PointSet(xyz)
-        
-        
+
+        azimuth = np.arctan2(y, x)
+        xy2 = x ** 2 + y ** 2
+        elevation = np.arctan2(z, np.sqrt(xy2))
+        range = np.sqrt(xy2 + z ** 2)
+
+        elevation *= 180. / np.pi
+        azimuth *= 180. / np.pi
+        if azimuth < 0:
+            azimuth += 360.
+
+        return float(elevation), float(azimuth), float(range)
+
+    def cart2sph_RDD(self, points, sc):
+        """
+        Cartesian to spherical transformation via RDD.
+
+        :param points: a point set to be transformed
+        :param sc: a spark context object (driver) that will run the job
+
+        :type points: PointSet
+        :type SparkContext
+
+        :return: RDD holding the spherical coordinates
+        :rtype: pySpark RDD
+
+        """
+
+        return points.ToRDD().map(lambda y: self.cart2sph_elementwise(float(y[0]), float(y[1]), float(y[2])))

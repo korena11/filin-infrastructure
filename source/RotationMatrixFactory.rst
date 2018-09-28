@@ -1,0 +1,16 @@
+RotationMatrix Factory Documentation
+=====================================
+
+.. autoclass:: RotationMatrixFactory.RotationMatrixFactory
+:members:
+       :undoc-members:
+
+        .. rubric:: Attributes
+
+    .. autoautosummary:: RotationMatrixFactory.RotationMatrixFactory
+:attributes:
+
+        .. rubric:: Methods
+
+    .. autoautosummary:: RotationMatrixFactory.RotationMatrixFactory
+:methods:

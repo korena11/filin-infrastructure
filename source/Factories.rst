@@ -1,0 +1,21 @@
+Factories
+=========
+
+Each property has a factory, where differnet ways of making the same property are implemented. 
+
+.. toctree::
+	:maxdepth: 2
+   
+	IOFactory
+	ColorFactory
+	CurvatureFactory
+	EigenFactory
+	FilterFactory
+	NormalsFactory 
+	NeighborsFactory
+	PanoramaFactory
+	RotationMatrixFactory
+	RasterFactory
+	SegmentationFactory
+	SphericalCoordinatesFactory
+	TriangulationFactory

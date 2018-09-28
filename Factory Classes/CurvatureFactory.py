@@ -1,12 +1,12 @@
-# from CurvatureProperty import CurvatureProperty
 import numpy as np
 
+from CurvatureProperty import CurvatureProperty
 from EigenFactory import EigenFactory
 from NeighborsFactory import NeighborsFactory
 from RotationMatrixFactory import RotationMatrixFactory
 
 
-class CurvatureFactory:
+class CurvatureFactory():
     '''
     curvature parameters computation
     '''
@@ -14,7 +14,7 @@ class CurvatureFactory:
     @staticmethod
     def __GoodPoint(points, rad):
         '''
-        determine weather the point is appropriate for curvature calculation
+        determine whether the point is appropriate for curvature calculation
         '''
 
         sector = 0
@@ -51,7 +51,7 @@ class CurvatureFactory:
 
         :type points: nx3 array
 
-        :return: p  - surface's coefficients
+        :return: p - surface's coefficients
 
         :rtype: nd-array
 
@@ -67,17 +67,20 @@ class CurvatureFactory:
         return p
 
     @staticmethod
-    def Curvature_FundamentalForm(pnt, points, rad, tree):
+    def Curvature_FundamentalForm(pnt, points, rad, tree = None):
         '''
         Curvature computation based on fundamental form
 
         :param pnt: array 3x1 point of interest
         :param points: pointset
+        :param tree: KD tree, if exists
         :param rad: radius of the neighborhood
+
         :return: principal curvatures
+
         '''
         # find point's neighbors in a radius
-        neighbor = NeighborsFactory.GetNeighborsIn3dRange_KDtree(pnt, points, rad, tree)
+        neighbor, tree = NeighborsFactory.GetNeighborsIn3dRange_KDtree(pnt, points, rad, tree)
         neighbors = neighbor.ToNumpy()
         if neighbors[1::, :].shape[0] > 5:
             neighbors = (neighbors - np.repeat(np.expand_dims(pnt, 0), neighbors.shape[0], 0))[1::, :]
@@ -112,9 +115,34 @@ class CurvatureFactory:
         else:
             k1, k2 = -999, -999
 
-        return np.array([k1, k2])
+        return CurvatureProperty(points, np.array([k1, k2]))
 
+    @staticmethod
+    def Curvature_by3parameters(points, normals):
+        r"""
+        Computes the curvature for each point in the point cloud according to three parameters.
 
+        Main idea:
+        1. Find neighbors
+
+        2. Rotate so that the normal will be [0 0 1]
+            the bi-quadratic surface coefficients :math:`d,e,f` are zero and the fitting is of three parameters:
+
+            .. math::
+
+                z(x,y) = ax^2 + by^2 + cxy
+
+        3. Second derivatives dictate the curvature
+
+           .. math::
+               {\bf H} = \begin{bmatrix} 2a & c \\ c & 2b \end{bmatrix}
+
+        :param points: the point cloud
+
+        :return: curvature property
+        """
+
+    # -------------------- Obsolete once the property is updated ------------------------
     @staticmethod
     def Similarity_Curvature(k1, k2):
         '''
@@ -130,6 +158,7 @@ class CurvatureFactory:
         #         if 'points' in kwargs and ('k1' not in kwargs and 'k2' not in kwargs):
         #             points = kwargs['points']
         #             curv = np.asarray( map( functools.partial( CurvatureFactory.Curvature_FundamentalForm, points = pointSet, rad = coeff, tree = tree ), pp ) )
+        print("Obsolete once the Curvature property will be updated")
 
         k3 = np.min((np.abs(k1), np.abs(k2)), 0) / np.max((np.abs(k1), np.abs(k2)), 0)
         similarCurv = np.zeros((k3.shape[0], 2))
@@ -139,7 +168,7 @@ class CurvatureFactory:
         sign_k2 = np.sign(k2)
         signK = sign_k1 + sign_k2
 
-        # (+,0) 
+        # (+,0)
         positive = np.where(signK == 2)
         similarCurv[positive[0], 0] = k3[positive]
         rgb[positive[0], 0] = k3[positive]
@@ -161,28 +190,33 @@ class CurvatureFactory:
 
         return rgb, similarCurv
 
+
     @staticmethod
     def Mean_Curvature(k1, k2):
         '''
         '''
+        print("Obsolete once the Curvature property will be updated")
         return (k1 + k2) / 2
 
     @staticmethod
     def Gaussian_Curvature(k1, k2):
         '''
         '''
+        print("Obsolete once the Curvature property will be updated")
         return k1 * k2
 
     @staticmethod
     def Curvadness(k1, k2):
         '''
         '''
+        print("Obsolete once the Curvature property will be updated")
         return np.sqrt((k1 ** 2 + k2 ** 2) / 2)
 
     @staticmethod
     def Shape_Index(k1, k2):
         '''
         '''
+        print("Obsolete once the Curvature property will be updated")
         shapeI = np.zeros(k1.shape)
         equalZero = np.where(np.abs(k1 - k2) <= 1e-6)[0]
         difZero = np.where(k1 != k2)[0]

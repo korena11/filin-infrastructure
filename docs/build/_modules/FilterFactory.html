@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FilterFactory &mdash; infragit 1a documentation</title>
+
+
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../index.html" class="icon icon-home"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
+                        class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
+                        class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                        base class</a></li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="index.html">Module code</a> &raquo;</li>
+
+                        <li>FilterFactory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+</div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <h1>Source code for FilterFactory</h1>
+                        <div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="k">import</span> <span class="n">jit</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+                                class="n">sqrt</span><span class="p">,</span> <span class="n">arctan</span><span
+                                class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">uint8</span><span
+                                class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="nb">min</span><span
+                                class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">logical_and</span><span
+                                class="p">,</span> <span class="n">nonzero</span>
+
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                                class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
+
+
+<div class="viewcode-block" id="FilterFactory"><a class="viewcode-back"
+                                                  href="../Factories/FilterFactory.html#FilterFactory.FilterFactory">[docs]</a><span
+        class="k">class</span> <span class="nc">FilterFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter PointSet using different methods</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@jit</span>
+    <span class="k">def</span> <span class="nf">SlopeBasedMorphologicFilter</span><span class="p">(</span><span
+            class="n">pntData</span><span class="p">,</span> <span class="n">searchRadius</span><span class="p">,</span> <span
+            class="n">slopeThreshold</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param pntData:</span>
+<span class="sd">        :param searchRadius:</span>
+<span class="sd">        :param slopeThreshold:</span>
+
+<span class="sd">        :return:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">numPoints</span> <span class="o">=</span> <span class="nb">len</span><span
+            class="p">(</span><span class="n">pntData</span><span class="p">)</span>
+        <span class="n">groundPointsIndices</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">slopeThreshold</span> <span class="o">=</span> <span class="n">slopeThreshold</span> <span
+            class="o">*</span> <span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span
+            class="nb">range</span><span class="p">(</span><span class="n">numPoints</span><span class="p">):</span>
+            <span class="n">isGround</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span
+            class="p">(</span><span class="n">numPoints</span><span class="p">):</span>
+                <span class="n">dist</span> <span class="o">=</span> <span class="n">sqrt</span><span
+            class="p">((</span><span class="n">pntData</span><span class="p">[</span><span class="n">i</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span
+            class="n">pntData</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span
+            class="o">+</span> <span class="p">(</span><span class="n">pntData</span><span class="p">[</span><span
+            class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span
+            class="o">-</span> <span class="n">pntData</span><span class="p">[</span><span class="n">j</span><span
+            class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span
+            class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">dist</span> <span
+            class="o">&lt;</span> <span class="n">searchRadius</span> <span class="ow">and</span> <span class="n">pntData</span><span
+            class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span
+            class="o">&gt;</span> <span class="n">pntData</span><span class="p">[</span><span class="n">j</span><span
+            class="p">,</span> <span class="mi">2</span><span class="p">]):</span>
+                    <span class="n">slope</span> <span class="o">=</span> <span class="n">arctan</span><span class="p">((</span><span
+            class="n">pntData</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span
+            class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">pntData</span><span
+            class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span
+            class="o">/</span> <span class="n">dist</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">slope</span> <span
+            class="o">&gt;</span> <span class="n">slopeThreshold</span><span class="p">):</span>
+                        <span class="n">isGround</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">isGround</span><span class="p">):</span>
+                <span class="n">groundPointsIndices</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">groundPointsIndices</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__CreateSegmentationProperty</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="n">numPoints</span> <span class="o">=</span> <span class="n">points</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">()</span>
+        <span class="n">segments</span> <span class="o">=</span> <span class="n">ones</span><span
+            class="p">((</span><span class="n">numPoints</span><span class="p">),</span> <span
+            class="n">dtype</span><span class="o">=</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">segments</span><span class="p">[</span><span class="n">indices</span><span
+            class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">return</span> <span class="n">SegmentationProperty</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">segments</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="FilterFactory.SlopeBasedMorphologicFilter"><a class="viewcode-back"
+                                                                              href="../Factories/FilterFactory.html#FilterFactory.FilterFactory.SlopeBasedMorphologicFilter">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">SlopeBasedMorphologicFilter</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">searchRadius</span><span class="p">,</span> <span
+            class="n">slopeThreshold</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slope Based Morphological Filter</span>
+<span class="sd">        </span>
+<span class="sd">        :param points</span>
+<span class="sd">        :param searchRadius: search radius in meters</span>
+<span class="sd">        :param slopeThreshold: maximum slope angle allowed, given in degrees</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type searchRadius: float</span>
+<span class="sd">        :type slopeThreshold: float</span>
+
+<span class="sd">        :return: segmented points, with segment 0 contains the terrain points</span>
+
+<span class="sd">        :rtype: SegmentationProperty</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pntData</span> <span class="o">=</span> <span class="n">points</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
+
+        <span class="n">groundPointsIndices</span> <span class="o">=</span> <span class="n">FilterFactory</span><span
+            class="o">.</span><span class="n">SlopeBasedMorphologicFilter</span><span class="p">(</span><span class="n">pntData</span><span
+            class="p">,</span> <span class="n">searchRadius</span><span class="p">,</span> <span class="n">slopeThreshold</span><span
+            class="p">)</span>
+
+        <span class="c1"># 0 - terrain, 1 - cover</span>
+        <span class="k">return</span> <span class="n">FilterFactory</span><span class="o">.</span><span class="n">__CreateSegmentationProperty</span><span
+            class="p">(</span><span class="n">points</span><span class="p">,</span> <span
+            class="n">groundPointsIndices</span><span class="p">)</span>        </div>
+
+<div class="viewcode-block" id="FilterFactory.FilterByBoundingBox"><a class="viewcode-back"
+                                                                      href="../Factories/FilterFactory.html#FilterFactory.FilterFactory.FilterByBoundingBox">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">FilterByBoundingBox</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">xmin</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">zmin</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filtering based on a defined boundary box</span>
+<span class="sd">        </span>
+
+<span class="sd">        :param points</span>
+<span class="sd">        :param xmin, xmax: ymin, ymax, zmin, zmax:</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type xmin, xmax: ymin, ymax, zmin, zmax: float</span>
+
+<span class="sd">        :return: segmented data, segment 0 contains the non-filtered points</span>
+
+<span class="sd">        :rtype: SegmentationProperty</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="c1"># Defining values of unsent parameters</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">xmin</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">X</span><span
+            class="p">())</span>
+            
+        <span class="k">if</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">X</span><span
+            class="p">())</span>
+            
+        <span class="k">if</span> <span class="p">(</span><span class="n">ymin</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Y</span><span
+            class="p">())</span>
+            
+        <span class="k">if</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Y</span><span
+            class="p">())</span>
+            
+        <span class="k">if</span> <span class="p">(</span><span class="n">zmin</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">zmin</span> <span class="o">=</span> <span class="nb">min</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Z</span><span
+            class="p">())</span>
+            
+        <span class="k">if</span> <span class="p">(</span><span class="n">zmax</span> <span class="o">==</span> <span
+            class="kc">None</span><span class="p">):</span>
+            <span class="n">zmax</span> <span class="o">=</span> <span class="nb">max</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Z</span><span
+            class="p">())</span>
+            
+        <span class="c1"># Finding the indices of all the points inside the defined bounds</span>
+        <span class="n">insidePointIndices</span> <span class="o">=</span> <span class="n">nonzero</span><span
+            class="p">(</span><span class="n">logical_and</span><span class="p">(</span><span
+            class="n">logical_and</span><span class="p">(</span><span class="n">logical_and</span><span
+            class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">X</span><span
+            class="p">()</span> <span class="o">&gt;=</span> <span class="n">xmin</span><span class="p">,</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">X</span><span class="p">()</span> <span
+            class="o">&lt;=</span> <span class="n">xmax</span><span class="p">),</span>
+                                                              <span class="n">logical_and</span><span class="p">(</span><span
+            class="n">points</span><span class="o">.</span><span class="n">Y</span><span class="p">()</span> <span
+            class="o">&gt;=</span> <span class="n">ymin</span><span class="p">,</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">Y</span><span class="p">()</span> <span
+            class="o">&lt;=</span> <span class="n">ymax</span><span class="p">)),</span>
+                                                  <span class="n">logical_and</span><span class="p">(</span><span
+            class="n">points</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span> <span
+            class="o">&gt;=</span> <span class="n">zmin</span><span class="p">,</span> <span
+            class="n">points</span><span class="o">.</span><span class="n">Z</span><span class="p">()</span> <span
+            class="o">&lt;=</span> <span class="n">zmax</span><span class="p">)))</span>
+        
+        <span class="k">return</span> <span class="n">FilterFactory</span><span class="o">.</span><span class="n">__CreateSegmentationProperty</span><span
+            class="p">(</span><span class="n">points</span><span class="p">,</span> <span
+            class="n">insidePointIndices</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="FilterFactory.FilterBySphericalCoordinates"><a class="viewcode-back"
+                                                                               href="../Factories/FilterFactory.html#FilterFactory.FilterFactory.FilterBySphericalCoordinates">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">FilterBySphericalCoordinates</span><span class="p">(</span><span
+            class="n">sphCoorProp</span><span class="p">,</span> <span class="n">minAzimuth</span> <span
+            class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
+            class="o">=</span> <span class="mi">360</span><span class="p">,</span>
+                                     <span class="n">minElevationAngle</span> <span class="o">=</span> <span
+            class="o">-</span><span class="mi">90</span><span class="p">,</span> <span
+            class="n">maxElevationAngle</span> <span class="o">=</span> <span class="mi">90</span><span
+            class="p">,</span> <span class="n">minRange</span> <span class="o">=</span> <span class="mi">0</span><span
+            class="p">,</span> <span class="n">maxRange</span> <span class="o">=</span> <span
+            class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filtering based on spherical coordinates values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">sphCoorProp</span> <span
+            class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+            
+        <span class="c1"># If maxRange was not provided, defining as the highest range</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">maxRange</span> <span
+            class="o">==</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">maxRange</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span
+            class="n">sphCoorProp</span><span class="o">.</span><span class="n">Ranges</span><span class="p">())</span>
+        
+        <span class="c1"># Finding the indices of all the points inside the defined bounds</span>
+        <span class="n">insidePointIndices</span> <span class="o">=</span> <span class="n">nonzero</span><span
+            class="p">(</span><span class="n">logical_and</span><span class="p">(</span><span
+            class="n">logical_and</span><span class="p">(</span><span class="n">logical_and</span><span
+            class="p">(</span><span class="n">sphCoorProp</span><span class="o">.</span><span
+            class="n">Azimuths</span><span class="p">()</span> <span class="o">&gt;=</span> <span
+            class="n">minAzimuth</span><span class="p">,</span>
+                                                                          <span class="n">sphCoorProp</span><span
+            class="o">.</span><span class="n">Azimuths</span><span class="p">()</span> <span
+            class="o">&lt;=</span> <span class="n">maxAzimuth</span><span class="p">),</span>
+                                                              <span class="n">logical_and</span><span class="p">(</span><span
+            class="n">sphCoorProp</span><span class="o">.</span><span class="n">ElevationAngles</span><span
+            class="p">()</span> <span class="o">&gt;=</span> <span class="n">minElevationAngle</span><span
+            class="p">,</span>
+                                                                          <span class="n">sphCoorProp</span><span
+            class="o">.</span><span class="n">ElevationAngles</span><span class="p">()</span> <span
+            class="o">&lt;=</span> <span class="n">maxElevationAngle</span><span class="p">)),</span>
+                                                  <span class="n">logical_and</span><span class="p">(</span><span
+            class="n">sphCoorProp</span><span class="o">.</span><span class="n">Ranges</span><span
+            class="p">()</span> <span class="o">&gt;=</span> <span class="n">minRange</span><span class="p">,</span>
+                                                              <span class="n">sphCoorProp</span><span class="o">.</span><span
+            class="n">Ranges</span><span class="p">()</span> <span class="o">&lt;=</span> <span
+            class="n">maxRange</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">FilterFactory</span><span class="o">.</span><span class="n">__CreateSegmentationProperty</span><span
+            class="p">(</span><span class="n">sphCoorProp</span><span class="o">.</span><span
+            class="n">Points</span><span class="p">(),</span> <span class="n">insidePointIndices</span><span
+            class="p">)</span></div></div>
+            
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span
+                                class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">pass</span>
+    <span class="c1">#     pointSetList = []</span>
+    <span class="c1">#     IOFactory.ReadXYZ(&#39;..\\Sample Data\\DU9_2.xyz&#39;, pointSetList)</span>
+    <span class="c1">#</span>
+    <span class="c1"># #    filterFactory = FilterFactory()</span>
+    <span class="c1">#     terrainSubSet = FilterFactory.SlopeBasedMorphologicFilter(pointSetList[0], 1.0, 25).GetSegment(0)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Visualization.RenderPointSet(terrainSubSet, &#39;color&#39;, color=(0.5, 0, 0))</span>
+    <span class="c1">#     Visualization.Show()</span>
+</pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1a',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+
+</script>
+<script type="text/javascript" src="../_static/jquery.js"></script>
+<script type="text/javascript" src="../_static/underscore.js"></script>
+<script type="text/javascript" src="../_static/doctools.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<script type="text/javascript" src="../_static/js/theme.js"></script>
+
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+
+</script>
+
+</body>
+</html>

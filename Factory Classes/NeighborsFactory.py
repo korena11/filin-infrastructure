@@ -3,6 +3,7 @@ from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree
 
+from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
@@ -15,12 +16,12 @@ class NeighborsFactory:
     @staticmethod
     def GetNeighborsIn3dRange(points, x, y, z, radius):
         """                            
-        Find all tokens (points) in radius range 
-        
-        Find all points in range of the ball field with radius 'radius'. 
+        Find all tokens (points) in radius range
+
+        Find all points in range of the ball field with radius 'radius'.
 
         :param points: - PointSet
-        :param x:, y:, z:  search point coordinates
+        :param x y z:  search point coordinates
         :param radius: Radius of ball field
 
         :type points: PointSet
@@ -102,7 +103,7 @@ class NeighborsFactory:
         l = tree.query(pnt, pSize, p = 2, distance_upper_bound = radius)
         #         neighbor = PointSubSet(pntSet, l[1][where(l[0] != inf)[0]])
         neighbor = l[1][where(l[0] != inf)[0]]
-        return PointSubSet(pntSet, neighbor)
+        return PointSubSet(pntSet, neighbor), tree
 
     @staticmethod
     def GetNeighborsIn3dRange_BallTree(pnt, pntSet, radius, tree = None, num_neighbor = None):

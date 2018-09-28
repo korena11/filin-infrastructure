@@ -1,0 +1,17 @@
+Color Factory Documentation
+=====================================
+
+
+.. autoclass:: ColorFactory.ColorFactory
+:members:
+        :undoc-members:
+
+        .. rubric:: Attributes
+
+    .. autoautosummary:: ColorFactory.ColorFactory
+:attributes:
+
+        .. rubric:: Methods
+
+    .. autoautosummary:: ColorFactory.ColorFactory
+:methods:

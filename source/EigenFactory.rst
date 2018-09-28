@@ -1,0 +1,12 @@
+Eigen Factory Documentation
+=====================================
+
+
+.. autoclass:: EigenFactory.EigenFactory
+:members:
+       :undoc-members:
+
+    	.. rubric:: Methods
+
+	.. autoautosummary:: EigenFactory.EigenFactory
+:methods:

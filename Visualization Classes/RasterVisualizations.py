@@ -13,6 +13,7 @@ if platform.system() == 'Linux':
     import matplotlib
     matplotlib.use('TkAgg')
 
+
 class RasterVisualization:
 
     @classmethod

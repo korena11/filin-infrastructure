@@ -33,27 +33,20 @@ class PointSubSet(PointSet):
         """
         return self.indices
 
-    @property
-    def RGB(self):
-        """
-        Return nX3 ndarray of rgb values    
-        """
-        rgb = self.pointSet.RGB
-        if rgb == None:
-            return None
-        else:
-            return self.pointSet.RGB[self.indices, :]
+
 
     @property
     def Intensity(self):
         """
         Return nX1 ndarray of intensity values 
         """
+        import numpy as np
         intensity = self.pointSet.Intensity
-        if intensity == None:
-            return None
+        if isinstance(intensity, np.ndarray):
+            return self.pointSet.Intensity[self.indices]
         else:
-            return self.pointSet.Intensity[self.indices, :]
+            return None
+
 
     @property
     def X(self):
@@ -80,15 +73,14 @@ class PointSubSet(PointSet):
         """
         Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the future)
         
-        :Return:
-        
+
         """
         return self.pointSet.ToNumpy()[self.indices, :]
 
     def ToPolyData(self):
         """
-        :Returns:
-            tvtk.PolyData of the current PointSet
+        :return: tvtk.PolyData of the current PointSet
+
         """
 
         numpy_points = self.pointSet.ToNumpy()[self.indices, :]
