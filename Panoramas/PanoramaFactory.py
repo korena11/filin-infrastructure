@@ -16,8 +16,8 @@ class PanoramaFactory:
     """
 
     @classmethod
-    def CreatePanorama_byPoints(cls, points, azimuthSpacing = 0.057, elevationSpacing = 0.057,
-                                intensity = False, **kwargs):
+    def CreatePanorama_byPoints(cls, points, azimuthSpacing=0.057, elevationSpacing=0.057,
+                                intensity=False, **kwargs):
         """
         Create a PanoramaProperty object from a point set based on according to range or intensity
         
@@ -52,32 +52,32 @@ class PanoramaFactory:
             return 1
 
         (minAz, maxAz), (minEl, maxEl), (azimuthIndexes, elevationIndexes) = \
-            cls.__computePanoramaIndices(sphCoords, azimuthSpacing = azimuthSpacing,
-                                         elevationSpacing = elevationSpacing)
+            cls.__computePanoramaIndices(sphCoords, azimuthSpacing=azimuthSpacing,
+                                         elevationSpacing=elevationSpacing)
 
         # Create the panorama
         if not intensity:
             # range as pixel value
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
-                                        minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                        elevationSpacing = elevationSpacing, **kwargs)
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing, **kwargs)
 
         else:
             #  intensity as pixel value
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,
-                                        minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                        elevationSpacing = elevationSpacing, **kwargs)
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing, **kwargs)
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)
-            panorama.setValues(voidData = void)
+            panorama.setValues(voidData=void)
 
         return panorama
 
     @classmethod
-    def CreatePanorama_byProperty(cls, pointSet_property, azimuthSpacing = 0.057, elevationSpacing = 0.057,
-                                  intensity = False, **kwargs):
+    def CreatePanorama_byProperty(cls, pointSet_property, azimuthSpacing=0.057, elevationSpacing=0.057,
+                                  intensity=False, **kwargs):
         """
         Creates panorama with the property as the values of the pixels.
 
@@ -110,23 +110,23 @@ class PanoramaFactory:
             sphCoords = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(pointSet_property.Points)
 
         (minAz, maxAz), (minEl, maxEl), (azimuthIndexes, elevationIndexes) = \
-            cls.__computePanoramaIndices(sphCoords, azimuthSpacing = azimuthSpacing,
-                                         elevationSpacing = elevationSpacing)
+            cls.__computePanoramaIndices(sphCoords, azimuthSpacing=azimuthSpacing,
+                                         elevationSpacing=elevationSpacing)
 
         if not intensity:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
-                                        minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                        elevationSpacing = elevationSpacing)
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing)
         else:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.Points.Intensity,
-                                        minAzimuth = minAz, maxAzimuth = maxAz,
-                                        minElevation = minEl, maxElevation = maxEl, azimuthSpacing = azimuthSpacing,
-                                        elevationSpacing = elevationSpacing)
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing)
 
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)
-            panorama.setValues(voidData = void)
+            panorama.setValues(voidData=void)
 
         return panorama
 

@@ -12,7 +12,7 @@ class SphericalCoordinatesFactory:
     """    
     
     @staticmethod
-    def CartesianToSphericalCoordinates(points, ceval = ne.evaluate):
+    def CartesianToSphericalCoordinates(points, ceval=ne.evaluate):
         """
         CartesianToSphericalCoordinates
 

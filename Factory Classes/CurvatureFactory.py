@@ -67,7 +67,7 @@ class CurvatureFactory():
         return p
 
     @staticmethod
-    def Curvature_FundamentalForm(pnt, points, rad, tree = None):
+    def Curvature_FundamentalForm(pnt, points, rad, tree=None):
         '''
         Curvature computation based on fundamental form
 

@@ -281,7 +281,7 @@ def intersect2d(a, b, **kwargs):
     return c.view(a.dtype).reshape(-1, byaxis)
 
 
-def CreateFilename(filename, mode = 'w', **kwargs):
+def CreateFilename(filename, mode='w', **kwargs):
     """
    Checks or creates a file object according to specifications given.
        Default is hdf5.
@@ -322,7 +322,7 @@ def CreateFilename(filename, mode = 'w', **kwargs):
         return (open(filename, mode), extension)
 
 
-def draw_contours(func, ax, img, hold = False, **kwargs):
+def draw_contours(func, ax, img, hold=False, **kwargs):
     """
     Draws the contours of a specific iteration
 
@@ -360,7 +360,7 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
     function_binary = np.uint8(function_binary)
 
     contours = measure.find_contours(func, 0.)
-    blob_labels = measure.label(function_binary, background = 0)
+    blob_labels = measure.label(function_binary, background=0)
     label_props = measure.regionprops(blob_labels)
 
     #     contours = chooseLargestContours(contours, label_props, 1)
@@ -373,7 +373,7 @@ def draw_contours(func, ax, img, hold = False, **kwargs):
         if color:
             color = (random.random(), random.random(), random.random())
 
-        curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
+        curve, = ax.plot(c[:, 0], c[:, 1], '-', color=color)
         l_curve.append(curve)
 
     return l_curve, ax
@@ -413,7 +413,7 @@ def curves2D_toGeoDataframe(curves):
     geometry = [curve2D_toGeoSeries(curve) for curve in curves]
 
     df = pd.DataFrame({'id': range(len(geometry)), 'coordinates': geometry})
-    return gpd.GeoDataFrame(df, geometry = 'coordinates')
+    return gpd.GeoDataFrame(df, geometry='coordinates')
 
 
 

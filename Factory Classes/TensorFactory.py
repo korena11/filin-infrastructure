@@ -26,7 +26,7 @@ class TensorFactory:
     """
 
     @classmethod
-    def tensorFromPoints(cls, points, point_index = -1, **kwargs):
+    def tensorFromPoints(cls, points, point_index=-1, **kwargs):
         """
         Creating a tensor instance from a list of 3D points
 
@@ -47,7 +47,7 @@ class TensorFactory:
         """
         numPnts = points.Size[0]
         if point_index == -1:
-            ref_point = np.mean(points.ToNumpy(), axis = 0)  # Computing the center of gravity of the points
+            ref_point = np.mean(points.ToNumpy(), axis=0)  # Computing the center of gravity of the points
 
         else:
             ref_point = points.GetPoint(point_index)
@@ -72,7 +72,7 @@ class TensorFactory:
         # Compute the stick radius of the tensor
         norms = np.array(list(map(la.norm, deltas)))
         distances = norms * np.sin(
-            np.array(list(map(np.arccos, map(partial(np.dot, b = t.stick_axis), deltas) / norms))))
+            np.array(list(map(np.arccos, map(partial(np.dot, b=t.stick_axis), deltas) / norms))))
         t.__stickRadius = np.mean(distances)
 
         # Computing the sphere parameters defined by the tensor

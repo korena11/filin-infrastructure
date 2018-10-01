@@ -32,7 +32,7 @@ class LevelSetFunction(object):
 
     """
 
-    def __init__(self, function, regularization_note = 0, **kwargs):
+    def __init__(self, function, regularization_note=0, **kwargs):
         r"""
 
 
@@ -164,10 +164,10 @@ class LevelSetFunction(object):
 
         """
 
-        self.__norm_nabla = mt.computeImageGradient(self.value, gradientType = self.processing_props['gradientType'])
+        self.__norm_nabla = mt.computeImageGradient(self.value, gradientType=self.processing_props['gradientType'])
         self.__x, self.__y, self.__xx, self.__yy, self.__xy = \
-            mt.computeImageDerivatives(self.value, 2, ksize = self.processing_props['ksize'],
-                                       sigma = self.processing_props['sigma'])
+            mt.computeImageDerivatives(self.value, 2, ksize=self.processing_props['ksize'],
+                                       sigma=self.processing_props['sigma'])
 
         self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
                                          self._yy * self._x ** 2 -

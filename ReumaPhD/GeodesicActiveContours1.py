@@ -57,11 +57,11 @@ if __name__ == '__main__':
     c = np.vstack((y_tau, x_tau)).T
 
     # ---- define g(\nabla I) ---
-    imgGradient = mt.computeImageGradient(img, gradientType = 'L1', ksize = 3)
+    imgGradient = mt.computeImageGradient(img, gradientType='L1', ksize=3)
     #    imgGradient[np.isinf(imgGradient)] = 1e6
     g = - imgGradient
-    g_x = cv2.Sobel(g, cv2.CV_64F, 0, 1, ksize = 3)
-    g_y = cv2.Sobel(g, cv2.CV_64F, 1, 0, ksize = 3)
+    g_x = cv2.Sobel(g, cv2.CV_64F, 0, 1, ksize=3)
+    g_y = cv2.Sobel(g, cv2.CV_64F, 1, 0, ksize=3)
     g_x = cv2.GaussianBlur(g_x, (0, 0), 2.5)
     g_y = cv2.GaussianBlur(g_y, (0, 0), 2.5)
     g = cv2.GaussianBlur(g, (0, 0), .5)
@@ -72,10 +72,10 @@ if __name__ == '__main__':
 
     # display
     plt.figure()
-    plt.subplot(221), plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
-    plt.subplot(222), plt.imshow(imgGradient, interpolation = 'nearest', cmap = 'gray')
+    plt.subplot(221), plt.imshow(img, interpolation='nearest', cmap='gray')
+    plt.subplot(222), plt.imshow(imgGradient, interpolation='nearest', cmap='gray')
     plt.subplot(223), plt.ylim([img.shape[0], 0]), plt.axis("equal"), plt.xlim([0, img.shape[1]]), plt.quiver(g_y, g_x)
-    plt.subplot(224), plt.imshow(g, interpolation = 'nearest', cmap = 'gray')
+    plt.subplot(224), plt.imshow(g, interpolation='nearest', cmap='gray')
 
     epsilon = 1000
 
@@ -89,15 +89,15 @@ if __name__ == '__main__':
 
         c, dc_dtau, d2c_dtau2 = mt.curveCentralDerivatives(c, ds)
         #  curve tangent
-        dc_dtau__ = np.gradient(c, ds, axis = 0)
-        tangent = dc_dtau / norm(dc_dtau, axis = 1)[:, None]  # normalize T
+        dc_dtau__ = np.gradient(c, ds, axis=0)
+        tangent = dc_dtau / norm(dc_dtau, axis=1)[:, None]  # normalize T
 
         # curve curvature
-        d2c_dtau2__ = np.gradient(dc_dtau, ds, axis = 0)  # curve's second derivative
+        d2c_dtau2__ = np.gradient(dc_dtau, ds, axis=0)  # curve's second derivative
 
         #   curvature_c = norm(d2c_dtau2, axis=1) / norm(dc_dtau, axis=1)
-        curvature_c = (dc_dtau[:, 0] * d2c_dtau2[:, 1] - dc_dtau[:, 1] * d2c_dtau2[:, 0]) / norm(dc_dtau, axis = 1,
-                                                                                                 ord = 2) ** 3
+        curvature_c = (dc_dtau[:, 0] * d2c_dtau2[:, 1] - dc_dtau[:, 1] * d2c_dtau2[:, 0]) / norm(dc_dtau, axis=1,
+                                                                                                 ord=2) ** 3
 
         # curve normal
         normal_c = tangent.dot(np.array([[0, 1], [-1, 0]]))
@@ -109,7 +109,7 @@ if __name__ == '__main__':
         grad_gx = np.asarray(list(map(partial(getValueSubpix, g_x), c[:, 0], c[:, 1])))
         grad_gy = np.asarray(list(map(partial(getValueSubpix, g_y), c[:, 0], c[:, 1])))
         grad_g = np.vstack((grad_gx, grad_gy))
-        grad_gN = np.sum(grad_g.T * normal_c, axis = 1)
+        grad_gN = np.sum(grad_g.T * normal_c, axis=1)
 
         # development scheme
         dc_dt = dt * (g_I * curvature_c - grad_gN)[:, None] * normal_c
@@ -122,7 +122,7 @@ if __name__ == '__main__':
         plt.ylim([img.shape[0], 0])
         plt.xlim([0, img.shape[1]])
 
-        plt.imshow(g, cmap = 'gray')
+        plt.imshow(g, cmap='gray')
 
         plt.plot(c[:, 1], c[:, 0], '-r.')
         plt.pause(1e-10)

@@ -12,11 +12,11 @@ import numpy.core.arrayprint as arrayprint
 # http://stackoverflow.com/questions/2891790/pretty-printing-of-numpy-array
 #
 @contextlib.contextmanager
-def printoptions(strip_zeros = True, **kwargs):
+def printoptions(strip_zeros=True, **kwargs):
     origcall = arrayprint.FloatFormat.__call__
 
     # noinspection PyUnresolvedReferences
-    def __call__(self, x, strip_zeros = strip_zeros):
+    def __call__(self, x, strip_zeros=strip_zeros):
         return origcall.__call__(self, x, strip_zeros)
 
     arrayprint.FloatFormat.__call__ = __call__
@@ -28,7 +28,7 @@ def printoptions(strip_zeros = True, **kwargs):
 
 
 # noinspection PyTypeChecker
-def to_latex(a, decimals = 4, tab = '  '):
+def to_latex(a, decimals=4, tab='  '):
     """
     Convert an array-like object into a LaTeX array.
     The elements of each column are aligned on the decimal, if present.
@@ -96,7 +96,7 @@ def to_latex(a, decimals = 4, tab = '  '):
 
     # Specify that we want all columns to have the same column type.
     nCols = array.shape[1]
-    cols = r"*{{{nCols}}}{{X}}".format(nCols = nCols)
+    cols = r"*{{{nCols}}}{{X}}".format(nCols=nCols)
 
     # Build the lines in the array.
     #
@@ -197,7 +197,7 @@ def matrix_latex(a, **kwargs):
     except ValueError:
         decimals = 0
 
-    matrixName = r"{name}_{{{size}}}".format(name = name, size = size_str)
+    matrixName = r"{name}_{{{size}}}".format(name=name, size=size_str)
 
     # Build the lines in the array.
     with printoptions(**options):

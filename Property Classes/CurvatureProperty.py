@@ -106,7 +106,7 @@ class CurvatureProperty(BaseProperty):
 
         k3 = np.min((np.abs(self.k1), np.abs(self.k2)), 0) / np.max((np.abs(self.k1), np.abs(self.k2)), 0)
         similarCurv = np.zeros((k3.shape[0], 2))
-        rgb = np.zeros((k3.shape[0], 3), dtype = np.float32)
+        rgb = np.zeros((k3.shape[0], 3), dtype=np.float32)
 
         sign_k1 = np.sign(self.k1)
         sign_k2 = np.sign(self.k2)

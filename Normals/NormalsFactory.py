@@ -25,22 +25,21 @@ class NormalsFactory:
         :rtype: NormalsProperty
 
         """
-        
+
         # Read normals from file                 
-        parametersTypes = dtype({'names':['dx', 'dy', 'dz']
-                               , 'formats':['float', 'float', 'float']})
-        
-            
+        parametersTypes = dtype({'names': ['dx', 'dy', 'dz']
+                                    , 'formats': ['float', 'float', 'float']})
+
         imported_array = genfromtxt(normalsFileName, dtype=parametersTypes, filling_values=(0, 0, 0))
-    
+
         dxdydz = imported_array[['x', 'y', 'z']].view(float).reshape(len(imported_array), -1)
-                            
+
         normals = NormalsProperty(points, dxdydz)
-        
+
         return normals
 
     @staticmethod
-    def normalsPCA(pointset, tree = None, radius = None, k_neighbors = None, **kwargs):
+    def normalsPCA(pointset, tree=None, radius=None, k_neighbors=None, **kwargs):
         """
         Computes the normals for each point in the pointset via PCA
 
@@ -54,6 +53,7 @@ class NormalsFactory:
         :param k_neighbors: number of neighbors
 
         **Optionals**
+
         :param leaf_size: for ball-tree construction. Default: 40
         :param metric: for ball-tree construction. Deafault: 'minkowski'
 
@@ -74,18 +74,18 @@ class NormalsFactory:
 
         # Build tree if no tree was passed
         if tree is None:
-            tree = BallTree(pointset.ToNumpy(), leaf_size = leaf_size, metric = metric)
+            tree = BallTree(pointset.ToNumpy(), leaf_size=leaf_size, metric=metric)
         points = pointset.ToNumpy()
         for pt in points:
 
             # first try by radius
             try:
-                neighbors_ind = tree.query_radius([pt], r = radius)
+                neighbors_ind = tree.query_radius([pt], r=radius)
 
             # if no radius given, try by number of neighbors
             except TypeError:
                 try:
-                    dist, neighbors_ind = tree.query([pt], k = k_neighbors)
+                    dist, neighbors_ind = tree.query([pt], k=k_neighbors)
                 except TypeError:
                     warn('Size of radius or number of neighbors are required')
                     return -1
@@ -101,19 +101,19 @@ class NormalsFactory:
 
         Using pt as the point where the normal should be computed, the vectors :math:`y` from it are computed
 
-        ..math::
+        .. math::
 
             y_i = x_i - pt
 
         minimizing
 
-        ..math::
+        .. math::
 
             \min_{||{\bf n}||=1} \sum_{i=1}^n\left({\bf y}_i^T{\bf n}\right)^2
 
         we get:
 
-        ..math::
+        .. math::
 
             \begin{eqnarray}
             f({\bf n}) = {\bf n}^T{\bf Sn} \qquad ({\bf S}={\bf YY^T} \\
@@ -121,7 +121,7 @@ class NormalsFactory:
 
         Using Lagrange multipliers we get:
 
-        ..math::
+        .. math::
 
             {\bf Sn|=\lambda {\bf n}
 
@@ -134,6 +134,7 @@ class NormalsFactory:
         :type neighbors: np.ndarray
 
         :return: normal to the point
+
         :rtype: np.ndarray
         """
 
@@ -145,11 +146,6 @@ class NormalsFactory:
         # except:
         eigval, eigvec = np.linalg.eig(y.T.dot(y))
         return eigvec[:, np.argmin(eigval)]
-
-
-
-
-
 
     @staticmethod
     def normalsComputation_in_raster(x, y, z):
@@ -174,13 +170,15 @@ class NormalsFactory:
         :param z: z ordinates as organized in the raster
 
         :return: normals matrices for each direction
+
         :rtype: np.ndarray [:math:`n\times m \times 3`]
+
         """
         import MyTools as mt
         # Local derivatives (according to Zeibak p. 56)
-        dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order = 1)
-        dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order = 1)
-        dfz_daz, dfz_delevation = mt.computeImageDerivatives(z, order = 1)
+        dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order=1)
+        dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order=1)
+        dfz_daz, dfz_delevation = mt.computeImageDerivatives(z, order=1)
 
         v1 = np.zeros((x.shape[0], x.shape[1], 3))
         v2 = np.zeros((x.shape[0], x.shape[1], 3))
@@ -193,78 +191,83 @@ class NormalsFactory:
         v2[:, :, 1] = dfy_daz
         v2[:, :, 2] = dfz_daz
 
-        cross_vec = np.cross(v1, v2, axis = 2)
-        n = cross_vec / np.linalg.norm(cross_vec, axis = 2)[:, :, None]
+        cross_vec = np.cross(v1, v2, axis=2)
+        n = cross_vec / np.linalg.norm(cross_vec, axis=2)[:, :, None]
 
         return n
 
     @staticmethod
+    def normals_open3D(pointset):
+        """
+        Computes the normals using open 3D
+
+        :param pointset: a point set object
+
+        :return:
+        """
+    
+    @staticmethod
     def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
-        
+
         indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
         return mean(normals[indices], axis=0)
 
+    @staticmethod
+    def VtkNormals(points, triangulation=None):
+        """
+        Calculate normals for each points as average of normals of trianges to which the points belongs to.
+        If no triangulation is given, use TriangulationFactory.Delaunay2D
 
-#     @staticmethod
-#     def VtkNormals(points, triangulation=None):
-#         """
-#         Calculate normals for each points as average of normals of trianges to which the points belongs to.
-#         If no triangulation is given, use TriangulationFactory.Delaunay2D
+        :Args:
+
+            - points: PointSet/PointSubSet object
+            - triangulation: triangulationProperty
+
+
+
+        :Returns:
+            - NormalsProperty
+        """
+        polyData = points.ToPolyData
+
+        if triangulation == None:
+            triangulation = TriangulationFactory.Delaunay2D(points)
+
+        polyData.polys = triangulation.TrianglesIndices()
+
+        compute_normals = mlab.pipeline.poly_data_normals(polyData)
+
+        #        normals = compute_normals.outputs[0].point_data.normals.to_array()
+
+        mlab.close()
+
+        normals = asarray(map(partial(NormalsFactory.__CalcAverageNormal,
+                                      normalsPoints=compute_normals.outputs[0].points.to_array(),
+                                      normals=compute_normals.outputs[0].point_data.normals.to_array()), points.X,
+                              points.Y, points.Z))
+        normals = compute_normals.outputs[0].point_data.normals.to_array()[0: points.Size]
+
+        return NormalsProperty(points, normals)
+
+
 #
-#         :Args:
-#
-#             - points: PointSet/PointSubSet object
-#             - triangulation: triangulationProperty
-#
-#
-#
-#         :Returns:
-#             - NormalsProperty
-#         """
-#         polyData = points.ToPolyData
-#
-#         if triangulation == None:
-#             triangulation = TriangulationFactory.Delaunay2D(points)
-#
-#         polyData.polys = triangulation.TrianglesIndices()
-#
-#         compute_normals = mlab.pipeline.poly_data_normals(polyData)
-#
-# #        normals = compute_normals.outputs[0].point_data.normals.to_array()
-#
-#         mlab.close()
-#
-#         normals = asarray(map(partial(NormalsFactory.__CalcAverageNormal,
-#                                            normalsPoints = compute_normals.outputs[0].points.to_array(),
-#                                            normals = compute_normals.outputs[0].point_data.normals.to_array()), points.X, points.Y, points.Z))
-#         normals = compute_normals.outputs[0].point_data.normals.to_array()[0 : points.Size]
-#
-#         return NormalsProperty(points, normals)
-#
-    
+
 if __name__ == "__main__":
-    
-    from IOFactory import IOFactory    
+    from IOFactory import IOFactory
     from Visualization import Visualization
-    
+
     pointSetList = []
-    
-#    IOFactory.ReadXYZ('..\\Sample Data\\cubeSurface.xyz', pointSetList)
-#    normalsFileName = '..\\Sample Data\\cubeSurfaceNormals.xyz'
-#    normals = NormalsFactory.ReadNormalsFromFile(pointSetList[0], normalsFileName)
+
+    #    IOFactory.ReadXYZ('..\\Sample Data\\cubeSurface.xyz', pointSetList)
+    #    normalsFileName = '..\\Sample Data\\cubeSurfaceNormals.xyz'
+    #    normals = NormalsFactory.ReadNormalsFromFile(pointSetList[0], normalsFileName)
     IOFactory.ReadXYZ(r'D:\\Documents\\Pointsets\\cylinder_1.3_Points.txt', pointSetList)
-#    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])
+    #    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])
     normals = NormalsFactory.VtkNormals(pointSetList[0])  # , triangulation)
-    
+
     Visualization.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3)
     Visualization.Show()
-    
+
 #    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
 #    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    
 #    show()
-        
-        
-        
-         
-        
-        

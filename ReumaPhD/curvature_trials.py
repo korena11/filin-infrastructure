@@ -28,7 +28,7 @@ if __name__ == '__main__':
     z = R * cos(theta)
 
     fig = plt.figure()
-    ax = fig.add_subplot(111, projection = '3d')
+    ax = fig.add_subplot(111, projection='3d')
     ax.scatter(x, y, z)
     ax.axis('equal')
     plt.show()

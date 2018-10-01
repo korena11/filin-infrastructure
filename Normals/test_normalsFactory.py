@@ -18,18 +18,18 @@ class TestNormalsFactory(TestCase):
     def test_normalsPCA_no_tree_radius_kneighbors(self):
         filename = r'../IO modules/test_pts.pts'
         points = IOFactory.ReadPts(filename)
-        normals = NormalsFactory.normalsPCA(points, radius = 0.5)
+        normals = NormalsFactory.normalsPCA(points, radius=0.5)
 
-        normals2 = NormalsFactory.normalsPCA(points, k_neighbors = 5)
+        normals2 = NormalsFactory.normalsPCA(points, k_neighbors=5)
 
         normals.save('normals.h5')
         normals2.save('normals2.h5')
         fig = plt.figure()
-        ax = fig.add_subplot(121, projection = '3d')
-        ax2 = fig.add_subplot(122, projection = '3d')
+        ax = fig.add_subplot(121, projection='3d')
+        ax2 = fig.add_subplot(122, projection='3d')
 
-        ax.scatter(points.X, points.Y, zs = points.Z)
-        ax2.scatter(points.X, points.Y, zs = points.Z)
+        ax.scatter(points.X, points.Y, zs=points.Z)
+        ax2.scatter(points.X, points.Y, zs=points.Z)
 
         ax.quiver(points.X, points.Y, points.Z, normals.dX, normals.dY, normals.dZ)
         ax2.quiver(points.X, points.Y, points.Z, normals2.dX, normals2.dY, normals2.dZ)

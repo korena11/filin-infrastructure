@@ -16,7 +16,7 @@ from PointSet import PointSet
 from TransformationMatrixProperty import TransformationMatrixProperty
 
 
-def ReadPts(filename, pointsetlist = list(), colorslist = list(), merge = True):
+def ReadPts(filename, pointsetlist=list(), colorslist=list(), merge=True):
     """
     Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
     otherwise).
@@ -119,8 +119,8 @@ def ReadPts(filename, pointsetlist = list(), colorslist = list(), merge = True):
         return pointsetlist
 
 
-def ReadPtx(filename, pointsetlist = list(), colorslist = list(), trasformationMatrices = list(),
-            remove_empty = True):
+def ReadPtx(filename, pointsetlist=list(), colorslist=list(), trasformationMatrices=list(),
+            remove_empty=True):
     """
     Reads .ptx file, created by Leica Cyclone
 
@@ -177,7 +177,7 @@ def ReadPtx(filename, pointsetlist = list(), colorslist = list(), trasformationM
 
             pointsetlist.append(PointSet(pt_batch, path = filename, intensity = pt_batch[:, 3]))
             trasformationMatrices.append(TransformationMatrixProperty(pointsetlist[-1],
-                                                                      transformationMatrix = transformationMatrix))
+                                                                      transformationMatrix=transformationMatrix))
             dimension = pt_batch.shape[1]
             if dimension == 7:
                 # the data includes RGB

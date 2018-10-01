@@ -57,7 +57,7 @@ def drawContours(phi, img, ax, **kwargs):
     phi_binary = np.uint8(phi_binary)
 
     contours = measure.find_contours(phi, 0.)
-    blob_labels = measure.label(phi_binary, background = 0)
+    blob_labels = measure.label(phi_binary, background=0)
     label_props = measure.regionprops(blob_labels)
 
     #  contours = chooseLargestContours(contours, label_props, 1)
@@ -104,7 +104,7 @@ def compute_vt(vectorField, edge_map, kappa, **kwargs):
     vx_t = g * laplacian_vx - h * (vectorField[:, :, 0] - edge_map)
     vy_t = g * laplacian_vy - h * (vectorField[:, :, 1] - edge_map)
 
-    return np.stack((vx_t, vy_t), axis = 2)
+    return np.stack((vx_t, vy_t), axis=2)
 
 
 def compute_vb(img, phi, **kwargs):
@@ -219,14 +219,14 @@ def geometricActiveContours(img, phi, **kwargs):
     g_x = g_y = 0
 
     if alpha is not None:
-        g_x, g_y = mt.computeImageDerivatives(alpha, 1, ksize = g_ksize)
+        g_x, g_y = mt.computeImageDerivatives(alpha, 1, ksize=g_ksize)
         alpha = cv2.GaussianBlur(g, blur_ksize, blur_sigma)
     else:
         alpha = 0
 
     if edgeMap is not None:
-        v_x, v_y = mt.computeImageDerivatives(edgeMap, 1, ksize = g_ksize)
-        v = np.stack((v_x, v_y), axis = 2)
+        v_x, v_y = mt.computeImageDerivatives(edgeMap, 1, ksize=g_ksize)
+        v = np.stack((v_x, v_y), axis=2)
     else:
         v = np.zeros((img.shape[0], img.shape[1], 2))
         edgeMap = np.zeros((img.shape[0], img.shape[1]))
@@ -243,13 +243,13 @@ def geometricActiveContours(img, phi, **kwargs):
     for i in range(0, 200):
 
         # phi derivatives
-        phi_x, phi_y, phi_xx, phi_yy, phi_xy = mt.computeImageDerivatives(phi, 2, ksize = gradient_inputs['ksize'],
-                                                                          sigma = gradient_inputs['sigma'])
+        phi_x, phi_y, phi_xx, phi_yy, phi_xy = mt.computeImageDerivatives(phi, 2, ksize=gradient_inputs['ksize'],
+                                                                          sigma=gradient_inputs['sigma'])
         # |\nabla \phi|
         norm_nabla_phi = np.sqrt(phi_x ** 2 + phi_y ** 2 + eps)
 
         if open_contour:
-            nabla_psi = mt.computeImageGradient(psi, ksize = gradient_inputs['ksize'], gradientType = 'L1')
+            nabla_psi = mt.computeImageGradient(psi, ksize=gradient_inputs['ksize'], gradientType='L1')
 
         # level set curvature: kappa=div(\nabla \phi / |\nabla \phi|)
         kappa = ((phi_xx * phi_y ** 2 + phi_yy * phi_x ** 2 - 2 * phi_xy * phi_x * phi_y) / norm_nabla_phi ** 3)
@@ -259,7 +259,7 @@ def geometricActiveContours(img, phi, **kwargs):
         Fext_nabla_phi = g_x * phi_x + g_y * phi_y
 
         # gvf
-        vt = compute_vt(v, edgeMap, kappa, eps = eps, **gradient_inputs)
+        vt = compute_vt(v, edgeMap, kappa, eps=eps, **gradient_inputs)
         v += vt
         Fext_gvf = v[:, :, 0] * phi_x + v[:, :, 1] * phi_y
 
@@ -269,7 +269,7 @@ def geometricActiveContours(img, phi, **kwargs):
 
         # band velocity
         if open_contour:
-            vb = compute_vb(img, phi, stepsize = stepsize)
+            vb = compute_vb(img, phi, stepsize=stepsize)
         else:
             vb = np.zeros(img)
 
@@ -358,7 +358,7 @@ def geodesicActiveContours(img, phi, **kwargs):
     imgGradient = mt.computeImageGradient(img, **gradient_inputs)
     g = 1 / (1 + imgGradient)
 
-    g_x, g_y = mt.computeImageDerivatives(g, 1, ksize = g_ksize)
+    g_x, g_y = mt.computeImageDerivatives(g, 1, ksize=g_ksize)
     g = cv2.GaussianBlur(g, blur_ksize, blur_sigma)
 
     for i in range(0, 1500):
@@ -369,7 +369,7 @@ def geodesicActiveContours(img, phi, **kwargs):
         # div(\nabla phi/|\nabla phi|)
         div_phi = beta * (
                 (phi_xx * phi_y ** 2 + phi_yy * phi_x ** 2 - 2 * phi_xy * phi_x * phi_y) / (
-                    phi_x ** 2 + phi_y ** 2 + eps) ** 2)
+                phi_x ** 2 + phi_y ** 2 + eps) ** 2)
 
         # dot product of \nabla g and \nabla phi
         grad_g_dot_grad_phi = g_x * phi_x + g_y * phi_y
@@ -383,7 +383,7 @@ def geodesicActiveContours(img, phi, **kwargs):
         phi_binary = np.uint8(phi_binary)
 
         contours = measure.find_contours(phi, 0.)
-        blob_labels = measure.label(phi_binary, background = 0)
+        blob_labels = measure.label(phi_binary, background=0)
         label_props = measure.regionprops(blob_labels)
 
         contours = chooseLargestContours(contours, label_props, 10)
@@ -413,12 +413,12 @@ if __name__ == '__main__':
     sigma = 2.5
 
     # define region constraints
-    region = sl.distance_based(img, filter_sigma = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
-                               feature = 'normals')
-    region1 = sl.distance_based(img, filter_size = 2.5, feature = 'normals', method = 'local')
+    region = sl.distance_based(img, filter_sigma=[sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
+                               feature='normals')
+    region1 = sl.distance_based(img, filter_size=2.5, feature='normals', method='local')
 
-    region = cv2.GaussianBlur(region, ksize = (5, 5), sigmaX = sigma)
-    region1 = cv2.GaussianBlur(np.uint8(region), ksize = (5, 5), sigmaX = sigma)
+    region = cv2.GaussianBlur(region, ksize=(5, 5), sigmaX=sigma)
+    region1 = cv2.GaussianBlur(np.uint8(region), ksize=(5, 5), sigmaX=sigma)
 
     # define edge function
     edges = cv2.Canny(region1, 30, 70)
@@ -434,7 +434,7 @@ if __name__ == '__main__':
 
     # define initial alpha function (usually a gradient map)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    imgGradient = mt.computeImageGradient(img, gradientType = 'L2', ksize = 5)
+    imgGradient = mt.computeImageGradient(img, gradientType='L2', ksize=5)
     g = 1 / (1 + imgGradient)
 
     # define an initial contour via phi(x,y) = 0
@@ -461,7 +461,7 @@ if __name__ == '__main__':
     blur_inputs = {'sigma': 2.5, 'ksize': (0, 0)}
     region_inputs = {'region': region, 'weight': 1}
 
-    geodesicActiveContours(img, phi, GAC_inputs = gac_inputs)
+    geodesicActiveContours(img, phi, GAC_inputs=gac_inputs)
 
     # geometricActiveContours(img, phi, GAC_inputs = gac_inputs, img_grad = gradient_inputs, blur=blur_inputs,
     #                         region = region_inputs, open_contour = True, psi = psi)

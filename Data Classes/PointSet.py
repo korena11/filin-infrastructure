@@ -127,7 +127,7 @@ class PointSet(BaseData):
         return pyspark.SparkContext.parallelize([self.X, self.Y, self.Z])
 
     #
-    def ToGeoPandas(self, crs = None):
+    def ToGeoPandas(self, crs=None):
         """
         :param crs: coordinate spatial reference, if exists
 
@@ -147,9 +147,21 @@ class PointSet(BaseData):
 
         # Transform to geopandas GeoDataFrame
         geometry = [Point(xyz) for xyz in zip(self.X, self.Y, self.Z)]
-        geodf = GeoDataFrame(pts, crs = crs, geometry = geometry)
+        geodf = GeoDataFrame(pts, crs=crs, geometry=geometry)
         return geodf
 
+    def ToOpen3d_pcl(self):
+        """
+        Converts to open 3D PointCloud()
+
+        :return: open 3D PointCloud object
+
+        :rtype open3d.PointCloud
+        """
+        import platform
+
+        if platform.system() == 'Linux':
+            pass
 
 
     def GetPoint(self, index):
@@ -183,8 +195,7 @@ class PointSet(BaseData):
         if 'XYZ' in kwargs:
             self.data[:, :] = kwargs['XYZ']
 
-
-    def AddData2Fields(self, data, field = 'XYZ'):
+    def AddData2Fields(self, data, field='XYZ'):
         '''
         Add data to a field
         '''

@@ -294,7 +294,7 @@ class ClassificationFactory:
                 self.percentMap = np.zeros(self.data.shape)
             resolution = self.data.resolution
             eigenvalue_sigma = np.sqrt(6) * self.data.accuracy / (winsize * resolution) ** 2
-            eigenprop = EigenFactory.eigen_Hessian(self.data, winsize = winsize, resolution = resolution)
+            eigenprop = EigenFactory.eigen_Hessian(self.data, winsize=winsize, resolution=resolution)
             eigThreshold = 2 * self.data.roughness / (winsize * resolution) ** 2
 
             # Computes percentages for each combination:
@@ -331,7 +331,7 @@ class ClassificationFactory:
 
     @staticmethod
     def __percentMapComputation(eigenProp, eigMax_sign, eigMin_sign,
-                                denominator_oneTail = 0, denominator_twoTail = 0):
+                                denominator_oneTail=0, denominator_twoTail=0):
         """
         computes the percent map according to the probability to have a negative or positive min/max eigenvalues
 
@@ -385,7 +385,7 @@ class ClassificationFactory:
         for win in winSizes:
             print(('current window size %.4f' % win))
             if isinstance(self.data, RasterData):
-                self.__ClassifyPoints(win, classProp = classified)
+                self.__ClassifyPoints(win, classProp=classified)
         return classified, self.percentMap
 
 

@@ -23,13 +23,13 @@ if __name__ == '__main__':
                        cv2.COLOR_BGR2GRAY)
 
     FFMpegWriter = manimation.writers['ffmpeg']
-    metadata = dict(title = 'Movie Test', artist = 'Matplotlib',
-                    comment = 'Movie support!')
-    writer = FFMpegWriter(fps = 15, metadata = metadata)
+    metadata = dict(title='Movie Test', artist='Matplotlib',
+                    comment='Movie support!')
+    writer = FFMpegWriter(fps=15, metadata=metadata)
 
     fig = plt.figure()
 
-    plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
+    plt.imshow(img, interpolation='nearest', cmap='gray')
 
     dt = 0.01
     ds = 5.

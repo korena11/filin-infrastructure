@@ -15,10 +15,12 @@ import numpy as np
 from RasterData import RasterData
 from MyTools import computeImageDerivatives
 from PointSet import PointSet
+
+
 class EigenFactory:
 
     @staticmethod
-    def eigen_PCA(points, rad = None, pt_index = -1):
+    def eigen_PCA(points, rad=None, pt_index=-1):
         """
         Compute eigenvalues and eigenvectors about a point.
 
@@ -94,16 +96,16 @@ class EigenFactory:
         :rtype: tuple
 
         """
-        #TODO apply for PointSet data
+        # TODO apply for PointSet data
 
         if isinstance(data, RasterData):
-            dx, dy, dxx, dyy, dxy = computeImageDerivatives(data.data, order =2,  ksize = winsize, resolution=resolution)
+            dx, dy, dxx, dyy, dxy = computeImageDerivatives(data.data, order=2, ksize=winsize, resolution=resolution)
 
             # Eigenvalues computation (numerically) - (eq. 3 - 36, Amit Baruch dissertation)
             # instead of constructing a matrix for each pixel
             b = - dyy - dxx
-            c = dxx * dyy - dxy**2
-            eigMax = np.real((- b + np.sqrt(b**2 - 4 * c))/ 2)
-            eigMin = np.real((- b - np.sqrt(b**2 - 4 * c)) / 2)
+            c = dxx * dyy - dxy ** 2
+            eigMax = np.real((- b + np.sqrt(b ** 2 - 4 * c)) / 2)
+            eigMin = np.real((- b - np.sqrt(b ** 2 - 4 * c)) / 2)
 
             return np.array([eigMin, eigMax]), None

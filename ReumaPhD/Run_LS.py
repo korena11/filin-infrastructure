@@ -22,25 +22,25 @@ if __name__ == '__main__':
                              cv2.NORM_MINMAX)  # Convert to normalized floating point
     sigma = 2.5  # blurring
     # ----------- Define properties for the Level Set Factory -----------
-    ls_obj = LevelSetFlow(img_gray, img_rgb = img_orig, step = .1)
+    ls_obj = LevelSetFlow(img_gray, img_rgb=img_orig, step=.1)
 
     processing_props = {'sigma': 2.5, 'ksize': 5, 'gradientType': 'L2', 'regularization': 0}
     ls_obj.set = processing_props
 
-    ls_obj.set_flow_types(geodesic = 1.0)
+    ls_obj.set_flow_types(geodesic=1.0)
 
-    ls_obj.set_weights(gvf_w = 1, region_w = .05)
+    ls_obj.set_weights(gvf_w=1, region_w=.05)
 
     # ls_obj.band_props = {'band_width': 5e-4, 'threshold': 0.1, 'stepsize': 0.5}
 
     # ---------------------------------------------------------------------
 
-    ls_obj.init_phi(radius = 100, regularization_note = 0, processing_props = processing_props, center_pt = (80, 160))
-    ls_obj.init_phi(radius = 100, regularization_note = 0, processing_props = processing_props, center_pt = (60, 100))
+    ls_obj.init_phi(radius=100, regularization_note=0, processing_props=processing_props, center_pt=(80, 160))
+    ls_obj.init_phi(radius=100, regularization_note=0, processing_props=processing_props, center_pt=(60, 100))
 
-    fig, ax = plt.subplots(num = 1)
-    mt.draw_contours(ls_obj.phi(0).value, ax, img_gray, color = 'b')
-    mt.draw_contours(ls_obj.phi(1).value, ax, img_gray, hold = True, color = 'r')
+    fig, ax = plt.subplots(num=1)
+    mt.draw_contours(ls_obj.phi(0).value, ax, img_gray, color='b')
+    mt.draw_contours(ls_obj.phi(1).value, ax, img_gray, hold=True, color='r')
     plt.show()
 
     # ------- Initial limits via psi(x,y) = 0 ---------------------------
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # can be either constant, weights, or function
     # option 1: edge map g = 1/(1+|\nabla G(I) * I|).
 
-    imgGradient = mt.computeImageGradient(img_gray, gradientType = 'L2', sigma = 2.5)
+    imgGradient = mt.computeImageGradient(img_gray, gradientType='L2', sigma=2.5)
     g = 1 / (1 + imgGradient ** 2)
     plt.figure('g')
     mt.imshow(g)
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    ls_obj.init_region('saliency', saliency_method = 'context', sigma = 0.5, feature = 'normals')
+    ls_obj.init_region('saliency', saliency_method='context', sigma=0.5, feature='normals')
     plt.figure('region')
     mt.imshow(ls_obj.region)
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     # The map which the GVF will be defined by
     # option 1: the image itself
-    f = 1 - cv2.GaussianBlur(img_gray, ksize = (9, 9), sigmaX = sigma)
+    f = 1 - cv2.GaussianBlur(img_gray, ksize=(9, 9), sigmaX=sigma)
 
     # # option 2: edge map
     # f = cv2.Canny(img_orig, 10, 50)
@@ -101,4 +101,4 @@ if __name__ == '__main__':
     mt.imshow(f)
     plt.show()
 
-    ls_obj.moveLS(open_flag = False, verbose = False, mumford_shah = False)
+    ls_obj.moveLS(open_flag=False, verbose=False, mumford_shah=False)

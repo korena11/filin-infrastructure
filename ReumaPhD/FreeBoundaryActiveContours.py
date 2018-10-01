@@ -30,7 +30,7 @@ def closestBoundaryPoint(point, boundary_curve, **kwargs):
     '''
     # TODO: threshold when to resample the boundary for better "guess"
 
-    dist2 = np.sum(np.power(boundary_curve - point, 2), axis = 1)
+    dist2 = np.sum(np.power(boundary_curve - point, 2), axis=1)
 
     return boundary_curve[np.argmin(dist2), :]
 
@@ -85,15 +85,15 @@ if __name__ == '__main__':
     #                 comment='Movie support!')
     # writer = FFMpegWriter(fps=30, metadata=metadata)
     fig = plt.figure()
-    plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
+    plt.imshow(img, interpolation='nearest', cmap='gray')
     plt.axis('off')
     plt.plot(b0_x, b0_y, '-r')
     plt.plot(b1_x, b1_y, '-r')
-    l_curve, = plt.plot(x_tau, y_tau, 'm', linewidth = 2.5)
+    l_curve, = plt.plot(x_tau, y_tau, 'm', linewidth=2.5)
 
     # generate image
-    energy_image = ac.generateImageEnergy(img, w_line, w_edge, w_term, edgeEnergyType = 'value', blur_ksize = 13,
-                                          sobel_ksize = 5)
+    energy_image = ac.generateImageEnergy(img, w_line, w_edge, w_term, edgeEnergyType='value', blur_ksize=13,
+                                          sobel_ksize=5)
     energy_image = cv2.blur(energy_image, (11, 11))
     energy_image_x = filters.sobel(energy_image, 1)
     energy_image_y = filters.sobel(energy_image, 0)
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     energy_image_x = cv2.blur(energy_image_x, (7, 7))
     energy_image_y = cv2.blur(energy_image_y, (7, 7))
 
-    M = ac.returnPentadiagonal(x_tau.shape[0], a, b, open = True)
+    M = ac.returnPentadiagonal(x_tau.shape[0], a, b, open=True)
     eyeM = np.eye(M.shape[0])
     invM = np.linalg.inv(M)
 

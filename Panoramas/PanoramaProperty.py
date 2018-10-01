@@ -26,7 +26,7 @@ class PanoramaProperty(BaseProperty):
     __azimuthSpacing = 0.057  # The spacing between points in the azimuth direction
     __elevationSpacing = 0.057  # The spacing between points in the elevation angle direction
 
-    def __init__(self, sphericalCoordinates, rowIndexes = None, columnIndexes = None, panoramaData = None, **kwargs):
+    def __init__(self, sphericalCoordinates, rowIndexes=None, columnIndexes=None, panoramaData=None, **kwargs):
         """
         Constuctor - Creates a panoramic view of the data sent
 
@@ -231,7 +231,7 @@ class PanoramaProperty(BaseProperty):
         ind = np.intersect1d(row_ind, col_ind)
         return PointSubSet(self.Points, ind)
 
-    def normals(self, phenomenaSize = 0.2, ksize = (5, 5), gradientType = 'L1', **kwargs):
+    def normals(self, phenomenaSize=0.2, ksize=(5, 5), gradientType='L1', **kwargs):
         r"""
         Computing gradients and normals in each direction, via adaptive smoothing according to :cite:`Arav2013`
 
@@ -286,7 +286,7 @@ class PanoramaProperty(BaseProperty):
 
         # Computing gradient map in the scan after lowpass filter
         import MyTools as mt
-        gradient = mt.computeImageGradient(filtered, ksize = ksize, sigma = sigma, gradientType = gradientType)
+        gradient = mt.computeImageGradient(filtered, ksize=ksize, sigma=sigma, gradientType=gradientType)
 
         # Computing Normal vectors
         # finding the ray direction (Zeibak Thesis: eq. 20, p. 58)

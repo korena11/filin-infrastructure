@@ -22,7 +22,7 @@ from .ContourDevelopment import getValueSubpix
 from .MyTools import imshow
 
 
-def createGaussianImage(gridSpacing = .025, noise = 0.01):
+def createGaussianImage(gridSpacing=.025, noise=0.01):
     x = np.arange(-3.0, 3.0, gridSpacing)
     y = np.arange(-2.0, 2.0, gridSpacing)
     X, Y = np.meshgrid(x, y)
@@ -93,8 +93,8 @@ def generateImageEnergy(I, w_line, w_edge, w_term, **kwargs):
     img = cv2.blur(I, (blur_ksize, blur_ksize))
 
     # compute image gradient
-    dx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = sobel_ksize)
-    dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = sobel_ksize)
+    dx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=sobel_ksize)
+    dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=sobel_ksize)
 
     grad_img = img
 
@@ -108,9 +108,9 @@ def generateImageEnergy(I, w_line, w_edge, w_term, **kwargs):
         grad_img = img
 
     # ---- Second derivatives ---
-    dxx = cv2.Sobel(dx, cv2.CV_64F, 1, 0, ksize = sobel_ksize)
-    dyy = cv2.Sobel(dy, cv2.CV_64F, 0, 1, ksize = sobel_ksize)
-    dxy = cv2.Sobel(dx, cv2.CV_64F, 0, 1, ksize = sobel_ksize)
+    dxx = cv2.Sobel(dx, cv2.CV_64F, 1, 0, ksize=sobel_ksize)
+    dyy = cv2.Sobel(dy, cv2.CV_64F, 0, 1, ksize=sobel_ksize)
+    dxy = cv2.Sobel(dx, cv2.CV_64F, 0, 1, ksize=sobel_ksize)
 
     energy_line = I
     energy_edge = -grad_img
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     img = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\twosink.png', 1),
                        cv2.COLOR_BGR2GRAY)
 
-    plt.imshow(img, interpolation = 'nearest', cmap = 'gray')
+    plt.imshow(img, interpolation='nearest', cmap='gray')
 
     # tension and stiffness
     alpha = 50
@@ -205,7 +205,7 @@ if __name__ == '__main__':
     #   y_tau = np.append(y_tau, y_tau[0])
     c = np.vstack((y_tau, x_tau)).T
 
-    energy_image = generateImageEnergy(img, w_line, w_edge, w_term, edgeEnergyType = 'value')
+    energy_image = generateImageEnergy(img, w_line, w_edge, w_term, edgeEnergyType='value')
     energy_image = cv2.blur(energy_image, (7, 7))
     energy_image_y = filters.sobel(energy_image, 0)
     energy_image_x = filters.sobel(energy_image, 1)
@@ -222,7 +222,7 @@ if __name__ == '__main__':
 
     e_external = -filters.gaussian_laplace(img, 1.5)
 
-    energy_image_x, energy_image_y = GVF(e_external, mu = 2., dt = dt, image = img)
+    energy_image_x, energy_image_y = GVF(e_external, mu=2., dt=dt, image=img)
 
     # contours = measure.find_contours(img, 0.5)
     plt.plot(c[:, 0], c[:, 1], '-r')
@@ -247,7 +247,7 @@ if __name__ == '__main__':
         plt.ylim([img.shape[0], 0])
         plt.xlim([0, img.shape[1]])
 
-        imshow(img, cmap = 'gray')
+        imshow(img, cmap='gray')
 
         plt.plot(c[:, 0], c[:, 1], '-r.')
         plt.pause(1e-6)

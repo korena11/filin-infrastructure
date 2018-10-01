@@ -110,7 +110,7 @@ class IOFactory:
         return obj
 
     @classmethod
-    def ReadPts(cls, filename, pointsetlist = list(), colorslist = list(), merge = True):
+    def ReadPts(cls, filename, pointsetlist=list(), colorslist=list(), merge=True):
         """
         Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
         otherwise).
@@ -137,8 +137,8 @@ class IOFactory:
 
 
     @classmethod
-    def ReadPtx(cls, filename, pointsetlist = list(), colorslist = list(), trasformationMatrices = list(),
-                remove_empty = True):
+    def ReadPtx(cls, filename, pointsetlist=list(), colorslist=list(), trasformationMatrices=list(),
+                remove_empty=True):
 
         """
         Reads .ptx file, created by Leica Cyclone
@@ -170,7 +170,7 @@ class IOFactory:
 
 
     @classmethod
-    def ReadXYZ(cls, fileName, pointsetlist = list(), merge = True):
+    def ReadXYZ(cls, fileName, pointsetlist=list(), merge=True):
         """
         Reading points from .xyz file
         Creates one PointSet objects returned through pointSetList
@@ -333,7 +333,7 @@ class IOFactory:
             savetxt(f_handle, data, fmt, delimiter = '\t', newline = '\n')
 
     @classmethod
-    def WriteToShapeFile(cls, pointSet, fileName, colors = None, **kwargs):
+    def WriteToShapeFile(cls, pointSet, fileName, colors=None, **kwargs):
         """
         Exporting points to shapefile
         

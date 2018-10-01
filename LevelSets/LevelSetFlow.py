@@ -87,13 +87,11 @@ class LevelSetFlow:
         self.__f = np.zeros(self.img().shape)
         self.__g = np.zeros(self.img().shape)
 
-
         if 'weights' in list(kwargs.keys()):
             self.set_weights(**kwargs['weights'])
 
         if 'flow_types' in list(kwargs.keys()):
             self.set_flow_types(**kwargs['flow_types'])
-
 
     @property
     def num_ls(self):
@@ -230,7 +228,7 @@ class LevelSetFlow:
         self.__gvf_w = inputs['gvf_w']
         self.__vo_w = inputs['vo_w']
 
-    def img(self, index = 0):
+    def img(self, index=0):
         """
         The analyzed image (of the data). Multiple can exist.
 
@@ -328,7 +326,7 @@ class LevelSetFlow:
         """
         return self.__g_y
 
-    def phi(self, index = 0):
+    def phi(self, index=0):
         """
         Returns the level set function phi according to the index
 
@@ -342,14 +340,13 @@ class LevelSetFlow:
         return self.__Phi[index]
 
     @property
-    def psi(self, index = 0):
+    def psi(self, index=0):
         """
         Returns the level set function phi according to the index
         :return: LevelSetFunction self.__psi
         """
 
         return self.__psi[index]
-
 
     def init_phi(self, **kwargs):
         r"""
@@ -399,14 +396,14 @@ class LevelSetFlow:
 
         if func_type == 'circle':
             phi = LevelSetFunction.dist_from_circle(center_pt, radius, (img_height, img_width),
-                                                    ksize = processing_props['ksize'])
+                                                    ksize=processing_props['ksize'])
 
         if np.all(self.__Phi[0].value == 0):
             self.__Phi = []
 
         self.__Phi.append(
-            LevelSetFunction(phi, regularization_note = regularization,
-                             epsilon = 1e-8,
+            LevelSetFunction(phi, regularization_note=regularization,
+                             epsilon=1e-8,
                              **processing_props))
 
     def init_img(self, img, **kwargs):
@@ -504,8 +501,8 @@ class LevelSetFlow:
             region = classified.classification(inputs['class'])
 
         region = 255 - cv2.GaussianBlur(region,
-                                        ksize = (self.processing_props['ksize'], self.processing_props['ksize']),
-                                        sigmaX = self.processing_props['sigma'])
+                                        ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
+                                        sigmaX=self.processing_props['sigma'])
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 
@@ -598,7 +595,7 @@ class LevelSetFlow:
             if open_flag:
                 psi_t = self.g * self.phi().kappa * self.psi.norm_nabla + (
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
-                self.psi.update(self.psi.value - psi_t, regularization_note = processing_props['regularization'])
+                self.psi.update(self.psi.value - psi_t, regularization_note=processing_props['regularization'])
 
         if flow_type == 'band':
             vb = self.__compute_vb(**processing_props)
@@ -608,7 +605,7 @@ class LevelSetFlow:
 
         return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
-    def mumfordshah_flow(self, img = True, nu = 1):
+    def mumfordshah_flow(self, img=True, nu=1):
         """
         Computes the Mumford-Shah flow for a multi-phase level set, according to :cite:`Vese.Chan2002`.
 
@@ -766,7 +763,7 @@ class LevelSetFlow:
         function_binary = np.uint8(function_binary)
 
         contours = measure.find_contours(function, 0.)
-        blob_labels = measure.label(function_binary, background = 0)
+        blob_labels = measure.label(function_binary, background=0)
         label_props = measure.regionprops(blob_labels)
 
         #     contours = chooseLargestContours(contours, label_props, 1)
@@ -789,13 +786,13 @@ class LevelSetFlow:
                 # else:
                 collide_ind = np.isin(np.int64(np.round(c[:])), psi_ind)
 
-                c = c[np.sum(collide_ind, axis = 1).astype('bool')]
+                c = c[np.sum(collide_ind, axis=1).astype('bool')]
                 if c.shape[0] == 0:
                     continue
 
             c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
 
-            curve, = ax.plot(c[:, 0], c[:, 1], '-', color = color)
+            curve, = ax.plot(c[:, 0], c[:, 1], '-', color=color)
             l_curve.append(curve)
 
         return l_curve, ax
@@ -868,7 +865,7 @@ class LevelSetFlow:
 
         # plt.quiver(vx_t, vy_t, scale=25)
 
-        return np.stack((-vx_t, -vy_t), axis = 2)
+        return np.stack((-vx_t, -vy_t), axis=2)
 
     def __compute_vo(self, **kwargs):
         """
@@ -930,7 +927,7 @@ class LevelSetFlow:
         region_w = self.region_w
         processing_props = self.processing_props
 
-        fig, ax = plt.subplots(num = 'img')
+        fig, ax = plt.subplots(num='img')
         if np.any(self.img_rgb) != 0:
             mt.imshow(self.img_rgb)
         else:
@@ -938,10 +935,10 @@ class LevelSetFlow:
 
         ax2 = plt.figure("phi")
         mt.imshow(self.phi().value)
-        fig3, ax3 = plt.subplots(num = 'kappa')
+        fig3, ax3 = plt.subplots(num='kappa')
         mt.imshow(self.phi().kappa)
         if open_flag:
-            fig4, ax4 = plt.subplots(num = 'psi')
+            fig4, ax4 = plt.subplots(num='psi')
             mt.imshow(self.psi.value)
 
         for i in range(iterations):
@@ -982,11 +979,11 @@ class LevelSetFlow:
                 #         cv2.GaussianBlur(self.psi.value - psi_t, (processing_props['ksize'], processing_props['ksize']),
                 #                          sigmaX = processing_props['sigma']))
                 plt.figure('psi')
-                l_curve, ax4 = self.__drawContours(self.psi.value, ax4, color = 'b', image = self.psi.value)
+                l_curve, ax4 = self.__drawContours(self.psi.value, ax4, color='b', image=self.psi.value)
                 plt.pause(.5e-10)
 
             # ---------------extrinsic movement ----------
-            v = np.stack((self.f_x, self.f_y), axis = 2)
+            v = np.stack((self.f_x, self.f_y), axis=2)
             vt = self.__compute_vt(v, **processing_props)
             v += vt
             for i in range(self.num_ls):
@@ -1015,17 +1012,17 @@ class LevelSetFlow:
 
             plt.figure('img')
             if open_flag:
-                _, ax = mt.draw_contours(self.phi().value, ax, color = 'r', img = img_showed,
-                                         open = True)
+                _, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
+                                         open=True)
             else:
                 colors = 'rbgm'
                 for i in range(len(self.__Phi)):
                     if i > 0:
-                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = True,
-                                                       color = colors[i])
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
+                                                       color=colors[i])
                     else:
-                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img = img_showed, hold = False,
-                                                       color = colors[i])
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
+                                                       color=colors[i])
             plt.pause(.5e-10)
         plt.show()
         print('Done')

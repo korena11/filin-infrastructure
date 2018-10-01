@@ -47,7 +47,6 @@ class PointSubSet(PointSet):
         else:
             return None
 
-
     @property
     def X(self):
         """

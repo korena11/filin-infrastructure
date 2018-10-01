@@ -30,8 +30,8 @@ class TestPanoramaProperty(TestCase):
         print('hello')
         pts = IOFactory.ReadPts(r'..\IO modules\test_pts.pts')
 
-        pts_panorama = PanoramaFactory.CreatePanorama_byPoints(pts, elevationSpacing = 0.111, azimuthSpacing = 0.115,
-                                                               voidData = 30)
+        pts_panorama = PanoramaFactory.CreatePanorama_byPoints(pts, elevationSpacing=0.111, azimuthSpacing=0.115,
+                                                               voidData=30)
         pts_panorama.indexes_to_panorama()
 
         self.assertIsNotNone(pts_panorama.Points.GetPoint(int(pts_panorama.PanoramaImage[0, 0])))

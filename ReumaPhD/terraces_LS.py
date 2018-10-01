@@ -40,10 +40,10 @@ if __name__ == '__main__':
     hillshade = rv.hillshade(raster.data)
     sigma = 2.5  # blurring
     # hillshade = rv.hillshade(img_orig)
-    ls_obj = LevelSetFlow(img_normed, img_rgb = img_orig, step = 2.)
+    ls_obj = LevelSetFlow(img_normed, img_rgb=img_orig, step=2.)
 
     processing_props = {'sigma': 5, 'ksize': 5, 'gradientType': 'L2'}
-    ls_obj.init_phi(width = img_orig.shape[1] / 2 - 5, height = img_orig.shape[0] / 2 - 5, start = (1, 1))
+    ls_obj.init_phi(width=img_orig.shape[1] / 2 - 5, height=img_orig.shape[0] / 2 - 5, start=(1, 1))
 
     plt.figure()
     mt.imshow(ls_obj.phi)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     # can be either constant, weights, or function
     # option 1: edge map g = 1/(1+|\nabla G(I) * I|).
 
-    imgGradient = mt.computeImageGradient(img_normed, gradientType = 'L2', sigma = 1.5)
+    imgGradient = mt.computeImageGradient(img_normed, gradientType='L2', sigma=1.5)
     g = 1 / (1 + imgGradient ** 2)
     plt.imshow(g)
     plt.show()
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
-    ls_obj.init_region('saliency', feature = 'normals')
+    ls_obj.init_region('saliency', feature='normals')
     plt.imshow(ls_obj.region)
     plt.show()
     # Force III - open contours:
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     # The map which the GVF will be defined by
     # option 1: the image itself
-    f = 1 - cv2.GaussianBlur(img_normed, ksize = (5, 5), sigmaX = sigma)
+    f = 1 - cv2.GaussianBlur(img_normed, ksize=(5, 5), sigmaX=sigma)
 
     # # option 2: edge map
     # f = cv2.Canny(img_orig, 10, 50)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     #  f = np.zeros(img_gray.shape)
     ls_obj.init_f(f, **processing_props)
 
-    ls_obj.moveLS(open_flag = False, processing_props = processing_props, iterations = 500, img_showed = hillshade,
-                  gvf_w = 2.,
-                  vo_w = 0.,
-                  region_w = 0.02)
+    ls_obj.moveLS(open_flag=False, processing_props=processing_props, iterations=500, img_showed=hillshade,
+                  gvf_w=2.,
+                  vo_w=0.,
+                  region_w=0.02)

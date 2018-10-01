@@ -44,7 +44,7 @@ def cart2sph(x, y, z):
 
 # second program in pyspark
 # --------------------------
-sc = pyspark.SparkContext(appName = 'pyspark tutorial')
+sc = pyspark.SparkContext(appName='pyspark tutorial')
 # temp_c = [10, 3, -5, 25, 1, 9, 29, -10]
 # rdd_temp_c = sc.parallelize(temp_c)
 # rdd_temp_K = rdd_temp_c.map(lambda x: x + 273.15).collect() # the map transforms the list while the collect pulls the
