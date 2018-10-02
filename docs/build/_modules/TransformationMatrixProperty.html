@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -131,7 +129,7 @@
 
 
 <div class="viewcode-block" id="TransformationMatrixProperty"><a class="viewcode-back"
-                                                                 href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty">[docs]</a><span
+                                                                 href="../Properties/Transformations/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty">[docs]</a><span
         class="k">class</span> <span class="nc">TransformationMatrixProperty</span><span class="p">(</span><span
         class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -144,19 +142,41 @@
 
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">):</span>
+            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">transformationMatrix</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span
+            class="n">translationMatrix</span><span class="o">=</span><span class="kc">None</span><span
+            class="p">,</span> <span class="n">rotationMatrix</span><span class="o">=</span><span class="kc">None</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        :param points: the point set </span>
+<span class="sd">        :param transformationMatrix: 4x4 transformation matrix which includes both rotation and translation </span>
+<span class="sd">        :param translationMatrix: 3x1 or 3x3 translation matrix </span>
+<span class="sd">        :param rotationMatrix:  3x3 rotation matrix</span>
+<span class="sd">        </span>
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type transformationMatrix: np.ndarray</span>
+<span class="sd">        :type translationMatrix: np.ndarray</span>
+<span class="sd">        :type rotationMatrix: np.ndarray</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TransformationMatrixProperty</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="fm">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;transformationMatrix&#39;</span> <span
-            class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">transformationMatrix</span> <span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
-            class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;transformationMatrix&#39;</span><span
-            class="p">])</span>
+            class="n">transformationMatrix</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rotationMatrix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
+            class="n">rotationMatrix</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">translationMatrix</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span class="p">(</span><span
+            class="n">translationMatrix</span><span class="p">)</span>
 
 <div class="viewcode-block" id="TransformationMatrixProperty.setValues"><a class="viewcode-back"
-                                                                           href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.setValues">[docs]</a>    <span
+                                                                           href="../Properties/Transformations/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.setValues">[docs]</a>    <span
         class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
         class="n">kwargs</span><span class="p">):</span>
@@ -238,7 +258,7 @@
             class="n">dimensions</span><span class="p">]</span>
 
 <div class="viewcode-block" id="TransformationMatrixProperty.eulerAngles_from_R"><a class="viewcode-back"
-                                                                                    href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R">[docs]</a>    <span
+                                                                                    href="../Properties/Transformations/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R">[docs]</a>    <span
         class="k">def</span> <span class="nf">eulerAngles_from_R</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span
         class="s1">&#39;degrees&#39;</span><span class="p">):</span>
@@ -302,7 +322,7 @@
             class="n">phi</span><span class="p">,</span> <span class="n">kappa</span></div>
 
 <div class="viewcode-block" id="TransformationMatrixProperty.FromFile"><a class="viewcode-back"
-                                                                          href="../Properties/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.FromFile">[docs]</a>    <span
+                                                                          href="../Properties/Transformations/TransformationProperty.html#TransformationMatrixProperty.TransformationMatrixProperty.FromFile">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">FromFile</span><span class="p">():</span>
         <span class="k">pass</span></div></div>
@@ -348,7 +368,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -363,7 +382,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

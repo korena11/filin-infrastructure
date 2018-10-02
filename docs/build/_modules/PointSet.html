@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -299,18 +297,69 @@
 <div class="viewcode-block" id="PointSet.ToGeoPandas"><a class="viewcode-back"
                                                          href="../Datasets/PointSet.html#PointSet.PointSet.ToGeoPandas">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToGeoPandas</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">):</span>
+        class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span
+        class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param crs: coordinate spatial reference, if exists</span>
+
 <span class="sd">        :return: pointSet as GeoPandas (geoseries) object (Points)</span>
 <span class="sd">        :rtype: geopandas.geoseries</span>
 
+
+<span class="sd">        #TODO: there might be a smarter way to do it</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span
-            class="nn">geometry</span>
+        <span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">DataFrame</span>
+        <span class="kn">from</span> <span class="nn">geopandas</span> <span class="k">import</span> <span class="n">GeoDataFrame</span>
+        <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span
+            class="n">Point</span>
 
-        <span class="n">geometryPoints</span> <span class="o">=</span> <span class="n">geometry</span><span
-            class="o">.</span><span class="n">Point</span><span class="p">()</span></div>
+        <span class="c1"># Transform to pandas DataFrame</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="n">DataFrame</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">())</span>
 
+        <span class="c1"># Transform to geopandas GeoDataFrame</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="p">[</span><span
+            class="n">Point</span><span class="p">(</span><span class="n">xyz</span><span class="p">)</span> <span
+            class="k">for</span> <span class="n">xyz</span> <span class="ow">in</span> <span class="nb">zip</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">X</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Y</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Z</span><span
+            class="p">)]</span>
+        <span class="n">geodf</span> <span class="o">=</span> <span class="n">GeoDataFrame</span><span
+            class="p">(</span><span class="n">pts</span><span class="p">,</span> <span class="n">crs</span><span
+            class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">geometry</span><span
+            class="o">=</span><span class="n">geometry</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">geodf</span></div>
+
+<div class="viewcode-block" id="PointSet.ToOpen3d_pcl"><a class="viewcode-back"
+                                                          href="../Datasets/PointSet.html#PointSet.PointSet.ToOpen3d_pcl">[docs]</a>    <span
+        class="k">def</span> <span class="nf">ToOpen3d_pcl</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts to open 3D PointCloud()</span>
+
+<span class="sd">        :return: open 3D PointCloud object</span>
+
+<span class="sd">        :rtype open3d.PointCloud</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span
+            class="nn">o3d</span>
+            <span class="n">pcd</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span
+            class="n">PointCloud</span><span class="p">()</span>
+            <span class="n">pcd</span><span class="o">.</span><span class="n">points</span> <span
+            class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span
+            class="n">Vector3dVector</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">pcd</span>
+
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span
+            class="s1">&#39;The package open3D is missing. </span><span class="se">\n</span><span class="s1"> If the platform is windows it may not be possible to install&#39;</span><span
+            class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PointSet.GetPoint"><a class="viewcode-back"
@@ -365,12 +414,11 @@
             class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">kwargs</span><span
             class="p">[</span><span class="s1">&#39;XYZ&#39;</span><span class="p">]</span></div>
 
-
 <div class="viewcode-block" id="PointSet.AddData2Fields"><a class="viewcode-back"
                                                             href="../Datasets/PointSet.html#PointSet.PointSet.AddData2Fields">[docs]</a>    <span
         class="k">def</span> <span class="nf">AddData2Fields</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span
-        class="n">field</span> <span class="o">=</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">):</span>
+        class="n">field</span><span class="o">=</span><span class="s1">&#39;XYZ&#39;</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Add data to a field</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -455,7 +503,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -470,7 +517,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

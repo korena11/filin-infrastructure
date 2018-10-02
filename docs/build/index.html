@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="_static/pygments.css" type="text/css"/>
     <link rel="index" title="Index" href="genindex.html"/>
     <link rel="search" title="Search" href="search.html"/>
-    <link rel="next" title="Level Set functions and factory" href="LevelSets/LevelSets.html"/>
+    <link rel="next" title="Data set classes" href="Datasets/Datasets.html"/>
 
 
     <script src="_static/js/modernizr.min.js"></script>
@@ -59,10 +59,20 @@
 
 
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="Properties/BaseProperty.html">Property
+                        base class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="Factories/Factories.html">Factories</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal" href="LevelSets/LevelSets.html">Level Set
                         functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="Utils/Utils.html">General Utilities</a>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
                 </ul>
 
 
@@ -116,26 +126,161 @@
                                                                                           href="#welcome-to-filin-students-infrastucture-documentation"
                                                                                           title="Permalink to this headline">¶</a>
                             </h1>
-                            <p>The infrastucture is object oriented. There are three data-set object ( <code
-                                    class="xref py py-class docutils literal notranslate"><span
-                                    class="pre">PointSet</span></code>, <code
-                                    class="xref py py-class docutils literal notranslate"><span
-                                    class="pre">PointSubSet</span></code> and <code
-                                    class="xref py py-class docutils literal notranslate"><span
-                                    class="pre">RasterData</span></code> ) which have a basic set of properties, Factoy
-                                objects and Property objects.</p>
-                            <p>The Property objects relate to the data-set, and are built by a Factory object. In each
-                                Factory there several functions that build the same property, but with a different
-                                algorithm.</p>
+                            <p>The infrastucture is object oriented. There are two main data-set objects
+                                ( <a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet"
+                                     title="PointSet.PointSet"><code
+                                        class="xref py py-class docutils literal notranslate"><span
+                                        class="pre">PointSet</span></code></a>, and <a class="reference internal"
+                                                                                       href="Datasets/RasterData.html#RasterData.RasterData"
+                                                                                       title="RasterData.RasterData"><code
+                                        class="xref py py-class docutils literal notranslate"><span class="pre">RasterData</span></code></a>)which
+                                are being inherited to create new data-set objects (<code
+                                        class="xref py py-class docutils literal notranslate"><span class="pre">PointSetOpen3D</span></code>,
+                                <code class="xref py py-class docutils literal notranslate"><span class="pre">PointsSubSet</span></code>).
+                            </p>
+                            <p>These data-set objects have a basic set of properties, Factory objects and Property
+                                objects. The Property
+                                objects relate to the data-set, and are built by a Factory object.
+                                In each Factory there can be several functions that build the same property, but with a
+                                different algorithm and / or
+                                with different data-class.</p>
                             <p>Visualization is applicable through Visualization Classes.</p>
-                            <p>Other general utilities are in <code class="xref py py-mod docutils literal notranslate"><span
-                                    class="pre">MyTools</span></code>.</p>
+                            <p>Other general utilities are in <a class="reference internal"
+                                                                 href="Utils/Utils.html#module-MyTools" title="MyTools"><code
+                                    class="xref py py-mod docutils literal notranslate"><span class="pre">MyTools</span></code></a>.
+                            </p>
                         </div>
                         <div class="section" id="contents">
                             <h1>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a>
                             </h1>
                             <div class="toctree-wrapper compound">
                                 <ul>
+                                    <li class="toctree-l1"><a class="reference internal" href="Datasets/Datasets.html">Data
+                                        set classes</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Datasets/PointSet.html">PointSet class</a>
+                                                <ul>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Datasets/PointSet.html#pointsubset">PointSubSet</a>
+                                                        <ul>
+                                                            <li class="toctree-l4"><a class="reference internal"
+                                                                                      href="Datasets/PointSubSet.html">PointSubSet
+                                                                class</a></li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Datasets/RasterData.html">RasterData
+                                                class</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="Properties/BaseProperty.html">Property base
+                                        class</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/Colors/Colors.html">Point cloud
+                                                Colors</a>
+                                                <ul>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Colors/ColorProperty.html">Color
+                                                        Property</a></li>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Colors/ColorFactory.html">Color
+                                                        Factory</a></li>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Colors/RandomColors.html">Utility
+                                                        functions: RandomColors</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/Curvature/Curvature.html">Point
+                                                cloud curvature</a>
+                                                <ul>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Curvature/CurvatureProperty.html">Curvature
+                                                        Property</a></li>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Curvature/CurvatureFactory.html">Curvature
+                                                        Factory</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/EigenProperty.html">Eigen
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/NormalsProperty.html">Normals
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/PanoramaProperty.html">Panorama
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/RasterProperty.html">Raster
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/SegmentationProperty.html">Segmentation
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/SphericalProperty.html">Spherical
+                                                Property</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/Transformations/Transformation.html">Transformations</a>
+                                                <ul>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Transformations/TransformationProperty.html">Transformation
+                                                        Matrix Property</a></li>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Transformations/TransformationFactory.html">Transformation
+                                                        Matrix Factory</a></li>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Properties/Transformations/RotationUtils.html">Rotation
+                                                        Utilities</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Properties/TriangulationProperty.html">Triangulation
+                                                Property</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="Factories/Factories.html">Factories</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/IOFactory.html">IO Factory</a>
+                                                <ul>
+                                                    <li class="toctree-l3"><a class="reference internal"
+                                                                              href="Factories/IOFactory.html#reading-functions">Reading
+                                                        Functions</a></li>
+                                                </ul>
+                                            </li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/FilterFactory.html">Filter
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/NormalsFactory.html">Normals
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/NeighborsFactory.html">Neighbors
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/PanoramaFactory.html">Panorama
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/RasterFactory.html">Raster
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/SegmentationFactory.html">Segmentation
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/SphericalCoordinatesFactory.html">SphericalCoordinates
+                                                Factory</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Factories/TriangulationFactory.html">Triangulation
+                                                Factory</a></li>
+                                        </ul>
+                                    </li>
                                     <li class="toctree-l1"><a class="reference internal"
                                                               href="LevelSets/LevelSets.html">Level Set functions and
                                         factory</a>
@@ -151,8 +296,22 @@
                                                 computations</a></li>
                                         </ul>
                                     </li>
+                                    <li class="toctree-l1"><a class="reference internal" href="Utils/EigenFactory.html">Eigen
+                                        Factory Documentation</a></li>
                                     <li class="toctree-l1"><a class="reference internal" href="Utils/Utils.html">General
                                         Utilities</a></li>
+                                    <li class="toctree-l1"><a class="reference internal"
+                                                              href="Visualizations/Visualization.html">Visualization
+                                        Classes</a>
+                                        <ul>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Visualizations/PointSetVisualization.html">Visualization
+                                                Documentation</a></li>
+                                            <li class="toctree-l2"><a class="reference internal"
+                                                                      href="Visualizations/RasterVisualization.html">Raster
+                                                Visualization Documentation</a></li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -216,7 +375,81 @@
                             <div class="section" id="references">
                                 <h2>References<a class="headerlink" href="#references"
                                                  title="Permalink to this headline">¶</a></h2>
-                                <p id="bibtex-bibliography-index-0"></p>
+                                <p id="bibtex-bibliography-index-0">
+                                <table class="docutils citation" frame="void" id="arav2013" rules="none">
+                                    <colgroup>
+                                        <col class="label"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    <tr>
+                                        <td class="label">[1]</td>
+                                        <td>Reuma Arav. Detection of changes in dynamic geomorphological environments
+                                            using airborne and terrestrial laser scanning datasets. Master’s thesis,
+                                            Technion - Israel Institute of Technology, 2013.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="docutils citation" frame="void" id="caselles-etal1997" rules="none">
+                                    <colgroup>
+                                        <col class="label"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    <tr>
+                                        <td class="label">[2]</td>
+                                        <td>Vicent Caselles, Ron Kimmel, and Guillermo Sapiro. Geodesic active contours.
+                                            <em>International journal of computer vision</em>, 22(1):61–79, 1997.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="docutils citation" frame="void" id="li-etal2006" rules="none">
+                                    <colgroup>
+                                        <col class="label"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    <tr>
+                                        <td class="label">[3]</td>
+                                        <td>Min Li, Chandra Kambhamettu, and Maureen Stone. A level set approach for
+                                            shape recovery of open contours. <em>Computer Vision–ACCV 2006</em>, pages
+                                            601–611, 2006.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="docutils citation" frame="void" id="vese-chan2002" rules="none">
+                                    <colgroup>
+                                        <col class="label"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    <tr>
+                                        <td class="label">[4]</td>
+                                        <td>Luminita&nbsp;A Vese and Tony&nbsp;F Chan. A multiphase level set framework
+                                            for image segmentation using the mumford and shah model. <em>International
+                                                journal of computer vision</em>, 50(3):271–293, 2002.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <table class="docutils citation" frame="void" id="zeibak2008" rules="none">
+                                    <colgroup>
+                                        <col class="label"/>
+                                        <col/>
+                                    </colgroup>
+                                    <tbody valign="top">
+                                    <tr>
+                                        <td class="label">[5]</td>
+                                        <td>R.&nbsp;Zeibak. Change detection via terrestrial laser scanning. Master’s
+                                            thesis, Technion - Israel Institute of Technology, Haifa, April 2008.
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </p>
                             </div>
                         </div>
                         <div class="section" id="indices-and-tables">
@@ -240,9 +473,8 @@
 
                     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
 
-                        <a href="LevelSets/LevelSets.html" class="btn btn-neutral float-right"
-                           title="Level Set functions and factory" accesskey="n" rel="next">Next <span
-                                class="fa fa-arrow-circle-right"></span></a>
+                        <a href="Datasets/Datasets.html" class="btn btn-neutral float-right" title="Data set classes"
+                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
                     </div>

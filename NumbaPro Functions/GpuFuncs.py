@@ -1,10 +1,12 @@
-from PC_registration import *
-from numbapro import float64, float32, int32, int64, jit, vectorize, bool_, autojit, cuda
-import numpy as np
 import time
-from PointSet import PointSet
+
+import numpy as np
+from PC_registration import *
+from numbapro import jit, vectorize, cuda
+
 from NeighborsFactory import NeighborsFactory
-from IOFactory import IOFactory
+from PointSet import PointSet
+
 
 def Negetive(vec):
     return -vec

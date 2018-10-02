@@ -11,11 +11,29 @@ class TransformationMatrixProperty(BaseProperty):
     """
     __transformMatrix = np.array(np.zeros((4, 4)))
 
-
-    def __init__(self, points, **kwargs):
+    def __init__(self, points, transformationMatrix=None, translationMatrix=None, rotationMatrix=None):
+        """
+        
+        :param points: the point set 
+        :param transformationMatrix: 4x4 transformation matrix which includes both rotation and translation 
+        :param translationMatrix: 3x1 or 3x3 translation matrix 
+        :param rotationMatrix:  3x3 rotation matrix
+        
+        :type points: PointSet
+        :type transformationMatrix: np.ndarray
+        :type translationMatrix: np.ndarray
+        :type rotationMatrix: np.ndarray
+        
+        """
         super(TransformationMatrixProperty, self).__init__(points)
-        if 'transformationMatrix' in kwargs:
-            self.setValues(kwargs['transformationMatrix'])
+        if transformationMatrix:
+            self.setValues(transformationMatrix)
+
+        if rotationMatrix:
+            self.setValues(rotationMatrix)
+
+        if translationMatrix:
+            self.setValues(translationMatrix)
 
     def setValues(self, *args, **kwargs):
         """

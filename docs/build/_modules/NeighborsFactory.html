@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -130,10 +128,13 @@
                                 class="n">where</span><span class="p">,</span> <span class="n">hstack</span><span
                                 class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">rad2deg</span><span
                                 class="p">,</span> <span class="n">expand_dims</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span
                                 class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">BallTree</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">Delaunay</span>
 
+<span class="c1"># Infrastructure imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
@@ -147,6 +148,34 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find neighbors of a given points using different methods  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="NeighborsFactory.CalculateAllPointsNeighbors"><a class="viewcode-back"
+                                                                                 href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">CalculateAllPointsNeighbors</span><span class="p">(</span><span
+            class="n">pointSetOpen3D</span><span class="p">,</span> <span class="n">searchRadius</span><span
+            class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">maxNN</span><span
+            class="o">=</span><span class="mi">20</span><span class="p">,</span> <span
+            class="n">maxProcesses</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+        <span class="c1"># threadsList = []</span>
+        <span class="c1"># pointsIndices = np.arange(self.numberOfPoints)</span>
+        <span class="c1"># splitIndices = np.array_split(pointsIndices, maxProcesses)</span>
+        <span class="c1"># p = Pool(maxProcesses)</span>
+        <span class="c1"># filledFunction = partial(self.GetPointsNeighborsByID, searchRadius=searchRadius, maxNN=maxNN,</span>
+        <span class="c1">#                          returnValues=False)</span>
+        <span class="c1"># p.map(filledFunction, splitIndices)</span>
+        <span class="c1"># p.map(self.GetPointsNeighborsByID, splitIndices, [searchRadius] * maxProcesses, [maxNN] * maxProcesses,</span>
+        <span class="c1"># [False] * maxProcesses)</span>
+        <span class="c1"># print(&quot;Done??????&quot;)</span>
+
+        <span class="c1"># Function will be used with multiprocessing, not relevant to run it without.</span>
+        <span class="n">pointsIndices</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pointSetOpen3D</span><span
+            class="o">.</span><span class="n">numberOfPoints</span><span class="p">)</span>
+        <span class="n">pointSetOpen3D</span><span class="o">.</span><span class="n">GetPointsNeighborsByID</span><span
+            class="p">(</span><span class="n">pointsIndices</span><span class="p">,</span> <span
+            class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span
+            class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="NeighborsFactory.GetNeighborsIn3dRange"><a class="viewcode-back"
                                                                            href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange">[docs]</a>    <span
@@ -307,7 +336,7 @@
             class="n">inf</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
         <span class="k">return</span> <span class="n">PointSubSet</span><span class="p">(</span><span
             class="n">pntSet</span><span class="p">,</span> <span class="n">neighbor</span><span
-            class="p">)</span></div>
+            class="p">),</span> <span class="n">tree</span></div>
 
 <div class="viewcode-block" id="NeighborsFactory.GetNeighborsIn3dRange_BallTree"><a class="viewcode-back"
                                                                                     href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_BallTree">[docs]</a>    <span
@@ -475,7 +504,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -490,7 +518,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

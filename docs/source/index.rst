@@ -2,9 +2,14 @@ Welcome to Filin Students' infrastucture documentation!
 ========================================================
 
 
-The infrastucture is object oriented. There are three data-set object ( :class:`~PointSet.PointSet`, :class:`~PointSubSet.PointSubSet` and :class:`~RasterData.RasterData` ) which have a basic set of properties, Factoy objects and Property objects. 
+The infrastucture is object oriented. There are two main data-set objects
+( :class:`~PointSet.PointSet`, and :class:`~RasterData.RasterData`)which are being inherited to create new data-set objects (:class:`~PointSetOpen3D.PointSetOpen3D`,
+:class:`~PointSubSet.PointsSubSet`).
 
-The Property objects relate to the data-set, and are built by a Factory object. In each Factory there several functions that build the same property, but with a different algorithm. 
+These data-set objects have a basic set of properties, Factory objects and Property objects. The Property
+objects relate to the data-set, and are built by a Factory object.
+In each Factory there can be several functions that build the same property, but with a different algorithm and \/ or
+with different data-class.
 
 Visualization is applicable through Visualization Classes. 
 
@@ -15,8 +20,7 @@ Contents:
 
 .. toctree::
 
-    Datasets/PointSet
-    Datasets/RasterData
+    Datasets/Datasets
     Properties/BaseProperty
     Factories/Factories
     LevelSets/LevelSets

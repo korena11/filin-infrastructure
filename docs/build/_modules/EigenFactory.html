@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -144,6 +142,8 @@
 <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">computeImageDerivatives</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
+
+
 <div class="viewcode-block" id="EigenFactory"><a class="viewcode-back"
                                                  href="../Utils/EigenFactory.html#EigenFactory.EigenFactory">[docs]</a><span
         class="k">class</span> <span class="nc">EigenFactory</span><span class="p">:</span>
@@ -152,9 +152,9 @@
                                                            href="../Utils/EigenFactory.html#EigenFactory.EigenFactory.eigen_PCA">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">eigen_PCA</span><span class="p">(</span><span
-            class="n">points</span><span class="p">,</span> <span class="n">rad</span> <span class="o">=</span> <span
-            class="kc">None</span><span class="p">,</span> <span class="n">pt_index</span> <span
-            class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            class="n">points</span><span class="p">,</span> <span class="n">rad</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">,</span> <span class="n">pt_index</span><span class="o">=-</span><span
+            class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute eigenvalues and eigenvectors about a point.</span>
 
@@ -249,7 +249,7 @@
             class="n">data</span><span class="p">,</span> <span class="n">winsize</span><span class="p">,</span> <span
             class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span
             class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the eigenvalues and eigenvectors from the Hessian Matrix</span>
 
 <span class="sd">        Eigenvalues computation (numerically) - (eq. 3-36, Amit Baruch dissertation) instead of</span>
@@ -264,19 +264,19 @@
 <span class="sd">           {{Z}_{yx}} &amp; {{Z}_{yy}}  \\</span>
 <span class="sd">           \end{bmatrix}</span>
 
-<span class="sd">        Substituting it in .. math:: \text{det}\left(\mathbf{H}-\lambda \mathbf{I} leads to:</span>
+<span class="sd">        Substituting it in :math:`\text{det}\left(\mathbf{H}-\lambda \mathbf{I}` leads to:</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           \[{{\lambda }^{2}}-\lambda \left( {{Z}_{xx}}+{{Z}_{yy}} \right)+\left( {{Z}_{xx}}{{Z}_{yy}}-Z_{xy}^{2}</span>
-<span class="sd">           \right)=0\]</span>
+<span class="sd">           {\lambda }^{2}-\lambda \left( {{Z}_{xx}}+{{Z}_{yy}} \right)+\left( {{Z}_{xx}}{{Z}_{yy}}-Z_{xy}^{2}</span>
+<span class="sd">           \right)=0</span>
 
 <span class="sd">        Solving results in the maximum and minimum eigenvalues:</span>
 
 <span class="sd">        .. math::</span>
 
-<span class="sd">           \[{{\lambda }_{\min ,\max }}=\frac{{{Z}_{xx}}+{{Z}_{yy}}\pm \sqrt{{{\left( {{Z}_{xx}}-{{Z}_{yy}} \right)}^{2}}</span>
-<span class="sd">           +4\cdot Z_{xy}^{2}}}{2}\]</span>
+<span class="sd">           {\lambda }_{\min ,\max }=\frac{{{Z}_{xx}}+{{Z}_{yy}}\pm \sqrt{{{\left( {{Z}_{xx}}-{{Z}_{yy}} \right)}^{2}}</span>
+<span class="sd">           +4\cdot Z_{xy}^{2}}}{2}</span>
 
 <span class="sd">        .. warning::</span>
 <span class="sd">           This function does not compute eigenvectors, *only* minimal and maximal eigen values.</span>
@@ -288,7 +288,7 @@
 <span class="sd">        :rtype: tuple</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1">#TODO apply for PointSet data</span>
+        <span class="c1"># TODO apply for PointSet data</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">data</span><span class="p">,</span> <span class="n">RasterData</span><span class="p">):</span>
@@ -296,8 +296,8 @@
             class="n">dxx</span><span class="p">,</span> <span class="n">dyy</span><span class="p">,</span> <span
             class="n">dxy</span> <span class="o">=</span> <span class="n">computeImageDerivatives</span><span class="p">(</span><span
             class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span
-            class="n">order</span> <span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span
-            class="n">ksize</span> <span class="o">=</span> <span class="n">winsize</span><span class="p">,</span> <span
+            class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span
+            class="n">ksize</span><span class="o">=</span><span class="n">winsize</span><span class="p">,</span> <span
             class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
 
             <span class="c1"># Eigenvalues computation (numerically) - (eq. 3 - 36, Amit Baruch dissertation)</span>
@@ -305,19 +305,19 @@
             <span class="n">b</span> <span class="o">=</span> <span class="o">-</span> <span class="n">dyy</span> <span
             class="o">-</span> <span class="n">dxx</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">dxx</span> <span class="o">*</span> <span
-            class="n">dyy</span> <span class="o">-</span> <span class="n">dxy</span><span class="o">**</span><span
+            class="n">dyy</span> <span class="o">-</span> <span class="n">dxy</span> <span class="o">**</span> <span
             class="mi">2</span>
             <span class="n">eigMax</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">real</span><span class="p">((</span><span class="o">-</span> <span
             class="n">b</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">sqrt</span><span class="p">(</span><span class="n">b</span><span class="o">**</span><span
+            class="n">sqrt</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span
             class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span
-            class="n">c</span><span class="p">))</span><span class="o">/</span> <span class="mi">2</span><span
+            class="n">c</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span
             class="p">)</span>
             <span class="n">eigMin</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">real</span><span class="p">((</span><span class="o">-</span> <span
             class="n">b</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">sqrt</span><span class="p">(</span><span class="n">b</span><span class="o">**</span><span
+            class="n">sqrt</span><span class="p">(</span><span class="n">b</span> <span class="o">**</span> <span
             class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span
             class="n">c</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span
             class="p">)</span>
@@ -367,7 +367,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -382,7 +381,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

@@ -14,7 +14,7 @@ if platform.system() == 'Linux':
 import numpy as np
 from numpy import pi, cos, sin
 from matplotlib import pyplot as plt
-from CurvatureFactory import CurvatureFactory
+from Curvature.CurvatureFactory import CurvatureFactory
 from PointSet import PointSet
 
 if __name__ == '__main__':

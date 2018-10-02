@@ -13,7 +13,7 @@ import numpy as np
 
 from ColorFactory import ColorFactory
 from PointSet import PointSet
-from TransformationMatrixProperty import TransformationMatrixProperty
+from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
 
 
 def ReadPts(filename, pointsetlist=list(), colorslist=list(), merge=True):
@@ -211,6 +211,36 @@ def ReadLAS(filename):
 
     """
     pass
+
+
+def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
+    '''
+    Reads a file into a PointSetOpen3D object
+
+    :param file_path: Path of pointcloud file
+    :param voxel_size: If >0 then decimate point cloud with this parameter as min points distance
+    :param print_bb: Print boundarybox values
+
+    :type: str
+    :type: Positive double
+    :type: bool
+
+    :return: pointsetExtra Object
+    :rtype: PointSetExtra
+
+    '''
+    import sys
+    if sys.platform == "linux":
+        import open3d as O3D
+        from PointSetOpen3D import PointSetOpen3D
+
+        # Read Point Cloud
+        input_cloud = O3D.read_point_cloud(file_path)
+
+        pointsetExtra = PointSetOpen3D(input_cloud)
+        pointsetExtra.DownsampleCloud(voxel_size)
+
+        return pointsetExtra
 
 
 def __splitPtsString(line):

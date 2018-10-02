@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -152,10 +150,10 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">CreatePanorama_byPoints</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-            class="n">azimuthSpacing</span> <span class="o">=</span> <span class="mf">0.057</span><span
-            class="p">,</span> <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="mf">0.057</span><span class="p">,</span>
-                                <span class="n">intensity</span> <span class="o">=</span> <span
+            class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.057</span><span class="p">,</span> <span
+            class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.057</span><span
+            class="p">,</span>
+                                <span class="n">intensity</span><span class="o">=</span><span
             class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -204,10 +202,9 @@
             class="p">)</span> <span class="o">=</span> \
             <span class="bp">cls</span><span class="o">.</span><span class="n">__computePanoramaIndices</span><span
             class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span
-            class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
+            class="n">azimuthSpacing</span><span class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                         <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">)</span>
 
         <span class="c1"># Create the panorama</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">intensity</span><span class="p">:</span>
@@ -217,16 +214,15 @@
             class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span
             class="p">,</span> <span class="n">sphCoords</span><span class="o">.</span><span
             class="n">Ranges</span><span class="p">,</span>
-                                        <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">)</span>
+                                        <span class="n">minAzimuth</span><span class="o">=</span><span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span><span
+            class="o">=</span><span class="n">maxAz</span><span class="p">,</span>
+                                        <span class="n">minElevation</span><span class="o">=</span><span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span
+            class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span
+            class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                        <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1">#  intensity as pixel value</span>
@@ -235,22 +231,21 @@
             class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span
             class="p">,</span> <span class="n">points</span><span class="o">.</span><span
             class="n">Intensity</span><span class="p">,</span>
-                                        <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">)</span>
+                                        <span class="n">minAzimuth</span><span class="o">=</span><span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span><span
+            class="o">=</span><span class="n">maxAz</span><span class="p">,</span>
+                                        <span class="n">minElevation</span><span class="o">=</span><span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span
+            class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span
+            class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                        <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">void_as_mean</span><span class="p">:</span>
             <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span
             class="o">.</span><span class="n">Ranges</span><span class="p">)</span>
             <span class="n">panorama</span><span class="o">.</span><span class="n">setValues</span><span
-            class="p">(</span><span class="n">voidData</span> <span class="o">=</span> <span class="n">void</span><span
+            class="p">(</span><span class="n">voidData</span><span class="o">=</span><span class="n">void</span><span
             class="p">)</span>
 
         <span class="k">return</span> <span class="n">panorama</span></div>
@@ -260,10 +255,10 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">CreatePanorama_byProperty</span><span class="p">(</span><span
             class="bp">cls</span><span class="p">,</span> <span class="n">pointSet_property</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span
-            class="mf">0.057</span><span class="p">,</span> <span class="n">elevationSpacing</span> <span
-            class="o">=</span> <span class="mf">0.057</span><span class="p">,</span>
-                                  <span class="n">intensity</span> <span class="o">=</span> <span
+            class="p">,</span> <span class="n">azimuthSpacing</span><span class="o">=</span><span
+            class="mf">0.057</span><span class="p">,</span> <span class="n">elevationSpacing</span><span
+            class="o">=</span><span class="mf">0.057</span><span class="p">,</span>
+                                  <span class="n">intensity</span><span class="o">=</span><span
             class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -311,10 +306,9 @@
             class="p">)</span> <span class="o">=</span> \
             <span class="bp">cls</span><span class="o">.</span><span class="n">__computePanoramaIndices</span><span
             class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span
-            class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                         <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
+            class="n">azimuthSpacing</span><span class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                         <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">intensity</span><span class="p">:</span>
             <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaProperty</span><span
@@ -322,37 +316,37 @@
             class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span
             class="p">,</span> <span class="n">pointSet_property</span><span class="o">.</span><span
             class="n">getValues</span><span class="p">(),</span>
-                                        <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
+                                        <span class="n">minAzimuth</span><span class="o">=</span><span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span><span
+            class="o">=</span><span class="n">maxAz</span><span class="p">,</span>
+                                        <span class="n">minElevation</span><span class="o">=</span><span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span
+            class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span
+            class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                        <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaProperty</span><span
             class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span
             class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span
             class="p">,</span> <span class="n">pointSet_property</span><span class="o">.</span><span
             class="n">Points</span><span class="o">.</span><span class="n">Intensity</span><span class="p">,</span>
-                                        <span class="n">minAzimuth</span> <span class="o">=</span> <span
-            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span> <span
-            class="o">=</span> <span class="n">maxAz</span><span class="p">,</span>
-                                        <span class="n">minElevation</span> <span class="o">=</span> <span class="n">minEl</span><span
-            class="p">,</span> <span class="n">maxElevation</span> <span class="o">=</span> <span class="n">maxEl</span><span
-            class="p">,</span> <span class="n">azimuthSpacing</span> <span class="o">=</span> <span class="n">azimuthSpacing</span><span
-            class="p">,</span>
-                                        <span class="n">elevationSpacing</span> <span class="o">=</span> <span
-            class="n">elevationSpacing</span><span class="p">)</span>
+                                        <span class="n">minAzimuth</span><span class="o">=</span><span
+            class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span><span
+            class="o">=</span><span class="n">maxAz</span><span class="p">,</span>
+                                        <span class="n">minElevation</span><span class="o">=</span><span
+            class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span
+            class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span
+            class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
+                                        <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span
+            class="p">)</span>
 
         <span class="k">if</span> <span class="n">void_as_mean</span><span class="p">:</span>
             <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span
             class="o">.</span><span class="n">Ranges</span><span class="p">)</span>
             <span class="n">panorama</span><span class="o">.</span><span class="n">setValues</span><span
-            class="p">(</span><span class="n">voidData</span> <span class="o">=</span> <span class="n">void</span><span
+            class="p">(</span><span class="n">voidData</span><span class="o">=</span><span class="n">void</span><span
             class="p">)</span>
 
         <span class="k">return</span> <span class="n">panorama</span></div>
@@ -456,7 +450,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -471,7 +464,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

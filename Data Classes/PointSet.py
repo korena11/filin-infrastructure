@@ -158,10 +158,15 @@ class PointSet(BaseData):
 
         :rtype open3d.PointCloud
         """
-        import platform
 
-        if platform.system() == 'Linux':
-            pass
+        try:
+            import open3d as o3d
+            pcd = o3d.PointCloud()
+            pcd.points = o3d.Vector3dVector(self.ToNumpy())
+            return pcd
+
+        except ImportError:
+            print('The package open3D is missing. \n If the platform is windows it may not be possible to install')
 
 
     def GetPoint(self, index):

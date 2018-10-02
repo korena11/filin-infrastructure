@@ -1,4 +1,5 @@
 # import mayavi.mlab as mlab
+import sys
 from warnings import warn
 
 import numpy as np
@@ -7,6 +8,9 @@ from sklearn.neighbors import BallTree, KDTree
 
 from Normals.NormalsProperty import NormalsProperty
 from PointSet import PointSet
+
+if sys.platform == 'linux':
+    pass
 
 
 class NormalsFactory:
@@ -197,57 +201,58 @@ class NormalsFactory:
         return n
 
     @staticmethod
-    def normals_open3D(pointset):
+    def normals_open3D(pointcloud):
         """
         Computes the normals using open 3D
 
-        :param pointset: a point set object
+        :param pointcloud: an open 3d point cloud object
+        :type pointcloud: open3d.PointCloud
 
-        :return:
+        :return: normals property and the pointcloud with normals
         """
-    
+
     @staticmethod
     def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
 
         indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
         return mean(normals[indices], axis=0)
 
-    @staticmethod
-    def VtkNormals(points, triangulation=None):
-        """
-        Calculate normals for each points as average of normals of trianges to which the points belongs to.
-        If no triangulation is given, use TriangulationFactory.Delaunay2D
-
-        :Args:
-
-            - points: PointSet/PointSubSet object
-            - triangulation: triangulationProperty
-
-
-
-        :Returns:
-            - NormalsProperty
-        """
-        polyData = points.ToPolyData
-
-        if triangulation == None:
-            triangulation = TriangulationFactory.Delaunay2D(points)
-
-        polyData.polys = triangulation.TrianglesIndices()
-
-        compute_normals = mlab.pipeline.poly_data_normals(polyData)
-
-        #        normals = compute_normals.outputs[0].point_data.normals.to_array()
-
-        mlab.close()
-
-        normals = asarray(map(partial(NormalsFactory.__CalcAverageNormal,
-                                      normalsPoints=compute_normals.outputs[0].points.to_array(),
-                                      normals=compute_normals.outputs[0].point_data.normals.to_array()), points.X,
-                              points.Y, points.Z))
-        normals = compute_normals.outputs[0].point_data.normals.to_array()[0: points.Size]
-
-        return NormalsProperty(points, normals)
+    # @staticmethod
+    # def VtkNormals(points, triangulation=None):
+    #     """
+    #     Calculate normals for each points as average of normals of trianges to which the points belongs to.
+    #     If no triangulation is given, use TriangulationFactory.Delaunay2D
+    #
+    #     :Args:
+    #
+    #         - points: PointSet/PointSubSet object
+    #         - triangulation: triangulationProperty
+    #
+    #
+    #
+    #     :Returns:
+    #         - NormalsProperty
+    #     """
+    #     polyData = points.ToPolyData
+    #
+    #     if triangulation == None:
+    #         triangulation = TriangulationFactory.Delaunay2D(points)
+    #
+    #     polyData.polys = triangulation.TrianglesIndices()
+    #
+    #     compute_normals = mlab.pipeline.poly_data_normals(polyData)
+    #
+    #     #        normals = compute_normals.outputs[0].point_data.normals.to_array()
+    #
+    #     mlab.close()
+    #
+    #     normals = asarray(map(partial(NormalsFactory.__CalcAverageNormal,
+    #                                   normalsPoints=compute_normals.outputs[0].points.to_array(),
+    #                                   normals=compute_normals.outputs[0].point_data.normals.to_array()), points.X,
+    #                           points.Y, points.Z))
+    #     normals = compute_normals.outputs[0].point_data.normals.to_array()[0: points.Size]
+    #
+    #     return NormalsProperty(points, normals)
 
 
 #

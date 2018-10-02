@@ -4,48 +4,34 @@ Created on Dec 2, 2014
 @author: Vera
 '''
 
-import numpy as np
-from scipy import spatial
-from scipy.linalg import inv as invSp
-from mayavi import mlab
+import datetime
+# from mayavi import mlab
 import functools
 import itertools
+
 import matplotlib.pyplot as plt
-
-from IOFactory import IOFactory
-from Visualization import Visualization
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from SphericalCoordinatesFactory import SphericalCoordinatesFactory 
-from SegmentationFactory import SegmentationFactory
-from ColorProperty import ColorProperty
-from NeighborsFactory import NeighborsFactory
-from NormalsProperty import NormalsProperty
-from TriangulationFactory import TriangulationFactory
-from TriangulationProperty import TriangulationProperty
-
-from scipy.spatial import Delaunay
-from scipy.spatial import cKDTree
+import numpy as np
 import scipy.cluster.hierarchy as hac
 import scipy.spatial.distance as distance
-from scipy.stats.stats import pearsonr 
-from scipy import signal  
-
-from sklearn.cluster import DBSCAN
-from sklearn import metrics
-from sklearn.datasets.samples_generator import make_blobs
-from sklearn.preprocessing import StandardScaler
-from sklearn.neighbors import BallTree
-
-import cProfile, pstats, StringIO
-from numba import jit, autojit, double, f8, i4
-import datetime
-from keyring.tests.backends.test_pyfs import ReverseCrypter
 from matplotlib.mlab import PCA
+from numba import jit, double, i4
+from scipy import signal
+from scipy import spatial
+from scipy.spatial import Delaunay
+from scipy.spatial import cKDTree
+
+from IOFactory import IOFactory
+from NeighborsFactory import NeighborsFactory
+# from Visualization import Visualization
+from PointSet import PointSet
+from PointSubSet import PointSubSet
+from SphericalCoordinatesFactory import SphericalCoordinatesFactory
+from TriangulationFactory import TriangulationFactory
 
 
 def Curvature_Euler(pnt, pntNormal, coeff, points_normals):
     '''
+
     according to: 2008 - Zhang etal. Curvature estimation of 3D point cloud surfaces through the fitting of normal curvatures.
     :Args:
         - pnt: array 3x1 point of interest

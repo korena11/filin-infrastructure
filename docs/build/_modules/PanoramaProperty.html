@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -157,11 +155,12 @@
     <span class="n">__elevationSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the elevation angle direction</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">sphericalCoordinates</span><span class="p">,</span> <span class="n">rowIndexes</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">columnIndexes</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">panoramaData</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">):</span>
+            class="p">,</span> <span class="n">sphericalCoordinates</span><span class="p">,</span> <span class="n">rowIndexes</span><span
+            class="o">=</span><span class="kc">None</span><span class="p">,</span> <span
+            class="n">columnIndexes</span><span class="o">=</span><span class="kc">None</span><span
+            class="p">,</span> <span class="n">panoramaData</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constuctor - Creates a panoramic view of the data sent</span>
 
@@ -447,6 +446,8 @@
 
 <span class="sd">        :return: a pointsubset according to the bounding box</span>
 <span class="sd">        :rtype: PointSubSet</span>
+
+<span class="sd">        :TODO: Return panorama property of the subset and not the subset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">row_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
@@ -475,11 +476,10 @@
 <div class="viewcode-block" id="PanoramaProperty.normals"><a class="viewcode-back"
                                                              href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.normals">[docs]</a>    <span
         class="k">def</span> <span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span
-        class="p">,</span> <span class="n">phenomenaSize</span> <span class="o">=</span> <span
-        class="mf">0.2</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span
-        class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span
-        class="p">),</span> <span class="n">gradientType</span> <span class="o">=</span> <span
-        class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="o">**</span><span
+        class="p">,</span> <span class="n">phenomenaSize</span><span class="o">=</span><span class="mf">0.2</span><span
+        class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span
+        class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">gradientType</span><span
+        class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="o">**</span><span
         class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computing gradients and normals in each direction, via adaptive smoothing according to :cite:`Arav2013`</span>
@@ -567,9 +567,9 @@
             class="nn">mt</span>
         <span class="n">gradient</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span
             class="n">computeImageGradient</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span
-            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">,</span> <span
-            class="n">sigma</span> <span class="o">=</span> <span class="n">sigma</span><span class="p">,</span> <span
-            class="n">gradientType</span> <span class="o">=</span> <span class="n">gradientType</span><span
+            class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span
+            class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span
+            class="n">gradientType</span><span class="o">=</span><span class="n">gradientType</span><span
             class="p">)</span>
 
         <span class="c1"># Computing Normal vectors</span>
@@ -832,7 +832,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -847,7 +846,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

@@ -1,8 +1,10 @@
+import numpy as np
 from matplotlib.path import Path
 from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree
 
+# Infrastructure imports
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
@@ -12,6 +14,24 @@ class NeighborsFactory:
     """
     Find neighbors of a given points using different methods  
     """
+
+    @staticmethod
+    def CalculateAllPointsNeighbors(pointSetOpen3D, searchRadius=0.05, maxNN=20, maxProcesses=8):
+        # threadsList = []
+        # pointsIndices = np.arange(self.numberOfPoints)
+        # splitIndices = np.array_split(pointsIndices, maxProcesses)
+        # p = Pool(maxProcesses)
+        # filledFunction = partial(self.GetPointsNeighborsByID, searchRadius=searchRadius, maxNN=maxNN,
+        #                          returnValues=False)
+        # p.map(filledFunction, splitIndices)
+        # p.map(self.GetPointsNeighborsByID, splitIndices, [searchRadius] * maxProcesses, [maxNN] * maxProcesses,
+        # [False] * maxProcesses)
+        # print("Done??????")
+
+        # Function will be used with multiprocessing, not relevant to run it without.
+        pointsIndices = np.arange(pointSetOpen3D.numberOfPoints)
+        pointSetOpen3D.GetPointsNeighborsByID(pointsIndices, searchRadius, maxNN, False)
+
 
     @staticmethod
     def GetNeighborsIn3dRange(points, x, y, z, radius):

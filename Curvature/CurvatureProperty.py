@@ -61,8 +61,10 @@ class CurvatureProperty(BaseProperty):
         Gaussian curvature
 
         Computed by
+
         .. math::
-           \lambda_{\max} \cdot \lambda_{\min}
+
+           \kappa_{Gaussian}=\lambda_{\max} \cdot \lambda_{\min}
 
         '''
         return self.k1 * self.k2
@@ -72,8 +74,9 @@ class CurvatureProperty(BaseProperty):
         r'''
         Curvadness property defined by
 
-        ..math::
-            \sqrt{\frac{\lambda_\max ^2 + \lambda_\min ^2}{2}}
+        .. math::
+
+            \kappa_{curvadness}=\sqrt{\frac{\lambda_\max ^2 + \lambda_\min ^2}{2}}
 
         '''
         return np.sqrt((self.k1 ** 2 + self.k2 ** 2) / 2)

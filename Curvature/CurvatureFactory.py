@@ -1,9 +1,9 @@
 import numpy as np
 
-from CurvatureProperty import CurvatureProperty
+from Curvature.CurvatureProperty import CurvatureProperty
 from EigenFactory import EigenFactory
 from NeighborsFactory import NeighborsFactory
-from RotationMatrixFactory import RotationMatrixFactory
+from Transformations.TransformationMatrixFactory import RotationMatrixFactory
 
 
 class CurvatureFactory():
@@ -123,6 +123,7 @@ class CurvatureFactory():
         Computes the curvature for each point in the point cloud according to three parameters.
 
         Main idea:
+     
         1. Find neighbors
 
         2. Rotate so that the normal will be [0 0 1]

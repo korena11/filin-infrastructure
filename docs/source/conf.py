@@ -39,17 +39,23 @@ from sphinx.ext.autosummary import get_documenter
 from sphinx.util.inspect import safe_getattr
 
 sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../../Property Classes'))
+sys.path.insert(0, os.path.abspath('../../Curvature'))
 sys.path.insert(0, os.path.abspath('../../Data Classes'))
 sys.path.insert(0, os.path.abspath('../../Factory Classes'))
-sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
 sys.path.insert(0, os.path.abspath('../../IO modules'))
+sys.path.insert(0, os.path.abspath('../../LevelSets'))
+sys.path.insert(0, os.path.abspath('../../Neighborhood'))
 sys.path.insert(0, os.path.abspath('../../Normals'))
 sys.path.insert(0, os.path.abspath('../../Panoramas'))
-sys.path.insert(0, os.path.abspath('../../LevelSets'))
-sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
+sys.path.insert(0, os.path.abspath('../../Property Classes'))
 sys.path.insert(0, os.path.abspath('../../Third Party'))
+sys.path.insert(0, os.path.abspath('../../Transformations'))
 sys.path.insert(0, os.path.abspath('../../Utils'))
+sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
+
+sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
+
+
 
 extensions = [
     'sphinx.ext.autodoc',

@@ -1,10 +1,9 @@
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from Visualization import Visualization
+from random import randint
+
 from IOFactory import IOFactory
 from NeighborsFactory import NeighborsFactory
-from numpy import mean
-from random import randint 
+from PointSubSet import PointSubSet
+from Visualization import Visualization
 
 if __name__ == "__main__":
     

@@ -58,11 +58,9 @@
 
 
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
-                        class</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
                         base class</a></li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
@@ -301,9 +299,9 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">ReadPts</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span
-            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(),</span> <span class="n">colorslist</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(),</span> <span class="n">merge</span> <span class="o">=</span> <span class="kc">True</span><span
+            class="n">pointsetlist</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span
+            class="n">colorslist</span><span class="o">=</span><span class="nb">list</span><span
+            class="p">(),</span> <span class="n">merge</span><span class="o">=</span><span class="kc">True</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told</span>
@@ -338,12 +336,11 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">ReadPtx</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span
-            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(),</span> <span class="n">colorslist</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(),</span> <span class="n">trasformationMatrices</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="n">pointsetlist</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span
+            class="n">colorslist</span><span class="o">=</span><span class="nb">list</span><span
+            class="p">(),</span> <span class="n">trasformationMatrices</span><span class="o">=</span><span class="nb">list</span><span
             class="p">(),</span>
-                <span class="n">remove_empty</span> <span class="o">=</span> <span class="kc">True</span><span
-            class="p">):</span>
+                <span class="n">remove_empty</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads .ptx file, created by Leica Cyclone</span>
@@ -383,9 +380,8 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">ReadXYZ</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span
-            class="n">pointsetlist</span> <span class="o">=</span> <span class="nb">list</span><span
-            class="p">(),</span> <span class="n">merge</span> <span class="o">=</span> <span class="kc">True</span><span
-            class="p">):</span>
+            class="n">pointsetlist</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span
+            class="n">merge</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reading points from .xyz file</span>
 <span class="sd">        Creates one PointSet objects returned through pointSetList</span>
@@ -718,17 +714,21 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">WriteToShapeFile</span><span class="p">(</span><span
             class="bp">cls</span><span class="p">,</span> <span class="n">pointSet</span><span class="p">,</span> <span
-            class="n">fileName</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">):</span>
+            class="n">fileName</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exporting points to shapefile</span>
 <span class="sd">        </span>
 <span class="sd">        :param pointSet: A PointSet\PointSubSet object with the points to be extracted</span>
 <span class="sd">        :param fileName: Full path and name of the shapefile to be created (not including the extension)</span>
 <span class="sd">        :param kwargs: Additional properties can be sent using kwargs which will be added as attributes in the shapfile</span>
+<span class="sd">        :param colors: ColorProperty object with the points colors</span>
 
 <span class="sd">        :type pointSet: PointSet or PointSubSet</span>
 <span class="sd">        :type fileName: str</span>
+<span class="sd">        :type colors: ColorProperty</span>
+
 
 <span class="sd">        :return:</span>
 
@@ -745,8 +745,8 @@
         <span class="n">attributes</span> <span class="o">=</span> <span class="n">pointSet</span><span
             class="o">.</span><span class="n">ToNumpy</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">pointSet</span><span class="o">.</span><span
-            class="n">Intensity</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pointSet</span><span class="o">.</span><span
+            class="n">Intensity</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fieldList</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="s1">&#39;intensity&#39;</span><span class="p">)</span>
             <span class="n">attributes</span> <span class="o">=</span> <span class="n">hstack</span><span
@@ -755,8 +755,8 @@
             class="n">reshape</span><span class="p">((</span><span class="n">pointSet</span><span
             class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="mi">1</span><span
             class="p">))])</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">pointSet</span><span class="o">.</span><span
-            class="n">RGB</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">colors</span> <span class="o">!=</span> <span
+            class="kc">None</span><span class="p">):</span>
             <span class="n">fieldList</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
             <span class="n">fieldList</span><span class="o">.</span><span class="n">append</span><span
@@ -764,8 +764,8 @@
             <span class="n">fieldList</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
             <span class="n">attributes</span> <span class="o">=</span> <span class="n">hstack</span><span
-            class="p">([</span><span class="n">attributes</span><span class="p">,</span> <span class="n">pointSet</span><span
-            class="o">.</span><span class="n">RGB</span><span class="p">])</span>
+            class="p">([</span><span class="n">attributes</span><span class="p">,</span> <span
+            class="n">colors</span><span class="o">.</span><span class="n">RGB</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">auxPropertyName</span><span class="p">,</span> <span class="n">auxProperty</span> <span
             class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span
@@ -783,8 +783,9 @@
             class="p">(</span><span class="n">auxPropertyName</span> <span class="o">+</span> <span class="s1">&#39;_b&#39;</span><span
             class="p">)</span>
                 <span class="n">attributes</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span
-            class="n">attributes</span><span class="p">,</span> <span class="n">pointSet</span><span
+            class="n">attributes</span><span class="p">,</span> <span class="n">colors</span><span
             class="o">.</span><span class="n">RGB</span><span class="p">])</span>
+
             <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span
             class="p">(</span><span class="n">auxProperty</span><span class="p">,</span> <span class="n">SegmentationProperty</span><span
             class="p">)):</span>
@@ -797,6 +798,7 @@
             class="o">.</span><span class="n">reshape</span><span class="p">((</span><span
             class="n">pointSet</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span
             class="mi">1</span><span class="p">))])</span>
+
             <span class="k">elif</span> <span class="p">(</span><span class="nb">isinstance</span><span
             class="p">(</span><span class="n">auxProperty</span><span class="p">,</span> <span class="n">SphericalCoordinatesProperty</span><span
             class="p">)):</span>
@@ -841,6 +843,32 @@
         <span class="n">w</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span
             class="n">fileName</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="IOFactory.curve2shp"><a class="viewcode-back"
+                                                        href="../Factories/IOFactory.html#IOFactory.IOFactory.curve2shp">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">curve2shp</span><span class="p">(</span><span
+            class="n">curves</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn curves to shapefiles</span>
+
+<span class="sd">        :param curves: curves as represented by matplotlib.plot</span>
+<span class="sd">        :param filename: file to save the curve</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+        <span class="c1"># w = Writer(POLYGON)</span>
+        <span class="c1">#</span>
+        <span class="c1"># w.field(&#39;Area&#39;, &#39;F&#39;)</span>
+        <span class="c1"># w.field(&#39;Circumference&#39;, &#39;F&#39;)</span>
+        <span class="c1">#</span>
+        <span class="c1"># for i in curves:</span>
+        <span class="c1">#</span>
+        <span class="c1">#</span>
+        <span class="c1"># w.poly(curves)</span>
+        <span class="c1"># w.records = str(range(len(curves)))</span>
+        <span class="c1"># w.save(filename)</span>
+
+
     <span class="c1"># ---------------------------PRIVATES -------------------------------</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__ConvertRecodrsToPoints</span><span class="p">(</span><span class="bp">cls</span><span
@@ -857,98 +885,7 @@
             class="o">.</span><span class="n">points</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">points</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__mergePntList</span><span class="p">(</span><span class="bp">cls</span><span
-            class="p">,</span> <span class="n">pointSetList</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Merging several pointsets</span>
-
-<span class="sd">        :param pointSetList: a list of PointSets</span>
-
-<span class="sd">        :return refPntSet: merged PointSet</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="c1"># TODO: changed from MegrePntList to __MergePntList. CHECK WHERE WAS IN USE!</span>
-
-        <span class="n">list_length</span> <span class="o">=</span> <span class="nb">len</span><span
-            class="p">(</span><span class="n">pointSetList</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">list_length</span> <span class="o">&gt;</span> <span
-            class="mi">1</span><span class="p">:</span>
-            <span class="n">refPntSet</span> <span class="o">=</span> <span class="n">pointSetList</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">fields_num</span> <span class="o">=</span> <span class="n">refPntSet</span><span
-            class="o">.</span><span class="n">FieldsDimension</span>
-            <span class="n">refPntSet</span><span class="o">.</span><span class="n">setPath</span><span
-            class="p">(</span><span class="n">pointSetList</span><span class="p">[</span><span class="mi">0</span><span
-            class="p">]</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
-
-            <span class="k">for</span> <span class="n">pntSet</span> <span class="ow">in</span> <span class="n">pointSetList</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">::]:</span>
-                <span class="k">if</span> <span class="n">fields_num</span> <span class="o">==</span> <span
-            class="mi">7</span><span class="p">:</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;XYZ&#39;</span><span class="p">)</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">RGB</span><span
-            class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">Intensity</span><span
-            class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;Intensity&#39;</span><span
-            class="p">)</span>
-                <span class="k">elif</span> <span class="n">fields_num</span> <span class="o">==</span> <span
-            class="mi">6</span><span class="p">:</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;XYZ&#39;</span><span class="p">)</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">RGB</span><span
-            class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="n">fields_num</span> <span class="o">==</span> <span
-            class="mi">4</span><span class="p">:</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;XYZ&#39;</span><span class="p">)</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">Intensity</span><span
-            class="p">,</span> <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;Intensity&#39;</span><span
-            class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">refPntSet</span><span class="o">.</span><span class="n">AddData2Fields</span><span
-            class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">field</span> <span class="o">=</span> <span
-            class="s1">&#39;XYZ&#39;</span><span class="p">)</span>
-
-            <span class="k">return</span> <span class="n">refPntSet</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">pointSetList</span><span class="p">[</span><span
-            class="mi">0</span><span class="p">]</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">__splitPtsString</span><span class="p">(</span><span
-            class="bp">cls</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Extracting from a string the Data of a point (3D coordinates, intensity, color)</span>
-
-<span class="sd">        :param line: A string containing a line from a .pts file</span>
-
-<span class="sd">        :return: all existing Data of a point</span>
-
-<span class="sd">        :rtype: ndarray</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span
-            class="n">line</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span
-            class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span
-            class="n">tmp</span><span class="p">))</span>
-
-        <span class="c1"># return [float(x) for x in split(line, &#39; &#39;)]</span>
+    <span class="c1"># return [float(x) for x in split(line, &#39; &#39;)]</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__loadata_hdf5</span><span class="p">(</span><span class="bp">cls</span><span
@@ -1149,7 +1086,6 @@
             SOURCELINK_SUFFIX: '.txt'
         };
 
-
 </script>
 <script type="text/javascript" src="../_static/jquery.js"></script>
 <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -1164,7 +1100,6 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-
 
 </script>
 

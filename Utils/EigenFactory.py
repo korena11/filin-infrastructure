@@ -57,7 +57,7 @@ class EigenFactory:
 
     @staticmethod
     def eigen_Hessian(data, winsize, resolution=1, **kwargs):
-        """
+        r"""
         Compute the eigenvalues and eigenvectors from the Hessian Matrix
 
         Eigenvalues computation (numerically) - (eq. 3-36, Amit Baruch dissertation) instead of
@@ -72,19 +72,19 @@ class EigenFactory:
            {{Z}_{yx}} & {{Z}_{yy}}  \\
            \end{bmatrix}
 
-        Substituting it in .. math:: \text{det}\left(\mathbf{H}-\lambda \mathbf{I} leads to:
+        Substituting it in :math:`\text{det}\left(\mathbf{H}-\lambda \mathbf{I}` leads to:
 
         .. math::
 
-           \[{{\lambda }^{2}}-\lambda \left( {{Z}_{xx}}+{{Z}_{yy}} \right)+\left( {{Z}_{xx}}{{Z}_{yy}}-Z_{xy}^{2}
-           \right)=0\]
+           {\lambda }^{2}-\lambda \left( {{Z}_{xx}}+{{Z}_{yy}} \right)+\left( {{Z}_{xx}}{{Z}_{yy}}-Z_{xy}^{2}
+           \right)=0
 
         Solving results in the maximum and minimum eigenvalues:
 
         .. math::
 
-           \[{{\lambda }_{\min ,\max }}=\frac{{{Z}_{xx}}+{{Z}_{yy}}\pm \sqrt{{{\left( {{Z}_{xx}}-{{Z}_{yy}} \right)}^{2}}
-           +4\cdot Z_{xy}^{2}}}{2}\]
+           {\lambda }_{\min ,\max }=\frac{{{Z}_{xx}}+{{Z}_{yy}}\pm \sqrt{{{\left( {{Z}_{xx}}-{{Z}_{yy}} \right)}^{2}}
+           +4\cdot Z_{xy}^{2}}}{2}
 
         .. warning::
            This function does not compute eigenvectors, *only* minimal and maximal eigen values.
