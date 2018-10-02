@@ -120,7 +120,9 @@
 
                         <h1>Source code for NeighborsFactory</h1>
                         <div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="k">import</span> <span
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
+                                class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib.path</span> <span class="k">import</span> <span
                                 class="n">Path</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
                                 class="n">mean</span><span class="p">,</span> <span class="nb">round</span><span
@@ -128,11 +130,9 @@
                                 class="n">where</span><span class="p">,</span> <span class="n">hstack</span><span
                                 class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">rad2deg</span><span
                                 class="p">,</span> <span class="n">expand_dims</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span
                                 class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">BallTree</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">Delaunay</span>
 
 <span class="c1"># Infrastructure imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
@@ -140,7 +140,7 @@
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                                 class="n">SphericalCoordinatesFactory</span>
-
+<span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
 
 <div class="viewcode-block" id="NeighborsFactory"><a class="viewcode-back"
                                                      href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory">[docs]</a><span
@@ -148,6 +148,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find neighbors of a given points using different methods  </span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="NeighborsFactory.CalculateAllPointsNeighbors"><a class="viewcode-back"
                                                                                  href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">[docs]</a>    <span
         class="nd">@staticmethod</span>
@@ -215,6 +216,8 @@
         <span class="n">zs</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
             class="n">Z</span>
 
+        <span class="n">dists</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="n">xm</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span
             class="n">xs</span><span class="p">)</span>
         <span class="n">x_</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span
@@ -271,13 +274,19 @@
             class="mi">1</span><span class="p">:</span>
                 <span class="n">indices</span><span class="p">[</span><span class="n">j</span><span
             class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dists</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="n">dd</span> <span class="o">*</span> <span class="n">radius</span><span
+            class="p">)</span>
 
         <span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span><span
             class="p">[</span><span class="n">indices</span> <span class="o">&gt;</span> <span class="mi">0</span><span
             class="p">]</span>
 
-        <span class="n">pointsInRange</span> <span class="o">=</span> <span class="n">PointSubSet</span><span class="p">(</span><span
-            class="n">points</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+        <span class="n">pointsInRange</span> <span class="o">=</span> <span class="n">PointNeighborhood</span><span
+            class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="kc">None</span><span
+            class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">indices</span><span
+            class="p">,</span> <span class="n">dists</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">pointsInRange</span></div>
 
@@ -285,14 +294,14 @@
                                                                                   href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_KDtree">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">GetNeighborsIn3dRange_KDtree</span><span class="p">(</span><span
-            class="n">pnt</span><span class="p">,</span> <span class="n">pntSet</span><span class="p">,</span> <span
+            class="n">ind</span><span class="p">,</span> <span class="n">pntSet</span><span class="p">,</span> <span
             class="n">radius</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span
             class="kc">None</span><span class="p">,</span> <span class="n">num_neighbor</span> <span class="o">=</span> <span
             class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Find neighbors of a point using KDtree</span>
 
-<span class="sd">        :param pnt: search point coordinates</span>
+<span class="sd">        :param ind: search point coordinates</span>
 <span class="sd">        :param pntSet: the points in which the neighbors are required - in cartesian coordinates</span>
 <span class="sd">        :param radius: search radius</span>
 <span class="sd">        :param tree: KD tree</span>
@@ -300,7 +309,7 @@
 <span class="sd">                if num_neighbor!=None the result will be the exact number of neighbors </span>
 <span class="sd">                and not neighbors in radius</span>
 <span class="sd">         </span>
-<span class="sd">        :type pnt: tuple?</span>
+<span class="sd">        :type ind: int</span>
 <span class="sd">        :type pntSet: PointSet.PointSet</span>
 <span class="sd">        :type tree: cKDTree</span>
 <span class="sd">        :type num_neighbor: int</span>
@@ -323,7 +332,8 @@
             <span class="n">tree</span> <span class="o">=</span> <span class="n">cKDTree</span><span
             class="p">(</span><span class="n">pntSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
             class="p">())</span>
-
+        <span class="n">pnt</span> <span class="o">=</span> <span class="n">pntSet</span><span class="o">.</span><span
+            class="n">GetPoint</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
         <span class="n">l</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span
             class="n">query</span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span> <span
             class="n">pSize</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span

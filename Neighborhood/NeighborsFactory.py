@@ -4,6 +4,7 @@ from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import cKDTree
 from sklearn.neighbors import BallTree
 
+from PointNeighborhood import PointNeighborhood
 # Infrastructure imports
 from PointSet import PointSet
 from PointSubSet import PointSubSet
@@ -61,6 +62,8 @@ class NeighborsFactory:
         ys = points.Y
         zs = points.Z
 
+        dists = []
+
         xm = mean(xs)
         x_ = round((xs - xm) / radius)
         ym = mean(ys)
@@ -81,19 +84,21 @@ class NeighborsFactory:
 
             if dd > 1:
                 indices[j] = -1
+            else:
+                dists.append(dd * radius)
 
         indices = indices[indices > 0]
 
-        pointsInRange = PointSubSet(points, indices)
+        pointsInRange = PointNeighborhood(radius, None, None, indices, dists)
 
         return pointsInRange
 
     @staticmethod
-    def GetNeighborsIn3dRange_KDtree(pnt, pntSet, radius, tree = None, num_neighbor = None):
+    def GetNeighborsIn3dRange_KDtree(ind, pntSet, radius, tree=None, num_neighbor=None):
         '''
         Find neighbors of a point using KDtree
 
-        :param pnt: search point coordinates
+        :param ind: search point coordinates
         :param pntSet: the points in which the neighbors are required - in cartesian coordinates
         :param radius: search radius
         :param tree: KD tree
@@ -101,7 +106,7 @@ class NeighborsFactory:
                 if num_neighbor!=None the result will be the exact number of neighbors 
                 and not neighbors in radius
          
-        :type pnt: tuple?
+        :type ind: int
         :type pntSet: PointSet.PointSet
         :type tree: cKDTree
         :type num_neighbor: int
@@ -119,7 +124,7 @@ class NeighborsFactory:
 
         if tree == None:
             tree = cKDTree(pntSet.ToNumpy())
-
+        pnt = pntSet.GetPoint(ind)
         l = tree.query(pnt, pSize, p = 2, distance_upper_bound = radius)
         #         neighbor = PointSubSet(pntSet, l[1][where(l[0] != inf)[0]])
         neighbor = l[1][where(l[0] != inf)[0]]

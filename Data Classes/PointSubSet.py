@@ -33,8 +33,6 @@ class PointSubSet(PointSet):
         """
         return self.indices
 
-
-
     @property
     def Intensity(self):
         """

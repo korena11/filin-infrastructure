@@ -3,31 +3,46 @@ from scipy.spatial import Delaunay
 
 
 class PointNeighborhood:
-    def __init__(self, r, nn, num, idx, dist):
-        self.r = r  # Radius of neighborhood
-        self.nn = nn  # Max number of neighborhood poinets set
-        self.num = num  # Number of points in neighborhood
-        self.idx = idx  # Neighborhood points indices
-        self.dist = dist  # Distance of neighborhood points from center point
+    def __init__(self, radius, max_neighbor_num, num_pts, idx, dist):
+        """
+        :param radius: Radius of neighborhood
+        :param max_neighbor_num: Max number of neighborhood points set
+        :param num_pts: Number of points in neighborhood
+        :param idx: Neighborhood points indices
+        :param dist: Distance of neighborhood points from center point
+        """
+        # self.pointSet = super(PointNeighborhood, self).__init__(points, idx)
+
+        self.r = radius
+        self.nn = max_neighbor_num
+        self.num = num_pts
+        self.idx = idx
+        self.dist = dist
 
         self.localRotatedNeighbors = None
 
-    def GetRadius(self):
+    @property
+    def radius(self):
         return self.r
 
-    def GetMaxNN(self):
+    @property
+    def maxNN(self):
         return self.nn
 
-    def GetNumberOfNeighbors(self):
+    @property
+    def numberOfNeighbors(self):
         return self.num
 
-    def GetNeighborhoodIndices(self):
+    @property
+    def neighborhoodIndices(self):
         return self.idx
 
-    def GetLocalRotatedNeighborhood(self):
+    @property
+    def localRotatedNeighborhood(self):
         return self.localRotatedNeighbors
 
-    def SetLocalRotatedNeighbors(self, neighborsArray):
+    @localRotatedNeighborhood.setter
+    def localRotatedNeighborhood(self, neighborsArray):
         self.localRotatedNeighbors = neighborsArray.copy()
 
     def VisualizeNeighborhoodTriangulation(self):
@@ -35,7 +50,7 @@ class PointNeighborhood:
         .. warning::
 
             Not working
-            
+
         :return:
         """
         flag = 0

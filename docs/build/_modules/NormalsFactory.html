@@ -121,6 +121,7 @@
                         <h1>Source code for NormalsFactory</h1>
                         <div class="highlight"><pre>
 <span></span><span class="c1"># import mayavi.mlab as mlab</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -136,10 +137,9 @@
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
 
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span
                                 class="o">==</span> <span class="s1">&#39;linux&#39;</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">o3d</span>
+    <span class="k">pass</span>
 
 
 <div class="viewcode-block" id="NormalsFactory"><a class="viewcode-back"
@@ -448,8 +448,6 @@
 <span class="sd">        :return: normals property and the pointcloud with normals</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-
-    
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__CalcAverageNormal</span><span class="p">(</span><span
             class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span
