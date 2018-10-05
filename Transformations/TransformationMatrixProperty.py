@@ -26,13 +26,13 @@ class TransformationMatrixProperty(BaseProperty):
         
         """
         super(TransformationMatrixProperty, self).__init__(points)
-        if transformationMatrix:
+        if transformationMatrix is not None:
             self.setValues(transformationMatrix)
 
-        if rotationMatrix:
+        if rotationMatrix is not None:
             self.setValues(rotationMatrix)
 
-        if translationMatrix:
+        if translationMatrix is not None:
             self.setValues(translationMatrix)
 
     def setValues(self, *args, **kwargs):

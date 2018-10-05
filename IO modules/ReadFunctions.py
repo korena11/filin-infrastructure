@@ -16,7 +16,7 @@ from PointSet import PointSet
 from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
 
 
-def ReadPts(filename, pointsetlist=list(), colorslist=list(), merge=True):
+def ReadPts(filename, pointsetlist=[], colorslist=[], merge=True):
     """
     Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
     otherwise).
@@ -241,6 +241,49 @@ def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
         pointsetExtra.DownsampleCloud(voxel_size)
 
         return pointsetExtra
+
+
+def GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborhoodParameters, decimationRadius,
+                         testRun):
+    """
+    Gets the curvature files according to path
+
+    :param folderPath: Path to curvature-files folder
+    :param dataName: name of the new file
+    :param currentFileIndex: indexing for saving (file1.txt, file2.txt, etc)
+    :param localNeighborhoodParameters: dictionary holding the neighborhood parameters (radius and maximum number of
+    neighbors)
+    :param decimationRadius: minimal distance between two points for downsampling .
+    :param testRun: If true then only temporary files will be saved that are cleaned at each run.
+
+    :TODO: Elia -- please provide better explanation
+
+    :type folderPath: str
+    :type dataName: str
+    :type currentFileIndex: int
+    :type localNeighborhoodParameters: dict
+    :type decimationRadius: float
+    :type testRun: bool
+
+    :return: full filename and path for loading (or saving) curvature files
+    :rtype: str
+
+    """
+    if not testRun:
+        r = localNeighborhoodParameters['r']
+        nn = localNeighborhoodParameters['nn']
+
+        curvatureFilePath = folderPath + 'Curvature/' + dataName + str(currentFileIndex) + 'r' + str(
+            r) + "nn" + str(nn)
+
+        if decimationRadius:
+            curvatureFilePath += 'd' + str(decimationRadius) + '.txt'
+        else:
+            curvatureFilePath += '.txt'
+    else:
+        curvatureFilePath = folderPath + 'Curvature/testRun' + str(currentFileIndex) + '.txt'
+
+    return curvatureFilePath
 
 
 def __splitPtsString(line):

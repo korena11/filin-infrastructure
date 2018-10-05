@@ -52,7 +52,8 @@ class BaseData(object):
 
         self.__path = path
 
-    def setdata(self, data):
+    @data.setter
+    def data(self, data):
         """
         Sets the data to the dataset
 
@@ -61,11 +62,6 @@ class BaseData(object):
         """
 
         self.__data = data
-
-    @property
-    def data(self):
-
-        return self.__data
 
     def setValues(self, **kwargs):
         """

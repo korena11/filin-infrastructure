@@ -134,13 +134,14 @@
                                 class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">BallTree</span>
 
+<span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
 <span class="c1"># Infrastructure imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                                 class="n">SphericalCoordinatesFactory</span>
-<span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+
 
 <div class="viewcode-block" id="NeighborsFactory"><a class="viewcode-back"
                                                      href="../Factories/NeighborsFactory.html#NeighborsFactory.NeighborsFactory">[docs]</a><span
@@ -295,9 +296,9 @@
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">GetNeighborsIn3dRange_KDtree</span><span class="p">(</span><span
             class="n">ind</span><span class="p">,</span> <span class="n">pntSet</span><span class="p">,</span> <span
-            class="n">radius</span><span class="p">,</span> <span class="n">tree</span> <span class="o">=</span> <span
-            class="kc">None</span><span class="p">,</span> <span class="n">num_neighbor</span> <span class="o">=</span> <span
-            class="kc">None</span><span class="p">):</span>
+            class="n">radius</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">,</span> <span class="n">num_neighbor</span><span
+            class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Find neighbors of a point using KDtree</span>
 

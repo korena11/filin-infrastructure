@@ -483,6 +483,73 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span></div>
 
+
+<div class="viewcode-block" id="IOFactory.read2_PointSetOpen3D"><a class="viewcode-back"
+                                                                   href="../Factories/IOFactory.html#IOFactory.IOFactory.read2_PointSetOpen3D">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">read2_PointSetOpen3D</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span
+            class="n">voxel_size</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span
+            class="n">print_bb</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads a file into a PointSetOpen3D object</span>
+
+<span class="sd">        :param file_path: Path of pointcloud file</span>
+<span class="sd">        :param voxel_size: If &gt;0 then decimate point cloud with this parameter as min points distance</span>
+<span class="sd">        :param print_bb: Print boundarybox values</span>
+
+<span class="sd">        :type: str</span>
+<span class="sd">        :type: Positive double</span>
+<span class="sd">        :type: bool</span>
+
+<span class="sd">        :return: pointsetExtra Object</span>
+<span class="sd">        :rtype: PointSetExtra</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">read2_PointSetOpen3D</span><span
+            class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">voxel_size</span><span
+            class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">print_bb</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="IOFactory.GetCurvatureFilePath"><a class="viewcode-back"
+                                                                   href="../Factories/IOFactory.html#IOFactory.IOFactory.GetCurvatureFilePath">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">GetCurvatureFilePath</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">folderPath</span><span
+            class="p">,</span> <span class="n">dataName</span><span class="p">,</span> <span
+            class="n">currentFileIndex</span><span class="p">,</span> <span class="n">localNeighborhoodParameters</span><span
+            class="p">,</span> <span class="n">decimationRadius</span><span class="p">,</span>
+                         <span class="n">testRun</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the curvature files according to path</span>
+
+<span class="sd">        :param folderPath: Path to curvature-files folder</span>
+<span class="sd">        :param dataName: name of the new file</span>
+<span class="sd">        :param currentFileIndex: indexing for saving (file1.txt, file2.txt, etc)</span>
+<span class="sd">        :param localNeighborhoodParameters: dictionary holding the neighborhood parameters (radius and maximum number of</span>
+<span class="sd">        neighbors)</span>
+<span class="sd">        :param decimationRadius: minimal distance between two points for downsampling .</span>
+<span class="sd">        :param testRun: If true then only temporary files will be saved that are cleaned at each run.</span>
+
+<span class="sd">        :TODO: Elia -- please provide better explanation</span>
+
+<span class="sd">        :type folderPath: str</span>
+<span class="sd">        :type dataName: str</span>
+<span class="sd">        :type currentFileIndex: int</span>
+<span class="sd">        :type localNeighborhoodParameters: dict</span>
+<span class="sd">        :type decimationRadius: float</span>
+<span class="sd">        :type testRun: bool</span>
+
+<span class="sd">        :return: full filename and path for loading (or saving) curvature files</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">GetCurvatureFilePath</span><span
+            class="p">(</span><span class="n">folderPath</span><span class="p">,</span> <span
+            class="n">dataName</span><span class="p">,</span> <span class="n">currentFileIndex</span><span
+            class="p">,</span> <span class="n">localNeighborhoodParameters</span><span class="p">,</span>
+                                                   <span class="n">decimationRadius</span><span class="p">,</span> <span
+            class="n">testRun</span><span class="p">)</span></div>
 <div class="viewcode-block" id="IOFactory.rasterFromGDAL"><a class="viewcode-back"
                                                              href="../Factories/IOFactory.html#IOFactory.IOFactory.rasterFromGDAL">[docs]</a>    <span
         class="nd">@classmethod</span>

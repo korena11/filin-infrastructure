@@ -1,6 +1,9 @@
+import functools
+
 import numpy as np
 
 import RotationUtils
+from CurvatureProperty import CurvatureProperty
 from EigenFactory import EigenFactory
 from NeighborsFactory import NeighborsFactory
 from PointSet import PointSet
@@ -14,7 +17,7 @@ class CurvatureFactory:
 
     @staticmethod
     def Curvature_FundamentalForm(ind, points, search_radius, max_nn=None, tree=None, ):
-        '''
+        r'''
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
         Main idea:
@@ -33,8 +36,6 @@ class CurvatureFactory:
            .. math::
                {\bf H} = \begin{bmatrix} 2a & c \\ c & 2b \end{bmatrix}
 
-
-
         :param points: the point cloud
         :param ind: index of the point where the curvature is computed
         :param points: pointset
@@ -50,13 +51,13 @@ class CurvatureFactory:
 
         .. note::
 
-            If the point cloud is sent as a PointSet, there's no need to define the maximum number of points. The normal
-            at the point is computed by PCA if there are more than 5 neighbors.
+            If the point cloud is sent as a `PointSet`, there's no need to define the maximum number of points. The normals
+            for each point are computed by PCA, when there are more than 5 neighbors.
 
-            If the point cloud is sent as a PointSetOpen3D, maximum number of neighbors should be defined. And the normals
+            If the point cloud is sent as a `PointSetOpen3D`, maximum number of neighbors should be defined. And the normals
             are computed via PCA *within* by Open3D
 
-        :return: principal curvatures k1 and k2
+        :return: principal curvatures :math:`\kappa_1` and :math:`\kappa_2`
 
         :rtype: np.ndarray
 
@@ -150,6 +151,110 @@ class CurvatureFactory:
             return 1
         else:
             return 0
+
+    @staticmethod
+    def read_or_calculate_curvature_data(curves_path, pointset3d, localNeighborhoodParameters,
+                                         delete_non_computed=False,
+                                         verbose=True):
+        """
+        Reads curvature data or computes it
+
+         .. code-block:: python
+
+            CurvatureFactory.read_or_calculate_curvature_data('/Curvature/', p3d, {'r': 0.015, 'nn': 5})
+
+        :param curves_path: path to file. If exists, the curvature is loaded; else, it computes it
+        :param pointset3d: the points as PointSetOpen3D
+        :param localNeighborhoodParameters: search radius ('r') and maximum nearest neighbors ('nn')
+        :param verbose: print interim messages
+        :param delete_non_computed: flag to delete or leave points that their curvature wasn't calculated. If False, these curvature values are set to -999. Default: False
+
+        :type curves_path: str
+        :type pointset3d: PointSetOpen3D
+        :type localNeighborhoodParameters: dict
+        :type verbose: bool
+        :type delete_non_computed: bool
+
+        :return: computed curvatures as Curvature property
+        :rtype: CurvatureProperty
+
+        """
+        search_radius = localNeighborhoodParameters['r']
+        max_nn = localNeighborhoodParameters['nn']
+
+        try:
+            open_file = open(curves_path)
+
+        except IOError:
+
+            pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
+
+            if verbose:
+                print(
+                    ">>> Calculating points curvatures. Neighborhood Parameters - r:" + str(
+                        search_radius) + "\t nn:" + str(
+                        max_nn))
+
+            curves_data = list(
+                map(functools.partial(CurvatureFactory.Curvature_FundamentalForm, points=pointset3d,
+                                      search_radius=search_radius,
+                                      max_nn=max_nn), range(len(pointset3d.pointsOpen3D.points))))
+            curves_data = np.array(curves_data)
+            np.savetxt(curves_path, curves_data)
+            curves = CurvatureProperty(pointset3d, curves_data)
+        else:
+            file_lines = open_file.read()
+            open_file.close()
+
+            # Splitting into list of lines
+            lines = file_lines.split('\n')
+            del file_lines
+
+            # Removing the last line if it is empty
+            num_lines = len(lines)
+            while True:
+                if lines[num_lines - 1] == "":
+                    num_lines -= 1
+                    lines = lines[0: num_lines]
+                else:
+                    break
+
+            curves_data = list(map(lambda k1_k2: np.float32(k1_k2.split(' ')), lines))
+            curves = CurvatureProperty(pointset3d, np.array(curves_data))
+
+        print("Number of curves before filterization: ", (curves.Size))
+
+        if delete_non_computed:
+            curves = CurvatureFactory.__keep_good_curves_data(curves.getValues(), pointset3d)
+            print("Number of curves after filterization: ", curves.Size)
+
+        return curves
+
+    @staticmethod
+    def __keep_good_curves_data(curves_data, pointset_open3D):
+        """
+
+        :param curves_data: an array of curvature data
+        :param pointset_open3D: the point set that relates to the curvature data
+
+        :type curves_data: np.ndarray
+        :type pointset_open3D: PointSetOpen3D
+
+        :return: the curvature data and the pointset without points that their curvature wasn't calculated
+
+        :rtype: CurvatureProperty
+        """
+        ind_not_good = np.where(curves_data == -999)[0]
+        ind_not_good = np.unique(ind_not_good, return_index=True)[0]
+        curves_data = np.delete(curves_data, ind_not_good, axis=0)
+        pointset_open3D.DisregardPoints(ind_not_good)
+
+        # curves_data = FilterBySTD(curves_data, pointsetExtra, maxSTD=1., minSTD=0.4)
+
+        k1 = np.expand_dims(curves_data[:, 0], 1)
+        k2 = np.expand_dims(curves_data[:, 1], 1)
+        curves = CurvatureProperty(pointset_open3D, np.hstack((k1, k2)))
+        return curves
 
     @staticmethod
     def __BiQuadratic_Surface(neighbor_points):

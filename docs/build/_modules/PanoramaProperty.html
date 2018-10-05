@@ -201,6 +201,10 @@
             class="o">.</span><span class="n">min_azimuth</span><span class="p">)</span> <span class="o">/</span> <span
             class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span
             class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span> <span
+            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span
+            class="p">((</span><span class="n">numRows</span><span class="p">,</span> <span
+            class="n">numColumns</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">panoramaData</span><span
             class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span
@@ -214,6 +218,12 @@
             class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
             class="n">columnIndexes</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">panoramaData</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span><span
+            class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
+            class="n">columnIndexes</span><span class="p">]</span> <span class="o">=</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span
+            class="mi">0</span><span class="p">,</span> <span class="n">panoramaData</span><span class="o">.</span><span
+            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span> <span
             class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
@@ -226,6 +236,12 @@
             class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
             class="n">columnIndexes</span><span class="p">,</span> <span class="p">:]</span> <span
             class="o">=</span> <span class="n">panoramaData</span><span class="p">[:,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span><span
+            class="p">[</span><span class="n">rowIndexes</span><span class="p">,</span> <span
+            class="n">columnIndexes</span><span class="p">]</span> <span class="o">=</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span
+            class="mi">0</span><span class="p">,</span> <span class="n">panoramaData</span><span class="o">.</span><span
+            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="c1"># def indexes_to_panorama(self):</span>
     <span class="c1">#     &quot;&quot;&quot;</span>

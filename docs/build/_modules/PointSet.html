@@ -178,8 +178,8 @@
         <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span
             class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">setdata</span><span class="p">(</span><span
-            class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span
+            class="n">points</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span> <span class="o">=</span> <span
             class="n">properties</span><span class="p">[</span><span class="s1">&#39;intensity&#39;</span><span
@@ -333,33 +333,6 @@
             class="o">=</span><span class="n">geometry</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">geodf</span></div>
 
-<div class="viewcode-block" id="PointSet.ToOpen3d_pcl"><a class="viewcode-back"
-                                                          href="../Datasets/PointSet.html#PointSet.PointSet.ToOpen3d_pcl">[docs]</a>    <span
-        class="k">def</span> <span class="nf">ToOpen3d_pcl</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Converts to open 3D PointCloud()</span>
-
-<span class="sd">        :return: open 3D PointCloud object</span>
-
-<span class="sd">        :rtype open3d.PointCloud</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span
-            class="nn">o3d</span>
-            <span class="n">pcd</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span
-            class="n">PointCloud</span><span class="p">()</span>
-            <span class="n">pcd</span><span class="o">.</span><span class="n">points</span> <span
-            class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span
-            class="n">Vector3dVector</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">ToNumpy</span><span class="p">())</span>
-            <span class="k">return</span> <span class="n">pcd</span>
-
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span
-            class="s1">&#39;The package open3D is missing. </span><span class="se">\n</span><span class="s1"> If the platform is windows it may not be possible to install&#39;</span><span
-            class="p">)</span></div>
 
 
 <div class="viewcode-block" id="PointSet.GetPoint"><a class="viewcode-back"
@@ -426,10 +399,9 @@
         <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span
             class="s1">&#39;XYZ&#39;</span> <span class="ow">or</span> <span class="n">field</span> <span
             class="o">==</span> <span class="s1">&#39;xyz&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setdata</span><span
-            class="p">(</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span
-            class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span
+            class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">)))</span>
 
         <span class="k">if</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;Intensity&#39;</span> <span
             class="ow">or</span> <span class="n">field</span> <span class="o">==</span> <span class="s1">&#39;intensity&#39;</span><span

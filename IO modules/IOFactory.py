@@ -232,6 +232,54 @@ class IOFactory:
             return 0
 
     @classmethod
+    def read2_PointSetOpen3D(cls, file_path, voxel_size=-1, print_bb=False):
+        """
+        Reads a file into a PointSetOpen3D object
+
+        :param file_path: Path of pointcloud file
+        :param voxel_size: If >0 then decimate point cloud with this parameter as min points distance
+        :param print_bb: Print boundarybox values
+
+        :type: str
+        :type: Positive double
+        :type: bool
+
+        :return: pointsetExtra Object
+        :rtype: PointSetExtra
+
+        """
+        return ReadFunctions.read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False)
+
+    @classmethod
+    def GetCurvatureFilePath(cls, folderPath, dataName, currentFileIndex, localNeighborhoodParameters, decimationRadius,
+                             testRun):
+        """
+        Gets the curvature files according to path
+
+        :param folderPath: Path to curvature-files folder
+        :param dataName: name of the new file
+        :param currentFileIndex: indexing for saving (file1.txt, file2.txt, etc)
+        :param localNeighborhoodParameters: dictionary holding the neighborhood parameters (radius and maximum number of
+        neighbors)
+        :param decimationRadius: minimal distance between two points for downsampling .
+        :param testRun: If true then only temporary files will be saved that are cleaned at each run.
+
+        :TODO: Elia -- please provide better explanation
+
+        :type folderPath: str
+        :type dataName: str
+        :type currentFileIndex: int
+        :type localNeighborhoodParameters: dict
+        :type decimationRadius: float
+        :type testRun: bool
+
+        :return: full filename and path for loading (or saving) curvature files
+        :rtype: str
+
+        """
+        return ReadFunctions.GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborhoodParameters,
+                                                  decimationRadius, testRun)
+    @classmethod
     def rasterFromGDAL(cls, path):
         try:
             ds = gdal.Open(path)

@@ -68,7 +68,7 @@ class RasterData(BaseData):
         """
         super(RasterData, self).__init__()
         self.__cellSize = gridSpacing
-        self.setdata(data)
+        self.data(data)
 
         self.setValues(**kwargs)
 

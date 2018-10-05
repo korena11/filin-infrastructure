@@ -9,7 +9,7 @@ class TestReadPts(TestCase):
     def test_ReadPts(self):
         pointsetlist = []
         colorslist = []
-        filename = r'test_readPts.pts'
+        filename = r'test_pts.pts'
         points = ReadFunctions.ReadPts(filename, pointsetlist, colorslist, merge = False)
 
         self.assertEqual(len(points), 3, 'Not all point clouds were loaded in different clouds')
@@ -26,7 +26,7 @@ class TestReadPts(TestCase):
         # self.fail()
 
     def test_ReadPts_default(self):
-        filename = r'test_readPts.pts'
+        filename = r'test_p ts.pts'
         points = ReadFunctions.ReadPts(filename)
         self.assertIsInstance(points, PointSet, 'Point set was not loaded into PointSet')
         self.assertIsNotNone(points.Intensity, 'Intensity was not loaded')

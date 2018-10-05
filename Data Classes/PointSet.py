@@ -45,7 +45,7 @@ class PointSet(BaseData):
                       'accuracy': .002}
         properties.update(kwargs)
 
-        self.setdata(points)
+        self.data = points
 
         self.__intensity = properties['intensity']
         self.__measurement_accuracy = properties['accuracy']
@@ -150,23 +150,6 @@ class PointSet(BaseData):
         geodf = GeoDataFrame(pts, crs=crs, geometry=geometry)
         return geodf
 
-    def ToOpen3d_pcl(self):
-        """
-        Converts to open 3D PointCloud()
-
-        :return: open 3D PointCloud object
-
-        :rtype open3d.PointCloud
-        """
-
-        try:
-            import open3d as o3d
-            pcd = o3d.PointCloud()
-            pcd.points = o3d.Vector3dVector(self.ToNumpy())
-            return pcd
-
-        except ImportError:
-            print('The package open3D is missing. \n If the platform is windows it may not be possible to install')
 
 
     def GetPoint(self, index):
@@ -206,7 +189,7 @@ class PointSet(BaseData):
         '''
 
         if field == 'XYZ' or field == 'xyz':
-            self.setdata(vstack((self.data, data)))
+            self.data(vstack((self.data, data)))
 
         if field == 'Intensity' or field == 'intensity':
             if self.__intensity is None:
