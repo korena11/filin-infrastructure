@@ -1,20 +1,10 @@
-'''
-Calculated Curve Properties
-1. Pointwise Curvature Values (Min, Max)
-2. Start-End Distance (CDF)
-3. Start-End Distance (Straight Line)
-
-'''
-
+# General Imports
 import numpy as np
+# Infrastructure Imports
 from PointSetExtra1 import PointSetOpen3D
 
 import GeneralUtils
 from PointSet import PointSet
-
-
-# from CurvesUtils import closed_curve_test
-
 
 
 class Curve:
@@ -22,35 +12,34 @@ class Curve:
         # General Parameters
         self.curve_id = curve_id
         self.points = self.InitializePoints(points)
+
         self.cdf = None
         self.length = 0
         self.start_end_straight_distance = 0
         self.is_closed = False
-
-        # # EigenValues, EigenVectors and Points Curvatures
-        # self.eigen_values = None
-        # self.eigen_vectors = None
-        # self.eigen_values_inverse = None
-        # self.eigen_vectors_inverse = None
-        self.all_curvatures = None  # List
-        self.max_curvature = None  # Float
-        self.min_curvature = None  # Float
-        #
-        # # Preparation Functions
-        self.CalculateCDF()
-        self.CalculateStartEndStraightDistance()
-        self.perform_closed_test()
-        self.calculate_points_curvature()
-        # self.CalculatePCA()
-        #
-        # # Sample Functions
 
         self.T = np.zeros(len(self.points), dtype=np.ndarray)
         self.N = np.zeros(len(self.points), dtype=np.ndarray)
         self.B = np.zeros(len(self.points), dtype=np.ndarray)
         self.K = np.zeros(len(self.points), dtype=np.ndarray)
 
+        # EigenValues, EigenVectors and Points Curvatures
+        self.eigen_values = None
+        self.eigen_vectors = None
+        self.eigen_values_inverse = None
+        self.eigen_vectors_inverse = None
+
+        # Preparation Functions
+        self.CalculateCDF()
+        self.CalculateStartEndStraightDistance()
+        # self.CalculatePCA()
+
     def InitializePoints(self, points):
+        '''
+        Builds the curve points from numpy array, PointSet or PointSetOpen3D.
+        :param points: Curve Points (ordered)
+        :return: Curve points as numpy array
+        '''
         if isinstance(points, np.ndarray):
             return points
         elif isinstance(points, PointSet) or isinstance(points, PointSetOpen3D):
@@ -58,10 +47,11 @@ class Curve:
         else:
             raise TypeError("Curve points can only be given as np.ndArray/PointSet/PointSetOpen3D.")
 
-    # def perform_closed_test(self):
-    #     self.is_closed = closed_curve_test(self.points)
-
     def CalculateCDF(self):
+        '''
+        Calculates the curve's CDF
+        :return: None
+        '''
         dist = np.linalg.norm(self.points[0:-1, :] - self.points[1:, :], axis=1)
         self.cdf = np.hstack((0, np.cumsum(dist)))  # First value = 0, Last value = curve's length
         self.length = self.cdf[-1]
@@ -383,14 +373,19 @@ class Curve:
 
     def Visualize(self, vectors):
         '''
-        Drawing the desired vector, either 'T', 'N', 'B'.
+        ## Temporary Implementation, will be moved to Visualization based Open3D.
+
+        Drawing the desired vector. Possible values:
+        'T' : Tangents
+        'N' : Normals
+        'B' : Bitangents
 
         - Developer Notes
-        To draw all three vectors at once, should use something like this:
+        To draw all three vectors at once for each point, should use something like this:
         draw_geometries([point_cloud, line_set])
 
-        :param vectors:
-        :return:
+        :param vectors: Either 'T', 'N' or 'B'/
+        :return: None
         '''
         V = getattr(self, vectors)
 
@@ -404,16 +399,6 @@ class Curve:
         PC.normals = open3d.Vector3dVector(V)
         PC.colors = open3d.Vector3dVector(colors)
         open3d.draw_geometries([PC])
-
-    def __repr__(self):
-        a = "--- Curve Info ---"
-        b = "ID: " + str(self.curve_id)
-        c = "Length: " + str(self.length)
-        d = "Closed: " + str(self.is_closed)
-        e = "Max Curvature: " + str(self.max_curvature)
-        f = "Min Curvature: " + str(self.min_curvature)
-        g = "------------------"
-        return "\n".join([a, b, c, d, e, f, g])
 
 
 if __name__ == '__main__':
