@@ -6,15 +6,15 @@ Calculated Curve Properties
 
 '''
 
-import ex1
 import numpy as np
-from ClassCloudManagement import CloudManagement
-from CurvatureUtils import curve_curvature_simplified
-from CurvesUtils import closed_curve_test
 from PointSetExtra1 import PointSetOpen3D
 
 import GeneralUtils
 from PointSet import PointSet
+
+
+# from CurvesUtils import closed_curve_test
+
 
 
 class Curve:
@@ -58,8 +58,8 @@ class Curve:
         else:
             raise TypeError("Curve points can only be given as np.ndArray/PointSet/PointSetOpen3D.")
 
-    def perform_closed_test(self):
-        self.is_closed = closed_curve_test(self.points)
+    # def perform_closed_test(self):
+    #     self.is_closed = closed_curve_test(self.points)
 
     def CalculateCDF(self):
         dist = np.linalg.norm(self.points[0:-1, :] - self.points[1:, :], axis=1)
@@ -69,19 +69,8 @@ class Curve:
     def CalculateStartEndStraightDistance(self):
         self.start_end_straight_distance = np.linalg.norm(self.points[0] - self.points[-1])
 
-    def CalculateStartEndSurfaceDistance(self, cloud_management):
-        temp_cloud = CloudManagement("Temp")
-        temp_cloud.set_cloud_points()
-        ex1.CloudSurfaceDistance(cloud_management, self.points[0], self.points[-1])
-
     def CalculatePCA(self):
         self.eigen_values, self.eigen_vectors = GeneralUtils.PCA(self.points - self.points[0, :])
-
-    def calculate_points_curvature(self):
-        # self.all_curvatures, _, _ = curve_curvature(self)
-        self.all_curvatures = curve_curvature_simplified(self.points)
-        self.max_curvature = np.max(self.all_curvatures)
-        self.min_curvature = np.min(self.all_curvatures)
 
     def CalculateTangentAndNormalVectors(self, minEuclideanDistance=-1, verbose=False):
         '''
