@@ -69,6 +69,7 @@ class NormalsFactory:
         :type metric: str
 
         :return: normals for each point
+        
         :rtype: NormalsProperty
 
         """

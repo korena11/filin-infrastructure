@@ -210,10 +210,11 @@ class LevelSetFunction(object):
 
     @staticmethod
     def dist_from_circle(center_pt, radius, func_shape, **kwargs):
-        """
+        r"""
         Build a Lipshitz distance function from a circle, with a specific size
 
         .. math::
+        
            \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
 
 

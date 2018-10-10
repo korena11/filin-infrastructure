@@ -1,13 +1,13 @@
 # General Imports
 import numpy as np
-# Infrastructure Imports
-from PointSetExtra1 import PointSetOpen3D
 
 import GeneralUtils
 from PointSet import PointSet
+# Infrastructure Imports
+from PointSetOpen3D import PointSetOpen3D
 
 
-class Curve:
+class Curve(object):
     def __init__(self, curve_id, points):
         # General Parameters
         self.curve_id = curve_id
@@ -18,10 +18,12 @@ class Curve:
         self.start_end_straight_distance = 0
         self.is_closed = False
 
+        # Fernet-Serret framework
         self.T = np.zeros(len(self.points), dtype=np.ndarray)
         self.N = np.zeros(len(self.points), dtype=np.ndarray)
         self.B = np.zeros(len(self.points), dtype=np.ndarray)
-        self.K = np.zeros(len(self.points), dtype=np.ndarray)
+
+        self.curvature = np.zeros(len(self.points), dtype=np.ndarray)
 
         # EigenValues, EigenVectors and Points Curvatures
         self.eigen_values = None
@@ -36,7 +38,8 @@ class Curve:
 
     def InitializePoints(self, points):
         '''
-        Builds the curve points from numpy array, PointSet or PointSetOpen3D.
+        Builds the curve points from numpy array, PointSet or PointSetOpen3D.rst.
+
         :param points: Curve Points (ordered)
         :return: Curve points as numpy array
         '''
@@ -45,7 +48,7 @@ class Curve:
         elif isinstance(points, PointSet) or isinstance(points, PointSetOpen3D):
             return points.ToNumpy()
         else:
-            raise TypeError("Curve points can only be given as np.ndArray/PointSet/PointSetOpen3D.")
+            raise TypeError("Curve points can only be given as np.ndArray/PointSet/PointSetOpen3D.rst.")
 
     def CalculateCDF(self):
         '''
@@ -57,6 +60,10 @@ class Curve:
         self.length = self.cdf[-1]
 
     def CalculateStartEndStraightDistance(self):
+        """
+
+
+        """
         self.start_end_straight_distance = np.linalg.norm(self.points[0] - self.points[-1])
 
     def CalculatePCA(self):
@@ -108,7 +115,7 @@ class Curve:
                 self.T[currentPointIndex] = None
                 self.N[currentPointIndex] = None
                 self.B[currentPointIndex] = None
-                self.K[currentPointIndex] = None
+                self.curvature[currentPointIndex] = None
 
         self.CalculateCurvatureAndUnitBinormalVector()
 
@@ -116,6 +123,7 @@ class Curve:
         '''
         Given a current point index and a minimum euclidean distance, find the next point that satisfies the minimum distance condition.
         If minEuclideanDistance<0 then the next point will be returned no matter it's distance.
+
         :param currentPointIndex: Index of the current point
         :param minEuclideanDistance: Min distance condition for next point
 
@@ -143,8 +151,10 @@ class Curve:
 
     def __GetPreviousPointIndex(self, currentPointIndex, minEuclideanDistance):
         '''
-        Given a current point index and a minimum euclidean distance, find the previous point that satisfies the minimum distance condition.
+        Given a current point index and a minimum euclidean distance, find the previous point that satisfies the minimum
+        distance condition.
         If minEuclideanDistance<0 then the next point will be returned no matter it's distance.
+
         :param currentPointIndex: Index of the current point
         :param minEuclideanDistance: Min distance condition for next point
 
@@ -173,7 +183,7 @@ class Curve:
     # region First Derivatives
 
     def __CalculateForwardFirstDerivative(self, currentPointIndex, nextPointIndex):
-        '''
+        r'''
         Calculate the First Order Forward Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -201,7 +211,7 @@ class Curve:
         return tangentVector
 
     def __CalculatebackwardFirstDerivative(self, currentPointIndex, previousPointIndex):
-        '''
+        r'''
         Calculate the First Order Backward Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -228,7 +238,7 @@ class Curve:
         return tangentVector
 
     def __CalculateCentralFirstDerivative(self, nextPointIndex, previousPointIndex):
-        '''
+        r'''
         Calculate the First Order Central Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -262,7 +272,7 @@ class Curve:
     # region Second Derivatives
 
     def __CalculateCentralSecondDerivative(self, currentPointIndex, nextPointIndex, previousPointIndex):
-        '''
+        r'''
         Calculate the Second Order Central Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -293,7 +303,7 @@ class Curve:
         return normalVector
 
     def __CalculateForwardSecondDerivative(self, currentPointIndex, nextPointIndex, nextNextPointIndex):
-        '''
+        r'''
         Calculate the Second Order Forward Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -326,7 +336,7 @@ class Curve:
         return normalVector
 
     def __CalculateBackwardSecondDerivative(self, currentPointIndex, previousPointIndex, previousPreviousPointIndex):
-        '''
+        r'''
         Calculate the Second Order Forward Derivative.
         Finite Differences Wiki - https://en.wikipedia.org/wiki/Finite_difference
 
@@ -363,8 +373,8 @@ class Curve:
             currentUnitTangent = self.T[currentIndex]
             if self.T[currentIndex] is not None:
                 # Calculating Curvature and Normalizing Normal Vector
-                self.K[currentIndex] = np.linalg.norm(self.N[currentIndex])
-                self.N[currentIndex] = self.N[currentIndex] / self.K[currentIndex]
+                self.curvature[currentIndex] = np.linalg.norm(self.N[currentIndex])
+                self.N[currentIndex] = self.N[currentIndex] / self.curvature[currentIndex]
 
                 # Calculating Unit Binormal Vector
                 currentUnitNormal = self.N[currentIndex]
@@ -380,11 +390,13 @@ class Curve:
         'N' : Normals
         'B' : Bitangents
 
-        - Developer Notes
+        **Developer Notes**
+
         To draw all three vectors at once for each point, should use something like this:
         draw_geometries([point_cloud, line_set])
 
         :param vectors: Either 'T', 'N' or 'B'/
+
         :return: None
         '''
         V = getattr(self, vectors)
@@ -432,4 +444,4 @@ if __name__ == '__main__':
     tempNormal = pointsNormals[0]
     # print(np.linalg.norm(tempNormal))
 
-    curve.Visualize(vectors='B')
+    curve.Visualize(vectors='N')

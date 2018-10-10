@@ -58,10 +58,11 @@
 
 
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
                         classes</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
-                        base class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
@@ -134,7 +135,7 @@
 
 
 <div class="viewcode-block" id="PanoramaProperty"><a class="viewcode-back"
-                                                     href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty">[docs]</a><span
+                                                     href="../Properties/Panorama/PanoramaProperty.html#PanoramaProperty.PanoramaProperty">[docs]</a><span
         class="k">class</span> <span class="nc">PanoramaProperty</span><span class="p">(</span><span class="n">BaseProperty</span><span
         class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -202,9 +203,9 @@
             class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span
             class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span> <span
-            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span
-            class="p">((</span><span class="n">numRows</span><span class="p">,</span> <span
-            class="n">numColumns</span><span class="p">))</span>
+            class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="n">numRows</span><span
+            class="p">,</span> <span class="n">numColumns</span><span class="p">))</span> <span class="o">*</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">NaN</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">panoramaData</span><span
             class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span
@@ -223,7 +224,9 @@
             class="n">columnIndexes</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span
             class="mi">0</span><span class="p">,</span> <span class="n">panoramaData</span><span class="o">.</span><span
-            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span
+            class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span
+            class="n">int</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span> <span
             class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
@@ -357,7 +360,7 @@
             class="n">__panoramaData</span>
 
 <div class="viewcode-block" id="PanoramaProperty.setValues"><a class="viewcode-back"
-                                                               href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.setValues">[docs]</a>    <span
+                                                               href="../Properties/Panorama/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.setValues">[docs]</a>    <span
         class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -447,7 +450,7 @@
             class="n">__voidData</span>
 
 <div class="viewcode-block" id="PanoramaProperty.extract_area"><a class="viewcode-back"
-                                                                  href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.extract_area">[docs]</a>    <span
+                                                                  href="../Properties/Panorama/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.extract_area">[docs]</a>    <span
         class="k">def</span> <span class="nf">extract_area</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">left_top_corner</span><span
         class="p">,</span> <span class="n">right_bottom_corner</span><span class="p">):</span>
@@ -490,7 +493,7 @@
             class="n">ind</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PanoramaProperty.normals"><a class="viewcode-back"
-                                                             href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.normals">[docs]</a>    <span
+                                                             href="../Properties/Panorama/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.normals">[docs]</a>    <span
         class="k">def</span> <span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span
         class="p">,</span> <span class="n">phenomenaSize</span><span class="o">=</span><span class="mf">0.2</span><span
         class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span
@@ -631,7 +634,7 @@
             class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span>
 
 <div class="viewcode-block" id="PanoramaProperty.adaptive_smoothing"><a class="viewcode-back"
-                                                                        href="../Properties/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.adaptive_smoothing">[docs]</a>    <span
+                                                                        href="../Properties/Panorama/PanoramaProperty.html#PanoramaProperty.PanoramaProperty.adaptive_smoothing">[docs]</a>    <span
         class="k">def</span> <span class="nf">adaptive_smoothing</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">panoramaImage</span><span
         class="p">,</span> <span class="n">phenomena_size</span><span class="p">,</span> <span class="o">**</span><span

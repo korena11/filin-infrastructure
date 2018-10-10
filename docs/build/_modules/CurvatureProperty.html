@@ -58,10 +58,11 @@
 
 
                 <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
                         classes</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Property
-                        base class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
                     <li class="toctree-l1"><a class="reference internal"
                                               href="../Factories/Factories.html">Factories</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
@@ -165,8 +166,11 @@
                                                                 href="../Properties/Curvature/CurvatureProperty.html#CurvatureProperty.CurvatureProperty.getValues">[docs]</a>    <span
         class="k">def</span> <span class="nf">getValues</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: mean curvature (temoprary)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__curvature</span></div>
+            class="n">mean_curvature</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Curvature</span><span class="p">(</span><span
@@ -196,7 +200,7 @@
             class="n">__curvature</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Mean_Curvature</span><span class="p">(</span><span
+    <span class="k">def</span> <span class="nf">mean_curvature</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        &#39;&#39;&#39;</span>
@@ -205,7 +209,7 @@
             class="n">k2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Gaussian_Curvature</span><span class="p">(</span><span
+    <span class="k">def</span> <span class="nf">gaussian_curvature</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Gaussian curvature</span>
@@ -222,7 +226,7 @@
             class="n">k2</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Curvadness</span><span class="p">(</span><span
+    <span class="k">def</span> <span class="nf">curvadness</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Curvadness property defined by</span>
@@ -272,9 +276,9 @@
             class="n">k1</span><span class="p">)[</span><span class="n">difZero</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">shapeI</span>
 
-<div class="viewcode-block" id="CurvatureProperty.Similarity_Curvature"><a class="viewcode-back"
-                                                                           href="../Properties/Curvature/CurvatureProperty.html#CurvatureProperty.CurvatureProperty.Similarity_Curvature">[docs]</a>    <span
-        class="k">def</span> <span class="nf">Similarity_Curvature</span><span class="p">(</span><span
+<div class="viewcode-block" id="CurvatureProperty.similarity_curvature"><a class="viewcode-back"
+                                                                           href="../Properties/Curvature/CurvatureProperty.html#CurvatureProperty.CurvatureProperty.similarity_curvature">[docs]</a>    <span
+        class="k">def</span> <span class="nf">similarity_curvature</span><span class="p">(</span><span
         class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        calculates similarity curvature (E,H)</span>

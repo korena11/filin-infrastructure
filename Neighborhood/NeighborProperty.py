@@ -157,7 +157,7 @@ class NeighborsProperty(BaseProperty):
         previousMaxNN = self.pointsNeighborsArray[exampleIndex].GetMaxNN()
 
         if previousRadius != newRadius or previousMaxNN != newMaxNN:
-            print("Function: PointSetExtra1.PointSetOpen3D.GetPointsNeighborsByID")
+            print("Function: PointSetOpen3D.PointSetOpen3D.GetPointsNeighborsByID")
             print("Overriding Previous Calculations")
 
             print("Previous Radius/maxNN: " + str(previousRadius) + "/" + str(previousMaxNN))

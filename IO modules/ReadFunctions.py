@@ -251,8 +251,7 @@ def GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborho
     :param folderPath: Path to curvature-files folder
     :param dataName: name of the new file
     :param currentFileIndex: indexing for saving (file1.txt, file2.txt, etc)
-    :param localNeighborhoodParameters: dictionary holding the neighborhood parameters (radius and maximum number of
-    neighbors)
+    :param localNeighborhoodParameters: dictionary holding the neighborhood parameters (radius and maximum number of neighbors)
     :param decimationRadius: minimal distance between two points for downsampling .
     :param testRun: If true then only temporary files will be saved that are cleaned at each run.
 
@@ -266,6 +265,7 @@ def GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborho
     :type testRun: bool
 
     :return: full filename and path for loading (or saving) curvature files
+
     :rtype: str
 
     """

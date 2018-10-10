@@ -75,6 +75,7 @@ class SphericalCoordinatesFactory:
         :type SparkContext
 
         :return: RDD holding the spherical coordinates
+
         :rtype: pySpark RDD
 
         """

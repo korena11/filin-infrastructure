@@ -19,7 +19,9 @@ Contents:
 =========
 
 .. toctree::
+    :maxdepth: 2
 
+    IOFactory
     Datasets/Datasets
     Properties/BaseProperty
     Factories/Factories

@@ -1,5 +1,5 @@
-Utility functions: RandomColors
-===============================
+Color utilities
+===============
 
 
 RandomColors choose colors such that they are farthest from each other as possible.
