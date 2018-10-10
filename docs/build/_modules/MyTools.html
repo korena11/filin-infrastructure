@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MyTools &mdash; infragit 1a documentation</title>
+
+
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../index.html" class="icon icon-home"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="index.html">Module code</a> &raquo;</li>
+
+                        <li>MyTools</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <h1>Source code for MyTools</h1>
+                        <div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on Nov 25, 2015</span>
+
+<span class="sd">@author: Reuma</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">platform</span>
+
+<span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span
+                                class="p">()</span> <span class="o">==</span> <span
+                                class="s1">&#39;Linux&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span>
+
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span
+                                class="s1">&#39;TkAgg&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span
+                                class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span
+                                class="n">norm</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="k">import</span> <span
+                                class="n">filters</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span
+                                class="n">measure</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span class="n">Polygon</span>
+
+
+<div class="viewcode-block" id="imshow"><a class="viewcode-back"
+                                           href="../Utils/Utils.html#MyTools.imshow">[docs]</a><span
+        class="k">def</span> <span class="nf">imshow</span><span class="p">(</span><span class="n">img</span><span
+        class="p">,</span> <span class="n">scale_val</span> <span class="o">=</span> <span class="mi">1</span><span
+        class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span><span
+        class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span
+        class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="o">*</span><span
+        class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+        class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    shows pixel value in the image window</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span
+            class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span
+            class="n">gca</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">format_coord</span><span class="p">(</span><span class="n">x</span><span
+            class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span
+            class="n">x</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span
+            class="n">y</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span
+            class="s2"> @ [</span><span class="si">%4i</span><span class="s2">, </span><span class="si">%4i</span><span
+            class="s2">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">img</span><span
+            class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span> <span
+            class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span
+            class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cmap</span> <span
+            class="o">=</span> <span class="n">cmap</span><span class="p">,</span> <span class="o">*</span><span
+            class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+            class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">format_coord</span> <span class="o">=</span> <span
+            class="n">format_coord</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span
+            class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">im</span></div>
+
+
+<div class="viewcode-block" id="im2double"><a class="viewcode-back"
+                                              href="../Utils/Utils.html#MyTools.im2double">[docs]</a><span
+        class="k">def</span> <span class="nf">im2double</span><span class="p">(</span><span class="n">img</span><span
+        class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    MATLAB equivalent</span>
+<span class="sd">    @param img: image to convert into double</span>
+<span class="sd">    @return: numpy array as a double array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">min_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">min</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span
+            class="n">ravel</span><span class="p">())</span>
+    <span class="n">max_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">max</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span
+            class="n">ravel</span><span class="p">())</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">img</span><span
+            class="o">.</span><span class="n">astype</span><span class="p">(</span><span
+            class="s1">&#39;float&#39;</span><span class="p">)</span> <span class="o">-</span> <span
+            class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span
+            class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="computeImageGradient"><a class="viewcode-back"
+                                                         href="../Utils/Utils.html#MyTools.computeImageGradient">[docs]</a><span
+        class="k">def</span> <span class="nf">computeImageGradient</span><span class="p">(</span><span
+        class="n">I</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+        class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes the gradient to a given image</span>
+
+<span class="sd">    :param I: image to which the gradient is computed</span>
+<span class="sd">    :param ksize: kernel size, for blurring and derivatives</span>
+<span class="sd">    :param sigma: sigma for LoG gradient</span>
+<span class="sd">    :param gradientType: &#39;L1&#39; L1 norm of grad(I); &#39;L2&#39; L2-norm of grad(I); &#39;LoG&#39; Laplacian of gaussian</span>
+
+<span class="sd">    :return: an image of the gradient magnitude</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">ksize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span
+            class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;ksize&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">gradientType</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;gradientType&#39;</span><span class="p">,</span> <span class="s1">&#39;L1&#39;</span><span
+            class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
+            class="n">get</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span
+            class="mf">2.5</span><span class="p">)</span>
+
+    <span class="n">gradient</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span
+            class="p">(</span><span class="n">ksize</span><span class="p">,</span> <span class="n">ksize</span><span
+            class="p">),</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="c1"># compute image gradient</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span
+            class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span
+            class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span> <span
+            class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span
+            class="p">(</span><span class="n">dy</span><span class="p">)),</span> <span class="p">(</span><span
+            class="n">ksize</span><span class="p">,</span> <span class="n">ksize</span><span class="p">),</span> <span
+            class="n">sigma</span><span class="p">)</span>  <span class="c1"># L1-norm of grad(I)</span>
+    <span class="k">elif</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span
+            class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
+            class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span
+            class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span
+            class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="n">ksize</span><span
+            class="p">,</span> <span class="n">ksize</span><span class="p">),</span> <span class="n">sigma</span><span
+            class="p">)</span>
+    <span class="k">elif</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;LoG&#39;</span><span
+            class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">filters</span><span
+            class="o">.</span><span class="n">gaussian_laplace</span><span class="p">(</span><span
+            class="n">I</span><span class="p">,</span> <span class="n">sigma</span><span class="p">),</span> <span
+            class="p">(</span><span class="n">ksize</span><span class="p">,</span> <span class="n">ksize</span><span
+            class="p">),</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="c1"># return cv2.normalize((gradient).astype(&#39;float&#39;), None, 0.0,1.0, cv2.NORM_MINMAX)</span>
+    <span class="k">return</span> <span class="n">gradient</span></div>
+
+<div class="viewcode-block" id="repartitionCurve"><a class="viewcode-back"
+                                                     href="../Utils/Utils.html#MyTools.repartitionCurve">[docs]</a><span
+        class="k">def</span> <span class="nf">repartitionCurve</span><span class="p">(</span><span
+        class="n">c</span><span class="p">,</span> <span class="n">dh</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Re-partitions the curve according to dh</span>
+<span class="sd">    :param c: curve</span>
+<span class="sd">    :param dh: length between points</span>
+<span class="sd">    :return: the re-partitioned curve</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span
+            class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">axis</span> <span
+            class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">dtau</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span
+            class="n">dc</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span
+            class="mi">1</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">cumsum</span><span class="p">(</span><span class="n">dtau</span><span class="p">)</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">tau</span><span class="p">)</span>
+
+    <span class="n">interpolator_x</span> <span class="o">=</span> <span class="n">interp1d</span><span
+            class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">c</span><span
+            class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">interpolator_y</span> <span class="o">=</span> <span class="n">interp1d</span><span
+            class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">c</span><span
+            class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">tau_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">tau</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span
+            class="p">],</span> <span class="n">dh</span><span class="p">)</span>
+    <span class="n">tau_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">tau_new</span><span class="p">,</span> <span
+            class="n">tau</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span
+            class="p">])</span>
+    <span class="k">return</span> <span class="n">tau_new</span><span class="p">,</span> <span
+            class="n">interpolator_x</span><span class="p">(</span><span class="n">tau_new</span><span
+            class="p">),</span> <span class="n">interpolator_y</span><span class="p">(</span><span
+            class="n">tau_new</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="curveCentralDerivatives"><a class="viewcode-back"
+                                                            href="../Utils/Utils.html#MyTools.curveCentralDerivatives">[docs]</a><span
+        class="k">def</span> <span class="nf">curveCentralDerivatives</span><span class="p">(</span><span
+        class="n">c</span><span class="p">,</span> <span class="n">repartition</span> <span class="o">=</span> <span
+        class="mi">5</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Computes the first and second central derivative of a curve</span>
+<span class="sd">    :param c: curve points, not necessarily arc-length</span>
+<span class="sd">    :param repartition: the step for repartition. if negative does not change the curve partition</span>
+<span class="sd">    :return: tuple, (c&#39;, c&quot;)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">dc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span
+            class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">axis</span> <span
+            class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">dtau</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span
+            class="n">dc</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span
+            class="mi">1</span><span class="p">)</span>
+    <span class="n">dtau_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">mean</span><span class="p">(</span><span class="n">dtau</span><span class="p">)</span>
+
+    <span class="n">dtau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">dtau</span><span class="p">,</span> <span
+            class="n">dtau_</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">cumsum</span><span class="p">(</span><span class="n">dtau</span><span class="p">)</span>
+    <span class="c1"># re-partition the curve</span>
+    <span class="k">if</span> <span class="n">repartition</span> <span class="o">&gt;</span> <span
+            class="mi">0</span><span class="p">:</span>
+        <span class="n">tau</span><span class="p">,</span> <span class="n">c_x</span><span class="p">,</span> <span
+            class="n">c_y</span> <span class="o">=</span> <span class="n">repartitionCurve</span><span
+            class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">repartition</span><span
+            class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">vstack</span><span class="p">((</span><span class="n">c_x</span><span class="p">,</span> <span
+            class="n">c_y</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dtau</span> <span class="o">=</span> <span class="n">repartition</span>
+
+    <span class="n">c_extrapolated</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">c</span><span
+            class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span
+            class="n">c</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">,</span> <span class="p">:]))</span>
+
+    <span class="c1"># derivatives</span>
+    <span class="n">dc</span> <span class="o">=</span> <span class="n">c_extrapolated</span><span
+            class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span> <span
+            class="o">-</span> <span class="n">c_extrapolated</span><span class="p">[:</span><span
+            class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">d2c</span> <span class="o">=</span> <span class="n">c_extrapolated</span><span
+            class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:]</span> <span
+            class="o">+</span> <span class="n">c_extrapolated</span><span class="p">[:</span><span
+            class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span
+            class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">c</span>
+
+    <span class="n">dc_dtau</span> <span class="o">=</span> <span class="n">dc</span> <span class="o">/</span> <span
+            class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dtau</span><span
+            class="p">)</span>
+    <span class="n">d2c_dtau2</span> <span class="o">=</span> <span class="n">d2c</span> <span class="o">/</span> <span
+            class="n">dtau</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">return</span> <span class="n">c</span><span class="p">,</span> <span class="n">dc_dtau</span><span
+            class="p">,</span> <span class="n">d2c_dtau2</span></div>
+
+
+<div class="viewcode-block" id="computeImageDerivatives"><a class="viewcode-back"
+                                                            href="../Utils/Utils.html#MyTools.computeImageDerivatives">[docs]</a><span
+        class="k">def</span> <span class="nf">computeImageDerivatives</span><span class="p">(</span><span
+        class="n">img</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span
+        class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes image derivatives up to order 2. Normalizes the derivatives.</span>
+
+<span class="sd">        :param img: the image to which the derivatives should be computed</span>
+<span class="sd">        :param order: order needed (1 or 2)</span>
+<span class="sd">        :param ksize: filter kernel size (3,and up)</span>
+<span class="sd">        :param resolution: kernel resolution</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring</span>
+<span class="sd">        :param window: tuple of window size for blurring</span>
+
+<span class="sd">        :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span
+            class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+              <span class="s1">&#39;ksize&#39;</span><span class="p">:</span> <span class="mi">3</span><span
+            class="p">,</span>
+              <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mi">1</span><span
+            class="p">,</span>
+              <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
+              <span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span
+            class="p">,</span><span class="mi">0</span><span class="p">)}</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span
+            class="n">kwargs</span><span class="p">)</span>
+    <span class="n">ksize</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;ksize&#39;</span><span class="p">]</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">float64</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+
+    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_x</span><span
+            class="p">,</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_y</span><span
+            class="p">,</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+
+    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img_x</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                          <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>
+    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img_y</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                          <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>
+
+    <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span
+            class="p">:</span>
+        <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+        <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img_y</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+        <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">Sobel</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span
+            class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+
+        <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xx</span><span
+            class="p">,</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+        <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_yy</span><span
+            class="p">,</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+        <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xy</span><span
+            class="p">,</span> <span class="n">params</span><span class="p">[</span><span
+            class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+
+        <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img_xx</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>
+        <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img_yy</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>
+        <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img_xy</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>
+
+        <span class="k">return</span> <span class="n">img_x</span><span class="p">,</span> <span
+            class="n">img_y</span><span class="p">,</span> <span class="n">img_xx</span><span class="p">,</span> <span
+            class="n">img_yy</span><span class="p">,</span> <span class="n">img_xy</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">img_x</span><span class="p">,</span> <span class="n">img_y</span></div>
+
+
+
+<div class="viewcode-block" id="DoG_filter"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.DoG_filter">[docs]</a><span
+        class="k">def</span> <span class="nf">DoG_filter</span><span class="p">(</span><span class="n">image</span><span
+        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the difference of gaussians filter.</span>
+<span class="sd">    :param image: the image</span>
+<span class="sd">    :param sigma1, sigma2: the sigma to be used for blurring. cv2 will decide the size accordingly.</span>
+<span class="sd">    :param ksize1, ksize2: the size of the filter to be used for blurring. cv2 will decide the sigma accordingly.</span>
+<span class="sd">    :return: filtered image</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filter_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;sigma1&#39;</span><span
+            class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                     <span class="s1">&#39;sigma2&#39;</span><span class="p">:</span> <span class="mi">0</span><span
+            class="p">,</span>
+                     <span class="s1">&#39;ksize1&#39;</span><span class="p">:</span> <span class="mi">0</span><span
+            class="p">,</span>
+                     <span class="s1">&#39;ksize2&#39;</span><span class="p">:</span> <span class="mi">0</span><span
+            class="p">}</span>
+    <span class="n">filter_params</span><span class="o">.</span><span class="n">update</span><span
+            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># large kernel minus smaller one</span>
+    <span class="k">if</span> <span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;sigma1&#39;</span><span
+            class="p">]</span> <span class="o">&gt;</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;sigma2&#39;</span><span class="p">]:</span>
+        <span class="n">sigma1</span> <span class="o">=</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;sigma2&#39;</span><span class="p">]</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;sigma1&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sigma1</span> <span class="o">=</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;sigma1&#39;</span><span class="p">]</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;sigma2&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize1&#39;</span><span
+            class="p">]</span> <span class="o">&gt;</span> <span class="n">filter_params</span><span
+            class="p">[</span><span class="s1">&#39;ksize2&#39;</span><span class="p">]:</span>
+        <span class="n">ksize1</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize2&#39;</span><span
+            class="p">],</span><span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize2&#39;</span><span
+            class="p">])</span>
+        <span class="n">ksize2</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize1&#39;</span><span
+            class="p">],</span> <span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize1&#39;</span><span
+            class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ksize1</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize1&#39;</span><span
+            class="p">],</span> <span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize1&#39;</span><span
+            class="p">])</span>
+        <span class="n">ksize2</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize2&#39;</span><span
+            class="p">],</span> <span class="n">filter_params</span><span class="p">[</span><span class="s1">&#39;ksize2&#39;</span><span
+            class="p">])</span>
+
+    <span class="n">blur1</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">image</span><span
+            class="p">,</span> <span class="n">ksize1</span><span class="p">,</span> <span class="n">sigma1</span><span
+            class="p">)</span>
+    <span class="n">blur2</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">GaussianBlur</span><span class="p">(</span><span class="n">image</span><span
+            class="p">,</span> <span class="n">ksize2</span><span class="p">,</span> <span class="n">sigma2</span><span
+            class="p">)</span>
+
+    <span class="k">return</span> <span class="n">blur2</span><span class="o">-</span><span class="n">blur1</span></div>
+
+
+<div class="viewcode-block" id="chooseLargestContours"><a class="viewcode-back"
+                                                          href="../Utils/Utils.html#MyTools.chooseLargestContours">[docs]</a><span
+        class="k">def</span> <span class="nf">chooseLargestContours</span><span class="p">(</span><span class="n">contours</span><span
+        class="p">,</span> <span class="n">labelProp</span><span class="p">,</span> <span class="n">minArea</span><span
+        class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    leaves only contours with area larger than minArea</span>
+<span class="sd">    :param contours: list of contours</span>
+<span class="sd">    :param labelProp: properties of labeled area</span>
+<span class="sd">    :param minArea: minimal area needed</span>
+<span class="sd">    :return: list of &quot;large&quot; contours</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">contours_filtered</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">c</span> <span
+            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
+            class="n">labelProp</span><span class="p">,</span> <span class="n">contours</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">prop</span><span class="o">.</span><span class="n">area</span> <span
+            class="o">&gt;=</span> <span class="n">minArea</span> <span class="ow">and</span> <span
+            class="n">prop</span><span class="o">.</span><span class="n">area</span> <span class="o">&lt;=</span> <span
+            class="mf">10e6</span><span class="p">:</span>
+            <span class="n">contours_filtered</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">contours_filtered</span></div>
+
+<div class="viewcode-block" id="is_pos_semidef"><a class="viewcode-back"
+                                                   href="../Utils/Utils.html#MyTools.is_pos_semidef">[docs]</a><span
+        class="k">def</span> <span class="nf">is_pos_semidef</span><span class="p">(</span><span class="n">x</span><span
+        class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    check if a matrix is positive semidefinite</span>
+<span class="sd">    :param x: the matrix</span>
+<span class="sd">    :return:  Boolean: True if it is, False is not.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span
+            class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span
+            class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">x</span><span
+            class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="intersect2d"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.intersect2d">[docs]</a><span
+        class="k">def</span> <span class="nf">intersect2d</span><span class="p">(</span><span class="n">a</span><span
+        class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
+        class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    finds the recurring elements in two arrays (row-wise)</span>
+
+<span class="sd">    :param axis: column-wise</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
+            class="n">get</span><span class="p">(</span><span class="s1">&#39;axis&#39;</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span
+            class="n">a</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span
+            class="p">:</span>
+        <span class="n">byaxis</span> <span class="o">=</span> <span class="n">ncols</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># TODO: CHECK THIS ONE WROKS, DIDN&#39;T TRY THAT</span>
+        <span class="n">byaxis</span> <span class="o">=</span> <span class="n">nrows</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="p">{</span><span
+            class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span
+            class="s1">&#39;f</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span
+            class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span
+            class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span
+            class="p">(</span><span class="n">byaxis</span><span class="p">)],</span>
+             <span class="s1">&#39;formats&#39;</span><span class="p">:</span> <span class="n">byaxis</span> <span
+            class="o">*</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span
+            class="p">]}</span>
+    <span class="n">aa</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">copy</span><span
+            class="p">()</span>
+    <span class="n">bb</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">copy</span><span
+            class="p">()</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span
+            class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">view</span><span
+            class="p">(</span><span class="n">dtype</span><span class="p">),</span> <span class="n">bb</span><span
+            class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span
+            class="p">))</span>
+    <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="n">view</span><span
+            class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span
+            class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span
+            class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">byaxis</span><span
+            class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CreateFilename"><a class="viewcode-back"
+                                                   href="../Utils/Utils.html#MyTools.CreateFilename">[docs]</a><span
+        class="k">def</span> <span class="nf">CreateFilename</span><span class="p">(</span><span
+        class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span
+        class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   Checks or creates a file object according to specifications given.</span>
+<span class="sd">       Default is hdf5.</span>
+
+<span class="sd">   .. warning:: Need to be implemented for other formats than hdf5</span>
+
+<span class="sd">   :param filename: can be a filename or a path and filename, with or without extension.</span>
+<span class="sd">   :param mode: is an optional string that specifies the mode in which the file is opened.</span>
+<span class="sd">    It defaults to &#39;w&#39; which means open for writing in text mode.</span>
+
+<span class="sd">   :param extension: &#39;h5&#39;, &#39;json&#39;, &#39;shp&#39;, &#39;pts&#39;, etc...</span>
+
+<span class="sd">   :type filename: str</span>
+<span class="sd">   :type mode: str</span>
+<span class="sd">   :type extension: str</span>
+
+<span class="sd">   :return: a file object (according to the extension) and its extension</span>
+
+<span class="sd">   &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">re</span>
+
+    <span class="n">matched</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span
+            class="n">match</span><span class="p">(</span><span class="s1">&#39;(.*)\.([a-z].*)&#39;</span><span
+            class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">matched</span> <span class="ow">is</span> <span
+            class="kc">None</span><span class="p">:</span>
+        <span class="c1"># if no extension is in filename, add</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;extension&#39;</span><span class="p">,</span> <span class="s1">&#39;h5&#39;</span><span
+            class="p">)</span>  <span class="c1"># if no extension given - default is h5</span>
+
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span> <span
+            class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span
+            class="n">extension</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># otherwise - use the extension in filename</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">matched</span><span class="o">.</span><span
+            class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span
+            class="s1">&#39;h5&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">h5py</span><span class="o">.</span><span
+            class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span
+            class="n">mode</span><span class="p">),</span> <span class="n">extension</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># change if needed</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">open</span><span class="p">(</span><span
+            class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">),</span> <span
+            class="n">extension</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="draw_contours"><a class="viewcode-back"
+                                                  href="../Utils/Utils.html#MyTools.draw_contours">[docs]</a><span
+        class="k">def</span> <span class="nf">draw_contours</span><span class="p">(</span><span
+        class="n">func</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span
+        class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draws the contours of a specific iteration</span>
+
+<span class="sd">    :param func: the function which contours should be drawn</span>
+<span class="sd">    :param ax: the axes to draw upon</span>
+<span class="sd">    :param image: the image on which the contours will be drawn</span>
+<span class="sd">    :param hold: erase image from previous drawings or not. Default: False</span>
+<span class="sd">    :param color: the color which the contour will be drawn. Default: random for each curve (send True)</span>
+
+<span class="sd">    :type func: np.ndarray</span>
+<span class="sd">    :type ax: plt.axes</span>
+<span class="sd">    :type hold: bool</span>
+<span class="sd">    :type color: str or bool</span>
+
+
+<span class="sd">    :return: the figure</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">random</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+    <span class="c1"># ax.axis(&quot;off&quot;)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span
+            class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span
+            class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span
+            class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
+            class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+            class="kc">True</span><span class="p">)</span>
+
+    <span class="n">function_binary</span> <span class="o">=</span> <span class="n">func</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># segmenting and presenting the found areas</span>
+    <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&gt;</span> <span
+            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">function_binary</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">function_binary</span><span
+            class="p">)</span>
+
+    <span class="n">contours</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span
+            class="n">find_contours</span><span class="p">(</span><span class="n">func</span><span
+            class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="n">blob_labels</span> <span class="o">=</span> <span class="n">measure</span><span
+            class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">function_binary</span><span
+            class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">)</span>
+    <span class="n">label_props</span> <span class="o">=</span> <span class="n">measure</span><span
+            class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span
+            class="n">blob_labels</span><span class="p">)</span>
+
+    <span class="c1">#     contours = chooseLargestContours(contours, label_props, 1)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
+        <span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">l_curve</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span
+            class="p">:</span>
+        <span class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span
+            class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span
+            class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">1</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">]]</span>  <span class="c1"># swapping between columns: x will be at the first column and y on the second</span>
+        <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span
+            class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span
+            class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+
+        <span class="n">curve</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span
+            class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span
+            class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span
+            class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span
+            class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span
+            class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">l_curve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">curve</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="curve2D_toGeoSeries"><a class="viewcode-back"
+                                                        href="../Utils/Utils.html#MyTools.curve2D_toGeoSeries">[docs]</a><span
+        class="k">def</span> <span class="nf">curve2D_toGeoSeries</span><span class="p">(</span><span
+        class="n">curve</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms a 2D line to a geopandas GeoSeries</span>
+
+<span class="sd">    :param curve: pyplot.2Dline</span>
+
+<span class="sd">    :return: geopandas GeoSeries of a polygon</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">xy</span> <span class="o">=</span> <span class="n">curve</span><span class="o">.</span><span
+            class="n">get_path</span><span class="p">()</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span
+            class="p">(</span><span class="n">xy</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span
+            class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">xy</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]):</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span
+            class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
+    <span class="n">polygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span
+            class="n">xy</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">polygon</span><span class="o">.</span><span
+            class="n">is_valid</span><span class="p">:</span>
+        <span class="n">polygon</span> <span class="o">=</span> <span class="n">polygon</span><span
+            class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span
+            class="p">)</span>
+    <span class="k">return</span> <span class="n">polygon</span></div>
+
+
+<div class="viewcode-block" id="curves2D_toGeoDataframe"><a class="viewcode-back"
+                                                            href="../Utils/Utils.html#MyTools.curves2D_toGeoDataframe">[docs]</a><span
+        class="k">def</span> <span class="nf">curves2D_toGeoDataframe</span><span class="p">(</span><span class="n">curves</span><span
+        class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms multiple 2D lines to geopandas GeoDataFrame</span>
+<span class="sd">    :param curves: list of pyplot.lines.Line2D</span>
+
+<span class="sd">    :type curves: list</span>
+
+<span class="sd">    :return: geodataframe of the polygons</span>
+
+<span class="sd">    :rtype: gpd.GeoDataFrame</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">geometry</span> <span class="o">=</span> <span class="p">[</span><span
+            class="n">curve2D_toGeoSeries</span><span class="p">(</span><span class="n">curve</span><span
+            class="p">)</span> <span class="k">for</span> <span class="n">curve</span> <span class="ow">in</span> <span
+            class="n">curves</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span
+            class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span
+            class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span
+            class="n">geometry</span><span class="p">)),</span> <span class="s1">&#39;coordinates&#39;</span><span
+            class="p">:</span> <span class="n">geometry</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span
+            class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span
+            class="n">geometry</span><span class="o">=</span><span class="s1">&#39;coordinates&#39;</span><span
+            class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span
+                                class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">img_orig</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+                                class="n">cvtColor</span><span class="p">(</span><span class="n">cv2</span><span
+                                class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span
+                                class="s1">&#39;D:\Documents\ownCloud\Data\Images\Image.bmp&#39;</span><span class="p">),</span> <span
+                                class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span
+                                class="p">)</span>
+    <span class="n">img_normed</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+                                class="n">normalize</span><span class="p">(</span><span class="n">img_orig</span><span
+                                class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+                                class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span
+                                class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span
+                                class="p">,</span>
+                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+                                class="p">)</span>  <span class="c1"># Convert to normalized floating point</span>
+
+    <span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">img_normed</span><span
+                                class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span> <span
+                                class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+</pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1a',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+
+</script>
+<script type="text/javascript" src="../_static/jquery.js"></script>
+<script type="text/javascript" src="../_static/underscore.js"></script>
+<script type="text/javascript" src="../_static/doctools.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<script type="text/javascript" src="../_static/js/theme.js"></script>
+
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+
+</script>
+
+</body>
+</html>

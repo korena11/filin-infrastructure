@@ -1,0 +1,19 @@
+Normals Property
+================
+
+
+.. autoclass:: NormalsProperty.NormalsProperty
+    :members:
+    :undoc-members:
+
+    .. rubric:: Attributes
+
+    .. autoautosummary:: NormalsProperty.NormalsProperty
+        :attributes:
+
+    .. rubric:: Methods
+
+    .. autoautosummary:: NormalsProperty.NormalsProperty
+        :methods:
+
+

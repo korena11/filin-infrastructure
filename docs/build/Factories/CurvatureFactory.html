@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Curvature Factory &mdash; infragit 1a documentation</title>
+
+
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
+    <link rel="index" title="Index" href="../genindex.html"/>
+    <link rel="search" title="Search" href="../search.html"/>
+    <link rel="next" title="Filter Factory" href="FilterFactory.html"/>
+    <link rel="prev" title="Color Factory" href="ColorFactory.html"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../index.html" class="icon icon-home"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/PointSet.html">PointSet
+                        class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/RasterData.html">RasterData
+                        class</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties
+                        base class</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal" href="Factories.html">Factories</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="IOFactory.html">IO Factory</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="ColorFactory.html">Color
+                                Factory</a></li>
+                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Curvature
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="FilterFactory.html">Filter
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="NormalsFactory.html">Normals
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="NeighborsFactory.html">Neighbors
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="PanoramaFactory.html">Panorama
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="RotationMatrixFactory.html">RotationMatrix
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="RasterFactory.html">Raster
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="SegmentationFactory.html">Segmentation
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="SphericalCoordinatesFactory.html">SphericalCoordinates
+                                Factory</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="TriangulationFactory.html">Triangulation
+                                Factory</a></li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="Factories.html">Factories</a> &raquo;</li>
+
+                        <li>Curvature Factory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../_sources/Factories/CurvatureFactory.rst.txt" rel="nofollow"> View page
+                                source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="curvature-factory">
+                            <h1>Curvature Factory<a class="headerlink" href="#curvature-factory"
+                                                    title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="CurvatureFactory.CurvatureFactory">
+                                    <em class="property">class </em><code class="descclassname">CurvatureFactory.</code><code
+                                        class="descname">CurvatureFactory</code><a class="reference internal"
+                                                                                   href="../_modules/CurvatureFactory.html#CurvatureFactory"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#CurvatureFactory.CurvatureFactory"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>curvature parameters computation</p>
+                                    <blockquote>
+                                        <div><p class="rubric">Methods</p>
+                                            <table border="1" class="longtable docutils">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="90%"/>
+                                                </colgroup>
+                                                <tbody valign="top">
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Curvadness"
+                                                           title="CurvatureFactory.CurvatureFactory.Curvadness"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Curvadness</span></code></a>(k1,&nbsp;k2)
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"
+                                                           title="CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Curvature_FundamentalForm</span></code></a>(pnt,&nbsp;points,&nbsp;rad)
+                                                    </td>
+                                                    <td>Curvature computation based on fundamental form</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Curvature_by3parameters"
+                                                           title="CurvatureFactory.CurvatureFactory.Curvature_by3parameters"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Curvature_by3parameters</span></code></a>(points,&nbsp;normals)
+                                                    </td>
+                                                    <td>Computes the curvature for each point in the point cloud
+                                                        according to three parameters.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Gaussian_Curvature"
+                                                           title="CurvatureFactory.CurvatureFactory.Gaussian_Curvature"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Gaussian_Curvature</span></code></a>(k1,&nbsp;k2)
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Mean_Curvature"
+                                                           title="CurvatureFactory.CurvatureFactory.Mean_Curvature"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Mean_Curvature</span></code></a>(k1,&nbsp;k2)
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Shape_Index"
+                                                           title="CurvatureFactory.CurvatureFactory.Shape_Index"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Shape_Index</span></code></a>(k1,&nbsp;k2)
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Similarity_Curvature"
+                                                           title="CurvatureFactory.CurvatureFactory.Similarity_Curvature"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Similarity_Curvature</span></code></a>(k1,&nbsp;k2)
+                                                    </td>
+                                                    <td>calculates similarity curvature (E,H)</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </blockquote>
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Curvadness">
+                                            <em class="property">static </em><code
+                                                class="descname">Curvadness</code><span
+                                                class="sig-paren">(</span><em>k1</em>, <em>k2</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/CurvatureFactory.html#CurvatureFactory.Curvadness"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Curvadness"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm">
+                                            <em class="property">static </em><code class="descname">Curvature_FundamentalForm</code><span
+                                                class="sig-paren">(</span><em>pnt</em>, <em>points</em>, <em>rad</em>,
+                                            <em>tree=None</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../_modules/CurvatureFactory.html#CurvatureFactory.Curvature_FundamentalForm"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Curvature computation based on fundamental form</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>pnt</strong> – array 3x1 point of interest</li>
+                                                            <li><strong>points</strong> – pointset</li>
+                                                            <li><strong>tree</strong> – KD tree, if exists</li>
+                                                            <li><strong>rad</strong> – radius of the neighborhood</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first last">principal
+                                                        curvatures</p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Curvature_by3parameters">
+                                            <em class="property">static </em><code class="descname">Curvature_by3parameters</code><span
+                                                class="sig-paren">(</span><em>points</em>, <em>normals</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/CurvatureFactory.html#CurvatureFactory.Curvature_by3parameters"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Curvature_by3parameters"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Computes the curvature for each point in the point cloud according to
+                                            three parameters.</p>
+                                            <p>Main idea:
+                                                1. Find neighbors</p>
+                                            <ol class="arabic" start="2">
+                                                <li>
+                                                    <dl class="first docutils">
+                                                        <dt>Rotate so that the normal will be [0 0 1]</dt>
+                                                        <dd><p class="first">the bi-quadratic surface coefficients <span
+                                                                class="math notranslate nohighlight">\(d,e,f\)</span>
+                                                            are zero and the fitting is of three parameters:</p>
+                                                            <div class="last math notranslate nohighlight">
+                                                                \[z(x,y) = ax^2 + by^2 + cxy\]
+                                                            </div>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li><p class="first">Second derivatives dictate the curvature</p>
+                                                    <div class="math notranslate nohighlight">
+                                                        \[\begin{split}{\bf H} = \begin{bmatrix} 2a &amp; c \\ c &amp;
+                                                        2b \end{bmatrix}\end{split}\]
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>points</strong> – the point cloud
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">curvature property</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Gaussian_Curvature">
+                                            <em class="property">static </em><code
+                                                class="descname">Gaussian_Curvature</code><span
+                                                class="sig-paren">(</span><em>k1</em>, <em>k2</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/CurvatureFactory.html#CurvatureFactory.Gaussian_Curvature"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Gaussian_Curvature"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Mean_Curvature">
+                                            <em class="property">static </em><code
+                                                class="descname">Mean_Curvature</code><span
+                                                class="sig-paren">(</span><em>k1</em>, <em>k2</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/CurvatureFactory.html#CurvatureFactory.Mean_Curvature"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Mean_Curvature"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Shape_Index">
+                                            <em class="property">static </em><code
+                                                class="descname">Shape_Index</code><span class="sig-paren">(</span><em>k1</em>,
+                                            <em>k2</em><span class="sig-paren">)</span><a class="reference internal"
+                                                                                          href="../_modules/CurvatureFactory.html#CurvatureFactory.Shape_Index"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Shape_Index"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Similarity_Curvature">
+                                            <em class="property">static </em><code
+                                                class="descname">Similarity_Curvature</code><span
+                                                class="sig-paren">(</span><em>k1</em>, <em>k2</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/CurvatureFactory.html#CurvatureFactory.Similarity_Curvature"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Similarity_Curvature"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>calculates similarity curvature (E,H)</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>k1</strong><strong>,</strong><strong>k2</strong>
+                                                        – principal curvatures (k1&gt;k2)
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name" colspan="2">Return similarCurv:</th>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <td>&#160;</td>
+                                                    <td class="field-body">values of similarity curvature (E,H)</td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return rgb:</th>
+                                                    <td class="field-body">RGB color for every point</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+                        <a href="FilterFactory.html" class="btn btn-neutral float-right" title="Filter Factory"
+                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a href="ColorFactory.html" class="btn btn-neutral" title="Color Factory" accesskey="p"
+                           rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1a',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+
+</script>
+<script type="text/javascript" src="../_static/jquery.js"></script>
+<script type="text/javascript" src="../_static/underscore.js"></script>
+<script type="text/javascript" src="../_static/doctools.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<script type="text/javascript" src="../_static/js/theme.js"></script>
+
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+
+</script>
+
+</body>
+</html>

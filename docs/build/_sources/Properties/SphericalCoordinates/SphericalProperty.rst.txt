@@ -1,0 +1,19 @@
+Spherical Property
+===================
+
+
+.. autoclass:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
+    :members:
+    :undoc-members:
+
+    .. rubric:: Attributes
+
+    .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
+        :attributes:
+
+    .. rubric:: Methods
+
+    .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
+        :methods:
+
+

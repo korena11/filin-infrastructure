@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Normals Factory &mdash; infragit 1a documentation</title>
+
+
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a href="../../index.html" class="icon icon-home"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+                        <input type="text" name="q" placeholder="Search docs"/>
+                        <input type="hidden" name="check_keywords" value="yes"/>
+                        <input type="hidden" name="area" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../BaseProperty.html">Properties</a></li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+
+        <nav class="wy-nav-top" aria-label="top navigation">
+
+            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div role="navigation" aria-label="breadcrumbs navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li>Normals Factory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Normals/NormalsFactory.rst.txt" rel="nofollow"> View page
+                                source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="normals-factory">
+                            <h1>Normals Factory<a class="headerlink" href="#normals-factory"
+                                                  title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="NormalsFactory.NormalsFactory">
+                                    <em class="property">class </em><code
+                                        class="descclassname">NormalsFactory.</code><code class="descname">NormalsFactory</code><a
+                                        class="reference internal"
+                                        href="../../_modules/NormalsFactory.html#NormalsFactory"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#NormalsFactory.NormalsFactory"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd>
+                                    <blockquote>
+                                        <div><p class="rubric">Methods</p>
+                                            <table border="1" class="longtable docutils">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="90%"/>
+                                                </colgroup>
+                                                <tbody valign="top">
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#NormalsFactory.NormalsFactory.normalsComputation_in_raster"
+                                                           title="NormalsFactory.NormalsFactory.normalsComputation_in_raster"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">normalsComputation_in_raster</span></code></a>(x,&nbsp;y,&nbsp;z)
+                                                    </td>
+                                                    <td>Computes the normal vectors according where each ordinate is
+                                                        ordered at its place as an ndarray (mxn) Usually used for
+                                                        computing normals in panorama images or other rasters.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#NormalsFactory.NormalsFactory.normalsPCA"
+                                                           title="NormalsFactory.NormalsFactory.normalsPCA"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">normalsPCA</span></code></a>(pointset[,&nbsp;tree,&nbsp;radius,&nbsp;k_neighbors])
+                                                    </td>
+                                                    <td>Computes the normals for each point in the pointset via PCA</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#NormalsFactory.NormalsFactory.normals_from_file"
+                                                           title="NormalsFactory.NormalsFactory.normals_from_file"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">normals_from_file</span></code></a>(points,&nbsp;normalsFileName)
+                                                    </td>
+                                                    <td>
+                                                        <table class="docutils field-list" frame="void" rules="none">
+                                                            <col class="field-name"/>
+                                                            <col class="field-body"/>
+                                                            <tbody valign="top">
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name">param points:</th>
+                                                                <td class="field-body">PointSet to which the normals
+                                                                    belong to :param normalsFileName: name of file
+                                                                    containing normal for each points
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#NormalsFactory.NormalsFactory.normals_open3D"
+                                                           title="NormalsFactory.NormalsFactory.normals_open3D"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">normals_open3D</span></code></a>(pointcloud)
+                                                    </td>
+                                                    <td>Computes the normals using open 3D</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </blockquote>
+                                    <dl class="staticmethod">
+                                        <dt id="NormalsFactory.NormalsFactory.normalsComputation_in_raster">
+                                            <em class="property">static </em><code class="descname">normalsComputation_in_raster</code><span
+                                                class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NormalsFactory.html#NormalsFactory.normalsComputation_in_raster"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NormalsFactory.NormalsFactory.normalsComputation_in_raster"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Computes the normal vectors according where each ordinate is ordered at
+                                            its place as an ndarray (mxn)
+                                            Usually used for computing normals in panorama images or other rasters.</p>
+                                            <p>According to <a class="reference internal"
+                                                               href="../../index.html#zeibak2008" id="id1">[5]</a>, the
+                                                normals are computed as</p>
+                                            <div class="math notranslate nohighlight">
+                                                \[\begin{split}\vec{v}_1 = \begin{bmatrix} dX_1\\ dY_1 \\dZ_1
+                                                \end{bmatrix} ; \qquad
+                                                \vec{v}_2 = \begin{bmatrix} dX_2\\ dY_2 \\dZ_2
+                                                \end{bmatrix}\end{split}\]
+                                            </div>
+                                            <p>with <span class="math notranslate nohighlight">\(dX_i\)</span> etc. the
+                                                differentiation in each direction. Then,</p>
+                                            <div class="math notranslate nohighlight">
+                                                \[\vec{N} = \frac{\vec{v}_1\times \vec{v}_2}{||\vec{v}_1\times
+                                                \vec{v}_2||}\]
+                                            </div>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>x</strong> – x ordinates as organized in the
+                                                                raster
+                                                            </li>
+                                                            <li><strong>y</strong> – y ordinates as organized in the
+                                                                raster
+                                                            </li>
+                                                            <li><strong>z</strong> – z ordinates as organized in the
+                                                                raster
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">normals matrices for each
+                                                        direction</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last">np.ndarray [<span
+                                                            class="math notranslate nohighlight">\(n\times m \times 3\)</span>]
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="NormalsFactory.NormalsFactory.normalsPCA">
+                                            <em class="property">static </em><code
+                                                class="descname">normalsPCA</code><span class="sig-paren">(</span><em>pointset</em>,
+                                            <em>tree=None</em>, <em>radius=None</em>, <em>k_neighbors=None</em>, <em>**kwargs</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NormalsFactory.html#NormalsFactory.normalsPCA"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NormalsFactory.NormalsFactory.normalsPCA"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Computes the normals for each point in the pointset via PCA</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>pointset</strong> – points to compute their
+                                                                normals
+                                                            </li>
+                                                            <li><strong>tree</strong> – a KD-tree or Ball-tree to
+                                                                extract neighbors from. If no tree is passed, a
+                                                                ball-tree will be
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p>build here.</p>
+                                            <p><em>One of these should be passed</em></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>radius</strong> – the radius in which the
+                                                                neighbors should be found
+                                                            </li>
+                                                            <li><strong>k_neighbors</strong> – number of neighbors</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Optionals</strong></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>leaf_size</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) – for
+                                                                ball-tree construction. Default: 40
+                                                            </li>
+                                                            <li><strong>metric</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                            title="(in Python v3.7)"><em>str</em></a>)
+                                                                – for ball-tree construction. Deafault: ‘minkowski’
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">normals for each point</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="NormalsProperty.html#NormalsProperty.NormalsProperty"
+                                                            title="NormalsProperty.NormalsProperty">NormalsProperty</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="NormalsFactory.NormalsFactory.normals_from_file">
+                                            <em class="property">static </em><code
+                                                class="descname">normals_from_file</code><span
+                                                class="sig-paren">(</span><em>points</em>, <em>normalsFileName</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NormalsFactory.html#NormalsFactory.normals_from_file"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NormalsFactory.NormalsFactory.normals_from_file"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>points</strong> (<a class="reference internal"
+                                                                                            href="../../Datasets/PointSet.html#PointSet.PointSet"
+                                                                                            title="PointSet.PointSet"><em>PointSet.PointSet</em></a>)
+                                                                – PointSet to which the normals belong to
+                                                            </li>
+                                                            <li><strong>normalsFileName</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                    title="(in Python v3.7)"><em>str</em></a>) – name of
+                                                                file containing normal for each points
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">NormalsProperty of the
+                                                        points</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="NormalsProperty.html#NormalsProperty.NormalsProperty"
+                                                            title="NormalsProperty.NormalsProperty">NormalsProperty</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="NormalsFactory.NormalsFactory.normals_open3D">
+                                            <em class="property">static </em><code
+                                                class="descname">normals_open3D</code><span
+                                                class="sig-paren">(</span><em>pointcloud</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NormalsFactory.html#NormalsFactory.normals_open3D"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NormalsFactory.NormalsFactory.normals_open3D"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Computes the normals using open 3D</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>pointcloud</strong> (<em>open3d.PointCloud</em>)
+                                                        – an open 3d point cloud object
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">normals property and the pointcloud with
+                                                        normals
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1a',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+
+</script>
+<script type="text/javascript" src="../../_static/jquery.js"></script>
+<script type="text/javascript" src="../../_static/underscore.js"></script>
+<script type="text/javascript" src="../../_static/doctools.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+<script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+
+</script>
+
+</body>
+</html>
