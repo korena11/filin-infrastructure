@@ -87,7 +87,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.data[:, 0]
+        return self.ToNumpy()[:, 0]
 
     @property
     def Y(self):
@@ -98,7 +98,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.data[:, 1]
+        return self.ToNumpy()[:, 1]
 
     @property
     def Z(self):
@@ -108,7 +108,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.data[:, 2]
+        return self.ToNumpy()[:, 2]
 
 
     def ToNumpy(self):

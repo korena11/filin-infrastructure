@@ -26,7 +26,10 @@ class CurvatureProperty(BaseProperty):
         self.__curvature = args[0]
 
     def getValues(self):
-        return self.__curvature
+        """
+        :return: mean curvature (temoprary)
+        """
+        return self.mean_curvature
 
     @property
     def Curvature(self):
@@ -50,13 +53,13 @@ class CurvatureProperty(BaseProperty):
         return self.__curvature[:, 1]
 
     @property
-    def Mean_Curvature(self):
+    def mean_curvature(self):
         '''
         '''
         return (self.k1 + self.k2) / 2
 
     @property
-    def Gaussian_Curvature(self):
+    def gaussian_curvature(self):
         r'''
         Gaussian curvature
 
@@ -70,7 +73,7 @@ class CurvatureProperty(BaseProperty):
         return self.k1 * self.k2
 
     @property
-    def Curvadness(self):
+    def curvadness(self):
         r'''
         Curvadness property defined by
 
@@ -93,7 +96,7 @@ class CurvatureProperty(BaseProperty):
         shapeI[difZero, :] = (1.0 / np.pi) * np.arctan2((self.k2 + self.k1)[difZero], (self.k2 - self.k1)[difZero])
         return shapeI
 
-    def Similarity_Curvature(self):
+    def similarity_curvature(self):
         '''
         calculates similarity curvature (E,H)
 

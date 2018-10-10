@@ -27,14 +27,15 @@ class PanoramaFactory:
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
 
-         **Optionals**
-
-        :param void_as_mean: flag to determine the void value as the mean value of the ranges
-
         :type points: PointSet
         :type azimuthSpacing: float
         :type elevationSpacing: float
         :type intensity: bool
+
+         **Optionals**
+
+        :param void_as_mean: flag to determine the void value as the mean value of the ranges
+
         :type void_as_mean: bool
 
         :return: panorama_property
@@ -85,9 +86,7 @@ class PanoramaFactory:
         :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
-
-        **Optionals**
-
+        :param voidData: the number to set where there is no data
         :param void_as_mean: flag to determine the void value as the mean value of the ranges
 
         :type pointSet_property: BaseProperty
@@ -95,6 +94,7 @@ class PanoramaFactory:
         :type elevationSpacing: float
         :type inensity: bool
         :type void_as_mean: bool
+        :type voidData: float
 
         :return: panorama_property
         :rtype: PanoramaProperty
@@ -117,12 +117,12 @@ class PanoramaFactory:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
-                                        elevationSpacing=elevationSpacing)
+                                        elevationSpacing=elevationSpacing, **kwargs)
         else:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.Points.Intensity,
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
-                                        elevationSpacing=elevationSpacing)
+                                        elevationSpacing=elevationSpacing, **kwargs)
 
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)

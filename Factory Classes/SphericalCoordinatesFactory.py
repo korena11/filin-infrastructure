@@ -24,6 +24,7 @@ class SphericalCoordinatesFactory:
         :return: spherical coordinates property in degrees
         :rtype: SphericalCoordinatesProperty
         """
+
         x = points.X
         y = points.Y
         z = points.Z

@@ -51,12 +51,12 @@ class PanoramaProperty(BaseProperty):
 
         numRows = int((self.max_elevation - self.min_elevation) / self.elevation_spacing) + 1
         numColumns = int((self.max_azimuth - self.min_azimuth) / self.azimuth_spacing) + 1
-        self.__panoramaIndex = np.empty((numRows, numColumns))
+        self.__panoramaIndex = ones((numRows, numColumns)) * np.NaN
 
         if len(panoramaData.shape) == 1:
             self.__panoramaData = self.void_data * ones((numRows, numColumns))
             self.__panoramaData[rowIndexes, columnIndexes] = panoramaData
-            self.__panoramaIndex[rowIndexes, columnIndexes] = np.arange(0, panoramaData.shape[0])
+            self.__panoramaIndex[rowIndexes, columnIndexes] = np.arange(0, panoramaData.shape[0], dtype=np.int)
         else:
             self.__panoramaData = self.void_data * ones((numRows, numColumns, panoramaData.shape[1]))
             self.__panoramaData[rowIndexes, columnIndexes, :] = panoramaData[:, :]
