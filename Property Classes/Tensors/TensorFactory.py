@@ -15,7 +15,7 @@ import platform
 import numpy as np
 
 from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
+from TensorProperty import TensorProperty
 from Tensors.tensor import Tensor
 
 if platform.system() == 'Linux':
@@ -39,7 +39,7 @@ class TensorFactory(object):
 
         ** Optionals **
 
-        :param radius: the radius according to which weights are being computes (if not set, then unit weight is used)
+        :param radius: the radius according to which weights are being computed (if not set, then unit weight is used)
 
         :type points: PointSet
         :type point_index: int
@@ -70,7 +70,7 @@ class TensorFactory(object):
         # Compute the covariance matrix of points around the ref_point
         covMat = (w[:, None] * deltas).T.dot(deltas) / np.sum(w)
 
-        t = Tensor(points, covMat, ref_point)
+        t = Tensor(covMat, ref_point, points.Size)
 
         return t
 
@@ -94,11 +94,8 @@ class TensorFactory(object):
         if not isinstance(t1, Tensor) and isinstance(t2, Tensor):
             raise TypeError('Argument must be a TensorSegment object')
 
-        n1 = t1.Size
-        n2 = t2.Size
-
-        points = t1.Points.AddData2Fields(t2.Points.ToNumpy(), 'XYZ')
-        points = points.Points.AddData2Fields(t2.Points.Intensity, 'intensity')
+        n1 = t1.points_number
+        n2 = t2.points_number
 
         covMat = n1 * t1.covariance_matrix / (n1 + n2) + n2 * t2.covariance_matrix / (n1 + n2) + \
                  n1 * n2 ** 2 * np.dot((t2.reference_point - t1.reference_point).reshape((-1, 1)),
@@ -108,25 +105,34 @@ class TensorFactory(object):
                                        (t2.reference_point - t1.reference_point).reshape((1, -1))) / \
                  (n1 + n2) ** 3
 
-        return Tensor(points, covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2))
+        return Tensor(covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2), n1 + n2)
 
     @staticmethod
-    def computeTensors_PointSetOpen3D(points, radius, knn=None, **kwargs):
+    def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty, **kwargs):
         """
         Compute tensors for a point cloud.
 
-        For each point a tensor is computed, with the point itself the reference point
+        For each point a tensor is computed, with the point itself the reference point.
 
         :param points: a point cloud (PointSet or sub-object)
-        :param radius: the search radius for neighbors
-        :param knn: k-nearest neighbors.
-
+        :param neighborhoodProperty: a property that holds all neighbors for each point
 
         :type points: PointSet
-        :type radius: float
+        :type neighborhoodProperty:
         :type knn: int
 
         :return: a tensor property with all tensors computed for each point
+
+
+        .. code-block:: python
+
+            pts = np.random.rand(1000, 3) - 0.5) * 1000.0
+            points = PointSet(pts)
+
+
+
         """
 
-        p3d = PointSetOpen3D(points)
+        tensors = TensorProperty(points)
+
+        for i in np.arange(points.Size):
