@@ -1,8 +1,7 @@
-from PointSet import PointSet
-from SegmentationFactory import SegmentationFactory 
-from Visualization import Visualization
 from IOFactory import IOFactory
-    
+from SegmentationFactory import SegmentationFactory
+from VisualizationVTK import VisualizationVTK
+
 if __name__ == '__main__':
 
     pointSetList = []
@@ -10,7 +9,6 @@ if __name__ == '__main__':
     IOFactory.ReadPts(fileName, pointSetList)
         
     scanLineSegmentation = SegmentationFactory.ScanLinesSegmentation(pointSetList[0])
-        
-    Visualization.RenderPointSet(scanLineSegmentation, 'segmentation')
-    Visualization.Show()
-    
+
+    VisualizationVTK.RenderPointSet(scanLineSegmentation, 'segmentation')
+    VisualizationVTK.Show()

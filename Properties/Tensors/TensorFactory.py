@@ -31,7 +31,7 @@ class TensorFactory(object):
     @classmethod
     def tensorFromPoints(cls, points, point_index=-1, **kwargs):
         """
-        Creating a tensor instance from a list of 3D points
+        Create a Tensor from 3D points
 
         :param points: PointSet
         :param point_index: around which point index the tensor is computed.  If (-1) the tensor is computed around the
@@ -77,7 +77,7 @@ class TensorFactory(object):
     @classmethod
     def joinTensors(cls, t1, t2):
         """
-        Creating a new instance of Tensor by adding two existing ones
+        Create a new Tensor by joining two existing ones
 
         :param t1: First TensorSegment object
         :param t2: Second TensorSegment object
@@ -136,3 +136,4 @@ class TensorFactory(object):
         tensors = TensorProperty(points)
 
         for i in np.arange(points.Size):
+            pass

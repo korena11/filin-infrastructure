@@ -1,8 +1,8 @@
-from IOFactory import IOFactory
-from PointSet import PointSet
-from TriangulationFactory import TriangulationFactory
-from Visualization import Visualization
 import vtk
+
+from IOFactory import IOFactory
+from TriangulationFactory import TriangulationFactory
+from VisualizationVTK import VisualizationVTK
 
 if __name__ == '__main__':
     
@@ -13,8 +13,8 @@ if __name__ == '__main__':
     pointSet = pointSetList[0]
     
     tp = TriangulationFactory.Delaunay2D(pointSet)
-    
-    Visualization.RenderTriangularMesh(pointSet, tp, 'height', colorMap = 'jet')
+
+    VisualizationVTK.RenderTriangularMesh(pointSet, tp, 'height', colorMap='jet')
     
     polyData = pointSet.ToPolyData()
     polyData.polys = tp.TrianglesIndices()
@@ -26,5 +26,5 @@ if __name__ == '__main__':
     
     stlWriter.SetInputConnection(polyData)
     stlWriter.Write()
-    
-    Visualization.Show()
+
+    VisualizationVTK.Show()

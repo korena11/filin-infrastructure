@@ -48,9 +48,8 @@ class NormalsFactory:
         Computes the normals for each point in the pointset via PCA
 
         :param pointset: points to compute their normals
-        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be
-        build here.
-
+        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be build here.
+        
         *One of these should be passed*
 
         :param radius: the radius in which the neighbors should be found
@@ -260,7 +259,7 @@ class NormalsFactory:
 
 if __name__ == "__main__":
     from IOFactory import IOFactory
-    from Visualization import Visualization
+    from VisualizationVTK import VisualizationVTK
 
     pointSetList = []
 
@@ -271,8 +270,8 @@ if __name__ == "__main__":
     #    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])
     normals = NormalsFactory.VtkNormals(pointSetList[0])  # , triangulation)
 
-    Visualization.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3)
-    Visualization.Show()
+    VisualizationVTK.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3)
+    VisualizationVTK.Show()
 
 #    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
 #    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    

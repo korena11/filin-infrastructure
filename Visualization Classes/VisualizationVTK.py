@@ -11,7 +11,7 @@ from PointSubSet import PointSubSet
 from SegmentationProperty import SegmentationProperty
 
 
-class Visualization:
+class VisualizationVTK:
     """
     .. code-block:: python
 
@@ -243,7 +243,7 @@ if __name__ == '__main__':
 
     number_of_viewports = 2
     # Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4
-    visualization_object = Visualization(number_of_viewports, two_viewports_vertical_horizontal='V')
+    visualization_object = VisualizationVTK(number_of_viewports, two_viewports_vertical_horizontal='V')
     visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
     visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
     visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)

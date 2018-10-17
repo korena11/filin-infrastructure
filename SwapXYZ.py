@@ -1,10 +1,6 @@
 import numpy as np
-import vtk as vtk
-from IOFactory import IOFactory
-from PointSet import PointSet
-from Visualization import Visualization 
-from Registration import Registration
 
+from Registration import Registration
 
 if __name__ == '__main__':
     fileName_s = 'D:\\My Documents\\Ovda\\Ovda5.pts'

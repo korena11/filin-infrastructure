@@ -8,5 +8,4 @@ and other functionalities)
 .. toctree::
     TransformationProperty
     TransformationFactory
-    SphericalProperty
     RotationUtils

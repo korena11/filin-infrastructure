@@ -24,9 +24,6 @@ class Tensor(object):
     """
     Class for representing a segment as a Tensor
 
-    .. warning::
-
-       THIS PROPERTY IS NOT FINISHED
     """
     __refPoint = None
     __covMat = None
@@ -97,7 +94,7 @@ class Tensor(object):
     @property
     def plate_axis(self):
         """
-
+        If the covariance relates to a plane (a plate), its normal is the plate_axis
 
         """
         return self.__plateAxis
@@ -188,17 +185,24 @@ class Tensor(object):
             return np.nan
 
     def VisualizeTensor(self, pntSet, color=(255, 0, 0)):
+        """
+        NOT WORKING
+        
+        :param pntSet:
+        :param color:
+        :return:
+        """
         from PointSet import PointSet
-        from Visualization import Visualization
+        from VisualizationVTK import VisualizationVTK
         from NormalsProperty import NormalsProperty
 
-        fig = Visualization.RenderPointSet(pntSet, 'color', pointSize=3, color=color)
+        fig = VisualizationVTK.RenderPointSet(pntSet, 'color', pointSize=3, color=color)
 
         cogPntSet = PointSet(self.reference_point.reshape((1, -1)))
         normalProperty1 = NormalsProperty(cogPntSet, self.stick_axis.reshape((1, -1)) * 10)
         normalProperty2 = NormalsProperty(cogPntSet, self.plate_axis.reshape((1, -1)) * 10)
         normalProperty3 = NormalsProperty(cogPntSet, self.eigenvectors[:, 1].reshape((1, -1)) * 10)
 
-        Visualization.RenderPointSet(normalProperty1, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
-        Visualization.RenderPointSet(normalProperty2, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
-        Visualization.RenderPointSet(normalProperty3, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+        VisualizationVTK.RenderPointSet(normalProperty1, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+        VisualizationVTK.RenderPointSet(normalProperty2, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+        VisualizationVTK.RenderPointSet(normalProperty3, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)

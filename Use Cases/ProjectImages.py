@@ -1,10 +1,11 @@
-from matplotlib.image import imread # Read image
-import numpy as np # Numpy arrays
-from string import split # Used in matrix file reading
-from PointSet import PointSet
+from string import split  # Used in matrix file reading
+
+import numpy as np  # Numpy arrays
+from matplotlib.image import imread  # Read image
+
 from ColorFactory import ColorFactory
 from IOFactory import IOFactory
-from Visualization import Visualization 
+from VisualizationVTK import VisualizationVTK
 
 
 def ReadProjectionMatrixFromFile(fileName):
@@ -62,5 +63,5 @@ if __name__ == '__main__':
         transformMatrices.append(transformMatrix)
 
     colorProperty = ColorFactory.ProjectImages(pointSet, images, transformMatrices)
-    Visualization.RenderPointSet(colorProperty, 'externRgb')      
-    Visualization.Show()
+    VisualizationVTK.RenderPointSet(colorProperty, 'externRgb')
+    VisualizationVTK.Show()

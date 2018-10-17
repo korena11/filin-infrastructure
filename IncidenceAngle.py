@@ -12,7 +12,7 @@ from scipy.spatial import cKDTree
 from IOFactory import IOFactory
 from NormalsProperty import NormalsProperty
 from PointSet import PointSet
-from Visualization import Visualization
+from VisualizationVTK import VisualizationVTK
 
 
 def Neighbors(pnt, pntSet, rad=None):
@@ -63,11 +63,13 @@ def IncidenceAngle(points):
 
 #     normals = NormalsProperty(PointSet(np.vstack((points[side1[0], :], points[side2[0], :]))), np.vstack((norm1, norm2)))
     normals = NormalsProperty(PointSet(points[side1[0], :]), norm1)
-    fig = Visualization.RenderPointSet(normals, renderFlag='color', pointSize=5)
-    fig = Visualization.RenderPointSet(PointSet(points[side1[0], :]), renderFlag='color', _figure=fig, color=(0, 1, 0), pointSize=5)
-    fig = Visualization.RenderPointSet(PointSet(points[side2[0], :]), renderFlag='color', _figure=fig, color=(0, 0, 1), pointSize=5)
+    fig = VisualizationVTK.RenderPointSet(normals, renderFlag='color', pointSize=5)
+    fig = VisualizationVTK.RenderPointSet(PointSet(points[side1[0], :]), renderFlag='color', _figure=fig,
+                                          color=(0, 1, 0), pointSize=5)
+    fig = VisualizationVTK.RenderPointSet(PointSet(points[side2[0], :]), renderFlag='color', _figure=fig,
+                                          color=(0, 0, 1), pointSize=5)
 #     Visualization.RenderPointSet(PointSet(meanP), renderFlag='color', _figure=fig, color=(0, 0, 1), pointSize=5)
-    Visualization.Show()
+    VisualizationVTK.Show()
     
     
 def NormalCalc(covMat):

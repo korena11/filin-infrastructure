@@ -122,18 +122,18 @@
                         <h1>Source code for PointSetOpen3D</h1>
                         <div class="highlight"><pre>
 <span></span><span class="c1"># Utils Imports</span>
-<span class="kn">import</span> <span class="nn">RotationUtils</span>
-<span class="kn">from</span> <span class="nn">RandomColors</span> <span class="k">import</span> <span class="n">LetThereBeRandomColors</span>
+<span class="c1"># General Imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># 3rd Party Imports</span>
+<span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">O3D</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="k">import</span> <span class="n">gaussian_filter</span>
 
+<span class="kn">import</span> <span class="nn">RotationUtils</span>
+<span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
 <span class="c1"># Infrastructure Imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
-<span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
-
-<span class="c1"># General Imports</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="k">import</span> <span class="n">gaussian_filter</span>
-
+<span class="kn">from</span> <span class="nn">RandomColors</span> <span class="k">import</span> <span class="n">LetThereBeRandomColors</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span
                                 class="n">formatter</span><span class="o">=</span><span class="p">{</span><span
@@ -141,10 +141,6 @@
                                 class="n">x</span><span class="p">:</span> <span class="s2">&quot;</span><span
                                 class="si">{0:0.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span
                                 class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)})</span>
-
-<span class="c1"># 3rd Party Imports</span>
-<span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">O3D</span>
-
 
 <div class="viewcode-block" id="PointSetOpen3D"><a class="viewcode-back"
                                                    href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D">[docs]</a><span
@@ -173,7 +169,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">InitializeOpen3dObject</span><span
             class="p">(</span><span class="n">inputPoints</span><span class="p">)</span>
 
-        <span class="c1">#TODO: check if needed after Elia</span>
+        <span class="c1"># TODO: check if needed after Elia</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pointsNeighborsArray</span> <span class="o">=</span> <span
             class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span
             class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span
@@ -282,6 +278,7 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
             class="bp">self</span><span class="o">.</span><span class="n">pointsOpen3D</span><span
             class="o">.</span><span class="n">points</span><span class="p">)</span>
+
     <span class="nd">@Size</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
             class="p">,</span> <span class="n">new_size</span><span class="p">):</span>
@@ -335,9 +332,9 @@
         class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; Calculating point-cloud normals. Neighborhood Parameters -- r:&quot;</span> <span
-            class="o">+</span> <span class="nb">str</span><span class="p">(</span><span
-            class="n">searchRadius</span><span class="p">)</span> <span class="o">+</span> <span
-            class="s2">&quot;</span><span class="se">\t</span><span class="s2">nn:&quot;</span> <span class="o">+</span> <span
+            class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">searchRadius</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span
+            class="se">\t</span><span class="s2">nn:&quot;</span> <span class="o">+</span> <span
             class="nb">str</span><span class="p">(</span>
                 <span class="n">maxNN</span><span class="p">))</span>
 
@@ -764,7 +761,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">pointsNeighborsArray</span><span
             class="p">[</span><span class="n">pointIndex</span><span class="p">]</span><span class="o">.</span><span
-            class="n">localRotatedNeighbors</span><span class="o">=</span> <span class="n">pointNeighborhoodDiff</span>
+            class="n">localRotatedNeighbors</span> <span class="o">=</span> <span class="n">pointNeighborhoodDiff</span>
 
 <div class="viewcode-block" id="PointSetOpen3D.GetAllPointsNeighbors"><a class="viewcode-back"
                                                                          href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D.GetAllPointsNeighbors">[docs]</a>    <span
@@ -919,8 +916,6 @@
             class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span
             class="n">newMaxNN</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">()</span></div>
-
-
 </pre>
                         </div>
 

@@ -156,12 +156,27 @@
 <span class="sd">        :rtype: SphericalCoordinatesProperty</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+            class="n">arctan2</span><span class="p">,</span> <span class="n">sqrt</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
             class="n">X</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
             class="n">Y</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
             class="n">Z</span>
+
+        <span class="c1"># temp vars so the IDE code optimization won&#39;t delete the import</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">temp1</span> <span class="o">=</span> <span class="n">arctan2</span><span class="p">(</span><span
+            class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span
+            class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">temp2</span> <span class="o">=</span> <span class="n">sqrt</span><span
+            class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span
+            class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points are empty, it is not possible to convert&#39;</span><span
+            class="p">)</span>
 
         <span class="n">azimuth</span> <span class="o">=</span> <span class="n">ceval</span><span
             class="p">(</span><span class="s1">&#39;arctan2(y,x)&#39;</span><span class="p">)</span>

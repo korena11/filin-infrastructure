@@ -211,9 +211,8 @@
 <span class="sd">        Computes the normals for each point in the pointset via PCA</span>
 
 <span class="sd">        :param pointset: points to compute their normals</span>
-<span class="sd">        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be</span>
-<span class="sd">        build here.</span>
-
+<span class="sd">        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be build here.</span>
+<span class="sd">        </span>
 <span class="sd">        *One of these should be passed*</span>
 
 <span class="sd">        :param radius: the radius in which the neighbors should be found</span>
@@ -513,7 +512,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span
                                 class="p">:</span>
     <span class="kn">from</span> <span class="nn">IOFactory</span> <span class="k">import</span> <span class="n">IOFactory</span>
-    <span class="kn">from</span> <span class="nn">Visualization</span> <span class="k">import</span> <span class="n">Visualization</span>
+    <span class="kn">from</span> <span class="nn">VisualizationVTK</span> <span class="k">import</span> <span class="n">VisualizationVTK</span>
 
     <span class="n">pointSetList</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -531,14 +530,14 @@
                                 class="n">pointSetList</span><span class="p">[</span><span class="mi">0</span><span
                                 class="p">])</span>  <span class="c1"># , triangulation)</span>
 
-    <span class="n">Visualization</span><span class="o">.</span><span class="n">RenderPointSet</span><span
-                                class="p">(</span><span class="n">normals</span><span class="p">,</span> <span
-                                class="s1">&#39;color&#39;</span><span class="p">,</span> <span
-                                class="n">color</span><span class="o">=</span><span class="p">(</span><span
+    <span class="n">VisualizationVTK</span><span class="o">.</span><span class="n">RenderPointSet</span><span class="p">(</span><span
+                                class="n">normals</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span
+                                class="p">,</span> <span class="n">color</span><span class="o">=</span><span
+                                class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
                                 class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span
-                                class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">pointSize</span><span
-                                class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">Visualization</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
+                                class="p">),</span> <span class="n">pointSize</span><span class="o">=</span><span
+                                class="mi">3</span><span class="p">)</span>
+    <span class="n">VisualizationVTK</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>
 
 <span class="c1">#    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)</span>
 <span class="c1">#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    </span>

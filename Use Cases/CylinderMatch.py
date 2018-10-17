@@ -13,7 +13,7 @@ from scipy.linalg import inv as invSp
 
 from IOFactory import IOFactory
 from PointSet import PointSet
-from Visualization import Visualization
+from VisualizationVTK import VisualizationVTK
 
 
 def Rotation_Matrix( a1, a2 ):
@@ -513,7 +513,7 @@ if __name__ == '__main__':
 #         pointSet_old = PointSet( np.hstack( ( x1, y1, z1 ) ) )
 #         fig = Visualization.RenderPointSet( pointSet_old, renderFlag = 'color', color = ( 0, 1, 0 ), pointSize = 2 )
         rectif_pnt = PointSet( np.hstack( ( x, y, z ) ) )
-        fig = Visualization.RenderPointSet( rectif_pnt, renderFlag = 'color', color = ( 1, 0, 0 ), pointSize = 2 )
+        fig = VisualizationVTK.RenderPointSet(rectif_pnt, renderFlag='color', color=(1, 0, 0), pointSize=2)
 #         Visualization.Show()
         
         print "Approximate values calculation..."
@@ -531,7 +531,8 @@ if __name__ == '__main__':
     #         x_ney, y_new, coeff = Fit_Cylinder(x, y, coeff0, f)
         #     draw fitted points
         pointSet_new = PointSet( np.hstack( ( x_ney, y_new, z ) ) )
-        fig = Visualization.RenderPointSet( pointSet_new, renderFlag = 'color', _figure = fig, color = ( 0, 0, 1 ), pointSize = 2 )
+        fig = VisualizationVTK.RenderPointSet(pointSet_new, renderFlag='color', _figure=fig, color=(0, 0, 1),
+                                              pointSize=2)
         
 #         #     -------------- Normals -------------- 
 #         pnt = np.hstack( ( x, y, z ) )
@@ -549,6 +550,4 @@ if __name__ == '__main__':
 #         Visualization.Show()
     
     f.close()
-    Visualization.Show()
-        
-        
+    VisualizationVTK.Show()

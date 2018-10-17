@@ -6,9 +6,10 @@ Created on 10 march 2014
 
 import numpy as np
 import vtk as vtk
+
 from IOFactory import IOFactory
 from PointSet import PointSet
-from Visualization import Visualization 
+from VisualizationVTK import VisualizationVTK
 
 
 class Registration:
@@ -254,10 +255,11 @@ class Registration:
         
         points = np.array( points )
         
-        pointSet_Res = PointSet( points ) 
-        fig = Visualization.RenderPointSet( pointSet_Res, renderFlag = 'color', color = ( 1, 0, 0 ), pointSize = 1 )
+        pointSet_Res = PointSet( points )
+        fig = VisualizationVTK.RenderPointSet(pointSet_Res, renderFlag='color', color=(1, 0, 0), pointSize=1)
         pointSet_Target = PointSet( targetPnt )
-        fig = Visualization.RenderPointSet( pointSet_Target, renderFlag = 'color', _figure = fig, color = ( 0, 0, 1 ), pointSize = 1 )
+        fig = VisualizationVTK.RenderPointSet(pointSet_Target, renderFlag='color', _figure=fig, color=(0, 0, 1),
+                                              pointSize=1)
         
 #        print "Writing to the file..."
         #=======================================================================
@@ -340,10 +342,10 @@ if __name__ == '__main__':
 
 
     targetData1 = pointSet_t.ToNumpy()
-    
-    fig_ = Visualization.RenderPointSet( pointSet_t, renderFlag = 'color', color = ( 1, 0, 0 ), pointSize = 1.0 )
-    Visualization.RenderPointSet( pointSet_s, renderFlag = 'color', _figure = fig_, color = ( 0, 0, 1 ), pointSize = 1.0 )
-    Visualization.Show()
+
+fig_ = VisualizationVTK.RenderPointSet(pointSet_t, renderFlag='color', color=(1, 0, 0), pointSize=1.0)
+VisualizationVTK.RenderPointSet(pointSet_s, renderFlag='color', _figure=fig_, color=(0, 0, 1), pointSize=1.0)
+VisualizationVTK.Show()
     
     targetData = Registration.TransformData( targetData1, np.array( [[0], [0], [0]] ), 0, [0, 0, 1] )
     sourceData = Registration.TransformData( sourceData1, np.array( [[45], [-10], [0]] ), 222.578, [0, 0, 1] )
@@ -351,12 +353,12 @@ if __name__ == '__main__':
 #     targetData = Registration.PointSet2Array(fileName_t)
     
      
-    pointSet_Res = PointSet( sourceData ) 
-    fig1 = Visualization.RenderPointSet( pointSet_Res, renderFlag = 'color', color = ( 0, 0, 1 ), pointSize = 1.0 )
+    pointSet_Res = PointSet( sourceData )
+fig1 = VisualizationVTK.RenderPointSet(pointSet_Res, renderFlag='color', color=(0, 0, 1), pointSize=1.0)
     pointSet_Target = PointSet( targetData )
-    Visualization.RenderPointSet( pointSet_Target, renderFlag = 'color', _figure = fig1, color = ( 1, 0, 0 ), pointSize = 1.0 )
-    
-    Visualization.Show()
+VisualizationVTK.RenderPointSet(pointSet_Target, renderFlag='color', _figure=fig1, color=(1, 0, 0), pointSize=1.0)
+
+VisualizationVTK.Show()
     
     print "ICP..." 
     transMat1 = Registration.ICP( sourceData, targetData )
@@ -430,5 +432,5 @@ if __name__ == '__main__':
 #     pointSet_Res = PointSet(pnts)
 #     fig3 = Visualization.RenderPointSet(pointSet_Res, renderFlag='color', color=(1, 1, 0), pointSize=2.0)
 #     Visualization.RenderPointSet(pointSet_Target, renderFlag='color', _figure=fig3, color=(0, 0, 1), pointSize=2.0)
-    
-    Visualization.Show()
+
+VisualizationVTK.Show()

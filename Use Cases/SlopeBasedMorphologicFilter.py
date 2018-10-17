@@ -1,10 +1,8 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from datetime import datetime, time
-from numba import autojit
-from IOFactory import IOFactory
+
 from FilterFactory import SlopeBasedMorphologicFilter
-from Visualization import Visualization 
+from IOFactory import IOFactory
+from VisualizationVTK import VisualizationVTK
 
 if __name__ == '__main__':
     
@@ -17,6 +15,5 @@ if __name__ == '__main__':
     print 'hi'
     
 #    Visualization.RenderPointSet(terrainSubSet, 'color', color=(0.5, 0, 0))
-    Visualization.RenderPointSet(terrainSubSet, 'rgb')
-    Visualization.Show()
-      
+    VisualizationVTK.RenderPointSet(terrainSubSet, 'rgb')
+    VisualizationVTK.Show()

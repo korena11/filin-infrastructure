@@ -121,7 +121,11 @@
 
                         <h1>Source code for CurvatureFactory</h1>
                         <div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">functools</span>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">|today|</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -218,7 +222,7 @@
             class="o">=</span> <span class="o">-</span><span class="mi">999</span><span class="p">,</span> <span
             class="o">-</span><span class="mi">999</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">ndarray</span><span class="p">([</span><span class="n">k1</span><span class="p">,</span> <span
+            class="n">array</span><span class="p">([</span><span class="n">k1</span><span class="p">,</span> <span
             class="n">k2</span><span class="p">])</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -293,7 +297,7 @@
             class="o">=</span> <span class="o">-</span><span class="mi">999</span><span class="p">,</span> <span
             class="o">-</span><span class="mi">999</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">ndarray</span><span class="p">([</span><span class="n">k1</span><span class="p">,</span> <span
+            class="n">array</span><span class="p">([</span><span class="n">k1</span><span class="p">,</span> <span
             class="n">k2</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="n">point_quality</span> <span class="o">==</span> <span
@@ -543,7 +547,7 @@
             class="o">.</span><span class="n">array</span><span class="p">(</span><span
             class="n">curves_data</span><span class="p">))</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of curves before filterization: &quot;</span><span
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of curvatures computed before filterization: &quot;</span><span
             class="p">,</span> <span class="p">(</span><span class="n">curves</span><span class="o">.</span><span
             class="n">Size</span><span class="p">))</span>
 
@@ -552,7 +556,7 @@
             class="o">.</span><span class="n">__keep_good_curves_data</span><span class="p">(</span><span class="n">curves</span><span
             class="o">.</span><span class="n">getValues</span><span class="p">(),</span> <span
             class="n">pointset3d</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of curves after filterization: &quot;</span><span
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of curvatures computed after filterization: &quot;</span><span
             class="p">,</span> <span class="n">curves</span><span class="o">.</span><span class="n">Size</span><span
             class="p">)</span>
 

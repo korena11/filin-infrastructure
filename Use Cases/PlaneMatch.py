@@ -4,15 +4,15 @@ Created on Nov 26, 2014
 @author: Vera
 '''
 
+import glob
+import os
+
 import numpy as np
 from scipy.linalg import inv as invSp
-from Visualization import Visualization
-from PointSet import PointSet
-from mayavi import mlab
-from IOFactory import IOFactory
-import os
-import glob
 
+from IOFactory import IOFactory
+from PointSet import PointSet
+from VisualizationVTK import VisualizationVTK
 
 
 def Fit_Plane( points, ( n, d ), f, f1 ):
@@ -183,7 +183,7 @@ if __name__ == '__main__':
         
         # draw data points
         pointSet = PointSet( points )
-        fig = Visualization.RenderPointSet( pointSet, renderFlag = 'color', color = ( 1, 0, 0 ), pointSize = 2 )
+        fig = VisualizationVTK.RenderPointSet(pointSet, renderFlag='color', color=(1, 0, 0), pointSize=2)
            
         print "Parameters' calculation..."
         # least square with Levenberg-Marquardt algorithm
@@ -203,8 +203,9 @@ if __name__ == '__main__':
         
         pointSet_new = PointSet( coeff0[2] )
 #         pointSet_new = PointSet( np.hstack( ( x_ney, y_new, z_new ) ) )
-        fig = Visualization.RenderPointSet( pointSet_new, renderFlag = 'color', _figure = fig, color = ( 0, 0, 1 ), pointSize = 2 )
+        fig = VisualizationVTK.RenderPointSet(pointSet_new, renderFlag='color', _figure=fig, color=(0, 0, 1),
+                                              pointSize=2)
         
 #         f1.close()
 #     f.close()
-    Visualization.Show()
+    VisualizationVTK.Show()

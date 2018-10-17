@@ -4,11 +4,8 @@ Created on 28 march 2014
 @author: vera
 '''
 import numpy as np
+
 from Registration import Registration
-from PointSet import PointSet
-from Visualization import Visualization 
-
-
 
 if __name__ == '__main__':
     FileNames = ['D:\\Documents\\Pointsets\\Ahziv\\st1.pts', 'D:\\Documents\\Pointsets\\Ahziv\\st2.pts', 'D:\\Documents\\Pointsets\\Ahziv\\st3.pts',

@@ -872,18 +872,18 @@
             class="o">.</span><span class="n">classification</span><span class="p">(</span><span class="n">inputs</span><span
             class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
 
-        <span class="n">region</span> <span class="o">=</span> <span class="mi">255</span> <span
+        <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span> <span
             class="o">-</span> <span class="n">cv2</span><span class="o">.</span><span
             class="n">GaussianBlur</span><span class="p">(</span><span class="n">region</span><span class="p">,</span>
-                                        <span class="n">ksize</span><span class="o">=</span><span
+                                         <span class="n">ksize</span><span class="o">=</span><span
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
             class="p">],</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
             class="p">]),</span>
-                                        <span class="n">sigmaX</span><span class="o">=</span><span
+                                         <span class="n">sigmaX</span><span class="o">=</span><span
             class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span
-            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]))</span>
         <span class="n">region</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
             class="n">normalize</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span
             class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span

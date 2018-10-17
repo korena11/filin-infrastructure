@@ -5,20 +5,14 @@ Created on 17 June 2014
 '''
 
 import numpy as np
-import numpy.matlib as matlib
-from Registration import Registration
-from PointSet import PointSet
-from Visualization import Visualization 
-from NormalsFactory import NormalsFactory
-from PointSet import PointSet
-from IOFactory import IOFactory
-from mayavi import mlab
 from matplotlib.path import Path
+from mayavi import mlab
+
+from PointSet import PointSet
 from PointSubSet import PointSubSet
-import PCA_gm
+from Registration import Registration
 from TriangulationFactory import TriangulationFactory
-
-
+from VisualizationVTK import VisualizationVTK
 
 
 def RotateV1toV2(f, t):
@@ -224,9 +218,9 @@ def SmallGridCell(row, column, cellH, cellW, gridLim, points, rotM, fig):
 #                                                    _figure=fig, color=(omnivar * 80, omnivar * 60, omnivar * 60), pointSize=2)
 #                fig = Visualization.RenderPointSet(pointSet, renderFlag='color',
 #                                                    _figure=fig, color=(CellRough[indCell][0] * 60, CellRough[indCell][0] * 60, CellRough[indCell][0] * 80), pointSize=2)
-                    
-                fig = Visualization.RenderPointSet(pointSet, renderFlag='color',
-                                                    _figure=fig, color=(p1, p2, p3), pointSize=2)
+
+                fig = VisualizationVTK.RenderPointSet(pointSet, renderFlag='color',
+                                                      _figure=fig, color=(p1, p2, p3), pointSize=2)
 #                fig = Visualization.RenderPointSet(pointSet, renderFlag='color',
 #                                                    _figure=fig, color=(N[0][0], N[1][0], N[2][0]), pointSize=2)    
             else:
@@ -408,8 +402,8 @@ if __name__ == '__main__':
     
     tp = TriangulationFactory.Delaunay2D(pnt1)
     tp.TrimEdgesByLength(0.7)
-    Visualization.RenderTriangularMesh(tp, renderFlag='height')
-    Visualization.Show()
+    VisualizationVTK.RenderTriangularMesh(tp, renderFlag='height')
+    VisualizationVTK.Show()
     
     del points1, points2
 
@@ -428,9 +422,5 @@ if __name__ == '__main__':
     print 'smallGridN2 = ', '\r', smallGridNrel2
     print 'smallGridRough1 = ', '\r', smallGridRough1
     print 'smallGridRough2 = ', '\r', smallGridRough2
-      
-    Visualization.Show()
 
-   
-
- 
+    VisualizationVTK.Show()

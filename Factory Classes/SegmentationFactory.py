@@ -170,7 +170,7 @@ class SegmentationFactory:
 if __name__ == '__main__':
     
     from IOFactory import IOFactory
-    from Visualization import Visualization
+    from VisualizationVTK import VisualizationVTK
     from numpy import random
        
     pointSetList = []
@@ -185,6 +185,5 @@ if __name__ == '__main__':
     _figure = None
     for i in range(scanLineSegmentation.NumberOfSegments):
         scanLinei = scanLineSegmentation.GetSegment(i)
-        _figure = Visualization.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
-    Visualization.Show()    
-        
+        _figure = VisualizationVTK.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
+    VisualizationVTK.Show()

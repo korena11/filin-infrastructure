@@ -1,7 +1,6 @@
-from IOFactory import IOFactory 
-from NormalsProperty import NormalsProperty
+from IOFactory import IOFactory
 from NormalsFactory import NormalsFactory
-from Visualization import Visualization
+from VisualizationVTK import VisualizationVTK
 
 if __name__ == "__main__":
     
@@ -11,9 +10,6 @@ if __name__ == "__main__":
     
 #    normals = NormalsFactory.ReadNormalsFromFile(pointSetList [0], '..\\Sample Data\\cubeSurfaceNormals.xyz')
     normals = NormalsFactory.VtkNormals(pointSetList[0])
-    
-    Visualization.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize = 3.0)
-    Visualization.Show()
-        
-    
-    
+
+    VisualizationVTK.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3.0)
+    VisualizationVTK.Show()

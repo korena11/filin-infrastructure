@@ -1,7 +1,8 @@
-from Visualization import Visualization
 from numpy import array
+
 from PointSet import PointSet
 from TriangulationFactory import TriangulationFactory
+from VisualizationVTK import VisualizationVTK
 
 if __name__ == '__main__':
     
@@ -12,6 +13,6 @@ if __name__ == '__main__':
     pointSet = PointSet(points)
     
     tp = TriangulationFactory.Delaunay2D(pointSet)
-    
-    Visualization.RenderTriangularMesh(tp, 'height', meshRepresentation = 'surface', colorMap = 'hot')
-    Visualization.Show()
+
+    VisualizationVTK.RenderTriangularMesh(tp, 'height', meshRepresentation='surface', colorMap='hot')
+    VisualizationVTK.Show()

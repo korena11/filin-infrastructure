@@ -1,7 +1,6 @@
-from Visualization import Visualization
 from IOFactory import IOFactory
-from PointSet import PointSet
 from TriangulationFactory import TriangulationFactory
+from VisualizationVTK import VisualizationVTK
 
 if __name__ == '__main__':
     
@@ -12,8 +11,8 @@ if __name__ == '__main__':
     pointSet = pointSetList[0]
     
     tp = TriangulationFactory.Delaunay2D(pointSet)
-    
-    Visualization.RenderTriangularMesh(tp, 'height', meshRepresentation = 'surface', colorMap = 'jet')
+
+    VisualizationVTK.RenderTriangularMesh(tp, 'height', meshRepresentation='surface', colorMap='jet')
     
     print "Number of triangles:", tp.NumberOfTriangles()
     print "Area of first triangle:", tp.AreaOfTriangle(0)
@@ -28,7 +27,7 @@ if __name__ == '__main__':
     
     print "Removing triangles with edges larger than ", maxLength
     print "Number of triangles removed: ", tp.TrimEdgesByLength(maxLength)
-    
-    Visualization.RenderTriangularMesh(tp, 'height', meshRepresentation = 'surface', colorMap = 'jet')
-    
-    Visualization.Show()
+
+    VisualizationVTK.RenderTriangularMesh(tp, 'height', meshRepresentation='surface', colorMap='jet')
+
+    VisualizationVTK.Show()
