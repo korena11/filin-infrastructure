@@ -4,19 +4,18 @@ Created on Nov 21, 2014
 @author: Vera
 '''
 
+import glob
+import os
+
 import numpy as np
 import scipy.spatial.distance as distance
 from scipy.linalg import inv as invSp
-from IOFactory import IOFactory
-from Visualization import Visualization
-from PointSet import PointSet
-from mayavi import mlab
-from NormalsProperty import NormalsProperty
-import os
-import glob
-from string import split
 
- 
+from IOFactory import IOFactory
+from PointSet import PointSet
+from Visualization import Visualization
+
+
 def Rotation_Matrix( a1, a2 ):
     '''
     compute rotation matrix from vector a1 to a2

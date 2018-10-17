@@ -1,6 +1,8 @@
 # Utils Imports
 # General Imports
 import numpy as np
+# 3rd Party Imports
+import open3d as O3D
 from scipy.ndimage import gaussian_filter
 
 import RotationUtils
@@ -10,10 +12,6 @@ from PointSet import PointSet
 from RandomColors import LetThereBeRandomColors
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-
-# 3rd Party Imports
-import open3d as O3D
-
 
 class PointSetOpen3D(PointSet):
     def __init__(self, inputPoints):

@@ -4,7 +4,7 @@ import ReadFunctions
 from ColorProperty import ColorProperty
 from IOFactory import IOFactory
 from PointSet import PointSet
-from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 class TestReadPtx(TestCase):

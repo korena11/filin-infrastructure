@@ -500,9 +500,9 @@ class LevelSetFlow:
             classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
-        region = 255 - cv2.GaussianBlur(region,
-                                        ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
-                                        sigmaX=self.processing_props['sigma'])
+        region = (255 - cv2.GaussianBlur(region,
+                                         ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
+                                         sigmaX=self.processing_props['sigma']))
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 

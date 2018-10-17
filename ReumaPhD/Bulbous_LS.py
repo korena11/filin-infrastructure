@@ -13,7 +13,7 @@ if platform.system() == 'Linux':
 
 from matplotlib import pyplot as plt
 from IOFactory import IOFactory
-from Panoramas.PanoramaFactory import PanoramaFactory
+from PanoramaFactory import PanoramaFactory
 from LevelSetFlow import LevelSetFlow
 from ColorProperty import ColorProperty
 import MyTools as mt

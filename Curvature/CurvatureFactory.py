@@ -1,3 +1,7 @@
+'''
+|today|
+'''
+
 import functools
 
 import numpy as np
@@ -72,7 +76,7 @@ class CurvatureFactory:
 
             else:
                 k1, k2 = -999, -999
-                return np.ndarray([k1, k2])
+                return np.array([k1, k2])
 
         else:
             neighbor, tree = NeighborsFactory.GetNeighborsIn3dRange_KDtree(ind, points, search_radius, tree)
@@ -99,7 +103,7 @@ class CurvatureFactory:
                 point_quality = CurvatureFactory.__good_point(neighbors)
             else:
                 k1, k2 = -999, -999
-                return np.ndarray([k1, k2])
+                return np.array([k1, k2])
 
         if point_quality == 1:
             p = CurvatureFactory.__BiQuadratic_Surface(np.vstack((localRotatedNeighborhood)))
@@ -222,11 +226,11 @@ class CurvatureFactory:
             curves_data = list(map(lambda k1_k2: np.float32(k1_k2.split(' ')), lines))
             curves = CurvatureProperty(pointset3d, np.array(curves_data))
 
-        print("Number of curves before filterization: ", (curves.Size))
+        print("Number of curvatures computed before filterization: ", (curves.Size))
 
         if delete_non_computed:
             curves = CurvatureFactory.__keep_good_curves_data(curves.getValues(), pointset3d)
-            print("Number of curves after filterization: ", curves.Size)
+            print("Number of curvatures computed after filterization: ", curves.Size)
 
         return curves
 

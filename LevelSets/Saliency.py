@@ -178,6 +178,8 @@ def distance_based(image, **kwargs):
     :param filter_sigma: (for global method) size of the filter(s)
     :param region_size: (for local and context aware methods) size of the region(s)/patch(es)
 
+    :param normals: given normals computation for saliency based on normals image feature 
+
     :return: saliency map
 
     '''

@@ -25,9 +25,18 @@ class SphericalCoordinatesFactory:
         :rtype: SphericalCoordinatesProperty
         """
 
+        from numpy import arctan2, sqrt
+
         x = points.X
         y = points.Y
         z = points.Z
+
+        # temp vars so the IDE code optimization won't delete the import
+        try:
+            temp1 = arctan2(x[0], y[0])
+            temp2 = sqrt(np.abs(z[0]))
+        except RuntimeError:
+            print('Points are empty, it is not possible to convert')
 
         azimuth = ceval('arctan2(y,x)')
         elevation = ceval('arctan2(z, sqrt(x**2+y**2))')

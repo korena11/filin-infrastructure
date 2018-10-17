@@ -11,8 +11,29 @@ from PointSubSet import PointSubSet
 from SegmentationProperty import SegmentationProperty
 
 
-class VisualizationVTK:
+class Visualization:
     """
+    .. code-block:: python
+
+        points1 = (np.random.rand(1000, 3) - 0.5) * 1000.0
+        pointset1 = PointSet(points=points1)
+        pointsubset1 = PointSubSet(points=pointset1, indices=list(range(0, len(points1), 3)))
+
+        points2 = (np.random.rand(1000, 3) - 0.5) * 1000.0
+        pointset2 = PointSet(points=points2)
+        pointsubset2 = PointSubSet(points=pointset2, indices=list(range(0, len(points2), 3)))
+
+        number_of_viewports = 2
+        # Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4
+        visualization_object = Visualization(number_of_viewports, two_viewports_vertical_horizontal='V')
+        visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
+        visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
+
+        visualization_object.BindSecondHalf(input_data=pointsubset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
+        visualization_object.BindSecondHalf(input_data=pointsubset2, renderFlag='color', color=(0, 255, 0), new_layer=True)
+
+        visualization_object.Show()
 
     """
     def __init__(self, number_of_view_ports=1, two_viewports_vertical_horizontal='H'):
@@ -222,7 +243,7 @@ if __name__ == '__main__':
 
     number_of_viewports = 2
     # Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4
-    visualization_object = VisualizationVTK(number_of_viewports, two_viewports_vertical_horizontal='V')
+    visualization_object = Visualization(number_of_viewports, two_viewports_vertical_horizontal='V')
     visualization_object.SetRenderWindowName("Test - One Viewport. PointSet. Uniform Color.")
     visualization_object.BindFirstHalf(input_data=pointset1, renderFlag='color', color=(255, 0, 0), new_layer=False)
     visualization_object.BindFirstHalf(input_data=pointset2, renderFlag='color', color=(0, 255, 0), new_layer=True)

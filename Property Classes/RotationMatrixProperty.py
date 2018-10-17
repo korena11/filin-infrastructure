@@ -2,7 +2,7 @@ from warnings import warn
 
 import numpy as np
 
-from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 class RotationMatrixProperty(TransformationMatrixProperty):

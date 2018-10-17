@@ -13,7 +13,7 @@ import numpy as np
 
 from ColorFactory import ColorFactory
 from PointSet import PointSet
-from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
+from TransformationMatrixProperty import TransformationMatrixProperty
 
 
 def ReadPts(filename, pointsetlist=[], colorslist=[], merge=True):

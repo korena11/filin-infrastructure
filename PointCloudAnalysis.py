@@ -6,13 +6,10 @@ Created on 30 march 2014
 
 import numpy as np
 import numpy.matlib as matlib
-from Registration import Registration
-from PointSet import PointSet
-from Visualization import Visualization 
-from NormalsFactory import NormalsFactory
-from PointSet import PointSet
+
 from IOFactory import IOFactory
-from mayavi import mlab
+from NormalsFactory import NormalsFactory
+from Registration import Registration
 
 
 def PointSet2Array_Norm(fileName):
