@@ -500,9 +500,10 @@ class LevelSetFlow:
             classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
-        region = (255 - cv2.GaussianBlur(region,
-                                         ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
-                                         sigmaX=self.processing_props['sigma']))
+        region = np.log(255 - cv2.GaussianBlur(region,
+                                               ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
+                                               sigmaX=self.processing_props['sigma']))
+
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 
@@ -525,21 +526,29 @@ class LevelSetFlow:
         :param flow_type: can be one of the following:
             - 'constant':
 
-               .. math:: C_t = N \Rightarrow \phi_t = |\nabla \varphi|
+               .. math::
+
+                   C_t = N \Rightarrow \phi_t = |\nabla \varphi|
 
             - 'curvature':
 
-               .. math:: C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|
+               .. math::
+
+                    C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|
 
             - 'equi_affine':
 
-                .. math:: C_t = k^{1/3} N \Rightarrow
-                        \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                .. math::
+
+                    C_t = k^{1/3} N \Rightarrow
+                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
             - 'geodesic': geodesic active contours, according to :cite:`Caselles.etal1997`
 
-                .. math::  C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
-                        \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                .. math::
+
+                    C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
+                    \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
 
             - 'band': band velocity, according to :cite:`Li.etal2006`
 

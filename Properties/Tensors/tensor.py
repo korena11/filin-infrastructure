@@ -13,7 +13,6 @@ import platform
 
 if platform.system() == 'Linux':
     import matplotlib
-
     matplotlib.use('TkAgg')
 import numpy as np
 import numpy.linalg as la

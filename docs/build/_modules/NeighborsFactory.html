@@ -142,20 +142,226 @@
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                                 class="n">SphericalCoordinatesFactory</span>
-
+<span class="kn">from</span> <span class="nn">NeighborProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
+<span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
 
 <div class="viewcode-block" id="NeighborsFactory"><a class="viewcode-back"
                                                      href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory">[docs]</a><span
         class="k">class</span> <span class="nc">NeighborsFactory</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Find neighbors of a given points using different methods  </span>
+<span class="sd">    Find neighbors of a given points using different methods. Use this factory to create either PointNeighbors or</span>
+<span class="sd">    NeighborProperty for a whole point cloud.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NeighborsFactory.GetPointsNeighborsByID"><a class="viewcode-back"
+                                                                            href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">GetPointsNeighborsByID</span><span class="p">(</span><span class="n">pointset3d</span><span
+            class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span
+            class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span
+            class="p">,</span> <span class="n">returnValues</span><span class="o">=</span><span
+            class="kc">True</span><span class="p">,</span> <span class="n">neighborsProperty</span> <span
+            class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                               <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span
+            class="p">,</span> <span class="n">useOriginal</span><span class="o">=</span><span
+            class="kc">False</span><span class="p">,</span> <span class="n">rotate</span> <span class="o">=</span> <span
+            class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the neighbors of a point within a point cloud by its index.</span>
+
+<span class="sd">        :param pointset3d: the cloud in which the point is searched for</span>
+<span class="sd">        :param idx: point index</span>
+<span class="sd">        :param searchRadius: the search radius for neighbors</span>
+<span class="sd">        :param maxNN: maximum number of neighbors</span>
+<span class="sd">        :param returnValues: default: True</span>
+<span class="sd">        :param neighborsProperty: Existing neighborhood property which should be override</span>
+<span class="sd">        :param override: default: False</span>
+<span class="sd">        :param rotate: flag whether to rotate the neighborhood or not. Default: False</span>
+<span class="sd">        :param useOriginal: default: False</span>
+
+<span class="sd">        :type pointset3d: PointSetOpen3D</span>
+<span class="sd">        :type idx: int or np.ndarray</span>
+<span class="sd">        :type searchRadius: float</span>
+<span class="sd">        :type maxNN: int</span>
+<span class="sd">        :type returnValues: bool</span>
+<span class="sd">        :type neighborsProperty: NeighborsProperty</span>
+<span class="sd">        :type override: bool</span>
+<span class="sd">        :type useOriginal: bool</span>
+<span class="sd">        :type rotate: bool</span>
+
+<span class="sd">        :return: the neighborhood property</span>
+
+<span class="sd">        :rtype: NeighborsProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">neighborsProperty</span> <span class="ow">is</span> <span class="kc">None</span><span
+            class="p">:</span>
+            <span class="n">neighborsProperty</span> <span class="o">=</span> <span
+            class="n">NeighborsProperty</span><span class="p">(</span><span class="n">pointset3d</span><span
+            class="p">)</span>
+
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span><span
+            class="p">]</span>
+
+        <span class="k">if</span> <span class="n">override</span><span class="p">:</span>
+            <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">__PrintOverrideNeighborhoodCalculations</span><span
+            class="p">(</span><span class="n">neighborsProperty</span><span class="p">,</span> <span
+            class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span
+            class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">currentPointIndex</span> <span class="ow">in</span> <span class="n">idx</span><span
+            class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">override</span><span
+            class="p">:</span>
+                <span class="k">if</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
+            class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span class="p">):</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">neighborsProperty</span><span
+            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span
+            class="p">)</span><span class="o">.</span><span class="n">GetRadius</span><span class="p">()</span>
+                    <span class="n">nn</span> <span class="o">=</span> <span class="n">neighborsProperty</span><span
+            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span
+            class="p">)</span><span class="o">.</span><span class="n">GetMaxNN</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="n">searchRadius</span> <span
+            class="ow">and</span> <span class="n">nn</span> <span class="o">==</span> <span class="n">maxNN</span><span
+            class="p">:</span>
+                        <span class="k">continue</span>
+
+            <span class="n">currentPoint</span> <span class="o">=</span> <span class="n">pointset3d</span><span
+            class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span
+            class="n">currentPointIndex</span><span class="p">)</span>
+
+            <span class="c1"># currentPoint = self.pointsOpen3D.points[currentPointIndex]</span>
+            <span class="n">pointNeighborhoodObject</span> <span class="o">=</span> <span
+            class="n">NeighborsFactory</span><span class="o">.</span><span
+            class="n">GetPointNeighborsByCoordinates</span><span class="p">(</span><span
+            class="n">pointset3d</span><span class="p">,</span> <span class="n">point</span><span
+            class="o">=</span><span class="n">currentPoint</span><span class="p">,</span>
+                                                                                      <span class="n">searchRadius</span><span
+            class="o">=</span><span class="n">searchRadius</span><span class="p">,</span>
+                                                                          <span class="n">maxNN</span><span
+            class="o">=</span><span class="n">maxNN</span><span class="p">,</span> <span
+            class="n">useOriginal</span><span class="o">=</span><span class="n">useOriginal</span><span
+            class="p">)</span>
+            <span class="n">neighborsProperty</span><span class="o">.</span><span class="n">setNeighbor</span><span
+            class="p">(</span><span class="n">currentPointIndex</span><span class="p">,</span> <span class="n">pointNeighborhoodObject</span><span
+            class="p">)</span>
+            <span class="k">if</span> <span class="n">rotate</span><span class="p">:</span>
+                <span class="n">neighborsProperty</span><span class="o">.</span><span
+            class="n">RotatePointNeighborhood</span><span class="p">(</span><span
+            class="n">currentPointIndex</span><span class="p">,</span> <span class="n">smoothen</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">,</span> <span
+            class="n">useOriginal</span><span class="o">=</span><span class="n">useOriginal</span><span
+            class="p">)</span>
+
+        <span class="k">if</span> <span class="n">returnValues</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span
+            class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
+            class="n">getNeighbor</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span
+            class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
+            class="n">getNeighbor</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NeighborsFactory.GetPointNeighborsByCoordinates"><a class="viewcode-back"
+                                                                                    href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">GetPointNeighborsByCoordinates</span><span class="p">(</span><span
+            class="n">pointset_open3d</span><span class="p">,</span> <span class="n">point</span><span
+            class="p">,</span> <span class="n">searchRadius</span><span class="p">,</span> <span
+            class="n">maxNN</span><span class="p">,</span> <span class="n">useOriginal</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define a point&#39;s neighborhood according to its coordinates</span>
+
+<span class="sd">        :param pointset_open3d: the point cloud in which the neighbors should be searched</span>
+<span class="sd">        :param point: x, y, z of the point</span>
+<span class="sd">        :param searchRadius: the radius in which the neighbors should be searched</span>
+<span class="sd">        :param maxNN: the maximum number of neighbors</span>
+<span class="sd">        :param useOriginal: ???</span>
+
+<span class="sd">        :type pointset_open3d: PointSetOpen3D</span>
+<span class="sd">        :type point: np.ndarray or tuple</span>
+<span class="sd">        :type searchRadius: float</span>
+<span class="sd">        :type maxNN: int</span>
+<span class="sd">        :type useOriginal: bool</span>
+
+<span class="sd">        :return: the neighborhood of a point</span>
+<span class="sd">        </span>
+<span class="sd">        :rtype: PointNeighborhood</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">maxNN</span> <span class="o">&lt;=</span> <span
+            class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">useOriginal</span><span
+            class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">kdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_radius_vector_3d</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span> <span class="n">radius</span><span class="o">=</span><span
+            class="n">searchRadius</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">originalkdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_radius_vector_3d</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span>
+                                                                                              <span class="n">radius</span><span
+            class="o">=</span><span class="n">searchRadius</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">searchRadius</span> <span class="o">&lt;=</span> <span
+            class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">useOriginal</span><span
+            class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">kdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_knn_vector_3d</span><span class="p">(</span><span
+            class="n">point</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span
+            class="n">maxNN</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">originalkdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_knn_vector_3d</span><span class="p">(</span><span
+            class="n">point</span><span class="p">,</span> <span class="n">knn</span><span class="o">=</span><span
+            class="n">maxNN</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">useOriginal</span><span
+            class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">kdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_hybrid_vector_3d</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span> <span class="n">radius</span><span class="o">=</span><span
+            class="n">searchRadius</span><span class="p">,</span>
+                                                                                      <span class="n">max_nn</span><span
+            class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">num</span><span class="p">,</span> <span class="n">idx</span><span
+            class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span
+            class="n">pointset_open3d</span><span class="o">.</span><span class="n">originalkdTreeOpen3D</span><span
+            class="o">.</span><span class="n">search_hybrid_vector_3d</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span>
+                                                                                              <span class="n">radius</span><span
+            class="o">=</span><span class="n">searchRadius</span><span class="p">,</span>
+                                                                                              <span class="n">max_nn</span><span
+            class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
+
+        <span class="n">pointNeighborhood</span> <span class="o">=</span> <span class="n">PointNeighborhood</span><span
+            class="p">(</span><span class="n">searchRadius</span><span class="p">,</span> <span
+            class="n">maxNN</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span
+            class="n">idx</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pointNeighborhood</span></div>
 
 <div class="viewcode-block" id="NeighborsFactory.CalculateAllPointsNeighbors"><a class="viewcode-back"
                                                                                  href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">CalculateAllPointsNeighbors</span><span class="p">(</span><span
-            class="n">pointSetOpen3D</span><span class="p">,</span> <span class="n">searchRadius</span><span
+            class="n">pointset</span><span class="p">,</span> <span class="n">searchRadius</span><span
             class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">maxNN</span><span
             class="o">=</span><span class="mi">20</span><span class="p">,</span> <span
             class="n">maxProcesses</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
@@ -170,14 +376,26 @@
         <span class="c1"># [False] * maxProcesses)</span>
         <span class="c1"># print(&quot;Done??????&quot;)</span>
 
-        <span class="c1"># Function will be used with multiprocessing, not relevant to run it without.</span>
+        <span class="c1"># Function will be used with multiprocessing.</span>
+        <span class="c1"># To run it without:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">pointset</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span
+            class="p">):</span>
+            <span class="n">pointset</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">)</span>
+
         <span class="n">pointsIndices</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pointSetOpen3D</span><span
-            class="o">.</span><span class="n">numberOfPoints</span><span class="p">)</span>
-        <span class="n">pointSetOpen3D</span><span class="o">.</span><span class="n">GetPointsNeighborsByID</span><span
-            class="p">(</span><span class="n">pointsIndices</span><span class="p">,</span> <span
+            class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">pointset</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">)</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">)</span>
+        <span class="n">NeighborsFactory</span><span class="o">.</span><span
+            class="n">GetPointsNeighborsByID</span><span class="p">(</span><span class="n">pointset</span><span
+            class="p">,</span> <span class="n">pointsIndices</span><span class="p">,</span> <span
             class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span
-            class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+            class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">neighbors</span></div>
+
 
 
 <div class="viewcode-block" id="NeighborsFactory.GetNeighborsIn3dRange"><a class="viewcode-back"
@@ -473,7 +691,58 @@
             class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i1</span><span
             class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i2</span><span
             class="p">[</span><span class="mi">0</span><span class="p">]]]))</span>
-        <span class="k">return</span> <span class="n">neighbors</span></div></div>
+        <span class="k">return</span> <span class="n">neighbors</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__PrintOverrideNeighborhoodCalculations</span><span
+            class="p">(</span><span class="n">neighborProperty</span><span class="p">,</span> <span class="n">exampleIndex</span><span
+            class="p">,</span> <span class="n">newRadius</span><span class="p">,</span> <span
+            class="n">newMaxNN</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param neighborProperty: an existing NeighborsProperty which will be override</span>
+<span class="sd">        :param exampleIndex:</span>
+<span class="sd">        :param newRadius:</span>
+<span class="sd">        :param newMaxNN:</span>
+
+<span class="sd">        :type neighborProperty: NeighborsProperty</span>
+<span class="sd">        :type exampleIndex:</span>
+<span class="sd">        :type newRadius: float</span>
+<span class="sd">        :type newMaxNN: int</span>
+
+
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="n">previousRadius</span> <span class="o">=</span> <span class="n">neighborProperty</span><span
+            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span
+            class="n">exampleIndex</span><span class="p">)</span><span class="o">.</span><span
+            class="n">GetRadius</span><span class="p">()</span>
+        <span class="n">previousMaxNN</span> <span class="o">=</span> <span class="n">neighborProperty</span><span
+            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span
+            class="n">exampleIndex</span><span class="p">)</span><span class="o">.</span><span class="n">GetMaxNN</span><span
+            class="p">()</span>
+
+        <span class="k">if</span> <span class="n">previousRadius</span> <span class="o">!=</span> <span class="n">newRadius</span> <span
+            class="ow">or</span> <span class="n">previousMaxNN</span> <span class="o">!=</span> <span
+            class="n">newMaxNN</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Function: PointSetOpen3D.PointSetOpen3D.GetPointsNeighborsByID&quot;</span><span
+            class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Overriding Previous Calculations&quot;</span><span
+            class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span
+            class="s2">&quot;Previous Radius/maxNN: &quot;</span> <span class="o">+</span> <span
+            class="nb">str</span><span class="p">(</span><span class="n">previousRadius</span><span
+            class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span
+            class="o">+</span> <span class="nb">str</span><span class="p">(</span><span
+            class="n">previousMaxNN</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New Radius/maxNN:</span><span
+            class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">str</span><span
+            class="p">(</span><span class="n">newRadius</span><span class="p">)</span> <span class="o">+</span> <span
+            class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span
+            class="n">newMaxNN</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">()</span></div>
+
+  
 </pre>
                         </div>
 

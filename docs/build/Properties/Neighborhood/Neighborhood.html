@@ -98,6 +98,8 @@
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
                                 Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal"
@@ -186,10 +188,9 @@
                                     <dt id="PointNeighborhood.PointNeighborhood">
                                         <em class="property">class </em><code
                                             class="descclassname">PointNeighborhood.</code><code class="descname">PointNeighborhood</code><span
-                                            class="sig-paren">(</span><em>radius</em>, <em>max_neighbor_num</em>, <em>num_pts</em>,
-                                        <em>idx</em>, <em>dist</em><span class="sig-paren">)</span><a
-                                            class="reference internal"
-                                            href="../../_modules/PointNeighborhood.html#PointNeighborhood"><span
+                                            class="sig-paren">(</span><em>radius</em>, <em>max_neighbor_num</em>, <em>points_subset</em>,
+                                        <em>dist=None</em><span class="sig-paren">)</span><a class="reference internal"
+                                                                                             href="../../_modules/PointNeighborhood.html#PointNeighborhood"><span
                                             class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                                         href="#PointNeighborhood.PointNeighborhood"
                                                                                         title="Permalink to this definition">¶</a>
@@ -203,26 +204,26 @@
                                             <tbody valign="top">
                                             <tr class="row-odd">
                                                 <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"
-                                                       title="PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">localRotatedNeighborhood</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><a class="reference internal"
                                                        href="#PointNeighborhood.PointNeighborhood.maxNN"
                                                        title="PointNeighborhood.PointNeighborhood.maxNN"><code
                                                         class="xref py py-obj docutils literal notranslate"><span
                                                         class="pre">maxNN</span></code></a></td>
                                                 <td></td>
                                             </tr>
-                                            <tr class="row-odd">
+                                            <tr class="row-even">
                                                 <td><a class="reference internal"
                                                        href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices"
                                                        title="PointNeighborhood.PointNeighborhood.neighborhoodIndices"><code
                                                         class="xref py py-obj docutils literal notranslate"><span
                                                         class="pre">neighborhoodIndices</span></code></a></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#PointNeighborhood.PointNeighborhood.neighbors"
+                                                       title="PointNeighborhood.PointNeighborhood.neighbors"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">neighbors</span></code></a></td>
                                                 <td></td>
                                             </tr>
                                             <tr class="row-even">
@@ -290,15 +291,6 @@
                                         </dl>
 
                                         <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.localRotatedNeighborhood">
-                                                <code class="descname">localRotatedNeighborhood</code><a
-                                                    class="headerlink"
-                                                    href="#PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"
-                                                    title="Permalink to this definition">¶</a></dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                        <dl class="attribute">
                                             <dt id="PointNeighborhood.PointNeighborhood.maxNN">
                                                 <code class="descname">maxNN</code><a class="headerlink"
                                                                                       href="#PointNeighborhood.PointNeighborhood.maxNN"
@@ -312,6 +304,15 @@
                                                 <code class="descname">neighborhoodIndices</code><a class="headerlink"
                                                                                                     href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices"
                                                                                                     title="Permalink to this definition">¶</a>
+                                            </dt>
+                                            <dd></dd>
+                                        </dl>
+
+                                        <dl class="attribute">
+                                            <dt id="PointNeighborhood.PointNeighborhood.neighbors">
+                                                <code class="descname">neighbors</code><a class="headerlink"
+                                                                                          href="#PointNeighborhood.PointNeighborhood.neighbors"
+                                                                                          title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd></dd>
                                         </dl>

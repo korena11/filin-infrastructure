@@ -19,7 +19,35 @@ from tensor import Tensor
 
 class TensorProperty(BaseProperty):
 
-    def __init__(self, points):
+    def __init__(self, points, tensors=None):
         super(TensorProperty, self).__init__(points)
 
         self.__tensors = np.empty(points.Size, Tensor)
+
+    def setValues(self, idx, tensor):
+        """
+        Sets the tensor for an index
+
+        :param idx: the index to which the tensor should be updated
+        :param tensor: the computed tensor
+
+        :type idx: int
+        :type tensor: Tensor
+
+        """
+
+        self.__tensors[idx] = tensor
+
+    def getTensor(self, idx):
+        """
+        Retrieve a tensor of point(s) with idx index
+
+        :param idx: the index of the point
+
+        :type idx: int
+
+        :return: the tensor of point idx
+
+        :rtype: Tensor
+        """
+        return self.__tensors[idx]

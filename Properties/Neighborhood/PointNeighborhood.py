@@ -1,25 +1,29 @@
 import numpy as np
 from scipy.spatial import Delaunay
 
+from PointSubSet import PointSubSet
+from PointSubSetOpen3D import PointSubSetOpen3D
+
 
 class PointNeighborhood:
-    def __init__(self, radius, max_neighbor_num, num_pts, idx, dist):
+    def __init__(self, radius, max_neighbor_num, points_subset, dist=None):
         """
         :param radius: Radius of neighborhood
         :param max_neighbor_num: Max number of neighborhood points set
-        :param num_pts: Number of points in neighborhood
-        :param idx: Neighborhood points indices
+        :param points_subset: the neighborhood as point subset
         :param dist: Distance of neighborhood points from center point
+
+
+        :type radius: float
+        :type max_neighbor_num: int
+        :type points_subset: PointSubSet or PointSubSetOpen3D
         """
-        # self.pointSet = super(PointNeighborhood, self).__init__(points, idx)
 
         self.r = radius
         self.nn = max_neighbor_num
-        self.num = num_pts
-        self.idx = idx
         self.dist = dist
 
-        self.localRotatedNeighbors = None
+        self.__neighbors = points_subset
 
     @property
     def radius(self):
@@ -31,19 +35,19 @@ class PointNeighborhood:
 
     @property
     def numberOfNeighbors(self):
-        return self.num
+        return self.__neighbors.Size
 
     @property
     def neighborhoodIndices(self):
-        return self.idx
+        return self.__neighbors.GetIndices
 
     @property
-    def localRotatedNeighborhood(self):
-        return self.localRotatedNeighbors
+    def neighbors(self):
+        return self.neighbors
 
-    @localRotatedNeighborhood.setter
-    def localRotatedNeighborhood(self, neighborsArray):
-        self.localRotatedNeighbors = neighborsArray.copy()
+    @neighbors.setter
+    def neighbors(self, pointsubset):
+        self.__neighbors = pointsubset
 
     def VisualizeNeighborhoodTriangulation(self):
         """

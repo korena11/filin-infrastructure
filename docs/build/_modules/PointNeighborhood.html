@@ -124,6 +124,8 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
                                 class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span class="n">Delaunay</span>
+<span class="kn">from</span> <span class="nn">PointSubSetOpen3D</span> <span class="k">import</span> <span class="n">PointSubSetOpen3D</span>
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 
 
 <div class="viewcode-block" id="PointNeighborhood"><a class="viewcode-back"
@@ -131,31 +133,30 @@
         class="k">class</span> <span class="nc">PointNeighborhood</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
             class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span
-            class="n">max_neighbor_num</span><span class="p">,</span> <span class="n">num_pts</span><span
-            class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">dist</span><span
+            class="n">max_neighbor_num</span><span class="p">,</span> <span class="n">points_subset</span><span
+            class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="kc">None</span><span
             class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param radius: Radius of neighborhood</span>
 <span class="sd">        :param max_neighbor_num: Max number of neighborhood points set</span>
-<span class="sd">        :param num_pts: Number of points in neighborhood</span>
-<span class="sd">        :param idx: Neighborhood points indices</span>
+<span class="sd">        :param points_subset: the neighborhood as point subset</span>
 <span class="sd">        :param dist: Distance of neighborhood points from center point</span>
+
+
+<span class="sd">        :type radius: float</span>
+<span class="sd">        :type max_neighbor_num: int</span>
+<span class="sd">        :type points_subset: PointSubSet or PointSubSetOpen3D</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># self.pointSet = super(PointNeighborhood, self).__init__(points, idx)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span
             class="n">radius</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nn</span> <span class="o">=</span> <span
             class="n">max_neighbor_num</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">num</span> <span class="o">=</span> <span
-            class="n">num_pts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">idx</span> <span class="o">=</span> <span
-            class="n">idx</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dist</span> <span class="o">=</span> <span
             class="n">dist</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">localRotatedNeighbors</span> <span
-            class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span> <span class="o">=</span> <span
+            class="n">points_subset</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span
@@ -170,24 +171,26 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">numberOfNeighbors</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">num</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__neighbors</span><span class="o">.</span><span class="n">Size</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">neighborhoodIndices</span><span class="p">(</span><span
             class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__neighbors</span><span class="o">.</span><span class="n">GetIndices</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">localRotatedNeighborhood</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">localRotatedNeighbors</span>
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">neighbors</span>
 
-    <span class="nd">@localRotatedNeighborhood</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">localRotatedNeighborhood</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">neighborsArray</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">localRotatedNeighbors</span> <span
-            class="o">=</span> <span class="n">neighborsArray</span><span class="o">.</span><span
-            class="n">copy</span><span class="p">()</span>
+    <span class="nd">@neighbors</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">pointsubset</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span> <span class="o">=</span> <span
+            class="n">pointsubset</span>
 
 <div class="viewcode-block" id="PointNeighborhood.VisualizeNeighborhoodTriangulation"><a class="viewcode-back"
                                                                                          href="../Properties/Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood.VisualizeNeighborhoodTriangulation">[docs]</a>    <span

@@ -3,15 +3,14 @@
 import numpy as np
 # 3rd Party Imports
 import open3d as O3D
-from scipy.ndimage import gaussian_filter
 
-import RotationUtils
-from PointNeighborhood import PointNeighborhood
+# from PointNeighborhood import PointNeighborhood
 # Infrastructure Imports
 from PointSet import PointSet
 from RandomColors import LetThereBeRandomColors
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
+
 
 class PointSetOpen3D(PointSet):
     def __init__(self, inputPoints):
@@ -28,7 +27,7 @@ class PointSetOpen3D(PointSet):
         self.InitializeOpen3dObject(inputPoints)
 
         # TODO: check if needed after Elia
-        self.pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
+        # self.pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
         self.originalNumberOfPoints = len(self.pointsOpen3D.points)
 
         self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
@@ -80,9 +79,9 @@ class PointSetOpen3D(PointSet):
     def Size(self):
         return len(self.pointsOpen3D.points)
 
-    @Size.setter
-    def Size(self, new_size):
-        self.Size = new_size
+    # @Size.setter
+    # def Size(self, new_size):
+    #     self.Size = new_size
 
     def DownsampleCloud(self, voxelSize, verbose=True):
         if voxelSize > 0.:
@@ -94,7 +93,7 @@ class PointSetOpen3D(PointSet):
 
             self.voxelSize = voxelSize
             self.numberOfPoints = len(self.pointsOpen3D.points)
-            self.pointsNeighborsArray = np.empty(shape=(self.numberOfPoints,), dtype=PointNeighborhood)
+            # self.pointsNeighborsArray = np.empty(shape=(self.numberOfPoints,), dtype=PointNeighborhood)
             self.RebuildKDTree()
 
     def CalculateNormals(self, searchRadius=0.05, maxNN=20, orientation=(0., 0., 0.), verbose=True):
@@ -168,7 +167,6 @@ class PointSetOpen3D(PointSet):
         :param indx: indices to remove
         :param verbose: runtime printing. Default: True
 
-
         :type indx: list or int
         :type verbose: bool
 
@@ -205,102 +203,6 @@ class PointSetOpen3D(PointSet):
 
             # Rebuild KD Tree
             self.RebuildKDTree(verbose=verbose)
-
-    # region Neighborhood Functions
-
-    def GetPointsNeighborsByID(self, idx, searchRadius, maxNN, returnValues=True, override=False,
-                               useOriginal=False):
-        """
-
-        :param idx: point index
-        :param searchRadius: the search radius for neighbors
-        :param maxNN: maximum number of neighbors
-        :param returnValues: default: True
-        :param override: default: False
-        :param useOriginal: default: False
-
-        :type idx: int
-        :type searchRadius: float
-        :type maxNN: int
-        :type returnValues: bool
-        :type override: bool
-        :type useOriginal: bool
-
-        :return:
-        """
-        if isinstance(idx, int):
-            idx = [idx]
-
-        if override:
-            self.__PrintOverrideNeighborhoodCalculations(idx[0], searchRadius, maxNN)
-
-        for currentPointIndex in idx:
-            if not override:
-                if self.pointsNeighborsArray[currentPointIndex]:
-                    r = self.pointsNeighborsArray[currentPointIndex].GetRadius()
-                    nn = self.pointsNeighborsArray[currentPointIndex].GetMaxNN()
-                    if (r == searchRadius and nn == maxNN):
-                        continue
-
-            currentPoint = self.pointsOpen3D.points[currentPointIndex]
-            pointNeighborhoodObject = self.GetPointNeighborsByCoordinates(point=currentPoint, searchRadius=searchRadius,
-                                                                          maxNN=maxNN, useOriginal=useOriginal)
-            self.pointsNeighborsArray[currentPointIndex] = pointNeighborhoodObject
-            self.__RotatePointNeighborhood(currentPointIndex, smoothen=False, useOriginal=useOriginal)
-
-        if returnValues:
-            if len(idx) == 1:
-                return self.pointsNeighborsArray[idx][0]
-            return self.pointsNeighborsArray[idx]
-
-    def GetPointNeighborsByCoordinates(self, point, searchRadius, maxNN, useOriginal=False):
-        if maxNN <= 0:
-            if not useOriginal:
-                num, idx, dist = self.kdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
-            else:
-                num, idx, dist = self.originalkdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
-
-        elif searchRadius <= 0:
-            if not useOriginal:
-                num, idx, dist = self.kdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
-            else:
-                num, idx, dist = self.originalkdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
-
-        else:
-            if not useOriginal:
-                num, idx, dist = self.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=searchRadius, max_nn=maxNN)
-            else:
-                num, idx, dist = self.originalkdTreeOpen3D.search_hybrid_vector_3d(point, radius=searchRadius,
-                                                                                   max_nn=maxNN)
-
-        pointNeighborhood = PointNeighborhood(searchRadius, maxNN, num, idx, dist)
-        return pointNeighborhood
-
-    def __RotatePointNeighborhood(self, pointIndex, smoothen=False, useOriginal=False):
-        pointCoordinates = self.pointsOpen3D.points[pointIndex]
-        pointNeighborhoodPointIdx = self.pointsNeighborsArray[pointIndex].neighborhoodIndices
-
-        if not useOriginal:
-            pointNeighborhoodPoints = np.asarray(self.pointsOpen3D.points)[pointNeighborhoodPointIdx]
-        else:
-            pointNeighborhoodPoints = np.asarray(self.originalPointsOpen3D.points)[pointNeighborhoodPointIdx]
-
-        pointNeighborhoodDiff = pointNeighborhoodPoints - pointCoordinates
-
-        pointNormal = self.pointsOpen3D.normals[pointIndex]
-        zAxis = np.array([0., 0., 1.])
-        rotationMatrix = RotationUtils.Rotation_2Vectors(pointNormal, zAxis)
-
-        pointNeighborhoodDiff = (np.dot(rotationMatrix, pointNeighborhoodDiff.T)).T
-        if smoothen:
-            pointNeighborhoodDiff[:, 2] = gaussian_filter(pointNeighborhoodDiff[:, 2], 5)
-
-        self.pointsNeighborsArray[pointIndex].localRotatedNeighbors = pointNeighborhoodDiff
-
-    def GetAllPointsNeighbors(self):
-        return self.pointsNeighborsArray
-
-    # endregion
 
     # region Visualization Functions
     def SetPointsColors(self, colors):
@@ -351,15 +253,3 @@ class PointSetOpen3D(PointSet):
         O3D.draw_geometries_with_key_callbacks(drawData, key_to_callback)
 
     # endregion
-
-    def __PrintOverrideNeighborhoodCalculations(self, exampleIndex, newRadius, newMaxNN):
-        previousRadius = self.pointsNeighborsArray[exampleIndex].GetRadius()
-        previousMaxNN = self.pointsNeighborsArray[exampleIndex].GetMaxNN()
-
-        if previousRadius != newRadius or previousMaxNN != newMaxNN:
-            print("Function: PointSetOpen3D.PointSetOpen3D.GetPointsNeighborsByID")
-            print("Overriding Previous Calculations")
-
-            print("Previous Radius/maxNN: " + str(previousRadius) + "/" + str(previousMaxNN))
-            print("New Radius/maxNN:\t" + str(newRadius) + "/" + str(newMaxNN))
-            print()

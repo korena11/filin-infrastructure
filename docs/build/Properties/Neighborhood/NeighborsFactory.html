@@ -98,6 +98,8 @@
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
                                 Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal"
@@ -175,7 +177,9 @@
                                                                                     href="#NeighborsFactory.NeighborsFactory"
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
-                                <dd><p>Find neighbors of a given points using different methods</p>
+                                <dd><p>Find neighbors of a given points using different methods. Use this factory to
+                                    create either PointNeighbors or
+                                    NeighborProperty for a whole point cloud.</p>
                                     <blockquote>
                                         <div><p class="rubric">Methods</p>
                                             <table border="1" class="longtable docutils">
@@ -189,7 +193,7 @@
                                                            href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors"
                                                            title="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors"><code
                                                             class="xref py py-obj docutils literal notranslate"><span
-                                                            class="pre">CalculateAllPointsNeighbors</span></code></a>(pointSetOpen3D)
+                                                            class="pre">CalculateAllPointsNeighbors</span></code></a>(pointset[,&nbsp;…])
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -229,6 +233,26 @@
                                                     </td>
                                                     <td>Find points in defined window - neighbors of a point</td>
                                                 </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates"
+                                                           title="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">GetPointNeighborsByCoordinates</span></code></a>(…[,&nbsp;…])
+                                                    </td>
+                                                    <td>Define a point’s neighborhood according to its coordinates</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID"
+                                                           title="NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">GetPointsNeighborsByID</span></code></a>(pointset3d,&nbsp;idx,&nbsp;…)
+                                                    </td>
+                                                    <td>Get the neighbors of a point within a point cloud by its
+                                                        index.
+                                                    </td>
+                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -236,10 +260,10 @@
                                     <dl class="staticmethod">
                                         <dt id="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">
                                             <em class="property">static </em><code class="descname">CalculateAllPointsNeighbors</code><span
-                                                class="sig-paren">(</span><em>pointSetOpen3D</em>,
-                                            <em>searchRadius=0.05</em>, <em>maxNN=20</em>, <em>maxProcesses=8</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../../_modules/NeighborsFactory.html#NeighborsFactory.CalculateAllPointsNeighbors"><span
+                                                class="sig-paren">(</span><em>pointset</em>, <em>searchRadius=0.05</em>,
+                                            <em>maxNN=20</em>, <em>maxProcesses=8</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborsFactory.html#NeighborsFactory.CalculateAllPointsNeighbors"><span
                                                 class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                                             href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors"
                                                                                             title="Permalink to this definition">¶</a>
@@ -477,6 +501,176 @@
                                                             class="reference internal"
                                                             href="../../Datasets/PointSubSet.html#PointSubSet.PointSubSet"
                                                             title="PointSubSet.PointSubSet">PointSubSet</a></p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates">
+                                            <em class="property">static </em><code class="descname">GetPointNeighborsByCoordinates</code><span
+                                                class="sig-paren">(</span><em>pointset_open3d</em>, <em>point</em>, <em>searchRadius</em>,
+                                            <em>maxNN</em>, <em>useOriginal=False</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointNeighborsByCoordinates"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Define a point’s neighborhood according to its coordinates</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>pointset_open3d</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a>)
+                                                                – the point cloud in which the neighbors should be
+                                                                searched
+                                                            </li>
+                                                            <li><strong>point</strong> (<em>np.ndarray</em><em> or </em><a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                    title="(in Python v3.7)"><em>tuple</em></a>) – x, y,
+                                                                z of the point
+                                                            </li>
+                                                            <li><strong>searchRadius</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                    title="(in Python v3.7)"><em>float</em></a>) – the
+                                                                radius in which the neighbors should be searched
+                                                            </li>
+                                                            <li><strong>maxNN</strong> (<a class="reference external"
+                                                                                           href="https://docs.python.org/3/library/functions.html#int"
+                                                                                           title="(in Python v3.7)"><em>int</em></a>)
+                                                                – the maximum number of neighbors
+                                                            </li>
+                                                            <li><strong>useOriginal</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#bool"
+                                                                    title="(in Python v3.7)"><em>bool</em></a>) – <p>
+                                                                ???</p>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">the neighborhood of a
+                                                        point</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="Neighborhood.html#PointNeighborhood.PointNeighborhood"
+                                                            title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="staticmethod">
+                                        <dt id="NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID">
+                                            <em class="property">static </em><code class="descname">GetPointsNeighborsByID</code><span
+                                                class="sig-paren">(</span><em>pointset3d</em>, <em>idx</em>, <em>searchRadius</em>,
+                                            <em>maxNN</em>, <em>returnValues=True</em>, <em>neighborsProperty=None</em>,
+                                            <em>override=False</em>, <em>useOriginal=False</em>,
+                                            <em>rotate=False</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointsNeighborsByID"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Get the neighbors of a point within a point cloud by its index.</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>pointset3d</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a>)
+                                                                – the cloud in which the point is searched for
+                                                            </li>
+                                                            <li><strong>idx</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/functions.html#int"
+                                                                                         title="(in Python v3.7)"><em>int</em></a><em>
+                                                                or </em><em>np.ndarray</em>) – point index
+                                                            </li>
+                                                            <li><strong>searchRadius</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                    title="(in Python v3.7)"><em>float</em></a>) – the
+                                                                search radius for neighbors
+                                                            </li>
+                                                            <li><strong>maxNN</strong> (<a class="reference external"
+                                                                                           href="https://docs.python.org/3/library/functions.html#int"
+                                                                                           title="(in Python v3.7)"><em>int</em></a>)
+                                                                – maximum number of neighbors
+                                                            </li>
+                                                            <li><strong>returnValues</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#bool"
+                                                                    title="(in Python v3.7)"><em>bool</em></a>) –
+                                                                default: True
+                                                            </li>
+                                                            <li><strong>neighborsProperty</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="NeighborhoodProperty.html#NeighborProperty.NeighborsProperty"
+                                                                    title="NeighborProperty.NeighborsProperty"><em>NeighborsProperty</em></a>)
+                                                                – Existing neighborhood property which should be
+                                                                override
+                                                            </li>
+                                                            <li><strong>override</strong> (<a class="reference external"
+                                                                                              href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                              title="(in Python v3.7)"><em>bool</em></a>)
+                                                                – default: False
+                                                            </li>
+                                                            <li><strong>rotate</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                            title="(in Python v3.7)"><em>bool</em></a>)
+                                                                – flag whether to rotate the neighborhood or not.
+                                                                Default: False
+                                                            </li>
+                                                            <li><strong>useOriginal</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#bool"
+                                                                    title="(in Python v3.7)"><em>bool</em></a>) –
+                                                                default: False
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">the neighborhood
+                                                        property</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="NeighborhoodProperty.html#NeighborProperty.NeighborsProperty"
+                                                            title="NeighborProperty.NeighborsProperty">NeighborsProperty</a>
+                                                    </p>
                                                     </td>
                                                 </tr>
                                                 </tbody>
