@@ -4,17 +4,22 @@
 .. sectionauthor:: Reuma
 
 
-Implementation of multiple kinds of saliencies given an image:
+Implementation of multiple kinds of saliencies a given image:
 
 **Distance based**
 
-1. Achanta, R., Hemami, S., Estrada, F., and Susstrunk S. 2009. Frequency tuned salient region detection.
-2. Achanta, R., Estrada, F., Wils, P., and Susstrunk S. 2008. Salient region detection and segmentation.
-3. Goferman, S., Zelnik-Manor, L., Tal, A.,2012. Context-aware saliency detection.
+1. :cite:`Achanta.etal2009`
+2. :cite:`Achanta.etal2008`
+3. :cite:`Goferman.etal2012`
+4. :cite:`Guo.etal2018`
 
 **Bayesian saliency**
 
-4. Xie, Y., Lu, J., and Yang M.H. 2013. Bayesian saliency via low and mid level cues.
+5. :cite:`Xie.etal2013`
+
+**PointCloud**
+
+6. :cite:`Guo.etal2018`
 
 
 '''
@@ -29,17 +34,17 @@ if platform.system() == 'Linux':
 import numpy as np
 from matplotlib import pyplot as plt
 import scipy.linalg as LA
+import warnings
 
 import cv2
 import MyTools as mt
 import LatexUtils as lu
-import warnings
 
 
 def bayesian(image, **kwargs):
     """
-    Saliency computed according to:
-    Xie, Y., Lu, J., and Yang M.H. 2013. Bayesian saliency via low and mid level cues.
+    Saliency computed according to :cite:`Xie.etal2013`
+
 
     :param image:
     :param numSegments: number of segments in the superpixel segmentation. defualt: 200
@@ -143,20 +148,20 @@ def distance_based(image, **kwargs):
 
     :param method: The method according to which the distance is computed:
 
-                   - *'frequency'* - the distance between blurred and unblurred image (Achanta et al., 2009)
+                   - *'frequency'* - the distance between blurred and unblurred image :cite:`Achanta.etal2009`
 
                    .. code-block:: python
 
                        s1 = distance_based(img, filter_sigma = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
                         feature = 'normals')
 
-                   - *'local'* - the distance between regions (Achanta et al., 2008)
+                   - *'local'* - the distance between regions :cite:`Achanta.etal2008`
 
                    .. code-block:: python
 
                        s2 = distance_based(img, filter_size = 5, method = 'local', feature = 'normals')
 
-                   - *'context'* - distance between regions and position (Goferman et al., 2012)
+                   - *'context'* - distance between regions and position :cite:`Goferman.etal2012`
 
                        :param scales_number: the number of scales that should be computed. default 3.
                        :param kpatches: the number of minimum distance patches,  dtype = int. default: 64
@@ -265,8 +270,7 @@ def distance_based(image, **kwargs):
 
 def __frequencyTuned(image, sigma_flag, filters):
     """
-    Saliency computed according to:
-    Achanta, R., Hemami, S., Estrada, F., and Susstrunk S. 2009. Frequency tuned salient region detection.
+    Saliency computed according to :cite:`Achanta.etal2009`
 
     :param image: image on which the saliency is computed
     :param sigma_flag: whether the sigma or the kernel size are used for blurring
@@ -287,8 +291,7 @@ def __frequencyTuned(image, sigma_flag, filters):
 
 def __regionConstrast(image, region1_size):
     """
-    Saliency computed according to:
-    Achanta, R., Estrada, F., Wils, P., and Susstrunk S. 2008. Salient region detection and segmentation.
+    Saliency computed according to :cite:`Achanta.etal2008`
 
     :param image: image on which the saliency is computed
     :param region1_size: R1 size -- does not change throughout
@@ -312,8 +315,7 @@ def __regionConstrast(image, region1_size):
 
 def __contextAware(image, ksize, image_feature, **kwargs):
     """
-    Saliency computed according to:
-    Goferman, S., Zelnik-Manor, L., Tal, A.,2012. Context-aware saliency detection.
+    Saliency computed according to :cite:`Goferman.etal2012`
 
     only one scale.
 
@@ -415,8 +417,11 @@ def __dcolor(p_i, image, image_feature, **kwargs):
 
 def __dissimilarity(A, B, **kwargs):
     """
-    Computes the dissimilarity measure for two covariance matrices according to:
-     d(A,B) = \sqrt{\sum{ln^2\lambda{A,B}}}
+    Computes the dissimilarity measure for two covariance matrices according to
+
+    .. math::
+
+        d(A,B) = \sqrt{\sum{ln^2\lambda{A,B}}}
 
     :param A, B: covariance matrices between which the dissimilarity is computed
     :param verbose: print intre running

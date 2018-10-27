@@ -165,8 +165,6 @@
             class="n">dtype</span><span class="o">=</span><span class="n">PointNeighborhood</span><span
             class="p">)</span>
 
-   
-
 <div class="viewcode-block" id="NeighborsProperty.GetAllPointsNeighbors"><a class="viewcode-back"
                                                                             href="../Properties/Neighborhood/NeighborhoodProperty.html#NeighborProperty.NeighborsProperty.GetAllPointsNeighbors">[docs]</a>    <span
         class="k">def</span> <span class="nf">GetAllPointsNeighbors</span><span class="p">(</span><span
@@ -177,10 +175,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pointsNeighborsArray</span></div>
 
-
-<div class="viewcode-block" id="NeighborsProperty.getNeighbor"><a class="viewcode-back"
-                                                                  href="../Properties/Neighborhood/NeighborhoodProperty.html#NeighborProperty.NeighborsProperty.getNeighbor">[docs]</a>    <span
-        class="k">def</span> <span class="nf">getNeighbor</span><span class="p">(</span><span
+<div class="viewcode-block" id="NeighborsProperty.getNeighbors"><a class="viewcode-back"
+                                                                   href="../Properties/Neighborhood/NeighborhoodProperty.html#NeighborProperty.NeighborsProperty.getNeighbors">[docs]</a>    <span
+        class="k">def</span> <span class="nf">getNeighbors</span><span class="p">(</span><span
         class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve a tensor of point(s) with idx index</span>
@@ -215,7 +212,6 @@
             class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">point_neighbor</span></div>
 
-
 <div class="viewcode-block" id="NeighborsProperty.RotatePointNeighborhood"><a class="viewcode-back"
                                                                               href="../Properties/Neighborhood/NeighborhoodProperty.html#NeighborProperty.NeighborsProperty.RotatePointNeighborhood">[docs]</a>    <span
         class="k">def</span> <span class="nf">RotatePointNeighborhood</span><span class="p">(</span><span class="bp">self</span><span
@@ -247,7 +243,7 @@
             class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span
             class="n">pointIndex</span><span class="p">)</span>
         <span class="n">pointNeighborhoodPointIdx</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span
+            class="o">.</span><span class="n">getNeighbors</span><span class="p">(</span><span
             class="n">pointIndex</span><span class="p">)</span><span class="o">.</span><span class="n">GetNeighborhoodIndices</span><span
             class="p">()</span>
 
@@ -287,7 +283,7 @@
             class="p">(</span><span class="n">pointNeighborhoodDiff</span><span class="p">[:,</span> <span
             class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">getNeighbor</span><span
+        <span class="bp">self</span><span class="o">.</span><span class="n">getNeighbors</span><span
             class="p">(</span><span class="n">pointIndex</span><span class="p">)</span><span class="o">.</span><span
             class="n">SetLocalRotatedNeighbors</span><span class="p">(</span><span
             class="n">pointNeighborhoodDiff</span><span class="p">)</span></div></div>

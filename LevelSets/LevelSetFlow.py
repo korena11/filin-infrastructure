@@ -10,9 +10,9 @@ from matplotlib import pyplot as plt
 from skimage import measure
 
 import MyTools as mt
-import Saliency as sl
 from LevelSetFunction import LevelSetFunction
 from RasterData import RasterData
+from Saliency import Saliency as sl
 
 EPS = np.finfo(float).eps
 

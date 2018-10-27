@@ -18,3 +18,4 @@ Each property is created by a Factory. These are the existing properties and fac
     Transformations/Transformation
     TriangulationProperty
     Tensors/tensorClass
+    Saliency/Saliency

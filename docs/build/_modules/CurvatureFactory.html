@@ -202,20 +202,20 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">points</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span
             class="p">):</span>
-            <span class="n">neighbors_diff</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
-            class="n">GetPointsNeighborsByID</span><span class="p">(</span><span class="n">ind</span><span
-            class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span
-            class="n">max_nn</span><span class="p">,</span> <span class="n">useOriginal</span><span
-            class="o">=</span><span class="kc">False</span><span class="p">)</span>
-            <span class="n">localRotatedNeighborhood</span> <span class="o">=</span> <span
-            class="n">neighbors_diff</span><span class="o">.</span><span class="n">localRotatedNeighborhood</span>
+            <span class="n">neighbors_diff</span> <span class="o">=</span> <span class="n">NeighborsFactory</span><span
+            class="o">.</span><span class="n">GetPointNeighborsByID</span><span class="p">(</span><span
+            class="n">ind</span><span class="p">,</span> <span class="n">search_radius</span><span
+            class="p">,</span> <span class="n">max_nn</span><span class="p">,</span> <span
+            class="n">useOriginal</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors_diff</span><span
+            class="o">.</span><span class="n">neighbors</span>
 
             <span class="k">if</span> <span class="n">neighbors_diff</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span
             class="o">-</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">5</span><span
             class="p">:</span>
                 <span class="n">point_quality</span> <span class="o">=</span> <span
             class="n">CurvatureFactory</span><span class="o">.</span><span class="n">__good_point</span><span class="p">(</span><span
-            class="n">localRotatedNeighborhood</span><span class="p">)</span>
+            class="n">neighbors</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">k1</span><span class="p">,</span> <span class="n">k2</span> <span
@@ -280,7 +280,7 @@
             class="o">.</span><span class="n">Rotation_2Vectors</span><span class="p">(</span><span
             class="n">normP</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
-                <span class="n">localRotatedNeighborhood</span> <span class="o">=</span> <span class="p">(</span><span
+                <span class="n">neighbors</span> <span class="o">=</span> <span class="p">(</span><span
             class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span
             class="n">rot_mat</span><span class="p">,</span> <span class="n">neighbors</span><span
             class="o">.</span><span class="n">T</span><span class="p">))</span><span class="o">.</span><span
@@ -305,7 +305,7 @@
             <span class="n">p</span> <span class="o">=</span> <span class="n">CurvatureFactory</span><span
             class="o">.</span><span class="n">__BiQuadratic_Surface</span><span class="p">(</span><span
             class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span
-            class="n">localRotatedNeighborhood</span><span class="p">)))</span>
+            class="n">neighbors</span><span class="p">)))</span>
             <span class="n">Zxx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span
             class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">Zyy</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span

@@ -132,6 +132,8 @@ class TensorFactory(object):
 
         :return: a tensor property with all tensors computed for each point
 
+        :rtype: TensorProperty
+
         **Usage**
 
         .. code-block:: python

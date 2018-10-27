@@ -135,15 +135,17 @@
                                 class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">BallTree</span>
 
+<span class="kn">from</span> <span class="nn">NeighborProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
 <span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
 <span class="c1"># Infrastructure imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+<span class="kn">from</span> <span class="nn">PointSubSetOpen3D</span> <span class="k">import</span> <span class="n">PointSubSetOpen3D</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                                 class="n">SphericalCoordinatesFactory</span>
-<span class="kn">from</span> <span class="nn">NeighborProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
-<span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+
 
 <div class="viewcode-block" id="NeighborsFactory"><a class="viewcode-back"
                                                      href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory">[docs]</a><span
@@ -153,18 +155,18 @@
 <span class="sd">    NeighborProperty for a whole point cloud.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="NeighborsFactory.GetPointsNeighborsByID"><a class="viewcode-back"
-                                                                            href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetPointsNeighborsByID">[docs]</a>    <span
+<div class="viewcode-block" id="NeighborsFactory.GetPointNeighborsByID"><a class="viewcode-back"
+                                                                           href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetPointNeighborsByID">[docs]</a>    <span
         class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">GetPointsNeighborsByID</span><span class="p">(</span><span class="n">pointset3d</span><span
+    <span class="k">def</span> <span class="nf">GetPointNeighborsByID</span><span class="p">(</span><span class="n">pointset3d</span><span
             class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span
             class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span
             class="p">,</span> <span class="n">returnValues</span><span class="o">=</span><span
-            class="kc">True</span><span class="p">,</span> <span class="n">neighborsProperty</span> <span
-            class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                               <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span
+            class="kc">True</span><span class="p">,</span> <span class="n">neighborsProperty</span><span
+            class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                              <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span
             class="p">,</span> <span class="n">useOriginal</span><span class="o">=</span><span
-            class="kc">False</span><span class="p">,</span> <span class="n">rotate</span> <span class="o">=</span> <span
+            class="kc">False</span><span class="p">,</span> <span class="n">rotate</span><span class="o">=</span><span
             class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the neighbors of a point within a point cloud by its index.</span>
@@ -189,9 +191,9 @@
 <span class="sd">        :type useOriginal: bool</span>
 <span class="sd">        :type rotate: bool</span>
 
-<span class="sd">        :return: the neighborhood property</span>
+<span class="sd">        :return: the point neighborhood</span>
 
-<span class="sd">        :rtype: NeighborsProperty</span>
+<span class="sd">        :rtype: PointNeighborhood</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">neighborsProperty</span> <span class="ow">is</span> <span class="kc">None</span><span
             class="p">:</span>
@@ -199,7 +201,7 @@
             class="n">NeighborsProperty</span><span class="p">(</span><span class="n">pointset3d</span><span
             class="p">)</span>
 
-
+        <span class="n">pointNeighborhoodObject</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">idx</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span><span
@@ -216,12 +218,13 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">override</span><span
             class="p">:</span>
                 <span class="k">if</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
-            class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span class="p">):</span>
+            class="n">getNeighbors</span><span class="p">(</span><span class="n">currentPointIndex</span><span
+            class="p">):</span>
                     <span class="n">r</span> <span class="o">=</span> <span class="n">neighborsProperty</span><span
-            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span
+            class="o">.</span><span class="n">getNeighbors</span><span class="p">(</span><span class="n">currentPointIndex</span><span
             class="p">)</span><span class="o">.</span><span class="n">GetRadius</span><span class="p">()</span>
                     <span class="n">nn</span> <span class="o">=</span> <span class="n">neighborsProperty</span><span
-            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span class="n">currentPointIndex</span><span
+            class="o">.</span><span class="n">getNeighbors</span><span class="p">(</span><span class="n">currentPointIndex</span><span
             class="p">)</span><span class="o">.</span><span class="n">GetMaxNN</span><span class="p">()</span>
                     <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="n">searchRadius</span> <span
             class="ow">and</span> <span class="n">nn</span> <span class="o">==</span> <span class="n">maxNN</span><span
@@ -240,10 +243,10 @@
             class="o">=</span><span class="n">currentPoint</span><span class="p">,</span>
                                                                                       <span class="n">searchRadius</span><span
             class="o">=</span><span class="n">searchRadius</span><span class="p">,</span>
-                                                                          <span class="n">maxNN</span><span
-            class="o">=</span><span class="n">maxNN</span><span class="p">,</span> <span
-            class="n">useOriginal</span><span class="o">=</span><span class="n">useOriginal</span><span
-            class="p">)</span>
+                                                                                      <span class="n">maxNN</span><span
+            class="o">=</span><span class="n">maxNN</span><span class="p">,</span>
+                                                                                      <span class="n">useOriginal</span><span
+            class="o">=</span><span class="n">useOriginal</span><span class="p">)</span>
             <span class="n">neighborsProperty</span><span class="o">.</span><span class="n">setNeighbor</span><span
             class="p">(</span><span class="n">currentPointIndex</span><span class="p">,</span> <span class="n">pointNeighborhoodObject</span><span
             class="p">)</span>
@@ -258,11 +261,8 @@
         <span class="k">if</span> <span class="n">returnValues</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">idx</span><span
             class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
-            class="n">getNeighbor</span><span class="p">(</span><span class="n">idx</span><span class="p">)[</span><span
-            class="mi">0</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">neighborsProperty</span><span class="o">.</span><span
-            class="n">getNeighbor</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span></div>
+                <span class="k">return</span> <span class="n">pointNeighborhoodObject</span>
+            <span class="k">return</span> <span class="n">pointNeighborhoodObject</span></div>
 
 <div class="viewcode-block" id="NeighborsFactory.GetPointNeighborsByCoordinates"><a class="viewcode-back"
                                                                                     href="../Properties/Neighborhood/NeighborsFactory.html#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates">[docs]</a>    <span
@@ -350,11 +350,13 @@
             class="o">=</span><span class="n">searchRadius</span><span class="p">,</span>
                                                                                               <span class="n">max_nn</span><span
             class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
-
+        <span class="n">pointsubset</span> <span class="o">=</span> <span class="n">PointSubSetOpen3D</span><span
+            class="p">(</span><span class="n">pointset_open3d</span><span class="p">,</span> <span
+            class="n">idx</span><span class="p">)</span>
         <span class="n">pointNeighborhood</span> <span class="o">=</span> <span class="n">PointNeighborhood</span><span
             class="p">(</span><span class="n">searchRadius</span><span class="p">,</span> <span
-            class="n">maxNN</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span
-            class="n">idx</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+            class="n">maxNN</span><span class="p">,</span> <span class="n">pointsubset</span><span
+            class="p">,</span> <span class="n">dist</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pointNeighborhood</span></div>
 
 <div class="viewcode-block" id="NeighborsFactory.CalculateAllPointsNeighbors"><a class="viewcode-back"
@@ -389,11 +391,11 @@
             class="o">.</span><span class="n">Size</span><span class="p">)</span>
         <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
             class="p">(</span><span class="n">pointset</span><span class="p">)</span>
-        <span class="n">NeighborsFactory</span><span class="o">.</span><span
-            class="n">GetPointsNeighborsByID</span><span class="p">(</span><span class="n">pointset</span><span
-            class="p">,</span> <span class="n">pointsIndices</span><span class="p">,</span> <span
-            class="n">searchRadius</span><span class="p">,</span> <span class="n">maxNN</span><span
-            class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">GetPointNeighborsByID</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">,</span> <span
+            class="n">pointsIndices</span><span class="p">,</span> <span class="n">searchRadius</span><span
+            class="p">,</span> <span class="n">maxNN</span><span class="p">,</span> <span class="kc">False</span><span
+            class="p">)</span>
         <span class="k">return</span> <span class="n">neighbors</span></div>
 
 
@@ -713,11 +715,11 @@
 
 <span class="sd">                &quot;&quot;&quot;</span>
         <span class="n">previousRadius</span> <span class="o">=</span> <span class="n">neighborProperty</span><span
-            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span
+            class="o">.</span><span class="n">getNeighbors</span><span class="p">(</span><span
             class="n">exampleIndex</span><span class="p">)</span><span class="o">.</span><span
             class="n">GetRadius</span><span class="p">()</span>
         <span class="n">previousMaxNN</span> <span class="o">=</span> <span class="n">neighborProperty</span><span
-            class="o">.</span><span class="n">getNeighbor</span><span class="p">(</span><span
+            class="o">.</span><span class="n">getNeighbors</span><span class="p">(</span><span
             class="n">exampleIndex</span><span class="p">)</span><span class="o">.</span><span class="n">GetMaxNN</span><span
             class="p">()</span>
 
@@ -741,8 +743,6 @@
             class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span
             class="n">newMaxNN</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">()</span></div>
-
-  
 </pre>
                         </div>
 

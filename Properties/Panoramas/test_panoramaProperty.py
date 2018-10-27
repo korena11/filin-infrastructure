@@ -7,7 +7,7 @@ from PanoramaFactory import PanoramaFactory
 class TestPanoramaProperty(TestCase):
     # def test_make_rectangular(self):
 
-    # pts = IOFactory.ReadPts(r'..\IO modules\test_pts.pts')
+    # pts = IOFactory.ReadPts(r'..\IOmodules\test_pts.pts')
     #
     # pts_panorama = PanoramaFactory.CreatePanorama_byPoints(pts, elevationSpacing = 0.111, azimuthSpacing = 0.115,
     #                                             voidData = 30)

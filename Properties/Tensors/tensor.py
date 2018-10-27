@@ -9,13 +9,14 @@ reuma\Reuma
 A tensor is constructed to a set of points, either around a specific point or around the centeroid (center of gravity)  
 '''
 
-import platform
+from warnings import warn
 
-if platform.system() == 'Linux':
-    import matplotlib
-    matplotlib.use('TkAgg')
+# if platform.system() == 'Linux':
+#     import matplotlib
+#     matplotlib.use('TkAgg')
 import numpy as np
 import numpy.linalg as la
+
 from PointSet import PointSet
 
 
@@ -31,6 +32,7 @@ class Tensor(object):
     __plateAxis = None
     __stickAxis = None
     __num_points = None
+    __pts = None
 
     def __init__(self, covariance_matrix, ref_point, pts_number, **kwargs):
         """
@@ -39,16 +41,31 @@ class Tensor(object):
         :param ref_point: index of the reference point according to which the covariance matrix was computed. If (-1)
            the ref_point is the centroid of the pointset
         :param pts_number: the number of points that were used to compute the tensor
+        :param points: points that were used in the creation of the tensor
 
-        :type points: PointSet
+        :type points: PointSet or PointSubSet
         :type covariance_matrix: np.array
         :type ref_point: int
 
         """
-
+        self.__num_points = pts_number
         self.setValues(covariance_matrix, ref_point)
 
+        if 'points' in kwargs:
+            self.__pts = kwargs['points']
+
     # --------------------- PROPERTIES -------------------------
+    @property
+    def points(self):
+        """
+        The points that were used to construct the tensor
+
+        """
+        if self.__pts is not None:
+            return self.__pts
+        else:
+            warn('No points were inserted to object. Refer to relevant neighbors property')
+            return 1
 
     @property
     def reference_point(self):

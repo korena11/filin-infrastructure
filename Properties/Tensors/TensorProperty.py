@@ -51,3 +51,11 @@ class TensorProperty(BaseProperty):
         :rtype: Tensor
         """
         return self.__tensors[idx]
+
+    def GetAllPointsTensors(self):
+        """
+        Retrieve all points tensors
+
+        :rtype: np.array
+        """
+        return self.__tensors

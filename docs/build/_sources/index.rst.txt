@@ -53,7 +53,6 @@ References
 ----------
 
 .. bibliography:: refs1.bib
-   :style: plain
    :cited:
 
 

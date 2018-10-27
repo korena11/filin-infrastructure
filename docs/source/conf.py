@@ -39,18 +39,20 @@ from sphinx.ext.autosummary import get_documenter
 from sphinx.util.inspect import safe_getattr
 
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../../Data Classes'))
+sys.path.insert(0, os.path.abspath('../../DataClasses'))
 sys.path.insert(0, os.path.abspath('../../Factory Classes'))
-sys.path.insert(0, os.path.abspath('../../IO modules'))
+sys.path.insert(0, os.path.abspath('../../IOmodules'))
 sys.path.insert(0, os.path.abspath('../../LevelSets'))
 sys.path.insert(0, os.path.abspath('../../Properties/Neighborhood'))
 sys.path.insert(0, os.path.abspath('../../Properties/Normals'))
 sys.path.insert(0, os.path.abspath('../../Properties/Panoramas'))
 sys.path.insert(0, os.path.abspath('../../Properties/Curvature'))
-sys.path.insert(0, os.path.abspath('../../Properties'))
-sys.path.insert(0, os.path.abspath('../../Third Party'))
+sys.path.insert(0, os.path.abspath('../../Properties/Saliency'))
 sys.path.insert(0, os.path.abspath('../../Properties/Transformations'))
 sys.path.insert(0, os.path.abspath('../../Properties/Tensors'))
+sys.path.insert(0, os.path.abspath('../../Properties'))
+sys.path.insert(0, os.path.abspath('../../Third Party'))
+
 sys.path.insert(0, os.path.abspath('../../Utils'))
 sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
 

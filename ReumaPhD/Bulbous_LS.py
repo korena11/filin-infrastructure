@@ -12,7 +12,7 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 from matplotlib import pyplot as plt
-from IOFactory import IOFactory
+from IOmodules import IOFactory
 from PanoramaFactory import PanoramaFactory
 from LevelSetFlow import LevelSetFlow
 from ColorProperty import ColorProperty

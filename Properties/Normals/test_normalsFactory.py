@@ -8,7 +8,7 @@ from NormalsFactory import NormalsFactory
 
 class TestNormalsFactory(TestCase):
     # def test_normals_from_panorama(self):
-    #     filename = r'../IO modules/test_pts.pts'
+    #     filename = r'../IOmodules/test_pts.pts'
     #     points = IOFactory.ReadPts(filename)
     #     panorama = PanoramaFactory.CreatePanorama_byPoints(points, elevationSpacing = 0.111, azimuthSpacing = 0.115,
     #                                                        voidData = 30)
@@ -16,7 +16,7 @@ class TestNormalsFactory(TestCase):
     #     NormalsFactory.normalsComputation_in_raster(panorama[:,0], panorama[:,1], panorama[:,2])
 
     def test_normalsPCA_no_tree_radius_kneighbors(self):
-        filename = r'../IO modules/test_pts.pts'
+        filename = r'../IOmodules/test_pts.pts'
         points = IOFactory.ReadPts(filename)
         normals = NormalsFactory.normalsPCA(points, radius=0.5)
 

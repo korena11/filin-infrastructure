@@ -135,7 +135,8 @@
                                 class="n">measure</span>
 
 <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
-<span class="kn">import</span> <span class="nn">Saliency</span> <span class="k">as</span> <span class="nn">sl</span>
+<span class="kn">from</span> <span class="nn">Saliency</span> <span class="k">import</span> <span
+                                class="n">Saliency</span> <span class="k">as</span> <span class="n">sl</span>
 <span class="kn">from</span> <span class="nn">LevelSetFunction</span> <span class="k">import</span> <span class="n">LevelSetFunction</span>
 <span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
                                 class="n">RasterData</span>
@@ -872,18 +873,20 @@
             class="o">.</span><span class="n">classification</span><span class="p">(</span><span class="n">inputs</span><span
             class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
 
-        <span class="n">region</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span> <span
-            class="o">-</span> <span class="n">cv2</span><span class="o">.</span><span
-            class="n">GaussianBlur</span><span class="p">(</span><span class="n">region</span><span class="p">,</span>
-                                         <span class="n">ksize</span><span class="o">=</span><span
+        <span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">log</span><span class="p">(</span><span class="mi">255</span> <span class="o">-</span> <span
+            class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span
+            class="n">region</span><span class="p">,</span>
+                                               <span class="n">ksize</span><span class="o">=</span><span
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
             class="p">],</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
             class="p">]),</span>
-                                         <span class="n">sigmaX</span><span class="o">=</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span
-            class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]))</span>
+                                               <span class="n">sigmaX</span><span class="o">=</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span
+            class="p">]))</span>
+
         <span class="n">region</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
             class="n">normalize</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span
             class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
@@ -921,21 +924,29 @@
 <span class="sd">        :param flow_type: can be one of the following:</span>
 <span class="sd">            - &#39;constant&#39;:</span>
 
-<span class="sd">               .. math:: C_t = N \Rightarrow \phi_t = |\nabla \varphi|</span>
+<span class="sd">               .. math::</span>
+
+<span class="sd">                   C_t = N \Rightarrow \phi_t = |\nabla \varphi|</span>
 
 <span class="sd">            - &#39;curvature&#39;:</span>
 
-<span class="sd">               .. math:: C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|</span>
+<span class="sd">               .. math::</span>
+
+<span class="sd">                    C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|</span>
 
 <span class="sd">            - &#39;equi_affine&#39;:</span>
 
-<span class="sd">                .. math:: C_t = k^{1/3} N \Rightarrow</span>
-<span class="sd">                        \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|</span>
+<span class="sd">                .. math::</span>
+
+<span class="sd">                    C_t = k^{1/3} N \Rightarrow</span>
+<span class="sd">                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|</span>
 
 <span class="sd">            - &#39;geodesic&#39;: geodesic active contours, according to :cite:`Caselles.etal1997`</span>
 
-<span class="sd">                .. math::  C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow</span>
-<span class="sd">                        \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|</span>
+<span class="sd">                .. math::</span>
+
+<span class="sd">                    C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow</span>
+<span class="sd">                    \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|</span>
 
 <span class="sd">            - &#39;band&#39;: band velocity, according to :cite:`Li.etal2006`</span>
 
