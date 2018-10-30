@@ -79,10 +79,12 @@ class NeighborsFactory:
             if rotate:
                 neighborsProperty.RotatePointNeighborhood(currentPointIndex, smoothen=False, useOriginal=useOriginal)
 
+        # TODO: Elia is there need for this?
         if returnValues:
             if len(idx) == 1:
                 return pointNeighborhoodObject
             return pointNeighborhoodObject
+
 
     @staticmethod
     def GetPointNeighborsByCoordinates(pointset_open3d, point, searchRadius, maxNN, useOriginal=False):
@@ -151,7 +153,8 @@ class NeighborsFactory:
 
         pointsIndices = np.arange(pointset.Size)
         neighbors = NeighborsProperty(pointset)
-        NeighborsFactory.GetPointNeighborsByID(pointset, pointsIndices, searchRadius, maxNN, False)
+        NeighborsFactory.GetPointNeighborsByID(pointset, pointsIndices, searchRadius, maxNN, False,
+                                               neighbors)
         return neighbors
 
 

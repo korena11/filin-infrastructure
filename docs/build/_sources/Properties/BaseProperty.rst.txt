@@ -11,11 +11,12 @@ Each property is created by a Factory. These are the existing properties and fac
     Curvature/Curvature
     EigenProperty
     Normals/Normals
-    Panorama/Panorama
     Neighborhood/Neighborhood
+    Panorama/Panorama
+    Saliency/Saliency
     SegmentationProperty
     SphericalCoordinates/Spherical
     Transformations/Transformation
     TriangulationProperty
     Tensors/tensorClass
-    Saliency/Saliency
+

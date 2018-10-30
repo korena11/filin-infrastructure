@@ -154,6 +154,8 @@ class PointSet(BaseData):
 
     def GetPoint(self, index):
         """
+        Retrieve specific point(s) by index
+
         :param index: the index of the point to return
 
         :return: specific point/s as numpy nX3 ndarray

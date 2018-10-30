@@ -33,6 +33,16 @@ class PointSetOpen3D(PointSet):
         self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
         self.originalkdTreeOpen3D = O3D.KDTreeFlann(self.originalPointsOpen3D)
 
+    def GetPoint(self, index):
+        """
+        Retrieve specific point(s) by index
+
+        :param index: the index of the point to return
+
+        :return: specific point/s as numpy nX3 ndarray
+        """
+        return np.asarray(self.originalPointsOpen3D.points)[index, :]
+
     def InitializeOpen3dObject(self, inputPoints):
         """
         Initializes the object according to the type of the input points

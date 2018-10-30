@@ -15,7 +15,6 @@ import platform
 import numpy as np
 
 from NeighborProperty import NeighborsProperty
-from NeighborsFactory import NeighborsFactory
 from PointSet import PointSet
 from PointSetOpen3D import PointSetOpen3D
 from TensorProperty import TensorProperty
@@ -111,24 +110,28 @@ class TensorFactory(object):
         return Tensor(covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2), n1 + n2)
 
     @staticmethod
-    def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty=None, radius=None, knn=None):
+    def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty=None, neighborsFunc=None, **kwargs):
         """
         Compute tensors for a point cloud.
 
-        For each point a tensor is computed, with the point itself the reference point.
+        For each point a tensor is computed, with the point itself the reference point. If the neighborhoodProperty is
+        None, it is computed here, according to the sent function.
 
         :param points: a point cloud (PointSet or sub-object)
 
         **Optionals**
 
-        :param neighborhoodProperty: a property that holds all neighbors for each point
-        :param radius: search radius for neighbors search
-        :param knn: k nearest neighbors for neighbors search
+        :param neighborhoodProperty: a property that holds all neighbors for each point (can be empty)
+        :param neighborsFunc: the function to be used for neighbors search.
+        :param kwargs: the arguments for the function to be used for neighbors search. These are usually:
+            :param radius: search radius for neighbors search
+            :param knn: k nearest neighbors for neighbors search
 
         :type points: PointSet
         :type neighborhoodProperty: NeighborhoodProperty
         :type knn: int
         :type radius: float
+        :type neighborsFunc: function
 
         :return: a tensor property with all tensors computed for each point
 
@@ -136,24 +139,23 @@ class TensorFactory(object):
 
         **Usage**
 
-        .. code-block:: python
+        .. warning::
 
-            pts = np.random.rand(1000, 3) - 0.5) * 1000.0
-            points = PointSet(pts)
+            Now works only for PointSet3D neighborhood search.
+
         """
 
         tensors = TensorProperty(points)
 
-        if neighborhoodProperty is not None:
-            if isinstance(neighborhoodProperty, NeighborsProperty):
-                # in case the neighborhood was already defined
-                for i in np.arange(points.Size):
-                    neighbors = neighborhoodProperty.getNeighbors(i)
-                    tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors, i, radius=radius))
+        if isinstance(neighborhoodProperty, NeighborsProperty):
+            # in case the neighborhood was already defined
+            for i in np.arange(points.Size):
+                neighbors = neighborhoodProperty.getNeighbors(i)
+                if neighbors == None:
+                    continue
+                radius = neighbors.radius
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
 
-            else:  # if the property given is not a neighbors property, then it cannot be used. Set to None and run without
-                neighborhoodProperty = None
-                TensorFactory.computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty, radius, knn)
         else:
             # compute neighbors and tensor at the same time
             for i in np.arange(points.Size):
@@ -162,6 +164,6 @@ class TensorFactory(object):
                 if not isinstance(points, PointSetOpen3D):
                     points = PointSetOpen3D(points)
 
-                neighbors = NeighborsFactory.GetPointNeighborsByID(points, i, radius, knn,
-                                                                   neighborsProperty=neighborhoodProperty).neighbors
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors, i, radius=radius))
+                neighbors = neighborsFunc(points, i, *kwargs, neighborsProperty=neighborhoodProperty)
+                radius = neighbors.radius
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))

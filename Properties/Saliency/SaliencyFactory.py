@@ -2,6 +2,7 @@ import numpy as np
 
 import RotationUtils
 from SaliencyProperty import SaliencyProperty
+from TensorProperty import TensorProperty
 
 
 class SaliencyFactory(object):
@@ -40,7 +41,7 @@ class SaliencyFactory(object):
         :param principal_components_number: the number of principal components to use. Default: 3.
         :param weights: weights for the k-th principal component. Default: all equal 1
 
-        :type tensor_property: Tensors.TensorProperty
+        :type tensor_property: TensorProperty
         :type principal_components_number: int
         :type weights: np.array
 

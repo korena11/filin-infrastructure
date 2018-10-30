@@ -20,7 +20,7 @@ class CurvatureFactory:
     '''
 
     @staticmethod
-    def Curvature_FundamentalForm(ind, points, search_radius, max_nn=None, tree=None, ):
+    def Curvature_FundamentalForm(ind, points, search_radius, max_nn=20, tree=None, ):
         r'''
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
@@ -45,7 +45,7 @@ class CurvatureFactory:
         :param points: pointset
         :param tree: KD tree, if exists
         :param search_radius: radius of the neighborhood
-        :param max_nn: maximum neighbors to use
+        :param max_nn: maximum neighbors to use, default: 20
 
         :type ind: int
         :type points: PointSet or PointSetOpen3D
@@ -68,7 +68,8 @@ class CurvatureFactory:
         '''
         # find point's neighbors in a radius
         if isinstance(points, PointSetOpen3D):
-            neighbors_diff = NeighborsFactory.GetPointNeighborsByID(ind, search_radius, max_nn, useOriginal=False)
+            neighbors_diff = NeighborsFactory.GetPointNeighborsByID(points, ind, search_radius, max_nn,
+                                                                    useOriginal=False)
             neighbors = neighbors_diff.neighbors
 
             if neighbors_diff.numberOfNeighbors - 1 > 5:

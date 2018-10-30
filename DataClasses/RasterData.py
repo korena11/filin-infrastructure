@@ -4,8 +4,6 @@ photo-lab-3\Reuma
 16, Jan, 2017 
 '''
 
-import platform
-
 from numpy import array, floor, nonzero, logical_or, logical_and, logical_not, zeros
 from numpy import max as npmax
 from pyproj import Proj, transform
@@ -13,10 +11,11 @@ from pyproj import Proj, transform
 from BaseData import BaseData
 from PointSet import PointSet
 
-if platform.system() == 'Linux':
-    import matplotlib
 
-    matplotlib.use('TkAgg')
+# if platform.system() == 'Linux':
+#     import matplotlib
+#
+#     matplotlib.use('TkAgg')
 
 
 class RasterData(BaseData):
