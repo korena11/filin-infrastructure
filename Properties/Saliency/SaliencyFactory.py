@@ -1,6 +1,7 @@
 import numpy as np
 
 import RotationUtils
+from PointSet import PointSet
 from SaliencyProperty import SaliencyProperty
 from TensorProperty import TensorProperty
 
@@ -74,6 +75,119 @@ class SaliencyFactory(object):
         Savg = Sarray.mean(axis=1)
         G = np.sum(weights * np.sum(np.abs(Srkarray - Savg), axis=1), axis=1)
         return SaliencyProperty(tensor_property.Points, G)
+
+    @staticmethod
+    def range_saliency(points, threshold):
+        """
+        Compute saliency as a function of the distance from a common plane. Points above a specific threshold their saliency will be set to zero.
+
+        :param points: a point cloud
+        :param threshold: the threshold above which the points will be set to zero
+
+        :type points: PointSet
+        :type threshold: float
+
+        :return: saliency property
+
+        :rtype: SaliencyProperty
+        """
+
+        # Compute the common plane
+        n, d = SaliencyFactory.__commonPlane_approx(points)
+        xyz = points.ToNumpy()[:, :3]
+
+        dists = np.abs(n.dot(xyz.T) + d) / (np.linalg.norm(n))
+        # dists*= 0.01
+        # dists[dists > threshold * 0.01] = -0.01
+
+        return SaliencyProperty(points, dists)
+
+    @staticmethod
+    def __commonPlane(points):
+        """
+        Compute the common plane. Finds approximation using Gauss-Markov and then finds the real plane using conditional adjustment with variables
+
+        :param points:
+
+        :type points: PointSet
+
+        :return: the adjusted parameter and the residual in each dimension
+
+        :rtype: tuple
+        """
+        normal_approx, d = SaliencyFactory.__commonPlane_approx(points)
+        sigma = 10
+        x0 = np.hstack((normal_approx, d))
+
+        n = points.Size  # number of points
+        xyz = points.ToNumpy()[:, :3]
+        u = 4  # number of parameters (a b c d)
+
+        # Design matrices
+        A = np.ones((n, u))
+        A[:, :3] = xyz
+
+        while sigma > 0.1:
+            a = np.diag(np.ones((n, 3 * n)) * x0[0])
+            b = np.diag(np.ones((n, 3 * n)) * x0[1], 1)
+            c = np.diag(np.ones((n, 3 * n)) * x0[2], 2)
+            B = a + b + c
+
+            M = B.dot(B.T)
+            N = A.dot(np.linalg.inv(M).dot(A))
+
+            w = A.dot(xyz.T)
+            u = A.T.dot(np.linalg.inv(M).dot(w))
+            dx = -np.linalg.solve(N, u)
+            x0 += dx
+
+            v = -B.T.dot(np.linalg.inv(M).dot(A.dot(dx) + w))
+            sigma = v.T.dot(v) / (n - u)
+        return x0, v
+
+    @staticmethod
+    def __commonPlane_approx(points):
+        r"""
+        Compute the approximation for a common plane via least squares s.t. :math:`||{\bf n}||=1`. 
+
+        The model for three points:
+
+        .. math::
+            \tilde{{\bf x}} = {\bf x} - {\bf \bar{x}}
+            {\bf n}\tilde{\bf x} = 0
+
+        with :math:`{\bf{\bar{x}}` the centroid of the points
+
+        The normal is the eigenvector that relates to the smallest eigenvalue
+
+        :param points: point cloud
+
+        :type points: PointSet
+
+        :return: the approximated parameters (normal vector + d)
+
+        :rtype: tuple
+        """
+        import MyTools as mt
+        n = points.Size
+
+        # find the centroid
+        xyz = points.ToNumpy()[:, :3]
+        x_bar = np.mean(xyz, axis=0)
+        x_ = xyz - x_bar
+
+        # Design matrix
+        A = x_.copy()
+        N = A.T.dot(A)
+
+        # the solution is the eigenvector that relates to the smallest eigenvalue
+        eigval, eigvec = mt.eig(N)  # returned by order
+
+        d = np.mean(eigvec[0, :].dot(xyz.T))
+
+        return eigvec[0, :], d
+
+
 
     @staticmethod
     def __computeSigmaSet(tensor):

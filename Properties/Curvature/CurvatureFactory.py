@@ -120,14 +120,14 @@ class CurvatureFactory:
         return np.array([k1, k2])
 
     @staticmethod
-    def __good_point(neighbor_points):
+    def __good_point(neighbors):
         '''
         Determine whether the point is appropriate for curvature calculation
 
         1. Calculate Azimuth for all neighborhood points
         2. Check number of points in every 45 degree sector
         '''
-
+        neighbor_points = neighbors.ToNumpy()
         count_valid_sectors = 0
         p_angle = np.zeros((1, neighbor_points.shape[0]))
 
@@ -184,30 +184,11 @@ class CurvatureFactory:
         :rtype: CurvatureProperty
 
         """
-        search_radius = localNeighborhoodParameters['r']
-        max_nn = localNeighborhoodParameters['nn']
+        search_radius = localNeighborhoodParameters['search_radius']
+        max_nn = localNeighborhoodParameters['maxNN']
 
         try:
             open_file = open(curves_path)
-
-        except IOError:
-
-            pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
-
-            if verbose:
-                print(
-                    ">>> Calculating points curvatures. Neighborhood Parameters - r:" + str(
-                        search_radius) + "\t nn:" + str(
-                        max_nn))
-
-            curves_data = list(
-                map(functools.partial(CurvatureFactory.Curvature_FundamentalForm, points=pointset3d,
-                                      search_radius=search_radius,
-                                      max_nn=max_nn), range(len(pointset3d.pointsOpen3D.points))))
-            curves_data = np.array(curves_data)
-            np.savetxt(curves_path, curves_data)
-            curves = CurvatureProperty(pointset3d, curves_data)
-        else:
             file_lines = open_file.read()
             open_file.close()
 
@@ -226,9 +207,48 @@ class CurvatureFactory:
 
             curves_data = list(map(lambda k1_k2: np.float32(k1_k2.split(' ')), lines))
             curves = CurvatureProperty(pointset3d, np.array(curves_data))
+            try:
+                normals_load = np.loadtxt(curves_path + 'normals_', delimiter=' ',
+                                          converters={0: lambda s: float(s.strip()),
+                                                      1: lambda s: float(s.strip()),
+                                                      2: lambda s: float(s.strip())})
+                pointset3d.pointsOpen3D.normals = normals_load
+
+                if verbose:
+                    print(
+                        ">>> Calculating points normals. Neighborhood Parameters - r:" + str(
+                            search_radius) + "\t nn:" + str(
+                            max_nn))
+            except IOError:
+                pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
+
+        except IOError:
+            try:
+                normals_load = np.loadtxt(curves_path + 'normals_', delimiter=' ',
+                                          converters={0: lambda s: float(s.strip()),
+                                                      1: lambda s: float(s.strip()),
+                                                      2: lambda s: float(s.strip())})
+                import open3d as O3D
+                pointset3d.pointsOpen3D.normals = O3D.Vector3dVector(normals_load)
+            except IOError:
+                pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
+                np.savetxt(curves_path + 'normals_', np.asarray(pointset3d.pointsOpen3D.normals))
+
+            if verbose:
+                print(
+                    ">>> Calculating points curvatures. Neighborhood Parameters - r:" + str(
+                        search_radius) + "\t nn:" + str(
+                        max_nn))
+
+            curves_data = list(
+                map(functools.partial(CurvatureFactory.Curvature_FundamentalForm, points=pointset3d,
+                                      search_radius=search_radius,
+                                      max_nn=max_nn), range(len(pointset3d.pointsOpen3D.points))))
+            curves_data = np.array(curves_data)
+            np.savetxt(curves_path, curves_data)
+            curves = CurvatureProperty(pointset3d, curves_data)
 
         print("Number of curvatures computed before filterization: ", (curves.Size))
-
         if delete_non_computed:
             curves = CurvatureFactory.__keep_good_curves_data(curves.getValues(), pointset3d)
             print("Number of curvatures computed after filterization: ", curves.Size)

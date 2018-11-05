@@ -363,7 +363,7 @@ def draw_contours(func, ax, img, hold=False, **kwargs):
     blob_labels = measure.label(function_binary, background=0)
     label_props = measure.regionprops(blob_labels)
 
-    #     contours = chooseLargestContours(contours, label_props, 1)
+    contours = chooseLargestContours(contours, label_props, .25)
     if not hold:
         imshow(img)
     l_curve = []
@@ -415,6 +415,22 @@ def curves2D_toGeoDataframe(curves):
     df = pd.DataFrame({'id': range(len(geometry)), 'coordinates': geometry})
     return gpd.GeoDataFrame(df, geometry='coordinates')
 
+
+def eig(matrix):
+    """
+    Computes eigenvalues and eigenvectors and returns them sorted from smallest eigenvalues to largest
+
+    :param matrix: matrix to compute the eigenvalues and eigenvectors
+
+    :type matrix: nd-array
+
+    :return eigenValues, eigenVectors: sorted from small to large
+    """
+    eigVals, eigVectors = np.linalg.eig(matrix)
+    sort_perm = eigVals.argsort()
+    eigVals.sort()  # <-- This sorts the list in place.
+    eigVectors = eigVectors[:, sort_perm]
+    return eigVals, eigVectors
 
 if __name__ == '__main__':
     img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2GRAY)

@@ -270,8 +270,8 @@ def GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborho
 
     """
     if not testRun:
-        r = localNeighborhoodParameters['r']
-        nn = localNeighborhoodParameters['nn']
+        r = localNeighborhoodParameters['search_radius']
+        nn = localNeighborhoodParameters['maxNN']
 
         curvatureFilePath = folderPath + 'Curvature/' + dataName + str(currentFileIndex) + 'r' + str(
             r) + "nn" + str(nn)

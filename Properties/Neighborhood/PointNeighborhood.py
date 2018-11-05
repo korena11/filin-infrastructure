@@ -43,7 +43,7 @@ class PointNeighborhood:
 
     @property
     def neighbors(self):
-        return self.neighbors
+        return self.__neighbors
 
     @neighbors.setter
     def neighbors(self, pointsubset):

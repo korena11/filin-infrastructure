@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 from skimage import measure
 
 import MyTools as mt
+import Saliency as sl
 from LevelSetFunction import LevelSetFunction
 from RasterData import RasterData
 
@@ -464,13 +465,15 @@ class LevelSetFlow:
         :param region_method: type of the region wanted: 'classification', 'saliency'.
         :param img_index: the self.img according to which the region will be computed
 
-        :type img_index: int
+        :type img_index: [int, PointSet]
 
         *Inputs according to method:*
 
         - saliency: inputs according to :py:meth:`~Saliency.distance_based`
 
         - classification:
+
+        - range_saliency:
 
         :param winSizes: array or list with different window sizes for classification
         :param class: the classes which are looked for.
@@ -490,6 +493,15 @@ class LevelSetFlow:
             inputs.update(kwargs)
 
             region = sl.distance_based(self.img(index), **inputs)
+        elif region_method == 'range_saliency':
+            from SaliencyFactory import SaliencyFactory
+            inputs = {'range': 2.}
+            inputs.update(kwargs)
+            region = SaliencyFactory.range_saliency(index, 4)
+            from PanoramaFactory import PanoramaFactory
+            region = PanoramaFactory.CreatePanorama_byProperty(region, 0.03, 0.016, voidData=0).PanoramaImage
+
+
         elif region_method == 'classification':
             inputs = {'winSizes', np.linspace(0.1, 10, 5),
                       'class', 1}
@@ -499,9 +511,9 @@ class LevelSetFlow:
             classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
             region = classified.classification(inputs['class'])
 
-        region = np.log(255 - cv2.GaussianBlur(region,
-                                               ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
-                                               sigmaX=self.processing_props['sigma']))
+        # region = np.log(255 - cv2.GaussianBlur(region,
+        #                                        ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
+        #                                        sigmaX=self.processing_props['sigma']))
 
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region

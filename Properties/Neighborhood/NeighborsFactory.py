@@ -338,9 +338,7 @@ class NeighborsFactory:
         :type exampleIndex:
         :type newRadius: float
         :type newMaxNN: int
-
-
-                """
+        """
         previousRadius = neighborProperty.getNeighbors(exampleIndex).GetRadius()
         previousMaxNN = neighborProperty.getNeighbors(exampleIndex).GetMaxNN()
 

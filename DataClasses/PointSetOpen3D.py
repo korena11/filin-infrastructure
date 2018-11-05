@@ -14,8 +14,8 @@ np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 
 class PointSetOpen3D(PointSet):
     def __init__(self, inputPoints):
-
-        self.pointSet = super(PointSetOpen3D, self).__init__(inputPoints)
+        if not isinstance(inputPoints, PointSet):
+            self.pointSet = super(PointSetOpen3D, self).__init__(inputPoints)
 
         self.pointsOpen3D = None
         self.originalPointsOpen3D = None  # Will be useful only if down sampling was performed. This stores the original
@@ -67,7 +67,7 @@ class PointSetOpen3D(PointSet):
             raise ValueError("Wrong turn.")
 
         self.originalPointsOpen3D = O3D.PointCloud(self.pointsOpen3D)
-        print(self.originalPointsOpen3D)
+        # print(self.originalPointsOpen3D)
 
     def RebuildKDTree(self, verbose=True):
         if verbose:

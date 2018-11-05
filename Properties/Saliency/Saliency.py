@@ -244,14 +244,14 @@ def distance_based(image, **kwargs):
 
     elif inputs['method'] == 'context':
         scales_number = kwargs.get('scales_number', 3)
-        context_input = {'kaptches': 64,
+        context_input = {'kpatches': 64,
                          'thresh': 0.2,
                          'c': 3}
         context_input.update(kwargs)
 
         ksizes = [filters * 2 ** (-n) for n in np.arange(scales_number)]
         s = [__contextAware(image, ksize, img_feature,
-                            kpatches=context_input['kaptches'],
+                            kpatches=context_input['kpatches'],
                             thresh=context_input['thresh'],
                             c=context_input['c'],
                             verbose=verbose)
@@ -266,6 +266,28 @@ def distance_based(image, **kwargs):
         saliency_map = np.abs(s)
 
     return np.mean(saliency_map, axis=0)
+
+
+def range_saliency(image, salient_range):
+    """
+    Mark closer ranges as salient
+
+    :param image: a range image for saliency
+    :param salient_range: the range threshold for saliency
+
+    :type image: np.array
+    :type salient_range: float
+
+    :return: saliency image according to the salient range
+
+    :rtype: np.array
+
+    """
+
+    \
+    return image_salient
+
+
 
 
 def __frequencyTuned(image, sigma_flag, filters):
