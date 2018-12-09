@@ -401,7 +401,8 @@ class AutoAutoSummary(Autosummary):
     option_spec = {
         'methods': directives.unchanged,
         'attributes': directives.unchanged,
-        'functions': directives.unchanged
+        'functions': directives.unchanged,
+        'private-members': directives.unchanged
     }
 
     required_arguments = 1
@@ -424,19 +425,38 @@ class AutoAutoSummary(Autosummary):
 
     def run(self):
         clazz = str(self.arguments[0])
+        private = False
 
         try:
             (module_name, class_name) = clazz.rsplit('.', 1)
 
             m = __import__(module_name, globals(), locals(), [class_name])
             c = getattr(m, class_name)
+            if 'private-members' in self.options:
+                private = True
+
             if 'methods' in self.options:
                 _, methods = self.get_members(c, 'method', ['__init__'])
 
-                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('_')]
+                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('__')]
+
+            if 'methods' and private:
+                _, methods = self.get_members(c, 'method', ['__init__'])
+
+                self.content = ["~%s.%s" % (clazz, method) for method in methods if
+                                method.startswith('_%s' % class_name)]
+
             if 'attributes' in self.options:
                 _, attribs = self.get_members(c, 'attribute')
+
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
+
+            if 'attributes' and private:
+                _, attribs = self.get_members(c, 'attribute')
+
+                self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if attrib.startswith('_') if
+                                not attrib.startswith('__')]
+
         except:
             module_name = clazz
             m = __import__(module_name, globals(), locals())

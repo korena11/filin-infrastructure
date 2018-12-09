@@ -6,15 +6,15 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>LevelSetFlow &mdash; infragit 1a documentation</title>
 
 
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../genindex.html"/>
-    <link rel="search" title="Search" href="../search.html"/>
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../genindex.html" rel="index" title="Index"/>
+    <link href="../search.html" rel="search" title="Search"/>
 
 
     <script src="../_static/js/modernizr.min.js"></script>
@@ -32,7 +32,7 @@
             <div class="wy-side-nav-search">
 
 
-                <a href="../index.html" class="icon icon-home"> infragit
+                <a class="icon icon-home" href="../index.html"> infragit
 
 
                 </a>
@@ -44,17 +44,17 @@
 
 
                 <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
+                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
                     </form>
                 </div>
 
 
             </div>
 
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
 
 
                 <ul>
@@ -83,9 +83,9 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
 
-        <nav class="wy-nav-top" aria-label="top navigation">
+        <nav aria-label="top navigation" class="wy-nav-top">
 
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
             <a href="../index.html">infragit</a>
 
         </nav>
@@ -96,7 +96,7 @@
             <div class="rst-content">
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
+                <div aria-label="breadcrumbs navigation" role="navigation">
 
                     <ul class="wy-breadcrumbs">
 
@@ -116,7 +116,7 @@
 
                     <hr/>
                 </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
                     <div itemprop="articleBody">
 
                         <h1>Source code for LevelSetFlow</h1>
@@ -135,10 +135,10 @@
                                 class="n">measure</span>
 
 <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
+<span class="kn">import</span> <span class="nn">Saliency</span> <span class="k">as</span> <span class="nn">sl</span>
 <span class="kn">from</span> <span class="nn">LevelSetFunction</span> <span class="k">import</span> <span class="n">LevelSetFunction</span>
 <span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
                                 class="n">RasterData</span>
-<span class="kn">import</span> <span class="nn">Saliency</span>
 
 <span class="n">EPS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span
                                 class="p">(</span><span class="nb">float</span><span class="p">)</span><span
@@ -802,13 +802,15 @@
 <span class="sd">        :param region_method: type of the region wanted: &#39;classification&#39;, &#39;saliency&#39;.</span>
 <span class="sd">        :param img_index: the self.img according to which the region will be computed</span>
 
-<span class="sd">        :type img_index: int</span>
+<span class="sd">        :type img_index: [int, PointSet]</span>
 
 <span class="sd">        *Inputs according to method:*</span>
 
 <span class="sd">        - saliency: inputs according to :py:meth:`~Saliency.distance_based`</span>
 
 <span class="sd">        - classification:</span>
+
+<span class="sd">        - range_saliency:</span>
 
 <span class="sd">        :param winSizes: array or list with different window sizes for classification</span>
 <span class="sd">        :param class: the classes which are looked for.</span>
@@ -849,6 +851,26 @@
             class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">(</span><span
             class="n">index</span><span class="p">),</span> <span class="o">**</span><span class="n">inputs</span><span
             class="p">)</span>
+        <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;range_saliency&#39;</span><span
+            class="p">:</span>
+            <span class="kn">from</span> <span class="nn">SaliencyFactory</span> <span class="k">import</span> <span
+            class="n">SaliencyFactory</span>
+            <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;range&#39;</span><span
+            class="p">:</span> <span class="mf">2.</span><span class="p">}</span>
+            <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span
+            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span
+            class="o">.</span><span class="n">range_saliency</span><span class="p">(</span><span
+            class="n">index</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+            <span class="kn">from</span> <span class="nn">PanoramaFactory</span> <span class="k">import</span> <span
+            class="n">PanoramaFactory</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span
+            class="o">.</span><span class="n">CreatePanorama_byProperty</span><span class="p">(</span><span class="n">region</span><span
+            class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.016</span><span
+            class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">)</span><span class="o">.</span><span class="n">PanoramaImage</span>
+
+
         <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span
             class="p">:</span>
             <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;winSizes&#39;</span><span
@@ -872,19 +894,9 @@
             class="o">.</span><span class="n">classification</span><span class="p">(</span><span class="n">inputs</span><span
             class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
 
-        <span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">log</span><span class="p">(</span><span class="mi">255</span> <span class="o">-</span> <span
-            class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span
-            class="n">region</span><span class="p">,</span>
-                                               <span class="n">ksize</span><span class="o">=</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
-            class="p">],</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span
-            class="p">]),</span>
-                                               <span class="n">sigmaX</span><span class="o">=</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span
-            class="p">]))</span>
+        <span class="c1"># region = np.log(255 - cv2.GaussianBlur(region,</span>
+        <span class="c1">#                                        ksize=(self.processing_props[&#39;ksize&#39;], self.processing_props[&#39;ksize&#39;]),</span>
+        <span class="c1">#                                        sigmaX=self.processing_props[&#39;sigma&#39;]))</span>
 
         <span class="n">region</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
             class="n">normalize</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span
@@ -1896,31 +1908,29 @@
 
 
 <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'1a',
+        LANGUAGE:'None',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
 </script>
-<script type="text/javascript" src="../_static/jquery.js"></script>
-<script type="text/javascript" src="../_static/underscore.js"></script>
-<script type="text/javascript" src="../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="../_static/jquery.js" type="text/javascript"></script>
+<script src="../_static/underscore.js" type="text/javascript"></script>
+<script src="../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
 
 
-<script type="text/javascript" src="../_static/js/theme.js"></script>
+<script src="../_static/js/theme.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
 </script>
 
 </body>

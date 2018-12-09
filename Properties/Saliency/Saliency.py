@@ -187,6 +187,10 @@ def distance_based(image, **kwargs):
 
     :return: saliency map
 
+    .. warning::
+
+        Context aware is incorrect.
+
     '''
 
     inputs = {'feature': 'pixel_val',
@@ -249,8 +253,8 @@ def distance_based(image, **kwargs):
                          'c': 3}
         context_input.update(kwargs)
 
-        ksizes = [filters * 2 ** (-n) for n in np.arange(scales_number)]
-        s = [__contextAware(image, ksize, img_feature,
+        ksizes = [np.array(filters) * (2 ** (-n)) for n in np.arange(scales_number).astype('f')]
+        s = [__contextAware(image, ksize.astype('int'), img_feature,
                             kpatches=context_input['kpatches'],
                             thresh=context_input['thresh'],
                             c=context_input['c'],
@@ -284,8 +288,8 @@ def range_saliency(image, salient_range):
 
     """
 
-    \
-    return image_salient
+    pass
+    # return image_salient
 
 
 
@@ -356,7 +360,7 @@ def __contextAware(image, ksize, image_feature, **kwargs):
     verbose = kwargs.get('verbose', True)
 
     if type(K) != int:
-        warnings.warn('K should be interger, using K=64 instead.', RuntimeWarning)
+        warnings.warn('K should be integer, using K=64 instead.', RuntimeWarning)
         K = 64
 
     # 1. Creating the kernels

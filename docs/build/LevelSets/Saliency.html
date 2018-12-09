@@ -6,17 +6,17 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Saliency computations &mdash; infragit 1a documentation</title>
 
 
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../genindex.html"/>
-    <link rel="search" title="Search" href="../search.html"/>
-    <link rel="next" title="Eigen Factory Documentation" href="../Utils/EigenFactory.html"/>
-    <link rel="prev" title="LevelSet Function" href="LevelSetFunction.html"/>
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../genindex.html" rel="index" title="Index"/>
+    <link href="../search.html" rel="search" title="Search"/>
+    <link href="../Utils/EigenFactory.html" rel="next" title="Eigen Factory Documentation"/>
+    <link href="LevelSetFunction.html" rel="prev" title="LevelSet Function"/>
 
 
     <script src="../_static/js/modernizr.min.js"></script>
@@ -34,7 +34,7 @@
             <div class="wy-side-nav-search">
 
 
-                <a href="../index.html" class="icon icon-home"> infragit
+                <a class="icon icon-home" href="../index.html"> infragit
 
 
                 </a>
@@ -46,17 +46,17 @@
 
 
                 <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
+                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
                     </form>
                 </div>
 
 
             </div>
 
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
 
 
                 <ul class="current">
@@ -94,9 +94,9 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
 
-        <nav class="wy-nav-top" aria-label="top navigation">
+        <nav aria-label="top navigation" class="wy-nav-top">
 
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
             <a href="../index.html">infragit</a>
 
         </nav>
@@ -107,7 +107,7 @@
             <div class="rst-content">
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
+                <div aria-label="breadcrumbs navigation" role="navigation">
 
                     <ul class="wy-breadcrumbs">
 
@@ -131,14 +131,14 @@
 
                     <hr/>
                 </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
                     <div itemprop="articleBody">
 
                         <div class="section" id="module-Saliency">
                             <span id="saliency-computations"></span>
                             <h1>Saliency computations<a class="headerlink" href="#module-Saliency"
                                                         title="Permalink to this headline">¶</a></h1>
-                            <p>Oct 27, 2018</p>
+                            <p>Nov 05, 2018</p>
                             <p>Implementation of multiple kinds of saliencies a given image:</p>
                             <p><strong>Distance based</strong></p>
                             <ol class="arabic simple">
@@ -400,6 +400,53 @@
                                 </dd>
                             </dl>
 
+                            <dl class="function">
+                                <dt id="Saliency.range_saliency">
+                                    <code class="descclassname">Saliency.</code><code
+                                        class="descname">range_saliency</code><span
+                                        class="sig-paren">(</span><em>image</em>, <em>salient_range</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../_modules/Saliency.html#range_saliency"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#Saliency.range_saliency"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Mark closer ranges as salient</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>image</strong> (<em>np.array</em>) – a range image for
+                                                        saliency
+                                                    </li>
+                                                    <li><strong>salient_range</strong> (<a class="reference external"
+                                                                                           href="https://docs.python.org/3/library/functions.html#float"
+                                                                                           title="(in Python v3.7)"><em>float</em></a>)
+                                                        – the range threshold for saliency
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first">saliency image according to the
+                                                salient range</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last">np.array</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
                         </div>
 
 
@@ -408,15 +455,15 @@
                 </div>
                 <footer>
 
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-                        <a href="../Utils/EigenFactory.html" class="btn btn-neutral float-right"
-                           title="Eigen Factory Documentation" accesskey="n" rel="next">Next <span
+                        <a accesskey="n" class="btn btn-neutral float-right" href="../Utils/EigenFactory.html"
+                           rel="next" title="Eigen Factory Documentation">Next <span
                                 class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="LevelSetFunction.html" class="btn btn-neutral" title="LevelSet Function" accesskey="p"
-                           rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral" href="LevelSetFunction.html" rel="prev"
+                           title="LevelSet Function"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -444,31 +491,29 @@
 
 
 <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:'../',
+        VERSION:'1a',
+        LANGUAGE:'None',
+        COLLAPSE_INDEX:false,
+        FILE_SUFFIX:'.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
 </script>
-<script type="text/javascript" src="../_static/jquery.js"></script>
-<script type="text/javascript" src="../_static/underscore.js"></script>
-<script type="text/javascript" src="../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="../_static/jquery.js" type="text/javascript"></script>
+<script src="../_static/underscore.js" type="text/javascript"></script>
+<script src="../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
 
 
-<script type="text/javascript" src="../_static/js/theme.js"></script>
+<script src="../_static/js/theme.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
 </script>
 
 </body>

@@ -322,7 +322,7 @@ def CreateFilename(filename, mode='w', **kwargs):
         return (open(filename, mode), extension)
 
 
-def draw_contours(func, ax, img, hold=False, **kwargs):
+def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
     """
     Draws the contours of a specific iteration
 
@@ -331,6 +331,7 @@ def draw_contours(func, ax, img, hold=False, **kwargs):
     :param image: the image on which the contours will be drawn
     :param hold: erase image from previous drawings or not. Default: False
     :param color: the color which the contour will be drawn. Default: random for each curve (send True)
+    :param blob_size: the minimal area of a contour to draw
 
     :type func: np.ndarray
     :type ax: plt.axes
@@ -355,15 +356,15 @@ def draw_contours(func, ax, img, hold=False, **kwargs):
     function_binary = func.copy()
 
     # segmenting and presenting the found areas
-    function_binary[np.where(func > 0)] = 0
-    function_binary[np.where(func < 0)] = 1
+    function_binary[np.where(func > 0.)] = 0
+    function_binary[np.where(func <= 0.)] = 1
     function_binary = np.uint8(function_binary)
 
     contours = measure.find_contours(func, 0.)
     blob_labels = measure.label(function_binary, background=0)
     label_props = measure.regionprops(blob_labels)
 
-    contours = chooseLargestContours(contours, label_props, .25)
+    contours = chooseLargestContours(contours, label_props, blob_size)
     if not hold:
         imshow(img)
     l_curve = []

@@ -5,13 +5,14 @@
 import functools
 
 import numpy as np
+from numpy import ndarray
 
 import RotationUtils
 from CurvatureProperty import CurvatureProperty
 from EigenFactory import EigenFactory
 from NeighborsFactory import NeighborsFactory
 from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
+from RasterData import RasterData
 
 
 class CurvatureFactory:
@@ -19,8 +20,8 @@ class CurvatureFactory:
     curvature parameters computation
     '''
 
-    @staticmethod
-    def Curvature_FundamentalForm(ind, points, search_radius, max_nn=20, tree=None, ):
+    @classmethod
+    def Curvature_FundamentalForm(cls, ind, points, search_radius, max_nn=20, tree=None, ):
         r'''
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
@@ -66,6 +67,7 @@ class CurvatureFactory:
         :rtype: np.ndarray
 
         '''
+        from PointSetOpen3D import PointSetOpen3D
         # find point's neighbors in a radius
         if isinstance(points, PointSetOpen3D):
             neighbors_diff = NeighborsFactory.GetPointNeighborsByID(points, ind, search_radius, max_nn,
@@ -119,46 +121,8 @@ class CurvatureFactory:
 
         return np.array([k1, k2])
 
-    @staticmethod
-    def __good_point(neighbors):
-        '''
-        Determine whether the point is appropriate for curvature calculation
-
-        1. Calculate Azimuth for all neighborhood points
-        2. Check number of points in every 45 degree sector
-        '''
-        neighbor_points = neighbors.ToNumpy()
-        count_valid_sectors = 0
-        p_angle = np.zeros((1, neighbor_points.shape[0]))
-
-        # Calculate Azimuth with neighbors who do not have X coordinate zero
-        ind1 = np.where(np.abs(neighbor_points[:, 0]) > 1e-6)[0]
-        p_angle[0, ind1] = np.arctan2(neighbor_points[ind1, 1], neighbor_points[ind1, 0])
-
-        # Calculate Azimuth ith neighbors who have X coordinate zero
-        ind2 = np.where(np.abs(neighbor_points[:, 0]) <= 1e-6)[0]
-        if ind2.size != 0:
-            ind2_1 = np.where(neighbor_points[ind2, 1] > 0)[0]
-            ind2_2 = np.where(neighbor_points[ind2, 1] < 0)[0]
-            if ind2_1.size != 0:
-                p_angle[0, ind2[ind2_1]] = np.pi / 2.0
-            if ind2_2.size != 0:
-                p_angle[0, ind2[ind2_2]] = 3.0 * np.pi / 2.0
-
-        p_angle[np.where(p_angle < 0)] += 2 * np.pi
-
-        for i in np.linspace(0, 7.0 * np.pi / 4.0, 8):
-            p_in_sector = (np.where(p_angle[np.where(p_angle <= i + np.pi / 4.0)] > i))[0].size
-            if p_in_sector >= 2:  # original: rad * 85:  # Why this threshold was chosen? I changed it to 2
-                count_valid_sectors += 1
-
-        if count_valid_sectors >= 7:
-            return 1
-        else:
-            return 0
-
-    @staticmethod
-    def read_or_calculate_curvature_data(curves_path, pointset3d, localNeighborhoodParameters,
+    @classmethod
+    def read_or_calculate_curvature_data(cls, curves_path, pointset3d, localNeighborhoodParameters,
                                          delete_non_computed=False,
                                          verbose=True):
         """
@@ -254,6 +218,92 @@ class CurvatureFactory:
             print("Number of curvatures computed after filterization: ", curves.Size)
 
         return curves
+
+    @classmethod
+    def curvature_raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
+        """
+        Compute raster curvature based on first fundamental form
+
+        :param raster: the raster image
+        :param ksize: window/kernel size (equivalent to neighborhood size)
+        :param sigma: for Gaussian blurring
+        :param gradientType: 'L1' or 'L2' for derivatives computation
+
+        :type raster: ndarray or RasterData
+        :type window_size: int
+        :type sigma: float
+        :type gradientType: str
+
+        :return: curvature map
+
+        :rtype: curvatureProperty
+
+        """
+        import MyTools as mt
+        import cv2
+
+        if isinstance(raster, RasterData):
+            img = raster.data
+            voidData = raster.voidData
+        else:
+            img = raster
+            voidData = -9999
+
+        img[img == voidData] = np.mean(np.mean(img[img != voidData]))
+
+        img = cv2.normalize(img.astype('float'), None, 0.0, 1.0,
+                            cv2.NORM_MINMAX)  # Convert to normalized floating point
+
+        dx, dy, Zxx, Zyy, Zxy = mt.computeImageDerivatives(img, 2, sigma=sigma,
+                                                           gradientType=gradientType,
+                                                           ksize=ksize)
+
+        k1 = (((Zxx + Zyy) + np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)
+        k2 = (((Zxx + Zyy) - np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)
+
+        if isinstance(raster, RasterData):
+            return CurvatureProperty(raster, np.concatenate((k1[:, :, None], k2[:, :, None]), axis=2))
+        else:
+            return np.concatenate((k1[:, :, None], k2[:, :, None]), axis=2)
+
+    # ------------------ PRIVATE METHODS ----------------------------
+    @staticmethod
+    def __good_point(neighbors):
+        '''
+        Determine whether the point is appropriate for curvature calculation
+
+        1. Calculate Azimuth for all neighborhood points
+        2. Check number of points in every 45 degree sector
+        '''
+        neighbor_points = neighbors.ToNumpy()
+        count_valid_sectors = 0
+        p_angle = np.zeros((1, neighbor_points.shape[0]))
+
+        # Calculate Azimuth with neighbors who do not have X coordinate zero
+        ind1 = np.where(np.abs(neighbor_points[:, 0]) > 1e-6)[0]
+        p_angle[0, ind1] = np.arctan2(neighbor_points[ind1, 1], neighbor_points[ind1, 0])
+
+        # Calculate Azimuth ith neighbors who have X coordinate zero
+        ind2 = np.where(np.abs(neighbor_points[:, 0]) <= 1e-6)[0]
+        if ind2.size != 0:
+            ind2_1 = np.where(neighbor_points[ind2, 1] > 0)[0]
+            ind2_2 = np.where(neighbor_points[ind2, 1] < 0)[0]
+            if ind2_1.size != 0:
+                p_angle[0, ind2[ind2_1]] = np.pi / 2.0
+            if ind2_2.size != 0:
+                p_angle[0, ind2[ind2_2]] = 3.0 * np.pi / 2.0
+
+        p_angle[np.where(p_angle < 0)] += 2 * np.pi
+
+        for i in np.linspace(0, 7.0 * np.pi / 4.0, 8):
+            p_in_sector = (np.where(p_angle[np.where(p_angle <= i + np.pi / 4.0)] > i))[0].size
+            if p_in_sector >= 2:  # original: rad * 85:  # Why this threshold was chosen? I changed it to 2
+                count_valid_sectors += 1
+
+        if count_valid_sectors >= 7:
+            return 1
+        else:
+            return 0
 
     @staticmethod
     def __keep_good_curves_data(curves_data, pointset_open3D):

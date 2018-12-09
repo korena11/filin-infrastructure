@@ -27,7 +27,8 @@ class BaseProperty(object):
         if isinstance(self.__dataset, PointSet):
             return self.__dataset
         else:
-            raise TypeError('Wrong data type data for this instance')
+            # warn('Wrong data type data for this instance')
+            return False
 
     @property
     def Raster(self):
@@ -41,7 +42,8 @@ class BaseProperty(object):
         if isinstance(self.__dataset, RasterData):
             return self.__dataset
         else:
-            raise TypeError('Wrong data type data for this instance')
+            # warn('Wrong data type data for this instance')
+            return False
 
     def setValues(self, *args, **kwargs):
         """

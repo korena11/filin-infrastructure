@@ -1,22 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Saliency property and Factory added.&#10;New Saliency method for point clouds added (based on PCA)">
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/infraGit.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/infraGit.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="New Saliency method for point clouds added based on range (not working) (not in the factory and not in Saliency module)&#10;Bug fixes in CurvatureFactory. @TODO efficiency degraded because of the creation of subset pointclouds. Should be checked&#10;PointSubSetOpen3D added override properties">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IOmodules/ReadFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/IOmodules/ReadFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/BaseData.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/BaseData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/PointSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/PointSubSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSubSet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/RasterData.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/RasterData.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IOmodules/IOFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/IOmodules/IOFactory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/BaseProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/BaseProperty.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureProperty.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/Saliency.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/Saliency.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utils/GeneralUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/GeneralUtils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py" beforeDir="false" afterPath="$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Utils/MyTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/MyTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Visualization Classes/RasterVisualizations.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization Classes/RasterVisualizations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFlow.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFlow.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/Saliency.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/Saliency.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/CurvatureFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/CurvatureFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Utils/Utils.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Utils/Utils.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/Datasets.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/Datasets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/IOFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/IOFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFlow.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFlow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/LevelSets.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/LevelSets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/Saliency.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/Saliency.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/BaseProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/BaseProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Curvature/CurvatureFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Curvature/CurvatureFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/NeighborsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/NeighborsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Normals/NormalsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Normals/NormalsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Utils/Utils.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Utils/Utils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/ColorFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/ColorFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/ColorProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/ColorProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurveData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurveData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/EigenFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/EigenFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/EigenProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/EigenProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/FilterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/FilterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/IOFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/IOFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/LevelSetFlow.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/LevelSetFlow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/LevelSetFunction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/LevelSetFunction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/MyTools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/MyTools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PanoramaFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PanoramaFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PanoramaProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PanoramaProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RandomColors.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RandomColors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterVisualizations.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterVisualizations.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/ReadFunctions.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/ReadFunctions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RotationUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RotationUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Saliency.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Saliency.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SegmentationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SegmentationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SegmentationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SegmentationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TriangulationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TriangulationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TriangulationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TriangulationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/VisualizationVTK.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/VisualizationVTK.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/py-modindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/py-modindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +100,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data.coverage" NAME="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data Coverage Results" MODIFIED="1541078691923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Curvature" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency.coverage" NAME="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency Coverage Results" MODIFIED="1541514565318" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data.coverage" NAME="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data Coverage Results" MODIFIED="1541507470160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Curvature" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -44,104 +120,13 @@
     <expand />
     <select />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1525996385">
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="Curvature" value="2" />
-          <entry key="PointSetOpen3D" value="1" />
-          <entry key="Transformations" value="1" />
-          <entry key="html" value="1" />
-          <entry key="pstat" value="4" />
-          <entry key="py" value="171" />
-          <entry key="rst" value="72" />
-          <entry key="txt" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="HTML" value="1" />
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Profiler Session" value="4" />
-          <entry key="Python" value="171" />
-          <entry key="ReST" value="73" />
-          <entry key="Scratch" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="6" />
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.11" value="1" />
-          <entry key="project.open.time.12" value="1" />
-          <entry key="project.open.time.13" value="2" />
-          <entry key="project.open.time.16" value="2" />
-          <entry key="project.open.time.17" value="1" />
-          <entry key="project.open.time.18" value="1" />
-          <entry key="project.open.time.22" value="1" />
-          <entry key="project.open.time.23" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.30" value="1" />
-          <entry key="project.open.time.7" value="4" />
-          <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="19" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.vcs.git.usages">
-        <counts>
-          <entry key="git.branch.checkout.local" value="1" />
-          <entry key="git.branch.checkout.remote" value="1" />
-          <entry key="git.branch.compare" value="2" />
-          <entry key="git.branch.create.new" value="1" />
-          <entry key="git.branch.delete.local" value="1" />
-          <entry key="git.branch.merge" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="Curvature" value="124" />
-          <entry key="PointSetOpen3D" value="196" />
-          <entry key="Python Console" value="437" />
-          <entry key="dummy" value="80" />
-          <entry key="py" value="18531" />
-          <entry key="rst" value="3965" />
-          <entry key="txt" value="554" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="PLAIN_TEXT" value="634" />
-          <entry key="Python" value="18968" />
-          <entry key="ReST" value="4285" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="131" column="36" selection-start-line="131" selection-start-column="36" selection-end-line="131" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1272">
-              <caret line="3" column="41" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="3888">
+              <caret line="168" column="38" selection-start-line="168" selection-start-column="38" selection-end-line="168" selection-end-column="38" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -150,10 +135,77 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Curvature/test_curvatureFactory.py">
+        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="26" column="63" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
+            <state relative-caret-position="2832">
+              <caret line="131" selection-start-line="131" selection-end-line="131" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Properties/Tensors/tensor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1080">
+              <caret line="53" selection-start-line="53" selection-end-line="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1104">
+              <caret line="47" selection-start-line="47" selection-end-line="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1368">
+              <caret line="61" column="36" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorFactory.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1224">
+              <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
+              <folding>
+                <element signature="e#178#193#0" expanded="true" />
+                <marker date="1541514543846" expanded="true" signature="2274:3296" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorProperty.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="984">
+              <caret line="45" selection-start-line="45" selection-end-line="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -162,64 +214,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Saliency/Saliency.py">
+        <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/unittest/case.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="155" column="24" selection-start-line="155" selection-start-column="24" selection-end-line="155" selection-end-column="24" />
-              <folding>
-                <marker date="1541345078170" expanded="true" signature="9128:9465" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="72" selection-start-line="72" selection-end-line="72" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="150" column="47" selection-start-line="150" selection-start-column="47" selection-end-line="150" selection-end-column="47" />
-              <folding>
-                <element signature="e#17#33#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborProperty.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="100" selection-start-line="100" selection-end-line="100" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IOmodules/ReadFunctions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="106" selection-start-line="106" selection-end-line="106" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
-              <folding>
-                <marker date="1541099901017" expanded="true" signature="1174:1430" ph="..." />
-              </folding>
+            <state relative-caret-position="14184">
+              <caret line="604" selection-start-line="604" selection-end-line="604" />
             </state>
           </provider>
         </entry>
@@ -301,7 +299,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Property Classes/Tensors/TensorProperty.py" />
         <option value="$PROJECT_DIR$/Property Classes/Tensors/tensor.py" />
         <option value="$PROJECT_DIR$/Property Classes/Tensors/TensorFactory.py" />
         <option value="$PROJECT_DIR$/Visualization Classes/VisualizationVTK.py" />
@@ -329,43 +326,38 @@
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/IO modules/__init__.py" />
         <option value="$PROJECT_DIR$/Properties/Curvature/__init__.py" />
-        <option value="$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py" />
         <option value="$PROJECT_DIR$/IOmodules/__init__.py" />
         <option value="$PROJECT_DIR$/Properties/Tensors/__init__.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyPropery.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyProperty.rst" />
-        <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst" />
         <option value="$PROJECT_DIR$/Data Classes/__init__.py" />
         <option value="$PROJECT_DIR$/Properties/Saliency/__init__.py" />
-        <option value="$PROJECT_DIR$/docs/source/conf.py" />
         <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst" />
-        <option value="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" />
-        <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" />
         <option value="$PROJECT_DIR$/DataClasses/RasterData.py" />
         <option value="$PROJECT_DIR$/Properties/Panoramas/test_panoramaFactory.py" />
-        <option value="$PROJECT_DIR$/DataClasses/PointSet.py" />
-        <option value="$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py" />
-        <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" />
-        <option value="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" />
         <option value="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" />
         <option value="$PROJECT_DIR$/Properties/Curvature/test_curvatureFactory.py" />
         <option value="$PROJECT_DIR$/Properties/Saliency/Saliency.py" />
+        <option value="$PROJECT_DIR$/docs/source/conf.py" />
+        <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst" />
+        <option value="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" />
+        <option value="$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py" />
+        <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" />
+        <option value="$PROJECT_DIR$/DataClasses/PointSet.py" />
+        <option value="$PROJECT_DIR$/DataClasses/PointSubSet.py" />
+        <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" />
+        <option value="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" />
+        <option value="$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2015" />
-    <option name="y" value="27" />
-    <option name="width" value="1910" />
-    <option name="height" value="810" />
+    <option name="x" value="1987" />
+    <option name="y" value="25" />
+    <option name="width" value="1853" />
+    <option name="height" value="1055" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -390,7 +382,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -422,20 +413,27 @@
             <path>
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Tensors" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="ReumaPhD" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="PointSetOpen3D.rst&#9;FILE&#9;file:///home/reuma/PycharmProjects/Filin-Infrastructure/docs/build/_sources/Datasets/PointSetOpen3D.rst.txt&#10;Poin&#9;FILE&#9;file:///home/reuma/PycharmProjects/Filin-Infrastructure/docs/source/Datasets/PointSetOpen3D.rst" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="ReST" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Revital" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ISPRSJ_2019" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="settings.editor.splitter.proportion" value="0.2560214" />
   </component>
   <component name="RecentsManager">
@@ -463,7 +461,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data">
+  <component name="RunManager" selected="Python tests.Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -567,8 +565,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" />
         <item itemvalue="Python tests.Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" />
+        <item itemvalue="Python tests.Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" />
         <item itemvalue="Python tests.Unittests for test_panoramaFactory.TestPanoramaFactory" />
         <item itemvalue="Python tests.Unittests for test_panoramaFactory.TestPanoramaFactory.test_CreatePanorama_From_pts_intensity" />
         <item itemvalue="Python tests.Unittests in test_panoramaFactory.py" />
@@ -585,6 +583,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1483359678573</updated>
+      <workItem from="1542895540318" duration="519000" />
+      <workItem from="1542907352810" duration="599000" />
+      <workItem from="1543254051258" duration="599000" />
+      <workItem from="1543746983027" duration="632000" />
+      <workItem from="1544012384469" duration="603000" />
     </task>
     <task id="LOCAL-00001" summary="ReumaPhD folder added with circle development">
       <created>1484487854691</created>
@@ -831,40 +834,50 @@
       <option name="project" value="LOCAL" />
       <updated>1540914508166</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="New Saliency method for point clouds added based on range (not working) (not in the factory and not in Saliency module)&#10;Bug fixes in CurvatureFactory. @TODO efficiency degraded because of the creation of subset pointclouds. Should be checked&#10;PointSubSetOpen3D added override properties">
+      <created>1541424123668</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1541424123668</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.10.27 at 19h 11m 10s.xml">
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 18m 53s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.10.27 at 19h 11m 27s.xml">
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 19m 10s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.10.27 at 19h 11m 40s.xml">
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 20m 58s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.10.27 at 19h 11m 59s.xml">
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 24m 27s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.10.30 at 18h 14m 15s.xml">
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 27m 31s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data - 2018.11.01 at 15h 20m 15s.xml">
-      <configuration name="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" configurationId="tests" />
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 27m 47s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data - 2018.11.01 at 15h 22m 06s.xml">
-      <configuration name="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" configurationId="tests" />
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 28m 28s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data - 2018.11.01 at 15h 24m 58s.xml">
-      <configuration name="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" configurationId="tests" />
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 28m 30s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data - 2018.11.01 at 15h 26m 09s.xml">
-      <configuration name="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" configurationId="tests" />
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 29m 06s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_curvatureFactory_TestCurvatureFactory_test_read_or_calculate_curvature_data - 2018.11.01 at 19h 54m 08s.xml">
-      <configuration name="Unittests for test_curvatureFactory.TestCurvatureFactory.test_read_or_calculate_curvature_data" configurationId="tests" />
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_pointwise_tensor_saliency - 2018.11.06 at 16h 29m 26s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_pointwise_tensor_saliency" configurationId="tests" />
     </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="2952000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -879,7 +892,33 @@
     <frame x="1987" y="25" width="1853" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.16823465" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.18151632" />
+      <window_info auto_hide="true" x="480" y="245" width="813" height="881" id="Structure" order="1" sideWeight="0.7046549" side_tool="true" type="FLOATING" weight="1.0" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32756758" />
+      <window_info active="true" anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49562842" visible="true" weight="0.32108107" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49341065" weight="0.3935135" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32864866" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.32864866" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49836066" weight="0.3257821" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50163937" side_tool="true" weight="0.3264865" />
+      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.3362162" />
+      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32972974" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24958949" />
+      <window_info anchor="right" x="1155" y="97" width="423" height="855" id="Documentation" order="3" side_tool="true" visible="true" weight="0.20088544" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32982844" />
+      <window_info anchor="right" id="SciView" order="5" weight="0.32982844" />
+      <window_info anchor="right" id="Coverage" order="6" side_tool="true" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.16823465" />
       <window_info auto_hide="true" x="480" y="245" width="813" height="881" id="Structure" order="1" sideWeight="0.7046549" side_tool="true" type="FLOATING" weight="1.0" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -890,7 +929,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32864866" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.32864866" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49836066" weight="0.3264865" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49836066" visible="true" weight="0.3264865" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50163937" side_tool="true" weight="0.3264865" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.3362162" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
@@ -903,32 +942,6 @@
       <window_info anchor="right" id="Database" order="4" weight="0.32982844" />
       <window_info anchor="right" id="SciView" order="5" weight="0.32982844" />
       <window_info anchor="right" id="Coverage" order="6" side_tool="true" />
-    </layout>
-    <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.16862327" />
-      <window_info auto_hide="true" x="68" y="628" width="813" height="881" id="Structure" order="1" sideWeight="0.7046549" side_tool="true" type="FLOATING" visible="true" weight="1.0" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Docker" order="0" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="1" weight="0.32972974" />
-      <window_info anchor="bottom" id="Database Changes" order="2" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.32756758" />
-      <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="5" sideWeight="0.49562842" weight="0.32108107" />
-      <window_info anchor="bottom" id="Debug" order="6" sideWeight="0.49341065" weight="0.3935135" />
-      <window_info anchor="bottom" id="Cvs" order="7" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="8" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="9" weight="0.32864866" />
-      <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.4989071" weight="0.32864866" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49836066" weight="0.3264865" />
-      <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50163937" side_tool="true" weight="0.3264865" />
-      <window_info anchor="bottom" id="Python Console" order="13" sideWeight="0.49508196" weight="0.3362162" />
-      <window_info anchor="right" auto_hide="true" x="1155" y="97" width="423" height="855" id="Documentation" order="0" side_tool="true" type="WINDOWED" visible="true" weight="0.21914776" />
-      <window_info anchor="right" id="Database" order="1" weight="0.32982844" />
-      <window_info anchor="right" id="SciView" order="2" weight="0.32982844" />
-      <window_info anchor="right" id="Coverage" order="3" side_tool="true" />
-      <window_info anchor="right" id="Commander" order="4" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="5" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.24958949" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -951,12 +964,22 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Geodesic active contours works using L1 &#10;" />
     <MESSAGE value="Level Set via GAC &#10;working with L1 and L2&#10;tweak alpha, step size and ksize for different images" />
     <MESSAGE value="Point Classification added for raster data. Started surface classification (scale space based)." />
     <MESSAGE value="NOT WORKING In progress" />
@@ -981,7 +1004,8 @@
     <MESSAGE value="Tensor classes done, @Zachi should add unitesting and update the classes &#10;PoinstSubSetOpen3D added" />
     <MESSAGE value="Saliency property and Facroty added.&#10;New Saliency method for point clouds added (based on PCA(" />
     <MESSAGE value="Saliency property and Factory added.&#10;New Saliency method for point clouds added (based on PCA)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Saliency property and Factory added.&#10;New Saliency method for point clouds added (based on PCA)" />
+    <MESSAGE value="New Saliency method for point clouds added based on range (not working) (not in the factory and not in Saliency module)&#10;Bug fixes in CurvatureFactory. @TODO efficiency degraded because of the creation of subset pointclouds. Should be checked&#10;PointSubSetOpen3D added override properties" />
+    <option name="LAST_COMMIT_MESSAGE" value="New Saliency method for point clouds added based on range (not working) (not in the factory and not in Saliency module)&#10;Bug fixes in CurvatureFactory. @TODO efficiency degraded because of the creation of subset pointclouds. Should be checked&#10;PointSubSetOpen3D added override properties" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1151,12 +1175,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/BaseProperty.py</url>
-          <line>78</line>
+          <line>80</line>
           <option name="timeStamp" value="314" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DataClasses/BaseData.py</url>
-          <line>128</line>
+          <line>138</line>
           <option name="timeStamp" value="322" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1166,7 +1190,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/BaseProperty.py</url>
-          <line>88</line>
+          <line>90</line>
           <option name="timeStamp" value="344" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1205,29 +1229,21 @@
           <option name="timeStamp" value="375" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="388" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py</url>
-          <line>15</line>
-          <option name="timeStamp" value="382" />
+          <line>16</line>
+          <option name="timeStamp" value="398" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Tensors/TensorFactory.py</url>
-          <line>156</line>
-          <option name="timeStamp" value="383" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Tensors/TensorFactory.py</url>
-          <line>53</line>
-          <option name="timeStamp" value="384" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py</url>
-          <line>150</line>
-          <option name="timeStamp" value="385" />
+          <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
+          <line>73</line>
+          <option name="timeStamp" value="401" />
         </line-breakpoint>
       </breakpoints>
-      <breakpoints-dialog>
-        <breakpoints-dialog />
-      </breakpoints-dialog>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -1238,22 +1254,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/Datasets/PointSet.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Utils/Utils.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Factories/RasterFactory.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/LevelSets/LevelSetFlow.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
@@ -1270,20 +1270,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="667">
           <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Tensors/tensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="65" column="89" selection-start-line="65" selection-start-column="89" selection-end-line="65" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorProperty.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
-          <caret line="60" column="29" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -1314,13 +1300,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/IOmodules/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Tensors/__init__.py" />
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/Colors/Colors.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
@@ -1329,12 +1308,6 @@
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/Colors/ColorProperty.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyProperty.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst">
@@ -1356,22 +1329,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="195" column="18" selection-start-line="195" selection-start-column="18" selection-end-line="195" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="151" column="46" lean-forward="true" selection-start-line="151" selection-start-column="46" selection-end-line="151" selection-end-column="46" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/RasterData.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1387,44 +1346,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="604" selection-start-line="604" selection-end-line="604" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3240">
-          <caret line="139" column="11" selection-start-line="139" selection-start-column="11" selection-end-line="139" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="49" column="38" selection-start-line="49" selection-start-column="38" selection-end-line="49" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
-          <caret line="34" column="11" lean-forward="true" selection-start-line="34" selection-start-column="11" selection-end-line="34" selection-end-column="11" />
-          <folding>
-            <element signature="e#178#193#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/385305029/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="298">
@@ -1432,20 +1353,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="131" column="36" selection-start-line="131" selection-start-column="36" selection-end-line="131" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1453,19 +1364,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret line="26" column="63" selection-start-line="26" selection-start-column="63" selection-end-line="26" selection-end-column="63" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Saliency/Saliency.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="155" column="24" selection-start-line="155" selection-start-column="24" selection-end-line="155" selection-end-column="24" />
-          <folding>
-            <marker date="1541345078170" expanded="true" signature="9128:9465" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1480,40 +1378,163 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret line="150" column="47" selection-start-line="150" selection-start-column="47" selection-end-line="150" selection-end-column="47" />
-          <folding>
-            <element signature="e#17#33#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborProperty.py">
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="100" selection-start-line="100" selection-end-line="100" />
+        <state relative-caret-position="294">
+          <caret line="443" column="72" lean-forward="true" selection-start-line="443" selection-start-column="72" selection-end-line="443" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReumaPhD/Bulbous_LS.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="24">
+          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyProperty.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="11904">
+          <caret line="505" selection-start-line="505" selection-end-line="505" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/Saliency.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3288">
+          <caret line="137" column="4" selection-start-line="137" selection-start-column="4" selection-end-line="137" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/IOmodules/ReadFunctions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="2376">
           <caret line="106" selection-start-line="106" selection-end-line="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IOmodules/IOFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3169" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="744">
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="20" column="12" selection-start-line="20" selection-start-column="12" selection-end-line="20" selection-end-column="12" />
+        <state relative-caret-position="192">
+          <caret line="85" selection-start-line="85" selection-end-line="85" />
           <folding>
-            <marker date="1541099901017" expanded="true" signature="1174:1430" ph="..." />
+            <marker date="1541424120561" expanded="true" signature="1174:1430" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="491" selection-start-line="491" selection-end-line="491" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/BaseData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="55" column="8" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1272">
-          <caret line="3" column="41" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
+        <state relative-caret-position="3888">
+          <caret line="168" column="38" selection-start-line="168" selection-start-column="38" selection-end-line="168" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2832">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Tensors/tensor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1104">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="61" column="36" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="59" column="26" selection-start-line="59" selection-start-column="26" selection-end-line="59" selection-end-column="26" />
+          <folding>
+            <element signature="e#178#193#0" expanded="true" />
+            <marker date="1541514543846" expanded="true" signature="2274:3296" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="984">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/anaconda3/lib/python3.6/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14184">
+          <caret line="604" selection-start-line="604" selection-end-line="604" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/test_saliencyFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="17" column="51" selection-start-line="17" selection-start-column="51" selection-end-line="17" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

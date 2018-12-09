@@ -321,7 +321,12 @@ class IOFactory:
         cellsize = np.float32(filelines[4].split(' ')[-1])
         nodata_value = np.float32(filelines[5].split(' ')[-1])
 
-        tmp = lambda x: np.float32(x.split(' ')[:-1])
+        line_size = len(filelines[6].split(' ')[:-1])
+        if line_size == ncols:
+            tmp = lambda x: np.float32(x.split(' ')[1:-1])
+        else:
+
+            tmp = lambda x: np.float32(x.split(' ')[:-1])
 
         data = array(list(map(tmp, filelines[6:])))
         return RasterData(data, gridSpacing = cellsize, geoTransform = (xllcorner, yllcorner, 1., 1.),

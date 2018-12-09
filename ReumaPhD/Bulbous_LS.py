@@ -12,7 +12,7 @@ if platform.system() == 'Linux':
     matplotlib.use('TkAgg')
 
 from matplotlib import pyplot as plt
-from IOmodules import IOFactory
+from IOmodules.IOFactory import IOFactory
 from PanoramaFactory import PanoramaFactory
 from LevelSetFlow import LevelSetFlow
 from ColorProperty import ColorProperty
@@ -87,6 +87,7 @@ if __name__ == '__main__':
     ls_obj.init_g(g, **processing_props)
 
     # Force II - region constraint:
+    tensor_property = Ten
     ls_obj.init_region('saliency', feature='normals', saliency_method='context', filter_size=3, normals=n)
     # ls_obj.update_region(g)
     ls_obj.update_region(ls_obj.region)

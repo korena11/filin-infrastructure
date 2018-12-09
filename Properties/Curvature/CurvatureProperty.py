@@ -43,18 +43,27 @@ class CurvatureProperty(BaseProperty):
         """
         Maximal principal curvature value
         """
-        return self.__curvature[:, 0]
+        if self.Points:
+            return self.__curvature[:, 0]
+
+        if self.Raster:
+            return self.__curvature[:, :, 0]
 
     @property
     def k2(self):
         """
         Minimal principal curvature value
         """
-        return self.__curvature[:, 1]
+        if self.Points:
+            return self.__curvature[:, 1]
+
+        if self.Raster:
+            return self.__curvature[:, :, 1]
 
     @property
     def mean_curvature(self):
         '''
+        Mean curvature values
         '''
         return (self.k1 + self.k2) / 2
 

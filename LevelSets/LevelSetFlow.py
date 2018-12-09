@@ -7,12 +7,12 @@ reuma\Reuma
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-from skimage import measure
 
 import MyTools as mt
 import Saliency as sl
 from LevelSetFunction import LevelSetFunction
 from RasterData import RasterData
+from SaliencyFactory import SaliencyFactory
 
 EPS = np.finfo(float).eps
 
@@ -86,6 +86,8 @@ class LevelSetFlow:
         self.__region = np.zeros(self.img().shape)
         self.__f = np.zeros(self.img().shape)
         self.__g = np.zeros(self.img().shape)
+        self.scale_x = 1
+        self.scale_y = 1
 
         if 'weights' in list(kwargs.keys()):
             self.set_weights(**kwargs['weights'])
@@ -241,6 +243,17 @@ class LevelSetFlow:
         """
         return self.__img[index]
 
+    def update_img(self, new_img):
+        """
+        Adds another image (of the data).
+
+        :param new_img: the new image to add
+
+        :type new_img: np.ndarray
+
+        """
+        self.__img.append(new_img)
+
     @property
     def img_rgb(self):
         """
@@ -288,7 +301,7 @@ class LevelSetFlow:
 
         :rtype: np.array
         """
-        return self.__g_x
+        return self.__g_x * self.scale_x
 
     @property
     def g_y(self):
@@ -297,7 +310,7 @@ class LevelSetFlow:
 
         :rtype: np.array
         """
-        return self.__g_y
+        return self.__g_y * self.scale_y
 
     @property
     def f(self):
@@ -306,7 +319,7 @@ class LevelSetFlow:
 
         :rtype: np.array
         """
-        return self.__g
+        return self.__f
 
     @property
     def f_x(self):
@@ -315,7 +328,7 @@ class LevelSetFlow:
 
         :rtype: np.array
         """
-        return self.__g_x
+        return self.__f_x
 
     @property
     def f_y(self):
@@ -324,7 +337,7 @@ class LevelSetFlow:
 
         :rtype: np.array
         """
-        return self.__g_y
+        return self.__f_y
 
     def phi(self, index=0):
         """
@@ -494,13 +507,16 @@ class LevelSetFlow:
 
             region = sl.distance_based(self.img(index), **inputs)
         elif region_method == 'range_saliency':
-            from SaliencyFactory import SaliencyFactory
+
             inputs = {'range': 2.}
             inputs.update(kwargs)
             region = SaliencyFactory.range_saliency(index, 4)
             from PanoramaFactory import PanoramaFactory
             region = PanoramaFactory.CreatePanorama_byProperty(region, 0.03, 0.016, voidData=0).PanoramaImage
 
+        elif region_method == 'PCA_Sacliency':
+
+            saliency_property = SaliencyFactory.pointwise_tensor_saliency()
 
         elif region_method == 'classification':
             inputs = {'winSizes', np.linspace(0.1, 10, 5),
@@ -750,73 +766,6 @@ class LevelSetFlow:
 
         return dPhi
 
-    def __drawContours(self, function, ax, **kwargs):
-        """
-        Draws the contours of a specific iteration
-
-        :param phi: the potential function
-        :param image: the image on which the contours will be drawn
-
-        :return: the figure
-
-        """
-
-        ax.cla()
-        ax.axis("off")
-        ax.set_ylim([self.img.shape[0], 0])
-        ax.set_xlim([0, self.img.shape[1]])
-
-        color = kwargs.get('color', 'b')
-        open_flag = kwargs.get('open', False)
-
-        if np.any(self.img_rgb) != 0:
-            temp = self.img_rgb
-        else:
-            temp = self.img
-        img = kwargs.get('image', temp)
-
-        function_binary = function.copy()
-
-        # segmenting and presenting the found areas
-        function_binary[np.where(function > 0)] = 0
-        function_binary[np.where(function < 0)] = 1
-        function_binary = np.uint8(function_binary)
-
-        contours = measure.find_contours(function, 0.)
-        blob_labels = measure.label(function_binary, background=0)
-        label_props = measure.regionprops(blob_labels)
-
-        #     contours = chooseLargestContours(contours, label_props, 1)
-
-        mt.imshow(img)
-        l_curve = []
-
-        if open_flag:
-            psi_ind = np.nonzero(self.psi.value < 0)
-            psi_ind = np.vstack(psi_ind).T
-
-        for c in contours:
-            if open_flag:
-                # collide_ind = mt.intersect2d(np.int64(np.round(c[:])), psi_ind)
-                # if collide_ind.shape[0] == 0:
-                #     pass
-                #
-                # elif collide_ind.shape[0] == c.shape[0]:
-                #     continue
-                # else:
-                collide_ind = np.isin(np.int64(np.round(c[:])), psi_ind)
-
-                c = c[np.sum(collide_ind, axis=1).astype('bool')]
-                if c.shape[0] == 0:
-                    continue
-
-            c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
-
-            curve, = ax.plot(c[:, 0], c[:, 1], '-', color=color)
-            l_curve.append(curve)
-
-        return l_curve, ax
-
     def __compute_vb(self, **kwargs):
         """
         Computes the band velocity, according to Li et al., 2006.
@@ -849,7 +798,7 @@ class LevelSetFlow:
         #  vb[np.where(phi != 0)] = 0
         return vb * self.phi().kappa
 
-    def __compute_vt(self, vectorField, **kwargs):
+    def __compute_vt(self, vectorField, verbose=False, **kwargs):
         """
         Computes the vector field derivative in each direction according to
         .. math:: v_t = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)
@@ -857,6 +806,9 @@ class LevelSetFlow:
         :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)
         :param edge_map:
         :param kappa: curvature map
+        :param verbose: show vector field
+
+        :type verbose: bool
 
         **Optionals**
         gradient computation parameters
@@ -865,6 +817,7 @@ class LevelSetFlow:
         :param ksize:
         :param sigma:
 
+
         :return vt: velocity for x and y directions
          :type vt: nd-array nxmx2
         """
@@ -872,7 +825,7 @@ class LevelSetFlow:
         # compute the derivatives of the edge map at each direction
         nabla_edge = mt.computeImageGradient(self.f, **kwargs)
 
-        # compute the laplacian of the vector field
+        # compute the Laplacian of the vector field
         laplacian_vx = cv2.Laplacian(vectorField[:, :, 0], cv2.CV_64F)
         laplacian_vy = cv2.Laplacian(vectorField[:, :, 1], cv2.CV_64F)
 
@@ -883,7 +836,13 @@ class LevelSetFlow:
         vx_t = g * laplacian_vx - h * (vectorField[:, :, 0] - self.f)
         vy_t = g * laplacian_vy - h * (vectorField[:, :, 1] - self.f)
 
-        # plt.quiver(vx_t, vy_t, scale=25)
+        if verbose == True:
+            # plt.quiver(vx_t, vy_t, scale=25)
+            # plt.show()
+            plt.figure()
+            plt.imshow(vectorField[:, :, 0])
+            plt.figure()
+            plt.imshow(vectorField[:, :, 1])
 
         return np.stack((-vx_t, -vy_t), axis=2)
 
@@ -919,6 +878,11 @@ class LevelSetFlow:
         :param gvf_flag: flag to add gradient vector flow
         :param open_flag: flag for open contours
         :param mumford_shah: flag for mumford_shah flow
+        :param scaleX: enhance X direction
+        :param scaleY: enhance Y direction
+
+        :type scaleX: float
+        :type scaleY: float
 
         :return the contours after level set
 
@@ -927,7 +891,11 @@ class LevelSetFlow:
         verbose = kwargs.get('verbose', False)
         open_flag = kwargs.get('open_flag', False)
         mumford_shah_flag = kwargs.get('mumford_shah', False)
+        self.scale_x = kwargs.get('scaleX', 1.)
+        self.scale_y = kwargs.get('scaleY', 1.)
+
         nu = 1.
+        blob_size = kwargs.get('blob_size', 1)
         if mumford_shah_flag:
             nu = kwargs.get('nu', 1.)
         if np.any(self.img_rgb) != 0:
@@ -989,22 +957,9 @@ class LevelSetFlow:
             for i in range(self.num_ls):
                 intrinsic += region_w * self.region * self.phi(i).norm_nabla
 
-            # open contour
-            if open_flag:
-                #     band_props.update(processing_props)
-                #     vb = self.__compute_vb(**band_props)
-                #     intrinsic += vb * self.phi().norm_nabla
-                #     psi_t = band_w * vb * self.psi.norm_nabla + flow_types['geodesic']*self.flow('geodesic', self.psi, **processing_props)
-                #     self.psi.update(
-                #         cv2.GaussianBlur(self.psi.value - psi_t, (processing_props['ksize'], processing_props['ksize']),
-                #                          sigmaX = processing_props['sigma']))
-                plt.figure('psi')
-                l_curve, ax4 = self.__drawContours(self.psi.value, ax4, color='b', image=self.psi.value)
-                plt.pause(.5e-10)
-
             # ---------------extrinsic movement ----------
             v = np.stack((self.f_x, self.f_y), axis=2)
-            vt = self.__compute_vt(v, **processing_props)
+            vt = self.__compute_vt(v, verbose=verbose, **processing_props)
             v += vt
             for i in range(self.num_ls):
                 extrinsic = (v[:, :, 0] * self.phi(i)._x + v[:, :, 1] * self.phi(i)._y) * gvf_w
@@ -1013,6 +968,7 @@ class LevelSetFlow:
                 extrinsic += self.__compute_vo() * vo_w
                 phi_t = self.step * (intrinsic - extrinsic)
                 self.phi(i).move_function(phi_t)
+                self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
 
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
@@ -1039,10 +995,10 @@ class LevelSetFlow:
                 for i in range(len(self.__Phi)):
                     if i > 0:
                         l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
-                                                       color=colors[i])
+                                                       color=colors[i], blob_size=blob_size)
                     else:
                         l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
-                                                       color=colors[i])
+                                                       color=colors[i], blob_size=blob_size)
             plt.pause(.5e-10)
         plt.show()
         print('Done')

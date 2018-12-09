@@ -59,7 +59,7 @@ class PointSet(BaseData):
         :return: number of points
 
         """
-        return self.data.shape[0]
+        return np.array(self.data).shape[0]
 
     @property
     def FieldsDimension(self):

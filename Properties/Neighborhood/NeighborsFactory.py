@@ -10,7 +10,6 @@ from PointNeighborhood import PointNeighborhood
 from PointSet import PointSet
 from PointSetOpen3D import PointSetOpen3D
 from PointSubSet import PointSubSet
-from PointSubSetOpen3D import PointSubSetOpen3D
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
@@ -129,7 +128,7 @@ class NeighborsFactory:
                 num, idx, dist = pointset_open3d.originalkdTreeOpen3D.search_hybrid_vector_3d(point,
                                                                                               radius=searchRadius,
                                                                                               max_nn=maxNN)
-        pointsubset = PointSubSetOpen3D(pointset_open3d, idx)
+        pointsubset = PointSubSet(pointset_open3d.ToNumpy(), np.asarray(idx))
         pointNeighborhood = PointNeighborhood(searchRadius, maxNN, pointsubset, dist)
         return pointNeighborhood
 

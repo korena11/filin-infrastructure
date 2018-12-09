@@ -40,6 +40,16 @@ class BaseData(object):
         """
         return self.__data
 
+    @data.setter
+    def data(self, data):
+        """
+        Set data within the data attribute
+
+        :param data of any kind (either points, raster etc.)
+
+        """
+        self.__data = data
+
     def setPath(self, path):
         """
         Sets path to dataset
@@ -52,16 +62,16 @@ class BaseData(object):
 
         self.__path = path
 
-    @data.setter
-    def data(self, data):
-        """
-        Sets the data to the dataset
-
-        :param data of any kind (either points, raster etc.)
-
-        """
-
-        self.__data = data
+    # @data.setter
+    # def data(self, data):
+    #     """
+    #     Sets the data to the dataset
+    #
+    #     :param data of any kind (either points, raster etc.)
+    #
+    #     """
+    #
+    #     self.__data = data
 
     def setValues(self, **kwargs):
         """

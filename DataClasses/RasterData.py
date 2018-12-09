@@ -67,7 +67,7 @@ class RasterData(BaseData):
         """
         super(RasterData, self).__init__()
         self.__cellSize = gridSpacing
-        self.data(data)
+        self.data = data
 
         self.setValues(**kwargs)
 
@@ -266,6 +266,15 @@ class RasterData(BaseData):
         return array([xs, ys, rasterData]).T
 
 #------------------ PROPERTIES --------------------------
+    @property
+    def voidData(self):
+        """
+        The value set to represent void data (usually when exported from arcgis or qgis)
+
+        :rtype: int
+        """
+        return self.__voidData
+
     @property
     def spatialReference(self):
         """

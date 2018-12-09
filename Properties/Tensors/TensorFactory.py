@@ -49,15 +49,22 @@ class TensorFactory(object):
         :return: TensorProperty object
 
         :rtype: Tensor
-        """
+
+                """
 
         if point_index == -1:
-            ref_point = np.mean(points.ToNumpy(), axis=0)  # Computing the center of gravity of the points
+            ref_point = -1
+            points_array = points.ToNumpy()
 
         else:
             ref_point = points.GetPoint(point_index)
+            points_array = points.ToNumpy()
+            points_array1 = points_array[point_index + 1:, :]
+            points_array2 = points_array[:point_index, :]
+            points_array = np.vstack((points_array1, points_array2))
 
-        deltas = points.ToNumpy() - ref_point
+        # points_array = points.ToNumpy()
+        deltas = points_array - ref_point
 
         # Set weights, if needed:
         if 'radius' in kwargs:
@@ -65,16 +72,49 @@ class TensorFactory(object):
             w = (1 / np.sqrt(2 * np.pi * sigma ** 2)) * np.exp(
                 -(deltas[:, 0] ** 2 + deltas[:, 1] ** 2 + deltas[:, 2] ** 2) / (2 * sigma ** 2))
             if np.sum(np.isnan(w)) > 0 or np.sum(np.isinf(w)) > 0 or np.abs(np.sum(w)) < 1e-10:
-                w = np.ones(points[:, 0].shape)
+                w = np.ones(points_array[:, 0].shape)
         else:
-            w = np.ones(points.Size)
+            w = 1
 
-        # Compute the covariance matrix of points around the ref_point
-        covMat = (w[:, None] * deltas).T.dot(deltas) / np.sum(w)
-
-        t = Tensor(covMat, ref_point, points.Size)
+        t = TensorFactory.tensorGeneral(points_array, ref_point, weights=w)
 
         return t
+
+    @classmethod
+    def tensorGeneral(cls, arrays, ref_array=-1, weights=1):
+        """
+        Compute a general tensor (not necessarily 3D)
+
+        :param arrays: an nxm arrays (each *row* array is the set for the tensor)
+        :param ref_array: the array around which the tensor is computed, if (-1) it is computed around the center of gravity
+
+        :type arrays: np.array
+        :type ref_array: np.array
+
+        **Optionals**
+        :param weights: the weights for the tensor computation. Default 1 for all
+
+        :return: a tensor
+
+        :rtype: Tensor
+        """
+
+        if isinstance(ref_array, int) and ref_array == -1:
+            ref_array = np.mean(arrays, axis=1)
+
+        deltas = arrays - ref_array
+
+        # Set weights, if needed:
+        if isinstance(weights, int) and weights == 1:
+            weights = np.ones(arrays.shape[0])
+
+        # Compute the covariance matrix of the arrays around the ref_array
+        covMat = (weights[:, None] * deltas).T.dot(deltas) / np.sum(weights)
+
+        t = Tensor(covMat, ref_array, arrays.shape[0])
+
+        return t
+
 
     @classmethod
     def joinTensors(cls, t1, t2):
@@ -167,3 +207,4 @@ class TensorFactory(object):
                 neighbors = neighborsFunc(points, i, *kwargs, neighborsProperty=neighborhoodProperty)
                 radius = neighbors.radius
                 tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+        return tensors

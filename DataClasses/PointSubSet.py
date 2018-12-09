@@ -13,18 +13,11 @@ class PointSubSet(PointSet):
     def __init__(self, points, indices):
 
         if isinstance(points, PointSet):
-            self.pointSet = points
+            self.data = points
         else:
-            self.pointSet = super(PointSubSet, self).__init__(points)
+            super(PointSubSet, self).__init__(points)
 
         self.indices = indices
-
-    @property
-    def Size(self):
-        """
-        Return number of points 
-        """
-        return len(self.indices)
 
     @property
     def GetIndices(self):
@@ -39,32 +32,11 @@ class PointSubSet(PointSet):
         Return nX1 ndarray of intensity values 
         """
         import numpy as np
-        intensity = self.pointSet.Intensity
+        intensity = self.Intensity
         if isinstance(intensity, np.ndarray):
-            return self.pointSet.Intensity[self.indices]
+            return self.Intensity[self.indices]
         else:
-            return None
-
-    @property
-    def X(self):
-        """
-        Return nX1 ndarray of X coordinate 
-        """
-        return self.pointSet.X[self.indices]
-
-    @property
-    def Y(self):
-        """
-        Return nX1 ndarray of Y coordinate 
-        """
-        return self.pointSet.Y[self.indices]
-
-    @property
-    def Z(self):
-        """
-        Return nX1 ndarray of Z coordinate 
-        """
-        return self.pointSet.Z[self.indices]
+            return np.asarray(self.Intensity)[self.indices]
 
     def ToNumpy(self):
         """
@@ -72,7 +44,8 @@ class PointSubSet(PointSet):
         
 
         """
-        return self.pointSet.ToNumpy()[self.indices, :]
+        from numpy import array
+        return array(self.data)[self.indices, :]
 
     def ToPolyData(self):
         """
@@ -80,6 +53,6 @@ class PointSubSet(PointSet):
 
         """
 
-        numpy_points = self.pointSet.ToNumpy()[self.indices, :]
+        numpy_points = self.ToNumpy()[self.indices, :]
         vtkPolydata = VisualizationUtils.MakeVTKPointsMesh(numpy_points)
         return vtkPolydata
