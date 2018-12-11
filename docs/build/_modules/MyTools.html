@@ -760,6 +760,7 @@
         class="k">def</span> <span class="nf">draw_contours</span><span class="p">(</span><span
         class="n">func</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span
         class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">,</span> <span class="n">blob_size</span><span class="o">=</span><span class="mi">5</span><span
         class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws the contours of a specific iteration</span>
@@ -769,6 +770,7 @@
 <span class="sd">    :param image: the image on which the contours will be drawn</span>
 <span class="sd">    :param hold: erase image from previous drawings or not. Default: False</span>
 <span class="sd">    :param color: the color which the contour will be drawn. Default: random for each curve (send True)</span>
+<span class="sd">    :param blob_size: the minimal area of a contour to draw</span>
 
 <span class="sd">    :type func: np.ndarray</span>
 <span class="sd">    :type ax: plt.axes</span>
@@ -802,10 +804,10 @@
     <span class="c1"># segmenting and presenting the found areas</span>
     <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
             class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&gt;</span> <span
-            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            class="mf">0.</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&lt;</span> <span
-            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+            class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&lt;=</span> <span
+            class="mf">0.</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">function_binary</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">function_binary</span><span
             class="p">)</span>
@@ -823,7 +825,7 @@
 
     <span class="n">contours</span> <span class="o">=</span> <span class="n">chooseLargestContours</span><span
             class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">label_props</span><span
-            class="p">,</span> <span class="o">.</span><span class="mi">25</span><span class="p">)</span>
+            class="p">,</span> <span class="n">blob_size</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
         <span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
     <span class="n">l_curve</span> <span class="o">=</span> <span class="p">[]</span>
@@ -992,12 +994,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

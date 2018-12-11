@@ -206,6 +206,25 @@ class IOFactory:
         return len(pointsetlist)
 
     @classmethod
+    def ReadLAS(cls, fileName, classification_flag=False):
+        """
+        Reads LAS or LAZ file. Can return classification property in addition to the point cloud
+
+        :param fileName: path to file (LAS or LAZ)
+        :param classification_flag: a flag whether to return a classification property or not (default: False)
+
+        :type fileName: str
+        :type classification_flag: bool
+
+        :return: pointcloud, classification
+
+        :rtype: PointSet, ClassificationProperty
+        """
+        pcl = ReadFunctions.ReadLAS(fileName, classification_flag)
+
+        return pcl
+
+    @classmethod
     def ReadShapeFile(cls, fileName, pointSetList):
         # TODO: make small functions from other kinds of shapefiles rather than polylines
         """

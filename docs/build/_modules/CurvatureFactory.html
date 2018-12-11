@@ -128,6 +128,7 @@
 <span class="kn">import</span> <span class="nn">functools</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
 
 <span class="kn">import</span> <span class="nn">RotationUtils</span>
 <span class="kn">from</span> <span class="nn">CurvatureProperty</span> <span class="k">import</span> <span class="n">CurvatureProperty</span>
@@ -135,7 +136,8 @@
 <span class="kn">from</span> <span class="nn">NeighborsFactory</span> <span class="k">import</span> <span class="n">NeighborsFactory</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
-<span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+<span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
+                                class="n">RasterData</span>
 
 
 <div class="viewcode-block" id="CurvatureFactory"><a class="viewcode-back"
@@ -147,12 +149,13 @@
 
 <div class="viewcode-block" id="CurvatureFactory.Curvature_FundamentalForm"><a class="viewcode-back"
                                                                                href="../Properties/Curvature/CurvatureFactory.html#CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm">[docs]</a>    <span
-        class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">Curvature_FundamentalForm</span><span class="p">(</span><span class="n">ind</span><span
-            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-            class="n">search_radius</span><span class="p">,</span> <span class="n">max_nn</span><span class="o">=</span><span
-            class="mi">20</span><span class="p">,</span> <span class="n">tree</span><span class="o">=</span><span
-            class="kc">None</span><span class="p">,</span> <span class="p">):</span>
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">Curvature_FundamentalForm</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">ind</span><span class="p">,</span> <span
+            class="n">points</span><span class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span
+            class="n">max_nn</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span
+            class="n">tree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span
+            class="p">):</span>
         <span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Curvature computation based on fundamental form when fitting bi-quadratic surface.</span>
 
@@ -198,6 +201,8 @@
 <span class="sd">        :rtype: np.ndarray</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span
+            class="n">PointSetOpen3D</span>
         <span class="c1"># find point&#39;s neighbors in a radius</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">points</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span
@@ -339,103 +344,13 @@
             class="p">([</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span
             class="p">])</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__good_point</span><span class="p">(</span><span
-            class="n">neighbors</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Determine whether the point is appropriate for curvature calculation</span>
-
-<span class="sd">        1. Calculate Azimuth for all neighborhood points</span>
-<span class="sd">        2. Check number of points in every 45 degree sector</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">neighbor_points</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span
-            class="n">ToNumpy</span><span class="p">()</span>
-        <span class="n">count_valid_sectors</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">p_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span
-            class="n">neighbor_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
-            class="mi">0</span><span class="p">]))</span>
-
-        <span class="c1"># Calculate Azimuth with neighbors who do not have X coordinate zero</span>
-        <span class="n">ind1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
-            class="n">abs</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span
-            class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span
-            class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
-            class="n">ind1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span
-            class="n">neighbor_points</span><span class="p">[</span><span class="n">ind1</span><span class="p">,</span> <span
-            class="mi">1</span><span class="p">],</span> <span class="n">neighbor_points</span><span
-            class="p">[</span><span class="n">ind1</span><span class="p">,</span> <span class="mi">0</span><span
-            class="p">])</span>
-
-        <span class="c1"># Calculate Azimuth ith neighbors who have X coordinate zero</span>
-        <span class="n">ind2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
-            class="n">abs</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span
-            class="mi">0</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span><span
-            class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">ind2</span><span class="o">.</span><span class="n">size</span> <span
-            class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">ind2_1</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">neighbor_points</span><span
-            class="p">[</span><span class="n">ind2</span><span class="p">,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span
-            class="mi">0</span><span class="p">]</span>
-            <span class="n">ind2_2</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">neighbor_points</span><span
-            class="p">[</span><span class="n">ind2</span><span class="p">,</span> <span class="mi">1</span><span
-            class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span
-            class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">ind2_1</span><span class="o">.</span><span
-            class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
-            class="n">ind2</span><span class="p">[</span><span class="n">ind2_1</span><span class="p">]]</span> <span
-            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span
-            class="o">/</span> <span class="mf">2.0</span>
-            <span class="k">if</span> <span class="n">ind2_2</span><span class="o">.</span><span
-            class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
-            class="n">ind2</span><span class="p">[</span><span class="n">ind2_2</span><span class="p">]]</span> <span
-            class="o">=</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
-
-        <span class="n">p_angle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">p_angle</span> <span
-            class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">+=</span> <span
-            class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">pi</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span
-            class="p">,</span> <span class="mf">7.0</span> <span class="o">*</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span
-            class="p">,</span> <span class="mi">8</span><span class="p">):</span>
-            <span class="n">p_in_sector</span> <span class="o">=</span> <span class="p">(</span><span
-            class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span
-            class="n">p_angle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">p_angle</span> <span
-            class="o">&lt;=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span
-            class="p">)]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">))[</span><span
-            class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
-            <span class="k">if</span> <span class="n">p_in_sector</span> <span class="o">&gt;=</span> <span
-            class="mi">2</span><span class="p">:</span>  <span class="c1"># original: rad * 85:  # Why this threshold was chosen? I changed it to 2</span>
-                <span class="n">count_valid_sectors</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">if</span> <span class="n">count_valid_sectors</span> <span class="o">&gt;=</span> <span
-            class="mi">7</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-
 <div class="viewcode-block" id="CurvatureFactory.read_or_calculate_curvature_data"><a class="viewcode-back"
                                                                                       href="../Properties/Curvature/CurvatureFactory.html#CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data">[docs]</a>    <span
-        class="nd">@staticmethod</span>
+        class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">read_or_calculate_curvature_data</span><span class="p">(</span><span
-            class="n">curves_path</span><span class="p">,</span> <span class="n">pointset3d</span><span
-            class="p">,</span> <span class="n">localNeighborhoodParameters</span><span class="p">,</span>
+            class="bp">cls</span><span class="p">,</span> <span class="n">curves_path</span><span
+            class="p">,</span> <span class="n">pointset3d</span><span class="p">,</span> <span class="n">localNeighborhoodParameters</span><span
+            class="p">,</span>
                                          <span class="n">delete_non_computed</span><span class="o">=</span><span
             class="kc">False</span><span class="p">,</span>
                                          <span class="n">verbose</span><span class="o">=</span><span
@@ -623,6 +538,198 @@
 
         <span class="k">return</span> <span class="n">curves</span></div>
 
+<div class="viewcode-block" id="CurvatureFactory.curvature_raster_fundamentalForm"><a class="viewcode-back"
+                                                                                      href="../Properties/Curvature/CurvatureFactory.html#CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">curvature_raster_fundamentalForm</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">raster</span><span class="p">,</span> <span
+            class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span
+            class="n">sigma</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span
+            class="n">gradientType</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute raster curvature based on first fundamental form</span>
+
+<span class="sd">        :param raster: the raster image</span>
+<span class="sd">        :param ksize: window/kernel size (equivalent to neighborhood size)</span>
+<span class="sd">        :param sigma: for Gaussian blurring</span>
+<span class="sd">        :param gradientType: &#39;L1&#39; or &#39;L2&#39; for derivatives computation</span>
+
+<span class="sd">        :type raster: ndarray or RasterData</span>
+<span class="sd">        :type window_size: int</span>
+<span class="sd">        :type sigma: float</span>
+<span class="sd">        :type gradientType: str</span>
+
+<span class="sd">        :return: curvature map</span>
+
+<span class="sd">        :rtype: curvatureProperty</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span
+            class="nn">mt</span>
+        <span class="kn">import</span> <span class="nn">cv2</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">raster</span><span class="p">,</span> <span class="n">RasterData</span><span class="p">):</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">raster</span><span
+            class="o">.</span><span class="n">data</span>
+            <span class="n">voidData</span> <span class="o">=</span> <span class="n">raster</span><span
+            class="o">.</span><span class="n">voidData</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">raster</span>
+            <span class="n">voidData</span> <span class="o">=</span> <span class="o">-</span><span
+            class="mi">9999</span>
+
+        <span class="n">img</span><span class="p">[</span><span class="n">img</span> <span class="o">==</span> <span
+            class="n">voidData</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">img</span><span
+            class="p">[</span><span class="n">img</span> <span class="o">!=</span> <span class="n">voidData</span><span
+            class="p">]))</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">normalize</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span
+            class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span
+            class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span
+            class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
+                            <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span
+            class="p">)</span>  <span class="c1"># Convert to normalized floating point</span>
+
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span
+            class="n">Zxx</span><span class="p">,</span> <span class="n">Zyy</span><span class="p">,</span> <span
+            class="n">Zxy</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span
+            class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">img</span><span
+            class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sigma</span><span
+            class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+                                                           <span class="n">gradientType</span><span
+            class="o">=</span><span class="n">gradientType</span><span class="p">,</span>
+                                                           <span class="n">ksize</span><span class="o">=</span><span
+            class="n">ksize</span><span class="p">)</span>
+
+        <span class="n">k1</span> <span class="o">=</span> <span class="p">(((</span><span class="n">Zxx</span> <span
+            class="o">+</span> <span class="n">Zyy</span><span class="p">)</span> <span class="o">+</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span
+            class="n">Zxx</span> <span class="o">-</span> <span class="n">Zyy</span><span class="p">)</span> <span
+            class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span> <span
+            class="o">*</span> <span class="n">Zxy</span> <span class="o">**</span> <span class="mi">2</span><span
+            class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="p">(((</span><span class="n">Zxx</span> <span
+            class="o">+</span> <span class="n">Zyy</span><span class="p">)</span> <span class="o">-</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span
+            class="n">Zxx</span> <span class="o">-</span> <span class="n">Zyy</span><span class="p">)</span> <span
+            class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span> <span
+            class="o">*</span> <span class="n">Zxy</span> <span class="o">**</span> <span class="mi">2</span><span
+            class="p">))</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">raster</span><span class="p">,</span> <span class="n">RasterData</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span
+            class="n">raster</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">concatenate</span><span class="p">((</span><span class="n">k1</span><span
+            class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span> <span
+            class="n">k2</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span
+            class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span
+            class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">concatenate</span><span class="p">((</span><span class="n">k1</span><span
+            class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">],</span> <span
+            class="n">k2</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span
+            class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span
+            class="p">)</span></div>
+
+    <span class="c1"># ------------------ PRIVATE METHODS ----------------------------</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__good_point</span><span class="p">(</span><span
+            class="n">neighbors</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Determine whether the point is appropriate for curvature calculation</span>
+
+<span class="sd">        1. Calculate Azimuth for all neighborhood points</span>
+<span class="sd">        2. Check number of points in every 45 degree sector</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">neighbor_points</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span
+            class="n">ToNumpy</span><span class="p">()</span>
+        <span class="n">count_valid_sectors</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">p_angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span
+            class="n">neighbor_points</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># Calculate Azimuth with neighbors who do not have X coordinate zero</span>
+        <span class="n">ind1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
+            class="n">abs</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span
+            class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span
+            class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">ind1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span
+            class="n">neighbor_points</span><span class="p">[</span><span class="n">ind1</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">],</span> <span class="n">neighbor_points</span><span
+            class="p">[</span><span class="n">ind1</span><span class="p">,</span> <span class="mi">0</span><span
+            class="p">])</span>
+
+        <span class="c1"># Calculate Azimuth ith neighbors who have X coordinate zero</span>
+        <span class="n">ind2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
+            class="n">abs</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span
+            class="mi">0</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mf">1e-6</span><span
+            class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">ind2</span><span class="o">.</span><span class="n">size</span> <span
+            class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ind2_1</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">neighbor_points</span><span
+            class="p">[</span><span class="n">ind2</span><span class="p">,</span> <span class="mi">1</span><span
+            class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span
+            class="mi">0</span><span class="p">]</span>
+            <span class="n">ind2_2</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">neighbor_points</span><span
+            class="p">[</span><span class="n">ind2</span><span class="p">,</span> <span class="mi">1</span><span
+            class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span
+            class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ind2_1</span><span class="o">.</span><span
+            class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">ind2</span><span class="p">[</span><span class="n">ind2_1</span><span class="p">]]</span> <span
+            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span
+            class="o">/</span> <span class="mf">2.0</span>
+            <span class="k">if</span> <span class="n">ind2_2</span><span class="o">.</span><span
+            class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">p_angle</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">ind2</span><span class="p">[</span><span class="n">ind2_2</span><span class="p">]]</span> <span
+            class="o">=</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="n">p_angle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">p_angle</span> <span
+            class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">+=</span> <span
+            class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">pi</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span
+            class="p">,</span> <span class="mf">7.0</span> <span class="o">*</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span
+            class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+            <span class="n">p_in_sector</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span
+            class="n">p_angle</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">p_angle</span> <span
+            class="o">&lt;=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span><span
+            class="p">)]</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">))[</span><span
+            class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+            <span class="k">if</span> <span class="n">p_in_sector</span> <span class="o">&gt;=</span> <span
+            class="mi">2</span><span class="p">:</span>  <span class="c1"># original: rad * 85:  # Why this threshold was chosen? I changed it to 2</span>
+                <span class="n">count_valid_sectors</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">count_valid_sectors</span> <span class="o">&gt;=</span> <span
+            class="mi">7</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__keep_good_curves_data</span><span class="p">(</span><span class="n">curves_data</span><span
             class="p">,</span> <span class="n">pointset_open3D</span><span class="p">):</span>
@@ -746,12 +853,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

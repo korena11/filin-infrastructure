@@ -11,21 +11,25 @@ from BaseData import BaseData
 
 
 class PointSet(BaseData):
-    """ 
+    r"""
     Basic point cloud 
     
     Mandatory Data (must be different from None):
                 
         __xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D currently) 
         
-    Optional Data (May not exist at all, or can be None):
-        __intensity - intensity of each point (ndarray)
-        __measurement_accuracy: noise of modeled surface
+    Optional Data (can be None or default value):
+        - intensity - intensity of each point (ndarray)
+        - range_accuracy: range measurement accuracy (default 0.002 m)
+        - angle_accuracy: angle measurement accuracy (default  :math:`0.012^\circ`)
+        - measurement_accuracy: noise of modeled surface (default 0.002 m)
+
          
     """
 
-    def __init__(self, points, **kwargs):
-        """
+    def __init__(self, points, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
+                 measurement_accuracy=0.002):
+        r"""
         Initialize the PointSet object
 
         :param points: ndarray of xyz or xy
@@ -34,23 +38,25 @@ class PointSet(BaseData):
 
         :param intensity: intensity values for each point(optional)
         :param path: path to PointSet file
+        :param range_accuracy: range measurement accuracy in m (default 0.002 m)
+        :param angle_accuracy: angle measurement accuracy in degrees (default  :math:`0.012^\circ`)
+        :param measurement_accuracy: noise of modeled surface (default 0.002 m)
 
         :type points: np.array
         :type intensity: int
+        :type range_accuracy: float
+        :type angle_accuracy: float
         :type path: str
 
         """
         super(PointSet, self).__init__()
-        properties = {'intensity': None,
-                      'accuracy': .002}
-        properties.update(kwargs)
 
         self.data = points
 
-        self.__intensity = properties['intensity']
-        self.__measurement_accuracy = properties['accuracy']
-
-        path = kwargs.get('path', '')  # The path for the data file
+        self.__intensity = intensity
+        self.__range_accuracy = range_accuracy
+        self.__angle_accuracy = angle_accuracy
+        self.__measurement_accuracy = measurement_accuracy
         self.setPath(path)
 
     @property
@@ -110,7 +116,6 @@ class PointSet(BaseData):
         """
         return self.ToNumpy()[:, 2]
 
-
     def ToNumpy(self):
         """
         :return: points as numpy nX3 ndarray
@@ -149,8 +154,6 @@ class PointSet(BaseData):
         geometry = [Point(xyz) for xyz in zip(self.X, self.Y, self.Z)]
         geodf = GeoDataFrame(pts, crs=crs, geometry=geometry)
         return geodf
-
-
 
     def GetPoint(self, index):
         """

@@ -316,6 +316,38 @@
                                         </colgroup>
                                         <tbody valign="top">
                                         <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LevelSetFlow__compute_vb</span></code>(**kwargs)
+                                            </td>
+                                            <td>Computes the band velocity, according to Li et al., 2006.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LevelSetFlow__compute_vo</span></code>(**kwargs)
+                                            </td>
+                                            <td>Computes velocity under orhogonality constraint (the force is computed
+                                                so that the contours will be orthogonal to another function (psi)
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LevelSetFlow__compute_vt</span></code>(vectorField[,&nbsp;verbose])
+                                            </td>
+                                            <td>
+                                                <blockquote>
+                                                    <div>Computes the vector field derivative in each direction
+                                                        according to ..
+                                                    </div>
+                                                </blockquote>
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LevelSetFlow__ms_element</span></code>(combination,&nbsp;img)
+                                            </td>
+                                            <td>An element for summation within the Mumford-Shah model.</td>
+                                        </tr>
+                                        <tr class="row-odd">
                                             <td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.flow"
                                                    title="LevelSetFlow.LevelSetFlow.flow"><code
                                                     class="xref py py-obj docutils literal notranslate"><span
@@ -439,6 +471,15 @@
                                             <td>Set weights for constraints.</td>
                                         </tr>
                                         <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#LevelSetFlow.LevelSetFlow.update_img"
+                                                   title="LevelSetFlow.LevelSetFlow.update_img"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">update_img</span></code></a>(new_img)
+                                            </td>
+                                            <td>Adds another image (of the data).</td>
+                                        </tr>
+                                        <tr class="row-odd">
                                             <td><a class="reference internal"
                                                    href="#LevelSetFlow.LevelSetFlow.update_region"
                                                    title="LevelSetFlow.LevelSetFlow.update_region"><code
@@ -1159,6 +1200,16 @@
                                                             <li><strong>mumford_shah</strong> – flag for mumford_shah
                                                                 flow
                                                             </li>
+                                                            <li><strong>scaleX</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/functions.html#float"
+                                                                                            title="(in Python v3.7)"><em>float</em></a>)
+                                                                – enhance X direction
+                                                            </li>
+                                                            <li><strong>scaleY</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/functions.html#float"
+                                                                                            title="(in Python v3.7)"><em>float</em></a>)
+                                                                – enhance Y direction
+                                                            </li>
                                                         </ul>
                                                     </td>
                                                 </tr>
@@ -1446,6 +1497,31 @@
                                     </dl>
 
                                     <dl class="method">
+                                        <dt id="LevelSetFlow.LevelSetFlow.update_img">
+                                            <code class="descname">update_img</code><span class="sig-paren">(</span><em>new_img</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.update_img"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#LevelSetFlow.LevelSetFlow.update_img"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Adds another image (of the data).</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>new_img</strong> (<em>np.ndarray</em>)
+                                                        – the new image to add
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
                                         <dt id="LevelSetFlow.LevelSetFlow.update_region">
                                             <code class="descname">update_region</code><span
                                                 class="sig-paren">(</span><em>new_region</em><span
@@ -1543,12 +1619,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

@@ -16,7 +16,6 @@ import numpy as np
 
 from NeighborProperty import NeighborsProperty
 from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
 from TensorProperty import TensorProperty
 from Tensors.tensor import Tensor
 
@@ -184,6 +183,7 @@ class TensorFactory(object):
             Now works only for PointSet3D neighborhood search.
 
         """
+        from PointSetOpen3D import PointSetOpen3D
 
         tensors = TensorProperty(points)
 

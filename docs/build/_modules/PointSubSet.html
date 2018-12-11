@@ -143,25 +143,15 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">points</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pointSet</span> <span class="o">=</span> <span
-            class="n">points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span
+            class="o">=</span> <span class="n">points</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pointSet</span> <span class="o">=</span> <span
-            class="nb">super</span><span class="p">(</span><span class="n">PointSubSet</span><span
+            <span class="nb">super</span><span class="p">(</span><span class="n">PointSubSet</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="fm">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span
             class="o">=</span> <span class="n">indices</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return number of points </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">GetIndices</span><span class="p">(</span><span
@@ -180,46 +170,18 @@
         <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
             class="nn">np</span>
         <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">pointSet</span><span class="o">.</span><span class="n">Intensity</span>
+            class="o">.</span><span class="n">Intensity</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span
             class="n">ndarray</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">pointSet</span><span class="o">.</span><span class="n">Intensity</span><span
-            class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span
-            class="p">]</span>
+            class="n">Intensity</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">indices</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">X</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of X coordinate </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">pointSet</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Y</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of Y coordinate </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">pointSet</span><span class="o">.</span><span class="n">Y</span><span class="p">[</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">Z</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return nX1 ndarray of Z coordinate </span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">pointSet</span><span class="o">.</span><span class="n">Z</span><span class="p">[</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">Intensity</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">indices</span><span class="p">]</span>
 
 <div class="viewcode-block" id="PointSubSet.ToNumpy"><a class="viewcode-back"
                                                         href="../Datasets/PointSubSet.html#PointSubSet.PointSubSet.ToNumpy">[docs]</a>    <span
@@ -230,10 +192,12 @@
 <span class="sd">        </span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">pointSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span
-            class="p">,</span> <span class="p">:]</span></div>
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+            class="n">array</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span
+            class="p">:]</span></div>
 
 <div class="viewcode-block" id="PointSubSet.ToPolyData"><a class="viewcode-back"
                                                            href="../Datasets/PointSubSet.html#PointSubSet.PointSubSet.ToPolyData">[docs]</a>    <span
@@ -245,9 +209,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">numpy_points</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">pointSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span
-            class="p">,</span> <span class="p">:]</span>
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">vtkPolydata</span> <span class="o">=</span> <span class="n">VisualizationUtils</span><span
             class="o">.</span><span class="n">MakeVTKPointsMesh</span><span class="p">(</span><span class="n">numpy_points</span><span
             class="p">)</span>
@@ -285,12 +248,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

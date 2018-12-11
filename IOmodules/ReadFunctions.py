@@ -201,16 +201,39 @@ def ReadPtx(filename, pointsetlist=list(), colorslist=list(), trasformationMatri
     return pointsetlist
 
 
-def ReadLAS(filename):
+def ReadLAS(filename, classification=False):
     """
-    .. warning:: Not implemented.
+    Reads LAS or LAZ files
 
-    :param filename:
+    :param filename: path to LAS or LAZ
+    :param classification: return a SegmentationProperty according to the LAS file or not (default: False)
 
-    :return:
+    :type filename: str
+    :type classification: bool
+
+    :return: pointcloud, (classification as received from LAS file)
+    :rtype: PointSet, SegmentationProperty
 
     """
-    pass
+    from laspy import file as lasfile
+    from SegmentationProperty import SegmentationProperty
+
+    with lasfile.File(filename, mode='r') as infile:
+        x = infile.X
+        y = infile.Y
+        z = infile.Z
+
+        pcl = PointSet(np.hstack((x[:, None], y[:, None], z[:, None])), path=filename, intensity=infile.Intensity)
+
+        if classification:
+            segmentation = SegmentationProperty(pcl, infile.Classification)
+            return pcl, segmentation
+        else:
+            return pcl
+
+
+
+
 
 
 def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
@@ -239,7 +262,7 @@ def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
 
         pointsetExtra = PointSetOpen3D(input_cloud)
         pointsetExtra.DownsampleCloud(voxel_size)
-
+        pointsetExtra.setPath(file_path)
         return pointsetExtra
 
 

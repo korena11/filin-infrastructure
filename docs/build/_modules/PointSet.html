@@ -138,23 +138,34 @@
 <div class="viewcode-block" id="PointSet"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet">[docs]</a><span
         class="k">class</span> <span class="nc">PointSet</span><span class="p">(</span><span
         class="n">BaseData</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; </span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Basic point cloud </span>
 <span class="sd">    </span>
 <span class="sd">    Mandatory Data (must be different from None):</span>
 <span class="sd">                </span>
 <span class="sd">        __xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D currently) </span>
 <span class="sd">        </span>
-<span class="sd">    Optional Data (May not exist at all, or can be None):</span>
-<span class="sd">        __intensity - intensity of each point (ndarray)</span>
-<span class="sd">        __measurement_accuracy: noise of modeled surface</span>
+<span class="sd">    Optional Data (can be None or default value):</span>
+<span class="sd">        - intensity - intensity of each point (ndarray)</span>
+<span class="sd">        - range_accuracy: range measurement accuracy (default 0.002 m)</span>
+<span class="sd">        - angle_accuracy: angle measurement accuracy (default  :math:`0.012^\circ`)</span>
+<span class="sd">        - measurement_accuracy: noise of modeled surface (default 0.002 m)</span>
+
 <span class="sd">         </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
-            class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="o">**</span><span
-            class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PointSet.__init__"><a class="viewcode-back"
+                                                      href="../Datasets/PointSet.html#PointSet.PointSet.__init__">[docs]</a>    <span
+        class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">path</span><span
+        class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intensity</span><span
+        class="o">=</span><span class="kc">None</span><span class="p">,</span> <span
+        class="n">range_accuracy</span><span class="o">=</span><span class="mf">0.002</span><span
+        class="p">,</span> <span class="n">angle_accuracy</span><span class="o">=</span><span
+        class="mf">0.012</span><span class="p">,</span>
+                 <span class="n">measurement_accuracy</span><span class="o">=</span><span class="mf">0.002</span><span
+            class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the PointSet object</span>
 
 <span class="sd">        :param points: ndarray of xyz or xy</span>
@@ -163,37 +174,34 @@
 
 <span class="sd">        :param intensity: intensity values for each point(optional)</span>
 <span class="sd">        :param path: path to PointSet file</span>
+<span class="sd">        :param range_accuracy: range measurement accuracy in m (default 0.002 m)</span>
+<span class="sd">        :param angle_accuracy: angle measurement accuracy in degrees (default  :math:`0.012^\circ`)</span>
+<span class="sd">        :param measurement_accuracy: noise of modeled surface (default 0.002 m)</span>
 
 <span class="sd">        :type points: np.array</span>
 <span class="sd">        :type intensity: int</span>
+<span class="sd">        :type range_accuracy: float</span>
+<span class="sd">        :type angle_accuracy: float</span>
 <span class="sd">        :type path: str</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PointSet</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="fm">__init__</span><span class="p">()</span>
-        <span class="n">properties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;intensity&#39;</span><span
-            class="p">:</span> <span class="kc">None</span><span class="p">,</span>
-                      <span class="s1">&#39;accuracy&#39;</span><span class="p">:</span> <span class="o">.</span><span
-            class="mi">002</span><span class="p">}</span>
-        <span class="n">properties</span><span class="o">.</span><span class="n">update</span><span
-            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span
             class="n">points</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__intensity</span> <span class="o">=</span> <span
-            class="n">properties</span><span class="p">[</span><span class="s1">&#39;intensity&#39;</span><span
-            class="p">]</span>
+            class="n">intensity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__range_accuracy</span> <span
+            class="o">=</span> <span class="n">range_accuracy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angle_accuracy</span> <span
+            class="o">=</span> <span class="n">angle_accuracy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__measurement_accuracy</span> <span
-            class="o">=</span> <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span
-            class="p">]</span>
-
-        <span class="n">path</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
-            class="n">get</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span
-            class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># The path for the data file</span>
+            class="o">=</span> <span class="n">measurement_accuracy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">setPath</span><span class="p">(</span><span
-            class="n">path</span><span class="p">)</span>
+            class="n">path</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
@@ -202,8 +210,9 @@
 <span class="sd">        :return: number of points</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
             class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
@@ -264,7 +273,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span
             class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span>
-
 
 <div class="viewcode-block" id="PointSet.ToNumpy"><a class="viewcode-back"
                                                      href="../Datasets/PointSet.html#PointSet.PointSet.ToNumpy">[docs]</a>    <span
@@ -333,8 +341,6 @@
             class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">geometry</span><span
             class="o">=</span><span class="n">geometry</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">geodf</span></div>
-
-
 
 <div class="viewcode-block" id="PointSet.GetPoint"><a class="viewcode-back"
                                                       href="../Datasets/PointSet.html#PointSet.PointSet.GetPoint">[docs]</a>    <span
@@ -469,12 +475,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

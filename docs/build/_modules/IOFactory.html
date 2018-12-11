@@ -641,8 +641,22 @@
             class="s1">&#39; &#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span
             class="p">])</span>
 
-        <span class="n">tmp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span
-            class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span
+        <span class="n">line_size</span> <span class="o">=</span> <span class="nb">len</span><span
+            class="p">(</span><span class="n">filelines</span><span class="p">[</span><span class="mi">6</span><span
+            class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span
+            class="s1">&#39; &#39;</span><span class="p">)[:</span><span class="o">-</span><span
+            class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">line_size</span> <span class="o">==</span> <span
+            class="n">ncols</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="k">lambda</span> <span
+            class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span
+            class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span
+            class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span
+            class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="n">tmp</span> <span class="o">=</span> <span class="k">lambda</span> <span
+            class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span
             class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span
             class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[:</span><span class="o">-</span><span
             class="mi">1</span><span class="p">])</span>
@@ -1144,12 +1158,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

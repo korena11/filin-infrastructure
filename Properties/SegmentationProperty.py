@@ -29,7 +29,7 @@ class SegmentationProperty(BaseProperty):
         :param points: reference to points
         :param segments: segmentation labels for each point
 
-        :type points: PointSubSet or PointSet
+        :type points: PointSubSet, PointSet
         :type segments: nx1 nd-array
             
         """
@@ -47,7 +47,11 @@ class SegmentationProperty(BaseProperty):
         
         # Assign for each point a color according to the segments it belongs to.                                        
         for i in range(0, nPoints):
-            self.__rgb[i, :] = self.__segmentsColors[segments[i]]
+
+            try:
+                self.__rgb[i, :] = self.__segmentsColors[segments[i]]
+            except:
+                self.__rgb[i, :] = self.__segmentsColors[-1]
             
     @property
     def RGB(self):

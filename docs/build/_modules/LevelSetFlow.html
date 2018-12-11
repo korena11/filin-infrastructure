@@ -131,14 +131,13 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span
                                 class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span
-                                class="n">measure</span>
 
 <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
 <span class="kn">import</span> <span class="nn">Saliency</span> <span class="k">as</span> <span class="nn">sl</span>
 <span class="kn">from</span> <span class="nn">LevelSetFunction</span> <span class="k">import</span> <span class="n">LevelSetFunction</span>
 <span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
                                 class="n">RasterData</span>
+<span class="kn">from</span> <span class="nn">SaliencyFactory</span> <span class="k">import</span> <span class="n">SaliencyFactory</span>
 
 <span class="n">EPS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span
                                 class="p">(</span><span class="nb">float</span><span class="p">)</span><span
@@ -262,6 +261,10 @@
             class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span
             class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span
             class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_x</span> <span
+            class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_y</span> <span
+            class="o">=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="s1">&#39;weights&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span
             class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span
@@ -466,6 +469,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__img</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
 
+<div class="viewcode-block" id="LevelSetFlow.update_img"><a class="viewcode-back"
+                                                            href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.update_img">[docs]</a>    <span
+        class="k">def</span> <span class="nf">update_img</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">new_img</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds another image (of the data).</span>
+
+<span class="sd">        :param new_img: the new image to add</span>
+
+<span class="sd">        :type new_img: np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">new_img</span><span class="p">)</span></div>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">img_rgb</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
@@ -521,7 +539,9 @@
 
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_x</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__g_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">scale_x</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">g_y</span><span class="p">(</span><span class="bp">self</span><span
@@ -531,7 +551,9 @@
 
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_y</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__g_y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">scale_y</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span
@@ -541,7 +563,7 @@
 
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__f</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">f_x</span><span class="p">(</span><span class="bp">self</span><span
@@ -551,7 +573,7 @@
 
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_x</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__f_x</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">f_y</span><span class="p">(</span><span class="bp">self</span><span
@@ -561,7 +583,7 @@
 
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_y</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__f_y</span>
 
 <div class="viewcode-block" id="LevelSetFlow.phi"><a class="viewcode-back"
                                                      href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.phi">[docs]</a>    <span
@@ -853,8 +875,7 @@
             class="p">)</span>
         <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;range_saliency&#39;</span><span
             class="p">:</span>
-            <span class="kn">from</span> <span class="nn">SaliencyFactory</span> <span class="k">import</span> <span
-            class="n">SaliencyFactory</span>
+
             <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;range&#39;</span><span
             class="p">:</span> <span class="mf">2.</span><span class="p">}</span>
             <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span
@@ -870,6 +891,12 @@
             class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">0</span><span
             class="p">)</span><span class="o">.</span><span class="n">PanoramaImage</span>
 
+        <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;PCA_Sacliency&#39;</span><span
+            class="p">:</span>
+
+            <span class="n">saliency_property</span> <span class="o">=</span> <span
+            class="n">SaliencyFactory</span><span class="o">.</span><span
+            class="n">pointwise_tensor_saliency</span><span class="p">()</span>
 
         <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span
             class="p">:</span>
@@ -1292,136 +1319,6 @@
 
         <span class="k">return</span> <span class="n">dPhi</span>
 
-    <span class="k">def</span> <span class="nf">__drawContours</span><span class="p">(</span><span
-            class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span
-            class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
-            class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Draws the contours of a specific iteration</span>
-
-<span class="sd">        :param phi: the potential function</span>
-<span class="sd">        :param image: the image on which the contours will be drawn</span>
-
-<span class="sd">        :return: the figure</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">ax</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span
-            class="s2">&quot;off&quot;</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="o">.</span><span
-            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span
-            class="mi">0</span><span class="p">])</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span
-            class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
-            class="mi">1</span><span class="p">]])</span>
-
-        <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
-            class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span
-            class="s1">&#39;b&#39;</span><span class="p">)</span>
-        <span class="n">open_flag</span> <span class="o">=</span> <span class="n">kwargs</span><span
-            class="o">.</span><span class="n">get</span><span class="p">(</span><span
-            class="s1">&#39;open&#39;</span><span class="p">,</span> <span class="kc">False</span><span
-            class="p">)</span>
-
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rgb</span><span
-            class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">img_rgb</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">img</span>
-        <span class="n">img</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
-            class="n">get</span><span class="p">(</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span
-            class="n">temp</span><span class="p">)</span>
-
-        <span class="n">function_binary</span> <span class="o">=</span> <span class="n">function</span><span
-            class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
-        <span class="c1"># segmenting and presenting the found areas</span>
-        <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">function</span> <span
-            class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span
-            class="mi">0</span>
-        <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">function</span> <span
-            class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span
-            class="mi">1</span>
-        <span class="n">function_binary</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">function_binary</span><span
-            class="p">)</span>
-
-        <span class="n">contours</span> <span class="o">=</span> <span class="n">measure</span><span
-            class="o">.</span><span class="n">find_contours</span><span class="p">(</span><span
-            class="n">function</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-        <span class="n">blob_labels</span> <span class="o">=</span> <span class="n">measure</span><span
-            class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">function_binary</span><span
-            class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="mi">0</span><span
-            class="p">)</span>
-        <span class="n">label_props</span> <span class="o">=</span> <span class="n">measure</span><span
-            class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span
-            class="n">blob_labels</span><span class="p">)</span>
-
-        <span class="c1">#     contours = chooseLargestContours(contours, label_props, 1)</span>
-
-        <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span
-            class="n">img</span><span class="p">)</span>
-        <span class="n">l_curve</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
-            <span class="n">psi_ind</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span
-            class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">value</span> <span
-            class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">psi_ind</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">psi_ind</span><span
-            class="p">)</span><span class="o">.</span><span class="n">T</span>
-
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span
-            class="n">contours</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
-                <span class="c1"># collide_ind = mt.intersect2d(np.int64(np.round(c[:])), psi_ind)</span>
-                <span class="c1"># if collide_ind.shape[0] == 0:</span>
-                <span class="c1">#     pass</span>
-                <span class="c1">#</span>
-                <span class="c1"># elif collide_ind.shape[0] == c.shape[0]:</span>
-                <span class="c1">#     continue</span>
-                <span class="c1"># else:</span>
-                <span class="n">collide_ind</span> <span class="o">=</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">np</span><span
-            class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">np</span><span
-            class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">c</span><span
-            class="p">[:])),</span> <span class="n">psi_ind</span><span class="p">)</span>
-
-                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span
-            class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span
-            class="n">collide_ind</span><span class="p">,</span> <span class="n">axis</span><span
-            class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span
-            class="p">(</span><span class="s1">&#39;bool&#39;</span><span class="p">)]</span>
-                <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span
-            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span
-            class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">continue</span>
-
-            <span class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span
-            class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span
-            class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">1</span><span
-            class="p">,</span> <span class="mi">0</span><span class="p">]]</span>  <span class="c1"># swapping between columns: x will be at the first column and y on the second</span>
-
-            <span class="n">curve</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span
-            class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span
-            class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span
-            class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span
-            class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span
-            class="o">=</span><span class="n">color</span><span class="p">)</span>
-            <span class="n">l_curve</span><span class="o">.</span><span class="n">append</span><span
-            class="p">(</span><span class="n">curve</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span>
-
     <span class="k">def</span> <span class="nf">__compute_vb</span><span class="p">(</span><span
             class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span
             class="p">):</span>
@@ -1492,6 +1389,7 @@
 
     <span class="k">def</span> <span class="nf">__compute_vt</span><span class="p">(</span><span
             class="bp">self</span><span class="p">,</span> <span class="n">vectorField</span><span
+            class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span
             class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the vector field derivative in each direction according to</span>
@@ -1500,6 +1398,9 @@
 <span class="sd">        :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)</span>
 <span class="sd">        :param edge_map:</span>
 <span class="sd">        :param kappa: curvature map</span>
+<span class="sd">        :param verbose: show vector field</span>
+
+<span class="sd">        :type verbose: bool</span>
 
 <span class="sd">        **Optionals**</span>
 <span class="sd">        gradient computation parameters</span>
@@ -1507,6 +1408,7 @@
 <span class="sd">        :param gradientType:</span>
 <span class="sd">        :param ksize:</span>
 <span class="sd">        :param sigma:</span>
+
 
 <span class="sd">        :return vt: velocity for x and y directions</span>
 <span class="sd">         :type vt: nd-array nxmx2</span>
@@ -1518,7 +1420,7 @@
             class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span
             class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># compute the laplacian of the vector field</span>
+        <span class="c1"># compute the Laplacian of the vector field</span>
         <span class="n">laplacian_vx</span> <span class="o">=</span> <span class="n">cv2</span><span
             class="o">.</span><span class="n">Laplacian</span><span class="p">(</span><span class="n">vectorField</span><span
             class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span
@@ -1551,7 +1453,18 @@
             class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span
             class="p">)</span>
 
-        <span class="c1"># plt.quiver(vx_t, vy_t, scale=25)</span>
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span
+            class="kc">True</span><span class="p">:</span>
+            <span class="c1"># plt.quiver(vx_t, vy_t, scale=25)</span>
+            <span class="c1"># plt.show()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span
+            class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span
+            class="mi">0</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span
+            class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span
+            class="mi">1</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span
             class="p">((</span><span class="o">-</span><span class="n">vx_t</span><span class="p">,</span> <span
@@ -1607,6 +1520,11 @@
 <span class="sd">        :param gvf_flag: flag to add gradient vector flow</span>
 <span class="sd">        :param open_flag: flag for open contours</span>
 <span class="sd">        :param mumford_shah: flag for mumford_shah flow</span>
+<span class="sd">        :param scaleX: enhance X direction</span>
+<span class="sd">        :param scaleY: enhance Y direction</span>
+
+<span class="sd">        :type scaleX: float</span>
+<span class="sd">        :type scaleY: float</span>
 
 <span class="sd">        :return the contours after level set</span>
 
@@ -1624,7 +1542,20 @@
             class="o">.</span><span class="n">get</span><span class="p">(</span><span
             class="s1">&#39;mumford_shah&#39;</span><span class="p">,</span> <span class="kc">False</span><span
             class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_x</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span
+            class="mf">1.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_y</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span
+            class="p">(</span><span class="s1">&#39;scaleY&#39;</span><span class="p">,</span> <span
+            class="mf">1.</span><span class="p">)</span>
+
         <span class="n">nu</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="n">blob_size</span> <span class="o">=</span> <span class="n">kwargs</span><span
+            class="o">.</span><span class="n">get</span><span class="p">(</span><span
+            class="s1">&#39;blob_size&#39;</span><span class="p">,</span> <span class="mi">1</span><span
+            class="p">)</span>
         <span class="k">if</span> <span class="n">mumford_shah_flag</span><span class="p">:</span>
             <span class="n">nu</span> <span class="o">=</span> <span class="n">kwargs</span><span
             class="o">.</span><span class="n">get</span><span class="p">(</span><span
@@ -1750,28 +1681,6 @@
             class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span
             class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">norm_nabla</span>
 
-            <span class="c1"># open contour</span>
-            <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
-                <span class="c1">#     band_props.update(processing_props)</span>
-                <span class="c1">#     vb = self.__compute_vb(**band_props)</span>
-                <span class="c1">#     intrinsic += vb * self.phi().norm_nabla</span>
-                <span class="c1">#     psi_t = band_w * vb * self.psi.norm_nabla + flow_types[&#39;geodesic&#39;]*self.flow(&#39;geodesic&#39;, self.psi, **processing_props)</span>
-                <span class="c1">#     self.psi.update(</span>
-                <span class="c1">#         cv2.GaussianBlur(self.psi.value - psi_t, (processing_props[&#39;ksize&#39;], processing_props[&#39;ksize&#39;]),</span>
-                <span class="c1">#                          sigmaX = processing_props[&#39;sigma&#39;]))</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span
-            class="p">(</span><span class="s1">&#39;psi&#39;</span><span class="p">)</span>
-                <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax4</span> <span
-            class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__drawContours</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span
-            class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax4</span><span
-            class="p">,</span> <span class="n">color</span><span class="o">=</span><span
-            class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">image</span><span
-            class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span
-            class="o">.</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span
-            class="p">(</span><span class="o">.</span><span class="mf">5e-10</span><span class="p">)</span>
-
             <span class="c1"># ---------------extrinsic movement ----------</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">stack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span
@@ -1780,6 +1689,7 @@
             class="mi">2</span><span class="p">)</span>
             <span class="n">vt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__compute_vt</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span
+            class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span
             class="o">**</span><span class="n">processing_props</span><span class="p">)</span>
             <span class="n">v</span> <span class="o">+=</span> <span class="n">vt</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span
@@ -1805,6 +1715,16 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span
             class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">move_function</span><span
             class="p">(</span><span class="n">phi_t</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span
+            class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span
+            class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span
+            class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span
+            class="o">.</span><span class="n">astype</span><span class="p">(</span><span
+            class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span
+            class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span
+            class="mf">1.0</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span
+            class="n">NORM_MINMAX</span><span class="p">))</span>
 
             <span class="c1"># extrinsic += (1 - mult_phi)</span>
             <span class="c1">#  self.psi += extrinsic</span>
@@ -1858,7 +1778,8 @@
             class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span
             class="p">,</span>
                                                        <span class="n">color</span><span class="o">=</span><span
-            class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span
+            class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span
             class="o">=</span> <span class="n">mt</span><span class="o">.</span><span
@@ -1869,7 +1790,8 @@
             class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span
             class="p">,</span>
                                                        <span class="n">color</span><span class="o">=</span><span
-            class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span
+            class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span
             class="o">.</span><span class="mf">5e-10</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1909,12 +1831,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

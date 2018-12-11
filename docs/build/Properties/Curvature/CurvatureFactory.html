@@ -197,6 +197,53 @@
                                                     </td>
                                                 </tr>
                                                 <tr class="row-even">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__BiQuadratic_Surface</span></code>(…)
+                                                    </td>
+                                                    <td>BiQuadratic surface adjustment to discrete point cloud</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__good_point</span></code>(neighbors)
+                                                    </td>
+                                                    <td>Determine whether the point is appropriate for curvature
+                                                        calculation
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__keep_good_curves_data</span></code>(…)
+                                                    </td>
+                                                    <td>
+                                                        <table class="docutils field-list" frame="void" rules="none">
+                                                            <col class="field-name"/>
+                                                            <col class="field-body"/>
+                                                            <tbody valign="top">
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name" colspan="2">param curves_data:
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="field-odd field">
+                                                                <td>&#160;</td>
+                                                                <td class="field-body">an array of curvature data :param
+                                                                    pointset_open3D: the point set that relates to the
+                                                                    curvature data
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"
+                                                           title="CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">curvature_raster_fundamentalForm</span></code></a>(raster[,&nbsp;…])
+                                                    </td>
+                                                    <td>Compute raster curvature based on first fundamental form</td>
+                                                </tr>
+                                                <tr class="row-even">
                                                     <td><a class="reference internal"
                                                            href="#CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data"
                                                            title="CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data"><code
@@ -209,9 +256,9 @@
                                             </table>
                                         </div>
                                     </blockquote>
-                                    <dl class="staticmethod">
+                                    <dl class="classmethod">
                                         <dt id="CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm">
-                                            <em class="property">static </em><code class="descname">Curvature_FundamentalForm</code><span
+                                            <em class="property">classmethod </em><code class="descname">Curvature_FundamentalForm</code><span
                                                 class="sig-paren">(</span><em>ind</em>, <em>points</em>, <em>search_radius</em>,
                                             <em>max_nn=20</em>, <em>tree=None</em><span class="sig-paren">)</span><a
                                                 class="reference internal"
@@ -317,9 +364,67 @@
                                         </dd>
                                     </dl>
 
-                                    <dl class="staticmethod">
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm">
+                                            <em class="property">classmethod </em><code class="descname">curvature_raster_fundamentalForm</code><span
+                                                class="sig-paren">(</span><em>raster</em>, <em>ksize=3</em>, <em>sigma=2.5</em>,
+                                            <em>gradientType='L1'</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvature_raster_fundamentalForm"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute raster curvature based on first fundamental form</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>raster</strong> (<em>ndarray</em><em> or </em><a
+                                                                    class="reference internal"
+                                                                    href="../../Datasets/RasterData.html#RasterData.RasterData"
+                                                                    title="RasterData.RasterData"><em>RasterData</em></a>)
+                                                                – the raster image
+                                                            </li>
+                                                            <li><strong>ksize</strong> – window/kernel size (equivalent
+                                                                to neighborhood size)
+                                                            </li>
+                                                            <li><strong>sigma</strong> (<a class="reference external"
+                                                                                           href="https://docs.python.org/3/library/functions.html#float"
+                                                                                           title="(in Python v3.7)"><em>float</em></a>)
+                                                                – for Gaussian blurring
+                                                            </li>
+                                                            <li><strong>gradientType</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                    title="(in Python v3.7)"><em>str</em></a>) – ‘L1’ or
+                                                                ‘L2’ for derivatives computation
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">curvature map</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last">curvatureProperty</p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
                                         <dt id="CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data">
-                                            <em class="property">static </em><code class="descname">read_or_calculate_curvature_data</code><span
+                                            <em class="property">classmethod </em><code class="descname">read_or_calculate_curvature_data</code><span
                                                 class="sig-paren">(</span><em>curves_path</em>, <em>pointset3d</em>,
                                             <em>localNeighborhoodParameters</em>, <em>delete_non_computed=False</em>,
                                             <em>verbose=True</em><span class="sig-paren">)</span><a
@@ -460,12 +565,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

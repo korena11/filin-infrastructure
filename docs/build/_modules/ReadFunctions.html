@@ -463,7 +463,33 @@
 <span class="sd">    :return:</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">pass</span></div>
+    <span class="kn">import</span> <span class="nn">laspy.file</span> <span class="k">as</span> <span
+            class="nn">lasfile</span>
+    <span class="k">with</span> <span class="n">lasfile</span><span class="o">.</span><span class="n">File</span><span
+            class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span
+            class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span
+            class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span
+            class="n">X</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span
+            class="n">Y</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">infile</span><span class="o">.</span><span
+            class="n">Z</span>
+
+        <span class="n">pcl</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span
+            class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span
+            class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span
+            class="n">z</span><span class="p">)),</span> <span class="n">path</span><span class="o">=</span><span
+            class="n">filename</span><span class="p">,</span> <span class="n">intensity</span><span
+            class="o">=</span><span class="n">infile</span><span class="o">.</span><span class="n">Intensity</span><span
+            class="p">)</span>
+
+
+        <span class="k">return</span></div>
+
+
+
+
 
 
 <div class="viewcode-block" id="read2_PointSetOpen3D"><a class="viewcode-back"
@@ -504,7 +530,8 @@
             class="p">(</span><span class="n">input_cloud</span><span class="p">)</span>
         <span class="n">pointsetExtra</span><span class="o">.</span><span class="n">DownsampleCloud</span><span
             class="p">(</span><span class="n">voxel_size</span><span class="p">)</span>
-
+        <span class="n">pointsetExtra</span><span class="o">.</span><span class="n">setPath</span><span
+            class="p">(</span><span class="n">file_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pointsetExtra</span></div>
 
 
@@ -622,12 +649,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

@@ -4,8 +4,11 @@ PointSet class
 .. autoclass:: PointSet.PointSet
     :members:
     :undoc-members:
+    :private-members:
 
-        .. rubric:: Attributes
+    .. automethod:: __init__
+
+    .. rubric:: Attributes
 
     .. autoautosummary:: PointSet.PointSet
         :attributes:

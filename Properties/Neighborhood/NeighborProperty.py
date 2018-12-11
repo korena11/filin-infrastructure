@@ -4,8 +4,6 @@ from scipy.ndimage import gaussian_filter
 import RotationUtils
 from BaseProperty import BaseProperty
 from PointNeighborhood import PointNeighborhood
-from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
 
 
 class NeighborsProperty(BaseProperty):
@@ -18,7 +16,7 @@ class NeighborsProperty(BaseProperty):
 
         :param points:
 
-        :type points: PointSet
+        :type points: PointSet, PointSetOpen3D
         :param args:
 
 
@@ -73,6 +71,7 @@ class NeighborsProperty(BaseProperty):
 
         :return:
         """
+        from PointSetOpen3D import PointSetOpen3D
 
         if isinstance(self.Points, PointSetOpen3D):
             pointset_open3d = self.Points

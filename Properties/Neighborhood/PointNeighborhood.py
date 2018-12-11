@@ -2,7 +2,6 @@ import numpy as np
 from scipy.spatial import Delaunay
 
 from PointSubSet import PointSubSet
-from PointSubSetOpen3D import PointSubSetOpen3D
 
 
 class PointNeighborhood:

@@ -135,6 +135,9 @@
                                 class="p">,</span> <span class="n">arctan2</span><span class="p">,</span> <span
                                 class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
 
+<span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
+                                class="n">RasterData</span>
+
 <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span
                                 class="p">()</span> <span class="o">==</span> <span
                                 class="s1">&#39;Linux&#39;</span><span class="p">:</span>
@@ -164,6 +167,10 @@
 <span class="sd">        :return: a shaded relief of a raster</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span
+            class="p">,</span> <span class="n">RasterData</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">array</span><span
+            class="o">.</span><span class="n">data</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span
             class="n">np</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span
             class="n">array</span><span class="p">)</span>
@@ -182,12 +189,13 @@
 
         <span class="n">shaded</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span
             class="n">altituderad</span><span class="p">)</span> <span class="o">*</span> <span
-            class="n">sin</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> \
-                 <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span
-            class="n">altituderad</span><span class="p">)</span> <span class="o">*</span> <span
-            class="n">cos</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> \
-                   <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span
-            class="n">azimuthrad</span> <span class="o">-</span> <span class="n">aspect</span><span class="p">)</span>
+            class="n">sin</span><span class="p">(</span><span class="n">slope</span><span class="p">)</span> <span
+            class="o">+</span> \
+                 <span class="n">cos</span><span class="p">(</span><span class="n">altituderad</span><span
+            class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span class="p">(</span><span
+            class="n">slope</span><span class="p">)</span> <span class="o">*</span> <span class="n">cos</span><span
+            class="p">(</span><span class="n">azimuthrad</span> <span class="o">-</span> <span
+            class="n">aspect</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">255</span> <span class="o">*</span> <span class="p">(</span><span
             class="n">shaded</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span
             class="o">/</span> <span class="mi">2</span></div></div>
@@ -229,12 +237,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

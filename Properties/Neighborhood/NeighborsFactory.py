@@ -8,7 +8,6 @@ from NeighborProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
 # Infrastructure imports
 from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
@@ -49,6 +48,7 @@ class NeighborsFactory:
 
         :rtype: PointNeighborhood
         """
+
         if neighborsProperty is None:
             neighborsProperty = NeighborsProperty(pointset3d)
 
@@ -144,6 +144,8 @@ class NeighborsFactory:
         # p.map(self.GetPointsNeighborsByID, splitIndices, [searchRadius] * maxProcesses, [maxNN] * maxProcesses,
         # [False] * maxProcesses)
         # print("Done??????")
+
+        from PointSetOpen3D import PointSetOpen3D
 
         # Function will be used with multiprocessing.
         # To run it without:

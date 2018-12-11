@@ -148,8 +148,9 @@
                                 <dt id="PointSet.PointSet">
                                     <em class="property">class </em><code class="descclassname">PointSet.</code><code
                                         class="descname">PointSet</code><span class="sig-paren">(</span><em>points</em>,
-                                    <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                        href="../_modules/PointSet.html#PointSet"><span
+                                    <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>,
+                                    <em>measurement_accuracy=0.002</em><span class="sig-paren">)</span><a
+                                        class="reference internal" href="../_modules/PointSet.html#PointSet"><span
                                         class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                                     href="#PointSet.PointSet"
                                                                                     title="Permalink to this definition">¶</a>
@@ -162,12 +163,88 @@
                                         </div>
                                     </blockquote>
                                     <dl class="docutils">
-                                        <dt>Optional Data (May not exist at all, or can be None):</dt>
-                                        <dd><p class="first">__intensity - intensity of each point (ndarray)
-                                            __measurement_accuracy: noise of modeled surface</p>
-                                            <p class="last rubric">Attributes</p>
+                                        <dt>Optional Data (can be None or default value):</dt>
+                                        <dd>
+                                            <ul class="first last simple">
+                                                <li>intensity - intensity of each point (ndarray)</li>
+                                                <li>range_accuracy: range measurement accuracy (default 0.002 m)</li>
+                                                <li>angle_accuracy: angle measurement accuracy (default <span
+                                                        class="math notranslate nohighlight">\(0.012^\circ\)</span>)
+                                                </li>
+                                                <li>measurement_accuracy: noise of modeled surface (default 0.002 m)
+                                                </li>
+                                            </ul>
                                         </dd>
                                     </dl>
+                                    <dl class="method">
+                                        <dt id="PointSet.PointSet.__init__">
+                                            <code class="descname">__init__</code><span class="sig-paren">(</span><em>points</em>,
+                                            <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>,
+                                            <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/PointSet.html#PointSet.__init__"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#PointSet.PointSet.__init__"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Initialize the PointSet object</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>points</strong> – ndarray of xyz or
+                                                        xy
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Optionals</strong></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>intensity</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) –
+                                                                intensity values for each point(optional)
+                                                            </li>
+                                                            <li><strong>path</strong> (<a class="reference external"
+                                                                                          href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                          title="(in Python v3.7)"><em>str</em></a>)
+                                                                – path to PointSet file
+                                                            </li>
+                                                            <li><strong>range_accuracy</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                    title="(in Python v3.7)"><em>float</em></a>) – range
+                                                                measurement accuracy in m (default 0.002 m)
+                                                            </li>
+                                                            <li><strong>angle_accuracy</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                    title="(in Python v3.7)"><em>float</em></a>) – angle
+                                                                measurement accuracy in degrees (default <span
+                                                                        class="math notranslate nohighlight">\(0.012^\circ\)</span>)
+                                                            </li>
+                                                            <li><strong>measurement_accuracy</strong> – noise of modeled
+                                                                surface (default 0.002 m)
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <p class="rubric">Attributes</p>
                                     <table border="1" class="longtable docutils">
                                         <colgroup>
                                             <col width="10%"/>
@@ -707,12 +784,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>
