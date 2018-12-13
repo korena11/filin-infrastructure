@@ -240,7 +240,7 @@ class LevelSetFunction(object):
         xx, yy = np.meshgrid(ksize * x, ksize * y)
 
         phi = radius - np.sqrt((xx - center_pt[1] * ksize) ** 2 + (yy - center_pt[0] * ksize) ** 2)
-
+        phi = cv2.normalize(phi, -1, 1, cv2.NORM_MINMAX)
         return phi
 
     def compute_heaviside(self, **kwargs):

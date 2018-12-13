@@ -816,114 +816,13 @@
 <div class="viewcode-block" id="LevelSetFlow.init_region"><a class="viewcode-back"
                                                              href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_region">[docs]</a>    <span
         class="k">def</span> <span class="nf">init_region</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">,</span> <span class="n">region_method</span><span
-        class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initializes region function</span>
+<span class="sd">        Initializes region function. Normalizes between (-1,1)</span>
 
-<span class="sd">        :param region_method: type of the region wanted: &#39;classification&#39;, &#39;saliency&#39;.</span>
-<span class="sd">        :param img_index: the self.img according to which the region will be computed</span>
-
-<span class="sd">        :type img_index: [int, PointSet]</span>
-
-<span class="sd">        *Inputs according to method:*</span>
-
-<span class="sd">        - saliency: inputs according to :py:meth:`~Saliency.distance_based`</span>
-
-<span class="sd">        - classification:</span>
-
-<span class="sd">        - range_saliency:</span>
-
-<span class="sd">        :param winSizes: array or list with different window sizes for classification</span>
-<span class="sd">        :param class: the classes which are looked for.</span>
+<span class="sd">        :param region: region function initialize</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
-            class="n">get</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span
-            class="mf">2.5</span><span class="p">)</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span
-            class="n">get</span><span class="p">(</span><span class="s1">&#39;img_index&#39;</span><span
-            class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;saliency&#39;</span><span
-            class="p">:</span>
-            <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;feature&#39;</span><span
-            class="p">:</span> <span class="s1">&#39;normals&#39;</span><span class="p">,</span>
-                      <span class="s1">&#39;method&#39;</span><span class="p">:</span> <span class="s1">&#39;frequency&#39;</span><span
-            class="p">,</span>
-                      <span class="s1">&#39;dist_type&#39;</span><span class="p">:</span> <span class="s1">&#39;Euclidean&#39;</span><span
-            class="p">,</span>
-                      <span class="s1">&#39;filter_sigma&#39;</span><span class="p">:</span> <span
-            class="p">[</span><span class="n">sigma</span><span class="p">,</span> <span class="mf">1.6</span> <span
-            class="o">*</span> <span class="n">sigma</span><span class="p">,</span> <span class="mf">1.6</span> <span
-            class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span
-            class="p">,</span> <span class="mf">1.6</span> <span class="o">*</span> <span class="mi">3</span> <span
-            class="o">*</span> <span class="n">sigma</span><span class="p">],</span>
-                      <span class="s1">&#39;filter_size&#39;</span><span class="p">:</span> <span
-            class="mi">0</span><span class="p">,</span>
-                      <span class="s1">&#39;scales_number&#39;</span><span class="p">:</span> <span
-            class="mi">3</span><span class="p">,</span>
-                      <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span
-            class="kc">True</span><span class="p">}</span>
-            <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span
-            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-
-            <span class="n">region</span> <span class="o">=</span> <span class="n">sl</span><span
-            class="o">.</span><span class="n">distance_based</span><span class="p">(</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">(</span><span
-            class="n">index</span><span class="p">),</span> <span class="o">**</span><span class="n">inputs</span><span
-            class="p">)</span>
-        <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;range_saliency&#39;</span><span
-            class="p">:</span>
-
-            <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;range&#39;</span><span
-            class="p">:</span> <span class="mf">2.</span><span class="p">}</span>
-            <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span
-            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="n">region</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span
-            class="o">.</span><span class="n">range_saliency</span><span class="p">(</span><span
-            class="n">index</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-            <span class="kn">from</span> <span class="nn">PanoramaFactory</span> <span class="k">import</span> <span
-            class="n">PanoramaFactory</span>
-            <span class="n">region</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span
-            class="o">.</span><span class="n">CreatePanorama_byProperty</span><span class="p">(</span><span class="n">region</span><span
-            class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.016</span><span
-            class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">0</span><span
-            class="p">)</span><span class="o">.</span><span class="n">PanoramaImage</span>
-
-        <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;PCA_Sacliency&#39;</span><span
-            class="p">:</span>
-
-            <span class="n">saliency_property</span> <span class="o">=</span> <span
-            class="n">SaliencyFactory</span><span class="o">.</span><span
-            class="n">pointwise_tensor_saliency</span><span class="p">()</span>
-
-        <span class="k">elif</span> <span class="n">region_method</span> <span class="o">==</span> <span class="s1">&#39;classification&#39;</span><span
-            class="p">:</span>
-            <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;winSizes&#39;</span><span
-            class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span
-            class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span
-            class="p">,</span> <span class="mi">5</span><span class="p">),</span>
-                      <span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="mi">1</span><span
-            class="p">}</span>
-            <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span
-            class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-
-            <span class="kn">from</span> <span class="nn">ClassificationFactory</span> <span
-            class="k">import</span> <span class="n">ClassificationFactory</span> <span class="k">as</span> <span
-            class="n">Cf</span>
-            <span class="n">classified</span><span class="p">,</span> <span class="n">percentMap</span> <span class="o">=</span> <span
-            class="n">Cf</span><span class="o">.</span><span class="n">SurfaceClassification</span><span
-            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span
-            class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="n">inputs</span><span
-            class="p">[</span><span class="s1">&#39;winSizes&#39;</span><span class="p">])</span>
-            <span class="n">region</span> <span class="o">=</span> <span class="n">classified</span><span
-            class="o">.</span><span class="n">classification</span><span class="p">(</span><span class="n">inputs</span><span
-            class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
-
-        <span class="c1"># region = np.log(255 - cv2.GaussianBlur(region,</span>
-        <span class="c1">#                                        ksize=(self.processing_props[&#39;ksize&#39;], self.processing_props[&#39;ksize&#39;]),</span>
-        <span class="c1">#                                        sigmaX=self.processing_props[&#39;sigma&#39;]))</span>
 
         <span class="n">region</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span
             class="n">normalize</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span

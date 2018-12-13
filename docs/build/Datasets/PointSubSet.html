@@ -186,8 +186,10 @@
                                             <td>Return nX1 ndarray of intensity values</td>
                                         </tr>
                                         <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">Size</span></code></td>
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.Size"
+                                                   title="PointSubSet.PointSubSet.Size"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Size</span></code></a></td>
                                             <td>
                                                 <table class="docutils field-list" frame="void" rules="none">
                                                     <col class="field-name"/>
@@ -275,10 +277,14 @@
                                             <td>Add data to a field</td>
                                         </tr>
                                         <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">GetPoint</span></code>(index)
+                                            <td><a class="reference internal" href="#PointSubSet.PointSubSet.GetPoint"
+                                                   title="PointSubSet.PointSubSet.GetPoint"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">GetPoint</span></code></a>(index)
                                             </td>
-                                            <td>Retrieve specific point(s) by index</td>
+                                            <td>Retrieve specific point(s) by index (when the index is according to the
+                                                subset and not to the original set)
+                                            </td>
                                         </tr>
                                         <tr class="row-odd">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
@@ -304,9 +310,7 @@
                                                     class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">ToNumpy</span></code></a>()
                                             </td>
-                                            <td>Return the points as numpy nX3 ndarray (incase we change the type of
-                                                __xyz in the future)
-                                            </td>
+                                            <td>Return the points as numpy nX3 ndarray</td>
                                         </tr>
                                         <tr class="row-odd">
                                             <td><a class="reference internal" href="#PointSubSet.PointSubSet.ToPolyData"
@@ -370,6 +374,36 @@
                                         </dd>
                                     </dl>
 
+                                    <dl class="method">
+                                        <dt id="PointSubSet.PointSubSet.GetPoint">
+                                            <code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../_modules/PointSubSet.html#PointSubSet.GetPoint"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#PointSubSet.PointSubSet.GetPoint"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Retrieve specific point(s) by index (when the index is according to the
+                                            subset and not to the original set)</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>index</strong> – the index of the
+                                                        point to return
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">specific point/s as numpy nX3 ndarray</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
                                     <dl class="attribute">
                                         <dt id="PointSubSet.PointSubSet.Intensity">
                                             <code class="descname">Intensity</code><a class="headerlink"
@@ -377,6 +411,26 @@
                                                                                       title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Return nX1 ndarray of intensity values</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="attribute">
+                                        <dt id="PointSubSet.PointSubSet.Size">
+                                            <code class="descname">Size</code><a class="headerlink"
+                                                                                 href="#PointSubSet.PointSubSet.Size"
+                                                                                 title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">number of points</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -389,8 +443,7 @@
                                                                                             href="#PointSubSet.PointSubSet.ToNumpy"
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
-                                        <dd><p>Return the points as numpy nX3 ndarray (incase we change the type of
-                                            __xyz in the future)</p>
+                                        <dd><p>Return the points as numpy nX3 ndarray</p>
                                         </dd>
                                     </dl>
 
@@ -465,12 +518,12 @@
 
 <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'../',
-        VERSION:'1a',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
         SOURCELINK_SUFFIX: '.txt'
     };
 </script>

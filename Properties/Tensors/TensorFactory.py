@@ -58,8 +58,9 @@ class TensorFactory(object):
         else:
             ref_point = points.GetPoint(point_index)
             points_array = points.ToNumpy()
-            points_array1 = points_array[point_index + 1:, :]
-            points_array2 = points_array[:point_index, :]
+            local_idx = np.nonzero(ref_point in points_array)
+            points_array1 = points_array[local_idx[0][0] + 1:, :]
+            points_array2 = points_array[:local_idx[0][0], :]
             points_array = np.vstack((points_array1, points_array2))
 
         # points_array = points.ToNumpy()
@@ -75,12 +76,12 @@ class TensorFactory(object):
         else:
             w = 1
 
-        t = TensorFactory.tensorGeneral(points_array, ref_point, weights=w)
+        t, _ = TensorFactory.tensorGeneral(points_array, ref_point, weights=w)
 
         return t
 
     @classmethod
-    def tensorGeneral(cls, arrays, ref_array=-1, weights=1):
+    def tensorGeneral(cls, arrays, ref_array=-1, weights=1, min_points=3):
         """
         Compute a general tensor (not necessarily 3D)
 
@@ -92,14 +93,24 @@ class TensorFactory(object):
 
         **Optionals**
         :param weights: the weights for the tensor computation. Default 1 for all
+        :param min_points: minimal number of points that can define a tensor (default: 3)
+
+        :type min_points: int
 
         :return: a tensor
 
         :rtype: Tensor
+
+        .. note::
+            If there are less than `min_point` the covariance matrix of the tensor will be defined as the Identity matrix (with the required shape)
         """
+        weights_axis = False  # flag for weights axes size
 
         if isinstance(ref_array, int) and ref_array == -1:
-            ref_array = np.mean(arrays, axis=1)
+            if len(arrays.shape) >= 2:
+                ref_array = np.mean(arrays, axis=0)
+            else:
+                ref_array = np.mean(arrays, axis=1)
 
         deltas = arrays - ref_array
 
@@ -107,12 +118,19 @@ class TensorFactory(object):
         if isinstance(weights, int) and weights == 1:
             weights = np.ones(arrays.shape[0])
 
+        while weights_axis is False:
+            weights = weights[:, np.newaxis]
+            if len(weights.shape) == len(deltas.shape):
+                weights_axis = True
         # Compute the covariance matrix of the arrays around the ref_array
-        covMat = (weights[:, None] * deltas).T.dot(deltas) / np.sum(weights)
+        covMat = (weights * deltas).T.dot(deltas) / np.sum(weights)
+
+        if arrays.shape[0] < min_points:
+            covMat = np.eye(covMat.shape[0])
 
         t = Tensor(covMat, ref_array, arrays.shape[0])
 
-        return t
+        return t, ref_array
 
 
     @classmethod
@@ -163,8 +181,8 @@ class TensorFactory(object):
         :param neighborhoodProperty: a property that holds all neighbors for each point (can be empty)
         :param neighborsFunc: the function to be used for neighbors search.
         :param kwargs: the arguments for the function to be used for neighbors search. These are usually:
-            :param radius: search radius for neighbors search
-            :param knn: k nearest neighbors for neighbors search
+        :param radius: search radius for neighbors search
+        :param knn: k nearest neighbors for neighbors search
 
         :type points: PointSet
         :type neighborhoodProperty: NeighborhoodProperty
@@ -184,17 +202,20 @@ class TensorFactory(object):
 
         """
         from PointSetOpen3D import PointSetOpen3D
+        print(""">>> Computing tensors for all points""")
 
         tensors = TensorProperty(points)
 
         if isinstance(neighborhoodProperty, NeighborsProperty):
             # in case the neighborhood was already defined
             for i in np.arange(points.Size):
+
                 neighbors = neighborhoodProperty.getNeighbors(i)
+
                 if neighbors == None:
                     continue
                 radius = neighbors.radius
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0, radius=radius))
 
         else:
             # compute neighbors and tensor at the same time
@@ -206,5 +227,7 @@ class TensorFactory(object):
 
                 neighbors = neighborsFunc(points, i, *kwargs, neighborsProperty=neighborhoodProperty)
                 radius = neighbors.radius
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+                # always around the first points, as the point around which the tensor is looked is the first on the
+                # neighbors list (the closest to itself)
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0, radius=radius))
         return tensors

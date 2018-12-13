@@ -45,7 +45,15 @@ class NeighborsProperty(BaseProperty):
 
         :rtype: Tensor
         """
-        return self.__pointsNeighborsArray[idx]
+        neighbors = self.__pointsNeighborsArray[idx]
+
+        if neighbors is None:
+            return neighbors
+
+        elif np.all(neighbors.neighborhoodIndices == idx):
+            neighbors = None
+
+        return neighbors
 
     def setNeighbor(self, idx, point_neighbor):
         """

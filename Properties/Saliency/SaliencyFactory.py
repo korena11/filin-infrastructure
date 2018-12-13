@@ -8,8 +8,8 @@ from TensorProperty import TensorProperty
 
 class SaliencyFactory(object):
 
-    @staticmethod
-    def pointwise_tensor_saliency(tensor_property, principal_components_number=3, weights=1):
+    @classmethod
+    def pointwise_tensor_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
         r"""
         Compute saliency according to PCA (tensors) similarity.
 
@@ -51,10 +51,12 @@ class SaliencyFactory(object):
         :param tensor_property: the patches or neighbors of all points
         :param principal_components_number: the number of principal components to use. Default: 3.
         :param weights: weights for the k-th principal component. Default: all equal 1
+        :param verbose: print running comments (Default: False)
 
         :type tensor_property: TensorProperty
         :type principal_components_number: int
         :type weights: np.array
+        :type verbose: bool
 
         :return: saliency property for the cloud
 
@@ -66,25 +68,36 @@ class SaliencyFactory(object):
         if isinstance(weights, int) and weights == 1:
             # if there are no specific weights for k -- all equal 1.
             weights = np.ones(principal_components_number)
-
+        counter = 0
+        print('>>> Compute sigma-sets for all tensors')
         for tensor in tensor_property.GetAllPointsTensors():
-            S.append(SaliencyFactory.__computeSigmaSet(tensor))
 
+            counter += 1
+            # if verbose:
+            #     print(counter)
+            if tensor is None:
+                S.append(np.zeros((principal_components_number * 2 * principal_components_number)))
+            else:
+                S.append(SaliencyFactory.__computeSigmaSet(tensor, verbose=verbose))
 
-        Sarray = np.array(S)
+        Sarray = np.stack(S, axis=0)
         # compute tensor around S_AVG
         s_tensor, S_ref = TensorFactory.tensorGeneral(Sarray)
 
         # Rotate according to the k-lowest
-        eigenvectors = s_tensor.eigenvectors[principal_components_number, :]
-        S_eigenvectors = np.diag(Sarray.dot(eigenvectors.T))
-        G = np.sum(weights * np.abs(S_eigenvectors))
+        print('>>> Compute eigenvectors and projection on the average sigma-set')
+        eigenvectors = s_tensor.eigenvectors[:principal_components_number, :]
+        S_eigenvectors = (Sarray.dot(eigenvectors.T))
+        G = np.sum(weights * np.abs(S_eigenvectors), axis=1)
+        if verbose:
+            print('G', G)
+            print('S_eigenvectors', S_eigenvectors)
 
 
         return SaliencyProperty(tensor_property.Points, G)
 
-    @staticmethod
-    def range_saliency(points, threshold):
+    @classmethod
+    def range_saliency(cls, points, threshold):
         """
         Compute saliency as a function of the distance from a common plane. Points above a specific threshold their saliency will be set to zero.
 
@@ -154,22 +167,27 @@ class SaliencyFactory(object):
 
 
     @staticmethod
-    def __computeSigmaSet(tensor):
+    def __computeSigmaSet(tensor, verbose=False):
         """
         Compute the sigma set of a tensor
 
         :param tensor: the tensor for which the sigma set will be computed
+        :param verbose: print running comments (default: False)
 
         :type tensor: Tensor
+        :type verbose: bool
 
         :return: sigma set
 
         :rtype: np.array
         """
-        print(tensor.covariance_matrix)
+
+        if verbose:
+            print(tensor.covariance_matrix)
         M = np.linalg.cholesky(tensor.covariance_matrix)
+
         d = tensor.covariance_matrix.ndim
         alpha = np.sqrt(d)
 
         # sigma set:
-        return np.hstack((alpha * M, -alpha * M))
+        return np.hstack(((alpha * M).flatten(), (-alpha * M).flatten()))

@@ -139,7 +139,7 @@ class CurvatureFactory:
         :param delete_non_computed: flag to delete or leave points that their curvature wasn't calculated. If False, these curvature values are set to -999. Default: False
 
         :type curves_path: str
-        :type pointset3d: PointSetOpen3D
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
         :type localNeighborhoodParameters: dict
         :type verbose: bool
         :type delete_non_computed: bool
@@ -148,6 +148,7 @@ class CurvatureFactory:
         :rtype: CurvatureProperty
 
         """
+        import open3d as O3D
         search_radius = localNeighborhoodParameters['search_radius']
         max_nn = localNeighborhoodParameters['maxNN']
 
@@ -176,7 +177,8 @@ class CurvatureFactory:
                                           converters={0: lambda s: float(s.strip()),
                                                       1: lambda s: float(s.strip()),
                                                       2: lambda s: float(s.strip())})
-                pointset3d.pointsOpen3D.normals = normals_load
+                pointset3d.pointsOpen3D.normals = O3D.Vector3dVector(normals_load)
+
 
                 if verbose:
                     print(

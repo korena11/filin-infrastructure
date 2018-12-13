@@ -63,7 +63,6 @@ class PanoramaFactory:
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
                                         elevationSpacing=elevationSpacing, **kwargs)
-
         else:
             #  intensity as pixel value
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, points.Intensity,

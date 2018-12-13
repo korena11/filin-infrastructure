@@ -454,17 +454,26 @@
 <div class="viewcode-block" id="ReadLAS"><a class="viewcode-back"
                                             href="../IOFactory.html#ReadFunctions.ReadLAS">[docs]</a><span
         class="k">def</span> <span class="nf">ReadLAS</span><span class="p">(</span><span class="n">filename</span><span
-        class="p">):</span>
+        class="p">,</span> <span class="n">classification</span><span class="o">=</span><span
+        class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    .. warning:: Not implemented.</span>
+<span class="sd">    Reads LAS or LAZ files</span>
 
-<span class="sd">    :param filename:</span>
+<span class="sd">    :param filename: path to LAS or LAZ</span>
+<span class="sd">    :param classification: return a SegmentationProperty according to the LAS file or not (default: False)</span>
 
-<span class="sd">    :return:</span>
+<span class="sd">    :type filename: str</span>
+<span class="sd">    :type classification: bool</span>
+
+<span class="sd">    :return: pointcloud, (classification as received from LAS file)</span>
+<span class="sd">    :rtype: PointSet, SegmentationProperty</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">laspy.file</span> <span class="k">as</span> <span
-            class="nn">lasfile</span>
+    <span class="kn">from</span> <span class="nn">laspy</span> <span class="k">import</span> <span class="n">file</span> <span
+            class="k">as</span> <span class="n">lasfile</span>
+    <span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span
+            class="n">SegmentationProperty</span>
+
     <span class="k">with</span> <span class="n">lasfile</span><span class="o">.</span><span class="n">File</span><span
             class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span
             class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span
@@ -477,15 +486,22 @@
             class="n">Z</span>
 
         <span class="n">pcl</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span
-            class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">((</span><span
-            class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span
-            class="n">z</span><span class="p">)),</span> <span class="n">path</span><span class="o">=</span><span
-            class="n">filename</span><span class="p">,</span> <span class="n">intensity</span><span
-            class="o">=</span><span class="n">infile</span><span class="o">.</span><span class="n">Intensity</span><span
-            class="p">)</span>
+            class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span
+            class="n">x</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span
+            class="n">y</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span
+            class="n">z</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])),</span> <span
+            class="n">path</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span> <span
+            class="n">intensity</span><span class="o">=</span><span class="n">infile</span><span class="o">.</span><span
+            class="n">Intensity</span><span class="p">)</span>
 
-
-        <span class="k">return</span></div>
+        <span class="k">if</span> <span class="n">classification</span><span class="p">:</span>
+            <span class="n">segmentation</span> <span class="o">=</span> <span
+            class="n">SegmentationProperty</span><span class="p">(</span><span class="n">pcl</span><span
+            class="p">,</span> <span class="n">infile</span><span class="o">.</span><span
+            class="n">Classification</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">pcl</span><span class="p">,</span> <span class="n">segmentation</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pcl</span></div>
 
 
 

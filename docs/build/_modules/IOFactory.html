@@ -444,6 +444,31 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
             class="n">pointsetlist</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="IOFactory.ReadLAS"><a class="viewcode-back"
+                                                      href="../IOFactory.html#IOFactory.IOFactory.ReadLAS">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">ReadLAS</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">classification_flag</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads LAS or LAZ file. Can return classification property in addition to the point cloud</span>
+
+<span class="sd">        :param fileName: path to file (LAS or LAZ)</span>
+<span class="sd">        :param classification_flag: a flag whether to return a classification property or not (default: False)</span>
+
+<span class="sd">        :type fileName: str</span>
+<span class="sd">        :type classification_flag: bool</span>
+
+<span class="sd">        :return: pointcloud, classification</span>
+
+<span class="sd">        :rtype: PointSet, ClassificationProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pcl</span> <span class="o">=</span> <span class="n">ReadFunctions</span><span class="o">.</span><span
+            class="n">ReadLAS</span><span class="p">(</span><span class="n">fileName</span><span
+            class="p">,</span> <span class="n">classification_flag</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pcl</span></div>
+
 <div class="viewcode-block" id="IOFactory.ReadShapeFile"><a class="viewcode-back"
                                                             href="../IOFactory.html#IOFactory.IOFactory.ReadShapeFile">[docs]</a>    <span
         class="nd">@classmethod</span>

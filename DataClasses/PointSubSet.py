@@ -14,10 +14,20 @@ class PointSubSet(PointSet):
 
         if isinstance(points, PointSet):
             self.data = points
+
         else:
             super(PointSubSet, self).__init__(points)
 
         self.indices = indices
+
+    @property
+    def Size(self):
+        """
+        :return: number of points
+
+        """
+        from numpy import array
+        return array(self.indices).shape[0]
 
     @property
     def GetIndices(self):
@@ -32,20 +42,36 @@ class PointSubSet(PointSet):
         Return nX1 ndarray of intensity values 
         """
         import numpy as np
-        intensity = self.Intensity
-        if isinstance(intensity, np.ndarray):
-            return self.Intensity[self.indices]
+        if isinstance(self.data, PointSet):
+            intensity = self.data.Intensity
         else:
-            return np.asarray(self.Intensity)[self.indices]
+            intensity = self.__intensity
+        if isinstance(intensity, np.ndarray):
+            return intensity[self.indices]
+        else:
+            return np.asarray(intensity)[self.indices]
+
+    def GetPoint(self, index):
+        """
+           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)
+
+           :param index: the index of the point to return
+
+           :return: specific point/s as numpy nX3 ndarray
+        """
+        return self.ToNumpy()[index, :]
+
 
     def ToNumpy(self):
         """
-        Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the future)
-        
-
+        Return the points as numpy nX3 ndarray
         """
-        from numpy import array
-        return array(self.data)[self.indices, :]
+        from numpy import ndarray
+        if isinstance(self.data, PointSet):
+            return self.data.ToNumpy()[self.indices, :]
+        elif isinstance(self.data, ndarray):
+            return self.data[self.indices, :]
+
 
     def ToPolyData(self):
         """

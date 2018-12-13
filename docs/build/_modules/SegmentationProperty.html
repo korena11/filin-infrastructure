@@ -159,7 +159,7 @@
 <span class="sd">        :param points: reference to points</span>
 <span class="sd">        :param segments: segmentation labels for each point</span>
 
-<span class="sd">        :type points: PointSubSet or PointSet</span>
+<span class="sd">        :type points: PointSubSet, PointSet</span>
 <span class="sd">        :type segments: nx1 nd-array</span>
 <span class="sd">            </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -192,11 +192,18 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span
             class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
             class="n">nPoints</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span><span
-            class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span
-            class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__segmentsColors</span><span class="p">[</span><span class="n">segments</span><span
-            class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span><span class="p">[</span><span
+            class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__segmentsColors</span><span
+            class="p">[</span><span class="n">segments</span><span class="p">[</span><span class="n">i</span><span
+            class="p">]]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rgb</span><span class="p">[</span><span
+            class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__segmentsColors</span><span
+            class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
             
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">RGB</span><span class="p">(</span><span class="bp">self</span><span

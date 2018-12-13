@@ -143,8 +143,9 @@
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">points</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span
-            class="o">=</span> <span class="n">points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointSet</span> <span class="o">=</span> <span
+            class="n">points</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">super</span><span class="p">(</span><span class="n">PointSubSet</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
@@ -152,6 +153,20 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span
             class="o">=</span> <span class="n">indices</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: number of points</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+            class="n">array</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">GetIndices</span><span class="p">(</span><span
@@ -170,34 +185,45 @@
         <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
             class="nn">np</span>
         <span class="n">intensity</span> <span class="o">=</span> <span class="bp">self</span><span
-            class="o">.</span><span class="n">Intensity</span>
+            class="o">.</span><span class="n">pointSet</span><span class="o">.</span><span class="n">Intensity</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
             class="n">intensity</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span
             class="n">ndarray</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">Intensity</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">indices</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">intensity</span><span class="p">[</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">Intensity</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span
-            class="n">indices</span><span class="p">]</span>
+            class="n">asarray</span><span class="p">(</span><span class="n">intensity</span><span
+            class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span
+            class="p">]</span>
+
+<div class="viewcode-block" id="PointSubSet.GetPoint"><a class="viewcode-back"
+                                                         href="../Datasets/PointSubSet.html#PointSubSet.PointSubSet.GetPoint">[docs]</a>    <span
+        class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)</span>
+
+<span class="sd">           :param index: the index of the point to return</span>
+
+<span class="sd">           :return: specific point/s as numpy nX3 ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">()[</span><span class="n">index</span><span class="p">,:]</span></div>
+
 
 <div class="viewcode-block" id="PointSubSet.ToNumpy"><a class="viewcode-back"
                                                         href="../Datasets/PointSubSet.html#PointSubSet.PointSubSet.ToNumpy">[docs]</a>    <span
         class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span
         class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the points as numpy nX3 ndarray (incase we change the type of __xyz in the future)</span>
-<span class="sd">        </span>
-
+<span class="sd">        Return the points as numpy nX3 ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
-            class="n">array</span>
-        <span class="k">return</span> <span class="n">array</span><span class="p">(</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[</span><span
-            class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span
-            class="p">:]</span></div>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">pointSet</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span
+            class="p">,</span> <span class="p">:]</span></div>
 
 <div class="viewcode-block" id="PointSubSet.ToPolyData"><a class="viewcode-back"
                                                            href="../Datasets/PointSubSet.html#PointSubSet.PointSubSet.ToPolyData">[docs]</a>    <span

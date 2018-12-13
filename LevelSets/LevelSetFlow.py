@@ -9,10 +9,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 import MyTools as mt
-import Saliency as sl
 from LevelSetFunction import LevelSetFunction
 from RasterData import RasterData
-from SaliencyFactory import SaliencyFactory
 
 EPS = np.finfo(float).eps
 
@@ -471,65 +469,13 @@ class LevelSetFlow:
         self.__f = f
         self.__f_x, self.__f_y = mt.computeImageDerivatives(f, 1, **kwargs)
 
-    def init_region(self, region_method, **kwargs):
+    def init_region(self, region):
         """
-        Initializes region function
+        Initializes region function. Normalizes between (-1,1)
 
-        :param region_method: type of the region wanted: 'classification', 'saliency'.
-        :param img_index: the self.img according to which the region will be computed
-
-        :type img_index: [int, PointSet]
-
-        *Inputs according to method:*
-
-        - saliency: inputs according to :py:meth:`~Saliency.distance_based`
-
-        - classification:
-
-        - range_saliency:
-
-        :param winSizes: array or list with different window sizes for classification
-        :param class: the classes which are looked for.
+        :param region: region function initialize
 
         """
-        sigma = kwargs.get('sigma', 2.5)
-        index = kwargs.get('img_index', 0)
-
-        if region_method == 'saliency':
-            inputs = {'feature': 'normals',
-                      'method': 'frequency',
-                      'dist_type': 'Euclidean',
-                      'filter_sigma': [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma],
-                      'filter_size': 0,
-                      'scales_number': 3,
-                      'verbose': True}
-            inputs.update(kwargs)
-
-            region = sl.distance_based(self.img(index), **inputs)
-        elif region_method == 'range_saliency':
-
-            inputs = {'range': 2.}
-            inputs.update(kwargs)
-            region = SaliencyFactory.range_saliency(index, 4)
-            from PanoramaFactory import PanoramaFactory
-            region = PanoramaFactory.CreatePanorama_byProperty(region, 0.03, 0.016, voidData=0).PanoramaImage
-
-        elif region_method == 'PCA_Sacliency':
-
-            saliency_property = SaliencyFactory.pointwise_tensor_saliency()
-
-        elif region_method == 'classification':
-            inputs = {'winSizes', np.linspace(0.1, 10, 5),
-                      'class', 1}
-            inputs.update(kwargs)
-
-            from ClassificationFactory import ClassificationFactory as Cf
-            classified, percentMap = Cf.SurfaceClassification(self.img(index), inputs['winSizes'])
-            region = classified.classification(inputs['class'])
-
-        # region = np.log(255 - cv2.GaussianBlur(region,
-        #                                        ksize=(self.processing_props['ksize'], self.processing_props['ksize']),
-        #                                        sigmaX=self.processing_props['sigma']))
 
         region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region

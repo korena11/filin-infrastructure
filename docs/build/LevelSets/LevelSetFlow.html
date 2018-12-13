@@ -416,9 +416,9 @@
                                                    href="#LevelSetFlow.LevelSetFlow.init_region"
                                                    title="LevelSetFlow.LevelSetFlow.init_region"><code
                                                     class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">init_region</span></code></a>(region_method,&nbsp;**kwargs)
+                                                    class="pre">init_region</span></code></a>(region)
                                             </td>
-                                            <td>Initializes region function</td>
+                                            <td>Initializes region function.</td>
                                         </tr>
                                         <tr class="row-odd">
                                             <td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.moveLS"
@@ -1055,65 +1055,22 @@
                                     <dl class="method">
                                         <dt id="LevelSetFlow.LevelSetFlow.init_region">
                                             <code class="descname">init_region</code><span
-                                                class="sig-paren">(</span><em>region_method</em>, <em>**kwargs</em><span
+                                                class="sig-paren">(</span><em>region</em><span
                                                 class="sig-paren">)</span><a class="reference internal"
                                                                              href="../_modules/LevelSetFlow.html#LevelSetFlow.init_region"><span
                                                 class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                                             href="#LevelSetFlow.LevelSetFlow.init_region"
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
-                                        <dd><p>Initializes region function</p>
+                                        <dd><p>Initializes region function. Normalizes between (-1,1)</p>
                                             <table class="docutils field-list" frame="void" rules="none">
                                                 <col class="field-name"/>
                                                 <col class="field-body"/>
                                                 <tbody valign="top">
                                                 <tr class="field-odd field">
                                                     <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>region_method</strong> – type of the region
-                                                                wanted: ‘classification’, ‘saliency’.
-                                                            </li>
-                                                            <li><strong>img_index</strong> (<em>[</em><a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#int"
-                                                                    title="(in Python v3.7)"><em>int</em></a><em>, </em><a
-                                                                    class="reference internal"
-                                                                    href="../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet</em></a><em>]</em>)
-                                                                – the self.img according to which the region will be
-                                                                computed
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <p><em>Inputs according to method:</em></p>
-                                            <ul class="simple">
-                                                <li>saliency: inputs according to <a class="reference internal"
-                                                                                     href="Saliency.html#Saliency.distance_based"
-                                                                                     title="Saliency.distance_based"><code
-                                                        class="xref py py-meth docutils literal notranslate"><span
-                                                        class="pre">distance_based()</span></code></a></li>
-                                                <li>classification:</li>
-                                                <li>range_saliency:</li>
-                                            </ul>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>winSizes</strong> – array or list with different
-                                                                window sizes for classification
-                                                            </li>
-                                                            <li><strong>class</strong> – the classes which are looked
-                                                                for.
-                                                            </li>
-                                                        </ul>
+                                                    <td class="field-body"><strong>region</strong> – region function
+                                                        initialize
                                                     </td>
                                                 </tr>
                                                 </tbody>

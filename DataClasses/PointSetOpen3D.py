@@ -16,7 +16,8 @@ class PointSetOpen3D(PointSet):
     def __init__(self, inputPoints):
         if not isinstance(inputPoints, PointSet):
             self.pointSet = super(PointSetOpen3D, self).__init__(inputPoints)
-
+        else:
+            self.pointSet = inputPoints
         self.pointsOpen3D = None
         self.originalPointsOpen3D = None  # Will be useful only if down sampling was performed. This stores the original
 
