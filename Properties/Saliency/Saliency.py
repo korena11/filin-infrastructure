@@ -339,7 +339,7 @@ def __regionConstrast(image, region1_size):
     return np.array([map_R1 - map_R2 for map_R2 in maps_R2])
 
 
-def __contextAware(image, ksize, image_feature, **kwargs):
+def _contextAware(image, ksize, image_feature, **kwargs):
     """
     Saliency computed according to :cite:`Goferman.etal2012`
 

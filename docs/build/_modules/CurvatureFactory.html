@@ -378,6 +378,8 @@
 <span class="sd">        :rtype: CurvatureProperty</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span
+            class="nn">O3D</span>
         <span class="n">search_radius</span> <span class="o">=</span> <span class="n">localNeighborhoodParameters</span><span
             class="p">[</span><span class="s1">&#39;search_radius&#39;</span><span class="p">]</span>
         <span class="n">max_nn</span> <span class="o">=</span> <span class="n">localNeighborhoodParameters</span><span
@@ -438,8 +440,10 @@
             class="n">s</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span
             class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">())})</span>
                 <span class="n">pointset3d</span><span class="o">.</span><span class="n">pointsOpen3D</span><span
-            class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span
-            class="n">normals_load</span>
+            class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">O3D</span><span
+            class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span
+            class="n">normals_load</span><span class="p">)</span>
+
 
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
