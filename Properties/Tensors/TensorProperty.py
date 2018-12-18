@@ -24,6 +24,25 @@ class TensorProperty(BaseProperty):
 
         self.__tensors = np.empty(points.Size, Tensor)
 
+        # --------- To make the object iterable ---------
+        self.current = 0
+        # --------- To make the object iterable ---------
+        self.current = 0
+
+    # ---------- Definitions to make iterable -----------
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.getTensor(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
+
+    # --------end definitions for iterable object-----------
+
     def setValues(self, idx, tensor):
         """
         Sets the tensor for an index

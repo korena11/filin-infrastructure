@@ -10,7 +10,6 @@ from TensorProperty import TensorProperty
 
 class SaliencyFactory(object):
 
-
     @classmethod
     def pointwise_tensor_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
         r"""
@@ -138,7 +137,6 @@ class SaliencyFactory(object):
             s2 = Saliency.Factory.panorama_frequency(normals_panorama, filters= [3, 5, 7],
             feature = 'pixel_val')
         """
-        import cv2
 
         image = panorama_property.PanoramaImage.astype(np.float32)
 
@@ -217,7 +215,7 @@ class SaliencyFactory(object):
         k_R1 = np.ones((region_size, region_size)) * (1 / region_size ** 2)
 
         row_size, column_size = image.shape[:2]
-        k_R2 = [np.ones((ksize, ksize)) / ksize ** 2 for ksize in [row_size / 2, row_size / 4, row_size / 8]]
+        k_R2 = [np.ones((int(ksize), int(ksize))) / ksize ** 2 for ksize in [row_size / 2, row_size / 4, row_size / 8]]
 
         # 2. Create convoluted map according to region1
         map_R1 = cv2.filter2D(image, -1, k_R1)
@@ -235,10 +233,14 @@ class SaliencyFactory(object):
         return np.mean(saliency_map, axis=0)
 
     @classmethod
-    def panorama_context(cls, panorama_property, scale_r, scales_number=3, feature='pixel_val',
+    def panorama_context(cls, panorama_property, scale_r, scales_number=4, feature='pixel_val',
                          kpatches=64, constant=3, verbose=False):
         r"""
         Compute context saliency (position based) for panorama property (its image)
+
+        .. warning::
+
+            This saliency measure is not implemented correctly and should be reviewed and rewritten
 
         Saliency is computed based on the distances between regions and their positions :cite:`Goferman.etal2012`.
 
@@ -247,10 +249,10 @@ class SaliencyFactory(object):
 
             .. math::
 
-                R_q=\left{ r, \frac{1}{2}r, \frac{1}{4}r,...}
+                R_q=\left\{ r, \frac{1}{2}r, \frac{1}{4}r,...\right\}
 
             according scales_number
-        :param scales_number: the number of scales that should be computed. default 3.
+        :param scales_number: the number of scales that should be computed. default 4.
         :param feature: according to which property the saliency is computed, can be:
 
             - 'pixel_val' - the value of the pixel itself
@@ -374,9 +376,11 @@ class SaliencyFactory(object):
     @classmethod
     def __contextAware(cls, image, ksize, image_feature, kpatches=64, c=3, verbose=False):
         """
-        Saliency computed according to :cite:`Goferman.etal2012`
+        Saliency computed according to :cite:`Goferman.etal2012` for one scale.
 
-        only one scale.
+           .. warning::
+
+            This saliency measure is not implemented correctly and should be reviewed and rewritten
 
         :param image: image on which the saliency is computed
         :param ksize: the sizes of the patches
@@ -451,6 +455,10 @@ class SaliencyFactory(object):
     def __dcolor(cls, p_i, image, image_feature, kpatches, verbose=False):
         '''
         computes the most similar patch to a patch i and their indices
+
+           .. warning::
+
+            This  measure is not implemented correctly and should be reviewed and rewritten
 
         :param p_i: the patch to which the comparison is made
         :param vector: all other patches

@@ -184,6 +184,7 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
+        new_function = cv2.normalize(new_function, -1., 1, cv2.NORM_MINMAX)
         self.__value = new_function
         self.__ls_derivatives_curvature()
         if 'regularization_note' in list(kwargs.keys()):

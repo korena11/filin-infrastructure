@@ -77,13 +77,20 @@ class PanoramaFactory:
 
     @classmethod
     def CreatePanorama_byProperty(cls, pointSet_property, azimuthSpacing=0.057, elevationSpacing=0.057,
-                                  intensity=False, **kwargs):
+                                  intensity=False, property_array=None, **kwargs):
         """
         Creates panorama with the property as the values of the pixels.
 
         :param pointSet_property: any PointSet property according to which the pixel's value should be
         :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
+        :param property_array: if the values of the property to present cannot be retrieved by a simple ``getValues()``
+
+        .. code-block:: python
+
+            PanoramaFactory.CreatePanorama_byProperty(curvatureProperty, azimuthSpacing=0.057, elevationSpacing=0.057,
+                                  intensity=False, property_array=curvatureProperty.k1)
+
         :param intensity: if the pixel's value should be the intensity value.
         :param voidData: the number to set where there is no data
         :param void_as_mean: flag to determine the void value as the mean value of the ranges
@@ -92,6 +99,7 @@ class PanoramaFactory:
         :type azimuthSpacing: float
         :type elevationSpacing: float
         :type inensity: bool
+        :type property_array: numpy.array
         :type void_as_mean: bool
         :type voidData: float
 
@@ -99,8 +107,10 @@ class PanoramaFactory:
         :rtype: PanoramaProperty
 
         """
+        import numpy as np
 
         void_as_mean = kwargs.get('void_as_mean', False)
+
 
         if isinstance(pointSet_property, SphericalCoordinatesProperty):
             sphCoords = pointSet_property
@@ -114,6 +124,12 @@ class PanoramaFactory:
 
         if not intensity:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing, **kwargs)
+
+        elif np.all(property_array is not None):
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, property_array,
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
                                         elevationSpacing=elevationSpacing, **kwargs)

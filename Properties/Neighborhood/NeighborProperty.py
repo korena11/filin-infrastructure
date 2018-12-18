@@ -26,6 +26,22 @@ class NeighborsProperty(BaseProperty):
         super(NeighborsProperty, self).__init__(points)
         self.__pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
 
+        # --------- To make the object iterable ---------
+        self.current = 0
+
+    # ---------- Definitions to make iterable -----------
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.getNeighbors(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
+
+    # --------end definitions for iterable object-----------
     def GetAllPointsNeighbors(self):
         """
         All neighbors of all computed points
@@ -35,15 +51,15 @@ class NeighborsProperty(BaseProperty):
 
     def getNeighbors(self, idx):
         """
-        Retrieve a tensor of point(s) with idx index
+        Retrieve a neighborhood of point(s) with idx index
 
         :param idx: the index of the point
 
-        :type idx: int or tuple or list
+        :type idx: int, tuple, list
 
         :return: the tensor of point idx
 
-        :rtype: Tensor
+        :rtype: PointNeighborhood
         """
         neighbors = self.__pointsNeighborsArray[idx]
 

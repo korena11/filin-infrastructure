@@ -34,7 +34,7 @@ class NeighborsFactory:
         :param rotate: flag whether to rotate the neighborhood or not. Default: False
         :param useOriginal: default: False
 
-        :type pointset3d: PointSetOpen3D
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
         :type idx: int or np.ndarray
         :type searchRadius: float
         :type maxNN: int
@@ -133,7 +133,26 @@ class NeighborsFactory:
         return pointNeighborhood
 
     @staticmethod
-    def CalculateAllPointsNeighbors(pointset, searchRadius=0.05, maxNN=20, maxProcesses=8):
+    def CalculateAllPointsNeighbors(pointset, search_radius=0.05, maxNN=20, maxProcesses=8):
+        """
+        Compute all points neighbors within search radius with maximal number of neighbors.
+
+
+        :param pointset: a point cloud
+        :param search_radius: the radius in which the neighbors are collected. Default: 0.05m
+        :param maxNN: maximum points per neighborhood. Default: 20
+        :param maxProcesses: ** for later use **
+
+        :type pointset: np.array, PointSet.PointSet, PointSetOpen3D.PointSetOpen3D
+
+        :return: neighbors property where each point has a PointNeighborhood defined.
+
+        :rtype: NeighborsProperty
+
+        .. warning::
+
+            Currently, the number of processes does not work
+        """
         # threadsList = []
         # pointsIndices = np.arange(self.numberOfPoints)
         # splitIndices = np.array_split(pointsIndices, maxProcesses)
@@ -154,7 +173,7 @@ class NeighborsFactory:
 
         pointsIndices = np.arange(pointset.Size)
         neighbors = NeighborsProperty(pointset)
-        NeighborsFactory.GetPointNeighborsByID(pointset, pointsIndices, searchRadius, maxNN, False,
+        NeighborsFactory.GetPointNeighborsByID(pointset, pointsIndices, search_radius, maxNN, False,
                                                neighbors)
         return neighbors
 

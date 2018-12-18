@@ -5,7 +5,6 @@
 import functools
 
 import numpy as np
-from numpy import ndarray
 
 import RotationUtils
 from CurvatureProperty import CurvatureProperty
@@ -19,6 +18,62 @@ class CurvatureFactory:
     '''
     curvature parameters computation
     '''
+
+    @classmethod
+    def curvatures_givenTensors(cls, tensorProperty, min_points=5):
+        r"""
+        Compute curvature based on PCA (tensors)
+
+        Curvature for tensors that have less points than min_points will not be computed.
+
+        :param tensorProperty: the tensors of the points cloud (precomputed)
+        :param min_points: minimum points required to compute curvature for a point
+
+        :type tensorProperty: TensorProperty.TensorProperty
+
+        :return: Curvature property
+
+        :rtype: CurvatureProperty
+        """
+        k1 = []
+        k2 = []
+        # Find normal to tensors
+        for tensor in tensorProperty:
+            num_pts = tensor.points_number
+            if num_pts > min_points:
+                eigVec = tensor.eigenvectors
+                eigVals = tensor.eigenvalues
+
+                normP = eigVec[:, np.where(eigVals == np.min(eigVals))[0][0]]
+                pnt = tensor.reference_point
+
+                # if a normal of a neighborhood is in an opposite direction rotate it 180 degrees
+                if np.linalg.norm(pnt, 2) < np.linalg.norm(pnt + normP, 2):
+                    normP = -normP
+                n = np.array([0, 0, 1])
+
+                # rotate the neighborhood to xy plane
+                rot_mat = RotationUtils.Rotation_2Vectors(normP, n)
+
+                neighbors = (np.dot(rot_mat, tensor.points.T)).T
+                pnt = np.array([0, 0, 0])
+
+                p = CurvatureFactory.__BiQuadratic_Surface(np.vstack((neighbors)))
+                Zxx = 2 * p[0]
+                Zyy = 2 * p[1]
+                Zxy = p[2]
+
+                k1.append((((Zxx + Zyy) + np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)[0])
+                k2.append((((Zxx + Zyy) - np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)[0])
+            else:
+                k1.append(-999)
+                k2.append(-999)
+
+        k1 = np.asarray(k1)
+        k2 = np.asarray(k2)
+        curvature = np.vstack((k1, k2))
+        return CurvatureProperty(tensorProperty.Points, curvature)
+
 
     @classmethod
     def Curvature_FundamentalForm(cls, ind, points, search_radius, max_nn=20, tree=None, ):
@@ -67,6 +122,7 @@ class CurvatureFactory:
         :rtype: np.ndarray
 
         '''
+        pnt = points.GetPoint(ind)
         from PointSetOpen3D import PointSetOpen3D
         # find point's neighbors in a radius
         if isinstance(points, PointSetOpen3D):
@@ -75,7 +131,7 @@ class CurvatureFactory:
             neighbors = neighbors_diff.neighbors
 
             if neighbors_diff.numberOfNeighbors - 1 > 5:
-                point_quality = CurvatureFactory.__good_point(neighbors)
+                point_quality = CurvatureFactory.__good_point(neighbors, pnt)
 
             else:
                 k1, k2 = -999, -999
@@ -84,11 +140,10 @@ class CurvatureFactory:
         else:
             neighbor, tree = NeighborsFactory.GetNeighborsIn3dRange_KDtree(ind, points, search_radius, tree)
             neighbors = neighbor.ToNumpy()
-            pnt = points.GetPoint(ind)
 
             # if there are more than 5 neighbors normals can be computed via PCA, if less -- the curvature won't be
             # computed
-            if neighbors[1::, :].shape[0] > 5:
+            if neighbors.shape[0] - 1 > 5:
                 neighbors = (neighbors - np.repeat(np.expand_dims(pnt, 0), neighbors.shape[0], 0))[1::, :]
                 eigVal, eigVec = EigenFactory.eigen_PCA(neighbors, search_radius)
 
@@ -102,13 +157,13 @@ class CurvatureFactory:
                 rot_mat = RotationUtils.Rotation_2Vectors(normP, n)
 
                 neighbors = (np.dot(rot_mat, neighbors.T)).T
-                pnt = np.array([0, 0, 0])
-                point_quality = CurvatureFactory.__good_point(neighbors)
+                # pnt = np.array([0, 0, 0])
+                point_quality = CurvatureFactory.__good_point(neighbors, pnt)
             else:
                 k1, k2 = -999, -999
                 return np.array([k1, k2])
 
-        if point_quality == 1:
+        if point_quality:
             p = CurvatureFactory.__BiQuadratic_Surface(np.vstack((neighbors)))
             Zxx = 2 * p[0]
             Zyy = 2 * p[1]
@@ -179,7 +234,6 @@ class CurvatureFactory:
                                                       2: lambda s: float(s.strip())})
                 pointset3d.pointsOpen3D.normals = O3D.Vector3dVector(normals_load)
 
-
                 if verbose:
                     print(
                         ">>> Calculating points normals. Neighborhood Parameters - r:" + str(
@@ -211,8 +265,13 @@ class CurvatureFactory:
                                       search_radius=search_radius,
                                       max_nn=max_nn), range(len(pointset3d.pointsOpen3D.points))))
             curves_data = np.array(curves_data)
-            np.savetxt(curves_path, curves_data)
-            curves = CurvatureProperty(pointset3d, curves_data)
+            if np.all(curves_data == -999):
+                import warnings
+                warnings.warn('No curvature was computed. All conditions for computataion failed')
+                return 1
+            else:
+                np.savetxt(curves_path, curves_data)
+                curves = CurvatureProperty(pointset3d, curves_data)
 
         print("Number of curvatures computed before filterization: ", (curves.Size))
         if delete_non_computed:
@@ -231,7 +290,7 @@ class CurvatureFactory:
         :param sigma: for Gaussian blurring
         :param gradientType: 'L1' or 'L2' for derivatives computation
 
-        :type raster: ndarray or RasterData
+        :type raster: np.array or RasterData
         :type window_size: int
         :type sigma: float
         :type gradientType: str
@@ -268,16 +327,204 @@ class CurvatureFactory:
         else:
             return np.concatenate((k1[:, :, None], k2[:, :, None]), axis=2)
 
-    # ------------------ PRIVATE METHODS ----------------------------
-    @staticmethod
-    def __good_point(neighbors):
-        '''
-        Determine whether the point is appropriate for curvature calculation
+    @classmethod
+    def curvature_PointSetOpen3D(cls, pointset3d, neighbors_property,
+                                 min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7,
+                                 verbose=True):
+        """
+        Compute curvature given a PointSetOpen3D with its normals, and neighborhood.
 
-        1. Calculate Azimuth for all neighborhood points
-        2. Check number of points in every 45 degree sector
+        .. warning::
+
+            If a pointset3D is sent without its normals computed in advance, the normals will be computed according to the first
+            point neighborhood parameters
+
+        :param pointset3d: the point cloud
+        :param neighbors_property: the neighbors property of the point cloud
+        :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5
+        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
+        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
+        :param verbose: print inter running messages. default: True
+
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type neighbors_property: NeighborProperty.NeighborsProperty
+        :type min_points_in_neighborhood: int
+        :type min_points_in_sector: int
+        :type valid_sectors: int
+        :type verbose: bool
+
+        :return: curvature property
+
+        :rtype: CurvatureProperty
+        """
+        from PointSetOpen3D import PointSetOpen3D
+        from PointNeighborhood import PointNeighborhood
+        k1 = []
+        k2 = []
+
+        if not isinstance(pointset3d, PointSetOpen3D):
+            import warnings
+            warnings.warn('Pointset must be PointSetOpen3D')
+            return 1
+
+        # check if normals have been computed before for this point cloud:
+        if np.asarray(pointset3d.pointsOpen3D.normals).shape[0] == 0:
+
+            for neighborhood in neighbors_property:
+                radius = neighborhood.radius
+                maxNN = neighborhood.maxNN
+                if radius is not None and maxNN is not None:
+                    pointset3d.CalculateNormals(searchRadius=radius, maxNN=maxNN)
+                    break
+
+        normals = np.asarray(pointset3d.pointsOpen3D.normals)
+
+        for neighborhood, i in zip(neighbors_property, range(pointset3d.Size)):
+            if isinstance(neighborhood, PointNeighborhood) and cls.__checkNeighborhood(neighborhood,
+                                                                                       min_points_in_neighborhood=min_points_in_neighborhood,
+                                                                                       min_points_in_sector=min_points_in_sector,
+                                                                                       valid_sectors=valid_sectors):
+                normal = normals[i, :]
+                k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal)
+                k1.append(k1_)
+                k2.append(k2_)
+            else:
+                k1.append(-999)
+                k2.append(-999)
+        k1 = np.asarray(k1)
+        k2 = np.asarray(k2)
+
+        return CurvatureProperty(pointset3d, np.vstack((k1, k2)).T)
+
+    @classmethod
+    def curvature_by_3parameters(cls, neighborhood, normal):
+        """
+        Curvature computation based on fundamental form when fitting bi-quadratic surface.
+
+        :param neighborhood: the neighbors according to which the curvature is computed
+        :param normal: normal to the point which the curvature is computed
+
+        :type neighborhood: PointNeighborhood.PointNeighbohhod
+        :type normal: np.array
+
+        :return: minimal and maximal curvature
+
+        :rtype: tuple
+
+        ** Algorithm **
+
+        1. Rotate so that the normal will be [0 0 1]
+            the bi-quadratic surface coefficients :math:`d,e,f` are zero and the fitting is of three parameters:
+
+            .. math::
+
+                z(x,y) = ax^2 + by^2 + cxy
+
+        2. Second derivatives dictate the curvature
+
+           .. math::
+               {\bf H} = \begin{bmatrix} 2a & c \\ c & 2b \end{bmatrix}
+
+        """
+        neighbors = neighborhood.neighbors.ToNumpy()
+        pnt = neighbors[0, :]
+        # remove reference point from neighbors array
+        neighbors = neighbors[1:, :]
+
+        # if a normal of a neighborhood is in an opposite direction rotate it 180 degrees
+        if np.linalg.norm(pnt, 2) < np.linalg.norm(pnt + normal, 2):
+            normal = -normal
+        n = np.array([0, 0, 1])
+
+        # rotate the neighborhood to xy plane
+        rot_mat = RotationUtils.Rotation_2Vectors(normal, n)
+
+        neighbors = (np.dot(rot_mat, neighbors.T)).T
+
+        # compute curvature by 3 parameters
+        p = CurvatureFactory.__BiQuadratic_Surface(neighbors)
+        Zxx = 2 * p[0]
+        Zyy = 2 * p[1]
+        Zxy = p[2]
+
+        k1_max = (((Zxx + Zyy) + np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)[0]
+        k2_min = (((Zxx + Zyy) - np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)[0]
+
+        return k1_max, k2_min
+
+
+    # ------------------ PRIVATE METHODS ----------------------------
+    @classmethod
+    def __checkNeighborhood(cls, neighborhood, min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7):
+        """
+        Check if a neighborhood is viable for curvature computation.
+
+        Decided according to number of neighbors and distribution of the points around the reference points.
+        The second condition is defined by the number of sectors with a minimum number of points.
+
+        :param neighborhood: all points that compose the neighborhood of index 0 point
+        :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5
+        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
+        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
+
+        :type neighborhood: PointNeighborhood.PointNeighborhood
+        :type min_points_in_neighborhood: int
+        :type min_points_in_sector: int
+        :type valid_sectors: int
+
+        :return: true if the neighborhood is valid; false otherwise
+
+        :rtype: bool
+        """
+
+        # Check minimal number of neighbors
+        # the numberOfNeighbors is with the reference points
+        if neighborhood.numberOfNeighbors - 1 < min_points_in_neighborhood:
+            return False
+
+        # Check distribution
+        neighborhood_array = neighborhood.neighbors.ToNumpy()
+        return cls.__good_point(neighborhood_array, neighborhood_array[0, :], min_points_in_sector, valid_sectors)
+
+    @staticmethod
+    def __good_point(neighbors, pnt=np.array([0, 0, 0]), min_points_in_sector=2, valid_sectors=7):
         '''
-        neighbor_points = neighbors.ToNumpy()
+        Determine whether the point is appropriate for curvature calculation according to the spread of its neighbours.
+
+        Dividing the neighborhood into 8 sectors around the point. If there are more than ``min_points_in_sector``, i.e.,
+        more than the minimum number of points within that sector, and there are more than ``valid_sectors`` that answer
+        that condition -- the point is considered good for curvature computation.
+
+        :param neighbors: neighboring points.
+        :param pnt: the point to which the curvature should be computed. Default: [0,0,0]
+        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
+        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
+
+        :type neighbors: PointSet, numpy.array
+        :type pnt: numpy.array
+        :type min_points_in_sector: int
+        :type valid_sectors: int
+
+        1. Calculate Azimuth between the reference point and the points in neighborhood
+        2. Check number of points in every 45 degree sector
+
+        :return: True if the point is good, False otherwise
+
+        :rtype: bool
+        '''
+        if min_points_in_sector is None:
+            min_points_in_sector = 2
+
+        if valid_sectors is None:
+            valid_sectors = 7
+
+        if isinstance(neighbors, np.ndarray):
+            neighbor_points = neighbors
+        else:
+            neighbor_points = neighbors.ToNumpy()
+
+        neighbor_points = neighbor_points - pnt.flatten()
+
         count_valid_sectors = 0
         p_angle = np.zeros((1, neighbor_points.shape[0]))
 
@@ -299,13 +546,13 @@ class CurvatureFactory:
 
         for i in np.linspace(0, 7.0 * np.pi / 4.0, 8):
             p_in_sector = (np.where(p_angle[np.where(p_angle <= i + np.pi / 4.0)] > i))[0].size
-            if p_in_sector >= 2:  # original: rad * 85:  # Why this threshold was chosen? I changed it to 2
+            if p_in_sector >= min_points_in_sector:
                 count_valid_sectors += 1
 
-        if count_valid_sectors >= 7:
-            return 1
+        if count_valid_sectors >= valid_sectors:
+            return True
         else:
-            return 0
+            return False
 
     @staticmethod
     def __keep_good_curves_data(curves_data, pointset_open3D):

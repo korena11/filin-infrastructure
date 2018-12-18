@@ -181,8 +181,9 @@ class TensorFactory(object):
         :param neighborhoodProperty: a property that holds all neighbors for each point (can be empty)
         :param neighborsFunc: the function to be used for neighbors search.
         :param kwargs: the arguments for the function to be used for neighbors search. These are usually:
-        :param radius: search radius for neighbors search
-        :param knn: k nearest neighbors for neighbors search
+
+            :param radius: search radius for neighbors search
+            :param knn: k nearest neighbors for neighbors search
 
         :type points: PointSet
         :type neighborhoodProperty: NeighborhoodProperty

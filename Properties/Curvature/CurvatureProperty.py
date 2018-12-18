@@ -27,9 +27,9 @@ class CurvatureProperty(BaseProperty):
 
     def getValues(self):
         """
-        :return: mean curvature (temoprary)
+        :return: min and max curvature
         """
-        return self.mean_curvature
+        return np.vstack((self.k1, self.k2))
 
     @property
     def Curvature(self):

@@ -30,10 +30,24 @@ class PointNeighborhood:
 
     @property
     def maxNN(self):
+        """
+        The maximal number of neighbors that can be in the neighborhood
+
+        :return: maximum number of neighbors
+
+        :rtype: int
+        """
         return self.nn
 
     @property
     def numberOfNeighbors(self):
+        """
+        The number of points within the neighborhood (including the point itself)
+
+        :return: the number of points within the neighborhood
+
+        :rtype: int
+        """
         return self.__neighbors.Size
 
     @property
@@ -42,6 +56,13 @@ class PointNeighborhood:
 
     @property
     def neighbors(self):
+        """
+        Return a point set of the neighborhood
+
+        :return: points that compose the neighborhood (including the point itself at index 0)
+
+        :rtype: PointSubSet
+        """
         return self.__neighbors
 
     @neighbors.setter
