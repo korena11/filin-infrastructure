@@ -4,13 +4,6 @@ photo-lab-3\Reuma
 23, Nov, 2017
 '''
 
-import platform
-
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
 from BaseProperty import BaseProperty
 
 

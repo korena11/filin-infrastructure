@@ -1,13 +1,7 @@
-import platform
-
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
-import numpy as np
-import MyTools as mt
 import cv2
+import numpy as np
+
+import MyTools as mt
 
 EPS = np.finfo(float).eps
 
@@ -184,7 +178,7 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
-        new_function = cv2.normalize(new_function, -1., 1, cv2.NORM_MINMAX)
+        new_function = cv2.normalize(new_function, None, -1., 1, cv2.NORM_MINMAX)
         self.__value = new_function
         self.__ls_derivatives_curvature()
         if 'regularization_note' in list(kwargs.keys()):
@@ -202,13 +196,51 @@ class LevelSetFunction(object):
         :type dphi: np.array
 
         """
-        Phi_temp = LevelSetFunction(self.value + dphi)
-        Phi_t = np.sign(Phi_temp.value) * (1 - (np.sqrt(Phi_temp._x ** 2 + Phi_temp._y ** 2)))
-        new_phi = cv2.GaussianBlur(Phi_temp.value,
+        # Phi_temp = LevelSetFunction(self.value + dphi)
+
+        new_phi = cv2.GaussianBlur(self.value + dphi,
                                    (self.processing_props['ksize'], self.processing_props['ksize']),
                                    self.processing_props['sigma'])
         self.update(new_phi)
 
+    def reinitialization(self, dphi):
+        """
+        Keeping phi close to a signed function.
+        
+        This should keep
+        
+        .. math::
+        
+            |\nabla \phi| \approx 1
+            
+        Here we use: 
+        
+        .. math::
+            
+            \phi_t = S(\phi_0)\left(1- |\nabla \phi| )
+        
+        where S is a smoothed signed function: 
+        
+        .. math::
+        
+            S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}, \qquad \epsilon = \min(\Delta x, \Delta y)
+        
+        assuming a grid. 
+        
+        :param dphi: the delta to add to the current function
+        
+        :type dphi: np.array
+        
+        """
+
+        phi_temp = LevelSetFunction(self.value + dphi)
+        S_phi = self.value / np.sqrt(self.value ** 2 + 1)
+
+        phi_t = S_phi * (1 - phi_temp.norm_nabla)
+
+        self.update(self.value + phi_t)
+        
+        
     @staticmethod
     def dist_from_circle(center_pt, radius, func_shape, **kwargs):
         r"""
@@ -241,7 +273,7 @@ class LevelSetFunction(object):
         xx, yy = np.meshgrid(ksize * x, ksize * y)
 
         phi = radius - np.sqrt((xx - center_pt[1] * ksize) ** 2 + (yy - center_pt[0] * ksize) ** 2)
-        phi = cv2.normalize(phi, -1, 1, cv2.NORM_MINMAX)
+        phi = cv2.normalize(phi, None, -1, 1, cv2.NORM_MINMAX)
         return phi
 
     def compute_heaviside(self, **kwargs):

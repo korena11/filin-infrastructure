@@ -4,16 +4,10 @@ photo-lab-3\Reuma
 16, Jan, 2017 
 '''
 
-import platform
-
 import numpy as np
 from numpy import pi, sqrt, arctan, arctan2, sin, cos
 
 from RasterData import RasterData
-
-if platform.system() == 'Linux':
-    import matplotlib
-    matplotlib.use('TkAgg')
 
 
 class RasterVisualization:

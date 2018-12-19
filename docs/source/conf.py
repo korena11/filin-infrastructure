@@ -56,7 +56,7 @@ sys.path.insert(0, os.path.abspath('../../Third Party'))
 sys.path.insert(0, os.path.abspath('../../Utils'))
 sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
 
-sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
+# sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
 
 sys.path.append('/home/workspace/myproj/myproj')
 
@@ -153,7 +153,7 @@ pygments_style = 'sphinx'
 # keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
+todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -371,7 +371,7 @@ texinfo_documents = [
      author, 'infragit', 'One line description of project.',
      'Miscellaneous'),
 ]
-
+# autodoc_member_order = 'bysource'
 # Documents to append as an appendix to all manuals.
 #
 # texinfo_appendices = []

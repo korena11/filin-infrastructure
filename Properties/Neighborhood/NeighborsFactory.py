@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib.path import Path
 from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
-from scipy.spatial import cKDTree
+from scipy.spatial import KDTree as cKDTree
 from sklearn.neighbors import BallTree
 
 from NeighborProperty import NeighborsProperty
@@ -96,7 +96,7 @@ class NeighborsFactory:
         :param maxNN: the maximum number of neighbors
         :param useOriginal: ???
 
-        :type pointset_open3d: PointSetOpen3D
+        :type pointset_open3d: PointSetOpen3D.PointSetOpen3D
         :type point: np.ndarray or tuple
         :type searchRadius: float
         :type maxNN: int
@@ -165,7 +165,7 @@ class NeighborsFactory:
         # print("Done??????")
 
         from PointSetOpen3D import PointSetOpen3D
-
+        print('>>> Find all points neighbors')
         # Function will be used with multiprocessing.
         # To run it without:
         if not isinstance(pointset, PointSetOpen3D):

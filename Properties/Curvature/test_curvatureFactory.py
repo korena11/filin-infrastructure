@@ -24,22 +24,21 @@ class TestCurvatureFactory(TestCase):
         search_radius = 0.25
         max_nn = -1
         localNeighborhoodParams = {'search_radius': search_radius, 'maxNN': max_nn}
-        # curvatureFilePath = IOFactory.GetCurvatureFilePath(folderPath, dataName, 3,
-        #                                                    localNeighborhoodParameters=localNeighborhoodParams,
-        #                                                    decimationRadius=0, testRun=False)
 
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts',
                                 pts, colors, merge=False)
         p3d = PointSetOpen3D(pcl[0])
-        # p3d.CalculateNormals(localNeighborhoodParams['search_radius'], localNeighborhoodParams['maxNN'])
         neighborsProperty = NeighborsFactory.CalculateAllPointsNeighbors(p3d, **localNeighborhoodParams)
-        curvature = CurvatureFactory.curvature_PointSetOpen3D(p3d, neighborsProperty, valid_sectors=4)
+        curvature = CurvatureFactory.curvature_PointSetOpen3D(p3d, neighborsProperty, min_points_in_neighborhood=2,
+                                                              valid_sectors=4)
         print('hello')
         curvature_panorama = PanoramaFactory.CreatePanorama_byProperty(curvature, elevationSpacing=0.111,
-                                                                       azimuthSpacing=0.115, voidData=30)
+                                                                       azimuthSpacing=0.115, voidData=30,
+                                                                       property_array=curvature.k1)
         import matplotlib.pyplot as plt
         plt.imshow(curvature_panorama.PanoramaImage.astype('f'))
         plt.show()
+
         pr.disable()
         s = io.StringIO()
         ps = pstats.Stats(pr, stream=s)

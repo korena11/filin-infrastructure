@@ -10,18 +10,12 @@ The factory either creates a TensorProperty or a tensor for each point in a poin
 
 '''
 
-import platform
-
 import numpy as np
 
 from NeighborProperty import NeighborsProperty
 from PointSet import PointSet
 from TensorProperty import TensorProperty
 from Tensors.tensor import Tensor
-
-if platform.system() == 'Linux':
-    import matplotlib
-    matplotlib.use('TkAgg')
 
 
 class TensorFactory(object):

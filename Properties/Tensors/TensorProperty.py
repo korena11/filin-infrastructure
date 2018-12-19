@@ -26,8 +26,6 @@ class TensorProperty(BaseProperty):
 
         # --------- To make the object iterable ---------
         self.current = 0
-        # --------- To make the object iterable ---------
-        self.current = 0
 
     # ---------- Definitions to make iterable -----------
     def __iter__(self):

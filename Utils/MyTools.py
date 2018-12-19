@@ -3,24 +3,19 @@ Created on Nov 25, 2015
 
 @author: Reuma
 '''
-import platform
 
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
+#
 import cv2
+import geopandas as gpd
+import h5py
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from numpy.linalg import norm
 from scipy.interpolate import interp1d
 from scipy.ndimage import filters
-import h5py
-from skimage import measure
-import geopandas as gpd
-import pandas as pd
 from shapely.geometry import Polygon
+from skimage import measure
 
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):

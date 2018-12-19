@@ -12,12 +12,6 @@ from BaseData import BaseData
 from PointSet import PointSet
 
 
-# if platform.system() == 'Linux':
-#     import matplotlib
-#
-#     matplotlib.use('TkAgg')
-
-
 class RasterData(BaseData):
     """
     A raster representation of the point set and manipulations on it

@@ -11,9 +11,6 @@ A tensor is constructed to a set of points, either around a specific point or ar
 
 from warnings import warn
 
-# if platform.system() == 'Linux':
-#     import matplotlib
-#     matplotlib.use('TkAgg')
 import numpy as np
 import numpy.linalg as la
 

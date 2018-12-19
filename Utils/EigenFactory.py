@@ -4,17 +4,11 @@ photo-lab-3\Reuma
 23, Nov, 2017 
 '''
 
-import platform
-
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
 import numpy as np
-from RasterData import RasterData
+
 from MyTools import computeImageDerivatives
 from PointSet import PointSet
+from RasterData import RasterData
 
 
 class EigenFactory:

@@ -41,6 +41,13 @@ class NeighborsProperty(BaseProperty):
             self.current = 0
             raise StopIteration
 
+    def __reset__(self):
+        """
+        Reset iterable
+        :return:
+        """
+        self.current = 0
+
     # --------end definitions for iterable object-----------
     def GetAllPointsNeighbors(self):
         """

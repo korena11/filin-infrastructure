@@ -122,17 +122,18 @@ class PanoramaFactory:
             cls.__computePanoramaIndices(sphCoords, azimuthSpacing=azimuthSpacing,
                                          elevationSpacing=elevationSpacing)
 
-        if not intensity:
+        if np.all(property_array is not None):
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, property_array,
+                                        minAzimuth=minAz, maxAzimuth=maxAz,
+                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
+                                        elevationSpacing=elevationSpacing, **kwargs)
+        elif not intensity:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.getValues(),
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
                                         elevationSpacing=elevationSpacing, **kwargs)
 
-        elif np.all(property_array is not None):
-            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, property_array,
-                                        minAzimuth=minAz, maxAzimuth=maxAz,
-                                        minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
-                                        elevationSpacing=elevationSpacing, **kwargs)
+
         else:
             panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, pointSet_property.Points.Intensity,
                                         minAzimuth=minAz, maxAzimuth=maxAz,

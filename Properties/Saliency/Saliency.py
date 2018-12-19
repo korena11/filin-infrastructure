@@ -24,21 +24,15 @@ Implementation of multiple kinds of saliencies a given image:
 
 '''
 
-import platform
-
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
-import numpy as np
-from matplotlib import pyplot as plt
-import scipy.linalg as LA
 import warnings
 
 import cv2
-import MyTools as mt
+import numpy as np
+import scipy.linalg as LA
+from matplotlib import pyplot as plt
+
 import LatexUtils as lu
+import MyTools as mt
 
 
 def bayesian(image, **kwargs):

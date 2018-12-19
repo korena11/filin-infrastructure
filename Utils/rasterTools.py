@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import richdem as rd
 
 from RasterData import RasterData
 
@@ -32,6 +31,8 @@ class RasterTools:
 
         :rtype: np.array
         """
+        import richdem as rd
+        
         if isinstance(raster, RasterData):
             raster = rd.rdarray(raster.data, no_data=raster.voidData)
         elif isinstance(raster, np.ndarray):
@@ -60,6 +61,7 @@ class RasterTools:
 
         :rtype: np.array
         """
+        import richdem as rd
         if isinstance(raster, RasterData):
             raster = rd.rdarray(raster.data, no_data=raster.voidData)
         elif isinstance(raster, np.ndarray):
@@ -88,6 +90,7 @@ class RasterTools:
 
         :rtype: np.array
         """
+        import richdem as rd
         if isinstance(raster, RasterData):
             raster = rd.rdarray(raster.data, no_data=raster.voidData)
         elif isinstance(raster, np.ndarray):
@@ -116,6 +119,7 @@ class RasterTools:
 
         :rtype: np.array
         """
+        import richdem as rd
         if isinstance(raster, RasterData):
             raster = rd.rdarray(raster.data, no_data=raster.voidData)
         elif isinstance(raster, np.ndarray):
@@ -145,6 +149,7 @@ class RasterTools:
 
         :rtype: np.array
         """
+        import richdem as rd
         if isinstance(raster, RasterData):
             raster = rd.rdarray(raster.data, no_data=raster.voidData)
         elif isinstance(raster, np.ndarray):

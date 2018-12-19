@@ -139,11 +139,11 @@ class VisualizationVTK:
         elif render_flag == 'segmentation' and isinstance(input_data, SegmentationProperty):
             scalars = input_data.RGB
 
-        elif render_flag == 'parametericColor':
-            if len(color[0].shape) == 1:
-                scalars = np.expand_dims(color[0], 1)
+        elif render_flag == 'parametricColor':
+            if len(color.shape) == 1:
+                scalars = np.expand_dims(color, 1)
             else:
-                scalars = color[0]
+                scalars = color
 
         else:  # display in some default color
             print('Rendering using default color')
@@ -154,12 +154,12 @@ class VisualizationVTK:
         return polyData
 
     # region  # Region: Binding Functions
-    def Bind(self, input_data, renderFlag='color', color=(255, 255, 255), new_layer=False):
+    def Bind(self, input_data, render_flag='color', color=(255, 255, 255), new_layer=False):
         """
         Populates the render view (when only one viewport is in use)
 
         :param input_data: points
-        :param renderFlag: the property according to which the color will be shown
+        :param render_flag: the property according to which the color will be shown
            - 'color'
            - 'rgb'
            - 'externrgb'
@@ -172,11 +172,11 @@ class VisualizationVTK:
         :param new_layer: flag to overwrite what's in the window. Default: False
 
         :type input_data: PointSet or BaseProperty
-        :type renderFlag: str
+        :type render_flag: str
         :type color: tuple
         :type new_layer: bool
         """
-        self.BindTopLeftData(input_data, renderFlag, color, new_layer=new_layer)
+        self.BindTopLeftData(input_data, render_flag, color, new_layer=new_layer)
 
     # ----- #
 
