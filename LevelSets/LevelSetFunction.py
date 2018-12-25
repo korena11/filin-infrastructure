@@ -212,7 +212,7 @@ class LevelSetFunction(object):
         .. math::
         
             |\nabla \phi| \approx 1
-            
+
         Here we use: 
         
         .. math::

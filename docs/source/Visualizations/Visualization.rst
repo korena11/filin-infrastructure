@@ -7,4 +7,5 @@ The visualization classes allow visualization of the point clouds and/or the ras
    :maxdepth: 2
    
    PointSetVisualization
+   VisualizationO3D
    RasterVisualization

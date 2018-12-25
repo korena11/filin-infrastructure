@@ -7,9 +7,6 @@ from PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 
 
 class VisualizationO3D:
-    """
-    Visualization class that uses Open3D for showing point clouds and their properties
-    """
 
     def __init__(self):
         self.pcd = None

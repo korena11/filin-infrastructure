@@ -9,10 +9,10 @@ from VisualizationO3D import VisualizationO3D
 
 class TestVisualizationO3D(TestCase):
 
-    # def test_visualize_pointset(self):
-    #     colors = []
-    #     pcl = IOFactory.ReadPts('../test_data/test_pts2.pts',colorslist=colors, merge=False)
-    #     VisualizationO3D.visualize_pointset(pcl[0], colors[0])
+    def test_visualize_pointset(self):
+        colors = []
+        pcl = IOFactory.ReadPts('../test_data/test_pts2.pts', colorslist=colors, merge=False)
+        VisualizationO3D.visualize_pointset(pcl[0], colors[0])
 
     def test_visualize_property(self):
         colors = []
