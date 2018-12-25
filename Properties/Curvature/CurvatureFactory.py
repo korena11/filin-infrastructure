@@ -56,7 +56,7 @@ class CurvatureFactory:
     @classmethod
     def curvature_PointSetOpen3D(cls, pointset3d, neighbors_property,
                                  min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7,
-                                 verbose=True):
+                                 verbose=False):
         """
         Compute curvature given a PointSetOpen3D with its normals, and neighborhood.
 
@@ -70,7 +70,7 @@ class CurvatureFactory:
         :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5
         :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
         :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
-        :param verbose: print inter running messages. default: True
+        :param verbose: print inter running messages. default: False
 
         :type pointset3d: PointSetOpen3D.PointSetOpen3D
         :type neighbors_property: NeighborProperty.NeighborsProperty

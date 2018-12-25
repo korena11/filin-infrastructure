@@ -32,13 +32,6 @@ class CurvatureProperty(BaseProperty):
         return np.vstack((self.k1, self.k2))
 
     @property
-    def Curvature(self):
-        """
-        Points' curvature values
-        """
-        return self.__curvature
-
-    @property
     def k1(self):
         """
         Maximal principal curvature value
@@ -98,11 +91,9 @@ class CurvatureProperty(BaseProperty):
         '''
         '''
         shapeI = np.zeros(self.k1.shape)
-        equalZero = np.where(np.abs(self.k1 - self.k2) <= 1e-6)[0]
-        difZero = np.where(self.k1 != self.k2)[0]
-        if equalZero.size != 0:
-            shapeI[equalZero, :] = 0
-        shapeI[difZero, :] = (1.0 / np.pi) * np.arctan2((self.k2 + self.k1)[difZero], (self.k2 - self.k1)[difZero])
+        difZero = np.where(np.abs(self.k1 - self.k2) >= 1e-6)[0]  # doesn't equal zero by threshold
+
+        shapeI[difZero] = (1.0 / np.pi) * np.arctan2((self.k2 + self.k1)[difZero], (self.k2 - self.k1)[difZero])
         return shapeI
 
     def similarity_curvature(self):

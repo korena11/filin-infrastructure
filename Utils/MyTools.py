@@ -359,7 +359,7 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
     blob_labels = measure.label(function_binary, background=0)
     label_props = measure.regionprops(blob_labels)
 
-    contours = chooseLargestContours(contours, label_props, blob_size)
+    # contours = chooseLargestContours(contours, label_props, blob_size)
     if not hold:
         imshow(img)
     l_curve = []

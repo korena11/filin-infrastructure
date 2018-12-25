@@ -841,7 +841,7 @@ class LevelSetFlow:
         self.scale_y = kwargs.get('scaleY', 1.)
 
         nu = 1.
-        blob_size = kwargs.get('blob_size', 1)
+        blob_size = kwargs.get('blob_size', 0.1)
         if mumford_shah_flag:
             nu = kwargs.get('nu', 1.)
         if np.any(self.img_rgb) != 0:
@@ -875,11 +875,11 @@ class LevelSetFlow:
             fig4, ax4 = plt.subplots(num='psi')
             mt.imshow(self.psi.value)
 
-        for i in range(iterations):
-            print(i)
+        for iteration in range(iterations):
+            print(iteration)
             if verbose:
-                print(i)
-                if i > 26:
+                print(iteration)
+                if iteration > 26:
                     print('hello')
             intrinsic = np.zeros(self.img().shape[:2])
             extrinsic = np.zeros(self.img().shape[:2])
@@ -900,21 +900,27 @@ class LevelSetFlow:
                         print(i)
 
             # region force
-            for i in range(self.num_ls):
-                intrinsic += region_w * self.region * self.phi(i).norm_nabla
+            for j in range(self.num_ls):
+                intrinsic += region_w * self.region * self.phi(j).norm_nabla
 
             # ---------------extrinsic movement ----------
             v = np.stack((self.f_x, self.f_y), axis=2)
             vt = self.__compute_vt(v, verbose=verbose, **processing_props)
             v += vt
-            for i in range(self.num_ls):
-                extrinsic = (v[:, :, 0] * self.phi(i)._x + v[:, :, 1] * self.phi(i)._y) * gvf_w
+            for k in range(self.num_ls):
+                extrinsic = (v[:, :, 0] * self.phi(k)._x + v[:, :, 1] * self.phi(k)._y) * gvf_w
 
                 # for constrained contours
                 extrinsic += self.__compute_vo() * vo_w
                 phi_t = self.step * (intrinsic - extrinsic)
-                self.phi(i).move_function(phi_t)
-                self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
+                # reinitializtion every 5 iterations:
+                if iteration % 10 == 0 and iteration != 0:
+                    self.phi(k).reinitialization(phi_t)
+                    # pass
+                else:
+                    self.phi(k).move_function(phi_t)
+
+                # self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
 
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
