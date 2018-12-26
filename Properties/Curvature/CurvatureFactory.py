@@ -18,9 +18,9 @@ class CurvatureFactory:
     '''
 
     @classmethod
-    def curvatures_givenTensors(cls, tensorProperty, min_points=5):
+    def tensorProperty_3parameters(cls, tensorProperty, min_points=5):
         r"""
-        Compute curvature based on PCA (tensors)
+        Compute curvature for tensors, via the *three-parameters* algorithm.
 
         Curvature for tensors that have less points than min_points will not be computed.
 
@@ -32,6 +32,10 @@ class CurvatureFactory:
         :return: Curvature property
 
         :rtype: CurvatureProperty
+
+        .. seealso::
+
+            :meth:`curvature_by_3parameters`
         """
         k1 = []
         k2 = []
@@ -54,11 +58,11 @@ class CurvatureFactory:
         return CurvatureProperty(tensorProperty.Points, np.vstack((k1, k2)).T)
 
     @classmethod
-    def curvature_PointSetOpen3D(cls, pointset3d, neighbors_property,
-                                 min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7,
-                                 verbose=False):
+    def pointSetOpen3D_3parameters(cls, pointset3d, neighbors_property,
+                                   min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7,
+                                   verbose=False):
         """
-        Compute curvature given a PointSetOpen3D with its normals, and neighborhood.
+        Curvature of a PointSetOpen3D with its normals and neighborhood via the *three-parameters* algorithm.
 
         .. warning::
 
@@ -82,6 +86,10 @@ class CurvatureFactory:
         :return: curvature property
 
         :rtype: CurvatureProperty
+
+        .. seealso::
+
+            :meth:`curvature_by_3parameters`
         """
         from PointSetOpen3D import PointSetOpen3D
         from PointNeighborhood import PointNeighborhood
@@ -100,7 +108,7 @@ class CurvatureFactory:
                 radius = neighborhood1.radius
                 maxNN = neighborhood1.maxNN
                 if radius is not None and maxNN is not None:
-                    pointset3d.CalculateNormals(searchRadius=radius, maxNN=maxNN)
+                    pointset3d.CalculateNormals(search_radius=radius, maxNN=maxNN)
                     break
 
         normals = np.asarray(pointset3d.pointsOpen3D.normals)
@@ -131,7 +139,7 @@ class CurvatureFactory:
 
     @classmethod
     def curvature_by_3parameters(cls, neighborhood, normal):
-        """
+        r"""
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
         :param neighborhood: the neighbors according to which the curvature is computed
@@ -144,7 +152,7 @@ class CurvatureFactory:
 
         :rtype: tuple
 
-        ** Algorithm **
+        **Algorithm**
 
         #. Rotate so that the normal will be [0 0 1]
             the bi-quadratic surface coefficients :math:`d,e,f` are zero and the fitting is of three parameters:
@@ -186,7 +194,7 @@ class CurvatureFactory:
         return k1_max, k2_min
 
     @classmethod
-    def curvature_raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
+    def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
         """
         Compute raster curvature based on first fundamental form
 
@@ -231,7 +239,6 @@ class CurvatureFactory:
             return CurvatureProperty(raster, np.concatenate((k1[:, :, None], k2[:, :, None]), axis=2))
         else:
             return np.concatenate((k1[:, :, None], k2[:, :, None]), axis=2)
-
 
     # ------------------ PRIVATE METHODS ----------------------------
     @classmethod
@@ -337,6 +344,7 @@ class CurvatureFactory:
     @staticmethod
     def __keep_good_curves_data(curves_data, pointset_open3D):
         """
+        Filters out points and their curvature that their curvature was not computed.
 
         :param curves_data: an array of curvature data
         :param pointset_open3D: the point set that relates to the curvature data
@@ -390,7 +398,7 @@ class CurvatureFactory:
     @classmethod
     def Curvature_FundamentalForm(cls, ind, points, search_radius, max_nn=20, tree=None, ):
         r'''
-        OBSOLETE - this function can be removed.
+        **OBSOLETE** - this function should be removed.
 
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
@@ -442,7 +450,7 @@ class CurvatureFactory:
 
         '''
         import warnings
-        warnings.warn('This function is obsolete. Will be removed with time', RuntimeError)
+        warnings.warn(DeprecationWarning)
 
         pnt = points.GetPoint(ind)
         from PointSetOpen3D import PointSetOpen3D
@@ -503,6 +511,8 @@ class CurvatureFactory:
                                          delete_non_computed=False,
                                          verbose=True):
         """
+        **OBSOLETE** - this function should be removed.
+
         Reads curvature data or computes it
 
          .. code-block:: python
@@ -529,13 +539,13 @@ class CurvatureFactory:
             This function was replaced by ``curvature_by_3parameters`` and by ``curvature_PointSetOpen3D``. It should be
             removed with time
 
-
         """
+
 
         import open3d as O3D
         import warnings
 
-        warnings.warn('This function is obsolete. Will be removed with time', RuntimeError)
+        warnings.warn(DeprecationWarning)
 
         search_radius = localNeighborhoodParameters['search_radius']
         max_nn = localNeighborhoodParameters['maxNN']
@@ -573,7 +583,7 @@ class CurvatureFactory:
                             search_radius) + "\t nn:" + str(
                             max_nn))
             except IOError:
-                pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
+                pointset3d.CalculateNormals(search_radius=search_radius, maxNN=max_nn, verbose=verbose)
 
         except IOError:
             try:
@@ -584,7 +594,7 @@ class CurvatureFactory:
                 import open3d as O3D
                 pointset3d.pointsOpen3D.normals = O3D.Vector3dVector(normals_load)
             except IOError:
-                pointset3d.CalculateNormals(searchRadius=search_radius, maxNN=max_nn, verbose=verbose)
+                pointset3d.CalculateNormals(search_radius=search_radius, maxNN=max_nn, verbose=verbose)
                 np.savetxt(curves_path + 'normals_', np.asarray(pointset3d.pointsOpen3D.normals))
 
             if verbose:
@@ -593,7 +603,7 @@ class CurvatureFactory:
                         search_radius) + "\t nn:" + str(
                         max_nn))
             neighbors_property = NeighborsFactory.CalculateAllPointsNeighbors(pointset3d, search_radius, max_nn)
-            curves = cls.curvature_PointSetOpen3D(pointset3d, neighbors_property)
+            curves = cls.pointSetOpen3D_3parameters(pointset3d, neighbors_property)
             curves_data = curves.getValues()
             curves_data = np.array(curves_data)
 

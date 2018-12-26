@@ -29,8 +29,8 @@ class TestCurvatureFactory(TestCase):
                                 pts, colors, merge=False)
         p3d = PointSetOpen3D(pcl[0])
         neighborsProperty = NeighborsFactory.CalculateAllPointsNeighbors(p3d, **localNeighborhoodParams)
-        curvature = CurvatureFactory.curvature_PointSetOpen3D(p3d, neighborsProperty, min_points_in_neighborhood=2,
-                                                              valid_sectors=4)
+        curvature = CurvatureFactory.pointSetOpen3D_3parameters(p3d, neighborsProperty, min_points_in_neighborhood=2,
+                                                                valid_sectors=4)
         print('hello')
         curvature_panorama = PanoramaFactory.CreatePanorama_byProperty(curvature, elevationSpacing=0.111,
                                                                        azimuthSpacing=0.115, voidData=30,
@@ -51,8 +51,8 @@ class TestCurvatureFactory(TestCase):
         dataName = 'gully7_05'
 
         raster = IOFactory.rasterFromAscFile(folderPath + dataName + '.txt')
-        curvature = CurvatureFactory.curvature_raster_fundamentalForm(raster, ksize=3, gradientType='L2',
-                                                                      sigma=9)
+        curvature = CurvatureFactory.raster_fundamentalForm(raster, ksize=3, gradientType='L2',
+                                                            sigma=9)
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots(4, 1)
         ax[0].imshow(curvature.k1)

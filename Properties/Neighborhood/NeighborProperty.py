@@ -27,18 +27,18 @@ class NeighborsProperty(BaseProperty):
         self.__pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
 
         # --------- To make the object iterable ---------
-        self.current = 0
+        self.__current = 0
 
     # ---------- Definitions to make iterable -----------
     def __iter__(self):
         return self
 
     def __next__(self):
-        self.current += 1
+        self.__current += 1
         try:
-            return self.getNeighbors(self.current - 1)
+            return self.getNeighbors(self.__current - 1)
         except IndexError:
-            self.current = 0
+            self.__current = 0
             raise StopIteration
 
     def __reset__(self):
@@ -46,7 +46,7 @@ class NeighborsProperty(BaseProperty):
         Reset iterable
         :return:
         """
-        self.current = 0
+        self.__current = 0
 
     # --------end definitions for iterable object-----------
     def GetAllPointsNeighbors(self):

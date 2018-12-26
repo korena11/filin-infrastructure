@@ -5,7 +5,7 @@ Visualization class that uses Open3D for showing point clouds and their properti
 
 The VisualizationO3D can work both with PointSet and BaseProperty.
 
-- 'K': pressing this button the background will change to black
+- **'K'**: pressing this button the background will change to black
 
 PointSet visualization
 ''''''''''''''''''''''
@@ -13,7 +13,7 @@ PointSet visualization
 .. literalinclude:: ../../../Visualization Classes/test_visualizationO3D.py
    :language: python
    :lineno-start: 13
-   :lines: 13-15
+   :lines: 13-19
    :linenos:
 
 This function gets a PointSet and a ColorProperty, if exists, and shows the point cloud with the original colors.
@@ -23,11 +23,11 @@ BaseProperty visualization
 
 .. literalinclude:: ../../../Visualization Classes/test_visualizationO3D.py
    :language: python
-   :lineno-start: 18
-   :lines: 18-25
+   :lineno-start: 22
+   :lines: 22-33
    :linenos:
 
-Here two new keyboard functionalities added:
+Here two new keyboard functions added:
 
 - **'P'**: changes the attribute shown from the property (every attribute that is not private and that is described by a numpy array.
 - **'.'**: changes the colormap of the attribute shown.

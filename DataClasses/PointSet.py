@@ -42,7 +42,7 @@ class PointSet(BaseData):
         :param angle_accuracy: angle measurement accuracy in degrees (default  :math:`0.012^\circ`)
         :param measurement_accuracy: noise of modeled surface (default 0.002 m)
 
-        :type points: np.array
+        :type points: np.array, open3d.PointCloud, or any other thing...
         :type intensity: int
         :type range_accuracy: float
         :type angle_accuracy: float
@@ -58,6 +58,29 @@ class PointSet(BaseData):
         self.__angle_accuracy = angle_accuracy
         self.__measurement_accuracy = measurement_accuracy
         self.setPath(path)
+
+        self.__current = 0  # for iterable object
+
+    # ---------- Definitions to make iterable -----------
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.__current += 1
+        try:
+            return self.GetPoint(self.__current - 1)
+        except IndexError:
+            self.__current = 0
+            raise StopIteration
+
+    def __reset__(self):
+        """
+        Reset iterable
+        :return:
+        """
+        self.__current = 0
+
+        # --------end definitions for iterable object-----------
 
     @property
     def Size(self):

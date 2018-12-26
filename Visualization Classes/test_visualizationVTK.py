@@ -23,9 +23,9 @@ class TestVisualizationVTK(TestCase):
                                 pts, colors, merge=False)
         p3d = PointSetOpen3D(pcl[0])
         neighborsProperty = NeighborsFactory.CalculateAllPointsNeighbors(p3d, **localNeighborhoodParams)
-        curvature = CurvatureFactory.curvature_PointSetOpen3D(p3d, neighborsProperty, min_points_in_neighborhood=2,
-                                                              valid_sectors=4,
-                                                              verbose=False)
+        curvature = CurvatureFactory.pointSetOpen3D_3parameters(p3d, neighborsProperty, min_points_in_neighborhood=2,
+                                                                valid_sectors=4,
+                                                                verbose=False)
 
         vis_obj = VisualizationVTK()
         import numpy as np

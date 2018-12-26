@@ -1,43 +1,36 @@
 import numpy as np
-from scipy.spatial import Delaunay
 
 from PointSubSet import PointSubSet
 
 
 class PointNeighborhood:
-    def __init__(self, radius, max_neighbor_num, points_subset, dist=None):
+    def __init__(self, points_subset, distances):
         """
-        :param radius: Radius of neighborhood
-        :param max_neighbor_num: Max number of neighborhood points set
+
         :param points_subset: the neighborhood as point subset
-        :param dist: Distance of neighborhood points from center point
+        :param distances: Distances of each point from center point
 
 
-        :type radius: float
-        :type max_neighbor_num: int
-        :type points_subset: PointSubSet or PointSubSetOpen3D
+
+        :type points_subset: PointSubSet, PointSubSetOpen3D
+        :type distances: np.array
+
         """
 
-        self.r = radius
-        self.nn = max_neighbor_num
-        self.dist = dist
-
+        self.__distances = distances
         self.__neighbors = points_subset
+
 
     @property
     def radius(self):
-        return self.r
-
-    @property
-    def maxNN(self):
         """
-        The maximal number of neighbors that can be in the neighborhood
+        Mean radius of the neighbors
 
-        :return: maximum number of neighbors
-
-        :rtype: int
+        :return: mean radius
+        :rtype: float
         """
-        return self.nn
+
+        return np.mean(self.__distances)
 
     @property
     def numberOfNeighbors(self):
@@ -69,18 +62,24 @@ class PointNeighborhood:
     def neighbors(self, pointsubset):
         self.__neighbors = pointsubset
 
-    def VisualizeNeighborhoodTriangulation(self):
+    @property
+    def center_point_coords(self):
         """
-        .. warning::
+        The point to which the neighbors relate
 
-            Not working
+        :return: coordinates of the center point
 
-        :return:
+        :rtype: np.ndarray
         """
-        flag = 0
-        idx = np.arange(len(self.localRotatedNeighbors))
+        return self.neighbors.GetPoint(0)
 
-        # simplices returns points IDs for each triangle
-        triangulation = (Delaunay(self.localRotatedNeighbors[:, 0:2])).simplices
+    @property
+    def center_point_idx(self):
+        """
+        The index of the point to which the neighbors relate
 
-        tri = np.where(triangulation == 0)[0]  # Keep triangles that have the first point in them
+        :return: index of the center point
+
+        :rtype: int
+        """
+        return self.neighbors.GetIndices[0]

@@ -11,28 +11,17 @@ from RandomColors import LetThereBeRandomColors
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 
-
 class PointSetOpen3D(PointSet):
-    def __init__(self, inputPoints):
-        if not isinstance(inputPoints, PointSet):
-            self.pointSet = super(PointSetOpen3D, self).__init__(inputPoints)
-        else:
-            self.pointSet = inputPoints
-        self.pointsOpen3D = None
-        self.originalPointsOpen3D = None  # Will be useful only if down sampling was performed. This stores the original
 
-        self.disregardingMasksList = []
+    def __init__(self, points, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
+                 measurement_accuracy=0.002):
 
+        super(PointSetOpen3D, self).__init__(points, path, intensity, range_accuracy, angle_accuracy,
+                                             measurement_accuracy)
+
+        self.InitializeOpen3dObject(points)  # sets the data to be open3d object
         self.voxelSize = 0.
-
-        self.InitializeOpen3dObject(inputPoints)
-
-        # TODO: check if needed after Elia
-        # self.pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
-        self.originalNumberOfPoints = len(self.pointsOpen3D.points)
-
-        self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
-        self.originalkdTreeOpen3D = O3D.KDTreeFlann(self.originalPointsOpen3D)
+        self.kdTreeOpen3D = O3D.KDTreeFlann(self.data)
 
     def GetPoint(self, index):
         """
@@ -42,7 +31,7 @@ class PointSetOpen3D(PointSet):
 
         :return: specific point/s as numpy nX3 ndarray
         """
-        return np.asarray(self.originalPointsOpen3D.points)[index, :]
+        return np.asarray(self.data.points)[index, :]
 
     def InitializeOpen3dObject(self, inputPoints):
         """
@@ -54,93 +43,110 @@ class PointSetOpen3D(PointSet):
         :return:
         """
         if isinstance(inputPoints, np.ndarray):
-            self.pointsOpen3D = O3D.PointCloud()
-            self.pointsOpen3D.points = O3D.Vector3dVector(inputPoints)
+            self.data = O3D.PointCloud()
+            self.data.points = O3D.Vector3dVector(inputPoints)
         elif isinstance(inputPoints, PointSet):
-            self.pointsOpen3D = O3D.PointCloud()
+            self.data = O3D.PointCloud()
             pts = inputPoints.ToNumpy()[:, :3]
-            self.pointsOpen3D.points = O3D.Vector3dVector(pts)
+            self.data.points = O3D.Vector3dVector(pts)
 
         elif isinstance(inputPoints, O3D.PointCloud):
-            self.pointsOpen3D = inputPoints
+            self.data = inputPoints
         else:
             print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
             raise ValueError("Wrong turn.")
 
-        self.originalPointsOpen3D = O3D.PointCloud(self.pointsOpen3D)
-        # print(self.originalPointsOpen3D)
-
     def RebuildKDTree(self, verbose=True):
+        """
+        Builds the KD-tree again
+
+        :param verbose:
+        :return:
+        """
         if verbose:
             print("Rebuilding KDTree...")
-        self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
-
-    # def GetPoint(self, indx=None):
-    #     pointsArray = np.asarray(self.pointsOpen3D.points)
-    #     if indx:
-    #         pointsArray = pointsArray[indx]
-    #
-    #     return pointsArray
+        self.kdTreeOpen3D = O3D.KDTreeFlann(self.data)
 
     def ToNumpy(self):
-        pointsArray = np.asarray(self.originalPointsOpen3D.points)
+        """
+        Convert data to numpy array
+        :return:
+        """
+        pointsArray = np.asarray(self.data.points)
         return pointsArray
 
     @property
     def Size(self):
-        return len(self.pointsOpen3D.points)
+        return len(self.data.points)
 
-    # @Size.setter
-    # def Size(self, new_size):
-    #     self.Size = new_size
 
     def DownsampleCloud(self, voxelSize, verbose=True):
         if voxelSize > 0.:
-            self.pointsOpen3D = O3D.voxel_down_sample(self.pointsOpen3D, voxel_size=voxelSize)
+            self.pointsOpen3D = O3D.voxel_down_sample(self.data, voxel_size=voxelSize)
 
             if verbose:
                 print("Downsampling the point cloud with a voxel size of " + str(voxelSize))
-                print("Number of points after down sampling: " + str(self.pointsOpen3D))
+                print("Number of points after down sampling: " + str(self.data))
 
             self.voxelSize = voxelSize
-            self.numberOfPoints = len(self.pointsOpen3D.points)
+            self.numberOfPoints = len(self.data.points)
             # self.pointsNeighborsArray = np.empty(shape=(self.numberOfPoints,), dtype=PointNeighborhood)
             self.RebuildKDTree()
 
-    def CalculateNormals(self, searchRadius=0.05, maxNN=20, orientation=(0., 0., 0.), verbose=True):
-        if verbose:
-            print(">>> Calculating point-cloud normals. Neighborhood Parameters -- r:" + str(
-                searchRadius) + "\tnn:" + str(
+    def CalculateNormals(self, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.), verbose=True):
+        """
+        Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.
+
+        :param search_radius: neighbors radius for normal computation. Default: 0.05
+        :param maxNN: maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.
+        :param orientation: "camera" orientation. The orientation towards which the normals are computed. Default: (0,0,0)
+        :param verbose: print inter-running messages.
+
+        :type search_radius: float
+        :type maxNN: int
+        :type orientation: tuple
+        :type verbose: bool
+
+        :return:
+        """
+
+        print(">>> Calculating point-cloud normals. Neighborhood Parameters -- r:" + str(
+            search_radius) + "\tnn:" + str(
                 maxNN))
 
         if maxNN <= 0:
-            O3D.estimate_normals(self.pointsOpen3D,
-                                 search_param=O3D.KDTreeSearchParamRadius(radius=searchRadius))
-        elif searchRadius <= 0:
-            O3D.estimate_normals(self.pointsOpen3D,
+            O3D.estimate_normals(self.data,
+                                 search_param=O3D.KDTreeSearchParamRadius(radius=search_radius))
+        elif search_radius <= 0:
+            O3D.estimate_normals(self.data,
                                  search_param=O3D.KDTreeSearchParamKNN(knn=maxNN))
         else:
-            O3D.estimate_normals(self.pointsOpen3D,
-                                 search_param=O3D.KDTreeSearchParamHybrid(radius=searchRadius, max_nn=maxNN))
+            O3D.estimate_normals(self.data,
+                                 search_param=O3D.KDTreeSearchParamHybrid(radius=search_radius, max_nn=maxNN))
 
         if isinstance(orientation, tuple):
             if orientation == (0., 0., 0.):
-                O3D.orient_normals_towards_camera_location(self.pointsOpen3D)  # Default Camera Location is (0, 0, 0).
+                O3D.orient_normals_towards_camera_location(self.data)  # Default Camera Location is (0, 0, 0).
             else:
                 raise NotImplementedError("Need to modify...")
-                O3D.orient_normals_to_align_with_direction(self.pointsOpen3D)  # Default Direction is (0, 0, 1).
+                O3D.orient_normals_to_align_with_direction(self.data)  # Default Direction is (0, 0, 1).
         else:
             raise ValueError("Orientation should be a tuple representing a location (X, Y, Z).\n"
                              "Default Location: Camera (0., 0., 0.).")
 
     def DisregardOtherPoints(self, indx):
         """
+        **OBSOLETE** - should be removed
+
         Remove points from the PointSetOpen3D object
 
         :param indx: indices to remove
 
         :return:
         """
+        from warnings import warn
+        warn(DeprecationWarning)
+
         if isinstance(indx, int):
             indx = [indx]
 
@@ -173,6 +179,8 @@ class PointSetOpen3D(PointSet):
 
     def DisregardPoints(self, indx, verbose=True):
         """
+        **OBSOLETE** - should be removed
+
         Remove points from the PointSetOpen3D object
 
         :param indx: indices to remove
@@ -182,6 +190,9 @@ class PointSetOpen3D(PointSet):
         :type verbose: bool
 
         """
+        from warnings import warn
+        warn(DeprecationWarning)
+
         if isinstance(indx, int):
             indx = [indx]
 
@@ -217,12 +228,29 @@ class PointSetOpen3D(PointSet):
 
     # region Visualization Functions
     def SetPointsColors(self, colors):
+        """
+        **OBSOLETE** -- should be removed
+
+        :param colors:
+        :return:
+        """
+        from warnings import warn
+        warn(DeprecationWarning)
+
         if isinstance(colors, O3D.Vector3dVector):
             self.pointsOpen3D.colors = colors
         else:
             self.pointsOpen3D.colors = O3D.Vector3dVector(colors)
 
     def VisualizeClusters(self, pointsLabels, both=False):
+        """
+        **OBSOLETE** -- should be removed
+        :param pointsLabels:
+        :param both:
+        :return:
+        """
+        from warnings import warn
+        warn(DeprecationWarning)
         assert self.numberOfPoints == len(pointsLabels), "Dimensions do not match."
 
         clustersIDs = set(pointsLabels)
@@ -237,6 +265,17 @@ class PointSetOpen3D(PointSet):
         self.Visualize(both=both)
 
     def Visualize(self, original=False, both=False):
+        """
+        **OBSOLETE** -- is about to be removed
+
+        :param original:
+        :param both:
+        :return:
+        """
+        import warnings
+
+        warnings.warn(DeprecationWarning)
+
         def toggle_black_white_background(vis):
             opt = vis.get_render_option()
             if np.array_equal(opt.background_color, np.ones(3)):
