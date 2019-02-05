@@ -32,7 +32,7 @@ Curvature Factory
         :methods:
 
 Methods documentation
-**********************************
+**********************
 
 .. autoclass:: CurvatureFactory.CurvatureFactory
    :members:

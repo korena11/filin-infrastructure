@@ -88,12 +88,15 @@ class NeighborsFactory:
         for point, i in zip(pointset3d, range(pointset3d.Size)):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_knn_vector_3d(point, k_nearest_neighbors)
             distances = np.asarray(distances)
+            if np.all(np.round(distances) == 0):
+                distances = None
             idx = np.asarray(idx)
 
             # create a temporary neighborhood
             tmp_subset = PointSubSetOpen3D(pointset3d, idx)
-            tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
-            neighbors.setNeighbor(i, tmp_point_neighborhood)
+            neighbors.setNeighbor(i, PointNeighborhood(tmp_subset, distances))
+
+        return neighbors
 
     @staticmethod
     def pointSetOpen3D_rknn_kdTree(pointset3d, k_nearest_neighbors, max_radius):
@@ -126,7 +129,7 @@ class NeighborsFactory:
 
         for point, i in zip(pointset3d, range(pointset3d.Size)):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=max_radius,
-                                                                                knn=k_nearest_neighbors)
+                                                                                max_nn=k_nearest_neighbors)
 
             distances = np.asarray(distances)
             idx = np.asarray(idx)
@@ -134,7 +137,11 @@ class NeighborsFactory:
             # create a temporary neighborhood
             tmp_subset = PointSubSetOpen3D(pointset3d, idx)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
+
+            # set in neighbors property
             neighbors.setNeighbor(i, tmp_point_neighborhood)
+
+        return neighbors
 
     @staticmethod
     def point3d_neighbors_kdtree(pt, pointset3d, radius=None, knn=None):
@@ -419,7 +426,7 @@ class NeighborsFactory:
             if not override:
                 if neighborsProperty.getNeighbors(currentPointIndex):
                     r = neighborsProperty.getNeighbors(currentPointIndex).radius
-                    nn = neighborsProperty.getNeighbors(currentPointIndex).maxNN
+                    nn = neighborsProperty.getNeighbors(currentPointIndex).numberOfNeighbors
                     if r == searchRadius and nn == maxNN:
                         continue
 
@@ -466,23 +473,21 @@ class NeighborsFactory:
             if not useOriginal:
                 num, idx, dist = pointset_open3d.kdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
             else:
-                num, idx, dist = pointset_open3d.originalkdTreeOpen3D.search_radius_vector_3d(point,
-                                                                                              radius=searchRadius)
-
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
         elif searchRadius <= 0:
             if not useOriginal:
                 num, idx, dist = pointset_open3d.kdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
             else:
-                num, idx, dist = pointset_open3d.originalkdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
 
         else:
             if not useOriginal:
                 num, idx, dist = pointset_open3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=searchRadius,
                                                                                       max_nn=maxNN)
             else:
-                num, idx, dist = pointset_open3d.originalkdTreeOpen3D.search_hybrid_vector_3d(point,
-                                                                                              radius=searchRadius,
-                                                                                              max_nn=maxNN)
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_hybrid_vector_3d(point,
+                                                                                      radius=searchRadius,
+                                                                                      max_nn=maxNN)
         pointsubset = PointSubSet(pointset_open3d.ToNumpy(), np.asarray(idx))
         pointNeighborhood = PointNeighborhood(pointsubset, dist)
         return pointNeighborhood
@@ -548,8 +553,8 @@ class NeighborsFactory:
         :type newRadius: float
         :type newMaxNN: int
         """
-        previousRadius = neighborProperty.getNeighbors(exampleIndex).GetRadius()
-        previousMaxNN = neighborProperty.getNeighbors(exampleIndex).GetMaxNN()
+        previousRadius = neighborProperty.getNeighbors(exampleIndex).radius
+        previousMaxNN = neighborProperty.getNeighbors(exampleIndex).numberOfNeighbors
 
         if previousRadius != newRadius or previousMaxNN != newMaxNN:
             print("Function: PointSetOpen3D.PointSetOpen3D.GetPointsNeighborsByID")

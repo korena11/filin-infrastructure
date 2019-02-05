@@ -14,7 +14,12 @@ class PointSubSetOpen3D(PointSetOpen3D):
 
     def __init__(self, points, indices):
 
-        self.pointSet = super(PointSubSetOpen3D, self).__init__(points)
+        if isinstance(points, PointSetOpen3D):
+            self.data = points.data
+
+        else:
+            super(PointSubSetOpen3D, self).__init__(points)
+
         self.indices = indices
 
     def ToNumpy(self):
@@ -22,7 +27,7 @@ class PointSubSetOpen3D(PointSetOpen3D):
         Return the points as numpy nX3 ndarray (in case we change the type of __xyz in the future)
         """
 
-        pointsArray = np.asarray(self.pointsOpen3D.points)[self.indices, :]
+        pointsArray = np.asarray(self.data.points)[self.indices, :]
         return pointsArray
 
     @property
@@ -45,9 +50,9 @@ class PointSubSetOpen3D(PointSetOpen3D):
         Return nX1 ndarray of intensity values
         """
         import numpy as np
-        intensity = self.pointSet.Intensity
+        intensity = self.data.Intensity
         if isinstance(intensity, np.ndarray):
-            return self.pointSet.Intensity[self.indices]
+            return self.data.Intensity[self.indices]
         else:
             return None
 
@@ -57,21 +62,21 @@ class PointSubSetOpen3D(PointSetOpen3D):
         Return nX1 ndarray of X coordinate
         """
 
-        return np.asarray(self.originalPointsOpen3D.points)[self.GetIndices, 0]
+        return np.asarray(self.data.points)[self.GetIndices, 0]
 
     @property
     def Y(self):
         """
         Return nX1 ndarray of Y coordinate
         """
-        return np.asarray(self.originalPointsOpen3D.points)[self.GetIndices, 1]
+        return np.asarray(self.data.points)[self.GetIndices, 1]
 
     @property
     def Z(self):
         """
         Return nX1 ndarray of Z coordinate
         """
-        return np.asarray(self.originalPointsOpen3D.points)[self.GetIndices, 2]
+        return np.asarray(self.data.points)[self.GetIndices, 2]
 
     def Visualize(self, original=False, both=False):
         # TODO: Elia please redo - so it will show only the subset

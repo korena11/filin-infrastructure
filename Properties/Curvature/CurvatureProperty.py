@@ -12,18 +12,29 @@ class CurvatureProperty(BaseProperty):
 
     def __init__(self, points, curvature):
         super(CurvatureProperty, self).__init__(points)
-        # self._BaseProperty__points = points
 
         self.setValues(curvature)
+        self.__invalid_value = -999  # value for not-computed curvature, default -999
+        self.__normalize = False  # flag whether to normalize the principal curvatures
+
+    def set_invalid_value(self, value):
+        """
+        Value for curvature that was not computed
+
+        :param value: a default value for not compute curvature
+
+        :return:
+        """
+        self.__invalid_value = value
 
     def setValues(self, *args, **kwargs):
         """
         Sets curvature into Curvature Property object
 
-        :param curvature:
-
         """
         self.__curvature = args[0]
+        if "invalid_value" in kwargs:
+            self.__invalid_value = kwargs['invalid_value']
 
     def getValues(self):
         """
@@ -31,27 +42,79 @@ class CurvatureProperty(BaseProperty):
         """
         return np.vstack((self.k1, self.k2))
 
+    def normalize_values(self, bool):
+        """
+        A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value
+
+        :param bool: boolean flag for normalization of the values
+
+        :type bool: bool
+
+        """
+        self.__normalize = bool
+
     @property
     def k1(self):
         """
         Maximal principal curvature value
         """
+        k1 = np.zeros((1, 1))
         if self.Points:
-            return self.__curvature[:, 0]
+            k1 = self.__curvature[:, 0]
 
         if self.Raster:
-            return self.__curvature[:, :, 0]
+            k1 = self.__curvature[:, :, 0]
+
+        # if flag for normalized value is "True", normalize between -1 and 1 with the invalid value set to 1.5
+
+        if self.__normalize:
+            # set values larger or smaller than 3sigma the average to invalid value
+            k_tmp = k1.copy()
+            k_tmp[np.where(k1 < k1.mean() - k1.std() * 3)] = self.__invalid_value
+            k_tmp[np.where(k1 > k1.mean() + k1.std() * 3)] = self.__invalid_value
+
+            # normalize to -1 and 1
+            # find min and max without considering the invalid value
+            min = k_tmp[np.where(k_tmp != self.__invalid_value)].min()
+            max = k_tmp[np.where(k_tmp != self.__invalid_value)].max()
+
+            s = 2 / (max - min)
+            k1_normed = s * k1 - (1 + min * s)
+            k1_normed[np.where(k_tmp == self.__invalid_value)] = 1.5
+            k1 = k1_normed
+
+        return k1
 
     @property
     def k2(self):
         """
         Minimal principal curvature value
         """
+        k2 = np.zeros((1, 1))
         if self.Points:
-            return self.__curvature[:, 1]
+            k2 = self.__curvature[:, 1]
 
         if self.Raster:
-            return self.__curvature[:, :, 1]
+            k2 = self.__curvature[:, :, 1]
+
+        # if flag for normalized value is "True", normalize between 0 and 1 with the invalid value set to 1.5
+        if self.__normalize:
+            # set values larger or smaller than 3sigma the average to invalid value
+            k_tmp = k2.copy()
+            k_tmp[np.where(k2 < k2.mean() - k2.std() * 3)] = self.__invalid_value
+            k_tmp[np.where(k2 > k2.mean() + k2.std() * 3)] = self.__invalid_value
+
+            # normalize to -1 and 1
+            # find min and max without considering the invalid value
+            min = k_tmp[np.where(k_tmp != self.__invalid_value)].min()
+            max = k_tmp[np.where(k_tmp != self.__invalid_value)].max()
+
+            s = 2 / (max - min)
+            k2_normed = s * k2 - (1 + min * s)
+            k2_normed[np.where(k_tmp == self.__invalid_value)] = 1.5
+            k2 = k2_normed
+
+        return k2
 
     @property
     def mean_curvature(self):

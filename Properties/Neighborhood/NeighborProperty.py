@@ -36,7 +36,7 @@ class NeighborsProperty(BaseProperty):
     def __next__(self):
         self.__current += 1
         try:
-            return self.getNeighbors(self.__current - 1)
+            return self.get_point_neighborhood(self.__current - 1)
         except IndexError:
             self.__current = 0
             raise StopIteration
@@ -58,13 +58,22 @@ class NeighborsProperty(BaseProperty):
 
     def getNeighbors(self, idx):
         """
-        Retrieve a neighborhood of point(s) with idx index
+        Retrieve the neighbors of point(s) with index
 
         :param idx: the index of the point
 
         :type idx: int, tuple, list
 
         :return: the tensor of point idx
+
+        :rtype: PointSubSet or PointSubSetOpen3D
+        """
+
+        return self.get_point_neighborhood(idx).neighbors
+
+    def get_point_neighborhood(self, idx):
+        """
+        Retrieve the point neighborhood
 
         :rtype: PointNeighborhood
         """
@@ -78,18 +87,21 @@ class NeighborsProperty(BaseProperty):
 
         return neighbors
 
-    def setNeighbor(self, idx, point_neighbor):
+    def setNeighbor(self, idx, point_neighbors):
         """
         Set a PointNeighborhood into the property according to the point index
 
         :param idx: the index (or indices) of the point(s) to set
-        :param point_neighbor: the PointeNeighborhood object to set
+        :param point_neighbors: the PointeNeighborhood object to set
 
         :type idx: int
-        :type point_neighbor: PointNeighborhood
+        :type point_neighbors: PointNeighborhood
 
         """
-        self.__pointsNeighborsArray[idx] = point_neighbor
+        if isinstance(point_neighbors, PointNeighborhood):
+            self.__pointsNeighborsArray[idx] = point_neighbors
+        else:
+            self.__pointsNeighborsArray[idx] = PointNeighborhood()
 
     def RotatePointNeighborhood(self, pointIndex, smoothen=False, useOriginal=False):
         """

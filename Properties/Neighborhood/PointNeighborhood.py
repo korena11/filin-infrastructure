@@ -4,13 +4,11 @@ from PointSubSet import PointSubSet
 
 
 class PointNeighborhood:
-    def __init__(self, points_subset, distances):
+    def __init__(self, points_subset, distances=None):
         """
 
         :param points_subset: the neighborhood as point subset
         :param distances: Distances of each point from center point
-
-
 
         :type points_subset: PointSubSet, PointSubSetOpen3D
         :type distances: np.array
@@ -20,7 +18,6 @@ class PointNeighborhood:
         self.__distances = distances
         self.__neighbors = points_subset
 
-
     @property
     def radius(self):
         """
@@ -29,8 +26,24 @@ class PointNeighborhood:
         :return: mean radius
         :rtype: float
         """
+        if self.__distances is None:
+            self.computeDistances()
 
         return np.mean(self.__distances)
+
+    @property
+    def distances(self):
+        """
+        Array of the distances between each point and the center point
+
+        :return: array of distances
+
+        :rtype: np.array
+        """
+        if self.__distances is None:
+            self.computeDistances()
+
+        return self.__distances
 
     @property
     def numberOfNeighbors(self):
@@ -83,3 +96,20 @@ class PointNeighborhood:
         :rtype: int
         """
         return self.neighbors.GetIndices[0]
+
+    def computeDistances(self):
+        """
+        Compute the distances between each point and the center point
+
+        :return: array of distances
+
+        :rtype: np.array
+        """
+
+        center_pt = self.center_point_coords
+        pts = self.__neighbors.ToNumpy()
+
+        dist2 = np.linalg.norm(pts - center_pt, axis=0)
+        self.__distances = np.sqrt(dist2)
+
+        return self.__distances

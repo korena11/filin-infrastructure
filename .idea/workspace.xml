@@ -1,48 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Added option to show BaseProperty classes via open3d.">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="restructured PointSetOpen3D to fit infrastructure idea&#10;made PointSet iterable&#10;rewrote NeighborhoodFactory to accommodate different ways to find neighbors&#10;restructured the docs so that there won't be so many files&#10;changed PointNeighborhood">
+      <change afterPath="$PROJECT_DIR$/Properties/Neighborhood/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Properties/Neighborhood/test_neighborsFactory.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Properties/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/PointSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Curvature/test_curvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/test_curvatureFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborProperty.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Visualization Classes/test_visualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization Classes/test_visualizationO3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Visualization Classes/test_visualizationVTK.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization Classes/test_visualizationVTK.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Colors/ColorFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Colors/ColorProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Colors/Colors.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Colors/Colors.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Colors/RandomColors.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Curvature/Curvature" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Curvature/Curvature.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Curvature/Curvature.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Curvature/CurvatureFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Curvature/CurvatureProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Neighborhood/NeighborhoodProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Neighborhood/NeighborsFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Normals/Normals.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Normals/Normals.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Normals/NormalsFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Normals/NormalsProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Panorama/Panorama.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Panorama/Panorama.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Panorama/PanoramaFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Panorama/PanoramaProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Saliency/SaliencyProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/Spherical.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/Spherical.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/SphericalCoordinatesFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/SphericalProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Tensors/tensorClass.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Tensors/tensorClass.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Transformations/RotationUtils.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Transformations/Transformation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Properties/Transformations/Transformation.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Transformations/TransformationFactory.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Properties/Transformations/TransformationProperty.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -86,8 +51,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="336">
+              <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -98,7 +63,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="335">
+            <state relative-caret-position="4272">
               <caret line="184" column="50" selection-start-line="184" selection-start-column="50" selection-end-line="184" selection-end-column="50" />
             </state>
           </provider>
@@ -127,7 +92,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
+            <state relative-caret-position="4944">
               <caret line="209" column="24" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -280,19 +245,19 @@
         <option value="$PROJECT_DIR$/Visualization Classes/test_visualizationO3D.py" />
         <option value="$PROJECT_DIR$/docs/source/Visualizations/Visualization.rst" />
         <option value="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" />
-        <option value="$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Panorama/Panorama.rst" />
         <option value="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" />
         <option value="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" />
         <option value="$PROJECT_DIR$/docs/source/conf.py" />
+        <option value="$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1987" />
-    <option name="y" value="25" />
-    <option name="width" value="1853" />
-    <option name="height" value="1055" />
+    <option name="y" value="27" />
+    <option name="width" value="1843" />
+    <option name="height" value="992" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -317,7 +282,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -366,6 +330,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -541,7 +506,9 @@
       <workItem from="1545731023435" duration="4667000" />
       <workItem from="1545744455705" duration="4722000" />
       <workItem from="1545844160654" duration="535000" />
-      <workItem from="1545844719283" duration="1018000" />
+      <workItem from="1545844719283" duration="2516000" />
+      <workItem from="1547376662626" duration="598000" />
+      <workItem from="1547396949322" duration="166000" />
     </task>
     <task id="LOCAL-00001" summary="ReumaPhD folder added with circle development">
       <created>1484487854691</created>
@@ -851,7 +818,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545755365996</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="restructured PointSetOpen3D to fit infrastructure idea&#10;made PointSet iterable&#10;rewrote NeighborhoodFactory to accommodate different ways to find neighbors&#10;restructured the docs so that there won't be so many files&#10;changed PointNeighborhood">
+      <created>1545862427519</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1545862427519</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -887,7 +861,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103478000" />
+    <option name="totallyTimeSpent" value="105740000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -902,13 +876,13 @@
     <frame x="1920" y="27" width="1920" height="992" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.17182498" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.17502668" />
       <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.7046549" side_tool="true" weight="1.0" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32721382" />
       <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49562842" weight="0.32073435" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49529606" visible="true" weight="0.42007002" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49529606" visible="true" weight="0.41666666" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3278867" />
@@ -1008,7 +982,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Band flow added - not clear if working&#10;open contour (intersection with psi) - working. :)" />
     <MESSAGE value="Added saving properties (with data class) to hdf5. &#10;&#10;Added build and source folders for documentation (sphinx)" />
     <MESSAGE value="Full documentation (by Sphinx)&#10; &#10; Added:&#10; --------&#10; BaseData as DataClass&#10; &#10; setValue() function for the BaseProperty&#10; &#10; load + save from hdf5 file, both for Properties and for Data. &#10; &#10; Open issues:  &#10; -------&#10; ClassificationProperty was changed and should be rechecked. &#10; Other changes to the properties that should be rechecked. &#10;&#10;" />
     <MESSAGE value="Full documentation (by Sphinx)&#10;" />
@@ -1033,7 +1006,8 @@
     <MESSAGE value="CurvatureFactory divided into functions &#10;NeighborProperty and TensorProperty made in iterable objects&#10;ReumaPhD removed" />
     <MESSAGE value="Removed linux check for matplotlib&#10;Added reinitializtion for the level set function&#10;completed curvature computation for tensors (in case there is a neighbors property but no normals can be computed via PointSet3D&#10;Added reset for NeighborProperty iterator&#10;Added an option for panorama's values to be from an external array&#10;Added visualization testing" />
     <MESSAGE value="Added option to show BaseProperty classes via open3d." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added option to show BaseProperty classes via open3d." />
+    <MESSAGE value="restructured PointSetOpen3D to fit infrastructure idea&#10;made PointSet iterable&#10;rewrote NeighborhoodFactory to accommodate different ways to find neighbors&#10;restructured the docs so that there won't be so many files&#10;changed PointNeighborhood" />
+    <option name="LAST_COMMIT_MESSAGE" value="restructured PointSetOpen3D to fit infrastructure idea&#10;made PointSet iterable&#10;rewrote NeighborhoodFactory to accommodate different ways to find neighbors&#10;restructured the docs so that there won't be so many files&#10;changed PointNeighborhood" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1419,7 +1393,7 @@
         <state relative-caret-position="193">
           <caret line="86" selection-start-line="86" selection-end-line="86" />
           <folding>
-            <marker date="1545856933590" expanded="true" signature="825:1065" ph="..." />
+            <marker date="1545862421816" expanded="true" signature="870:1110" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1676,6 +1650,33 @@
     <entry file="file://$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/Visualization Classes/test_visualizationO3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4272">
+          <caret line="184" column="50" selection-start-line="184" selection-start-column="50" selection-end-line="184" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
@@ -1687,6 +1688,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Visualizations/Visualization.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4944">
+          <caret line="209" column="24" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/BaseProperty.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1702,43 +1713,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="184" column="50" selection-start-line="184" selection-start-column="50" selection-end-line="184" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Visualization Classes/test_visualizationO3D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="209" column="24" selection-start-line="209" selection-start-column="24" selection-end-line="209" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

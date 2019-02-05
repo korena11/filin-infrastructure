@@ -63,7 +63,10 @@ class VisualizationO3D:
         key_to_callback = cls.initialize_key_to_callback()
 
         # Change the pointset to an instance of PointSetOpen3D
-        if isinstance(pointset, PointSubSetOpen3D) or isinstance(pointset, PointSetOpen3D):
+        if isinstance(pointset, PointSubSetOpen3D):
+            pcd = PointSetOpen3D(pointset.ToNumpy())
+
+        elif isinstance(pointset, PointSetOpen3D):
             pcd = pointset
 
         else:
@@ -75,9 +78,9 @@ class VisualizationO3D:
 
         if isinstance(colors, ColorProperty):
             colors_ = colors.rgb
-            pcd.pointsOpen3D.colors = o3d.Vector3dVector(colors_)
+            pcd.data.colors = o3d.Vector3dVector(colors_)
 
-        o3d.draw_geometries_with_key_callbacks([pcd.pointsOpen3D], key_to_callback)
+        o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
     def visualize_property(self, propertyclass):
         """
@@ -114,7 +117,7 @@ class VisualizationO3D:
         key_to_callback[ord('P')] = self.toggle_attributes_colors
         key_to_callback[ord('.')] = self.toggle_colormaps
 
-        o3d.draw_geometries_with_key_callbacks([self.pointset.pointsOpen3D], key_to_callback)
+        o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
 
         print('hello')
 
@@ -134,7 +137,7 @@ class VisualizationO3D:
             self.index += 1
 
         print(self.attribute_name[self.index])
-        self.pointset.pointsOpen3D.colors = self.colors[self.index]
+        self.pointset.data.colors = self.colors[self.index]
         vis.update_geometry()
 
     def toggle_colormaps(self, vis):
@@ -148,7 +151,7 @@ class VisualizationO3D:
         cm = plt.get_cmap(colorname)
 
         new_colors = self.__change_colormap(cm)
-        self.pointset.pointsOpen3D.colors = new_colors
+        self.pointset.data.colors = new_colors
         vis.update_geometry()
 
     def __change_colormap(self, colormap):
