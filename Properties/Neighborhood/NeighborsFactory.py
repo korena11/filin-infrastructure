@@ -86,7 +86,7 @@ class NeighborsFactory:
         neighbors = NeighborsProperty(pointset3d)
 
         for point, i in zip(pointset3d, range(pointset3d.Size)):
-            k, idx, distances = pointset3d.kdTreeOpen3D.search_knn_vector_3d(point, k_nearest_neighbors)
+            k, idx, distances = pointset3d.kdTreeOpen3D.search_knn_vector_3d(point, k_nearest_neighbors + 1)
             distances = np.asarray(distances)
             if np.all(np.round(distances) == 0):
                 distances = None
@@ -129,7 +129,7 @@ class NeighborsFactory:
 
         for point, i in zip(pointset3d, range(pointset3d.Size)):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=max_radius,
-                                                                                max_nn=k_nearest_neighbors)
+                                                                                max_nn=k_nearest_neighbors + 1)
 
             distances = np.asarray(distances)
             idx = np.asarray(idx)
@@ -189,17 +189,17 @@ class NeighborsFactory:
         if knn_flag and radius_flag:
             # check if the point is an array or an index
             if isinstance(pt, np.ndarray):
-                k, idx, dist = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(pt, radius=radius, knn=knn)
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(pt, radius=radius, knn=knn + 1)
             else:
                 k, idx, dist = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(pointset3d.data.points[pt],
-                                                                               radius=radius, knn=knn)
+                                                                               radius=radius, knn=knn + 1)
 
         elif knn_flag:
             # check if the point is an array or an index
             if isinstance(pt, np.ndarray):
-                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pt, knn)
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pt, knn + 1)
             else:
-                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pointset3d.data.points[pt], knn)
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pointset3d.data.points[pt], knn + 1)
 
         elif radius_flag:
             # check if the point is an array or an index

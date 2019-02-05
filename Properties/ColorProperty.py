@@ -13,8 +13,8 @@ class ColorProperty(BaseProperty):
         :type rgb: numpy.array
         """
         super(ColorProperty, self).__init__(points)
-        self.setValues(rgb)
-        
+        self.setValues(rgb)  # makes sure that the array is 3d and that it ranges [0,1]
+
     @property
     def RGB(self):
         """
@@ -26,7 +26,7 @@ class ColorProperty(BaseProperty):
 
         """
 
-        RGB = (self.__rgb * 255).astype(int)
+        RGB = (self.rgb * 255).astype(int)
 
         return RGB
 
@@ -50,11 +50,26 @@ class ColorProperty(BaseProperty):
         :return:
         """
 
+        array = args[0]
+
+        import numpy as np
+        size_array = array.shape
+
+        # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)
+        if len(size_array) < 2:
+            rgb = np.ones((size_array[0], 3))
+            rgb *= array[:, None]
+        elif len(size_array) == 3:
+            rgb = array.reshape((size_array[0] * size_array[1], 3))
+
+        else:
+            rgb = array
         # normalize numbers to [0,1] interval
-        rgb = args[0]
+
         rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
 
         self.__rgb = rgb_normed
 
     def getValues(self):
         return self.__rgb
+

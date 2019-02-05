@@ -207,7 +207,8 @@ class CurvatureFactory:
 
         return k1[0], k2[0]
 
-    def umbrella_curvature(self, neighbrohood, normals,
+    @classmethod
+    def umbrella_curvature(cls, neighbrohood, normals,
                            min_points_in_neighborhood=8, min_points_in_sector=1, valid_sectors=7, num_sectors=8,
                            invalid_value=-999, verbose=False):
         r"""
@@ -251,21 +252,22 @@ class CurvatureFactory:
 
         for point_neighbors in neighbrohood:
             # check if the neighborhood is valid
-            if self.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
-                                        min_points_in_sector=min_points_in_sector, valid_sectors=valid_sectors,
-                                        num_sectors=num_sectors):
+            if cls.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
+                                       min_points_in_sector=min_points_in_sector, valid_sectors=valid_sectors,
+                                       num_sectors=num_sectors):
                 point_idx = point_neighbors.neighborhoodIndices[0]
                 n = normals.Normals[point_idx]
 
                 if verbose:
                     print(point_idx, n)
 
-                # compute the direction from center point to each neighbor:
-
-
-
+                # compute the directions projections  on the normal at the center point of each neighbor
+                directions = point_neighbors.neighbors_vectors().dot(n)
+                umbrellaCurvature.append(np.sum(directions))
 
             else:
+                if verbose:
+                    print('invalid point:', point_neighbors.center_point_idx)
                 umbrellaCurvature.append(invalid_value)
 
         return np.asarray(umbrellaCurvature)

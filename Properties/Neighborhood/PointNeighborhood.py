@@ -109,7 +109,25 @@ class PointNeighborhood:
         center_pt = self.center_point_coords
         pts = self.__neighbors.ToNumpy()
 
-        dist2 = np.linalg.norm(pts - center_pt, axis=0)
-        self.__distances = np.sqrt(dist2)
+        self.__distances = np.linalg.norm(pts - center_pt, axis=1)
 
         return self.__distances
+
+    def neighbors_vectors(self):
+        """
+        Find the direction of each point to the center point
+
+        :return: array of directions
+
+        :rtype: np.array nx3
+        """
+        center_pt = self.center_point_coords
+        pts = self.__neighbors.ToNumpy()
+
+        directions = pts - center_pt
+
+        if self.__distances is None:
+            self.__distances = np.linalg.norm(directions, axis=1)
+
+        return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
+                                                               None]
