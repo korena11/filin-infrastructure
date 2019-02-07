@@ -26,4 +26,6 @@ All other data classes inherit from here
 
     PointSet
     PointSetOpen3D
+    BallTreePointSet
     RasterData
+

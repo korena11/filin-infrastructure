@@ -13,7 +13,7 @@ PointSet class
     .. autoautosummary:: PointSet.PointSet
         :attributes:
 
-        .. rubric:: Methods
+    .. rubric:: Methods
 
     .. autoautosummary:: PointSet.PointSet
         :methods:

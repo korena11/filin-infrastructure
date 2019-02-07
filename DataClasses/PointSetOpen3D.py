@@ -40,6 +40,7 @@ class PointSetOpen3D(PointSet):
         :param inputPoints: the points from which the object should be initialized to
 
         :type inputPoints: np.ndarray, o3D.PointCloud, PointSet
+
         :return:
         """
         if isinstance(inputPoints, np.ndarray):

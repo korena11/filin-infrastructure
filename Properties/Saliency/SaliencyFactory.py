@@ -63,6 +63,14 @@ class SaliencyFactory(object):
         :return: saliency property for the cloud
 
         :rtype: SaliencyProperty
+
+        **Usage example**
+
+        .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
+            :lines: 13-21
+            :emphasize-lines: 4
+            :linenos:
+
         """
 
         S = []  # collection of sigma sets
@@ -114,23 +122,26 @@ class SaliencyFactory(object):
             - 'pixel_val' - the value of the pixel itself
             - 'LAB' - a feature vector using CIElab color space
 
-            .. note::
-
-                Other features can be added.
-
         :type panorama_property: PanoramaProperty.PanoramaProperty
         :type filters: list
         :type sigma_sent: bool
         :type feature: str
 
+        .. note::
+           Other features can be added.
+
+
+
         :return: saliency image
 
         :rtype: numpy.array
 
-        .. literalinclude:: test_saliencyFactory.py
-            :lines: 24-32
-            :emphasize-lines: 30
-            :linenos:
+        **Usage example**
+
+        .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
+           :lines: 25-32
+           :emphasize-lines: 5
+           :linenos:
 
         .. code-block:: python
 
@@ -140,6 +151,7 @@ class SaliencyFactory(object):
 
             s2 = Saliency.Factory.panorama_frequency(normals_panorama, filters= [3, 5, 7],
             feature = 'pixel_val')
+
         """
 
         image = panorama_property.PanoramaImage.astype(np.float32)
@@ -200,10 +212,12 @@ class SaliencyFactory(object):
 
         :rtype: numpy.array
 
-        .. literalinclude:: test_saliencyFactory.py
-            :lines: 34-40
-            :emphasize-lines: 38
-            :linenos:
+        **Usage example**
+
+        .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
+           :lines: 34-40
+           :emphasize-lines: 4
+           :linenos:
         """
 
         image = panorama_property.PanoramaImage.astype(np.float32)
@@ -253,10 +267,10 @@ class SaliencyFactory(object):
         :param scale_r: scale for multiscale saliency, according to which the neighboring scales are defined:
 
             .. math::
-
                 R_q=\left\{ r, \frac{1}{2}r, \frac{1}{4}r,...\right\}
 
             according scales_number
+
         :param scales_number: the number of scales that should be computed. default 4.
         :param feature: according to which property the saliency is computed, can be:
 
@@ -282,16 +296,18 @@ class SaliencyFactory(object):
 
         :return: saliency map
 
-         .. code-block:: python
+        **Usage example**
+
+        .. code-block:: python
 
             s3 = panorama_context(panorama, r_scale = 2, scales_number = 4, feature = 'pixel_val',
             kpatches=128, constant=3)
             s3[s3 < 1.e-5] = 0
 
-            .. literalinclude:: test_saliencyFactory.py
-                :lines: 42-49
-                :emphasize-lines: 30
-                :linenos:
+       .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
+          :lines: 42-48
+          :emphasize-lines: 5
+          :linenos:
         """
         image = panorama_property.PanoramaImage.astype(np.float32)
 

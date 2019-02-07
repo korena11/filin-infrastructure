@@ -39,9 +39,3 @@ Methods documentation
     :private-members:
     :undoc-members: SaliencyFactory.SaliencyFactory.pointwise_tensor_saliency
 
-
-
-
-
-
-
