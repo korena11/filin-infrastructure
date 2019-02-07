@@ -74,9 +74,9 @@ class SaliencyFactory(object):
         print('>>> Compute sigma-sets for all tensors')
         for tensor in tensor_property.GetAllPointsTensors():
 
-            counter += 1
-            # if verbose:
-            #     print(counter)
+            if verbose:
+                counter += 1
+                print(counter)
             if tensor is None:
                 S.append(np.zeros((principal_components_number * 2 * principal_components_number)))
             else:
@@ -94,7 +94,6 @@ class SaliencyFactory(object):
         if verbose:
             print('G', G)
             print('S_eigenvectors', S_eigenvectors)
-
 
         return SaliencyProperty(tensor_property.Points, G)
 
@@ -127,6 +126,11 @@ class SaliencyFactory(object):
         :return: saliency image
 
         :rtype: numpy.array
+
+        .. literalinclude:: test_saliencyFactory.py
+            :lines: 24-32
+            :emphasize-lines: 30
+            :linenos:
 
         .. code-block:: python
 
@@ -196,9 +200,10 @@ class SaliencyFactory(object):
 
         :rtype: numpy.array
 
-        .. code-block:: python
-
-            s = panorama_contrast(panoramaProp, filter_size = 5, feature = 'LAB')
+        .. literalinclude:: test_saliencyFactory.py
+            :lines: 34-40
+            :emphasize-lines: 38
+            :linenos:
         """
 
         image = panorama_property.PanoramaImage.astype(np.float32)
@@ -282,6 +287,11 @@ class SaliencyFactory(object):
             s3 = panorama_context(panorama, r_scale = 2, scales_number = 4, feature = 'pixel_val',
             kpatches=128, constant=3)
             s3[s3 < 1.e-5] = 0
+
+            .. literalinclude:: test_saliencyFactory.py
+                :lines: 42-49
+                :emphasize-lines: 30
+                :linenos:
         """
         image = panorama_property.PanoramaImage.astype(np.float32)
 

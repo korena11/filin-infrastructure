@@ -117,7 +117,7 @@ class NeighborsFactory:
 
         :rtype: NeighborsProperty
 
-        .. seelso::
+        .. seealso::
 
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`
 
