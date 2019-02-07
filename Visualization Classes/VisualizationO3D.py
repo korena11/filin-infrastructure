@@ -106,16 +106,18 @@ class VisualizationO3D:
                 colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att)))
                 attribute_name.append(att)
         if len(colors_new) == 0:
-            pass
+            colors_new = [self.__make_color_array(propertyclass.getValues())]
+            attribute_name = ['default']
 
-        else:
-            self.colors = colors_new
-            self.attribute_name = attribute_name
-            self.high = len(attribute_name)
+        self.high = len(attribute_name)
+
+        self.colors = colors_new
+        self.attribute_name = attribute_name
+
         from itertools import cycle
         self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray'])
         key_to_callback[ord('P')] = self.toggle_attributes_colors
-        key_to_callback[ord('.')] = self.toggle_colormaps
+        key_to_callback[ord('C')] = self.toggle_colormaps
 
         o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
 

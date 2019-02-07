@@ -85,10 +85,11 @@ class TestCurvatureFactory(TestCase):
         p3d.CalculateNormals(search_radius, max_nn)
         normals = NormalsProperty(p3d, np.asarray(p3d.data.normals))
         neighborsProperty = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, max_nn)
-        curvatures = CurvatureFactory.umbrella_curvature(neighborsProperty, normals, valid_sectors=4, verbose=True)
+        curvatures = CurvatureFactory.umbrella_curvature(neighborsProperty, normals, valid_sectors=4, invalid_value=0,
+                                                         verbose=True)
 
         from ColorProperty import ColorProperty
         colors_curvature = ColorProperty(p3d, curvatures)
 
         vis = VisualizationO3D()
-        vis.visualize_pointset(p3d, colors=curvatures)
+        vis.visualize_pointset(p3d, colors=colors_curvature)

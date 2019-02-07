@@ -46,8 +46,8 @@ class TensorFactory(object):
                 """
 
         if point_index == -1:
-            ref_point = -1
             points_array = points.ToNumpy()
+            ref_point = -1
 
         else:
             ref_point = points.GetPoint(point_index)
@@ -86,6 +86,7 @@ class TensorFactory(object):
         :type ref_array: np.array
 
         **Optionals**
+
         :param weights: the weights for the tensor computation. Default 1 for all
         :param min_points: minimal number of points that can define a tensor (default: 3)
 
@@ -205,12 +206,12 @@ class TensorFactory(object):
             # in case the neighborhood was already defined
             for i in np.arange(points.Size):
 
-                neighbors = neighborhoodProperty.getNeighbors(i)
+                neighbors = neighborhoodProperty.get_point_neighborhood(i)
 
                 if neighbors == None:
                     continue
                 radius = neighbors.radius
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0, radius=radius))
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
 
         else:
             # compute neighbors and tensor at the same time
@@ -224,5 +225,5 @@ class TensorFactory(object):
                 radius = neighbors.radius
                 # always around the first points, as the point around which the tensor is looked is the first on the
                 # neighbors list (the closest to itself)
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0, radius=radius))
+                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
         return tensors
