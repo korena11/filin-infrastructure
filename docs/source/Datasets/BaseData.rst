@@ -1,6 +1,11 @@
 BaseData class
 ================
 
+All other data classes inherit from here.
+
+.. seealso::
+    :ref:`PointSet class`, :ref:`BallTreePointSet class`, :ref:`PointSetOpen3D class`, :ref:`RasterData class`
+
 .. autoclass:: BaseData.BaseData
     :members:
     :undoc-members:
@@ -19,13 +24,5 @@ BaseData class
         :methods:
 
 
-All other data classes inherit from here
 
-.. toctree::
-    :maxdepth: 2
-
-    PointSet
-    PointSetOpen3D
-    BallTreePointSet
-    RasterData
 

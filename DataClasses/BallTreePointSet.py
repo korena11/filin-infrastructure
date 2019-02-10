@@ -427,6 +427,9 @@ class BallTreePointSet(PointSet):
         """
         return self.data.get_arrays()[0]
 
+    def GetPoint(self, index):
+        return self.ToNumpy()[index, :]
+
     def ToPolyData(self):
         from VisualizationUtils import MakeVTKPointsMesh
         vtkPolyData = MakeVTKPointsMesh(self.ToNumpy())

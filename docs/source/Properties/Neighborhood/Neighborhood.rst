@@ -25,18 +25,18 @@ Neighbors Property
 ------------------
 
 
-.. autoclass:: NeighborProperty.NeighborsProperty
+.. autoclass:: NeighborsProperty.NeighborsProperty
     :members:
     :undoc-members:
 
     .. rubric:: Attributes
 
-    .. autoautosummary:: NeighborProperty.NeighborsProperty
+    .. autoautosummary:: NeighborsProperty.NeighborsProperty
         :attributes:
 
     .. rubric:: Methods
 
-    .. autoautosummary:: NeighborProperty.NeighborsProperty
+    .. autoautosummary:: NeighborsProperty.NeighborsProperty
         :methods:
 
 

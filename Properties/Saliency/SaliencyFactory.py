@@ -11,7 +11,7 @@ from TensorProperty import TensorProperty
 class SaliencyFactory(object):
 
     @classmethod
-    def pointwise_tensor_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
+    def pointwise_pca_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
         r"""
         Compute saliency according to PCA (tensors) similarity.
 
@@ -104,6 +104,82 @@ class SaliencyFactory(object):
             print('S_eigenvectors', S_eigenvectors)
 
         return SaliencyProperty(tensor_property.Points, G)
+
+    @classmethod
+    def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
+                           weight_distance=1, weight_normals=1, verbose=False):
+        r"""
+        Computes saliency in each point according to difference in curvature and normal, as a function of the distance
+
+        For each point, the angle between the normals is computed, as well as the difference in curvature magnitude:
+
+        .. math::
+            \begin{eqnarray}
+            d\kappa_{ij} = |\kappa_i - \kappa_j| \\
+            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf }_j
+            \end{eqnarray}
+
+        The saliency of the point is the sum of:
+
+        .. math::
+            s = \sum{d\kappa \cdot w_d e^{-d} \cdot w_{dN} e^{-d{\bf N} + 1}}
+
+        :param curvature_property: curvature property computed in advance
+        :param curvature_attribute: the attribute according to which the curvature is measured.
+        :param normals_property: normals property computed in advance
+        :param neighbors_property: the neighborhood property of the point cloud.
+        :param weight_distance: weights for distance element. Default: 1.
+        :param weight_normals: weights for normal element. Default: 1.
+        :param verbose: print running messages. Default: False
+
+        :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
+        :type normals_property: NormalsProperty.NormalsProperty
+        :type curvature_attribute: str
+        :type neighbors_property: NeighborsProperty.NeighborsProperty
+        :type weight_normals: float
+        :type weight_distance: float
+        :type verbose: bool
+
+        :return: saliency values for each point
+
+        :rtype: SaliencyProperty
+        """
+        import CurvatureProperty
+        from warnings import warn
+
+        tensor_saliency = []
+
+        for neighborhood in neighbors_property:
+            # get all the current values of curvature and normals. The first is the point to which the
+            # computation is made
+            if isinstance(curvature_property, CurvatureProperty.CurvatureProperty):
+                current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
+                    neighborhood.neighborhoodIndices]
+            elif isinstance(curvature_property, np.ndarray):
+                current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
+            else:
+                warn(
+                    'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
+                return 1
+
+            current_normals = normals_property[neighborhood.neighborhoodIndices, :]
+
+            # difference in curvature
+            dk = current_curvatures[1:, :] - current_curvatures[0, :]
+
+            # distances influence
+            dist_element = weight_distance * np.exp(-neighborhood.distances[1:])
+
+            # normal influence
+            dn = current_normals[1:, :].dot(current_normals[0, :])
+            normal_element = weight_normals * np.exp(-(dn + 1))
+
+            tensor_saliency.append(np.sum(dk * dist_element * normal_element))
+
+        return SaliencyProperty(neighbors_property.Points, np.asarray(tensor_saliency))
+
+
+
 
     # ------------------- Saliency on Panorama Property ---------------------
     @classmethod

@@ -14,7 +14,7 @@ class TestSaliencyFactory(TestCase):
         pcl = IOFactory.ReadPts('../../test_data/test_pts2.pts', merge=False)
         neighbors = NeighborsFactory.CalculateAllPointsNeighbors(pcl[0], search_radius=0.1)
         tensorProp = TensorFactory.computeTensorsProperty_givenNeighborhood(pcl[0], neighbors)
-        saliency = SaliencyFactory.pointwise_tensor_saliency(tensorProp, verbose=True)
+        saliency = SaliencyFactory.pointwise_pca_saliency(tensorProp, verbose=True)
         saliencyPanorama = PanoramaFactory.CreatePanorama_byProperty(saliency, elevationSpacing=0.12,
                                                                      azimuthSpacing=0.12, voidData=2)
         plt.imshow(saliencyPanorama.PanoramaImage)

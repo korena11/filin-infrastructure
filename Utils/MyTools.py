@@ -428,6 +428,100 @@ def eig(matrix):
     eigVectors = eigVectors[:, sort_perm]
     return eigVals, eigVectors
 
+
+def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attribute, leaf_size=10,
+                      weight_distance=1, weight_normals=1, verbose=False):
+    """
+    Compute curvature based saliency using ball-tree and k-nearest-neighbors.
+
+    The saliency for every set of points within a ball-tree cell is computed as one for all points.
+
+    .. seealso::
+        :meth:`SaliencyFactory.curvature_saliency`
+
+    :param pointset: a point cloud of any sort
+    :param scale: the scale of the minimal phenomena (size of the smallest ball-tree cell)
+    :param neighborhood_properties: k nearest neighbors
+    :param curvature_attribute: the attribute according to which the curvature is measured.
+
+    :param leaf_size: the minimum number of points in the ball tree leaves. Default: 10
+    :param weight_distance: weights for distance element. Default: 1.
+    :param weight_normals: weights for normal element. Default: 1.
+    :param verbose: print running messages. Default: False
+
+    :type pointset: np.ndarray, PointSet.PointSet, BallTreePointSet.BallTreePointSet, PointSetOpen3D.PointSetOpen3D
+    :type scale: float
+    :type neighborhood_properties: int or float
+    :type leaf_size: int
+    :type weight_normals: float
+    :type weight_distance: float
+    :type verbose: bool
+
+    :return: curvature property, normals property, saliency property
+
+    :rtype: (CurvatureProperty, NormalsProperty, SaliencyProperty)
+    """
+
+    from CurvatureFactory import CurvatureFactory
+    from SaliencyFactory import SaliencyFactory, SaliencyProperty
+    from NeighborsFactory import NeighborsFactory
+    from BallTreePointSet import BallTreePointSet
+    from PointSubSet import PointSubSet
+    from TensorFactory import TensorFactory, TensorProperty
+    from NormalsFactory import NormalsFactory
+
+    # 1. Build the BallTree
+    if isinstance(pointset, BallTreePointSet):
+        balltree = pointset
+
+    else:
+        balltree = BallTreePointSet(pointset, leaf_size=leaf_size)
+
+    # 2. Choose vertices according to minimal scale
+    nodes = balltree.getSmallestNodesOfSize(scale, 'leaves')
+
+    # 3. Build tensors out of each node's points, and build their neighborhoods
+    tensors = []
+    new_cloud = []
+    for node in nodes:
+        tmp_subset = PointSubSet(pointset.ToNumpy(), balltree.getPointsOfNode(node))
+        tensors.append(TensorFactory.tensorFromPoints(tmp_subset, -1))
+        new_cloud.append(tensors[-1].reference_point)
+
+    new_bt = BallTreePointSet(np.asarray(new_cloud))  # the new cloud of the centers of mass of each tensor
+    tensors_property = TensorProperty(new_bt, np.asarray(tensors))
+    neighbors = NeighborsFactory.balltreePointSet_knn(new_bt, neighborhood_properties)  # neighborhood construction
+
+    # 4. Curvature for each tensor
+    tensor_curvature = CurvatureFactory.tensorProperty_3parameters(tensors_property)
+
+    # 5. Normal for each tensor
+    tensor_normals = NormalsFactory.normals_from_tensors(tensors_property)
+
+    # 6.  Saliency for each tensor
+    tensor_saliency = SaliencyFactory.curvature_saliency(neighbors, tensor_normals, tensor_curvature,
+                                                         curvature_attribute='k1')
+
+    # 7. Assign saliency value for each point in the tensor
+    pcl_saliency = SaliencyProperty(pointset)
+    for tensor, saliency in zip(tensors, tensor_saliency):
+        idx = tensor.points.GetIndices()
+        pcl_saliency.setPointSaliency(idx, saliency)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2GRAY)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,

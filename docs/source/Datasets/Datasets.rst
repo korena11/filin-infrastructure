@@ -13,6 +13,7 @@ The following are the existing dataset classes:
     BaseData
     PointSet
     PointSetOpen3D
+    BallTreePointSet
     RasterData
     CurveData
 

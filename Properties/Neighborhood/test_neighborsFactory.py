@@ -51,3 +51,58 @@ class TestNeighborsFactory(TestCase):
         ps = pstats.Stats(pr, stream=s)
         ps.print_stats()
         print(s.getvalue())
+
+    def test_balltreePointSet_rnn(self):
+        from BallTreePointSet import BallTreePointSet
+        pr = cProfile.Profile()
+        pr.enable()
+        colors = []
+        pts = []
+
+        # for neighbors and normal computations
+        folderPath = '../../test_data/'
+        dataName = 'test_pts'
+
+        search_radius = 0.25
+        pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
+        pcd = BallTreePointSet(pcl[0], leaf_size=10)
+        neighbors = NeighborsFactory.balltreePointSet_rnn(pcd, search_radius)
+
+        print('hello')
+
+    def test_buildNeighbors_rnn(self):
+        from PointSetOpen3D import PointSetOpen3D
+        pr = cProfile.Profile()
+        pr.enable()
+        colors = []
+        pts = []
+
+        # for neighbors and normal computations
+        folderPath = '../../test_data/'
+        dataName = 'test_pts'
+
+        search_radius = 0.25
+        pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
+        pcd = PointSetOpen3D(pcl[0])
+        neighbors = NeighborsFactory.buildNeighbors_rnn(pcl[0], search_radius,
+                                                        method=NeighborsFactory.pointSetOpen3D_rnn_kdTree)
+
+        print('hello')
+
+    def test_buildNeighbors_knn(self):
+        from PointSetOpen3D import PointSetOpen3D
+        pr = cProfile.Profile()
+        pr.enable()
+        colors = []
+        pts = []
+
+        # for neighbors and normal computations
+        folderPath = '../../test_data/'
+        dataName = 'test_pts'
+
+        knn = 50
+        pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
+        pcd = PointSetOpen3D(pcl[0])
+        neighbors = NeighborsFactory.buildNeighbors_knn(pcl[0], knn, method=NeighborsFactory.pointSetOpen3D_knn_kdTree)
+
+        print('hello')

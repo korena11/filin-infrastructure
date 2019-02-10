@@ -51,11 +51,21 @@ class Tensor(object):
         if 'points' in kwargs:
             self.__pts = kwargs['points']
 
+    def normal(self):
+        """
+        Return the normal of the tensor at reference point
+
+        :return: the normal
+        """
+        return self.eigenvectors[:, np.where(self.eigenvalues == np.min(self.eigenvalues))[0][0]]
+
     # --------------------- PROPERTIES -------------------------
     @property
     def points(self):
         """
         The points that were used to construct the tensor
+
+        :rtype: PointSet, PointSubSet.PointSubSet, BaseData.BaseData
 
         """
         if self.__pts is not None:

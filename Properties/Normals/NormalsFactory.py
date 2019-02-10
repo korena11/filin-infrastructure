@@ -14,6 +14,24 @@ if sys.platform == 'linux':
 
 
 class NormalsFactory:
+
+    @classmethod
+    def normals_from_tensors(cls, tensorProperty):
+        """
+        Compute normals of each tensors reference point and create a property
+
+        :param tensors_property: the tensors from which the normals will be computed
+        :param min_points: minimum points required to compute normal for a point
+
+        :return: normals property for the tensors
+        """
+        normals = []
+        for tensor in tensorProperty:
+            normals.append(tensor.normal())
+
+        return NormalsProperty(tensorProperty.Points, np.asarray(normals))
+
+
     @staticmethod
     def normals_from_file(points, normalsFileName):
         """
@@ -206,9 +224,13 @@ class NormalsFactory:
         Computes the normals using open 3D
 
         :param pointcloud: an open 3d point cloud object
+
         :type pointcloud: open3d.PointCloud
 
         :return: normals property and the pointcloud with normals
+
+        .. warning::
+            Empty. Needs to be filled
         """
 
     @staticmethod

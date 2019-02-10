@@ -40,12 +40,7 @@ class CurvatureFactory:
         for tensor in tensorProperty:
             num_pts = tensor.points_number
             if num_pts > min_points:
-                eigVec = tensor.eigenvectors
-                eigVals = tensor.eigenvalues
-
-                normP = eigVec[:, np.where(eigVals == np.min(eigVals))[0][0]]
-
-                k1_, k2_ = cls.curvature_by_3parameters(tensor.points, normP)
+                k1_, k2_ = cls.curvature_by_3parameters(tensor.points, tensor.normal())
                 k1.append(k1_)
                 k2.append(k2_)
 
@@ -76,7 +71,7 @@ class CurvatureFactory:
         :param verbose: print inter running messages. default: False
 
         :type pointset3d: PointSetOpen3D.PointSetOpen3D
-        :type neighbors_property: NeighborProperty.NeighborsProperty
+        :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int
         :type valid_sectors: int
@@ -230,7 +225,7 @@ class CurvatureFactory:
         :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999
         :param verbose: print inter running messages. default: False
 
-        :type neighbrohood: NeighborProperty.NeighborsProperty
+        :type neighbrohood: NeighborsProperty.NeighborsProperty
         :type normals: NormalsProperty.NormalsProperty
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int

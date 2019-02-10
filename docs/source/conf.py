@@ -71,7 +71,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'sphinxcontrib.bibtex'
+    'sphinxcontrib.bibtex',
+    'sphinx.ext.autosectionlabel',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -439,24 +440,24 @@ class AutoAutoSummary(Autosummary):
             if 'private-members' in self.options:
                 private = True
 
-            if 'methods' in self.options:
-                _, methods = self.get_members(c, 'method', ['__init__'])
-
-                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('__')]
-
             if 'methods' and private:
                 _, methods = self.get_members(c, 'method', ['__init__'])
 
                 self.content = ["~%s.%s" % (clazz, method) for method in methods if
                                 method.startswith('_%s' % class_name)]
 
+            if 'methods' in self.options:
+                _, methods = self.get_members(c, 'method', ['__init__'])
+
+                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('__')]
+
+            if 'attributes' and private:
+                _, attribs = self.get_members(c, 'attribute')
+
             if 'attributes' in self.options:
                 _, attribs = self.get_members(c, 'attribute')
 
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
-
-            if 'attributes' and private:
-                _, attribs = self.get_members(c, 'attribute')
 
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if attrib.startswith('_') if
                                 not attrib.startswith('__')]

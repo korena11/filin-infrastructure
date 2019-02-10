@@ -3,21 +3,14 @@ Tensors
 
 The tensor property holds a tensor for a point or a segment. Each tensor is defined by a
 :class:`tensor.Tensor`. The :class:`TensorProperty.TensorProperty` holds all the tensors for a point-cloud.
-The :class:`TensorFactory.TensorFactory` builds either a `tensor` object or a `TensorProperty`.
 
+The :class:`TensorFactory.TensorFactory` builds either a `tensor` (:ref:`Tensor Class`) object or a `TensorProperty` (:ref:`tensor Property`).
 
-.. toctree::
-
-    tensorProperty
-    TensorFactory
-
-
-tensor class
+Tensor Class
 ------------
 
 .. autoclass:: tensor.Tensor
     :members:
-    :undoc-members:
 
     .. rubric:: Attributes
 
@@ -36,7 +29,6 @@ Tensor Property
 
 .. autoclass:: TensorProperty.TensorProperty
     :members:
-    :undoc-members:
 
     .. rubric:: Attributes
 
@@ -55,7 +47,6 @@ Tensor Factory
 
 .. autoclass:: TensorFactory.TensorFactory
    :members:
-   :undoc-members:
 
     .. rubric:: Methods
 
