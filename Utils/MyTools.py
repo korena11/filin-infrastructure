@@ -459,16 +459,16 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
 
     :return: curvature property, normals property, saliency property
 
-    :rtype: (CurvatureProperty, NormalsProperty, SaliencyProperty)
+    :rtype: CurvatureProperty, NormalsProperty, SaliencyProperty
     """
 
-    from CurvatureFactory import CurvatureFactory
+    from CurvatureFactory import CurvatureFactory, CurvatureProperty
     from SaliencyFactory import SaliencyFactory, SaliencyProperty
     from NeighborsFactory import NeighborsFactory
     from BallTreePointSet import BallTreePointSet
     from PointSubSet import PointSubSet
     from TensorFactory import TensorFactory, TensorProperty
-    from NormalsFactory import NormalsFactory
+    from NormalsFactory import NormalsFactory, NormalsProperty
 
     # 1. Build the BallTree
     if isinstance(pointset, BallTreePointSet):
@@ -483,8 +483,15 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
     # 3. Build tensors out of each node's points, and build their neighborhoods
     tensors = []
     new_cloud = []
+    if verbose:
+        i = 0
+
     for node in nodes:
-        tmp_subset = PointSubSet(pointset.ToNumpy(), balltree.getPointsOfNode(node))
+        if verbose:
+            i += 1
+            if i == 1192:
+                print('hello')
+        tmp_subset = PointSubSet(pointset, balltree.getPointsOfNode(node))
         tensors.append(TensorFactory.tensorFromPoints(tmp_subset, -1))
         new_cloud.append(tensors[-1].reference_point)
 
@@ -500,26 +507,20 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
 
     # 6.  Saliency for each tensor
     tensor_saliency = SaliencyFactory.curvature_saliency(neighbors, tensor_normals, tensor_curvature,
-                                                         curvature_attribute='k1')
+                                                         curvature_attribute=curvature_attribute, verbose=verbose)
 
     # 7. Assign saliency value for each point in the tensor
     pcl_saliency = SaliencyProperty(pointset)
-    for tensor, saliency in zip(tensors, tensor_saliency):
-        idx = tensor.points.GetIndices()
+    pcl_curvature = CurvatureProperty(pointset)
+    pcl_normals = NormalsProperty(pointset)
+
+    for node_, saliency, curvature, normal in zip(nodes, tensor_saliency, tensor_curvature, tensor_normals):
+        idx = balltree.getPointsOfNode(node_)
         pcl_saliency.setPointSaliency(idx, saliency)
+        pcl_curvature.setPointCurvature(idx, curvature)
+        pcl_normals.setPointNormal(idx, normal)
 
-
-
-
-
-
-
-
-
-
-
-
-
+    return pcl_saliency, pcl_curvature, pcl_normals
 
 
 if __name__ == '__main__':

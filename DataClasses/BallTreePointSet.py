@@ -10,7 +10,7 @@ from PointSet import PointSet
 class BallTreePointSet(PointSet):
 
     def __init__(self, points, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
-                 measurement_accuracy=0.002, leaf_size=40):
+                 measurement_accuracy=0.002, leaf_size=40, **kwargs):
         r"""
         A ball tree representation
 
@@ -55,6 +55,7 @@ class BallTreePointSet(PointSet):
         elif isinstance(inputPoints, PointSet):
             pts = inputPoints.ToNumpy()[:, :3]
             self.data = BallTree(pts, leafsize)
+            self.path = inputPoints.path
 
         elif isinstance(inputPoints, O3D.PointCloud):
             pts = np.asarray(inputPoints.points)

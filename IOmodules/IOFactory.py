@@ -6,11 +6,11 @@ from sys import exc_info
 from traceback import print_tb
 
 import h5py
-import numpy as np
-from numpy import array, hstack, tile, ndarray, savetxt
+from numpy import array
 from osgeo import gdal
 
 import ReadFunctions
+import SaveFunctions
 from BaseData import BaseData
 from BaseProperty import BaseProperty
 from ColorProperty import ColorProperty
@@ -18,9 +18,7 @@ from IO_Tools import CreateFilename
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from RasterData import RasterData
-from SegmentationProperty import SegmentationProperty
-from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-from shapefile import Writer, Reader, POINTZ
+from shapefile import Reader
 
 
 class IOFactory:
@@ -59,10 +57,54 @@ class IOFactory:
                 obj = cls.ReadHDF(f, classname, **kwargs)
             except:
                 warnings.warn('No class type assigned for hdf file')
-
+        if ext == 'p' or ext == 'pickle' or ext == 'pkl':
+            obj = cls.ReadPickle(f, classname)
         f.close()
 
         return obj
+
+    @classmethod
+    def ReadPickle(cls, fileobj, classname):
+        """
+        Reads any pickle and assigns it according to given class.
+
+        :param fileobj: the filename
+        :param classname: the class to assign the pickle to
+
+        :type fileobj: file
+        :type classname: type
+
+        :return: the object loaded from the pickle
+
+        :rtype: BaseData or BaseProperty
+        """
+        import _pickle
+        attrs = _pickle.load(fileobj)
+        attrs_new = {}
+        for key in attrs:
+            matched = re.match('\_(.*)\_\_(.*)', key)
+            attrs_new.update({matched.group(2): attrs[key]})
+
+        if 'current' in attrs_new:
+            attrs_new.pop('current')
+        data = attrs_new.pop('data')
+
+        if issubclass(classname, BaseData):
+            obj = classname(data, **attrs_new)
+
+        if issubclass(classname, BaseProperty):
+            obj = classname
+
+        return obj
+
+
+
+
+
+
+
+
+
 
     @classmethod
     def ReadHDF(cls, f, classname, **kwargs):
@@ -71,8 +113,6 @@ class IOFactory:
 
         params = {}
         data = None
-        attribute_value = []
-        attribute_name = []
         obj = None
 
         # Get the data
@@ -89,7 +129,6 @@ class IOFactory:
 
             if len(group_name.split('dataset')) > 1:
                 data = obj
-
                 continue
 
             if isinstance(obj, dict):
@@ -168,9 +207,8 @@ class IOFactory:
         """
         return ReadFunctions.ReadPtx(filename, pointsetlist, colorslist, trasformationMatrices, remove_empty)
 
-
     @classmethod
-    def ReadXYZ(cls, fileName, pointsetlist=list(), merge=True):
+    def ReadXYZ(cls, fileName, pointsetlist=[], merge=True):
         """
         Reading points from .xyz file
         Creates one PointSet objects returned through pointSetList
@@ -187,23 +225,7 @@ class IOFactory:
         :rtype: int
  
         """
-        parametersTypes = np.dtype({'names': ['name', 'x', 'y', 'z']
-                                       , 'formats': ['int', 'float', 'float', 'float']})
-
-        #         parametersTypes = np.dtype({'names':['x', 'y', 'z']
-        #                                , 'formats':['float', 'float', 'float']})
-
-        imported_array = np.genfromtxt(fileName, dtype = parametersTypes, filling_values = (0, 0, 0, 0))
-
-        xyz = imported_array[['x', 'y', 'z']].view(float).reshape(len(imported_array), -1)
-
-        pointSet = PointSet(xyz)
-        pointSet.setPath(fileName)
-        pointsetlist.append(pointSet)
-
-        if merge:
-            pointsetlist = np.array(pointsetlist)
-        return len(pointsetlist)
+        return ReadFunctions.ReadXYZ(fileName, pointsetlist, merge)
 
     @classmethod
     def ReadLAS(cls, fileName, classification_flag=False):
@@ -220,9 +242,8 @@ class IOFactory:
 
         :rtype: PointSet, ClassificationProperty
         """
-        pcl = ReadFunctions.ReadLAS(fileName, classification_flag)
 
-        return pcl
+        return ReadFunctions.ReadLAS(fileName, classification_flag)
 
     @classmethod
     def ReadShapeFile(cls, fileName, pointSetList):
@@ -245,7 +266,7 @@ class IOFactory:
 
             for i in (polylinePoints):
                 pointSet = PointSet(i)
-                pointSet.setPath(fileName)
+                pointSet.path = fileName
                 pointSetList.append(pointSet)
         else:
             return 0
@@ -324,32 +345,7 @@ class IOFactory:
 
          :rtype: RasterData
         """
-        try:
-            fin = open(path, 'r')
-            filelines = fin.readlines()
-            fin.close()
-        except:
-            print("Unexpected error: ", exc_info()[0])
-            print_tb(exc_info()[2])
-            return None
-
-        ncols = np.int(filelines[0].split(' ')[-1])
-        nrows = np.int(filelines[1].split(' ')[-1])
-        xllcorner = np.float32(filelines[2].split(' ')[-1])
-        yllcorner = np.float32(filelines[3].split(' ')[-1])
-        cellsize = np.float32(filelines[4].split(' ')[-1])
-        nodata_value = np.float32(filelines[5].split(' ')[-1])
-
-        line_size = len(filelines[6].split(' ')[:-1])
-        if line_size == ncols:
-            tmp = lambda x: np.float32(x.split(' ')[1:-1])
-        else:
-
-            tmp = lambda x: np.float32(x.split(' ')[:-1])
-
-        data = array(list(map(tmp, filelines[6:])))
-        return RasterData(data, gridSpacing = cellsize, geoTransform = (xllcorner, yllcorner, 1., 1.),
-                          spatial_reference = projection, voidData = nodata_value, path = path)
+        return ReadFunctions.rasterFromAscFile(path, projection)
 
     # ---------------------------WRITE -------------------------------
     @classmethod
@@ -375,7 +371,7 @@ class IOFactory:
         try:
             property.save(file, **kwargs)
         except:
-            print ('Unable to save the file')
+            print('Unable to save the file')
 
     @classmethod
     def WriteToPts(cls, points, path):
@@ -386,23 +382,7 @@ class IOFactory:
             :param path: to the directory of a new file + file name
         '''
 
-        fields_num = points.FieldsDimension
-        if fields_num == 7:
-            data = hstack((points.ToNumpy(), points.Intensity, points.RGB))
-            fmt = ['%.3f', '%.3f', '%.3f', '%d', '%d', '%d', '%d']
-        elif fields_num == 6:
-            data = hstack((points.ToNumpy(), points.RGB))
-            fmt = ['%.3f', '%.3f', '%.3f', '%d', '%d', '%d']
-        elif fields_num == 4:
-            data = hstack((points.ToNumpy(), points.Intensity))
-            fmt = ['%.3f', '%.3f', '%.3f', '%d']
-        else:
-            data = points.ToNumpy()
-            fmt = ['%.3f', '%.3f', '%.3f']
-
-        savetxt(path, points.Size, fmt = '%long')
-        with open(path, 'a') as f_handle:
-            savetxt(f_handle, data, fmt, delimiter = '\t', newline = '\n')
+        SaveFunctions.WriteToPts(points, path)
 
     @classmethod
     def WriteToShapeFile(cls, pointSet, fileName, colors=None, **kwargs):
@@ -418,67 +398,45 @@ class IOFactory:
         :type fileName: str
         :type colors: ColorProperty
 
-
         :return:
 
         """
-        if (pointSet.Z != None):
-            fieldList = ['X', 'Y', 'Z']
-        else:
-            fieldList = ['X', 'Y']
+        SaveFunctions.WriteToShapeFile(pointSet, fileName, colors, **kwargs)
 
-        attributes = pointSet.ToNumpy
+    @classmethod
+    def saveDataset(cls, dataset, filename, name='dataset'):
+        """
+        Calls the save from the BaseData.
 
-        if pointSet.Intensity != None:
-            fieldList.append('intensity')
-            attributes = hstack([attributes, pointSet.Intensity.reshape((pointSet.Size, 1))])
-        if (colors != None):
-            fieldList.append('r')
-            fieldList.append('g')
-            fieldList.append('b')
-            attributes = hstack([attributes, colors.RGB])
+        The extension depends on the filename extension.
 
-        for auxPropertyName, auxProperty in kwargs.items():
-            if (isinstance(auxProperty, ColorProperty)):
-                fieldList.append(auxPropertyName + '_r')
-                fieldList.append(auxPropertyName + '_g')
-                fieldList.append(auxPropertyName + '_b')
-                attributes = hstack([attributes, colors.RGB])
+        :param dataset: the dataset to save
+        :param filename: the filename to save the dataset to
+        :param name: for h5 files, the name of the group
 
-            elif (isinstance(auxProperty, SegmentationProperty)):
-                fieldList.append('labels_' + auxPropertyName)
-                attributes = hstack([attributes,
-                                     auxProperty.GetAllSegments.reshape((pointSet.Size, 1))])
+        :type dataset: BaseData
+        :type filename: str
+        :type name: str
 
-            elif (isinstance(auxProperty, SphericalCoordinatesProperty)):
-                fieldList.append('azimuth')
-                fieldList.append('elevationAngle')
-                fieldList.append('Range')
-                attributes = hstack([attributes, auxProperty.ToNumpy])
-
-        w = Writer(POINTZ)
-
-        list(map(w.field, fieldList, tile('F', len(fieldList))))
-        if (pointSet.Z != None):
-            list(map(w.point, pointSet.X, pointSet.Y, pointSet.Z))
-
-        else:
-            list(map(w.point, pointSet.X, pointSet.Y))
-
-        # map(w.record, attributes2)
-        w.records = list(map(ndarray.tolist, attributes))
-
-        w.save(fileName)
+        :return:
+        """
+        dataset.save(filename, name, True)
 
     @staticmethod
     def curve2shp(curves, filename):
         """
+        TODO: make function
         Turn curves to shapefiles
 
         :param curves: curves as represented by matplotlib.plot
         :param filename: file to save the curve
+
+        .. warning::
+          Empty function.
+
         :return:
         """
+
 
         # w = Writer(POLYGON)
         #
@@ -513,7 +471,7 @@ class IOFactory:
         """
          Loads a data file (PointSet or RasterData) from an hdf5 group
 
-        .. warning:: Doesn't work for PointSubSet at the moment
+        .. warning:: Doesn't work for data classes other than PointSet or RasterData
 
         :param group: a group
         :param classname: the property or data class that the filename stores.

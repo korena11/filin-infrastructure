@@ -28,7 +28,7 @@ class PointSet(BaseData):
     """
 
     def __init__(self, points, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
-                 measurement_accuracy=0.002):
+                 measurement_accuracy=0.002, **kwargs):
         r"""
         Initialize the PointSet object
 
@@ -57,7 +57,7 @@ class PointSet(BaseData):
         self.__range_accuracy = range_accuracy
         self.__angle_accuracy = angle_accuracy
         self.__measurement_accuracy = measurement_accuracy
-        self.setPath(path)
+        self.path = path
 
         self.__current = 0  # for iterable object
 
@@ -144,7 +144,7 @@ class PointSet(BaseData):
         :return: points as numpy nX3 ndarray
         """
 
-        return np.array(self.data)
+        return np.array(self.data)[:, :3]
 
     def ToRDD(self):
         """

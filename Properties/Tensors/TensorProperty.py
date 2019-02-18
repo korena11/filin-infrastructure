@@ -4,7 +4,7 @@
 .. codeauthor:: Reuma
 
 .. note::
-     Base on Zachi's implementation
+     Based on Zachi's implementation
 
 
 A property for a whole point cloud. Does not have to have all tensors computed for all points. However, if a tensor is
@@ -19,43 +19,47 @@ from tensor import Tensor
 
 class TensorProperty(BaseProperty):
 
-    def __init__(self, points, tensors=None):
+    def __init__(self, points, tensors=None, **kwargs):
         super(TensorProperty, self).__init__(points)
 
         self.__tensors = np.empty(points.Size, Tensor)
-
-        # --------- To make the object iterable ---------
-        self.current = 0
-
-    # ---------- Definitions to make iterable -----------
-    def __iter__(self):
-        return self
+        if tensors is not None:
+            self.setValues(tensors)
 
     def __next__(self):
         self.current += 1
         try:
-            return self.getTensor(self.current - 1)
+            return self.getPointTensor(self.current - 1)
         except IndexError:
             self.current = 0
             raise StopIteration
 
-    # --------end definitions for iterable object-----------
+    def setValues(self, tensors):
+        """
+        Sets an entire tensor array to the object
 
-    def setValues(self, idx, tensor):
+        :param tensors: an entire array to set
+
+        :type tensors: np.ndarray of Tensor.Tensor
+
+        """
+        self.__tensors = np.asarray(tensors)
+
+    def setPointTensor(self, idx, values):
         """
         Sets the tensor for an index
 
         :param idx: the index to which the tensor should be updated
-        :param tensor: the computed tensor
+        :param values: the computed tensor
 
         :type idx: int
-        :type tensor: Tensor
+        :type values: Tensor
 
         """
 
-        self.__tensors[idx] = tensor
+        self.__tensors[idx] = values
 
-    def getTensor(self, idx):
+    def getPointTensor(self, idx):
         """
         Retrieve a tensor of point(s) with idx index
 

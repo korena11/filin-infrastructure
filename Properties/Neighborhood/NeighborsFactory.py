@@ -224,7 +224,7 @@ class NeighborsFactory:
            :meth:`balltreePointSet_rnn`
 
         """
-        print('>>> Find all points neighbors using open3d')
+        print('>>> Find all points neighbors using ball tree')
 
         neighbors = NeighborsProperty(pointset_bt)  # initialization of the neighborhood property
 
@@ -232,9 +232,9 @@ class NeighborsFactory:
 
         for id in range(len(idx)):
             current_id = np.asarray(idx[id])
-            tmp_subset = PointSubSet(pointset_bt.GetPoint(current_id), current_id)
+            tmp_subset = PointSubSet(pointset_bt, current_id)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset)
-            neighbors.setNeighbor(id, tmp_point_neighborhood)
+            neighbors.setNeighborhood(id, tmp_point_neighborhood)
 
         return neighbors
 
@@ -272,7 +272,7 @@ class NeighborsFactory:
 
             # create a temporary neighborhood
             tmp_subset = PointSubSetOpen3D(pointset3d, idx)
-            neighbors.setNeighbor(i, PointNeighborhood(tmp_subset, distances))
+            neighbors.setNeighborhood(i, PointNeighborhood(tmp_subset, distances))
 
         return neighbors
 

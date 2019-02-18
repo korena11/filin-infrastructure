@@ -116,13 +116,13 @@ class SaliencyFactory(object):
         .. math::
             \begin{eqnarray}
             d\kappa_{ij} = |\kappa_i - \kappa_j| \\
-            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf }_j
+            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
             \end{eqnarray}
 
-        The saliency of the point is the sum of:
+        The saliency of the point is the sum:
 
         .. math::
-            s = \sum{d\kappa \cdot w_d e^{-d} \cdot w_{dN} e^{-d{\bf N} + 1}}
+            s = \sum{d\kappa \cdot w_d e^{-d} \cdot w_{dN} e^{-(d{\bf N} + 1)}}
 
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
@@ -148,8 +148,15 @@ class SaliencyFactory(object):
         from warnings import warn
 
         tensor_saliency = []
-
+        if verbose:
+            i = 0
+        print('>>> Compute curvature saliency for each neighborhood in the neighborhood property')
         for neighborhood in neighbors_property:
+
+            if verbose:
+                i += 1
+                if i == 1192:
+                    print('hello')
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
             if isinstance(curvature_property, CurvatureProperty.CurvatureProperty):
@@ -162,10 +169,10 @@ class SaliencyFactory(object):
                     'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
                 return 1
 
-            current_normals = normals_property[neighborhood.neighborhoodIndices, :]
+            current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
             # difference in curvature
-            dk = current_curvatures[1:, :] - current_curvatures[0, :]
+            dk = np.abs(current_curvatures[1:] - current_curvatures[0])
 
             # distances influence
             dist_element = weight_distance * np.exp(-neighborhood.distances[1:])
@@ -177,9 +184,6 @@ class SaliencyFactory(object):
             tensor_saliency.append(np.sum(dk * dist_element * normal_element))
 
         return SaliencyProperty(neighbors_property.Points, np.asarray(tensor_saliency))
-
-
-
 
     # ------------------- Saliency on Panorama Property ---------------------
     @classmethod
@@ -205,8 +209,6 @@ class SaliencyFactory(object):
 
         .. note::
            Other features can be added.
-
-
 
         :return: saliency image
 

@@ -4,7 +4,7 @@ from PointSet import PointSet
 
 class SaliencyProperty(BaseProperty):
 
-    def __init__(self, points, saliencyValues=None):
+    def __init__(self, points, saliencyValues=None, **kwargs):
         """
 
         :param points: the point cloud
@@ -13,11 +13,20 @@ class SaliencyProperty(BaseProperty):
         :type points: PointSet
         """
         super(SaliencyProperty, self).__init__(points)
+
         if saliencyValues is None:
             import numpy as np
-            self.__saliency = np.empty((self.Size, 1))
+            self.__saliency = np.empty(self.Size)
         else:
             self.__saliency = saliencyValues
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.getPointSaliency(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
 
     def getValues(self):
         """

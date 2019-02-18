@@ -5,7 +5,9 @@ from RasterData import RasterData
 
 class BaseProperty(object):
     """
-    Base class for all property classes
+    Base class for all property classes. All properties are iterable, however the values the iteration returns need to
+    be defined for each property individually as methods: :meth:`__getPointProperty` and :meth:`__setPointProperty`. These functions
+    are usually called from another function, unique for each property to minimize confusion.
 
     """
 
@@ -14,8 +16,47 @@ class BaseProperty(object):
         Constructor
         """
         self.__dataset = dataset
+        # --------- To make the object iterable ---------
+        self.current = 0
 
-    @property   
+        # ---------- Definitions to make iterable -----------
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.__getPointProperty(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
+
+    def __reset__(self):
+        """
+        Reset iterable
+        :return:
+        """
+        self.__current = 0
+
+    def __getPointProperty(self, idx):
+        """
+        Retrieve the point property (object or value) of a specific point
+
+        :param idx: the point index
+
+        :return: principal curvature values (k1, k2)
+
+        :rtype: float
+
+        .. warning::
+            This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty
+
+
+        """
+        pass
+
+    @property
     def Points(self):
         """
         Holds the points dataset
@@ -47,14 +88,27 @@ class BaseProperty(object):
 
     def setValues(self, *args, **kwargs):
         """
-        Sets the values of a property.
+        Sets the all values of a property.
 
         :param args: according to the property
         :param kwargs: according to the property
 
+        .. warning::
+            This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty
 
         """
         pass
+
+    @property
+    def path(self):
+        """
+        The path of the dataset
+
+        :return: the path of the dataset
+
+        :rtype: str
+        """
+        return self.__dataset.path
 
     @property
     def Size(self):
@@ -75,9 +129,13 @@ class BaseProperty(object):
 
         :rtype: np.array
 
-        """
+        .. warning::
+            This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty
 
-    def save(self, filename, **kwargs):
+        """
+        pass
+
+    def save(self, filename, save_dataset=False):
         """
         Save the property in either json or hdf5.
 
@@ -88,99 +146,27 @@ class BaseProperty(object):
         :param filename: can be a filename or a path and filename, with or without extension.
         :param save_dataset: flag whether to save the dataset that the property relates to or not. Default: False
 
-
         :type filename: str
         :type save_dataset: bool
 
         """
-        save_dataset = kwargs.get('save_dataset', False)
+        import SaveFunctions
+        import h5py
         attrs = {}
 
-        f, extension = CreateFilename(filename)
+        if isinstance(filename, str):
+            filename, extension = CreateFilename(filename)
 
-        if extension == 'h5':
-            attrs = self.__dict__
+        if isinstance(filename, h5py.File):
+            SaveFunctions.save_property_h5(self, filename, save_dataset)
 
-            # the group name will be according to the property class name
-            groupname = list(attrs.keys())[0].split('_')[1]
-            property_group = f.create_group(groupname)
+        else:
+            try:
+                SaveFunctions.pickleProperty(self, filename, save_dataset)
+            except:
+                from warnings import warn
+                warn(IOError, 'Not sure how to save')
 
-            for key in attrs:
-                if len(key.split('__dataset')) > 1:
-                    # if it is the dataset attribute - create a subgroup and insert its attributes
-
-                    self.__dataset.save(f, group_name = '_' + groupname + '__dataset',
-                                        save_dataset = save_dataset)
-                else:
-                    # otherwise - insert the property attributes into an attrs
-                    property_group.attrs.create(key, attrs[key])
-
-        f.close()
-
-    # def load(self, filename):
-    #     pass
-
-    # def serialize(self, filename = None):
-    #     """
-    #     Save property to a json file.
-    #
-    #     .. warning:: This function may not work. Should be checked
-    #
-    #     :param filename: path and file name into which the property will be saved.
-    #     :type filename: str
-    #
-    #     """
-    #     # TODO: make sure this works.
-    #     datasetJson = self.__dataset.serialize()
-    #
-    #     propertyDict = {
-    #         'dataset': datasetJson
-    #     }
-    #     if filename is None:
-    #         return JsonConvertor.serializes(propertyDict)
-    #     else:
-    #         JsonConvertor.serialize(propertyDict, filename)
-    #
-    # @classmethod
-    # def deserializes(cls, jsonString):
-    #     """
-    #     Deserialize a JSON object from string
-    #
-    #     .. warning:: This function may not work. Should be checked
-    #
-    #     :param jsonString:
-    #     :type jsonString: str
-    #     :return:
-    #     """
-    #     tempDictionary = JsonConvertor.deserializes(jsonString)
-    #     cls.propertyFromDictionary(tempDictionary)
-    #
-    # @classmethod
-    # def deserialize(cls, filename):
-    #     """
-    #     Deserialize a JSON object from file
-    #
-    #     .. warning:: This function may not work. Should be checked
-    #
-    #     :param filename: The file name and path of the JSON object to be deserialized
-    #     :type filename: str
-    #
-    #     """
-    #     tempDictionary = JsonConvertor.deserialize(filename)
-    #     cls.propertyFromDictionary(tempDictionary)
-    #
-    # @classmethod
-    # def propertyFromDictionary(cls, data):
-    #     """
-    #     Assigns the data from json object into the property variables
-    #
-    #     .. warning:: This function may not work. Should be checked
-    #
-    #     :param data: dictionary retrieved from json object
-    #     :type data: dict
-    #
-    #     """
-    #     s = cls(data['dataset'])
 
     if __name__ == '__main__':
         import numpy as np

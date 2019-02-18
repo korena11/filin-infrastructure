@@ -10,13 +10,15 @@ class PointSubSet(PointSet):
     Provides the same interface as PointSet        
     """
 
-    def __init__(self, points, indices):
+    def __init__(self, points, indices, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
+                 measurement_accuracy=0.002, **kwargs):
 
         if isinstance(points, PointSet):
             self.data = points
 
         else:
-            super(PointSubSet, self).__init__(points)
+            super(PointSubSet, self).__init__(points, path=path, intensity=intensity, range_accuracy=range_accuracy,
+                                              angle_accuracy=angle_accuracy, measurement_accuracy=measurement_accuracy)
 
         self.indices = indices
 

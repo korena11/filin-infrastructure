@@ -8,14 +8,20 @@ class CurvatureProperty(BaseProperty):
     classdocs
     '''
 
-    __curvature = None
-
-    def __init__(self, points, curvature):
+    def __init__(self, points, curvature=None, **kwargs):
         super(CurvatureProperty, self).__init__(points)
 
         self.setValues(curvature)
         self.__invalid_value = -999  # value for not-computed curvature, default -999
         self.__normalize = False  # flag whether to normalize the principal curvatures
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.getPointCurvature(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
 
     def set_invalid_value(self, value):
         """
@@ -32,7 +38,11 @@ class CurvatureProperty(BaseProperty):
         Sets curvature into Curvature Property object
 
         """
-        self.__curvature = args[0]
+        if args[0] is None:
+            self.__curvature = np.empty((self.Size, 2))
+        else:
+            self.__curvature = args[0]
+
         if "invalid_value" in kwargs:
             self.__invalid_value = kwargs['invalid_value']
 
@@ -41,6 +51,32 @@ class CurvatureProperty(BaseProperty):
         :return: min and max curvature
         """
         return np.vstack((self.k1, self.k2))
+
+    def setPointCurvature(self, idx, values):
+        """
+        Sets a curvature object to specific points
+
+        :param idx: a list or array of indices (can be only one) for which the saliency values refer
+        :param values: the curvature objects to assign
+
+        :type idx: list, np.ndarray, int
+        :type values: k1 and k2
+
+        """
+        self.__curvature[idx, :] = values
+
+    def getPointCurvature(self, idx):
+        """
+        Retrieve the curvature object of a specific point
+
+        :param idx: the point index
+
+        :return: principal curvature values (k1, k2)
+
+        :rtype: float
+
+        """
+        return self.__curvature[idx, :]
 
     def normalize_values(self, bool):
         """

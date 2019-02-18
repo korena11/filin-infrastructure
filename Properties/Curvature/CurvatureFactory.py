@@ -145,7 +145,7 @@ class CurvatureFactory:
         :param neighborhood: the neighbors according to which the curvature is computed
         :param normal: normal to the point which the curvature is computed
 
-        :type neighborhood: PointNeighborhood.PointNeighbohhod
+        :type neighborhood: PointNeighborhood.PointNeighbohhod, np.ndarray, PointSet.PointSet
         :type normal: np.array
 
         :return: minimal and maximal curvature
@@ -175,7 +175,22 @@ class CurvatureFactory:
                 \kappa_{1,2} = \frac{a+b}{2}\pm C
 
         """
-        neighbors = neighborhood.neighbors.ToNumpy()
+        from PointNeighborhood import PointNeighborhood
+        from PointSet import PointSet
+
+        if isinstance(neighborhood, PointNeighborhood):
+            neighbors = neighborhood.neighbors.ToNumpy()
+
+        elif isinstance(neighborhood, PointSet):
+            neighbors = neighborhood.ToNumpy()
+
+        elif isinstance(neighborhood, np.ndarray):
+            neighbors = neighborhood
+        else:
+            import warnings
+            warnings.warn('Curvature_3d_params: Unknown type of neighborhood')
+            return 1
+
         pnt = neighbors[0, :]
         # remove reference point from neighbors array
         neighbors = neighbors[1:, :]
@@ -245,6 +260,8 @@ class CurvatureFactory:
         """
         umbrellaCurvature = []
 
+        print('>>> Compute umbrella curvature for all point cloud')
+
         for point_neighbors in neighbrohood:
             # check if the neighborhood is valid
             if cls.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
@@ -266,8 +283,6 @@ class CurvatureFactory:
                 umbrellaCurvature.append(invalid_value)
 
         return np.asarray(umbrellaCurvature)
-
-
 
     @classmethod
     def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):

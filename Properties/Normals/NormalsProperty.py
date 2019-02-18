@@ -3,11 +3,19 @@ from BaseProperty import BaseProperty
 class NormalsProperty(BaseProperty):
     __normals = None
 
-    def __init__(self, points, normals):
+    def __init__(self, points, normals=None):
         super(NormalsProperty, self).__init__(points)
         self.setValues(normals)
-    
-    @property    
+
+    def __next__(self):
+        self.current += 1
+        try:
+            return self.getPointNormal(self.current - 1)
+        except IndexError:
+            self.current = 0
+            raise StopIteration
+
+    @property
     def Normals(self):
         """
         Return points' normals 
@@ -22,7 +30,11 @@ class NormalsProperty(BaseProperty):
         :param kwargs:
         :return:
         """
-        self.__normals = args[0]
+        if args[0] is None:
+            from numpy import empty
+            self.__normals = empty((self.Size, 3))
+        else:
+            self.__normals = args[0]
 
     def getValues(self):
         return self.__normals
@@ -47,3 +59,28 @@ class NormalsProperty(BaseProperty):
         Return normals Z coordinates  
         """  
         return self.__normals[:, 2]
+
+    def getPointNormal(self, idx):
+        """
+        Retrieve the normal value of a specific point
+
+        :param idx: the point index
+
+        :return: saliency value
+
+         :rtype: np.ndarray
+        """
+        return self.__normals[idx, :]
+
+    def setPointNormal(self, idx, values):
+        """
+        Sets a normal values to specific points
+
+        :param idx: a list or array of indices (can be only one) for which the saliency values refer
+        :param values: the saliency values to assign
+
+        :type idx: list, np.ndarray, int
+        :type values: np.ndarray (nx3)
+
+        """
+        self.__normals[idx, :] = values

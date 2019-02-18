@@ -6,6 +6,7 @@ Specific functions for file reading. Called from the IOFactory
 
 """
 
+import _pickle
 import warnings
 
 # from laspy.file import file
@@ -13,6 +14,7 @@ import numpy as np
 
 from ColorFactory import ColorFactory
 from PointSet import PointSet
+from RasterData import RasterData
 from TransformationMatrixProperty import TransformationMatrixProperty
 
 
@@ -201,6 +203,42 @@ def ReadPtx(filename, pointsetlist=list(), colorslist=list(), trasformationMatri
     return pointsetlist
 
 
+def ReadXYZ(fileName, pointsetlist=list(), merge=True):
+    """
+    Reading points from .xyz file
+    Creates one PointSet objects returned through pointSetList
+
+
+    :param fileName: name of .xyz file
+    :param pointsetlist: place holder for created PointSet object
+
+    :type fileName: str
+    :type pointsetlist: list
+
+    :return: Number of PointSet objects created
+
+    :rtype: int
+
+    """
+    parametersTypes = np.dtype({'names': ['name', 'x', 'y', 'z']
+                                   , 'formats': ['int', 'float', 'float', 'float']})
+
+    #         parametersTypes = np.dtype({'names':['x', 'y', 'z']
+    #                                , 'formats':['float', 'float', 'float']})
+
+    imported_array = np.genfromtxt(fileName, dtype=parametersTypes, filling_values=(0, 0, 0, 0))
+
+    xyz = imported_array[['x', 'y', 'z']].view(float).reshape(len(imported_array), -1)
+
+    pointSet = PointSet(xyz)
+    pointSet.path = fileName
+    pointsetlist.append(pointSet)
+
+    if merge:
+        pointsetlist = np.array(pointsetlist)
+    return len(pointsetlist)
+
+
 def ReadLAS(filename, classification=False):
     """
     Reads LAS or LAZ files
@@ -232,9 +270,28 @@ def ReadLAS(filename, classification=False):
             return pcl
 
 
+def loadPickle_dataset(filename, type=None):
+    """
+    Loads a pickle file of a dataset.
 
+    The user can specify which type of data it is .
 
+    :param filename: file and path to file
+    :param type: the type of class (BallTreePointSet, PointSet, PointSubSet, etc.)
 
+    :type filename: str
+    :type type: class
+
+    :return: BaseData
+    """
+    import IO_Tools
+    filename, extension = IO_Tools.CreateFilename(filename, 'r')
+
+    if type is not None:
+        dataset = type()
+        dataset.load()
+        attrs = _pickle.load(filename)
+        print('hello')
 
 def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
     '''
@@ -308,6 +365,49 @@ def GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborho
 
     return curvatureFilePath
 
+
+def rasterFromAscFile(path, projection=None):
+    """
+    Reads raster from .txt or .asc files
+
+    :param path: path+filename
+    :param projection:
+
+    :type path: str
+
+    :return: a RasterData object
+
+     :rtype: RasterData
+    """
+    from sys import exc_info
+    from traceback import print_tb
+
+    try:
+        fin = open(path, 'r')
+        filelines = fin.readlines()
+        fin.close()
+    except:
+        print("Unexpected error: ", exc_info()[0])
+        print_tb(exc_info()[2])
+        return None
+
+    ncols = np.int(filelines[0].split(' ')[-1])
+    nrows = np.int(filelines[1].split(' ')[-1])
+    xllcorner = np.float32(filelines[2].split(' ')[-1])
+    yllcorner = np.float32(filelines[3].split(' ')[-1])
+    cellsize = np.float32(filelines[4].split(' ')[-1])
+    nodata_value = np.float32(filelines[5].split(' ')[-1])
+
+    line_size = len(filelines[6].split(' ')[:-1])
+    if line_size == ncols:
+        tmp = lambda x: np.float32(x.split(' ')[1:-1])
+    else:
+
+        tmp = lambda x: np.float32(x.split(' ')[:-1])
+
+    data = np.array(list(map(tmp, filelines[6:])))
+    return RasterData(data, gridSpacing=cellsize, geoTransform=(xllcorner, yllcorner, 1., 1.),
+                      spatial_reference=projection, voidData=nodata_value, path=path)
 
 def __splitPtsString(line):
     """

@@ -193,7 +193,11 @@ class VisualizationO3D:
         # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)
         if len(size_array) <= 2:
             rgb = np.ones((size_array[0], 3))
-            rgb *= array[:, None]
+            try:
+                rgb *= array[:, None]
+            except:
+                rgb *= array
+
         elif len(size_array) == 3:
             rgb = array.reshape((size_array[0] * size_array[1], 3))
 

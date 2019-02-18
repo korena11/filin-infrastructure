@@ -123,7 +123,7 @@ class TensorFactory(object):
         if arrays.shape[0] < min_points:
             covMat = np.eye(covMat.shape[0])
 
-        t = Tensor(covMat, ref_array, arrays.shape[0])
+        t = Tensor(covMat, ref_array, arrays.shape[0], points=arrays)
 
         return t, ref_array
 
@@ -206,12 +206,12 @@ class TensorFactory(object):
             # in case the neighborhood was already defined
             for i in np.arange(points.Size):
 
-                neighbors = neighborhoodProperty.get_point_neighborhood(i)
+                neighbors = neighborhoodProperty.getNeighborhood(i)
 
                 if neighbors == None:
                     continue
                 radius = neighbors.radius
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+                tensors.setPointTensor(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
 
         else:
             # compute neighbors and tensor at the same time

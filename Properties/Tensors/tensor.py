@@ -4,7 +4,7 @@ reuma\Reuma
 10, Jul, 2018
 
 .. note::
-     Base on Zachi's implementation
+     Based on Zachi's implementation
 
 A tensor is constructed to a set of points, either around a specific point or around the centeroid (center of gravity)  
 '''
@@ -166,7 +166,6 @@ class Tensor(object):
 
         # Computing the stick axis defined by the tensor
         self.__stickAxis = self.eigenvectors[:, 2]
-
 
     def distanceFromPoint(self, point, tensorType='all', sign=False):
         """

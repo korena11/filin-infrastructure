@@ -37,7 +37,10 @@ def CreateFilename(filename, mode = 'a', **kwargs):
         extension = matched.group(2)
 
     if extension == 'h5':
-        return (h5py.File(filename, mode), extension)
+        return h5py.File(filename, mode), extension
+
+    if extension == 'p' or extension == 'pickle' or extension == 'pkl':
+        return open(filename, mode + 'b'), extension
 
     else:  # change if needed
-        return (open(filename, mode), extension)
+        return open(filename, mode), extension

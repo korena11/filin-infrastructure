@@ -7,7 +7,6 @@ import open3d as O3D
 # from PointNeighborhood import PointNeighborhood
 # Infrastructure Imports
 from PointSet import PointSet
-from RandomColors import LetThereBeRandomColors
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 
@@ -50,6 +49,7 @@ class PointSetOpen3D(PointSet):
             self.data = O3D.PointCloud()
             pts = inputPoints.ToNumpy()[:, :3]
             self.data.points = O3D.Vector3dVector(pts)
+            self.path = inputPoints.path
 
         elif isinstance(inputPoints, O3D.PointCloud):
             self.data = inputPoints
@@ -79,20 +79,6 @@ class PointSetOpen3D(PointSet):
     @property
     def Size(self):
         return len(self.data.points)
-
-
-    def DownsampleCloud(self, voxelSize, verbose=True):
-        if voxelSize > 0.:
-            self.pointsOpen3D = O3D.voxel_down_sample(self.data, voxel_size=voxelSize)
-
-            if verbose:
-                print("Downsampling the point cloud with a voxel size of " + str(voxelSize))
-                print("Number of points after down sampling: " + str(self.data))
-
-            self.voxelSize = voxelSize
-            self.numberOfPoints = len(self.data.points)
-            # self.pointsNeighborsArray = np.empty(shape=(self.numberOfPoints,), dtype=PointNeighborhood)
-            self.RebuildKDTree()
 
     def CalculateNormals(self, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.), verbose=True):
         """
@@ -134,173 +120,3 @@ class PointSetOpen3D(PointSet):
         else:
             raise ValueError("Orientation should be a tuple representing a location (X, Y, Z).\n"
                              "Default Location: Camera (0., 0., 0.).")
-
-    def DisregardOtherPoints(self, indx):
-        """
-        **OBSOLETE** - should be removed
-
-        Remove points from the PointSetOpen3D object
-
-        :param indx: indices to remove
-
-        :return:
-        """
-        from warnings import warn
-        warn(DeprecationWarning)
-
-        if isinstance(indx, int):
-            indx = [indx]
-
-        if len(indx) > 0:
-            # Update Points
-            points = np.asarray(self.pointsOpen3D.points)
-            points = points[indx, :]
-            self.pointsOpen3D.points = O3D.Vector3dVector(points)
-            self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
-
-            # Update Points Colors
-            pointsColors = np.asarray(self.pointsOpen3D.colors)
-            pointsColors = pointsColors[indx, :]
-            self.pointsOpen3D.colors = O3D.Vector3dVector(pointsColors)
-
-            # Update Points Normals
-            pointsNormals = np.asarray(self.pointsOpen3D.normals)
-            if pointsNormals.size:
-                pointsNormals = pointsNormals[indx, :]
-                self.pointsOpen3D.normals = O3D.Vector3dVector(pointsNormals)
-
-            # Update Neighborhood Array
-            self.pointsNeighborsArray = self.pointsNeighborsArray[indx]
-
-            # Update Number of Points
-            self.numberOfPoints = len(indx)
-
-            # Rebuild KD Tree
-            self.RebuildKDTree()
-
-    def DisregardPoints(self, indx, verbose=True):
-        """
-        **OBSOLETE** - should be removed
-
-        Remove points from the PointSetOpen3D object
-
-        :param indx: indices to remove
-        :param verbose: runtime printing. Default: True
-
-        :type indx: list or int
-        :type verbose: bool
-
-        """
-        from warnings import warn
-        warn(DeprecationWarning)
-
-        if isinstance(indx, int):
-            indx = [indx]
-
-        if len(indx) > 0:
-            if verbose:
-                print("Disregarding " + str(len(indx)) + " points.")
-
-            # Update Points
-            points = np.asarray(self.ToNumpy())
-            points = np.delete(points, indx, axis=0)
-            self.pointsOpen3D.points = O3D.Vector3dVector(points)
-            self.kdTreeOpen3D = O3D.KDTreeFlann(self.pointsOpen3D)
-
-            # Update Points Colors
-            pointsColors = np.asarray(self.pointsOpen3D.colors)
-            pointsColors = np.delete(pointsColors, indx, axis=0)
-            self.pointsOpen3D.colors = O3D.Vector3dVector(pointsColors)
-
-            # Update Points Normals
-            pointsNormals = np.asarray(self.pointsOpen3D.normals)
-            if pointsNormals.size:
-                pointsNormals = np.delete(pointsNormals, indx, axis=0)
-                self.pointsOpen3D.normals = O3D.Vector3dVector(pointsNormals)
-
-            # Update Neighborhood Array
-            self.pointsNeighborsArray = np.delete(self.pointsNeighborsArray, indx, axis=0)
-
-            if verbose:
-                print("Number of remaining points: " + str(self.Size))
-
-            # Rebuild KD Tree
-            self.RebuildKDTree(verbose=verbose)
-
-    # region Visualization Functions
-    def SetPointsColors(self, colors):
-        """
-        **OBSOLETE** -- should be removed
-
-        :param colors:
-        :return:
-        """
-        from warnings import warn
-        warn(DeprecationWarning)
-
-        if isinstance(colors, O3D.Vector3dVector):
-            self.pointsOpen3D.colors = colors
-        else:
-            self.pointsOpen3D.colors = O3D.Vector3dVector(colors)
-
-    def VisualizeClusters(self, pointsLabels, both=False):
-        """
-        **OBSOLETE** -- should be removed
-        :param pointsLabels:
-        :param both:
-        :return:
-        """
-        from warnings import warn
-        warn(DeprecationWarning)
-        assert self.numberOfPoints == len(pointsLabels), "Dimensions do not match."
-
-        clustersIDs = set(pointsLabels)
-        numberOfClusters = len(clustersIDs)
-
-        randomColors = LetThereBeRandomColors().GenerateNewColor(numberOfColorsToGenerate=numberOfClusters)
-
-        for currentInd in range(1, numberOfClusters + 1):
-            selectedColor = randomColors[currentInd - 1]
-            np.asarray(self.pointsOpen3D.colors)[pointsLabels == currentInd] = selectedColor
-
-        self.Visualize(both=both)
-
-    def Visualize(self, original=False, both=False):
-        """
-        **OBSOLETE** -- is about to be removed
-
-        :param original:
-        :param both:
-        :return:
-        """
-        import warnings
-
-        warnings.warn(DeprecationWarning)
-
-        def toggle_black_white_background(vis):
-            opt = vis.get_render_option()
-            if np.array_equal(opt.background_color, np.ones(3)):
-                opt.background_color = np.zeros(3)
-            else:
-                opt.background_color = np.ones(3)
-            return False
-
-        key_to_callback = {}
-        key_to_callback[ord("K")] = toggle_black_white_background
-
-        if both:
-            originalColors = np.zeros((self.originalNumberOfPoints, 3), dtype=np.float)
-            originalColors[:, 0] = 0.5
-            # subsetColors = np.zeros((self.numberOfPoints, 3), dtype=np.float)
-            # subsetColors[:, 0] = 1.
-            # self.pointsOpen3D.colors = O3D.Vector3dVector(subsetColors)
-            self.originalPointsOpen3D.colors = O3D.Vector3dVector(originalColors)
-            drawData = [self.pointsOpen3D, self.originalPointsOpen3D]
-        elif original:
-            drawData = [self.originalPointsOpen3D]
-        else:
-            drawData = [self.pointsOpen3D]
-
-        O3D.draw_geometries_with_key_callbacks(drawData, key_to_callback)
-
-    # endregion
