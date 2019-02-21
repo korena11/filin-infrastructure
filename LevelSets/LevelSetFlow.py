@@ -746,7 +746,9 @@ class LevelSetFlow:
 
     def __compute_vt(self, vectorField, verbose=False, **kwargs):
         """
-        Computes the vector field derivative in each direction according to
+        Computes the vector field derivative in each direction
+
+        According to
         .. math:: v_t = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)
 
         :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)
@@ -762,7 +764,6 @@ class LevelSetFlow:
         :param gradientType:
         :param ksize:
         :param sigma:
-
 
         :return vt: velocity for x and y directions
          :type vt: nd-array nxmx2

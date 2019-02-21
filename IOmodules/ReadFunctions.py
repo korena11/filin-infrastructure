@@ -5,8 +5,12 @@ Reading Functions
 Specific functions for file reading. Called from the IOFactory
 
 """
+import sys
 
-import _pickle
+if sys.version_info[0] < 3:
+    import cPickle as _pickle
+else:
+    import _pickle
 import warnings
 
 # from laspy.file import file
@@ -18,7 +22,7 @@ from RasterData import RasterData
 from TransformationMatrixProperty import TransformationMatrixProperty
 
 
-def ReadPts(filename, pointsetlist=[], colorslist=[], merge=True):
+def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
     """
     Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
     otherwise).

@@ -35,17 +35,23 @@ class IOFactory:
 
     # ---------------------------READ -------------------------------
     @classmethod
-    def load(cls, filename, classname, **kwargs):
+    def load(cls, filename, classname=None, pointsetlist=None, colorlist=None, merge=True, **kwargs):
         """
         Loads an object file (json or hdf5)
 
         .. warning:: The option is not implemented for json
 
         :param filename: the path
-        :param classname: the property or data class that the filename stores -
+        :param classname: the property or data class that the filename stores
+        :param pointsetlist: a list to store pointset list if more than one cloud is in the file (applicaple for pts, ptx and shapefiles)
+        :param colorlist: a list to store colors proeprty, if colors are within the file (applicaple for pts and ptx)
+        :param merge: flag to merge multiple clouds into one pointset (applicaple for pts)
 
         :type filename: str
-        :type classname: BaseProperty or BaseData
+        :type classname: type
+        :type pointsetlist: list
+        :type colorlist: list
+        :type merge: bool
 
         :return: the property or dataset
 
@@ -57,8 +63,20 @@ class IOFactory:
                 obj = cls.ReadHDF(f, classname, **kwargs)
             except:
                 warnings.warn('No class type assigned for hdf file')
-        if ext == 'p' or ext == 'pickle' or ext == 'pkl':
+        elif ext == 'p' or ext == 'pickle' or ext == 'pkl':
             obj = cls.ReadPickle(f, classname)
+
+        elif ext == 'pts':
+            obj = cls.ReadPts(filename, pointsetlist=pointsetlist, colorslist=colorlist, merge=merge)
+
+        elif ext == 'xyz':
+            obj = cls.ReadXYZ(filename)
+
+        elif ext == 'ptx':
+            obj = cls.ReadPtx(filename, pointsetlist=pointsetlist, colorslist=colorlist)
+        elif ext == 'shp':
+            obj = cls.ReadShapeFile(filename, pointsetlist)
+
         f.close()
 
         return obj
@@ -81,30 +99,44 @@ class IOFactory:
         import _pickle
         attrs = _pickle.load(fileobj)
         attrs_new = {}
+
+        if 'current' in attrs:
+            attrs.pop('current')
+
         for key in attrs:
             matched = re.match('\_(.*)\_\_(.*)', key)
-            attrs_new.update({matched.group(2): attrs[key]})
+            if matched is None:
+                attrs_new.update({key: attrs[key]})
+            else:
+                attrs_new.update({matched.group(2): attrs[key]})
 
-        if 'current' in attrs_new:
-            attrs_new.pop('current')
-        data = attrs_new.pop('data')
+        if 'data' in attrs_new:
+            data = attrs_new.pop('data')
+        else:
+            try:
+                filename = fileobj.name.split('.')
+                datafilename = filename[0] + '__data' + '.' + filename[1]
+                if 'indices' in attrs_new:
+                    data = cls.load(datafilename, PointSubSet)
+                else:
+                    data = cls.load(datafilename, PointSet)
+            except:
+                datafilename = attrs_new['path']
+                data = cls.load(datafilename, PointSet)
+
+                if 'indices' in attrs_new:
+                    data = PointSubSet(data, attrs_new['indices'])
 
         if issubclass(classname, BaseData):
             obj = classname(data, **attrs_new)
 
         if issubclass(classname, BaseProperty):
-            obj = classname
+            # TODO: if the data is empty, should load from the path or look for a xx_data file
+
+            obj = classname(data)
+            obj.load(**attrs_new)
 
         return obj
-
-
-
-
-
-
-
-
-
 
     @classmethod
     def ReadHDF(cls, f, classname, **kwargs):
@@ -149,7 +181,7 @@ class IOFactory:
         return obj
 
     @classmethod
-    def ReadPts(cls, filename, pointsetlist=list(), colorslist=list(), merge=True):
+    def ReadPts(cls, filename, pointsetlist=None, colorslist=None, merge=True):
         """
         Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
         otherwise).
@@ -176,7 +208,7 @@ class IOFactory:
 
 
     @classmethod
-    def ReadPtx(cls, filename, pointsetlist=list(), colorslist=list(), trasformationMatrices=list(),
+    def ReadPtx(cls, filename, pointsetlist=None, colorslist=None, trasformationMatrices=None,
                 remove_empty=True):
 
         """
@@ -195,8 +227,8 @@ class IOFactory:
 
         :type filename: str
         :type pointsetlist: list
-        :type colorslist: list of ColorProperty.ColorProperty
-        :type trasnformationMatrices: list of TransformationMatrixProperty
+        :type colorslist: list
+        :type trasnformationMatrices: list
 
         :return: pointSet list
 
@@ -208,7 +240,7 @@ class IOFactory:
         return ReadFunctions.ReadPtx(filename, pointsetlist, colorslist, trasformationMatrices, remove_empty)
 
     @classmethod
-    def ReadXYZ(cls, fileName, pointsetlist=[], merge=True):
+    def ReadXYZ(cls, fileName, pointsetlist=None, merge=True):
         """
         Reading points from .xyz file
         Creates one PointSet objects returned through pointSetList
@@ -349,7 +381,40 @@ class IOFactory:
 
     # ---------------------------WRITE -------------------------------
     @classmethod
-    def saveProperty(cls, file, property, **kwargs):
+    def saveDataset(cls, dataset, filename, name='dataset'):
+        """
+        Save dataset according to filename extensioin.
+
+        The extension depends on the filename extension.
+
+        :param dataset: the dataset to save
+        :param filename: the filename to save the dataset to
+        :param name: for h5 files, the name of the group
+
+        :type dataset: BaseData
+        :type filename: str
+        :type name: str
+
+        :return:
+        """
+        if isinstance(filename, str):
+            filename, extension = CreateFilename(filename)
+
+        if isinstance(filename, h5py.File):
+            SaveFunctions.save_dataset_h5(dataset, filename, name, True)
+
+        else:
+            try:
+                SaveFunctions.pickleDataset(dataset, filename)
+            except:
+                from warnings import warn
+
+                warn(IOError, 'Not sure how to save')
+
+        return filename
+
+    @classmethod
+    def saveProperty(cls, property_class, filename, save_dataset=False, **kwargs):
         """
         Saves a property to hdf5 or json file
 
@@ -358,20 +423,31 @@ class IOFactory:
         .. warning:: Json file save is unavailable
 
         :param file: path or file object
-        :param property: the property which is needed to be saved
+        :param property_class: the property which is needed to be saved
         :param save_dataset: flag whether to save the dataset that the property relates to or not. Default: True
 
-        :type property: BaseProperty or subclasses
+        :type property_class: BaseProperty or subclasses
         :type filename: str
         :type save_dataset: bool
 
         :return:
 
         """
-        try:
-            property.save(file, **kwargs)
-        except:
-            print('Unable to save the file')
+        import SaveFunctions
+        import h5py
+
+        if isinstance(filename, str):
+            filename, extension = CreateFilename(filename)
+
+        if isinstance(filename, h5py.File):
+            SaveFunctions.save_property_h5(property_class, filename, save_dataset)
+
+        else:
+            try:
+                SaveFunctions.pickleProperty(property_class, filename, save_dataset)
+            except IOError:
+                from warnings import warn
+                warn(IOError, 'Not sure how to save')
 
     @classmethod
     def WriteToPts(cls, points, path):
@@ -403,24 +479,7 @@ class IOFactory:
         """
         SaveFunctions.WriteToShapeFile(pointSet, fileName, colors, **kwargs)
 
-    @classmethod
-    def saveDataset(cls, dataset, filename, name='dataset'):
-        """
-        Calls the save from the BaseData.
 
-        The extension depends on the filename extension.
-
-        :param dataset: the dataset to save
-        :param filename: the filename to save the dataset to
-        :param name: for h5 files, the name of the group
-
-        :type dataset: BaseData
-        :type filename: str
-        :type name: str
-
-        :return:
-        """
-        dataset.save(filename, name, True)
 
     @staticmethod
     def curve2shp(curves, filename):

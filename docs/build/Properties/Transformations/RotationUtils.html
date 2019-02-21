@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Rotation Utilities &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../TriangulationProperty.html" rel="next" title="Triangulation Property"/>
+    <link href="TransformationFactory.html" rel="prev" title="Transformation Matrix Factory"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal"
+                                                      href="../BaseProperty.html">Properties</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../SphericalCoordinates/Spherical.html">Spherical
+                                Coordinates</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal" href="Transformation.html">Transformations</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="TransformationProperty.html">Transformation Matrix
+                                        Property</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="TransformationFactory.html">Transformation Matrix
+                                        Factory</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">Rotation
+                                        Utilities</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+
+                        <li><a href="Transformation.html">Transformations</a> &raquo;</li>
+
+                        <li>Rotation Utilities</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Transformations/RotationUtils.rst.txt" rel="nofollow">
+                                View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="module-RotationUtils">
+                            <span id="rotation-utilities"></span>
+                            <h1>Rotation Utilities<a class="headerlink" href="#module-RotationUtils"
+                                                     title="Permalink to this headline">¶</a></h1>
+                            <p class="rubric">Methods</p>
+                            <table border="1" class="longtable docutils">
+                                <colgroup>
+                                    <col width="10%"/>
+                                    <col width="90%"/>
+                                </colgroup>
+                                <tbody valign="top">
+                                </tbody>
+                            </table>
+                            <dl class="function">
+                                <dt id="RotationUtils.BuildRotationMatrix">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">BuildRotationMatrix</code><span
+                                        class="sig-paren">(</span><em>omega</em>, <em>phi</em>, <em>kappa</em>, <em>dtype='degrees'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#BuildRotationMatrix"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.BuildRotationMatrix"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Builds rotation matrix from image to world, according to a z-y’-x” rotation:</p>
+                                    <div class="math notranslate nohighlight">
+                                        \[\begin{split}{\bf R}_{\omega, \phi, \kappa} = \begin{bmatrix}
+                                        1 &amp; 0 &amp; 0 \\
+                                        0 &amp; \cos(\omega) &amp; -\sin(\omega) \\
+                                        0 &amp; \sin(\omega) &amp; \cos(\omega)
+                                        \end{bmatrix} \begin{bmatrix}
+                                        \cos(\phi) &amp; 0 &amp; \sin(\phi) \\
+                                        0 &amp; 1 &amp; 0\\
+                                        \sin(\phi) &amp; 0 &amp; \cos(\phi)
+                                        \end{bmatrix} \begin{bmatrix}
+                                        \cos(\kappa) &amp; -\sin(\kappa) &amp; 0\\
+                                        -\sin(\kappa) &amp; \cos(\kappa) &amp; 0\\
+                                        0 &amp; 0 &amp; 1
+                                        \end{bmatrix}\end{split}\]
+                                    </div>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>omega</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/functions.html#float"
+                                                                                   title="(in Python v3.7)"><em>float</em></a>)
+                                                        – rotation about x-axis
+                                                    </li>
+                                                    <li><strong>phi</strong> (<a class="reference external"
+                                                                                 href="https://docs.python.org/3/library/functions.html#float"
+                                                                                 title="(in Python v3.7)"><em>float</em></a>)
+                                                        – rotation about y-axis
+                                                    </li>
+                                                    <li><strong>kappa</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/functions.html#float"
+                                                                                   title="(in Python v3.7)"><em>float</em></a>)
+                                                        – rotation about z-axis
+                                                    </li>
+                                                    <li><strong>dtype</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a>)
+                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
+                                                        ‘degrees’
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">rotation matrix 3x3
+                                                nd-array</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.ExtractRotationAngles">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">ExtractRotationAngles</code><span
+                                        class="sig-paren">(</span><em>R</em>, <em>dtype='degrees'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#ExtractRotationAngles"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.ExtractRotationAngles"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Extracts rotation angles from the rotation matrix</p>
+                                    <div class="admonition note">
+                                        <p class="first admonition-title">Note</p>
+                                        <p class="last">The angles returned are subjected to ambiguity</p>
+                                    </div>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>R</strong> (<em>nd-array 3x3</em>) – rotation matrix
+                                                    </li>
+                                                    <li><strong>dtype</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a>)
+                                                        – should the output be in ‘degrees’ or ‘radians’ (default
+                                                        ‘degrees’)
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">(omega, phi, kappa) according
+                                                to the dtype</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.RotationByKappa">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">RotationByKappa</code><span
+                                        class="sig-paren">(</span><em>kappa</em>, <em>dtype='degrees'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#RotationByKappa"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.RotationByKappa"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Builds a rotation matrix about the z-axis</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>kappa</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/functions.html#float"
+                                                                                   title="(in Python v3.7)"><em>float</em></a>)
+                                                        – angle
+                                                    </li>
+                                                    <li><strong>dtype</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a>)
+                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
+                                                        ‘degrees’
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">a 3x3 rotation matrix, around
+                                                the z-axis</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.RotationByOmega">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">RotationByOmega</code><span
+                                        class="sig-paren">(</span><em>omega</em>, <em>dtype='degrees'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#RotationByOmega"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.RotationByOmega"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Builds a rotation matrix about the x-axis</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>omega</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/functions.html#float"
+                                                                                   title="(in Python v3.7)"><em>float</em></a>)
+                                                        – angle
+                                                    </li>
+                                                    <li><strong>dtype</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a>)
+                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
+                                                        ‘degrees’
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first">a 3x3 rotation matrix, around the
+                                                x-axis</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last">np.array</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.RotationByPhi">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">RotationByPhi</code><span
+                                        class="sig-paren">(</span><em>phi</em>, <em>dtype='degrees'</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#RotationByPhi"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.RotationByPhi"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Builds a rotation matrix about the y-axis</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>phi</strong> (<a class="reference external"
+                                                                                 href="https://docs.python.org/3/library/functions.html#float"
+                                                                                 title="(in Python v3.7)"><em>float</em></a>)
+                                                        – angle
+                                                    </li>
+                                                    <li><strong>dtype</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a>)
+                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
+                                                        ‘degrees’
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">a 3x3 rotation matrix, around
+                                                the y-axis</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.Rotation_2Vectors">
+                                    <code class="descclassname">RotationUtils.</code><code class="descname">Rotation_2Vectors</code><span
+                                        class="sig-paren">(</span><em>from_vector</em>, <em>to_vector</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#Rotation_2Vectors"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.Rotation_2Vectors"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Computes rotation matrix from ‘fromVector’ to ‘toVector’</p>
+                                    <p>Rotation by angle between ‘fromVector’ and ‘toVector’ around the unit vector
+                                        - <cite>Link to information
+                                            &lt;https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d&gt;_</cite>
+                                    </p>
+                                    <div class="math notranslate nohighlight">
+                                        \[\bf{R} = \bf{I} + \sin(\alpha) \cdot [v]_\times +
+                                        (1-\cos(\alpha))\cdot[v]_\times^2\]
+                                    </div>
+                                    <p>with <span class="math notranslate nohighlight">\([v]_\times\)</span>
+                                        skewsymmetric inner product matrix
+                                        (i.e., <span class="math notranslate nohighlight">\(v=a_\text{from vector}\cdot b_\text{to vector}\)</span>;
+                                        and <span class="math notranslate nohighlight">\(\alpha\)</span> the
+                                        angle between from and to vectors</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>from_vector</strong> (<em>np.ndarray</em>) – the vector
+                                                        from which the rotation matrix should be computed
+                                                    </li>
+                                                    <li><strong>to_vector</strong> (<em>np.ndarray</em>) – the vector to
+                                                        which the matrix should rotate to
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first">rotation matrix</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last">np.ndarray</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.Skew">
+                                    <code class="descclassname">RotationUtils.</code><code
+                                        class="descname">Skew</code><span class="sig-paren">(</span><em>v</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/RotationUtils.html#Skew"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RotationUtils.Skew"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Builds a skew symmetric matrix from an array</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>v</strong> (<em>nd-array</em>) – 3x1 array
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p>:return skew symmetric matrix</p>
+                                </dd>
+                            </dl>
+
+                            <dl class="function">
+                                <dt id="RotationUtils.decdeg2dms">
+                                    <code class="descclassname">RotationUtils.</code><code
+                                        class="descname">decdeg2dms</code><span
+                                        class="sig-paren">(</span><em>dd</em><span class="sig-paren">)</span><a
+                                        class="reference internal"
+                                        href="../../_modules/RotationUtils.html#decdeg2dms"><span class="viewcode-link">[source]</span></a><a
+                                        class="headerlink" href="#RotationUtils.decdeg2dms"
+                                        title="Permalink to this definition">¶</a></dt>
+                                <dd><p>Convert from decimal degrees to degree-minute-second
+                                    :param dd: degree in decimal degrees
+                                    :type dd: float</p>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">degree in dms</td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><a class="reference external"
+                                                                      href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                      title="(in Python v3.7)">tuple</a> (degree,
+                                                minutes, seconds)
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+
+                        <a accesskey="n" class="btn btn-neutral float-right" href="../TriangulationProperty.html"
+                           rel="next" title="Triangulation Property">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a accesskey="p" class="btn btn-neutral" href="TransformationFactory.html" rel="prev"
+                           title="Transformation Matrix Factory"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

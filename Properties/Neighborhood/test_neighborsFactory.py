@@ -104,5 +104,3 @@ class TestNeighborsFactory(TestCase):
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
         pcd = PointSetOpen3D(pcl[0])
         neighbors = NeighborsFactory.buildNeighbors_knn(pcl[0], knn, method=NeighborsFactory.pointSetOpen3D_knn_kdTree)
-
-        print('hello')

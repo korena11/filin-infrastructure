@@ -24,7 +24,7 @@ class TensorProperty(BaseProperty):
 
         self.__tensors = np.empty(points.Size, Tensor)
         if tensors is not None:
-            self.setValues(tensors)
+            self.load(tensors)
 
     def __next__(self):
         self.current += 1
@@ -34,7 +34,7 @@ class TensorProperty(BaseProperty):
             self.current = 0
             raise StopIteration
 
-    def setValues(self, tensors):
+    def load(self, tensors, **kwargs):
         """
         Sets an entire tensor array to the object
 

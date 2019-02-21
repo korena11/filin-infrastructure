@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>VisualizationVTK &mdash; infragit 1a documentation</title>
+
+
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../genindex.html" rel="index" title="Index"/>
+    <link href="../search.html" rel="search" title="Search"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="index.html">Module code</a> &raquo;</li>
+
+                        <li>VisualizationVTK</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <h1>Source code for VisualizationVTK</h1>
+                        <div class="highlight"><pre>
+<span></span><span class="c1"># General Imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">vtk</span>
+
+<span class="kn">import</span> <span class="nn">VisualizationUtils</span>
+<span class="c1"># Framework Imports</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                                class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
+
+
+<div class="viewcode-block" id="VisualizationVTK"><a class="viewcode-back"
+                                                     href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK">[docs]</a><span
+        class="k">class</span> <span class="nc">VisualizationVTK</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        points1 = (np.random.rand(1000, 3) - 0.5) * 1000.0</span>
+<span class="sd">        pointset1 = PointSet(points=points1)</span>
+<span class="sd">        pointsubset1 = PointSubSet(points=pointset1, indices=list(range(0, len(points1), 3)))</span>
+
+<span class="sd">        points2 = (np.random.rand(1000, 3) - 0.5) * 1000.0</span>
+<span class="sd">        pointset2 = PointSet(points=points2)</span>
+<span class="sd">        pointsubset2 = PointSubSet(points=pointset2, indices=list(range(0, len(points2), 3)))</span>
+
+<span class="sd">        number_of_viewports = 2</span>
+<span class="sd">        # Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4</span>
+<span class="sd">        visualization_object = Visualization(number_of_viewports, two_viewports_vertical_horizontal=&#39;V&#39;)</span>
+<span class="sd">        visualization_object.SetRenderWindowName(&quot;Test - One Viewport. PointSet. Uniform Color.&quot;)</span>
+<span class="sd">        visualization_object.BindFirstHalf(input_data=pointset1, renderFlag=&#39;color&#39;, color=(255, 0, 0), new_layer=False)</span>
+<span class="sd">        visualization_object.BindFirstHalf(input_data=pointset2, renderFlag=&#39;color&#39;, color=(0, 255, 0), new_layer=True)</span>
+
+<span class="sd">        visualization_object.BindSecondHalf(input_data=pointsubset1, renderFlag=&#39;color&#39;, color=(255, 0, 0), new_layer=False)</span>
+<span class="sd">        visualization_object.BindSecondHalf(input_data=pointsubset2, renderFlag=&#39;color&#39;, color=(0, 255, 0), new_layer=True)</span>
+
+<span class="sd">        visualization_object.Show()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">,</span> <span class="n">number_of_view_ports</span><span class="o">=</span><span
+            class="mi">1</span><span class="p">,</span> <span class="n">two_viewports_vertical_horizontal</span><span
+            class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">):</span>
+        <span class="c1"># Setting Viewports</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_view_ports</span> <span class="o">=</span> <span
+            class="n">number_of_view_ports</span>
+        <span class="bp">self</span><span class="o">.</span><span
+            class="n">two_viewports_vertical_horizontal</span> <span class="o">=</span> <span class="n">two_viewports_vertical_horizontal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span><span class="p">,</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span><span class="p">,</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">y_mins</span><span class="p">,</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">y_maxs</span> <span class="o">=</span> <span
+            class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span
+            class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span
+            class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_number_of_viewports</span><span
+            class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitializeParametersVTK</span><span
+            class="p">()</span>
+
+<div class="viewcode-block" id="VisualizationVTK.set_number_of_viewports"><a class="viewcode-back"
+                                                                             href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.set_number_of_viewports">[docs]</a>    <span
+        class="k">def</span> <span class="nf">set_number_of_viewports</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sectioning the the rendering view according to the number_of_viewports</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_view_ports</span> <span
+            class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span
+            class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span
+            class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of supported viewports can be [1, 2, 4].&#39;</span><span
+            class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_view_ports</span> <span
+            class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_view_ports</span> <span
+            class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">two_viewports_vertical_horizontal</span> <span
+            class="o">==</span> <span class="s1">&#39;V&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="o">.</span><span class="mi">5</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">y_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">y_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">two_viewports_vertical_horizontal</span> <span
+            class="o">==</span> <span class="s1">&#39;H&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">y_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mf">0.5</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">y_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span
+            class="s1">&#39;Split Two Viewports Options: </span><span class="se">\&#39;</span><span
+            class="s1">V</span><span class="se">\&#39;</span><span class="s1"> - Vertical. </span><span class="se">\&#39;</span><span
+            class="s1">H</span><span class="se">\&#39;</span><span class="s1"> - Horizontal.&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="o">.</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span
+            class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y_mins</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span
+            class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y_maxs</span> <span
+            class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span
+            class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.InitializeParametersVTK"><a class="viewcode-back"
+                                                                             href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.InitializeParametersVTK">[docs]</a>    <span
+        class="k">def</span> <span class="nf">InitializeParametersVTK</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize VTK parameters</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkPolydataDictByViewport</span> <span
+            class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span
+            class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">number_of_view_ports</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkCombinedPolyData</span> <span
+            class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindow</span> <span
+            class="o">=</span> <span class="n">vtk</span><span class="o">.</span><span
+            class="n">vtkRenderWindow</span><span class="p">()</span>  <span
+            class="c1"># Initialize a VTK render window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindowInteractor</span> <span
+            class="o">=</span> <span class="n">vtk</span><span class="o">.</span><span class="n">vtkRenderWindowInteractor</span><span
+            class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindowInteractor</span><span
+            class="o">.</span><span class="n">SetRenderWindow</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">vtkRenderWindow</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span> <span
+            class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listVTKMappers</span> <span
+            class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">listVTKActors</span> <span
+            class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">iRenderer</span> <span class="ow">in</span> <span
+            class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">number_of_view_ports</span><span class="p">):</span>
+            <span class="c1"># Initialize VTK Renderers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span><span
+            class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vtk</span><span
+            class="o">.</span><span class="n">vtkRenderer</span><span class="p">())</span>
+            <span class="c1"># Add the VTK renderer to the VTK render window</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindow</span><span
+            class="o">.</span><span class="n">AddRenderer</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">]</span><span class="o">.</span><span
+            class="n">SetViewport</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">x_mins</span><span class="p">[</span><span class="n">iRenderer</span><span
+            class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_mins</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">],</span>
+                                                         <span class="bp">self</span><span class="o">.</span><span
+            class="n">x_maxs</span><span class="p">[</span><span class="n">iRenderer</span><span
+            class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_maxs</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">])</span>
+            <span class="c1"># Initialize VTK Mappers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKMappers</span><span
+            class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vtk</span><span
+            class="o">.</span><span class="n">vtkPolyDataMapper</span><span class="p">())</span>
+
+            <span class="c1"># Initialize VTK Actors</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKActors</span><span
+            class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vtk</span><span
+            class="o">.</span><span class="n">vtkActor</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKActors</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">]</span><span class="o">.</span><span
+            class="n">SetMapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">listVTKMappers</span><span class="p">[</span><span class="n">iRenderer</span><span
+            class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span><span
+            class="p">[</span><span class="n">iRenderer</span><span class="p">]</span><span class="o">.</span><span
+            class="n">AddActor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">listVTKActors</span><span class="p">[</span><span class="n">iRenderer</span><span
+            class="p">])</span></div>
+
+    <span class="k">def</span> <span class="nf">__CreatePolyDataForRendering</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span
+            class="p">,</span> <span class="n">render_flag</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+            class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+            class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">input_data</span><span class="p">,</span> <span class="n">BaseProperty</span><span
+            class="p">):</span>
+            <span class="n">polyData</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Points</span><span class="o">.</span><span
+            class="n">ToPolyData</span><span class="p">()</span>
+            <span class="n">numPoints</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">Size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">polyData</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">ToPolyData</span><span class="p">()</span>
+            <span class="n">numPoints</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Size</span>
+
+        <span class="k">if</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;color&#39;</span><span
+            class="p">:</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">color</span><span
+            class="p">,</span> <span class="p">(</span><span class="n">numPoints</span><span class="p">,</span> <span
+            class="mi">1</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span
+            class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;externrgb&#39;</span> <span
+            class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">input_data</span><span class="p">,</span> <span class="n">ColorProperty</span><span
+            class="p">):</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">RGB</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;rgb&#39;</span> <span
+            class="ow">and</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span> <span class="n">PointSet</span><span class="p">)</span> <span class="ow">or</span> <span
+            class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span> <span class="n">PointSubSet</span><span class="p">))</span> <span
+            class="ow">and</span> <span class="n">input_data</span><span class="o">.</span><span
+            class="n">RGB</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">RGB</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;intensity&#39;</span> <span
+            class="ow">and</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span> <span class="n">PointSet</span><span class="p">)</span> <span class="ow">or</span> <span
+            class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span>
+                                                               <span class="n">PointSubSet</span><span
+            class="p">))</span> <span class="ow">and</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Intensity</span> <span class="o">!=</span> <span
+            class="kc">None</span><span class="p">:</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Intensity</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;height&#39;</span> <span
+            class="ow">and</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span> <span class="n">PointSet</span><span class="p">)</span> <span class="ow">or</span> <span
+            class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span
+            class="p">,</span> <span class="n">PointSubSet</span><span class="p">))</span> <span
+            class="ow">and</span> <span class="n">input_data</span><span class="o">.</span><span
+            class="n">Z</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Z</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;height&#39;</span> <span
+            class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">input_data</span><span class="p">,</span> <span class="n">BaseProperty</span><span
+            class="p">):</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">Z</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;segmentation&#39;</span> <span
+            class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span
+            class="n">input_data</span><span class="p">,</span> <span class="n">SegmentationProperty</span><span
+            class="p">):</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">input_data</span><span
+            class="o">.</span><span class="n">RGB</span>
+
+        <span class="k">elif</span> <span class="n">render_flag</span> <span class="o">==</span> <span class="s1">&#39;parametricColor&#39;</span><span
+            class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span
+            class="n">color</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span
+            class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">scalars</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span
+            class="n">color</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scalars</span> <span class="o">=</span> <span class="n">color</span>
+
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># display in some default color</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Rendering using default color&#39;</span><span
+            class="p">)</span>
+            <span class="n">scalars</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="mi">255</span> <span
+            class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span
+            class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span
+            class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span
+            class="nb">len</span><span class="p">(</span><span class="n">polyData</span><span class="o">.</span><span
+            class="n">points</span><span class="p">),</span> <span class="mi">1</span><span class="p">)),</span> <span
+            class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span
+            class="n">uint8</span><span class="p">)</span>
+            <span class="n">render_flag</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
+
+        <span class="n">VisualizationUtils</span><span class="o">.</span><span class="n">AddScalarToPolydata</span><span
+            class="p">(</span><span class="n">polyData</span><span class="p">,</span> <span
+            class="n">scalars</span><span class="p">,</span> <span class="n">render_flag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">polyData</span>
+
+    <span class="c1"># region  # Region: Binding Functions</span>
+<div class="viewcode-block" id="VisualizationVTK.Bind"><a class="viewcode-back"
+                                                          href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.Bind">[docs]</a>    <span
+        class="k">def</span> <span class="nf">Bind</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">render_flag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Populates the render view (when only one viewport is in use)</span>
+
+<span class="sd">        :param input_data: points</span>
+<span class="sd">        :param render_flag: the property according to which the color will be shown</span>
+<span class="sd">           - &#39;color&#39;</span>
+<span class="sd">           - &#39;rgb&#39;</span>
+<span class="sd">           - &#39;externrgb&#39;</span>
+<span class="sd">           - &#39;intensity&#39;</span>
+<span class="sd">           - &#39;height&#39;</span>
+<span class="sd">           - &#39;segmentation&#39;</span>
+<span class="sd">           - &#39;parametricColor&#39;</span>
+
+<span class="sd">        :param color: if specific colors are in use. If &#39;color&#39; was chosen in renderFlag then this color will be used</span>
+<span class="sd">        :param new_layer: flag to overwrite what&#39;s in the window. Default: False</span>
+
+<span class="sd">        :type input_data: PointSet or BaseProperty</span>
+<span class="sd">        :type render_flag: str</span>
+<span class="sd">        :type color: tuple</span>
+<span class="sd">        :type new_layer: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BindTopLeftData</span><span
+            class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">render_flag</span><span class="p">,</span> <span class="n">color</span><span
+            class="p">,</span> <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+    <span class="c1"># ----- #</span>
+
+<div class="viewcode-block" id="VisualizationVTK.BindFirstHalf"><a class="viewcode-back"
+                                                                   href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindFirstHalf">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindFirstHalf</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BindTopLeftData</span><span
+            class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="p">,</span> <span class="n">color</span><span
+            class="p">,</span> <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.BindSecondHalf"><a class="viewcode-back"
+                                                                    href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindSecondHalf">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindSecondHalf</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BindTopRightData</span><span
+            class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="p">,</span> <span class="n">color</span><span
+            class="p">,</span> <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+    <span class="c1"># ----- #</span>
+
+<div class="viewcode-block" id="VisualizationVTK.BindTopLeftData"><a class="viewcode-back"
+                                                                     href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindTopLeftData">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindTopLeftData</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitializePointsArray</span><span class="p">(</span><span
+            class="n">region_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span
+            class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="o">=</span><span class="n">renderFlag</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                                   <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.BindTopRightData"><a class="viewcode-back"
+                                                                      href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindTopRightData">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindTopRightData</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitializePointsArray</span><span class="p">(</span><span
+            class="n">region_index</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span
+            class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="o">=</span><span class="n">renderFlag</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                                   <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.BindBottomLeftData"><a class="viewcode-back"
+                                                                        href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindBottomLeftData">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindBottomLeftData</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitializePointsArray</span><span class="p">(</span><span
+            class="n">region_index</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span
+            class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="o">=</span><span class="n">renderFlag</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                                   <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.BindBottomRightData"><a class="viewcode-back"
+                                                                         href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.BindBottomRightData">[docs]</a>    <span
+        class="k">def</span> <span class="nf">BindBottomRightData</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">,</span> <span
+        class="n">renderFlag</span><span class="o">=</span><span class="s1">&#39;color&#39;</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitializePointsArray</span><span class="p">(</span><span
+            class="n">region_index</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span
+            class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">renderFlag</span><span class="o">=</span><span class="n">renderFlag</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                                   <span class="n">new_layer</span><span class="o">=</span><span
+            class="n">new_layer</span><span class="p">)</span></div>
+
+    <span class="c1"># endregion</span>
+
+<div class="viewcode-block" id="VisualizationVTK.InitializePointsArray"><a class="viewcode-back"
+                                                                           href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.InitializePointsArray">[docs]</a>    <span
+        class="k">def</span> <span class="nf">InitializePointsArray</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">region_index</span><span class="p">,</span> <span
+        class="n">input_data</span><span class="p">,</span> <span class="n">renderFlag</span><span
+        class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+        class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span
+        class="p">),</span> <span class="n">new_layer</span><span class="o">=</span><span class="kc">False</span><span
+        class="p">):</span>
+
+        <span class="n">poly_data</span> <span class="o">=</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__CreatePolyDataForRendering</span><span class="p">(</span><span
+            class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span> <span
+            class="n">render_flag</span><span class="o">=</span><span class="n">renderFlag</span><span
+            class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span
+            class="p">)</span>
+        <span class="k">if</span> <span class="n">new_layer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vtkPolydataDictByViewport</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">poly_data</span><span class="p">)</span>
+            <span class="n">combined_polydata</span> <span class="o">=</span> <span
+            class="n">VisualizationUtils</span><span class="o">.</span><span class="n">CombineVTKPolyDatas</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vtkPolydataDictByViewport</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vtkCombinedPolyData</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span> <span class="o">=</span> <span
+            class="n">combined_polydata</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKMappers</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span><span class="o">.</span><span
+            class="n">SetInputConnection</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">vtkCombinedPolyData</span><span class="p">[</span><span class="n">region_index</span><span
+            class="p">]</span><span class="o">.</span><span class="n">GetOutputPort</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vtkPolydataDictByViewport</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span> <span class="o">=</span> <span
+            class="p">[</span><span class="n">poly_data</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vtkCombinedPolyData</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span> <span class="o">=</span> <span
+            class="n">poly_data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listVTKMappers</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span><span class="o">.</span><span
+            class="n">SetInputData</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">vtkCombinedPolyData</span><span class="p">[</span><span class="n">region_index</span><span
+            class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">listVTKRenderers</span><span
+            class="p">[</span><span class="n">region_index</span><span class="p">]</span><span class="o">.</span><span
+            class="n">ResetCamera</span><span class="p">()</span></div>
+
+    <span class="c1"># -----------------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="VisualizationVTK.SetRenderWindowName"><a class="viewcode-back"
+                                                                         href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.SetRenderWindowName">[docs]</a>    <span
+        class="k">def</span> <span class="nf">SetRenderWindowName</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">nameOfRenderWindow</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindow</span><span
+            class="o">.</span><span class="n">SetWindowName</span><span class="p">(</span><span
+            class="nb">str</span><span class="p">(</span><span class="n">nameOfRenderWindow</span><span
+            class="p">))</span></div>
+
+<div class="viewcode-block" id="VisualizationVTK.Show"><a class="viewcode-back"
+                                                          href="../Visualizations/PointSetVisualization.html#VisualizationVTK.VisualizationVTK.Show">[docs]</a>    <span
+        class="k">def</span> <span class="nf">Show</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindowInteractor</span><span
+            class="o">.</span><span class="n">Initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindow</span><span
+            class="o">.</span><span class="n">Render</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vtkRenderWindowInteractor</span><span
+            class="o">.</span><span class="n">Start</span><span class="p">()</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span
+                                class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">points1</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span
+                                class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span
+                                class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span
+                                class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span
+                                class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">pointset1</span> <span class="o">=</span> <span class="n">PointSet</span><span
+                                class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points1</span><span
+                                class="p">)</span>
+    <span class="n">pointsubset1</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
+                                class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pointset1</span><span
+                                class="p">,</span> <span class="n">indices</span><span class="o">=</span><span
+                                class="nb">list</span><span class="p">(</span><span class="nb">range</span><span
+                                class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
+                                class="nb">len</span><span class="p">(</span><span class="n">points1</span><span
+                                class="p">),</span> <span class="mi">3</span><span class="p">)))</span>
+
+    <span class="n">points2</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span
+                                class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span
+                                class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span
+                                class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span
+                                class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">pointset2</span> <span class="o">=</span> <span class="n">PointSet</span><span
+                                class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points2</span><span
+                                class="p">)</span>
+    <span class="n">pointsubset2</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
+                                class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pointset2</span><span
+                                class="p">,</span> <span class="n">indices</span><span class="o">=</span><span
+                                class="nb">list</span><span class="p">(</span><span class="nb">range</span><span
+                                class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
+                                class="nb">len</span><span class="p">(</span><span class="n">points2</span><span
+                                class="p">),</span> <span class="mi">3</span><span class="p">)))</span>
+
+    <span class="n">number_of_viewports</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="c1"># Initialize VisualizationVTK Object. Number of Viewports = 1, 2, 4</span>
+    <span class="n">visualization_object</span> <span class="o">=</span> <span class="n">VisualizationVTK</span><span
+                                class="p">(</span><span class="n">number_of_viewports</span><span
+                                class="p">,</span> <span class="n">two_viewports_vertical_horizontal</span><span
+                                class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">)</span>
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">SetRenderWindowName</span><span
+                                class="p">(</span><span class="s2">&quot;Test - One Viewport. PointSet. Uniform Color.&quot;</span><span
+                                class="p">)</span>
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">BindFirstHalf</span><span
+                                class="p">(</span><span class="n">input_data</span><span class="o">=</span><span
+                                class="n">pointset1</span><span class="p">,</span> <span
+                                class="n">renderFlag</span><span class="o">=</span><span
+                                class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+                                class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+                                class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+                                class="mi">0</span><span class="p">),</span> <span class="n">new_layer</span><span
+                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">BindFirstHalf</span><span
+                                class="p">(</span><span class="n">input_data</span><span class="o">=</span><span
+                                class="n">pointset2</span><span class="p">,</span> <span
+                                class="n">renderFlag</span><span class="o">=</span><span
+                                class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+                                class="n">color</span><span class="o">=</span><span class="p">(</span><span
+                                class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span
+                                class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">new_layer</span><span
+                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">BindSecondHalf</span><span
+                                class="p">(</span><span class="n">input_data</span><span class="o">=</span><span
+                                class="n">pointsubset1</span><span class="p">,</span> <span
+                                class="n">renderFlag</span><span class="o">=</span><span
+                                class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+                                class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span
+                                class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+                                class="mi">0</span><span class="p">),</span> <span class="n">new_layer</span><span
+                                class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">BindSecondHalf</span><span
+                                class="p">(</span><span class="n">input_data</span><span class="o">=</span><span
+                                class="n">pointsubset2</span><span class="p">,</span> <span
+                                class="n">renderFlag</span><span class="o">=</span><span
+                                class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+                                class="n">color</span><span class="o">=</span><span class="p">(</span><span
+                                class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span
+                                class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">new_layer</span><span
+                                class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">visualization_object</span><span class="o">.</span><span class="n">Show</span><span
+                                class="p">()</span>
+</pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../_static/jquery.js" type="text/javascript"></script>
+<script src="../_static/underscore.js" type="text/javascript"></script>
+<script src="../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

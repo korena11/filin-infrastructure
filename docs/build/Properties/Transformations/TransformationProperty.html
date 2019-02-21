@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Transformation Matrix Property &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="TransformationFactory.html" rel="next" title="Transformation Matrix Factory"/>
+    <link href="Transformation.html" rel="prev" title="Transformations"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal"
+                                                      href="../BaseProperty.html">Properties</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../SphericalCoordinates/Spherical.html">Spherical
+                                Coordinates</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal" href="Transformation.html">Transformations</a>
+                                <ul class="current">
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">Transformation
+                                        Matrix Property</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="TransformationFactory.html">Transformation Matrix
+                                        Factory</a></li>
+                                    <li class="toctree-l3"><a class="reference internal" href="RotationUtils.html">Rotation
+                                        Utilities</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+
+                        <li><a href="Transformation.html">Transformations</a> &raquo;</li>
+
+                        <li>Transformation Matrix Property</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Transformations/TransformationProperty.rst.txt"
+                               rel="nofollow"> View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="transformation-matrix-property">
+                            <h1>Transformation Matrix Property<a class="headerlink"
+                                                                 href="#transformation-matrix-property"
+                                                                 title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="TransformationMatrixProperty.TransformationMatrixProperty">
+                                    <em class="property">class </em><code class="descclassname">TransformationMatrixProperty.</code><code
+                                        class="descname">TransformationMatrixProperty</code><span
+                                        class="sig-paren">(</span><em>points</em>, <em>transformationMatrix=None</em>,
+                                    <em>translationMatrix=None</em>, <em>rotationMatrix=None</em><span
+                                        class="sig-paren">)</span><a class="reference internal"
+                                                                     href="../../_modules/TransformationMatrixProperty.html#TransformationMatrixProperty"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TransformationMatrixProperty.TransformationMatrixProperty"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>This class represents a 4x4 3D transformation matrix</p>
+                                    <p class="rubric">Attributes</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Points</span></code></td>
+                                            <td>Holds the points dataset</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Raster</span></code></td>
+                                            <td>Holds raster dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Size</span></code></td>
+                                            <td>Return the size of the property</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">rotationMatrix</span></code></a></td>
+                                            <td>Points’ rotation matrix with respect to reference pointset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">transformationMatrix</span></code></a></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">translationMatrix</span></code></a></td>
+                                            <td>Points’ translation matrix with respect to reference pointset</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="rubric">Methods</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.FromFile"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.FromFile"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">FromFile</span></code></a>()
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">eulerAngles_from_R</span></code></a>([dtype])
+                                            </td>
+                                            <td>Extracts euler rotation angles from the rotation matrix</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">getValues</span></code>()
+                                            </td>
+                                            <td>Get a specific characteristic value of the property</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TransformationMatrixProperty.TransformationMatrixProperty.setValues"
+                                                   title="TransformationMatrixProperty.TransformationMatrixProperty.setValues"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">setValues</span></code></a>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the rotation and translation matrices</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <dl class="staticmethod">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.FromFile">
+                                            <em class="property">static </em><code class="descname">FromFile</code><span
+                                                class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/TransformationMatrixProperty.html#TransformationMatrixProperty.FromFile"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TransformationMatrixProperty.TransformationMatrixProperty.FromFile"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R">
+                                            <code class="descname">eulerAngles_from_R</code><span
+                                                class="sig-paren">(</span><em>dtype='degrees'</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/TransformationMatrixProperty.html#TransformationMatrixProperty.eulerAngles_from_R"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Extracts euler rotation angles from the rotation matrix</p>
+                                            <div class="admonition warning">
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">The angles returned are subjected to ambiguity</p>
+                                            </div>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>dtype</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                            title="(in Python v3.7)"><em>str</em></a>) – the output in
+                                                        ‘degrees’ or ‘radians’ (default ‘degrees’)
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">(omega, phi, kappa) according to the dtype
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><a class="reference external"
+                                                                              href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                              title="(in Python v3.7)">tuple</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="attribute">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix">
+                                            <code class="descname">rotationMatrix</code><a class="headerlink"
+                                                                                           href="#TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix"
+                                                                                           title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Points’ rotation matrix with respect to reference pointset</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>dimensions</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                            title="(in Python v3.7)"><em>int</em></a>) – the dimensions
+                                                        of the returned vector. Either 3 or 4
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.setValues">
+                                            <code class="descname">setValues</code><span class="sig-paren">(</span><em>*args</em>,
+                                            <em>**kwargs</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/TransformationMatrixProperty.html#TransformationMatrixProperty.setValues"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TransformationMatrixProperty.TransformationMatrixProperty.setValues"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Sets the rotation and translation matrices</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>transformationMatrix</strong> – 4x4
+                                                        transformation matrix
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><em>Options</em></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>translationMatrix</strong> (<em>np.array</em>) –
+                                                                1x3 translation matrix
+                                                            </li>
+                                                            <li><strong>rotationMatrix</strong> (<em>np.array</em>) –
+                                                                3x3 rotation.
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="attribute">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix">
+                                            <code class="descname">transformationMatrix</code><a class="headerlink"
+                                                                                                 href="#TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix"
+                                                                                                 title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                    <dl class="attribute">
+                                        <dt id="TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix">
+                                            <code class="descname">translationMatrix</code><a class="headerlink"
+                                                                                              href="#TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix"
+                                                                                              title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Points’ translation matrix with respect to reference pointset</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>dimensions</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                            title="(in Python v3.7)"><em>int</em></a>) – the dimensions
+                                                        of the returned vector. Either 3 or 4
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+
+                        <a accesskey="n" class="btn btn-neutral float-right" href="TransformationFactory.html"
+                           rel="next" title="Transformation Matrix Factory">Next <span
+                                class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a accesskey="p" class="btn btn-neutral" href="Transformation.html" rel="prev"
+                           title="Transformations"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

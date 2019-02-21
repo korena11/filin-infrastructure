@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Tensor Factory &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../BaseProperty.html">Properties</a></li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li>Tensor Factory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Tensors/TensorFactory.rst.txt" rel="nofollow"> View page
+                                source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="tensor-factory">
+                            <h1>Tensor Factory<a class="headerlink" href="#tensor-factory"
+                                                 title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="TensorFactory.TensorFactory">
+                                    <em class="property">class </em><code
+                                        class="descclassname">TensorFactory.</code><code
+                                        class="descname">TensorFactory</code><a class="reference internal"
+                                                                                href="../../_modules/TensorFactory.html#TensorFactory"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#TensorFactory.TensorFactory"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd>
+                                    <blockquote>
+                                        <div><p class="rubric">Methods</p>
+                                            <table border="1" class="longtable docutils">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="90%"/>
+                                                </colgroup>
+                                                <tbody valign="top">
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="tensorClass.html#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood"
+                                                           title="TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">computeTensorsProperty_givenNeighborhood</span></code></a>(points)
+                                                    </td>
+                                                    <td>Compute tensors for a point cloud.</td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="tensorClass.html#TensorFactory.TensorFactory.joinTensors"
+                                                           title="TensorFactory.TensorFactory.joinTensors"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">joinTensors</span></code></a>(t1,&nbsp;t2)
+                                                    </td>
+                                                    <td>Create a new Tensor by joining two existing ones</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="tensorClass.html#TensorFactory.TensorFactory.tensorFromPoints"
+                                                           title="TensorFactory.TensorFactory.tensorFromPoints"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">tensorFromPoints</span></code></a>(points[,&nbsp;point_index])
+                                                    </td>
+                                                    <td>Create a Tensor from 3D points</td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="tensorClass.html#TensorFactory.TensorFactory.tensorGeneral"
+                                                           title="TensorFactory.TensorFactory.tensorGeneral"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">tensorGeneral</span></code></a>(arrays[,&nbsp;ref_array,&nbsp;weights,&nbsp;…])
+                                                    </td>
+                                                    <td>Compute a general tensor (not necessarily 3D)</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </blockquote>
+                                    <dl class="staticmethod">
+                                        <dt id="TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood">
+                                            <em class="property">static </em><code class="descname">computeTensorsProperty_givenNeighborhood</code><span
+                                                class="sig-paren">(</span><em>points</em>,
+                                            <em>neighborhoodProperty=None</em>, <em>neighborsFunc=None</em>, <em>**kwargs</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/TensorFactory.html#TensorFactory.computeTensorsProperty_givenNeighborhood"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute tensors for a point cloud.</p>
+                                            <p>For each point a tensor is computed, with the point itself the reference
+                                                point. If the neighborhoodProperty is
+                                                None, it is computed here, according to the sent function.</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>points</strong> – a point cloud
+                                                        (PointSet or sub-object)
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Optionals</strong></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>neighborhoodProperty</strong> (<em>NeighborhoodProperty</em>)
+                                                                – a property that holds all neighbors for each point
+                                                                (can be empty)
+                                                            </li>
+                                                            <li><strong>neighborsFunc</strong> (<em>function</em>) – the
+                                                                function to be used for neighbors search.
+                                                            </li>
+                                                            <li><strong>kwargs</strong> – <p>the arguments for the
+                                                                function to be used for neighbors search. These are
+                                                                usually:</p>
+                                                                <table class="docutils field-list" frame="void"
+                                                                       rules="none">
+                                                                    <col class="field-name"/>
+                                                                    <col class="field-body"/>
+                                                                    <tbody valign="top">
+                                                                    <tr class="field-odd field">
+                                                                        <th class="field-name">param radius:</th>
+                                                                        <td class="field-body">search radius for
+                                                                            neighbors search
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="field-even field">
+                                                                        <th class="field-name">param knn:</th>
+                                                                        <td class="field-body">k nearest neighbors for
+                                                                            neighbors search
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">a tensor property with all
+                                                        tensors computed for each point</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="tensorClass.html#TensorProperty.TensorProperty"
+                                                            title="TensorProperty.TensorProperty">TensorProperty</a></p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Usage</strong></p>
+                                            <div class="admonition warning">
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">Now works only for PointSet3D neighborhood search.</p>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="TensorFactory.TensorFactory.joinTensors">
+                                            <em class="property">classmethod </em><code
+                                                class="descname">joinTensors</code><span class="sig-paren">(</span><em>t1</em>,
+                                            <em>t2</em><span class="sig-paren">)</span><a class="reference internal"
+                                                                                          href="../../_modules/TensorFactory.html#TensorFactory.joinTensors"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TensorFactory.TensorFactory.joinTensors"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Create a new Tensor by joining two existing ones</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>t1</strong> (<a class="reference internal"
+                                                                                        href="tensorClass.html#tensor.Tensor"
+                                                                                        title="tensor.Tensor"><em>Tensor</em></a>)
+                                                                – First TensorSegment object
+                                                            </li>
+                                                            <li><strong>t2</strong> (<a class="reference internal"
+                                                                                        href="tensorClass.html#tensor.Tensor"
+                                                                                        title="tensor.Tensor"><em>Tensor</em></a>)
+                                                                – Second TensorSegment object
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">A new Tensor object which is
+                                                        the result of merging the two given ones</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="tensorClass.html#tensor.Tensor" title="tensor.Tensor">Tensor</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="TensorFactory.TensorFactory.tensorFromPoints">
+                                            <em class="property">classmethod </em><code class="descname">tensorFromPoints</code><span
+                                                class="sig-paren">(</span><em>points</em>, <em>point_index=-1</em>, <em>**kwargs</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/TensorFactory.html#TensorFactory.tensorFromPoints"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TensorFactory.TensorFactory.tensorFromPoints"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Create a Tensor from 3D points</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>points</strong> – PointSet</li>
+                                                            <li><strong>point_index</strong> – around which point index
+                                                                the tensor is computed. If (-1) the tensor is computed
+                                                                around the
+                                                                center of gravity. Default (-1).
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Optionals</strong></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>radius</strong> – the radius
+                                                        according to which weights are being computed (if not set, then
+                                                        unit weight is used)
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">TensorProperty object</td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><a class="reference internal"
+                                                                              href="tensorClass.html#tensor.Tensor"
+                                                                              title="tensor.Tensor">Tensor</a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="TensorFactory.TensorFactory.tensorGeneral">
+                                            <em class="property">classmethod </em><code
+                                                class="descname">tensorGeneral</code><span
+                                                class="sig-paren">(</span><em>arrays</em>, <em>ref_array=-1</em>, <em>weights=1</em>,
+                                            <em>min_points=3</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/TensorFactory.html#TensorFactory.tensorGeneral"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#TensorFactory.TensorFactory.tensorGeneral"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute a general tensor (not necessarily 3D)</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>arrays</strong> (<em>np.array</em>) – an nxm
+                                                                arrays (each <em>row</em> array is the set for the
+                                                                tensor)
+                                                            </li>
+                                                            <li><strong>ref_array</strong> (<em>np.array</em>) – the
+                                                                array around which the tensor is computed, if (-1) it is
+                                                                computed around the center of gravity
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p><strong>Optionals</strong></p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>weights</strong> – the weights for the tensor
+                                                                computation. Default 1 for all
+                                                            </li>
+                                                            <li><strong>min_points</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) – minimal
+                                                                number of points that can define a tensor (default: 3)
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">a tensor</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="tensorClass.html#tensor.Tensor" title="tensor.Tensor">Tensor</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="admonition note">
+                                                <p class="first admonition-title">Note</p>
+                                                <p class="last">If there are less than <cite>min_point</cite> the
+                                                    covariance matrix of the tensor will be defined as the Identity
+                                                    matrix (with the required shape)</p>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

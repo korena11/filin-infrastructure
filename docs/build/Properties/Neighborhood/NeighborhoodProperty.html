@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Neighbors Property &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="NeighborsFactory.html" rel="next" title="Neighbors Factory"/>
+    <link href="Neighborhood.html" rel="prev" title="Neighborhood"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal"
+                                                      href="../BaseProperty.html">Properties</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2 current"><a class="reference internal" href="Neighborhood.html">Neighborhood</a>
+                                <ul class="current">
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">Neighbors
+                                        Property</a></li>
+                                    <li class="toctree-l3"><a class="reference internal" href="NeighborsFactory.html">Neighbors
+                                        Factory</a></li>
+                                    <li class="toctree-l3"><a class="reference internal"
+                                                              href="Neighborhood.html#point-neighborhood">Point
+                                        Neighborhood</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../SphericalCoordinates/Spherical.html">Spherical
+                                Coordinates</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Transformations/Transformation.html">Transformations</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+
+                        <li><a href="Neighborhood.html">Neighborhood</a> &raquo;</li>
+
+                        <li>Neighbors Property</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Neighborhood/NeighborhoodProperty.rst.txt"
+                               rel="nofollow"> View page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="neighbors-property">
+                            <h1>Neighbors Property<a class="headerlink" href="#neighbors-property"
+                                                     title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="NeighborProperty.NeighborsProperty">
+                                    <em class="property">class </em><code class="descclassname">NeighborProperty.</code><code
+                                        class="descname">NeighborsProperty</code><span class="sig-paren">(</span><em>points</em>,
+                                    <em>*args</em><span class="sig-paren">)</span><a class="reference internal"
+                                                                                     href="../../_modules/NeighborProperty.html#NeighborsProperty"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#NeighborProperty.NeighborsProperty"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>Property that holds the neighbors of each point</p>
+                                    <p class="rubric">Attributes</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Points</span></code></td>
+                                            <td>Holds the points dataset</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Raster</span></code></td>
+                                            <td>Holds raster dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Size</span></code></td>
+                                            <td>Return the size of the property</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="rubric">Methods</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#NeighborProperty.NeighborsProperty.GetAllPointsNeighbors"
+                                                   title="NeighborProperty.NeighborsProperty.GetAllPointsNeighbors"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">GetAllPointsNeighbors</span></code></a>()
+                                            </td>
+                                            <td>All neighbors of all computed points :return:</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#NeighborProperty.NeighborsProperty.RotatePointNeighborhood"
+                                                   title="NeighborProperty.NeighborsProperty.RotatePointNeighborhood"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">RotatePointNeighborhood</span></code></a>(pointIndex[,&nbsp;…])
+                                            </td>
+                                            <td>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name" colspan="2">param pointIndex:</th>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <td>&#160;</td>
+                                                        <td class="field-body">
+                                                            <table class="first last docutils field-list" frame="void"
+                                                                   rules="none">
+                                                                <col class="field-name"/>
+                                                                <col class="field-body"/>
+                                                                <tbody valign="top">
+                                                                <tr class="field-odd field">
+                                                                    <th class="field-name">param smoothen:</th>
+                                                                    <td class="field-body">
+                                                                        <table class="first last docutils field-list"
+                                                                               frame="void" rules="none">
+                                                                            <col class="field-name"/>
+                                                                            <col class="field-body"/>
+                                                                            <tbody valign="top">
+                                                                            <tr class="field-odd field">
+                                                                                <th class="field-name" colspan="2">param
+                                                                                    useOriginal:
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr class="field-odd field">
+                                                                                <td>&#160;</td>
+                                                                                <td class="field-body"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#NeighborProperty.NeighborsProperty.getNeighbors"
+                                                   title="NeighborProperty.NeighborsProperty.getNeighbors"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">getNeighbors</span></code></a>(idx)
+                                            </td>
+                                            <td>Retrieve a neighborhood of point(s) with idx index</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">getValues</span></code>()
+                                            </td>
+                                            <td>Get a specific characteristic value of the property</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">save</span></code>(filename,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Save the property in either json or hdf5.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#NeighborProperty.NeighborsProperty.setNeighbor"
+                                                   title="NeighborProperty.NeighborsProperty.setNeighbor"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">setNeighbor</span></code></a>(idx,&nbsp;point_neighbor)
+                                            </td>
+                                            <td>Set a PointNeighborhood into the property according to the point index
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">setValues</span></code>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the values of a property.</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.GetAllPointsNeighbors">
+                                            <code class="descname">GetAllPointsNeighbors</code><span
+                                                class="sig-paren">(</span><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.GetAllPointsNeighbors"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.GetAllPointsNeighbors"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>All neighbors of all computed points
+                                            :return:</p>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.RotatePointNeighborhood">
+                                            <code class="descname">RotatePointNeighborhood</code><span
+                                                class="sig-paren">(</span><em>pointIndex</em>, <em>smoothen=False</em>,
+                                            <em>useOriginal=False</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.RotatePointNeighborhood"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.RotatePointNeighborhood"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>pointIndex</strong> –</li>
+                                                            <li><strong>smoothen</strong> –</li>
+                                                            <li><strong>useOriginal</strong> –</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first last"></p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.getNeighbors">
+                                            <code class="descname">getNeighbors</code><span
+                                                class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.getNeighbors"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.getNeighbors"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Retrieve a neighborhood of point(s) with idx index</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>idx</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                            title="(in Python v3.7)"><em>int</em></a><em>, </em><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                            title="(in Python v3.7)"><em>tuple</em></a><em>, </em><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#list"
+                                                            title="(in Python v3.7)"><em>list</em></a>) – the index of
+                                                        the point
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">the tensor of point idx</td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><a class="reference internal"
+                                                                              href="Neighborhood.html#PointNeighborhood.PointNeighborhood"
+                                                                              title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.setNeighbor">
+                                            <code class="descname">setNeighbor</code><span
+                                                class="sig-paren">(</span><em>idx</em>, <em>point_neighbor</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NeighborProperty.html#NeighborsProperty.setNeighbor"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.setNeighbor"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Set a PointNeighborhood into the property according to the point
+                                            index</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>idx</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/functions.html#int"
+                                                                                         title="(in Python v3.7)"><em>int</em></a>)
+                                                                – the index (or indices) of the point(s) to set
+                                                            </li>
+                                                            <li><strong>point_neighbor</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="Neighborhood.html#PointNeighborhood.PointNeighborhood"
+                                                                    title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood</em></a>)
+                                                                – the PointeNeighborhood object to set
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+
+                        <a accesskey="n" class="btn btn-neutral float-right" href="NeighborsFactory.html" rel="next"
+                           title="Neighbors Factory">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a accesskey="p" class="btn btn-neutral" href="Neighborhood.html" rel="prev"
+                           title="Neighborhood"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

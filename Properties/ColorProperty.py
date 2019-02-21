@@ -4,7 +4,7 @@ from BaseProperty import BaseProperty
 class ColorProperty(BaseProperty):
     __rgb = None
 
-    def __init__(self, points, rgb):
+    def __init__(self, points, rgb=None):
         """
 
         :param points:
@@ -13,7 +13,7 @@ class ColorProperty(BaseProperty):
         :type rgb: numpy.array
         """
         super(ColorProperty, self).__init__(points)
-        self.setValues(rgb)  # makes sure that the array is 3d and that it ranges [0,1]
+        self.load(rgb)  # makes sure that the array is 3d and that it ranges [0,1]
 
     @property
     def RGB(self):
@@ -42,33 +42,41 @@ class ColorProperty(BaseProperty):
 
         return self.__rgb
 
-    def setValues(self, *args, **kwargs):
+    def load(self, colors=None, **kwargs):
         """
         Set
-        :param args:
+        :param colors:
         :param kwargs:
         :return:
         """
+        for key in kwargs:
+            if key == 'rgb':
+                colors = kwargs[key]
+            elif key == '__rgb':
+                colors = kwargs[key]
+            elif key == 'colors':
+                colors = kwargs[key]
+            elif key == 'RGB':
+                colors = kwargs['RGB']
 
-        array = args[0]
+        if colors is not None:
 
-        import numpy as np
-        size_array = array.shape
+            import numpy as np
+            size_array = colors.shape
 
-        # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)
-        if len(size_array) < 2:
-            rgb = np.ones((size_array[0], 3))
-            rgb *= array[:, None]
-        elif len(size_array) == 3:
-            rgb = array.reshape((size_array[0] * size_array[1], 3))
+            # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)
+            if len(size_array) < 2:
+                rgb = np.ones((size_array[0], 3))
+                rgb *= colors[:, None]
+            elif len(size_array) == 3:
+                rgb = colors.reshape((size_array[0] * size_array[1], 3))
+            else:
+                rgb = colors
 
-        else:
-            rgb = array
-        # normalize numbers to [0,1] interval
+            # normalize numbers to [0,1] interval
+            rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
 
-        rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
-
-        self.__rgb = rgb_normed
+            self.__rgb = rgb_normed
 
     def getValues(self):
         return self.__rgb

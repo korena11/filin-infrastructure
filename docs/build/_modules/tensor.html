@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>tensor &mdash; infragit 1a documentation</title>
+
+
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../genindex.html" rel="index" title="Index"/>
+    <link href="../search.html" rel="search" title="Search"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="index.html">Module code</a> &raquo;</li>
+
+                        <li>tensor</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <h1>Source code for tensor</h1>
+                        <div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">infragit</span>
+<span class="sd">reuma\Reuma</span>
+<span class="sd">10, Jul, 2018</span>
+
+<span class="sd">.. note::</span>
+<span class="sd">     Based on Zachi&#39;s implementation</span>
+
+<span class="sd">A tensor is constructed to a set of points, either around a specific point or around the centeroid (center of gravity)  </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="nn">la</span>
+
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                                class="n">PointSet</span>
+
+
+<div class="viewcode-block" id="Tensor"><a class="viewcode-back"
+                                           href="../Properties/Tensors/tensorClass.html#tensor.Tensor">[docs]</a><span
+        class="k">class</span> <span class="nc">Tensor</span><span class="p">(</span><span class="nb">object</span><span
+        class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for representing a segment as a Tensor</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">__refPoint</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__covMat</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__eigenvalues</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__eigenvectors</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__plateAxis</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__stickAxis</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__num_points</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">__pts</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">,</span> <span class="n">covariance_matrix</span><span class="p">,</span> <span class="n">ref_point</span><span
+            class="p">,</span> <span class="n">pts_number</span><span class="p">,</span> <span class="o">**</span><span
+            class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param covariance_matrix: the covariance matrix of the pointset, as computed about the reference point.</span>
+<span class="sd">        :param ref_point: index of the reference point according to which the covariance matrix was computed. If (-1)</span>
+<span class="sd">           the ref_point is the centroid of the pointset</span>
+<span class="sd">        :param pts_number: the number of points that were used to compute the tensor</span>
+<span class="sd">        :param points: points that were used in the creation of the tensor</span>
+
+<span class="sd">        :type points: PointSet or PointSubSet</span>
+<span class="sd">        :type covariance_matrix: np.array</span>
+<span class="sd">        :type ref_point: int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__num_points</span> <span class="o">=</span> <span
+            class="n">pts_number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setValues</span><span
+            class="p">(</span><span class="n">covariance_matrix</span><span class="p">,</span> <span
+            class="n">ref_point</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s1">&#39;points&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span
+            class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__pts</span> <span
+            class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span
+            class="s1">&#39;points&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Tensor.normal"><a class="viewcode-back"
+                                                  href="../Properties/Tensors/tensorClass.html#tensor.Tensor.normal">[docs]</a>    <span
+        class="k">def</span> <span class="nf">normal</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the normal of the tensor at reference point</span>
+
+<span class="sd">        :return: the normal</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">eigenvectors</span><span class="p">[:,</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">eigenvalues</span> <span class="o">==</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">eigenvalues</span><span
+            class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span
+            class="p">]]</span></div>
+
+    <span class="c1"># --------------------- PROPERTIES -------------------------</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">points</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The points that were used to construct the tensor</span>
+
+<span class="sd">        :rtype: PointSet, PointSubSet.PointSubSet, BaseData.BaseData</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__pts</span> <span
+            class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__pts</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No points were inserted to object. Refer to relevant neighbors property&#39;</span><span
+            class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">reference_point</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The point according to which the tensor was computed</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__refPoint</span>
+        
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">covariance_matrix</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The covariance matrix of the pointset, as computed about the reference point.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__covMat</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">eigenvalues</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eigenvalues of the covariance matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__eigenvalues</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">eigenvectors</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eigenvectors of the covariance matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__eigenvectors</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stick_axis</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the covariance relates to a stick, its normal is the stick_axis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__stickAxis</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">plate_axis</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the covariance relates to a plane (a plate), its normal is the plate_axis</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__plateAxis</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">points_number</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of points used for tensor computation</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__num_points</span>
+
+    <span class="c1"># ------------------------- FUNCTIONS -------------------------------</span>
+
+<div class="viewcode-block" id="Tensor.setValues"><a class="viewcode-back"
+                                                     href="../Properties/Tensors/tensorClass.html#tensor.Tensor.setValues">[docs]</a>    <span
+        class="k">def</span> <span class="nf">setValues</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span
+        class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets values in the tensor object</span>
+
+<span class="sd">        :param covariance_matrix:</span>
+<span class="sd">        :param refPoint: the point about which the tensor is computed</span>
+
+
+<span class="sd">        **Usage**</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">          setValues(covariance_matrix, cog)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__covMat</span> <span
+            class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__refPoint</span> <span
+            class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span
+            class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__eigenvalues</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__eigenvectors</span> <span
+            class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">eigh</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">covariance_matrix</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">covariance_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mi">0</span><span class="p">]))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">__num_points</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">covariance_matrix</span><span class="p">)</span>
+
+        <span class="c1"># eigVals /= sum(eigVals)                # Normalizing the eigenvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__eigenvalues</span><span class="p">[</span><span
+            class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">eigenvalues</span><span class="p">)</span> <span class="o">&lt;=</span> <span
+            class="mf">1e-8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Computing the plate parameters defined by the tensor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__plateAxis</span> <span class="o">=</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">eigenvectors</span><span class="p">[:,</span> <span
+            class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Computing the stick axis defined by the tensor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stickAxis</span> <span class="o">=</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">eigenvectors</span><span class="p">[:,</span> <span
+            class="mi">2</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Tensor.distanceFromPoint"><a class="viewcode-back"
+                                                             href="../Properties/Tensors/tensorClass.html#tensor.Tensor.distanceFromPoint">[docs]</a>    <span
+        class="k">def</span> <span class="nf">distanceFromPoint</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span
+        class="n">tensorType</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span
+        class="n">sign</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computing the distance of a given point from the surface defined by the tensor object</span>
+
+<span class="sd">        :param point: A 3D point (ndarray, 1x3)</span>
+<span class="sd">        :param tensorType: The type of tensor to use for the computation (&#39;stick&#39;, &#39;plate&#39;, &#39;ball&#39; or &#39;all&#39;)</span>
+
+<span class="sd">        :type point: np.ndarray</span>
+<span class="sd">        :type tensorType: str</span>
+
+<span class="sd">        :return: The distance of the point from the object</span>
+
+<span class="sd">        :rtype: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+            class="n">arccos</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span
+            class="n">sin</span>
+        <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+
+        <span class="k">if</span> <span class="n">tensorType</span> <span class="o">==</span> <span class="s1">&#39;stick&#39;</span><span
+            class="p">:</span>
+            <span class="n">distFromCog</span> <span class="o">=</span> <span class="n">norm</span><span
+            class="p">(</span><span class="n">point</span> <span class="o">-</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">reference_point</span><span class="p">,</span> <span class="n">axis</span><span
+            class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">offAxisAngle</span> <span class="o">=</span> <span class="n">arccos</span><span
+            class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">point</span> <span
+            class="o">-</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">reference_point</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">stick_axis</span><span class="o">.</span><span
+            class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span
+            class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> <span
+            class="n">distFromCog</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">distFromCog</span> <span class="o">*</span> <span class="n">sin</span><span
+            class="p">(</span><span class="n">offAxisAngle</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">tensorType</span> <span class="o">==</span> <span class="s1">&#39;plate&#39;</span><span
+            class="p">:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span
+            class="n">point</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">reference_point</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">plate_axis</span><span class="o">.</span><span
+            class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span
+            class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+
+            <span class="k">return</span> <span class="n">dist</span> <span class="k">if</span> <span
+            class="n">sign</span> <span class="k">else</span> <span class="nb">abs</span><span class="p">(</span><span
+            class="n">dist</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">tensorType</span> <span class="o">==</span> <span class="s1">&#39;ball&#39;</span><span
+            class="p">:</span>
+            <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span
+            class="n">point</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">reference_point</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span
+            class="mi">0</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">tensorType</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span
+            class="p">:</span>
+            <span class="k">return</span> <span class="nb">min</span><span class="p">([</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">distanceFromPoint</span><span
+            class="p">(</span><span class="n">point</span><span class="p">,</span> <span
+            class="s1">&#39;stick&#39;</span><span class="p">),</span>
+                        <span class="bp">self</span><span class="o">.</span><span
+            class="n">distanceFromPoint</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span> <span class="s1">&#39;plate&#39;</span><span class="p">),</span>
+                        <span class="bp">self</span><span class="o">.</span><span
+            class="n">distanceFromPoint</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span> <span class="s1">&#39;ball&#39;</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">nan</span></div>
+
+<div class="viewcode-block" id="Tensor.VisualizeTensor"><a class="viewcode-back"
+                                                           href="../Properties/Tensors/tensorClass.html#tensor.Tensor.VisualizeTensor">[docs]</a>    <span
+        class="k">def</span> <span class="nf">VisualizeTensor</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">pntSet</span><span class="p">,</span> <span class="n">color</span><span
+        class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span
+        class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        NOT WORKING</span>
+<span class="sd">        </span>
+<span class="sd">        :param pntSet:</span>
+<span class="sd">        :param color:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+        <span class="kn">from</span> <span class="nn">VisualizationVTK</span> <span class="k">import</span> <span
+            class="n">VisualizationVTK</span>
+        <span class="kn">from</span> <span class="nn">NormalsProperty</span> <span class="k">import</span> <span
+            class="n">NormalsProperty</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">VisualizationVTK</span><span
+            class="o">.</span><span class="n">RenderPointSet</span><span class="p">(</span><span class="n">pntSet</span><span
+            class="p">,</span> <span class="s1">&#39;color&#39;</span><span class="p">,</span> <span
+            class="n">pointSize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span
+            class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="n">cogPntSet</span> <span class="o">=</span> <span class="n">PointSet</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_point</span><span
+            class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span
+            class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">normalProperty1</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span
+            class="p">(</span><span class="n">cogPntSet</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">stick_axis</span><span class="o">.</span><span
+            class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span
+            class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span
+            class="mi">10</span><span class="p">)</span>
+        <span class="n">normalProperty2</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span
+            class="p">(</span><span class="n">cogPntSet</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">plate_axis</span><span class="o">.</span><span
+            class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span
+            class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span
+            class="mi">10</span><span class="p">)</span>
+        <span class="n">normalProperty3</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span
+            class="p">(</span><span class="n">cogPntSet</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">eigenvectors</span><span class="p">[:,</span> <span
+            class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span
+            class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span
+            class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="mi">10</span><span
+            class="p">)</span>
+
+        <span class="n">VisualizationVTK</span><span class="o">.</span><span class="n">RenderPointSet</span><span
+            class="p">(</span><span class="n">normalProperty1</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span
+            class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span
+            class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="mi">255</span><span class="p">),</span> <span class="n">pointSize</span><span class="o">=</span><span
+            class="mi">5</span><span class="p">,</span> <span class="n">_figure</span><span class="o">=</span><span
+            class="n">fig</span><span class="p">)</span>
+        <span class="n">VisualizationVTK</span><span class="o">.</span><span class="n">RenderPointSet</span><span
+            class="p">(</span><span class="n">normalProperty2</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span
+            class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span
+            class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="mi">255</span><span class="p">),</span> <span class="n">pointSize</span><span class="o">=</span><span
+            class="mi">5</span><span class="p">,</span> <span class="n">_figure</span><span class="o">=</span><span
+            class="n">fig</span><span class="p">)</span>
+        <span class="n">VisualizationVTK</span><span class="o">.</span><span class="n">RenderPointSet</span><span
+            class="p">(</span><span class="n">normalProperty3</span><span class="p">,</span> <span class="s1">&#39;color&#39;</span><span
+            class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span
+            class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span
+            class="mi">255</span><span class="p">),</span> <span class="n">pointSize</span><span class="o">=</span><span
+            class="mi">5</span><span class="p">,</span> <span class="n">_figure</span><span class="o">=</span><span
+            class="n">fig</span><span class="p">)</span></div></div>
+</pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../_static/jquery.js" type="text/javascript"></script>
+<script src="../_static/underscore.js" type="text/javascript"></script>
+<script src="../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

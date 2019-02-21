@@ -25,9 +25,9 @@ class EigenProperty(BaseProperty):
 
         """
         super(EigenProperty, self).__init__(dataset)
-        self.setValues(**kwargs)
+        self.load(**kwargs)
 
-    def setValues(self, **kwargs):
+    def load(self, **kwargs):
         """
         Sets eigen values and eigen vectors into the EigenProperty object
 

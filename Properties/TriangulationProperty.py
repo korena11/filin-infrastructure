@@ -21,9 +21,9 @@ class TriangulationProperty(BaseProperty):
 
         '''
         super(TriangulationProperty, self).__init__(points)
-        self.setValues(trianglesIndices)
+        self.load(trianglesIndices)
 
-    def setValues(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         """
         Sets the TriagulationProperty attributes
         :param trianglesIndices: each row representing a triangle, holding the indices

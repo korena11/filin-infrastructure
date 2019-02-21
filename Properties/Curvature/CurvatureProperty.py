@@ -5,13 +5,19 @@ from BaseProperty import BaseProperty
 
 class CurvatureProperty(BaseProperty):
     '''
-    classdocs
-    '''
+    Curvature property initially holds only the principal curvatures. *However* if an additional type of curvature
+    is transferred in "kwargs" it will be assigned, with its name (as sent by kwargs) and an additional dictionary.
 
-    def __init__(self, points, curvature=None, **kwargs):
+    '''
+    __principal_curvatures = None
+    __invalid_value = -999
+    __normalize = False
+
+    def __init__(self, points, principal_curvatures=None, **kwargs):
         super(CurvatureProperty, self).__init__(points)
 
-        self.setValues(curvature)
+        self.__principal_curvatures = np.empty((self.Size, 2))
+        self.load(principal_curvatures, **kwargs)
         self.__invalid_value = -999  # value for not-computed curvature, default -999
         self.__normalize = False  # flag whether to normalize the principal curvatures
 
@@ -33,23 +39,37 @@ class CurvatureProperty(BaseProperty):
         """
         self.__invalid_value = value
 
-    def setValues(self, *args, **kwargs):
+    def load(self, principal_curvatures, **kwargs):
         """
         Sets curvature into Curvature Property object
 
+        If a new attribute is sent within kwargs, it will be set as a new attribute to the property
+
         """
-        if args[0] is None:
-            self.__curvature = np.empty((self.Size, 2))
-        else:
-            self.__curvature = args[0]
+        if principal_curvatures is not None:
+            self.__principal_curvatures = principal_curvatures
 
         if "invalid_value" in kwargs:
             self.__invalid_value = kwargs['invalid_value']
+            kwargs.pop('invalid_value')
+
+        if 'path' in kwargs:
+            kwargs.pop('path')
+
+        for key in kwargs:
+            key1 = '_' + self.__class__.__name__ + '__' + key
+            if key1 in self.__dict__:
+                self.__setattr__(key1, kwargs[key])
+            else:
+
+                self.__setattr__(key, kwargs[key])
+
 
     def getValues(self):
         """
         :return: min and max curvature
         """
+        # TODO: add condition for normalization (if normalized, the values returned should be normalized)
         return np.vstack((self.k1, self.k2))
 
     def setPointCurvature(self, idx, values):
@@ -63,7 +83,7 @@ class CurvatureProperty(BaseProperty):
         :type values: k1 and k2
 
         """
-        self.__curvature[idx, :] = values
+        self.__principal_curvatures[idx, :] = values
 
     def getPointCurvature(self, idx):
         """
@@ -76,7 +96,7 @@ class CurvatureProperty(BaseProperty):
         :rtype: float
 
         """
-        return self.__curvature[idx, :]
+        return self.__principal_curvatures[idx, :]
 
     def normalize_values(self, bool):
         """
@@ -96,10 +116,10 @@ class CurvatureProperty(BaseProperty):
         """
         k1 = np.zeros((1, 1))
         if self.Points:
-            k1 = self.__curvature[:, 0]
+            k1 = self.__principal_curvatures[:, 0]
 
         if self.Raster:
-            k1 = self.__curvature[:, :, 0]
+            k1 = self.__principal_curvatures[:, :, 0]
 
         # if flag for normalized value is "True", normalize between -1 and 1 with the invalid value set to 1.5
 
@@ -128,10 +148,10 @@ class CurvatureProperty(BaseProperty):
         """
         k2 = np.zeros((1, 1))
         if self.Points:
-            k2 = self.__curvature[:, 1]
+            k2 = self.__principal_curvatures[:, 1]
 
         if self.Raster:
-            k2 = self.__curvature[:, :, 1]
+            k2 = self.__principal_curvatures[:, :, 1]
 
         # if flag for normalized value is "True", normalize between 0 and 1 with the invalid value set to 1.5
         if self.__normalize:

@@ -27,15 +27,15 @@ class TransformationMatrixProperty(BaseProperty):
         """
         super(TransformationMatrixProperty, self).__init__(points)
         if transformationMatrix is not None:
-            self.setValues(transformationMatrix)
+            self.load(transformationMatrix)
 
         if rotationMatrix is not None:
-            self.setValues(rotationMatrix)
+            self.load(rotationMatrix)
 
         if translationMatrix is not None:
-            self.setValues(translationMatrix)
+            self.load(translationMatrix)
 
-    def setValues(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         """
         Sets the rotation and translation matrices
 

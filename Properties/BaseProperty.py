@@ -1,4 +1,3 @@
-from IO_Tools import CreateFilename
 from PointSet import PointSet
 from RasterData import RasterData
 
@@ -86,18 +85,28 @@ class BaseProperty(object):
             # warn('Wrong data type data for this instance')
             return False
 
-    def setValues(self, *args, **kwargs):
+    def load(self, **kwargs):
         """
-        Sets the all values of a property.
+        Loads all values of a property.
 
-        :param args: according to the property
         :param kwargs: according to the property
 
-        .. warning::
-            This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty
+        In general, sets every attribute if it exists within the property, and throws a warning if it is not
+        within the property
 
         """
-        pass
+        for key in kwargs:
+            try:
+                self.__getattribute__(key)
+                self.__setattr__(key, kwargs[key])
+            except AttributeError:
+                key_modified = '_' + self.__class__.__name__ + '__' + key
+                self.__setattr__(key_modified, kwargs[key])
+
+            except TypeError:
+                from warnings import warn
+                warn('No attribute by the name of %s' % (key))
+                continue
 
     @property
     def path(self):
@@ -135,37 +144,7 @@ class BaseProperty(object):
         """
         pass
 
-    def save(self, filename, save_dataset=False):
-        """
-        Save the property in either json or hdf5.
 
-        Default is hdf5.
-
-        .. warning:: Need to be implemented for json
-
-        :param filename: can be a filename or a path and filename, with or without extension.
-        :param save_dataset: flag whether to save the dataset that the property relates to or not. Default: False
-
-        :type filename: str
-        :type save_dataset: bool
-
-        """
-        import SaveFunctions
-        import h5py
-        attrs = {}
-
-        if isinstance(filename, str):
-            filename, extension = CreateFilename(filename)
-
-        if isinstance(filename, h5py.File):
-            SaveFunctions.save_property_h5(self, filename, save_dataset)
-
-        else:
-            try:
-                SaveFunctions.pickleProperty(self, filename, save_dataset)
-            except:
-                from warnings import warn
-                warn(IOError, 'Not sure how to save')
 
 
     if __name__ == '__main__':

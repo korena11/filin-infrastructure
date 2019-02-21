@@ -95,8 +95,8 @@ class NeighborsFactory:
         **Usage Example**
 
         .. literalinclude:: ../../../../Properties/Neighborhood/test_neighborsFactory.py
-            :lines: 106-109
-            :emphasize-lines: 4
+            :lines: 93-106
+            :emphasize-lines: 11
             :linenos:
 
         """
@@ -602,9 +602,9 @@ class NeighborsFactory:
 
         for currentPointIndex in idx:
             if not override:
-                if neighborsProperty.getNeighbors(currentPointIndex):
-                    r = neighborsProperty.getNeighbors(currentPointIndex).radius
-                    nn = neighborsProperty.getNeighbors(currentPointIndex).numberOfNeighbors
+                if neighborsProperty.getNeighborhood(currentPointIndex):
+                    r = neighborsProperty.getNeighborhood(currentPointIndex).radius
+                    nn = neighborsProperty.getNeighborhood(currentPointIndex).numberOfNeighbors
                     if r == searchRadius and nn == maxNN:
                         continue
 
@@ -615,7 +615,7 @@ class NeighborsFactory:
                                                                                       searchRadius=searchRadius,
                                                                                       maxNN=maxNN,
                                                                                       useOriginal=useOriginal)
-            neighborsProperty.setNeighbor(currentPointIndex, pointNeighborhoodObject)
+            neighborsProperty.setNeighborhood(currentPointIndex, pointNeighborhoodObject)
             if rotate:
                 neighborsProperty.RotatePointNeighborhood(currentPointIndex, smoothen=False, useOriginal=useOriginal)
 

@@ -85,5 +85,5 @@ class NeighborsProperty(BaseProperty):
         if isinstance(point_neighbors, PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
         else:
-            self.__pointsNeighborsArray[idx] = PointNeighborhood()
-
+            subset = point_neighbors.neighbors
+            self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)

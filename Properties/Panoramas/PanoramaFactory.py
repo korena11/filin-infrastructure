@@ -71,7 +71,7 @@ class PanoramaFactory:
                                         elevationSpacing=elevationSpacing, **kwargs)
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)
-            panorama.setValues(voidData=void)
+            panorama.load(voidData=void)
 
         return panorama
 
@@ -142,7 +142,7 @@ class PanoramaFactory:
 
         if void_as_mean:
             void = cls.__compute_void_as_mean(sphCoords.Ranges)
-            panorama.setValues(voidData=void)
+            panorama.load(voidData=void)
 
         return panorama
 

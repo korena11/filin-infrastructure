@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Color utilities &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../Curvature/Curvature.html" rel="next" title="Curvature"/>
+    <link href="ColorFactory.html" rel="prev" title="Color Factory"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal"
+                                                      href="../BaseProperty.html">Properties</a>
+                        <ul class="current">
+                            <li class="toctree-l2 current"><a class="reference internal" href="Colors.html">Colors</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal" href="ColorProperty.html">Color
+                                        Property</a></li>
+                                    <li class="toctree-l3"><a class="reference internal" href="ColorFactory.html">Color
+                                        Factory</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">Color
+                                        utilities</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../SphericalCoordinates/Spherical.html">Spherical
+                                Coordinates</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Transformations/Transformation.html">Transformations</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+
+                        <li><a href="Colors.html">Colors</a> &raquo;</li>
+
+                        <li>Color utilities</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Colors/RandomColors.rst.txt" rel="nofollow"> View page
+                                source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="color-utilities">
+                            <h1>Color utilities<a class="headerlink" href="#color-utilities"
+                                                  title="Permalink to this headline">¶</a></h1>
+                            <p>RandomColors choose colors such that they are farthest from each other as possible.</p>
+                            <dl class="class">
+                                <dt id="RandomColors.LetThereBeRandomColors">
+                                    <em class="property">class </em><code
+                                        class="descclassname">RandomColors.</code><code class="descname">LetThereBeRandomColors</code><a
+                                        class="reference internal"
+                                        href="../../_modules/RandomColors.html#LetThereBeRandomColors"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#RandomColors.LetThereBeRandomColors"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p class="rubric">Methods</p>
+                                    <table border="1" class="longtable docutils">
+                                        <colgroup>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
+                                        </colgroup>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#RandomColors.LetThereBeRandomColors.GenerateNewColor"
+                                                   title="RandomColors.LetThereBeRandomColors.GenerateNewColor"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">GenerateNewColor</span></code></a>([pastel_factor,&nbsp;…])
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LetThereBeRandomColors__color_distance</span></code>(c1,&nbsp;c2)
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_LetThereBeRandomColors__get_random_color</span></code>([…])
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <dl class="method">
+                                        <dt id="RandomColors.LetThereBeRandomColors.GenerateNewColor">
+                                            <code class="descname">GenerateNewColor</code><span
+                                                class="sig-paren">(</span><em>pastel_factor=0.5</em>, <em>numberOfColorsToGenerate=1</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/RandomColors.html#LetThereBeRandomColors.GenerateNewColor"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#RandomColors.LetThereBeRandomColors.GenerateNewColor"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd></dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+
+                        <a accesskey="n" class="btn btn-neutral float-right" href="../Curvature/Curvature.html"
+                           rel="next" title="Curvature">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a accesskey="p" class="btn btn-neutral" href="ColorFactory.html" rel="prev"
+                           title="Color Factory"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

@@ -1,11 +1,15 @@
 from BaseProperty import BaseProperty
 
+
 class NormalsProperty(BaseProperty):
     __normals = None
 
     def __init__(self, points, normals=None):
         super(NormalsProperty, self).__init__(points)
-        self.setValues(normals)
+
+        from numpy import empty
+        self.__normals = empty((self.Size, 3))
+        self.load(normals)
 
     def __next__(self):
         self.current += 1
@@ -22,7 +26,7 @@ class NormalsProperty(BaseProperty):
         """  
         return self.__normals
 
-    def setValues(self, *args, **kwargs):
+    def load(self, normals, **kwargs):
         """
         Sets normals into the NormalsProperty object
 
@@ -30,11 +34,9 @@ class NormalsProperty(BaseProperty):
         :param kwargs:
         :return:
         """
-        if args[0] is None:
-            from numpy import empty
-            self.__normals = empty((self.Size, 3))
-        else:
-            self.__normals = args[0]
+        if normals is not None:
+            self.__normals = normals
+
 
     def getValues(self):
         return self.__normals

@@ -5,7 +5,13 @@ Saving Functions
 Specific functions for file saving. Called from the ``IOFactory``
 
 """
-import _pickle
+import sys
+
+if sys.version_info[0] < 3:
+    import cPickle as _pickle
+else:
+    import _pickle
+
 import re
 import warnings
 
@@ -137,9 +143,8 @@ def save_property_h5(property, h5file, save_dataset=False):
     for key in attrs:
         if len(key.split('__dataset')) > 1:
             # if it is the dataset attribute - create a subgroup and insert its attributes
-
-            property.__dataset.save(h5file, group_name='_' + groupname + '__dataset',
-                                    save_dataset=save_dataset)
+            save_property_h5(property.__dataset, h5file, name='_' + groupname + '__dataset',
+                             save_dataset=save_dataset)
         else:
             # otherwise - insert the property attributes into an attrs
             property_group.attrs.create(key, attrs[key])
@@ -153,7 +158,7 @@ def save_dataset_h5(dataset, h5file, name='dataset', save_dataset=False):
     :param save_dataset: flag whether to save the dataset that the property relates to or not. Default: False
 
     :type dataset: BaseData
-    :type path_or_buff: h5py.File
+    :type h5file: h5py.File
     :type name: str
     :type save_dataset: bool
 
@@ -207,12 +212,19 @@ def pickleProperty(property, fileobj, save_dataset=False):
 
     :return: success of failure
     :rtype: bool
+
+    .. warning::
+
+        Does not work for properties that hold PointSetOpen3D
     """
     filename = fileobj.name
     attrs = property.__dict__
 
     if '_BaseProperty__dataset' in attrs:
         dataset = attrs.pop('_BaseProperty__dataset')
+        attrs.update({'_BaseProperty__path': dataset.path})
+        if isinstance(dataset, PointSubSet):
+            attrs.update({'indices': dataset.indices})
     if 'current' in attrs:
         attrs.pop('current')
 
@@ -222,6 +234,40 @@ def pickleProperty(property, fileobj, save_dataset=False):
     # if the dataset is to be saved
     if save_dataset:
         name, extension = filename.split('.')
-        data_name = filename.split('.')[0] + '_data.' + extension  # it will be saved to a different file
+        data_name = filename.split('.')[0] + '__data.' + extension  # it will be saved to a different file
         datafile = dataset.save(data_name)
         datafile.close()
+
+
+def pickleDataset(dataset, path_or_buf, **kwargs):
+    """
+       Save the PointSet in either json or hdf5.
+
+       Default is hdf5.
+
+       .. warning:: Need to be implemented for json
+
+       :param dataset: the dataset to save
+       :param path_or_buf: the path (string) or file object
+       :param extension: 'h5' or 'p' or 'pickle'
+
+       :type dataset: BaseData or subclass
+       :type path_or_buf: str or h5py.File or file
+       :type extension: str
+
+       :return the file after saving
+       :rtype: file
+
+       """
+    from IO_Tools import CreateFilename
+    import _pickle
+
+    if isinstance(path_or_buf, str):
+        path_or_buf, extension = CreateFilename(path_or_buf)
+
+    try:
+        _pickle.dump(dataset, path_or_buf)
+    except:
+        from warnings import warn
+
+    return path_or_buf

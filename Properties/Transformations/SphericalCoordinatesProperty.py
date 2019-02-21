@@ -24,9 +24,9 @@ class SphericalCoordinatesProperty(BaseProperty):
         """
 
         super(SphericalCoordinatesProperty, self).__init__(points)
-        self.setValues(*args)
+        self.load(*args)
 
-    def setValues(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         """
         Sets the values to the spherical coordinates property
 

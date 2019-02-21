@@ -1,7 +1,12 @@
 from unittest import TestCase
 
+import numpy as np
+
+from CurvatureFactory import CurvatureFactory, CurvatureProperty
 from IOFactory import IOFactory
-from PointSet import PointSet
+from NeighborsFactory import NeighborsFactory
+from NormalsProperty import NormalsProperty
+from PointSetOpen3D import PointSetOpen3D
 
 
 class TestPickleProperty(TestCase):
@@ -13,7 +18,16 @@ class TestPickleProperty(TestCase):
         pts = IOFactory.ReadPts(folder + filename, colorslist=color, merge=False)
         color_property = color[0]
         pts = pts[0]
-        # SaveFunctions.pickleProperty(color_property, 'test_pts.p', save_dataset=True)
-        color_property.save('test_pts.p', save_dataset=True)
+        p3d = PointSetOpen3D(pts)
+        p3d.CalculateNormals()
 
-        dataset = IOFactory.load('test_pts_data.p', PointSet)
+        normals = NormalsProperty(pts, np.asarray(p3d.data.normals))
+        neighbors = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, 50)
+        curvatureProperty = CurvatureFactory.pointSetOpen3D_3parameters(p3d, neighbors)
+        CurvatureFactory.umbrella_curvature(neighbors, normals, cuvatureProperty=curvatureProperty)
+        neighbors._BaseProperty__dataset = pts
+        # SaveFunctions.pickleProperty(color_property, 'test_pts.p', save_dataset=True)
+        IOFactory.saveDataset(pts, 'test_pts.p')
+
+        dataset = IOFactory.load('test_pts_curvature.p', CurvatureProperty)
+        print('hello')

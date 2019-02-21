@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Curvature Factory &mdash; infragit 1a documentation</title>
+
+
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../EigenProperty.html" rel="next" title="Eigen Property"/>
+    <link href="CurvatureProperty.html" rel="prev" title="Curvature Property"/>
+
+
+    <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1 current"><a class="reference internal"
+                                                      href="../BaseProperty.html">Properties</a>
+                        <ul class="current">
+                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
+                            </li>
+                            <li class="toctree-l2 current"><a class="reference internal"
+                                                              href="Curvature.html">Curvature</a>
+                                <ul class="current">
+                                    <li class="toctree-l3"><a class="reference internal" href="CurvatureProperty.html">Curvature
+                                        Property</a></li>
+                                    <li class="toctree-l3 current"><a class="current reference internal" href="#">Curvature
+                                        Factory</a></li>
+                                </ul>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../SphericalCoordinates/Spherical.html">Spherical
+                                Coordinates</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Transformations/Transformation.html">Transformations</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
+                                Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
+                        Factory Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+
+                        <li><a href="Curvature.html">Curvature</a> &raquo;</li>
+
+                        <li>Curvature Factory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+
+                            <a href="../../_sources/Properties/Curvature/CurvatureFactory.rst.txt" rel="nofollow"> View
+                                page source</a>
+
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <div class="section" id="curvature-factory">
+                            <h1>Curvature Factory<a class="headerlink" href="#curvature-factory"
+                                                    title="Permalink to this headline">¶</a></h1>
+                            <dl class="class">
+                                <dt id="CurvatureFactory.CurvatureFactory">
+                                    <em class="property">class </em><code class="descclassname">CurvatureFactory.</code><code
+                                        class="descname">CurvatureFactory</code><a class="reference internal"
+                                                                                   href="../../_modules/CurvatureFactory.html#CurvatureFactory"><span
+                                        class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                    href="#CurvatureFactory.CurvatureFactory"
+                                                                                    title="Permalink to this definition">¶</a>
+                                </dt>
+                                <dd><p>curvature parameters computation</p>
+                                    <blockquote>
+                                        <div><p class="rubric">Methods</p>
+                                            <table border="1" class="longtable docutils">
+                                                <colgroup>
+                                                    <col width="10%"/>
+                                                    <col width="90%"/>
+                                                </colgroup>
+                                                <tbody valign="top">
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"
+                                                           title="CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">Curvature_FundamentalForm</span></code></a>(ind,&nbsp;points,&nbsp;…)
+                                                    </td>
+                                                    <td>OBSOLETE - this function can be removed.</td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__BiQuadratic_Surface</span></code>(…)
+                                                    </td>
+                                                    <td>BiQuadratic surface adjustment to discrete point cloud</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__checkNeighborhood</span></code>(…[,&nbsp;…])
+                                                    </td>
+                                                    <td>Check if a neighborhood is viable for curvature computation.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__good_point</span></code>(neighbors[,&nbsp;…])
+                                                    </td>
+                                                    <td>Determine whether the point is appropriate for curvature
+                                                        calculation according to the spread of its neighbours.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_CurvatureFactory__keep_good_curves_data</span></code>(…)
+                                                    </td>
+                                                    <td>
+                                                        <table class="docutils field-list" frame="void" rules="none">
+                                                            <col class="field-name"/>
+                                                            <col class="field-body"/>
+                                                            <tbody valign="top">
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name" colspan="2">param curves_data:
+                                                                </th>
+                                                            </tr>
+                                                            <tr class="field-odd field">
+                                                                <td>&#160;</td>
+                                                                <td class="field-body">an array of curvature data :param
+                                                                    pointset_open3D: the point set that relates to the
+                                                                    curvature data
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.curvature_PointSetOpen3D"
+                                                           title="CurvatureFactory.CurvatureFactory.curvature_PointSetOpen3D"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">curvature_PointSetOpen3D</span></code></a>(pointset3d,&nbsp;…[,&nbsp;…])
+                                                    </td>
+                                                    <td>Compute curvature given a PointSetOpen3D with its normals, and
+                                                        neighborhood.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.curvature_by_3parameters"
+                                                           title="CurvatureFactory.CurvatureFactory.curvature_by_3parameters"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">curvature_by_3parameters</span></code></a>(neighborhood,&nbsp;normal)
+                                                    </td>
+                                                    <td>Curvature computation based on fundamental form when fitting
+                                                        bi-quadratic surface.
+                                                    </td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"
+                                                           title="CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">curvature_raster_fundamentalForm</span></code></a>(raster[,&nbsp;…])
+                                                    </td>
+                                                    <td>Compute raster curvature based on first fundamental form</td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.curvatures_givenTensors"
+                                                           title="CurvatureFactory.CurvatureFactory.curvatures_givenTensors"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">curvatures_givenTensors</span></code></a>(tensorProperty[,&nbsp;…])
+                                                    </td>
+                                                    <td>Compute curvature based on PCA (tensors)</td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><a class="reference internal"
+                                                           href="#CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data"
+                                                           title="CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data"><code
+                                                            class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">read_or_calculate_curvature_data</span></code></a>(…[,&nbsp;…])
+                                                    </td>
+                                                    <td>Reads curvature data or computes it</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </blockquote>
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm">
+                                            <em class="property">classmethod </em><code class="descname">Curvature_FundamentalForm</code><span
+                                                class="sig-paren">(</span><em>ind</em>, <em>points</em>, <em>search_radius</em>,
+                                            <em>max_nn=20</em>, <em>tree=None</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/CurvatureFactory.html#CurvatureFactory.Curvature_FundamentalForm"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.Curvature_FundamentalForm"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>OBSOLETE - this function can be removed.</p>
+                                            <p>Curvature computation based on fundamental form when fitting bi-quadratic
+                                                surface.</p>
+                                            <div class="admonition warning">
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">This function was replaced by <code
+                                                        class="docutils literal notranslate"><span class="pre">curvature_by_3parameters</span></code>
+                                                    and by <code class="docutils literal notranslate"><span class="pre">curvature_PointSetOpen3D</span></code>.
+                                                    It should be
+                                                    removed with time</p>
+                                            </div>
+                                            <p>Main idea:</p>
+                                            <ol class="arabic">
+                                                <li><p class="first">Find neighbors</p>
+                                                </li>
+                                                <li>
+                                                    <dl class="first docutils">
+                                                        <dt>Rotate so that the normal will be [0 0 1]</dt>
+                                                        <dd><p class="first">the bi-quadratic surface coefficients <span
+                                                                class="math notranslate nohighlight">\(d,e,f\)</span>
+                                                            are zero and the fitting is of three parameters:</p>
+                                                            <div class="last math notranslate nohighlight">
+                                                                \[z(x,y) = ax^2 + by^2 + cxy\]
+                                                            </div>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li><p class="first">Second derivatives dictate the curvature</p>
+                                                    <div class="math notranslate nohighlight">
+                                                        \[\begin{split}{\bf H} = \begin{bmatrix} 2a &amp; c \\ c &amp;
+                                                        2b \end{bmatrix}\end{split}\]
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>points</strong> (<a class="reference internal"
+                                                                                            href="../../Datasets/PointSet.html#PointSet.PointSet"
+                                                                                            title="PointSet.PointSet"><em>PointSet</em></a><em>
+                                                                or </em><a class="reference internal"
+                                                                           href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                           title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a>)
+                                                                – the point cloud
+                                                            </li>
+                                                            <li><strong>ind</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/functions.html#int"
+                                                                                         title="(in Python v3.7)"><em>int</em></a>)
+                                                                – index of the point where the curvature is computed
+                                                            </li>
+                                                            <li><strong>points</strong> – pointset</li>
+                                                            <li><strong>tree</strong> (<em>KDtree</em>) – KD tree, if
+                                                                exists
+                                                            </li>
+                                                            <li><strong>search_radius</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#float"
+                                                                    title="(in Python v3.7)"><em>float</em></a>) –
+                                                                radius of the neighborhood
+                                                            </li>
+                                                            <li><strong>max_nn</strong> (<a class="reference external"
+                                                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                                                            title="(in Python v3.7)"><em>int</em></a>)
+                                                                – maximum neighbors to use, default: 20
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="admonition note">
+                                                <p class="first admonition-title">Note</p>
+                                                <p>If the point cloud is sent as a <code
+                                                        class="docutils literal notranslate"><span
+                                                        class="pre">PointSet</span></code>, there’s no need to define
+                                                    the maximum number of points. The normals
+                                                    for each point are computed by PCA, when there are more than 5
+                                                    neighbors.</p>
+                                                <p class="last">If the point cloud is sent as a
+                                                    <cite>PointSetOpen3D</cite>, maximum number of neighbors should be
+                                                    defined. And the normals
+                                                    are computed via PCA <em>within</em> by Open3D</p>
+                                            </div>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">principal curvatures <span
+                                                            class="math notranslate nohighlight">\(\kappa_1\)</span> and
+                                                        <span class="math notranslate nohighlight">\(\kappa_2\)</span>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body">np.ndarray</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.curvature_PointSetOpen3D">
+                                            <em class="property">classmethod </em><code class="descname">curvature_PointSetOpen3D</code><span
+                                                class="sig-paren">(</span><em>pointset3d</em>,
+                                            <em>neighbors_property</em>, <em>min_points_in_neighborhood=5</em>, <em>min_points_in_sector=2</em>,
+                                            <em>valid_sectors=7</em>, <em>verbose=False</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvature_PointSetOpen3D"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.curvature_PointSetOpen3D"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute curvature given a PointSetOpen3D with its normals, and
+                                            neighborhood.</p>
+                                            <div class="admonition warning">
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">If a pointset3D is sent without its normals computed in
+                                                    advance, the normals will be computed according to the first
+                                                    point neighborhood parameters</p>
+                                            </div>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>pointset3d</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>)
+                                                                – the point cloud
+                                                            </li>
+                                                            <li><strong>neighbors_property</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../Neighborhood/NeighborhoodProperty.html#NeighborProperty.NeighborsProperty"
+                                                                    title="NeighborProperty.NeighborsProperty"><em>NeighborProperty.NeighborsProperty</em></a>)
+                                                                – the neighbors property of the point cloud
+                                                            </li>
+                                                            <li><strong>min_points_in_neighborhood</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) – minimal
+                                                                number of points in a neighborhood to make it viable for
+                                                                curvature computation. Default: 5
+                                                            </li>
+                                                            <li><strong>min_points_in_sector</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) – minimal
+                                                                points in a sector to be considered valid. Default: 2
+                                                            </li>
+                                                            <li><strong>valid_sectors</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#int"
+                                                                    title="(in Python v3.7)"><em>int</em></a>) – minimal
+                                                                sectors needed for a point to be considered good.
+                                                                Default: 7
+                                                            </li>
+                                                            <li><strong>verbose</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                             title="(in Python v3.7)"><em>bool</em></a>)
+                                                                – print inter running messages. default: False
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">curvature property</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="CurvatureProperty.html#CurvatureProperty.CurvatureProperty"
+                                                            title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.curvature_by_3parameters">
+                                            <em class="property">classmethod </em><code class="descname">curvature_by_3parameters</code><span
+                                                class="sig-paren">(</span><em>neighborhood</em>, <em>normal</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvature_by_3parameters"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.curvature_by_3parameters"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Curvature computation based on fundamental form when fitting bi-quadratic
+                                            surface.</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>neighborhood</strong> (<em>PointNeighborhood.PointNeighbohhod</em>)
+                                                                – the neighbors according to which the curvature is
+                                                                computed
+                                                            </li>
+                                                            <li><strong>normal</strong> (<em>np.array</em>) – normal to
+                                                                the point which the curvature is computed
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">minimal and maximal
+                                                        curvature</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                            title="(in Python v3.7)">tuple</a></p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <p>** Algorithm **</p>
+                                            <ol class="arabic">
+                                                <li>
+                                                    <dl class="first docutils">
+                                                        <dt>Rotate so that the normal will be [0 0 1]</dt>
+                                                        <dd><p class="first">the bi-quadratic surface coefficients <span
+                                                                class="math notranslate nohighlight">\(d,e,f\)</span>
+                                                            are zero and the fitting is of three parameters:</p>
+                                                            <div class="last math notranslate nohighlight">
+                                                                \[z(x,y) = ax^2 + by^2 + cxy\]
+                                                            </div>
+                                                        </dd>
+                                                    </dl>
+                                                </li>
+                                                <li><p class="first">Second derivatives dictate the curvature</p>
+                                                    <div class="math notranslate nohighlight">
+                                                        \[{f H} = egin{bmatrix} 2a &amp; c \ c &amp; 2b
+                                                        \end{bmatrix}\]
+                                                    </div>
+                                                </li>
+                                            </ol>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm">
+                                            <em class="property">classmethod </em><code class="descname">curvature_raster_fundamentalForm</code><span
+                                                class="sig-paren">(</span><em>raster</em>, <em>ksize=3</em>, <em>sigma=2.5</em>,
+                                            <em>gradientType='L1'</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvature_raster_fundamentalForm"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.curvature_raster_fundamentalForm"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute raster curvature based on first fundamental form</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>raster</strong> (<em>np.array</em><em>
+                                                                or </em><a class="reference internal"
+                                                                           href="../../Datasets/RasterData.html#RasterData.RasterData"
+                                                                           title="RasterData.RasterData"><em>RasterData</em></a>)
+                                                                – the raster image
+                                                            </li>
+                                                            <li><strong>ksize</strong> – window/kernel size (equivalent
+                                                                to neighborhood size)
+                                                            </li>
+                                                            <li><strong>sigma</strong> (<a class="reference external"
+                                                                                           href="https://docs.python.org/3/library/functions.html#float"
+                                                                                           title="(in Python v3.7)"><em>float</em></a>)
+                                                                – for Gaussian blurring
+                                                            </li>
+                                                            <li><strong>gradientType</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                    title="(in Python v3.7)"><em>str</em></a>) – ‘L1’ or
+                                                                ‘L2’ for derivatives computation
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">curvature map</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last">curvatureProperty</p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.curvatures_givenTensors">
+                                            <em class="property">classmethod </em><code class="descname">curvatures_givenTensors</code><span
+                                                class="sig-paren">(</span><em>tensorProperty</em>, <em>min_points=5</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvatures_givenTensors"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.curvatures_givenTensors"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Compute curvature based on PCA (tensors)</p>
+                                            <p>Curvature for tensors that have less points than min_points will not be
+                                                computed.</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>tensorProperty</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../Tensors/tensorProperty.html#TensorProperty.TensorProperty"
+                                                                    title="TensorProperty.TensorProperty"><em>TensorProperty.TensorProperty</em></a>)
+                                                                – the tensors of the points cloud (precomputed)
+                                                            </li>
+                                                            <li><strong>min_points</strong> – minimum points required to
+                                                                compute curvature for a point
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">Curvature property</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="CurvatureProperty.html#CurvatureProperty.CurvatureProperty"
+                                                            title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="classmethod">
+                                        <dt id="CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data">
+                                            <em class="property">classmethod </em><code class="descname">read_or_calculate_curvature_data</code><span
+                                                class="sig-paren">(</span><em>curves_path</em>, <em>pointset3d</em>,
+                                            <em>localNeighborhoodParameters</em>, <em>delete_non_computed=False</em>,
+                                            <em>verbose=True</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/CurvatureFactory.html#CurvatureFactory.read_or_calculate_curvature_data"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#CurvatureFactory.CurvatureFactory.read_or_calculate_curvature_data"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Reads curvature data or computes it</p>
+                                            <blockquote>
+                                                <div>
+                                                    <div class="highlight-python notranslate">
+                                                        <div class="highlight"><pre><span></span><span class="n">CurvatureFactory</span><span
+                                                                class="o">.</span><span class="n">read_or_calculate_curvature_data</span><span
+                                                                class="p">(</span><span
+                                                                class="s1">&#39;/Curvature/&#39;</span><span
+                                                                class="p">,</span> <span class="n">p3d</span><span
+                                                                class="p">,</span> <span class="p">{</span><span
+                                                                class="s1">&#39;r&#39;</span><span
+                                                                class="p">:</span> <span class="mf">0.015</span><span
+                                                                class="p">,</span> <span
+                                                                class="s1">&#39;nn&#39;</span><span
+                                                                class="p">:</span> <span class="mi">5</span><span
+                                                                class="p">})</span>
+</pre>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </blockquote>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first simple">
+                                                            <li><strong>curves_path</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                    title="(in Python v3.7)"><em>str</em></a>) – path to
+                                                                file. If exists, the curvature is loaded; else, it
+                                                                computes it
+                                                            </li>
+                                                            <li><strong>pointset3d</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>)
+                                                                – the points as PointSetOpen3D
+                                                            </li>
+                                                            <li><strong>localNeighborhoodParameters</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/stdtypes.html#dict"
+                                                                    title="(in Python v3.7)"><em>dict</em></a>) – search
+                                                                radius (‘r’) and maximum nearest neighbors (‘nn’)
+                                                            </li>
+                                                            <li><strong>verbose</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                             title="(in Python v3.7)"><em>bool</em></a>)
+                                                                – print interim messages
+                                                            </li>
+                                                            <li><strong>delete_non_computed</strong> (<a
+                                                                    class="reference external"
+                                                                    href="https://docs.python.org/3/library/functions.html#bool"
+                                                                    title="(in Python v3.7)"><em>bool</em></a>) – flag
+                                                                to delete or leave points that their curvature wasn’t
+                                                                calculated. If False, these curvature values are set to
+                                                                -999. Default: False
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"><p class="first">computed curvatures as
+                                                        Curvature property</p>
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body"><p class="first last"><a
+                                                            class="reference internal"
+                                                            href="CurvatureProperty.html#CurvatureProperty.CurvatureProperty"
+                                                            title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>
+                                                    </p>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="admonition warning">
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">This function was replaced by <code
+                                                        class="docutils literal notranslate"><span class="pre">curvature_by_3parameters</span></code>
+                                                    and by <code class="docutils literal notranslate"><span class="pre">curvature_PointSetOpen3D</span></code>.
+                                                    It should be
+                                                    removed with time</p>
+                                            </div>
+                                        </dd>
+                                    </dl>
+
+                                </dd>
+                            </dl>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <footer>
+
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
+
+                        <a accesskey="n" class="btn btn-neutral float-right" href="../EigenProperty.html" rel="next"
+                           title="Eigen Property">Next <span class="fa fa-arrow-circle-right"></span></a>
+
+
+                        <a accesskey="p" class="btn btn-neutral" href="CurvatureProperty.html" rel="prev"
+                           title="Curvature Property"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+
+                    </div>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

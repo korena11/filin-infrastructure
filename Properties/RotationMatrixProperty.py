@@ -17,9 +17,9 @@ class RotationMatrixProperty(TransformationMatrixProperty):
     def __init__(self, points, rotation_matrix, rotation_axis = None):
         super(TransformationMatrixProperty, self).__init__(points)
 
-        self.setValues(rotation_matrix, rotation_axis)
+        self.load(rotation_matrix, rotation_axis)
 
-    def setValues(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         """
         Sets the rotation matrix for the RotationMatrixProperty object
 

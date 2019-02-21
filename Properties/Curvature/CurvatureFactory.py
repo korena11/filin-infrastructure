@@ -102,7 +102,7 @@ class CurvatureFactory:
 
             for neighborhood1 in neighbors_property:
                 radius = neighborhood1.radius
-                maxNN = neighborhood1.maxNN
+                maxNN = neighborhood1.numberOfNeighbors
                 if radius is not None and maxNN is not None:
                     pointset3d.CalculateNormals(search_radius=radius, maxNN=maxNN)
                     break
@@ -220,9 +220,11 @@ class CurvatureFactory:
     @classmethod
     def umbrella_curvature(cls, neighbrohood, normals,
                            min_points_in_neighborhood=8, min_points_in_sector=1, valid_sectors=7, num_sectors=8,
-                           invalid_value=-999, verbose=False):
+                           invalid_value=-999, cuvatureProperty=None, verbose=False):
         r"""
-        Compute an umbrella curvature, defined in :cite:`Foorginejad.Kahlili2014`
+        Compute an umbrella curvature,
+
+        Defined in :cite:`Foorginejad.Khalili2014`
 
         Based on the idea that the size of the curvature (openness) is influenced by the projection of the neighboring points on the normal vector.
 
@@ -238,6 +240,7 @@ class CurvatureFactory:
         :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
         :param num_sectors: the number of sectors the circle is divided to. Default: 8
         :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999
+        :param cuvatureProperty: A curvature property to update with the umbrella curvature. If None, a new curvature property will be created, with the principal curvatures as None.
         :param verbose: print inter running messages. default: False
 
         :type neighbrohood: NeighborsProperty.NeighborsProperty
@@ -247,9 +250,10 @@ class CurvatureFactory:
         :type valid_sectors: int
         :type num_sectors: int
         :type invalid_value: float
+        :type cuvatureProperty: CurvatureProperty
         :type verbose: bool
 
-        :return: umbrella curvature  for all points that have enough neighbors for the curvature to be computed.
+        :return: umbrella curvature for all points that have enough neighbors for the curvature to be computed.
 
         :rtype: np.array
 
@@ -281,8 +285,13 @@ class CurvatureFactory:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)
                 umbrellaCurvature.append(invalid_value)
+        umbrella_curvature = np.asarray(umbrellaCurvature)
+        if cuvatureProperty is None:
+            return CurvatureProperty(neighbrohood.Points, principal_curvatures=None,
+                                     umbrella_curvature=umbrella_curvature)
+        else:
+            cuvatureProperty.load(None, umbrella_curvature=umbrella_curvature)
 
-        return np.asarray(umbrellaCurvature)
 
     @classmethod
     def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):

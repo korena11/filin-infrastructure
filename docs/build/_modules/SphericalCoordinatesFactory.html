@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>SphericalCoordinatesFactory &mdash; infragit 1a documentation</title>
+
+
+    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../genindex.html" rel="index" title="Index"/>
+    <link href="../search.html" rel="search" title="Search"/>
+
+
+    <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+
+<div class="wy-grid-for-nav">
+
+
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
+        <div class="wy-side-scroll">
+            <div class="wy-side-nav-search">
+
+
+                <a class="icon icon-home" href="../index.html"> infragit
+
+
+                </a>
+
+
+                <div class="version">
+                    0.1.0
+                </div>
+
+
+                <div role="search">
+                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
+                    </form>
+                </div>
+
+
+            </div>
+
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+
+
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
+                        classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal"
+                                              href="../Factories/Factories.html">Factories</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
+                        functions and factory</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
+                        Documentation</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
+                        Utilities</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
+                        Classes</a></li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+
+
+        <nav aria-label="top navigation" class="wy-nav-top">
+
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+            <a href="../index.html">infragit</a>
+
+        </nav>
+
+
+        <div class="wy-nav-content">
+
+            <div class="rst-content">
+
+
+                <div aria-label="breadcrumbs navigation" role="navigation">
+
+                    <ul class="wy-breadcrumbs">
+
+                        <li><a href="../index.html">Docs</a> &raquo;</li>
+
+                        <li><a href="index.html">Module code</a> &raquo;</li>
+
+                        <li>SphericalCoordinatesFactory</li>
+
+
+                        <li class="wy-breadcrumbs-aside">
+
+                        </li>
+
+                    </ul>
+
+
+                    <hr/>
+                </div>
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+                    <div itemprop="articleBody">
+
+                        <h1>Source code for SphericalCoordinatesFactory</h1>
+                        <div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numexpr</span> <span class="k">as</span> <span class="nn">ne</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">pi</span>
+
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
+                                class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span
+                                class="n">SphericalCoordinatesProperty</span>
+
+
+<div class="viewcode-block" id="SphericalCoordinatesFactory"><a class="viewcode-back"
+                                                                href="../Properties/SphericalCoordinates/Spherical.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory">[docs]</a><span
+        class="k">class</span> <span class="nc">SphericalCoordinatesFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    SphericalCoordinatesFactory</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    
+<div class="viewcode-block" id="SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><a class="viewcode-back"
+                                                                                                href="../Properties/SphericalCoordinates/Spherical.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">CartesianToSphericalCoordinates</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">ceval</span><span class="o">=</span><span
+            class="n">ne</span><span class="o">.</span><span class="n">evaluate</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        CartesianToSphericalCoordinates</span>
+
+<span class="sd">        :param points: a pointset containing the points to transform to spherical</span>
+<span class="sd">        :param ceval: backend to use:</span>
+<span class="sd">                 - eval: pure Numpy</span>
+<span class="sd">                 - numexpr.evaluate (default): Numexpr (faster for large arrays)</span>
+
+<span class="sd">        :return: spherical coordinates property in degrees</span>
+<span class="sd">        :rtype: SphericalCoordinatesProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span
+            class="n">arctan2</span><span class="p">,</span> <span class="n">sqrt</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
+            class="n">X</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
+            class="n">Y</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span
+            class="n">Z</span>
+
+        <span class="c1"># temp vars so the IDE code optimization won&#39;t delete the import</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">temp1</span> <span class="o">=</span> <span class="n">arctan2</span><span class="p">(</span><span
+            class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span
+            class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">temp2</span> <span class="o">=</span> <span class="n">sqrt</span><span
+            class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span
+            class="p">(</span><span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Points are empty, it is not possible to convert&#39;</span><span
+            class="p">)</span>
+
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">ceval</span><span
+            class="p">(</span><span class="s1">&#39;arctan2(y,x)&#39;</span><span class="p">)</span>
+        <span class="n">elevation</span> <span class="o">=</span> <span class="n">ceval</span><span
+            class="p">(</span><span class="s1">&#39;arctan2(z, sqrt(x**2+y**2))&#39;</span><span class="p">)</span>
+        <span class="nb">range</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span
+            class="s1">&#39;sqrt(x**2+y**2+z**2)&#39;</span><span class="p">)</span>
+
+        <span class="n">elevation</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span
+            class="n">pi</span>
+        <span class="n">azimuth</span> <span class="o">*=</span> <span class="mf">180.</span> <span
+            class="o">/</span> <span class="n">pi</span>
+        <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth</span> <span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.</span> <span
+            class="o">+</span> <span class="n">azimuth</span><span class="p">[</span><span
+            class="n">azimuth</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">SphericalCoordinatesProperty</span><span class="p">(</span><span
+            class="n">points</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span
+            class="n">elevation</span><span class="p">,</span> <span class="nb">range</span><span
+            class="p">)</span></div>
+
+<div class="viewcode-block" id="SphericalCoordinatesFactory.cart2sph_elementwise"><a class="viewcode-back"
+                                                                                     href="../Properties/SphericalCoordinates/Spherical.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">cart2sph_elementwise</span><span class="p">(</span><span
+            class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span
+            class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cartesian to spherical transformation for RDD use.</span>
+
+<span class="sd">        :param x:</span>
+<span class="sd">        :param y:</span>
+<span class="sd">        :param z:</span>
+
+<span class="sd">        :return: spherical coordinates</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span
+            class="n">x</span><span class="p">)</span>
+        <span class="n">xy2</span> <span class="o">=</span> <span class="n">x</span> <span class="o">**</span> <span
+            class="mi">2</span> <span class="o">+</span> <span class="n">y</span> <span class="o">**</span> <span
+            class="mi">2</span>
+        <span class="n">elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arctan2</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span
+            class="n">xy2</span><span class="p">))</span>
+        <span class="nb">range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">sqrt</span><span class="p">(</span><span class="n">xy2</span> <span class="o">+</span> <span
+            class="n">z</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">elevation</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">azimuth</span> <span class="o">*=</span> <span class="mf">180.</span> <span
+            class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">if</span> <span class="n">azimuth</span> <span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">:</span>
+            <span class="n">azimuth</span> <span class="o">+=</span> <span class="mf">360.</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span
+            class="n">elevation</span><span class="p">),</span> <span class="nb">float</span><span
+            class="p">(</span><span class="n">azimuth</span><span class="p">),</span> <span class="nb">float</span><span
+            class="p">(</span><span class="nb">range</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SphericalCoordinatesFactory.cart2sph_RDD"><a class="viewcode-back"
+                                                                             href="../Properties/SphericalCoordinates/Spherical.html#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD">[docs]</a>    <span
+        class="k">def</span> <span class="nf">cart2sph_RDD</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
+        class="n">sc</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cartesian to spherical transformation via RDD.</span>
+
+<span class="sd">        :param points: a point set to be transformed</span>
+<span class="sd">        :param sc: a spark context object (driver) that will run the job</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type SparkContext</span>
+
+<span class="sd">        :return: RDD holding the spherical coordinates</span>
+
+<span class="sd">        :rtype: pySpark RDD</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">points</span><span class="o">.</span><span
+            class="n">ToRDD</span><span class="p">()</span><span class="o">.</span><span class="n">map</span><span
+            class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">cart2sph_elementwise</span><span
+            class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">y</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span
+            class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span
+            class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span
+            class="mi">2</span><span class="p">])))</span></div></div>
+</pre>
+                        </div>
+
+                    </div>
+
+                </div>
+                <footer>
+
+
+                    <hr/>
+
+                    <div role="contentinfo">
+                        <p>
+                            &copy; Copyright 2018, Sagi Students.
+
+                        </p>
+                    </div>
+                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
+                        href="https://readthedocs.org">Read the Docs</a>.
+
+                </footer>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
+</script>
+<script src="../_static/jquery.js" type="text/javascript"></script>
+<script src="../_static/underscore.js" type="text/javascript"></script>
+<script src="../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
+
+
+<script src="../_static/js/theme.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
+</script>
+
+</body>
+</html>

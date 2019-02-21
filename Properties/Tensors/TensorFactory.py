@@ -225,5 +225,5 @@ class TensorFactory(object):
                 radius = neighbors.radius
                 # always around the first points, as the point around which the tensor is looked is the first on the
                 # neighbors list (the closest to itself)
-                tensors.setValues(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+                tensors.load(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
         return tensors
