@@ -453,14 +453,14 @@ class AutoAutoSummary(Autosummary):
 
             if 'attributes' and private:
                 _, attribs = self.get_members(c, 'attribute')
+                self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if attrib.startswith('_') if
+                                not attrib.startswith('__')]
 
             if 'attributes' in self.options:
                 _, attribs = self.get_members(c, 'attribute')
 
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
 
-                self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if attrib.startswith('_') if
-                                not attrib.startswith('__')]
 
         except:
             module_name = clazz

@@ -123,12 +123,14 @@ class BaseProperty(object):
     def Size(self):
         """
         Return the size of the property
+
+        :rtype: int
         """
         if isinstance(self.__dataset, RasterData):
-            return self.__dataset.cols * self.__dataset.rows
+            return int(self.__dataset.cols * self.__dataset.rows)
 
         elif isinstance(self.__dataset, PointSet):
-            return self.__dataset.Size
+            return int(self.__dataset.Size)
 
     def getValues(self):
         """

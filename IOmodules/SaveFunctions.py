@@ -219,6 +219,7 @@ def pickleProperty(property, fileobj, save_dataset=False):
     """
     filename = fileobj.name
     attrs = property.__dict__
+    att_types = [(att, type(property.__getattribute__(att))) for att in attrs]
 
     if '_BaseProperty__dataset' in attrs:
         dataset = attrs.pop('_BaseProperty__dataset')
@@ -227,6 +228,10 @@ def pickleProperty(property, fileobj, save_dataset=False):
             attrs.update({'indices': dataset.indices})
     if 'current' in attrs:
         attrs.pop('current')
+
+    # for att, att_type in att_types:
+    #     if issubclass(att_type, BaseProperty):
+    #         pickleProperty(property.__getattribute__(att), )
 
     _pickle.dump(attrs, fileobj)
     fileobj.close()

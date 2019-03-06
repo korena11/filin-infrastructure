@@ -848,7 +848,7 @@ class LevelSetFlow:
         if np.any(self.img_rgb) != 0:
             temp = self.img_rgb
         else:
-            temp = self.img
+            temp = self.img(0)
 
         img_showed = kwargs.get('image_showed', temp)
 
@@ -866,7 +866,7 @@ class LevelSetFlow:
         if np.any(self.img_rgb) != 0:
             mt.imshow(self.img_rgb)
         else:
-            mt.imshow(self.img)
+            mt.imshow(self.img(0))
 
         ax2 = plt.figure("phi")
         mt.imshow(self.phi().value)

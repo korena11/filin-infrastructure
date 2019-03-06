@@ -300,7 +300,15 @@
             class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">directions</span><span
             class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span
             class="p">)</span>
-
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">__distances</span> <span class="o">==</span> <span class="mi">0</span> <span
+            class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span
+            class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Point set has two identical points at </span><span
+            class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span
+            class="p">(</span><span class="n">center_pt</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">directions</span><span class="p">[</span><span class="n">np</span><span
             class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span
             class="o">.</span><span class="n">__distances</span> <span class="o">!=</span> <span

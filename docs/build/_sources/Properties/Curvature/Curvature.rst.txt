@@ -9,18 +9,18 @@ Curvature Property
 
     .. autoautosummary:: CurvatureProperty.CurvatureProperty
         :attributes:
+        
 
     .. rubric:: Methods
 
     .. autoautosummary:: CurvatureProperty.CurvatureProperty
         :methods:
 
-Methods documentation
-***********************
+    .. rubric:: Methods documentation
 
-.. autoclass:: CurvatureProperty.CurvatureProperty
-    :members:
-    :undoc-members:
+    .. autoclass:: CurvatureProperty.CurvatureProperty
+        :members:
+        :undoc-members:
 
 Curvature Factory
 -----------------
@@ -30,9 +30,8 @@ Curvature Factory
     .. autoautosummary:: CurvatureFactory.CurvatureFactory
         :methods:
 
-Methods documentation
-**********************
+    .. rubric:: Methods documentation
 
-.. autoclass:: CurvatureFactory.CurvatureFactory
-   :members:
-   :undoc-members:
+    .. autoclass:: CurvatureFactory.CurvatureFactory
+        :members:
+        :undoc-members:

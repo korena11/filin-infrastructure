@@ -10,7 +10,7 @@
  */
 
 
-/* Non-minified version JS is _stemmer.js if file is provided */
+/* Non-minified version JS is _stemmer.js if file is provided */ 
 /**
  * Porter Stemmer
  */
@@ -189,6 +189,7 @@ var Stemmer = function () {
         return w;
     }
 }
+
 
 
 /**

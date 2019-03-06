@@ -128,6 +128,7 @@ class PointNeighborhood:
 
         if self.__distances is None:
             self.__distances = np.linalg.norm(directions, axis=1)
-
+        if np.nonzero(self.__distances == 0)[0].shape[0] > 1:
+            print('Point set has two identical points at {}'.format(center_pt))
         return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
                                                                None]

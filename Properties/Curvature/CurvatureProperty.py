@@ -217,12 +217,13 @@ class CurvatureProperty(BaseProperty):
 
     def similarity_curvature(self):
         '''
-        calculates similarity curvature (E,H)
+        Calculate similarity curvature (E,H)
+
+        According to :cite:`Rugis.Klette2006`.
 
         :param k1,k2: principal curvatures (k1>k2)
 
-        :return similarCurv: values of similarity curvature (E,H)
-        :return rgb: RGB color for every point
+        :return: rgb: RGB color for every point, values of similarity curvature (E,H)
 
         '''
         #         if 'points' in kwargs and ('k1' not in kwargs and 'k2' not in kwargs):

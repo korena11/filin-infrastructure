@@ -30,9 +30,7 @@ Saliency Factory
     :methods:
 
 
-
-Methods documentation
-**********************************
+.. rubric:: Methods documentation
 
 .. autoclass:: SaliencyFactory.SaliencyFactory
     :members:

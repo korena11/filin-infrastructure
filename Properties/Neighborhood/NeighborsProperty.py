@@ -66,8 +66,8 @@ class NeighborsProperty(BaseProperty):
         if neighbors is None:
             return neighbors
 
-        elif np.all(neighbors.neighborhoodIndices == idx):
-            neighbors = None
+        # elif np.all(neighbors.neighborhoodIndices == idx):
+        #     neighbors = None
 
         return neighbors
 

@@ -30,7 +30,7 @@ class NormalsProperty(BaseProperty):
         """
         Sets normals into the NormalsProperty object
 
-        :param normals: the computes normals
+        :param normals: the computed normals
         :param kwargs:
         :return:
         """

@@ -4,18 +4,38 @@ Created on Nov 25, 2015
 @author: Reuma
 '''
 
-#
 import cv2
+#
 import geopandas as gpd
 import h5py
+# import the necessary packages
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from numpy.linalg import norm
 from scipy.interpolate import interp1d
 from scipy.ndimage import filters
 from shapely.geometry import Polygon
 from skimage import measure
+
+
+def chi2_distance(histA, histB, eps=1e-10):
+    """
+    Compute the :math:`\chi^2` distance between two histograms
+
+    .. math::
+        D_{\chi^2}(hist_A, hist_B) = \sum_{n=0}^N \frac{\left(hist_A - hist_B\right)^2}{hist_A + hist_B}
+
+    :param histA: histogram A
+    :param histB: histogram B (which A compares to)
+    :param eps: an epsilon for non-zero division
+
+    :return: the distance between the histograms
+
+    :rtype: np.ndarray
+    """
+
+    return np.sum((histA - histB) ** 2 / (histA + histB + eps), axis=1)
 
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):

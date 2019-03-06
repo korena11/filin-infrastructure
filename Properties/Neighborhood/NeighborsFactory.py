@@ -44,21 +44,21 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from warnings import warn
+
+        neighbors = -1
 
         if method is None:
             try:
                 neighbors = NeighborsFactory.balltreePointSet_rnn(pointset, search_radius)
 
             except:
+                warn('Could not compute with ball tree, trying open3d')
                 neighbors = NeighborsFactory.pointSetOpen3D_rnn_kdTree(pointset, search_radius)
-            finally:
-                from warnings import warn
-                neighbors = -1
-                warn('Cannot compute neighbors, method type is missing')
         else:
             try:
                 neighbors = method(pointset, search_radius)
-            except IOError:
+            except:
                 if method.__name__ == 'balltreePointSet_rnn':
                     print('Build Ball Tree with default leaf size ')
                     pointset = BallTreePointSet(pointset)
@@ -68,11 +68,10 @@ class NeighborsFactory:
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
                     neighbors = method(pointset, search_radius)
-            finally:
-                from warnings import warn
-                neighbors = -1
-                warn('Cannot compute neighbors ')
 
+        if neighbors == -1:
+            neighbors = -1
+            warn(RuntimeError, 'Cannot compute neighbors ')
         return neighbors
 
     @classmethod
@@ -102,21 +101,22 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from warnings import warn
+
+        neighbors = -1
 
         if method is None:
             try:
                 neighbors = NeighborsFactory.balltreePointSet_knn(pointset, k_nearest_neighbors)
 
             except:
+                warn('Could not compute with ball tree, trying open3d')
                 neighbors = NeighborsFactory.pointSetOpen3D_rnn_kdTree(pointset, k_nearest_neighbors)
-            finally:
-                from warnings import warn
-                neighbors = -1
-                warn('Cannot compute neighbors, method type is missing')
+
         else:
             try:
                 neighbors = method(pointset, k_nearest_neighbors)
-            except IOError:
+            except:
                 if method.__name__ == 'balltreePointSet_knn':
                     print('Build Ball Tree with default leaf size ')
                     pointset = BallTreePointSet(pointset)
@@ -126,11 +126,10 @@ class NeighborsFactory:
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
                     neighbors = method(pointset, k_nearest_neighbors)
-            finally:
-                from warnings import warn
-                neighbors = -1
-                warn('Cannot compute neighbors ')
 
+        if neighbors == -1:
+            neighbors = -1
+            warn(RuntimeError, 'Cannot compute neighbors ')
         return neighbors
 
     @staticmethod
@@ -159,7 +158,7 @@ class NeighborsFactory:
             current_id = np.asarray(idx[id])
             tmp_subset = PointSubSet(pointset_bt.GetPoint(current_id), current_id)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset)
-            neighbors.setNeighbor(id, tmp_point_neighborhood)
+            neighbors.setNeighborhood(id, tmp_point_neighborhood)
 
         return neighbors
 
@@ -203,7 +202,7 @@ class NeighborsFactory:
             # create a temporary neighborhood
             tmp_subset = PointSubSetOpen3D(pointset3d, idx)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
-            neighbors.setNeighbor(i, tmp_point_neighborhood)
+            neighbors.setNeighborhood(i, tmp_point_neighborhood)
 
         return neighbors
 

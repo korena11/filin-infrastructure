@@ -134,8 +134,7 @@
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
             class="p">,</span> <span class="n">points</span><span class="p">,</span> <span
-            class="n">saliencyValues</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span
-            class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            class="n">saliencyValues</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param points: the point cloud</span>
@@ -146,6 +145,8 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SaliencyProperty</span><span
             class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span
             class="fm">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span> <span class="o">=</span> <span
+            class="kc">False</span>
 
         <span class="k">if</span> <span class="n">saliencyValues</span> <span class="ow">is</span> <span
             class="kc">None</span><span class="p">:</span>
@@ -172,6 +173,21 @@
             class="mi">0</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
 
+<div class="viewcode-block" id="SaliencyProperty.normalize_values"><a class="viewcode-back"
+                                                                      href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.normalize_values">[docs]</a>    <span
+        class="k">def</span> <span class="nf">normalize_values</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value</span>
+
+<span class="sd">        :param bool: boolean flag for normalization of the values</span>
+
+<span class="sd">        :type bool: bool</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span> <span class="o">=</span> <span
+            class="nb">bool</span></div>
+
 <div class="viewcode-block" id="SaliencyProperty.getValues"><a class="viewcode-back"
                                                                href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.getValues">[docs]</a>    <span
         class="k">def</span> <span class="nf">getValues</span><span class="p">(</span><span class="bp">self</span><span
@@ -179,9 +195,45 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Saliency values for all the point cloud</span>
 
+<span class="sd">        .. warning::</span>
+<span class="sd">            If normalized is True, the normalization is with log</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
-            class="n">__saliency</span></div>
+        <span class="n">saliency</span> <span class="o">=</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__saliency</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span><span
+            class="p">:</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
+            class="nn">np</span>
+            <span class="c1"># set values larger or smaller than 3sigma the average to invalid value</span>
+            <span class="n">s_tmp</span> <span class="o">=</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">__saliency</span><span class="o">.</span><span class="n">copy</span><span
+            class="p">()</span>
+            <span class="n">s_tmp</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">saliency</span> <span
+            class="o">&lt;</span> <span class="n">saliency</span><span class="o">.</span><span
+            class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">saliency</span><span
+            class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span
+            class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">saliency</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span
+            class="mi">3</span> <span class="o">*</span> <span class="n">saliency</span><span class="o">.</span><span
+            class="n">std</span><span class="p">()</span>
+            <span class="n">s_tmp</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">saliency</span> <span
+            class="o">&gt;</span> <span class="n">saliency</span><span class="o">.</span><span
+            class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">saliency</span><span
+            class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span
+            class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">saliency</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span
+            class="mi">3</span> <span class="o">*</span> <span class="n">saliency</span><span class="o">.</span><span
+            class="n">std</span><span class="p">()</span>
+
+            <span class="n">saliency</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s_tmp</span><span
+            class="p">)</span>
+
+        <span class="k">return</span> <span class="n">saliency</span></div>
 
 <div class="viewcode-block" id="SaliencyProperty.getPointSaliency"><a class="viewcode-back"
                                                                       href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.getPointSaliency">[docs]</a>    <span

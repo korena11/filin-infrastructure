@@ -130,7 +130,12 @@
 <span class="kn">from</span> <span class="nn">SaliencyProperty</span> <span class="k">import</span> <span class="n">SaliencyProperty</span>
 <span class="kn">from</span> <span class="nn">TensorFactory</span> <span class="k">import</span> <span class="n">TensorFactory</span>
 <span class="kn">from</span> <span class="nn">TensorProperty</span> <span class="k">import</span> <span class="n">TensorProperty</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span><span
+                                class="p">,</span> <span class="n">trange</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
+<span class="n">EPS</span> <span class="o">=</span> <span class="mf">1e-10</span>
 
 <div class="viewcode-block" id="SaliencyFactory"><a class="viewcode-back"
                                                     href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory">[docs]</a><span
@@ -278,8 +283,8 @@
             class="bp">cls</span><span class="p">,</span> <span class="n">neighbors_property</span><span
             class="p">,</span> <span class="n">normals_property</span><span class="p">,</span> <span class="n">curvature_property</span><span
             class="p">,</span> <span class="n">curvature_attribute</span><span class="p">,</span>
-                           <span class="n">weight_distance</span><span class="o">=</span><span class="mi">1</span><span
-            class="p">,</span> <span class="n">weight_normals</span><span class="o">=</span><span
+                           <span class="n">weight_distance_sigma</span><span class="o">=</span><span
+            class="mf">0.05</span><span class="p">,</span> <span class="n">weight_normals</span><span class="o">=</span><span
             class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span
             class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -293,10 +298,12 @@
 <span class="sd">            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j</span>
 <span class="sd">            \end{eqnarray}</span>
 
+<span class="sd">        The distances are weighted as Gaussians: the closest and farthest get low weights.</span>
+
 <span class="sd">        The saliency of the point is the sum:</span>
 
 <span class="sd">        .. math::</span>
-<span class="sd">            s = \sum{d\kappa \cdot w_d e^{-d} \cdot w_{dN} e^{-(d{\bf N} + 1)}}</span>
+<span class="sd">            s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}</span>
 
 <span class="sd">        :param curvature_property: curvature property computed in advance</span>
 <span class="sd">        :param curvature_attribute: the attribute according to which the curvature is measured.</span>
@@ -323,19 +330,20 @@
             class="n">warn</span>
 
         <span class="n">tensor_saliency</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Compute curvature saliency for each neighborhood in the neighborhood property&#39;</span><span
-            class="p">)</span>
-        <span class="k">for</span> <span class="n">neighborhood</span> <span class="ow">in</span> <span class="n">neighbors_property</span><span
-            class="p">:</span>
+        <span class="n">j</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span><span
+            class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
+            class="n">neighbors_property</span><span class="p">,</span> <span class="n">trange</span><span
+            class="p">(</span><span class="n">neighbors_property</span><span class="o">.</span><span
+            class="n">Size</span><span class="p">,</span>
+                                                             <span class="n">desc</span><span class="o">=</span><span
+            class="s1">&#39;Curvature Saliency for each neighborhood&#39;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span
+            class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">tensor_saliency</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">continue</span>
 
-            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span
-            class="mi">1192</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span
-            class="p">)</span>
             <span class="c1"># get all the current values of curvature and normals. The first is the point to which the</span>
             <span class="c1"># computation is made</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">curvature_property</span><span
@@ -369,12 +377,31 @@
             class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span
             class="n">current_curvatures</span><span class="p">[</span><span class="mi">0</span><span
             class="p">])</span>
+            <span class="n">dk_normed</span> <span class="o">=</span> <span class="p">(</span><span class="n">dk</span> <span
+            class="o">-</span> <span class="n">dk</span><span class="o">.</span><span class="n">min</span><span
+            class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">dk</span><span
+            class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span
+            class="n">dk</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span
+            class="o">+</span> <span class="n">EPS</span><span class="p">)</span>
 
             <span class="c1"># distances influence</span>
-            <span class="n">dist_element</span> <span class="o">=</span> <span class="n">weight_distance</span> <span
-            class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span
+            <span class="n">dist_element</span> <span class="o">=</span> <span class="mi">1</span><span
+            class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span
+            class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span
+            class="n">weight_distance_sigma</span><span class="o">**</span><span class="mi">2</span><span
+            class="p">)</span> <span class="o">*</span> \
+                           <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span
             class="p">(</span><span class="o">-</span><span class="n">neighborhood</span><span class="o">.</span><span
-            class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span
+            class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span
+            class="mi">2</span><span class="o">*</span><span class="n">weight_distance_sigma</span><span
+            class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_element</span> <span
+            class="o">-</span> <span class="n">dist_element</span><span class="o">.</span><span
+            class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span
+            class="n">dist_element</span><span class="o">.</span><span class="n">max</span><span
+            class="p">()</span> <span class="o">-</span> <span class="n">dist_element</span><span
+            class="o">.</span><span class="n">min</span><span class="p">())</span>
 
             <span class="c1"># normal influence</span>
             <span class="n">dn</span> <span class="o">=</span> <span class="n">current_normals</span><span
@@ -382,20 +409,641 @@
             class="o">.</span><span class="n">dot</span><span class="p">(</span><span
             class="n">current_normals</span><span class="p">[</span><span class="mi">0</span><span
             class="p">,</span> <span class="p">:])</span>
-            <span class="n">normal_element</span> <span class="o">=</span> <span class="n">weight_normals</span> <span
-            class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span
-            class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">dn</span> <span class="o">+</span> <span
-            class="mi">1</span><span class="p">))</span>
+            <span class="n">dn_normed</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span
+            class="n">dn</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 
             <span class="n">tensor_saliency</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span
-            class="p">(</span><span class="n">dk</span> <span class="o">*</span> <span
-            class="n">dist_element</span> <span class="o">*</span> <span class="n">normal_element</span><span class="p">))</span>
+            class="p">(</span><span class="n">dist_element_normed</span> <span class="o">*</span><span
+            class="p">(</span><span class="n">dn_normed</span> <span class="o">+</span> <span class="n">dk_normed</span><span
+            class="p">)))</span>
+            <span class="n">j</span><span class="o">+=</span><span class="mi">1</span>
+
 
         <span class="k">return</span> <span class="n">SaliencyProperty</span><span class="p">(</span><span class="n">neighbors_property</span><span
             class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">np</span><span
             class="o">.</span><span class="n">asarray</span><span class="p">(</span><span
             class="n">tensor_saliency</span><span class="p">))</span></div>
+
+<span class="c1"># -------------------------- Hierarchical Method for Saliency computation -------------------</span>
+<div class="viewcode-block" id="SaliencyFactory.hierarchical_saliency"><a class="viewcode-back"
+                                                                          href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.hierarchical_saliency">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">hierarchical_saliency</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">neighborhoods</span><span
+            class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span
+            class="n">num_bins</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span
+            class="n">low_level_percentage</span><span class="o">=</span><span class="mi">1</span><span
+            class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.05</span><span
+            class="p">,</span>
+                              <span class="n">association_percentage</span><span class="o">=</span><span
+            class="mi">20</span><span class="p">,</span> <span class="n">high_level_percentage</span><span
+            class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">verbose</span><span
+            class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute saliency by hierarchical method.</span>
+
+<span class="sd">        Based on :cite:`Shtrom.etal2013` paper.</span>
+
+<span class="sd">        The procedure is divided into three main components:</span>
+
+<span class="sd">        #. Low-level saliency, which is composed by Fast Point Feature Histogram (FPFH) and the low-level distinctness accordingly.</span>
+
+<span class="sd">        #. Point Association, and</span>
+
+<span class="sd">        #.  High-level saliency.</span>
+
+<span class="sd">        :param neighborhoods: the neighborhoods computed for the queried point set</span>
+<span class="sd">        :param normals: the computed normals of the point cloud</span>
+<span class="sd">        :param num_bins: the number of bins for feature histogram construction</span>
+<span class="sd">        :param low_level_percentage: threshold for minimal chi-square distance for the low-level distinctness computation (percentage). Default: 1\%</span>
+<span class="sd">        :param association_percentage: percentage of focus points for point association (percentage). Default: 20\%</span>
+<span class="sd">        :param high_level_percentage: percentage of points to use for high level distinctness (percentage). Default: 10\%</span>
+<span class="sd">        :param sigma: for point association</span>
+<span class="sd">        :param verbose: print inter-running messages.</span>
+
+<span class="sd">        :type neighborhoods: NeighborsProperty.NeighborsProperty</span>
+<span class="sd">        :type normals: NormalsProperty.NormalsProperty</span>
+<span class="sd">        :type num_bins: int</span>
+<span class="sd">        :type low_level_percentage: float</span>
+<span class="sd">        :type association_percentage: float</span>
+<span class="sd">        :type high_level_percentage: float</span>
+<span class="sd">        :type sigma: float</span>
+<span class="sd">        :type verbose: bool</span>
+
+<span class="sd">        :return: saliency property with the values of the saliency</span>
+
+<span class="sd">        :rtype: SaliencyProperty</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            SaliencyFactory.__SPFH, SaliencyFactory.__FPFH, SaliencyFactory.__low_level_distinctness,</span>
+<span class="sd">            SaliencyFactory.__point_association, SaliencyFactory.__high_level_distinctness</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">chi2_distance</span>
+
+        <span class="n">pointset</span> <span class="o">=</span> <span class="n">neighborhoods</span><span
+            class="o">.</span><span class="n">Points</span>
+        <span class="n">spfh_property</span> <span class="o">=</span> <span class="n">SPFH_property</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">)</span>
+        <span class="n">k</span><span class="o">=</span><span class="mi">0</span>
+        <span class="c1"># 1. For each point compute the simplified point feature histogram</span>
+        <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span
+            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">neighborhoods</span><span
+            class="p">,</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span
+            class="p">(</span><span class="n">neighborhoods</span><span class="o">.</span><span
+            class="n">Size</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span
+            class="s1">&#39;SPFH for all point cloud&#39;</span><span class="p">)):</span>
+
+            <span class="n">spfh_point</span> <span class="o">=</span> <span class="bp">cls</span><span
+            class="o">.</span><span class="n">__SPFH</span><span class="p">(</span><span
+            class="n">neighborhood</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span
+            class="n">num_bins</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span
+            class="kc">False</span><span class="p">)</span>
+            <span class="n">spfh_property</span><span class="o">.</span><span class="n">set_spfh</span><span
+            class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">center_point_idx</span><span
+            class="p">,</span> <span class="n">spfh_point</span><span class="p">)</span>
+
+        <span class="c1"># 2. For each SPFH compute the FPFH</span>
+        <span class="n">fpfh</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">spfh</span><span class="p">,</span> <span class="n">j</span> <span
+            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spfh_property</span><span
+            class="p">,</span>
+                           <span class="n">trange</span><span class="p">(</span><span
+            class="n">spfh_property</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;FPFH for all point cloud&#39;</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">)):</span>
+
+            <span class="n">fpfh</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__FPFH</span><span
+            class="p">(</span><span class="n">spfh</span><span class="p">,</span> <span
+            class="n">spfh_property</span><span class="p">))</span>
+
+        <span class="c1"># 3. Low level distinctness,</span>
+        <span class="n">D_low</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pointset_distances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">point</span><span
+            class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span
+            class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">pointset</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">),</span> <span class="n">pointset</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span>
+                               <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span
+            class="p">(</span><span class="n">pointset</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;low level distinctness&#39;</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">)):</span>
+
+            <span class="n">tmp_fpfh</span> <span class="o">=</span> <span class="n">fpfh</span><span class="o">.</span><span
+            class="n">copy</span><span class="p">()</span>
+            <span class="n">current_hist</span> <span class="o">=</span> <span class="n">tmp_fpfh</span><span class="o">.</span><span
+            class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span
+            class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span
+            class="p">(</span><span class="n">current_hist</span><span class="p">)):</span>
+                <span class="n">D_low</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># 3.1 Compute the Chi-square distance of each histogram to each histogram</span>
+            <span class="n">tmp_fpfh</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tmp_fpfh</span><span
+            class="p">)</span>
+            <span class="n">chi_dist</span> <span class="o">=</span> <span class="n">chi2_distance</span><span
+            class="p">(</span><span class="n">current_hist</span><span class="p">,</span> <span
+            class="n">tmp_fpfh</span><span class="p">)</span>
+
+            <span class="n">pointset_distances</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="n">chi_dist</span><span class="p">)</span>
+
+            <span class="c1"># 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point</span>
+            <span class="n">dmin</span> <span class="o">=</span> <span class="n">low_level_percentage</span> <span
+            class="o">/</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">chi_dist</span><span
+            class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">D_low</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__low_level_distinctness</span><span
+            class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">pointset</span><span
+            class="p">,</span> <span class="n">chi_dist</span><span class="p">,</span> <span class="n">dmin</span><span
+            class="p">))</span>
+
+        <span class="n">D_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">D_low</span><span class="p">)</span>
+
+        <span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">D_low</span><span
+            class="p">)</span>  <span class="c1"># Sort the low level distinctness according to magnitude</span>
+
+        <span class="c1"># 4. Point association</span>
+        <span class="n">A_low</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Use the only percentage of the highest low level distinctness to compute the high-level one</span>
+        <span class="n">num_points_assoc</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">association_percentage</span> <span class="o">/</span> <span class="mi">100</span> <span
+            class="o">*</span> <span class="n">pointset</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">)</span>
+        <span class="n">focus_points_idx</span> <span class="o">=</span> <span class="n">sorted_idx</span><span
+            class="p">[</span><span class="o">-</span><span class="n">num_points_assoc</span><span class="p">:]</span>
+        <span class="n">focus_points</span> <span class="o">=</span> <span class="n">pointset</span><span
+            class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span
+            class="n">focus_points_idx</span><span class="p">)</span>
+
+        <span class="c1"># 5. High level distinctness</span>
+        <span class="n">D_high</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Use the only percentage of the highest low level distinctness to compute the high-level one</span>
+        <span class="n">num_points</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">high_level_percentage</span> <span class="o">/</span> <span
+            class="mi">100</span> <span class="o">*</span> <span class="n">pointset</span><span class="o">.</span><span
+            class="n">Size</span><span class="p">)</span>
+        <span class="n">valid_idx</span> <span class="o">=</span> <span class="n">sorted_idx</span><span
+            class="p">[</span><span class="o">-</span><span class="n">num_points</span><span class="p">:]</span>
+        <span class="n">valid_pts</span> <span class="o">=</span> <span class="n">pointset</span><span
+            class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span
+            class="n">valid_idx</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span
+            class="n">current_dist</span><span class="p">,</span> <span class="n">k</span> <span
+            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pointset</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span class="n">pointset_distances</span><span
+            class="p">,</span>
+                                          <span class="n">trange</span><span class="p">(</span><span
+            class="n">pointset</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span
+            class="n">desc</span><span class="o">=</span><span class="s1">&#39;Association and high-level distinctness&#39;</span><span
+            class="p">,</span>
+                                                 <span class="n">position</span><span class="o">=</span><span
+            class="mi">0</span><span class="p">)):</span>
+            <span class="c1"># compute point association</span>
+            <span class="n">A_low</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="bp">cls</span><span class="o">.</span><span
+            class="n">__point_association</span><span class="p">(</span><span class="n">point</span><span
+            class="p">,</span> <span class="n">focus_points</span><span class="p">,</span> <span class="n">focus_points_idx</span><span
+            class="p">,</span> <span class="n">D_low</span><span class="p">,</span> <span class="n">sigma</span><span
+            class="p">))</span>
+            <span class="c1"># compute high-level distinctness</span>
+            <span class="n">D_high</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__high_level_distinctness</span><span
+            class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="n">valid_pts</span><span
+            class="p">,</span> <span class="n">valid_idx</span><span class="p">,</span> <span
+            class="n">current_dist</span><span class="p">))</span>
+        <span class="n">A_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">A_low</span><span class="p">)</span>
+        <span class="n">D_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">D_high</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">SaliencyProperty</span><span class="p">(</span><span class="n">pointset</span><span
+            class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span
+            class="n">D_low</span> <span class="o">+</span> <span class="n">A_low</span><span class="p">)</span> <span
+            class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">D_high</span><span
+            class="p">)</span></div>
+
+    <span class="o">@</span> <span class="nb">classmethod</span>
+    <span class="k">def</span> <span class="nf">__high_level_distinctness</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span
+            class="n">valid_pts</span><span class="p">,</span> <span class="n">valid_idx</span><span class="p">,</span> <span
+            class="n">chi_dist</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the high-level distinctness of a point within a pointset</span>
+
+<span class="sd">        #. High-level dissimilarity measure is computed by</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                d_H(p_i,p_j) = D_{\chi^2}(p_i,p_j) \cdot \log\left(1+||p_i-p_j||\right)</span>
+
+<span class="sd">        #. The high-level distinctness is computed according to a percentage of the points with the highest low-level distinctness, and is defined by:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                D_{high}(p_i) = 1-\exp\left(-\frac{1}{N}\sum d_H(p_i,p_j)\right)</span>
+
+<span class="sd">            with N the number of points that correspond to the percentage of the highest low level distinctness</span>
+
+<span class="sd">        :param point: the 3d coordinates of the current point</span>
+<span class="sd">        :param valid_pts: \% of the points with the highest low-level distinctness</span>
+<span class="sd">        :param valid_idx: indices of the valid points</span>
+
+<span class="sd">        :type point: np.ndarray 3x1</span>
+<span class="sd">        :type valid_pts: np.ndarray nx3</span>
+<span class="sd">        :type valid_idx: list, np.ndarray, int</span>
+<span class="sd">        :type chi_dist: np.array</span>
+
+<span class="sd">        :return: the high-level distinctness of point :math:`p_i`.</span>
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># 1. Compute the high-level dissimilarity</span>
+        <span class="n">pi_pj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span
+            class="n">point</span> <span class="o">-</span> <span class="n">valid_pts</span><span
+            class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span
+            class="p">)</span>
+        <span class="n">pi_pj</span> <span class="o">/=</span> <span class="n">pi_pj</span><span class="o">.</span><span
+            class="n">max</span><span class="p">()</span>
+        <span class="n">dh</span> <span class="o">=</span> <span class="n">chi_dist</span><span class="p">[</span><span
+            class="n">valid_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span
+            class="o">+</span> <span class="n">pi_pj</span><span class="p">)</span>
+
+        <span class="c1"># 2. Compute the high-level distinctness</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dh</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__low_level_distinctness</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">point</span><span class="p">,</span> <span class="n">pointset</span><span
+            class="p">,</span> <span class="n">chi_dist</span><span class="p">,</span> <span class="n">dmin</span><span
+            class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the lowlevel distinctness for a point.</span>
+
+<span class="sd">        #. Dissimilarity measure is computed by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                d_L(p_i, p_j) = \frac{D_{\chi^2}(p_i, p_j)}{1+||p_i-p_j||}</span>
+
+<span class="sd">        #.  For points with :math:`D_{\chi^2}(p_i,p_j)&lt;d_{\min}, \forall j` the low-level distinctness</span>
+<span class="sd">        of point :math:`p_i` is computed by</span>
+
+<span class="sd">           .. math::</span>
+<span class="sd">               D_{low}(p_i) = 1-\exp\left(-\frac{1}{N}\sum d_L(p_i,p_j) \right)</span>
+
+<span class="sd">        :param point: the 3d coordinates of the point to which the low-level distinctness is computed</span>
+<span class="sd">        :param pointset: the points to which the computed distinctness is related</span>
+<span class="sd">        :param chi_dist: the computed :math:`D_{\chi^2}` for point :math:`p_i` with all other points</span>
+<span class="sd">        :param dmin: the threshold distance for distinctness measure</span>
+
+<span class="sd">        :type point: np.ndarray 3x1</span>
+<span class="sd">        :type pointset: BallTreePointSet.BallTreePointSet, PointSetOpen3D.PointSetOpen3D</span>
+<span class="sd">        :type chi_dist: np.array</span>
+<span class="sd">        :type dmin: float</span>
+
+<span class="sd">        :return: the distinctness value of point :math:`p_i`.</span>
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">valid_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">argwhere</span><span class="p">(</span><span class="n">chi_dist</span> <span
+            class="o">&lt;=</span> <span class="n">dmin</span><span class="p">)</span><span class="o">.</span><span
+            class="n">flatten</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">valid_idx</span><span class="o">.</span><span
+            class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span
+            class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">valid_pts</span> <span class="o">=</span> <span class="n">pointset</span><span
+            class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span
+            class="n">valid_idx</span><span class="p">)</span>
+        <span class="n">pi_pj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span
+            class="n">point</span> <span class="o">-</span> <span class="n">valid_pts</span><span
+            class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span
+            class="p">)</span>
+        <span class="n">dl</span> <span class="o">=</span> <span class="n">chi_dist</span><span class="p">[</span><span
+            class="n">valid_idx</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span
+            class="mi">1</span> <span class="o">+</span> <span class="n">pi_pj</span><span class="p">)</span>
+
+        <span class="c1"># 3.3 Compute the low-level distinctness</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dl</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">())</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__point_association</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span
+            class="n">focus_points</span><span class="p">,</span> <span class="n">focus_points_idx</span><span
+            class="p">,</span> <span class="n">distinctness</span><span class="p">,</span> <span
+            class="n">sigma</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Associate points that neighbor high-distinctness points with their distinction.</span>
+
+<span class="sd">        A fraction (according to percentage) of points that have high low-level distinctness are chosen as focus points.</span>
+<span class="sd">        :math:`p_{f_i}` is the closest focus point to :math:`p_i` and :math:`D_{foci}(p_i)` is the low-level</span>
+<span class="sd">        distinctness of :math:`p_{f_i}`, then:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            A_{low}(p_i) = D_{foci}(p_i) \cdot \exp\left(-\frac{||p_{f_i} - p_i||^2}{2\sigma^2}\right)</span>
+
+<span class="sd">        :param point: the current point to which the association is computed</span>
+<span class="sd">        :param focus_points: a list of the focus points</span>
+<span class="sd">        :param focus_points_idx: the id of the focus points</span>
+<span class="sd">        :param distinctness: low-level distinctness computed for the cloud</span>
+<span class="sd">        :param num_points: the number of points to consider as focus points</span>
+<span class="sd">        :param sigma: a parameter for decay</span>
+
+<span class="sd">        :type point: np.ndarray 3x1</span>
+<span class="sd">        :type focus_points: np.ndarray nx3</span>
+<span class="sd">        :type focus_points_idx: np.ndarray, list, int</span>
+<span class="sd">        :type distinctness: np.ndarray</span>
+<span class="sd">        :type sigma: float</span>
+
+<span class="sd">        :return: the association value for each point</span>
+
+<span class="sd">        :rtype: np.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># 1. Find the distances between current point and the focus points</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span
+            class="n">point</span><span class="o">-</span><span class="n">focus_points</span><span
+            class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span
+            class="p">)</span>
+
+        <span class="c1"># 2. The point association is of the closest foci point</span>
+        <span class="n">foci_point_id</span> <span class="o">=</span> <span class="n">focus_points_idx</span><span
+            class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span
+            class="p">(</span><span class="n">distances</span><span class="p">)]</span>
+        <span class="n">D_foci</span> <span class="o">=</span> <span class="n">distinctness</span><span
+            class="p">[</span><span class="n">foci_point_id</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">D_foci</span> <span class="o">*</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span
+            class="o">-</span> <span class="n">distances</span><span class="o">.</span><span class="n">min</span><span
+            class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span
+            class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sigma</span><span
+            class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__SPFH</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">neighborhood</span><span class="p">,</span> <span
+            class="n">normals</span><span class="p">,</span> <span class="n">num_bins</span> <span
+            class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="n">verbose</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the Simplified Point Feature Histogram.</span>
+
+<span class="sd">        #. Find the Darboux frame for each point :math:`u =  {\bf N}, \, v = (p_t-p)\times u, \, w = u\times v` with :math:`p_t` the current point and :math:`{\bf N}` the normal at that point.</span>
+
+<span class="sd">        #. The SPFH (simplified point feature histogram) is computed by:</span>
+
+<span class="sd">            .. math::</span>
+
+<span class="sd">                \begin{array}</span>
+<span class="sd">                \alpha = v \cdot {\bf N_t} \\</span>
+<span class="sd">                \phi = u \cdot \frac{p_t-p}{||p_t-p||} \\</span>
+<span class="sd">                \theta = \arctan(w\cdot {\bf N_t}, u\cdot {\bf N_t}</span>
+<span class="sd">                \end{array}</span>
+
+<span class="sd">        with :math:`p_t` a point in the neighborhood and :math:`{\bf N_t}` the normal of each neighbor.</span>
+
+<span class="sd">        :param neighborhood: the current neighborhood to which the SPFH is computed</span>
+<span class="sd">        :param normals: the normals of the point cloud</span>
+<span class="sd">        :param num_bins: number of bins in the histogram. Default: 11 (according to :cite:`Shtrom.etal2013` -- 11)</span>
+<span class="sd">        :param verbose: print inter-running messages. Default: False</span>
+
+<span class="sd">        :type neighborhood: PointNeighborhood.PointNeighborhood</span>
+<span class="sd">        :type normals: NormalsProperty.NormalsProperty</span>
+<span class="sd">        :type num_bins: int</span>
+<span class="sd">        :type verbose: bool</span>
+
+<span class="sd">        :return: array of :math:`\alpha, \phi, \theta`.</span>
+
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Construct the size of the descriptor</span>
+        <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
+            class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">pi</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">+</span><span
+            class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># If the neighborhood is too small (less than two points)</span>
+        <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span
+            class="n">neighbors</span><span class="o">.</span><span class="n">Size</span> <span
+            class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">hist_alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bins</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span
+            class="n">bins</span><span class="p">)</span>
+            <span class="n">hist_phi</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span
+            class="n">bins</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span
+            class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span
+            class="p">),</span> <span class="n">bins</span><span class="p">)</span>
+            <span class="n">hist_theta</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bins</span><span
+            class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
+            class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span
+            class="n">bins</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">SPFH_point</span><span class="p">(</span><span class="n">neighborhood</span><span
+            class="p">,</span> <span class="n">hist_alpha</span><span class="p">,</span> <span class="n">hist_phi</span><span
+            class="p">,</span> <span class="n">hist_theta</span><span class="p">)</span>
+
+        <span class="c1"># Prevent division in 0</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">nonzero</span><span class="p">(</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">distances</span> <span class="o">!=</span> <span class="mi">0</span><span
+            class="p">)</span>
+        <span class="n">neighbrhood_normals</span> <span class="o">=</span> <span class="n">normals</span><span
+            class="o">.</span><span class="n">getPointNormal</span><span class="p">(</span><span
+            class="n">neighborhood</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span
+            class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+        <span class="c1"># 1. Build the Darboux frame with each point in the neighborhood</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">normals</span><span class="o">.</span><span
+            class="n">getPointNormal</span><span class="p">(</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">center_point_idx</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">cross</span><span class="p">(</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">neighbors_vectors</span><span class="p">(),</span> <span
+            class="n">u</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">cross</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span
+            class="n">v</span><span class="p">)</span>
+
+        <span class="c1"># 2. Build feature vector</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">diag</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span
+            class="n">dot</span><span class="p">(</span><span class="n">neighbrhood_normals</span><span
+            class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">alpha</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span
+            class="n">write</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+            class="n">dot</span><span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span
+            class="n">neighbors_vectors</span><span class="p">()</span><span class="o">.</span><span
+            class="n">T</span><span class="p">)</span>
+
+        <span class="n">u_nt</span> <span class="o">=</span> <span class="n">u</span><span class="o">.</span><span
+            class="n">dot</span><span class="p">(</span><span class="n">neighbrhood_normals</span><span
+            class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">w_nt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">diag</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span
+            class="n">dot</span><span class="p">(</span><span class="n">neighbrhood_normals</span><span
+            class="o">.</span><span class="n">T</span><span class="p">))</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">arctan</span><span class="p">(</span><span class="n">w_nt</span> <span class="o">/</span> <span
+            class="n">u_nt</span><span class="p">)</span>
+
+        <span class="c1"># Require only positive angles</span>
+        <span class="n">alpha</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">alpha</span> <span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">alpha</span><span
+            class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
+            class="p">(</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">)]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">phi</span><span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">phi</span><span
+            class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
+            class="p">(</span><span class="n">phi</span><span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">)]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">theta</span><span class="o">&lt;</span> <span
+            class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">theta</span><span
+            class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
+            class="p">(</span><span class="n">theta</span><span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">)]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="n">hist_alpha</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">alpha</span><span
+            class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+        <span class="n">hist_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">histogram</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span
+            class="n">bins</span> <span class="p">)</span>
+        <span class="n">hist_theta</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">theta</span><span
+            class="p">,</span> <span class="n">bins</span> <span class="p">)</span>
+
+        <span class="n">tmp_alpha</span> <span class="o">=</span> <span class="n">hist_alpha</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">numberOfNeighbors</span>
+        <span class="n">tmp_phi</span> <span class="o">=</span> <span class="n">hist_phi</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">numberOfNeighbors</span>
+        <span class="n">tmp_theta</span> <span class="o">=</span> <span class="n">hist_theta</span><span
+            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">numberOfNeighbors</span>
+
+        <span class="n">hist_alpha</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">tmp_alpha</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+        <span class="n">hist_phi</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">tmp_phi</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+        <span class="n">hist_theta</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">tmp_theta</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span
+            class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+            <span class="n">figure</span><span class="p">,</span> <span class="p">(</span><span
+            class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">,</span> <span
+            class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span
+            class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span
+            class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span
+            class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span
+            class="p">(</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
+            <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span
+            class="p">(</span><span class="s1">&#39;theta&#39;</span><span class="p">)</span>
+            <span class="n">ax1</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span
+            class="n">alpha</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span
+            class="n">phi</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+            <span class="n">ax3</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span
+            class="n">theta</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
+
+        <span class="c1"># 4. Construct the auxilary class SPFH_point</span>
+        <span class="k">return</span>  <span class="n">SPFH_point</span><span class="p">(</span><span class="n">neighborhood</span><span
+            class="p">,</span> <span class="n">hist_alpha</span><span class="p">,</span> <span class="n">hist_phi</span><span
+            class="p">,</span> <span class="n">hist_theta</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">__FPFH</span><span class="p">(</span><span class="bp">cls</span><span
+            class="p">,</span> <span class="n">spfh_current</span><span class="p">,</span> <span
+            class="n">spfh_property</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute Fast Point Feature Histogram (FPFH)</span>
+
+<span class="sd">        For each point in spfh_propety, the FPFH is computed by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                FPFH(p) = SPFH(p) + \frac{1}{K} \sum_{k=1}^K \frac{SPFH(p_k)}{||p-p_k||}</span>
+
+<span class="sd">        with :math:`K` the number of neighbors of p.</span>
+
+<span class="sd">        :param spfh_property: the auxiliary property holding all the SPFH computed for the point cloud</span>
+
+<span class="sd">        :return: a feature vector for each point</span>
+
+<span class="sd">        :rtype: np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">spfh_current</span><span class="o">.</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">numberOfNeighbors</span> <span class="o">&lt;</span> <span
+            class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">spfh_current</span><span class="o">.</span><span class="n">getFeatureVector</span><span
+            class="p">()</span>
+
+        <span class="n">spfh_neighbors</span> <span class="o">=</span> <span class="n">spfh_property</span><span
+            class="o">.</span><span class="n">getPointSPFH</span><span class="p">(</span><span
+            class="n">spfh_current</span><span class="o">.</span><span class="n">neighborhood</span><span
+            class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">[</span><span
+            class="mi">1</span><span class="p">:])</span>
+
+        <span class="n">spfh_neighbors_normalized</span> <span class="o">=</span> <span class="p">[</span><span
+            class="n">spfh_neighbor</span><span class="o">.</span><span class="n">getFeatureVector</span><span
+            class="p">()</span> <span class="o">/</span> <span class="n">distance_neighbor</span> <span
+            class="k">for</span> <span class="n">spfh_neighbor</span><span class="p">,</span>
+                                     <span class="n">distance_neighbor</span> <span class="ow">in</span> <span
+            class="nb">zip</span><span class="p">(</span><span class="n">spfh_neighbors</span><span
+            class="p">,</span> <span class="n">spfh_current</span><span class="o">.</span><span
+            class="n">neighborhood</span><span class="o">.</span><span class="n">distances</span><span
+            class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
+
+        <span class="k">return</span> <span class="n">spfh_current</span><span class="o">.</span><span class="n">getFeatureVector</span><span
+            class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">spfh_neighbors_normalized</span><span
+            class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">)</span>
 
     <span class="c1"># ------------------- Saliency on Panorama Property ---------------------</span>
 <div class="viewcode-block" id="SaliencyFactory.panorama_frequency"><a class="viewcode-back"
@@ -1078,6 +1726,110 @@
         <span class="k">return</span> <span class="n">dcolors</span><span class="p">[</span><span
             class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span
             class="n">i</span><span class="p">,</span> <span class="n">j</span></div>
+
+
+
+<span class="k">class</span> <span class="nc">SPFH_property</span><span class="p">(</span><span
+                                class="n">BaseProperty</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An auxiliary property class for SPFH computation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spfh</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+                                class="p">,</span> <span class="n">pointset</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SPFH_property</span><span
+                                class="p">,</span> <span class="bp">self</span><span class="p">)</span><span
+                                class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span
+                                class="n">pointset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spfh</span> <span class="o">=</span> <span
+                                class="n">np</span><span class="o">.</span><span class="n">empty</span><span
+                                class="p">(</span><span class="n">pointset</span><span class="o">.</span><span
+                                class="n">Size</span><span class="p">,</span> <span class="n">SPFH_point</span><span
+                                class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_spfh</span><span class="p">(</span><span class="bp">self</span><span
+                                class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">spfh_point</span><span
+                                class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the spfh of each point</span>
+
+<span class="sd">        :param idx: indices of the point(s) to set</span>
+<span class="sd">        :param spfh_point: the SPFH point</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spfh</span><span class="p">[</span><span
+                                class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">spfh_point</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span
+                                class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span
+                                class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPointSPFH</span><span
+                                class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span
+                                class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span
+                                class="mi">0</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+    <span class="k">def</span> <span class="nf">getPointSPFH</span><span class="p">(</span><span
+                                class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span
+                                class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param idx:</span>
+<span class="sd">        :return:</span>
+
+<span class="sd">        :rtype: SPFH_point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+                                class="n">spfh</span><span class="p">[</span><span class="n">idx</span><span
+                                class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">SPFH_point</span><span class="p">(</span><span
+                                class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An auxiliary class for SPFH computation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">alpha_histogram</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">phi_histogram</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">theta_histogram</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">neighborhood</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span
+                                class="p">,</span> <span class="n">neighborhood</span><span class="p">,</span> <span
+                                class="n">alpha_hist</span><span class="p">,</span> <span class="n">phi_hist</span><span
+                                class="p">,</span> <span class="n">theta_hist</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighborhood</span> <span class="o">=</span> <span
+                                class="n">neighborhood</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hist_bins</span> <span
+                                class="o">=</span> <span class="n">alpha_hist</span><span class="p">[</span><span
+                                class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha_histogram</span> <span
+                                class="o">=</span> <span class="n">alpha_hist</span><span class="p">[</span><span
+                                class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phi_histogram</span> <span
+                                class="o">=</span> <span class="n">phi_hist</span><span class="p">[</span><span
+                                class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_histogram</span> <span
+                                class="o">=</span> <span class="n">theta_hist</span><span class="p">[</span><span
+                                class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">getFeatureVector</span><span class="p">(</span><span
+                                class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span
+                                class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span
+                                class="o">.</span><span class="n">alpha_histogram</span><span class="p">,</span> <span
+                                class="bp">self</span><span class="o">.</span><span class="n">phi_histogram</span><span
+                                class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_histogram</span><span
+                                class="p">))</span>
+
+
+
+
 </pre>
                         </div>
 
