@@ -35,7 +35,7 @@ def chi2_distance(histA, histB, eps=1e-10):
     :rtype: np.ndarray
     """
 
-    return np.sum((histA - histB) ** 2 / (histA + histB + eps), axis=1)
+    return np.sum(np.square(histA - histB) / (histA + histB + eps), axis=1)
 
 
 def imshow(img, scale_val = 1, ax = None, cmap = 'gray', *args, **kwargs):

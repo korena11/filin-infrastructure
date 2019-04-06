@@ -3,6 +3,7 @@
 '''
 
 import numpy as np
+from tqdm import tqdm
 
 import RotationUtils
 from CurvatureProperty import CurvatureProperty
@@ -264,9 +265,8 @@ class CurvatureFactory:
         """
         umbrellaCurvature = []
 
-        print('>>> Compute umbrella curvature for all point cloud')
-
-        for point_neighbors in neighbrohood:
+        for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
+                                    desc='Compute umbrella curvature for all point cloud'):
             # check if the neighborhood is valid
             if cls.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
                                        min_points_in_sector=min_points_in_sector, valid_sectors=valid_sectors,

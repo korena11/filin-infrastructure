@@ -123,17 +123,16 @@
                         <div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span><span
+                                class="p">,</span> <span class="n">trange</span>
 
 <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">SaliencyProperty</span> <span class="k">import</span> <span class="n">SaliencyProperty</span>
 <span class="kn">from</span> <span class="nn">TensorFactory</span> <span class="k">import</span> <span class="n">TensorFactory</span>
 <span class="kn">from</span> <span class="nn">TensorProperty</span> <span class="k">import</span> <span class="n">TensorProperty</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span><span
-                                class="p">,</span> <span class="n">trange</span>
-<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
 <span class="n">EPS</span> <span class="o">=</span> <span class="mf">1e-10</span>
 
@@ -330,13 +329,13 @@
             class="n">warn</span>
 
         <span class="n">tensor_saliency</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">j</span><span class="o">=</span><span class="mi">0</span>
-        <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span><span
-            class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span
+            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
             class="n">neighbors_property</span><span class="p">,</span> <span class="n">trange</span><span
             class="p">(</span><span class="n">neighbors_property</span><span class="o">.</span><span
             class="n">Size</span><span class="p">,</span>
-                                                             <span class="n">desc</span><span class="o">=</span><span
+                                                              <span class="n">desc</span><span class="o">=</span><span
             class="s1">&#39;Curvature Saliency for each neighborhood&#39;</span><span class="p">)):</span>
             <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span
             class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
@@ -385,17 +384,17 @@
             class="o">+</span> <span class="n">EPS</span><span class="p">)</span>
 
             <span class="c1"># distances influence</span>
-            <span class="n">dist_element</span> <span class="o">=</span> <span class="mi">1</span><span
-            class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span
-            class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span
-            class="n">weight_distance_sigma</span><span class="o">**</span><span class="mi">2</span><span
+            <span class="n">dist_element</span> <span class="o">=</span> <span class="mi">1</span> <span
+            class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span
+            class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span
+            class="n">weight_distance_sigma</span> <span class="o">**</span> <span class="mi">2</span><span
             class="p">)</span> <span class="o">*</span> \
                            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span
             class="p">(</span><span class="o">-</span><span class="n">neighborhood</span><span class="o">.</span><span
-            class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span
-            class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span
-            class="mi">2</span><span class="o">*</span><span class="n">weight_distance_sigma</span><span
-            class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span
+            class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span
+            class="mi">2</span> <span class="o">*</span> <span class="n">weight_distance_sigma</span> <span
+            class="o">**</span> <span class="mi">2</span><span class="p">))</span>
             <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="p">(</span><span class="n">dist_element</span> <span
             class="o">-</span> <span class="n">dist_element</span><span class="o">.</span><span
             class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span
@@ -415,10 +414,10 @@
 
             <span class="n">tensor_saliency</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span
-            class="p">(</span><span class="n">dist_element_normed</span> <span class="o">*</span><span
+            class="p">(</span><span class="n">dist_element_normed</span> <span class="o">*</span> <span
             class="p">(</span><span class="n">dn_normed</span> <span class="o">+</span> <span class="n">dk_normed</span><span
             class="p">)))</span>
-            <span class="n">j</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
 
 
         <span class="k">return</span> <span class="n">SaliencyProperty</span><span class="p">(</span><span class="n">neighbors_property</span><span
@@ -426,7 +425,7 @@
             class="o">.</span><span class="n">asarray</span><span class="p">(</span><span
             class="n">tensor_saliency</span><span class="p">))</span></div>
 
-<span class="c1"># -------------------------- Hierarchical Method for Saliency computation -------------------</span>
+    <span class="c1"># -------------------------- Hierarchical Method for Saliency computation -------------------</span>
 <div class="viewcode-block" id="SaliencyFactory.hierarchical_saliency"><a class="viewcode-back"
                                                                           href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.hierarchical_saliency">[docs]</a>    <span
         class="nd">@classmethod</span>
@@ -477,8 +476,8 @@
 <span class="sd">        :rtype: SaliencyProperty</span>
 
 <span class="sd">        .. seealso::</span>
-<span class="sd">            SaliencyFactory.__SPFH, SaliencyFactory.__FPFH, SaliencyFactory.__low_level_distinctness,</span>
-<span class="sd">            SaliencyFactory.__point_association, SaliencyFactory.__high_level_distinctness</span>
+<span class="sd">            :meth:`SaliencyFactory._SaliencyFactory__SPFH`, :meth:`SaliencyFactory._SaliencyFactory__FPFH`, :meth:`SaliencyFactory.__low_level_distinctness`,</span>
+<span class="sd">            :meth:`SaliencyFactory._SaliencyFactory__point_association`, :meth:`SaliencyFactory._SaliencyFactory__high_level_distinctness`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">chi2_distance</span>
 
@@ -486,7 +485,7 @@
             class="o">.</span><span class="n">Points</span>
         <span class="n">spfh_property</span> <span class="o">=</span> <span class="n">SPFH_property</span><span
             class="p">(</span><span class="n">pointset</span><span class="p">)</span>
-        <span class="n">k</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># 1. For each point compute the simplified point feature histogram</span>
         <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span
             class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">neighborhoods</span><span
@@ -494,12 +493,11 @@
             class="p">(</span><span class="n">neighborhoods</span><span class="o">.</span><span
             class="n">Size</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span
             class="s1">&#39;SPFH for all point cloud&#39;</span><span class="p">)):</span>
-
             <span class="n">spfh_point</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">__SPFH</span><span class="p">(</span><span
             class="n">neighborhood</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span
-            class="n">num_bins</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span
-            class="kc">False</span><span class="p">)</span>
+            class="n">num_bins</span><span class="p">,</span> <span class="n">verbose</span><span
+            class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">spfh_property</span><span class="o">.</span><span class="n">set_spfh</span><span
             class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">center_point_idx</span><span
             class="p">,</span> <span class="n">spfh_point</span><span class="p">)</span>
@@ -515,7 +513,6 @@
             class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;FPFH for all point cloud&#39;</span><span
             class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
             class="p">)):</span>
-
             <span class="n">fpfh</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__FPFH</span><span
             class="p">(</span><span class="n">spfh</span><span class="p">,</span> <span
@@ -639,7 +636,7 @@
             class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">D_high</span><span
             class="p">)</span></div>
 
-    <span class="o">@</span> <span class="nb">classmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__high_level_distinctness</span><span class="p">(</span><span
             class="bp">cls</span><span class="p">,</span> <span class="n">point</span><span class="p">,</span> <span
             class="n">valid_pts</span><span class="p">,</span> <span class="n">valid_idx</span><span class="p">,</span> <span
@@ -787,9 +784,8 @@
         <span class="c1"># 1. Find the distances between current point and the focus points</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span
-            class="n">point</span><span class="o">-</span><span class="n">focus_points</span><span
-            class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span
-            class="p">)</span>
+            class="n">point</span> <span class="o">-</span> <span class="n">focus_points</span><span class="p">,</span> <span
+            class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># 2. The point association is of the closest foci point</span>
         <span class="n">foci_point_id</span> <span class="o">=</span> <span class="n">focus_points_idx</span><span
@@ -801,15 +797,15 @@
         <span class="k">return</span> <span class="n">D_foci</span> <span class="o">*</span> <span
             class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span
             class="o">-</span> <span class="n">distances</span><span class="o">.</span><span class="n">min</span><span
-            class="p">()</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span
-            class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sigma</span><span
-            class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            class="p">()</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span
+            class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span
+            class="o">**</span> <span class="mi">2</span><span class="p">))</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__SPFH</span><span class="p">(</span><span class="bp">cls</span><span
             class="p">,</span> <span class="n">neighborhood</span><span class="p">,</span> <span
-            class="n">normals</span><span class="p">,</span> <span class="n">num_bins</span> <span
-            class="o">=</span> <span class="mi">11</span><span class="p">,</span> <span class="n">verbose</span><span
+            class="n">normals</span><span class="p">,</span> <span class="n">num_bins</span><span
+            class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">verbose</span><span
             class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the Simplified Point Feature Histogram.</span>
@@ -847,7 +843,7 @@
         <span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span
             class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">pi</span><span class="p">,</span> <span class="n">num_bins</span><span class="o">+</span><span
+            class="n">pi</span><span class="p">,</span> <span class="n">num_bins</span> <span class="o">+</span> <span
             class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># If the neighborhood is too small (less than two points)</span>
@@ -857,7 +853,7 @@
             <span class="n">hist_alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span
             class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">bins</span><span
             class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span
-            class="p">]</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span
+            class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span
             class="n">bins</span><span class="p">)</span>
             <span class="n">hist_phi</span> <span class="o">=</span> <span class="p">(</span><span
             class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span
@@ -892,7 +888,7 @@
             class="o">.</span><span class="n">neighbors_vectors</span><span class="p">(),</span> <span
             class="n">u</span><span class="p">)</span>
         <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">cross</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span
+            class="n">cross</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span
             class="n">v</span><span class="p">)</span>
 
         <span class="c1"># 2. Build feature vector</span>
@@ -925,20 +921,20 @@
             class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">alpha</span><span
             class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
             class="p">(</span><span class="n">alpha</span> <span class="o">&lt;</span> <span class="mi">0</span><span
-            class="p">)]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span
+            class="p">)]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span
             class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="n">phi</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">phi</span><span class="o">&lt;</span> <span
+            class="n">where</span><span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span
             class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">phi</span><span
             class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
-            class="p">(</span><span class="n">phi</span><span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="mi">0</span><span
             class="p">)]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span
             class="n">np</span><span class="o">.</span><span class="n">pi</span>
         <span class="n">theta</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
-            class="n">where</span><span class="p">(</span><span class="n">theta</span><span class="o">&lt;</span> <span
+            class="n">where</span><span class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span
             class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">theta</span><span
             class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
-            class="p">(</span><span class="n">theta</span><span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">(</span><span class="n">theta</span> <span class="o">&lt;</span> <span class="mi">0</span><span
             class="p">)]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span
             class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
@@ -947,20 +943,20 @@
             class="p">,</span> <span class="n">bins</span><span class="p">)</span>
         <span class="n">hist_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">histogram</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span
-            class="n">bins</span> <span class="p">)</span>
+            class="n">bins</span><span class="p">)</span>
         <span class="n">hist_theta</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">theta</span><span
-            class="p">,</span> <span class="n">bins</span> <span class="p">)</span>
+            class="p">,</span> <span class="n">bins</span><span class="p">)</span>
 
         <span class="n">tmp_alpha</span> <span class="o">=</span> <span class="n">hist_alpha</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
-            class="o">.</span><span class="n">numberOfNeighbors</span>
+            class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span
+            class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
         <span class="n">tmp_phi</span> <span class="o">=</span> <span class="n">hist_phi</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
-            class="o">.</span><span class="n">numberOfNeighbors</span>
+            class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span
+            class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
         <span class="n">tmp_theta</span> <span class="o">=</span> <span class="n">hist_theta</span><span
-            class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">neighborhood</span><span
-            class="o">.</span><span class="n">numberOfNeighbors</span>
+            class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span
+            class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
 
         <span class="n">hist_alpha</span> <span class="o">=</span> <span class="p">(</span><span
             class="n">tmp_alpha</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
@@ -973,10 +969,10 @@
             <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span
             class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
             <span class="n">figure</span><span class="p">,</span> <span class="p">(</span><span
-            class="n">ax1</span><span class="p">,</span><span class="n">ax2</span><span class="p">,</span> <span
+            class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span
             class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span
             class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span
-            class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            class="p">,</span> <span class="mi">3</span><span class="p">)</span>
             <span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span
             class="p">(</span><span class="s1">&#39;alpha&#39;</span><span class="p">)</span>
             <span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span
@@ -991,7 +987,7 @@
             class="n">theta</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span>
 
         <span class="c1"># 4. Construct the auxilary class SPFH_point</span>
-        <span class="k">return</span>  <span class="n">SPFH_point</span><span class="p">(</span><span class="n">neighborhood</span><span
+        <span class="k">return</span> <span class="n">SPFH_point</span><span class="p">(</span><span class="n">neighborhood</span><span
             class="p">,</span> <span class="n">hist_alpha</span><span class="p">,</span> <span class="n">hist_phi</span><span
             class="p">,</span> <span class="n">hist_theta</span><span class="p">)</span>
 
@@ -1032,11 +1028,12 @@
             class="n">spfh_neighbor</span><span class="o">.</span><span class="n">getFeatureVector</span><span
             class="p">()</span> <span class="o">/</span> <span class="n">distance_neighbor</span> <span
             class="k">for</span> <span class="n">spfh_neighbor</span><span class="p">,</span>
-                                     <span class="n">distance_neighbor</span> <span class="ow">in</span> <span
-            class="nb">zip</span><span class="p">(</span><span class="n">spfh_neighbors</span><span
-            class="p">,</span> <span class="n">spfh_current</span><span class="o">.</span><span
-            class="n">neighborhood</span><span class="o">.</span><span class="n">distances</span><span
-            class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
+                                                                                              <span class="n">distance_neighbor</span> <span
+            class="ow">in</span>
+                                     <span class="nb">zip</span><span class="p">(</span><span
+            class="n">spfh_neighbors</span><span class="p">,</span> <span class="n">spfh_current</span><span
+            class="o">.</span><span class="n">neighborhood</span><span class="o">.</span><span
+            class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]</span>
 
         <span class="k">return</span> <span class="n">spfh_current</span><span class="o">.</span><span class="n">getFeatureVector</span><span
             class="p">()</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span
@@ -1728,7 +1725,6 @@
             class="n">i</span><span class="p">,</span> <span class="n">j</span></div>
 
 
-
 <span class="k">class</span> <span class="nc">SPFH_property</span><span class="p">(</span><span
                                 class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1826,10 +1822,6 @@
                                 class="bp">self</span><span class="o">.</span><span class="n">phi_histogram</span><span
                                 class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_histogram</span><span
                                 class="p">))</span>
-
-
-
-
 </pre>
                         </div>
 

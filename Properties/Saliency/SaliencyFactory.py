@@ -110,7 +110,8 @@ class SaliencyFactory(object):
 
     @classmethod
     def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           weight_distance_sigma=0.05, weight_normals=1, verbose=False):
+                           weight_distance_sigma=0.05, association_percentage=20, association_weight=0.5,
+                           verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature and normal, as a function of the distance
 
@@ -133,16 +134,18 @@ class SaliencyFactory(object):
         :param curvature_attribute: the attribute according to which the curvature is measured.
         :param normals_property: normals property computed in advance
         :param neighbors_property: the neighborhood property of the point cloud.
-        :param weight_distance: weights for distance element. Default: 1.
-        :param weight_normals: weights for normal element. Default: 1.
+        :param weight_distance_sigma: sigma of the Gaussian accoring to which the distances are weighted. Also serves as the sigma for point association. Default: 0.05
+        :param association_percentage: percentage of points to serve as focal points. Default: 20\%
+        :param association_weight: the weight of the association saliency. Default: 0.5
         :param verbose: print running messages. Default: False
 
         :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
         :type normals_property: NormalsProperty.NormalsProperty
         :type curvature_attribute: str
         :type neighbors_property: NeighborsProperty.NeighborsProperty
-        :type weight_normals: float
-        :type weight_distance: float
+        :type weight_distance_sigma: float
+        :type association_percentage: float
+        :type association_weight: float
         :type verbose: bool
 
         :return: saliency values for each point
@@ -190,8 +193,23 @@ class SaliencyFactory(object):
             tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
             j += 1
 
+        # Use the only percentage of the highest low level distinctness to compute the high-level one
+        tensor_saliency = np.asarray(tensor_saliency)
+        sorted_idx = np.argsort(tensor_saliency)
+        num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
+        focus_points_idx = sorted_idx[-num_points_assoc:]
+        focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
 
-        return SaliencyProperty(neighbors_property.Points, np.asarray(tensor_saliency))
+        import itertools
+        points_association = list(map(cls.__point_association,
+                                      tqdm(neighbors_property.Points, desc='point association', position=0,
+                                           total=neighbors_property.Size), itertools.repeat(focus_points),
+                                      itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
+                                      itertools.repeat(weight_distance_sigma)))
+        tensor_saliency = association_weight * np.asarray(points_association) + (
+                    1 - association_weight) * tensor_saliency
+
+        return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
@@ -233,52 +251,51 @@ class SaliencyFactory(object):
         :rtype: SaliencyProperty
 
         .. seealso::
-            SaliencyFactory.__SPFH, SaliencyFactory.__FPFH, SaliencyFactory.__low_level_distinctness,
-            SaliencyFactory.__point_association, SaliencyFactory.__high_level_distinctness
+            :meth:`SaliencyFactory._SaliencyFactory__SPFH`, :meth:`SaliencyFactory._SaliencyFactory__FPFH`, :meth:`SaliencyFactory._SaliencyFactory__low_level_distinctness`,
+            :meth:`SaliencyFactory._SaliencyFactory__point_association`, :meth:`SaliencyFactory._SaliencyFactory__high_level_distinctness`
         """
         from MyTools import chi2_distance
+        import itertools
+        from functools import partial
 
         pointset = neighborhoods.Points
-        spfh_property = SPFH_property(pointset)
+        # spfh_property = SPFH_property(pointset)
         k = 0
         # 1. For each point compute the simplified point feature histogram
-        for neighborhood, i in zip(neighborhoods, tqdm(range(neighborhoods.Size), desc='SPFH for all point cloud')):
-            spfh_point = cls.__SPFH(neighborhood, normals, num_bins, verbose=False)
-            spfh_property.set_spfh(neighborhood.center_point_idx, spfh_point)
+
+        spfh_point = list(map(partial(cls.__SPFH, normals=normals, num_bins=num_bins, verbose=False),
+                              tqdm(neighborhoods, total=neighborhoods.Size, desc='SPFH...')))
+        spfh_property = SPFH_property(pointset, spfh_point)
+        # for neighborhood, i in zip(neighborhoods, tqdm(range(neighborhoods.Size), desc='SPFH for all point cloud')):
+        #     spfh_point = cls.__SPFH(neighborhood, normals, num_bins, verbose=False)
+        #     spfh_property.set_spfh(neighborhood.center_point_idx, spfh_point)
 
         # 2. For each SPFH compute the FPFH
-        fpfh = []
-
-        for spfh, j in zip(spfh_property,
-                           trange(spfh_property.Size, desc='FPFH for all point cloud', position=0)):
-            fpfh.append(cls.__FPFH(spfh, spfh_property))
+        # fpfh = []
+        fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
+                        tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
 
         # 3. Low level distinctness,
-        D_low = []
+        current_hist = []
         pointset_distances = []
 
-        for i, point, j in zip(range(pointset.Size), pointset.ToNumpy(),
-                               tqdm(range(pointset.Size), desc='low level distinctness', position=0)):
+        for i, j in zip(range(pointset.Size),
+                        trange(pointset.Size, desc='chi square', position=0)):
 
             tmp_fpfh = fpfh.copy()
             current_hist = tmp_fpfh.pop(i)
 
-            if np.any(np.isnan(current_hist)):
-                D_low.append(0)
-                continue
-
             # 3.1 Compute the Chi-square distance of each histogram to each histogram
-            tmp_fpfh = np.asarray(tmp_fpfh)
-            chi_dist = chi2_distance(current_hist, tmp_fpfh)
-
-            pointset_distances.append(chi_dist)
+            chi_square_dist = chi2_distance(current_hist, np.asarray(tmp_fpfh))
+            pointset_distances.append(chi_square_dist)
 
             # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
-            dmin = low_level_percentage / 100 * chi_dist.max()
-            D_low.append(cls.__low_level_distinctness(point, pointset, chi_dist, dmin))
-
+        pointset_distances = np.asarray(pointset_distances)
+        dmin = low_level_percentage / 100 * pointset_distances.max(axis=1)
+        D_low = list(
+            map(cls.__low_level_distinctness, tqdm(pointset, total=pointset.Size, desc='low level distinctness',
+                                                   position=0), itertools.repeat(pointset), pointset_distances, dmin))
         D_low = np.asarray(D_low)
-
         sorted_idx = np.argsort(D_low)  # Sort the low level distinctness according to magnitude
 
         # 4. Point association
@@ -288,22 +305,20 @@ class SaliencyFactory(object):
         num_points_assoc = int(association_percentage / 100 * pointset.Size)
         focus_points_idx = sorted_idx[-num_points_assoc:]
         focus_points = pointset.GetPoint(focus_points_idx)
+        A_low = list(map(cls.__point_association, tqdm(pointset, total=pointset.Size,
+                                                       desc='point association', position=0),
+                         itertools.repeat(focus_points), itertools.repeat(focus_points_idx),
+                         itertools.repeat(D_low), itertools.repeat(sigma)))
 
         # 5. High level distinctness
-        D_high = []
-
         # Use the only percentage of the highest low level distinctness to compute the high-level one
         num_points = int(high_level_percentage / 100 * pointset.Size)
         valid_idx = sorted_idx[-num_points:]
         valid_pts = pointset.GetPoint(valid_idx)
+        D_high = list(map(cls.__high_level_distinctness, tqdm(pointset, total=pointset.Size,
+                                                              desc='high-level distinctness', position=0),
+                          itertools.repeat(valid_pts), itertools.repeat(valid_idx), pointset_distances))
 
-        for point, current_dist, k in zip(pointset.ToNumpy(), pointset_distances,
-                                          trange(pointset.Size, desc='Association and high-level distinctness',
-                                                 position=0)):
-            # compute point association
-            A_low.append(cls.__point_association(point, focus_points, focus_points_idx, D_low, sigma))
-            # compute high-level distinctness
-            D_high.append(cls.__high_level_distinctness(point, valid_pts, valid_idx, current_dist))
         A_low = np.asarray(A_low)
         D_high = np.asarray(D_high)
 
@@ -442,7 +457,7 @@ class SaliencyFactory(object):
                 \begin{array}
                 \alpha = v \cdot {\bf N_t} \\
                 \phi = u \cdot \frac{p_t-p}{||p_t-p||} \\
-                \theta = \arctan(w\cdot {\bf N_t}, u\cdot {\bf N_t}
+                \theta = \arctan(w\cdot {\bf N_t}, u\cdot {\bf N_t})
                 \end{array}
 
         with :math:`p_t` a point in the neighborhood and :math:`{\bf N_t}` the normal of each neighbor.
@@ -545,10 +560,13 @@ class SaliencyFactory(object):
 
         spfh_neighbors = spfh_property.getPointSPFH(spfh_current.neighborhood.neighborhoodIndices[1:])
 
-        spfh_neighbors_normalized = [spfh_neighbor.getFeatureVector() / distance_neighbor for spfh_neighbor,
-                                                                                              distance_neighbor in
-                                     zip(spfh_neighbors, spfh_current.neighborhood.distances[1:])]
+        spfh_neighbors_normalized = list(
+            map(lambda spfh_neighbor, distance_neighbor: spfh_neighbor.getFeatureVector() / distance_neighbor,
+                spfh_neighbors, spfh_current.neighborhood.distances[1:]))
 
+        # [spfh_neighbor.getFeatureVector() / distance_neighbor for spfh_neighbor,
+        #                                                                                   distance_neighbor in
+        #                         ]
         return spfh_current.getFeatureVector() + np.mean(np.asarray(spfh_neighbors_normalized), axis=0)
 
     # ------------------- Saliency on Panorama Property ---------------------
@@ -980,9 +998,12 @@ class SPFH_property(BaseProperty):
     """
     spfh = None
 
-    def __init__(self, pointset):
+    def __init__(self, pointset, spfhs=None):
         super(SPFH_property, self).__init__(pointset)
-        self.spfh = np.empty(pointset.Size, SPFH_point)
+        if spfhs is None:
+            self.spfh = np.empty(pointset.Size, SPFH_point)
+        else:
+            self.spfh = np.asarray(spfhs)
 
     def set_spfh(self, idx, spfh_point):
         """
