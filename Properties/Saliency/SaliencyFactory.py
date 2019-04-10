@@ -569,6 +569,18 @@ class SaliencyFactory(object):
         #                         ]
         return spfh_current.getFeatureVector() + np.mean(np.asarray(spfh_neighbors_normalized), axis=0)
 
+    def FPFH_open3d(self, pointset_open3d, knn):
+        """
+        Compute the FPFH via open3d.
+
+        .. note::
+            This is implemented as proposed in :cite:`Rusu.etal2009` and not modified to :cite:`Shtrom.etal2013`.
+            This means that the SPFH is not defined as absolute values of the angles, but as the angles themselves.
+
+        :param pointset_open3d:
+        :param knn:
+        :return:
+        """
     # ------------------- Saliency on Panorama Property ---------------------
     @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):
