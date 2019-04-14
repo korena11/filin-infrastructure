@@ -157,6 +157,8 @@ class SaliencyFactory(object):
 
         tensor_saliency = []
         j = 0
+        kstd = []
+        kmean = []
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
                                                               desc='Curvature Saliency for each neighborhood')):
             if neighborhood.numberOfNeighbors < 3:
@@ -180,6 +182,8 @@ class SaliencyFactory(object):
             # difference in curvature
             dk = np.abs(current_curvatures[1:] - current_curvatures[0])
             dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+            kstd.append(np.std(dk))
+            kmean.append(np.mean(dk))
 
             # distances influence
             dist_element = 1 / (2 * np.pi * weight_distance_sigma ** 2) * \
@@ -193,22 +197,25 @@ class SaliencyFactory(object):
             tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
             j += 1
 
-        # Use the only percentage of the highest low level distinctness to compute the high-level one
+        # Use only percentage of the highest low level distinctness to compute the high-level one
         tensor_saliency = np.asarray(tensor_saliency)
         sorted_idx = np.argsort(tensor_saliency)
         num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
-        focus_points_idx = sorted_idx[-num_points_assoc:]
+        focus_points_idx = np.hstack((sorted_idx[:int(num_points_assoc)], sorted_idx[-num_points_assoc:]))
         focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
 
         import itertools
-        points_association = list(map(cls.__point_association,
-                                      tqdm(neighbors_property.Points, desc='point association', position=0,
-                                           total=neighbors_property.Size), itertools.repeat(focus_points),
-                                      itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
-                                      itertools.repeat(weight_distance_sigma)))
-        tensor_saliency = association_weight * np.asarray(points_association) + (
+        if association_weight != 0:
+            points_association = list(map(cls.__point_association,
+                                          tqdm(neighbors_property.Points, desc='point association', position=0,
+                                               total=neighbors_property.Size), itertools.repeat(focus_points),
+                                          itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
+                                          itertools.repeat(weight_distance_sigma)))
+            tensor_saliency = association_weight * np.asarray(points_association) + (
                     1 - association_weight) * tensor_saliency
-
+        else:
+            tensor_saliency = (1 - association_weight) * tensor_saliency
+        print('kmean {a} kstd {b}'.format(a=np.asarray(kmean).mean(), b=np.asarray(kstd).mean()))
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
@@ -257,9 +264,11 @@ class SaliencyFactory(object):
         from MyTools import chi2_distance
         import itertools
         from functools import partial
+        import open3d as o3d
 
         pointset = neighborhoods.Points
-        # spfh_property = SPFH_property(pointset)
+        search_param = o3d.KDTreeSearchParamHybrid(radius=neighborhoods.average_neighborhood_radius(),
+                                                   max_nn=neighborhoods.average_neighborhood_size())
         k = 0
         # 1. For each point compute the simplified point feature histogram
 
@@ -275,6 +284,9 @@ class SaliencyFactory(object):
         fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
                         tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
 
+        # 1 + 2. Compute FPFH open3d
+        # fpfh = SaliencyFactory.FPFH_open3d(pointset, search_param).T
+        # fpfh = fpfh.tolist()
         # 3. Low level distinctness,
         current_hist = []
         pointset_distances = []
@@ -569,7 +581,8 @@ class SaliencyFactory(object):
         #                         ]
         return spfh_current.getFeatureVector() + np.mean(np.asarray(spfh_neighbors_normalized), axis=0)
 
-    def FPFH_open3d(self, pointset_open3d, knn):
+    @classmethod
+    def FPFH_open3d(self, pointset_open3d, knn_search_param):
         """
         Compute the FPFH via open3d.
 
@@ -577,10 +590,39 @@ class SaliencyFactory(object):
             This is implemented as proposed in :cite:`Rusu.etal2009` and not modified to :cite:`Shtrom.etal2013`.
             This means that the SPFH is not defined as absolute values of the angles, but as the angles themselves.
 
-        :param pointset_open3d:
-        :param knn:
-        :return:
+        :param pointset_open3d: the point cloud as PointSetOpen3D. if a PointSet is received it is change to PointSetOpen3D.
+        :param knn_search_param: the type of search: knn, rnn or hybrid.
+
+        :type pointset_open3d: PointSet, PointSetOpen3D.PointSetOpen3D
+        :type knn_search_param: class
+
+        :return: feature vector FPFH
+
+        :rtype: np.array
+
+        ** Usage example **
+
+        .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
+           :lines: 50-60
+           :emphasize-lines: 10
+           :linenos:
+
         """
+
+        import open3d as o3d
+        from PointSetOpen3D import PointSetOpen3D
+
+        if isinstance(pointset_open3d, PointSetOpen3D):
+            fpfh = o3d.registration.compute_fpfh_feature(pointset_open3d.data, knn_search_param)
+        else:
+            p3d = PointSetOpen3D(pointset_open3d)
+            fpfh = o3d.registration.compute_fpfh_feature(p3d.data, knn_search_param)
+
+        return fpfh.data
+
+
+
+
     # ------------------- Saliency on Panorama Property ---------------------
     @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):

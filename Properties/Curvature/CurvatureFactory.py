@@ -219,7 +219,7 @@ class CurvatureFactory:
         return k1[0], k2[0]
 
     @classmethod
-    def umbrella_curvature(cls, neighbrohood, normals,
+    def umbrella_curvature(cls, neighbrohood, normals, min_obj_size=0.01, alpha=0.05,
                            min_points_in_neighborhood=8, min_points_in_sector=1, valid_sectors=7, num_sectors=8,
                            invalid_value=-999, cuvatureProperty=None, verbose=False):
         r"""
@@ -234,8 +234,13 @@ class CurvatureFactory:
 
         with :math:`N_i` the neighbor i of point :math:`p`, and :math:`\bf{n}` the normal at point :math:`p`.
 
+        .. note::
+            Each projection is checked so it will not be statistically zero in confidence level of :math:`\alpha`.
+
         :param neighbrohood: neighborhood property of a point cloud
         :param normals: normals property of a point cloud
+        :param min_obj_size: minimal object size - usually refers to surface roughness
+        :param alpha: confidence value for statistical test
         :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 8
         :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 1
         :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
@@ -246,6 +251,8 @@ class CurvatureFactory:
 
         :type neighbrohood: NeighborsProperty.NeighborsProperty
         :type normals: NormalsProperty.NormalsProperty
+        :type min_obj_size: float
+        :type alpha: float
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int
         :type valid_sectors: int
@@ -263,6 +270,7 @@ class CurvatureFactory:
            :meth:`__good_point` and :meth:`__checkNeighborhood`
 
         """
+        from scipy import stats
         umbrellaCurvature = []
 
         for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
@@ -278,8 +286,13 @@ class CurvatureFactory:
                     print(point_idx, n)
 
                 # compute the directions projections  on the normal at the center point of each neighbor
-                directions = point_neighbors.neighbors_vectors().dot(n)
-                umbrellaCurvature.append(np.sum(directions))
+                projections = point_neighbors.neighbors_vectors().dot(n)
+
+                # check if the projections are statistically zero
+                epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
+                projections[np.where(projections < -epsilon) and np.where(projections > epsilon)] = 0
+
+                umbrellaCurvature.append(np.sum(projections) / projections.shape)
 
             else:
                 if verbose:

@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib.path import Path
 from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import kdtree as cKDTree
+from tqdm import tqdm
 
 from NeighborsProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
@@ -154,14 +155,13 @@ class NeighborsFactory:
 
         idx = pointset_bt.queryRadius(pointset_bt.ToNumpy(), search_radius)
 
-        for id in range(len(idx)):
+        for id in tqdm(range(len(idx)), total=len(idx), desc='rnn neighbors by ball tree', position=0):
             current_id = np.asarray(idx[id])
             tmp_subset = PointSubSet(pointset_bt.GetPoint(current_id), current_id)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset)
             neighbors.setNeighborhood(id, tmp_point_neighborhood)
 
         return neighbors
-
 
     @staticmethod
     def pointSetOpen3D_rnn_kdTree(pointset3d, search_radius, verbose=False):
@@ -193,7 +193,8 @@ class NeighborsFactory:
 
         neighbors = NeighborsProperty(pointset3d)
 
-        for point, i in zip(pointset3d, range(pointset3d.Size)):
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute rnn neighbors for all point cloud', position=0):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_radius_vector_3d(point,
                                                                                 search_radius)
             distances = np.asarray(distances)
@@ -229,7 +230,7 @@ class NeighborsFactory:
 
         idx = pointset_bt.query(pointset_bt.ToNumpy(), k_nearest_neighbors)
 
-        for id in range(len(idx)):
+        for id in tqdm(range(len(idx)), total=len(idx), desc='knn neighbors by ball tree', position=0):
             current_id = np.asarray(idx[id])
             tmp_subset = PointSubSet(pointset_bt, current_id)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset)
@@ -262,7 +263,8 @@ class NeighborsFactory:
 
         neighbors = NeighborsProperty(pointset3d)
 
-        for point, i in zip(pointset3d, range(pointset3d.Size)):
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute knn neighbors for all point cloud', position=0):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_knn_vector_3d(point, k_nearest_neighbors + 1)
             distances = np.asarray(distances)
             if np.all(np.round(distances) == 0):
@@ -304,7 +306,8 @@ class NeighborsFactory:
 
         neighbors = NeighborsProperty(pointset3d)
 
-        for point, i in zip(pointset3d, range(pointset3d.Size)):
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute rknn neighbors for all point cloud', position=0):
             k, idx, distances = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=max_radius,
                                                                                 max_nn=k_nearest_neighbors + 1)
 
@@ -316,7 +319,7 @@ class NeighborsFactory:
             tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
 
             # set in neighbors property
-            neighbors.setNeighbor(i, tmp_point_neighborhood)
+            neighbors.setNeighborhood(i, tmp_point_neighborhood)
 
         return neighbors
 

@@ -23,6 +23,8 @@ class NeighborsProperty(BaseProperty):
         """
         super(NeighborsProperty, self).__init__(points)
         self.__pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
+        self.__averageRadius = None
+        self.__averageNeighborsNumber = None
 
     def __next__(self):
         self.current += 1
@@ -87,3 +89,35 @@ class NeighborsProperty(BaseProperty):
         else:
             subset = point_neighbors.neighbors
             self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
+
+    def average_neighborhood_radius(self):
+        """
+        compute the average radius of all the point neighborhood in the class
+
+        :return: the average radius
+
+        :rtype: float
+        """
+        if self.__averageRadius is None:
+            radii = []
+            for point_neighborhood in self.__pointsNeighborsArray:
+                radii.append(point_neighborhood.radius)
+
+            self.__averageRadius = np.asarray(radii).mean()
+        return self.__averageRadius
+
+    def average_neighborhood_size(self):
+        """
+        compute the average number of neighbors of all the point neighborhood in the class
+
+        :return: the average radius
+
+        :rtype: float
+        """
+        if self.__averageNeighborsNumber is None:
+            size = []
+            for point_neighborhood in self.__pointsNeighborsArray:
+                size.append(point_neighborhood.numberOfNeighbors)
+
+            self.__averageNeighborsNumber = int(np.asarray(size).mean())
+        return self.__averageNeighborsNumber

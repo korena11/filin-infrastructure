@@ -132,3 +132,4 @@ class PointNeighborhood:
             print('Point set has two identical points at {}'.format(center_pt))
         return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
                                                                None]
+
