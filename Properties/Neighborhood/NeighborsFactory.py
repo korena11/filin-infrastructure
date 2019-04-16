@@ -6,7 +6,6 @@ from tqdm import tqdm
 
 from NeighborsProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
-# Infrastructure imports
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
@@ -157,7 +156,7 @@ class NeighborsFactory:
 
         for id in tqdm(range(len(idx)), total=len(idx), desc='rnn neighbors by ball tree', position=0):
             current_id = np.asarray(idx[id])
-            tmp_subset = PointSubSet(pointset_bt.GetPoint(current_id), current_id)
+            tmp_subset = PointSubSet(pointset_bt, current_id)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset)
             neighbors.setNeighborhood(id, tmp_point_neighborhood)
 

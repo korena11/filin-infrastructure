@@ -116,8 +116,8 @@ def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
 
         if len(colors) == len(pts):
             colorslist = ColorFactory.assignColor(points, np.array(colors)[0])
-        else:
-            warnings.warn('Some points don''t have color values. No color property created')
+        # else:
+        #     warnings.warn('Some points don''t have color values. No color property created')
 
         return points
 
