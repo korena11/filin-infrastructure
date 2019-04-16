@@ -219,13 +219,6 @@ class NeighborsFactory:
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
         list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
 
-        # TODO: Delte after validating correctness of the above map/lambda functions
-        # for id in tqdm(range(len(idx)), total=len(idx), desc='rnn neighbors by kd-tree', position=0):
-        #     current_id = np.asarray(idx[id])
-        #     tmp_subset = PointSubSet(pointset_kdt, current_id)
-        #     tmp_point_neighborhood = PointNeighborhood(tmp_subset)
-        #     neighbors.setNeighborhood(id, tmp_point_neighborhood)
-
         return neighbors
 
     @staticmethod
@@ -253,13 +246,6 @@ class NeighborsFactory:
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
         list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
-
-        # TODO: Delte after validating correctness of the above map/lambda functions
-        # for id in tqdm(range(len(idx)), total=len(idx), desc='knn neighbors by ball tree', position=0):
-        #     current_id = np.asarray(idx[id])
-        #     tmp_subset = PointSubSet(pointset_bt, current_id)
-        #     tmp_point_neighborhood = PointNeighborhood(tmp_subset)
-        #     neighbors.setNeighborhood(id, tmp_point_neighborhood)
 
         return neighbors
 
