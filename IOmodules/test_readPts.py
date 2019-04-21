@@ -22,7 +22,7 @@ class TestReadPts(TestCase):
         self.assertEqual(filename, pointsetlist[0].path, 'path was not set')
 
         print('passed with lists')
-        print('passed seperate PointSets')
+        print('passed separate PointSets')
         # self.fail()
 
     def test_ReadPts_default(self):

@@ -278,6 +278,27 @@ class IOFactory:
         return ReadFunctions.ReadLAS(fileName, classification_flag)
 
     @classmethod
+    def ReadPly(cls, filename, returnAdditionalAttributes=True):
+        """
+        Reading ply file
+        The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and
+        their intensity values. If additional attributes exist they are returned as a dictionary with the attribute
+        names as the keys
+
+        :param filename: path to *.ply file
+        :param returnAdditionalAttributes: Indicator whether or not return the additional attributes that exist
+
+        :type filename: str
+        :type returnAdditionalAttributes: bool
+
+        :return: PointSet object and dictionary with additional properties (optional)
+
+        :rtype: tuple of PointSet object and a dictionary
+        """
+        return ReadFunctions.ReadPly(filename, returnAdditionalAttributes)
+
+
+    @classmethod
     def ReadShapeFile(cls, fileName, pointSetList):
         # TODO: make small functions from other kinds of shapefiles rather than polylines
         """
