@@ -6,7 +6,6 @@ from tqdm import tqdm
 
 from NeighborsProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
-# Infrastructure imports
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
@@ -164,6 +163,93 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
+    def balltreePointSet_knn(pointset_bt, k_nearest_neighbors):
+        """
+        Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
+
+        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed
+        :param k_nearest_neighbors: the number of neighbors
+
+        :type pointset_bt: BallTreePointSet.BallTreePointSet
+        :type k_nearest_neighbors: int
+
+        :return: NeighborsProperty
+
+        .. seealso::
+           :meth:`balltreePointSet_rnn`
+
+        """
+        print('>>> Find all points neighbors using ball tree')
+
+        neighbors = NeighborsProperty(pointset_bt)  # initialization of the neighborhood property
+
+        idx = pointset_bt.query(pointset_bt.ToNumpy(), k_nearest_neighbors)
+
+        for id in tqdm(range(len(idx)), total=len(idx), desc='knn neighbors by ball tree', position=0):
+            current_id = np.asarray(idx[id])
+            tmp_subset = PointSubSet(pointset_bt, current_id)
+            tmp_point_neighborhood = PointNeighborhood(tmp_subset)
+            neighbors.setNeighborhood(id, tmp_point_neighborhood)
+
+        return neighbors
+
+    @staticmethod
+    def kdtreePointSet_rnn(pointset_kdt, search_radius):
+        """
+        Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
+
+        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
+        :param search_radius: the neighborhood radius
+        :param verbose: print running messages
+
+        :type pointset_kdt: KdTreePointSet.KdTreePointSet
+        :type search_radius: float
+        :type verbose: bool
+
+        :return: NeighborsProperty
+        """
+
+        print('>>> Find all points neighbors using kd-Tree')
+
+        neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+
+        idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy(), search_radius)
+
+        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
+        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
+        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
+
+        return neighbors
+
+    @staticmethod
+    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors):
+        """
+        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
+
+        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
+        :param k_nearest_neighbors: the number of neighbors
+
+        :type pointset_kdt: KdTreePointSet.KdTreePointSet
+        :type k_nearest_neighbors: int
+
+        :return: NeighborsProperty
+
+        .. seealso::
+           :meth:`kdtreePointSet_rnn`
+
+        """
+        print('>>> Find all points neighbors using kd-tree')
+
+        neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+
+        idx = pointset_kdt.query(pointset_kdt.ToNumpy(), k_nearest_neighbors)
+        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
+        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
+        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
+
+        return neighbors
+
+    @staticmethod
     def pointSetOpen3D_rnn_kdTree(pointset3d, search_radius, verbose=False):
         """
         Create NeighborsProperty of PointSetOpen3D (whole cloud) based on search radius (RNN)
@@ -204,37 +290,6 @@ class NeighborsFactory:
             tmp_subset = PointSubSetOpen3D(pointset3d, idx)
             tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
             neighbors.setNeighborhood(i, tmp_point_neighborhood)
-
-        return neighbors
-
-    @staticmethod
-    def balltreePointSet_knn(pointset_bt, k_nearest_neighbors):
-        """
-        Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
-
-        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed
-        :param k_nearest_neighbors: the number of neighbors
-
-        :type pointset_bt: BallTreePointSet.BallTreePointSet
-        :type search_radius: int
-
-        :return: NeighborsProperty
-
-        .. seealso::
-           :meth:`balltreePointSet_rnn`
-
-        """
-        print('>>> Find all points neighbors using ball tree')
-
-        neighbors = NeighborsProperty(pointset_bt)  # initialization of the neighborhood property
-
-        idx = pointset_bt.query(pointset_bt.ToNumpy(), k_nearest_neighbors)
-
-        for id in tqdm(range(len(idx)), total=len(idx), desc='knn neighbors by ball tree', position=0):
-            current_id = np.asarray(idx[id])
-            tmp_subset = PointSubSet(pointset_bt, current_id)
-            tmp_point_neighborhood = PointNeighborhood(tmp_subset)
-            neighbors.setNeighborhood(id, tmp_point_neighborhood)
 
         return neighbors
 
