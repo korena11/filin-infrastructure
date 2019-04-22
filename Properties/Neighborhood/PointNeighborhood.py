@@ -61,6 +61,9 @@ class PointNeighborhood:
         return self.__neighbors.GetIndices
 
     @property
+    def Size(self):
+        return self.numberOfNeighbors
+    @property
     def neighbors(self):
         """
         Return a point set of the neighborhood

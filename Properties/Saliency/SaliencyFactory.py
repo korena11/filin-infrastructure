@@ -154,6 +154,7 @@ class SaliencyFactory(object):
         """
         import CurvatureProperty
         from warnings import warn
+        from matplotlib import pyplot as plt
 
         tensor_saliency = []
         j = 0
@@ -196,6 +197,25 @@ class SaliencyFactory(object):
 
             tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
             j += 1
+            import scipy.stats as stats
+            from VisualizationO3D import VisualizationO3D
+            vis = VisualizationO3D()
+            if j % 500:
+                fig, axes = plt.subplots(2, 2)
+                axes[0, 0].set_title('dk')
+                axes[0, 0].hist(dk)
+                axes[0, 1].set_title('dk_normed')
+                axes[0, 1].hist(dk_normed)
+                axes[1, 0].hist(dn)
+                axes[1, 0].set_title('dn')
+                axes[1, 1].hist(dn_normed)
+                axes[1, 1].set_title('dn_normed')
+                plt.show()
+                st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
+                print(st)
+                if st[1] > 0.005:
+                    vis.visualize_pointset(neighborhood)
+                
 
         # Use only percentage of the highest low level distinctness to compute the high-level one
         tensor_saliency = np.asarray(tensor_saliency)

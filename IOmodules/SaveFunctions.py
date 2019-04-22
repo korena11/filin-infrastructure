@@ -28,7 +28,6 @@ from SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 from shapefile import Writer, POINTZ
 
-
 def WriteToPts(points, path):
     '''
     Write to pts file
