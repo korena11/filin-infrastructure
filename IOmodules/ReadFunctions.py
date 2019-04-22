@@ -21,6 +21,11 @@ from PointSet import PointSet
 from RasterData import RasterData
 from TransformationMatrixProperty import TransformationMatrixProperty
 
+try:
+    from plyfile import PlyData
+except:
+    warnings.warn('Failed to import plyfile lib. Reading *.ply files will fail.')
+
 
 def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
     """
@@ -427,3 +432,47 @@ def __splitPtsString(line):
 
     tmp = line.split()
     return np.array(list(map(float, tmp)))
+
+
+def ReadPly(filename, returnAdditionalAttributes=True):
+    """
+    Reading ply file
+    The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and
+    their intensity values. If additional attributes exist they are returned as a dictionary with the attribute names
+    as the keys
+
+    :param filename: path to *.ply file
+    :param returnAdditionalAttributes: Indicator whether or not return the additional attributes that exist in the file
+
+    :type filename: str
+    :type returnAdditionalAttributes: bool
+
+    :return: PointSet object and a dictionary with additional properties (optional)
+
+    :rtype: tuple of a PointSet object and a dictionary
+    """
+
+    try:
+        plyData = PlyData.read(filename)  # Reading ply file
+        properties = list(map(lambda p: p.name, plyData['vertex'].properties))  # Getting list of properties of vertices
+        data = plyData['vertex'].data
+
+        # Extracting the 3-D coordinates of the points
+        xyz = np.array([data['x'], data['y'], data['z']]).T
+
+        # Extracting the intensity values of the points if they exist
+        intensity = data['reflectance'] if 'reflectance' in properties else None
+
+        # Creating the PointSet object
+        pntSet = PointSet(points=xyz, intensity=intensity)
+
+        if not returnAdditionalAttributes:
+            return pntSet
+        else:
+            attributes = {}
+            for p in properties:
+                if p not in ['x', 'y', 'z', 'reflectance']:
+                    attributes[p] = data[p]
+            return pntSet, attributes
+    except:
+        print('Failed to extract data from ply file')
