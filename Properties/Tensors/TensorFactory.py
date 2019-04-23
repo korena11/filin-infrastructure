@@ -43,7 +43,7 @@ class TensorFactory(object):
 
         :rtype: Tensor
 
-                """
+        """
 
         if point_index == -1:
             points_array = points.ToNumpy()
@@ -57,14 +57,15 @@ class TensorFactory(object):
             points_array2 = points_array[:local_idx[0][0], :]
             points_array = np.vstack((points_array1, points_array2))
 
-        # points_array = points.ToNumpy()
-        deltas = points_array - ref_point
-
         # Set weights, if needed:
         if 'radius' in kwargs:
+            # points_array = points.ToNumpy()
+            deltas = points_array - ref_point
+
             sigma = kwargs['radius'] / 3
             w = (1 / np.sqrt(2 * np.pi * sigma ** 2)) * np.exp(
                 -(deltas[:, 0] ** 2 + deltas[:, 1] ** 2 + deltas[:, 2] ** 2) / (2 * sigma ** 2))
+
             if np.sum(np.isnan(w)) > 0 or np.sum(np.isinf(w)) > 0 or np.abs(np.sum(w)) < 1e-10:
                 w = np.ones(points_array[:, 0].shape)
         else:

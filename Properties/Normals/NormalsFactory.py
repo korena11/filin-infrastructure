@@ -8,6 +8,7 @@ from sklearn.neighbors import BallTree, KDTree
 
 from Normals.NormalsProperty import NormalsProperty
 from PointSet import PointSet
+from PointSetOpen3D import PointSetOpen3D
 
 if sys.platform == 'linux':
     pass
@@ -219,19 +220,33 @@ class NormalsFactory:
         return n
 
     @staticmethod
-    def normals_open3D(pointcloud):
+    def normals_open3D(pointcloud, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.)):
         """
         Computes the normals using open 3D
 
         :param pointcloud: an open 3d point cloud object
+        :param search_radius: neighbors radius for normal computation. Default: 0.05
+        :param maxNN: maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.
+        :param orientation: "camera" orientation. The orientation towards which the normals are computed. Default: (0,0,0)
 
-        :type pointcloud: open3d.PointCloud
+        :type pointcloud: PointSetOpen3D
+        :type search_radius: float
+        :type maxNN: int
+        :type orientation: tuple
 
         :return: normals property and the pointcloud with normals
-
-        .. warning::
-            Empty. Needs to be filled
         """
+        # checking if the set point set is an object of PointSetOpen3D
+        if not isinstance(pointcloud, PointSetOpen3D):
+            _pointcloud = PointSetOpen3D(pointcloud)
+        else:
+            _pointcloud = pointcloud
+
+        _pointcloud.CalculateNormals(search_radius, maxNN, orientation)  # computing the normals using open3D method
+        normals = np.array(_pointcloud.data.normals)
+
+        return NormalsProperty(pointcloud, normals)
+
 
     @staticmethod
     def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
@@ -296,5 +311,5 @@ if __name__ == "__main__":
     VisualizationVTK.Show()
 
 #    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
-#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    
+#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())
 #    show()

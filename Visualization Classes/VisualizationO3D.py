@@ -3,6 +3,7 @@ import numpy as np
 import open3d as o3d
 
 from BaseProperty import BaseProperty
+from Normals.NormalsProperty import NormalsProperty
 from PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 
 
@@ -95,6 +96,8 @@ class VisualizationO3D:
         key_to_callback = self.initialize_key_to_callback()
 
         self.pointset = PointSetOpen3D(propertyclass.Points)
+        if isinstance(propertyclass, NormalsProperty):
+            self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
         colors_new = []
         attribute_name = []
         for att in dir(propertyclass):
