@@ -15,7 +15,7 @@ import numpy as np
 from NeighborsProperty import NeighborsProperty
 from PointSet import PointSet
 from TensorProperty import TensorProperty
-from Tensors.tensor import Tensor
+from Tensors.Tensor import Tensor
 
 
 class TensorFactory(object):
@@ -46,12 +46,19 @@ class TensorFactory(object):
         """
 
         if point_index == -1:
-            points_array = points.ToNumpy()
+            if isinstance(points, PointSet):
+                points_array = points.ToNumpy()
+            elif isinstance(points, np.ndarray):
+                points_array = points
+            else:
+                raise TypeError('Unexpected type of \'points\' object')
             ref_point = -1
 
         else:
             ref_point = points.GetPoint(point_index)
             points_array = points.ToNumpy()
+
+            # TODO: check validity and remove redundant code
             local_idx = np.nonzero(ref_point in points_array)
             points_array1 = points_array[local_idx[0][0] + 1:, :]
             points_array2 = points_array[:local_idx[0][0], :]
@@ -163,7 +170,8 @@ class TensorFactory(object):
         return Tensor(covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2), n1 + n2)
 
     @staticmethod
-    def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty=None, neighborsFunc=None, **kwargs):
+    def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty=None, neighborsFunc=None,
+                                                 equalWeights=True, **kwargs):
         """
         Compute tensors for a point cloud.
 
@@ -178,8 +186,8 @@ class TensorFactory(object):
         :param neighborsFunc: the function to be used for neighbors search.
         :param kwargs: the arguments for the function to be used for neighbors search. These are usually:
 
-            :param radius: search radius for neighbors search
-            :param knn: k nearest neighbors for neighbors search
+        :param radius: search radius for neighbors search
+        :param knn: k nearest neighbors for neighbors search
 
         :type points: PointSet
         :type neighborhoodProperty: NeighborhoodProperty
@@ -209,10 +217,13 @@ class TensorFactory(object):
 
                 neighbors = neighborhoodProperty.getNeighborhood(i)
 
-                if neighbors == None:
+                if neighbors is None:
                     continue
-                radius = neighbors.radius
-                tensors.setPointTensor(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+                if equalWeights:
+                    tensors.setPointTensor(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0))
+                else:
+                    radius = neighbors.radius
+                    tensors.setPointTensor(i, TensorFactory.tensorFromPoints(neighbors.neighbors, 0, radius=radius))
 
         else:
             # compute neighbors and tensor at the same time
@@ -223,8 +234,12 @@ class TensorFactory(object):
                     points = PointSetOpen3D(points)
 
                 neighbors = neighborsFunc(points, i, *kwargs, neighborsProperty=neighborhoodProperty)
-                radius = neighbors.radius
-                # always around the first points, as the point around which the tensor is looked is the first on the
-                # neighbors list (the closest to itself)
-                tensors.load(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
+
+                if equalWeights:
+                    tensors.load(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i))
+                else:
+                    radius = neighbors.radius
+                    # always around the first points, as the point around which the tensor is looked is the first on the
+                    # neighbors list (the closest to itself)
+                    tensors.load(i, TensorFactory.tensorFromPoints(neighbors.neighbors, i, radius=radius))
         return tensors

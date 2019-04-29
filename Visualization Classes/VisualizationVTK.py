@@ -3,12 +3,11 @@ import numpy as np
 import vtk
 
 import VisualizationUtils
-# Framework Imports
 from BaseProperty import BaseProperty
 from ColorProperty import ColorProperty
 from PointSet import PointSet
 from PointSubSet import PointSubSet
-from SegmentationProperty import SegmentationProperty
+from Segmentation.SegmentationProperty import SegmentationProperty
 
 
 class VisualizationVTK:

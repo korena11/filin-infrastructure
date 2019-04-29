@@ -57,7 +57,7 @@ class Tensor(object):
 
         :return: the normal
         """
-        return self.eigenvectors[:, np.where(self.eigenvalues == np.min(self.eigenvalues))[0][0]]
+        return self.plate_axis
 
     # --------------------- PROPERTIES -------------------------
     @property
@@ -72,7 +72,7 @@ class Tensor(object):
             return self.__pts
         else:
             warn('No points were inserted to object. Refer to relevant neighbors property')
-            return 1
+            return None
 
     @property
     def reference_point(self):
@@ -97,7 +97,6 @@ class Tensor(object):
 
         """
         return self.__eigenvalues
-
 
     @property
     def eigenvectors(self):
@@ -158,7 +157,6 @@ class Tensor(object):
             print(self.__num_points)
             print(self.covariance_matrix)
 
-        # eigVals /= sum(eigVals)                # Normalizing the eigenvalues
         self.__eigenvalues[abs(self.eigenvalues) <= 1e-8] = 0
 
         # Computing the plate parameters defined by the tensor

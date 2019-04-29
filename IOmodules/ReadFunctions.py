@@ -262,8 +262,7 @@ def ReadLAS(filename, classification=False):
     :rtype: PointSet, SegmentationProperty
 
     """
-    from laspy import file as lasfile
-    from SegmentationProperty import SegmentationProperty
+    from Segmentation.SegmentationProperty import SegmentationProperty
 
     with lasfile.File(filename, mode='r') as infile:
         x = infile.X
@@ -320,7 +319,6 @@ def read2_PointSetOpen3D(file_path, voxel_size=-1, print_bb=False):
     '''
     import sys
     if sys.platform == "linux":
-        import open3d as O3D
         from PointSetOpen3D import PointSetOpen3D
 
         # Read Point Cloud

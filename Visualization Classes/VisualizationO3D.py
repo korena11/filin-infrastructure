@@ -77,8 +77,13 @@ class VisualizationO3D:
                 print('pointset type has to be convertible to PointSetOpen3D')
                 raise TypeError
 
-        if isinstance(colors, ColorProperty):
-            colors_ = colors.rgb
+        if not (colors is None):
+            if isinstance(colors, ColorProperty):
+                colors_ = colors.rgb
+            elif isinstance(colors, np.ndarray):
+                colors_ = colors
+            if colors_.max() > 1:
+                colors_ /= 255
             pcd.data.colors = o3d.Vector3dVector(colors_)
 
         o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
@@ -98,6 +103,8 @@ class VisualizationO3D:
         self.pointset = PointSetOpen3D(propertyclass.Points)
         if isinstance(propertyclass, NormalsProperty):
             self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
+        elif isinstance(propertyclass.Points, PointSetOpen3D):
+            self.pointset.data.normals = propertyclass.Points.data.normals
         colors_new = []
         attribute_name = []
         for att in dir(propertyclass):

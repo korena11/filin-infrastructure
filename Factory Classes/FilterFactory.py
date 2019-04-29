@@ -2,7 +2,7 @@ from numba import jit
 from numpy import sqrt, arctan, ones, uint8, pi, min, max, logical_and, nonzero
 
 from PointSet import PointSet
-from SegmentationProperty import SegmentationProperty
+from Segmentation.SegmentationProperty import SegmentationProperty
 
 
 class FilterFactory:

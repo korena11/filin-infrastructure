@@ -1,5 +1,5 @@
 from IOFactory import IOFactory
-from SegmentationFactory import SegmentationFactory
+from Segmentation.SegmentationFactory import SegmentationFactory
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 if __name__ == '__main__':

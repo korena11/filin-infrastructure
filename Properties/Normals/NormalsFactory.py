@@ -3,7 +3,7 @@ import sys
 from warnings import warn
 
 import numpy as np
-from numpy import dtype, genfromtxt, nonzero, mean, sum
+from numpy import dtype, genfromtxt
 from sklearn.neighbors import BallTree, KDTree
 
 from Normals.NormalsProperty import NormalsProperty
@@ -26,10 +26,7 @@ class NormalsFactory:
 
         :return: normals property for the tensors
         """
-        normals = []
-        for tensor in tensorProperty:
-            normals.append(tensor.normal())
-
+        normals = list(map(lambda t: t.plate_axis, tensorProperty))
         return NormalsProperty(tensorProperty.Points, np.asarray(normals))
 
 
@@ -197,7 +194,6 @@ class NormalsFactory:
         :rtype: np.ndarray [:math:`n\times m \times 3`]
 
         """
-        import MyTools as mt
         # Local derivatives (according to Zeibak p. 56)
         dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order=1)
         dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order=1)
@@ -247,13 +243,13 @@ class NormalsFactory:
 
         return NormalsProperty(pointcloud, normals)
 
-
-    @staticmethod
-    def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
-
-        indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
-        return mean(normals[indices], axis=0)
-
+        # TODO: obsolete code for computing normals using vtk, should probably be deleted
+        # @staticmethod
+        # def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
+        #
+        #     indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
+        #     return mean(normals[indices], axis=0)
+        #
     # @staticmethod
     # def VtkNormals(points, triangulation=None):
     #     """
@@ -295,6 +291,7 @@ class NormalsFactory:
 #
 
 if __name__ == "__main__":
+    # TODO: Obsolete code, should be deleted or modified to a newer version
     from IOFactory import IOFactory
     from VisualizationVTK import VisualizationVTK
 
