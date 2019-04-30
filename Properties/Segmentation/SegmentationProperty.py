@@ -50,17 +50,12 @@ class SegmentationProperty(BaseProperty):
         # Color segments
         # Create a unique color for each segment. Save for future use.
         self.__segmentsColors = 255 * random.random((self.__nSegments, 3))
-        # Create rgb array  
+
         nPoints = points.Size
-        self.__rgb = zeros((nPoints, 3), dtype=uint8)
 
         # Assign for each point a color according to the segments it belongs to.
+        self.__rgb = zeros((nPoints, 3), dtype=uint8)
         self.__rgb = self.__segmentsColors[segments]
-        # for i in range(0, nPoints):
-        #     try:
-        #         self.__rgb[i, :] = self.__segmentsColors[segments[i]]
-        #     except:
-        #         self.__rgb[i, :] = self.__segmentsColors[-1]
             
     @property
     def RGB(self):

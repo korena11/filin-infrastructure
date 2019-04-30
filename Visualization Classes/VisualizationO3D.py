@@ -51,7 +51,8 @@ class VisualizationO3D:
         return False
 
     @classmethod
-    def visualize_pointset(cls, pointset, colors=None):
+    def visualize_pointset(cls, pointset, colors=None, drawCoordianteFrame=False,
+                           coordinateFrameSize=2.0, coordinateFrameOrigin='default', originOffset=1.5):
         """
         Visualize PointSet with color property, if exists
 
@@ -61,6 +62,8 @@ class VisualizationO3D:
         :type pointset: PointSetOpen3D, PointSet.PointSet
         """
         from ColorProperty import ColorProperty
+        from Segmentation.SegmentationProperty import SegmentationProperty
+
         key_to_callback = cls.initialize_key_to_callback()
 
         # Change the pointset to an instance of PointSetOpen3D
@@ -69,6 +72,10 @@ class VisualizationO3D:
 
         elif isinstance(pointset, PointSetOpen3D):
             pcd = pointset
+
+        elif isinstance(pointset, SegmentationProperty):
+            pcd = PointSetOpen3D(pointset.Points.ToNumpy())
+            colors = pointset.RGB
 
         else:
             try:
@@ -86,7 +93,15 @@ class VisualizationO3D:
                 colors_ /= 255
             pcd.data.colors = o3d.Vector3dVector(colors_)
 
-        o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
+        if drawCoordianteFrame:
+            if coordinateFrameOrigin == 'min':
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize,
+                                                               origin=pcd.ToNumpy().min(axis=0) - originOffset)
+            else:
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize)
+            o3d.draw_geometries_with_key_callbacks([pcd.data, cf], key_to_callback)
+        else:
+            o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
     def visualize_property(self, propertyclass):
         """
