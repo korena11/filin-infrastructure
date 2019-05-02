@@ -305,7 +305,6 @@ class CurvatureFactory:
         else:
             cuvatureProperty.load(None, umbrella_curvature=umbrella_curvature)
 
-
     @classmethod
     def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
         """
@@ -390,7 +389,7 @@ class CurvatureFactory:
                                 num_sectors)
 
     @staticmethod
-    def __good_point(neighbors, pnt=np.array([0, 0, 0]), min_points_in_sector=2, valid_sectors=7, num_sectors=4):
+    def __good_point(neighbors, pnt=np.array([0, 0, 0]), min_points_in_sector=2, valid_sectors=7, num_sectors=8):
         '''
         Determine whether the point is appropriate for curvature calculation according to the spread of its neighbours.
 

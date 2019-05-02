@@ -1,11 +1,8 @@
 # Utils Imports
 # General Imports
 import numpy as np
-# 3rd Party Imports
 import open3d as O3D
 
-# from PointNeighborhood import PointNeighborhood
-# Infrastructure Imports
 from PointSet import PointSet
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
@@ -98,8 +95,7 @@ class PointSetOpen3D(PointSet):
         """
 
         print(">>> Calculating point-cloud normals. Neighborhood Parameters -- r:" + str(
-            search_radius) + "\tnn:" + str(
-                maxNN))
+            search_radius) + "\tnn:" + str(maxNN))
 
         if maxNN <= 0:
             O3D.estimate_normals(self.data,

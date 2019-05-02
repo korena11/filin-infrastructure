@@ -24,7 +24,7 @@ from BaseProperty import BaseProperty
 from ColorProperty import ColorProperty
 from PointSet import PointSet
 from PointSubSet import PointSubSet
-from SegmentationProperty import SegmentationProperty
+from Segmentation.SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 from shapefile import Writer, POINTZ
 

@@ -5,12 +5,12 @@ Created on 17 June 2014
 '''
 
 import numpy as np
+from Registration import Registration
 from matplotlib.path import Path
 from mayavi import mlab
 
 from PointSet import PointSet
 from PointSubSet import PointSubSet
-from Registration import Registration
 from TriangulationFactory import TriangulationFactory
 from VisualizationVTK import VisualizationVTK
 

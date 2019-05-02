@@ -14,7 +14,7 @@ not computed, a PointTensor should be constructed and inserted here for the resp
 import numpy as np
 
 from BaseProperty import BaseProperty
-from tensor import Tensor
+from Tensor import Tensor
 
 
 class TensorProperty(BaseProperty):

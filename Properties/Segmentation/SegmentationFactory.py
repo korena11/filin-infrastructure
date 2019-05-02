@@ -3,7 +3,7 @@ from random import randint
 
 from numpy import fabs, nonzero, asarray, int, ones, arange
 
-from SegmentationProperty import SegmentationProperty
+from Segmentation.SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
@@ -166,24 +166,31 @@ class SegmentationFactory:
         list(map(segmentationProperty.UpdatePointLabel, unsortedIndexes, closestLineIndex))
         
         return segmentationProperty
-        
+
+    @classmethod
+    def BallTreeSurfaceElementSegmentation(self, points, leafSize=10, smallestObjectSize=0.1):
+        from TensorBallTreeSegmentation import ExtractSurfaceElements
+        bt, labels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
+        return SegmentationProperty(points, labels, nodeIds, tensors)
+
 if __name__ == '__main__':
-    
-    from IOFactory import IOFactory
-    from VisualizationVTK import VisualizationVTK
-    from numpy import random
-       
-    pointSetList = []
-    fileName = 'D:\\Documents\\Pointsets\\set3_1.pts' 
-    IOFactory.ReadPts(fileName, pointSetList)
-    
-    scanLineSegmentation = SegmentationFactory.ParabolicScanLineSegmentation(pointSetList[0], 0.1, minimalScanLineLength=5)
-        
-    colors = 255 * random.random((scanLineSegmentation.NumberOfSegments, 3))
-    print (colors)
-    
-    _figure = None
-    for i in range(scanLineSegmentation.NumberOfSegments):
-        scanLinei = scanLineSegmentation.GetSegment(i)
-        _figure = VisualizationVTK.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
-    VisualizationVTK.Show()
+    pass
+    # TODO: obsolete code needs to be deleted
+    # from IOFactory import IOFactory
+    # from VisualizationVTK import VisualizationVTK
+    # from numpy import random
+    #
+    # pointSetList = []
+    # fileName = 'D:\\Documents\\Pointsets\\set3_1.pts'
+    # IOFactory.ReadPts(fileName, pointSetList)
+    #
+    # scanLineSegmentation = SegmentationFactory.ParabolicScanLineSegmentation(pointSetList[0], 0.1, minimalScanLineLength=5)
+    #
+    # colors = 255 * random.random((scanLineSegmentation.NumberOfSegments, 3))
+    # print(colors)
+    #
+    # _figure = None
+    # for i in range(scanLineSegmentation.NumberOfSegments):
+    #     scanLinei = scanLineSegmentation.GetSegment(i)
+    #     _figure = VisualizationVTK.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
+    # VisualizationVTK.Show()

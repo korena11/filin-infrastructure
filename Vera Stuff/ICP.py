@@ -1,7 +1,8 @@
-import vtk as vtk
-# from vtk import *
 import numpy as np
+import vtk as vtk
+
 from IOFactory import IOFactory
+
 
 def Rotation_Quaternions(axis, theta):
     '''
