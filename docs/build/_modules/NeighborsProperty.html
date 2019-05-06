@@ -11,21 +11,32 @@
     <title>NeighborsProperty &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -159,6 +170,10 @@
             class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">,),</span> <span
             class="n">dtype</span><span class="o">=</span><span class="n">PointNeighborhood</span><span
             class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__averageRadius</span> <span
+            class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__averageNeighborsNumber</span> <span
+            class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span
             class="p">):</span>
@@ -251,7 +266,62 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">__pointsNeighborsArray</span><span
             class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span
             class="n">PointNeighborhood</span><span class="p">(</span><span class="n">subset</span><span
-            class="p">)</span></div></div>
+            class="p">)</span></div>
+
+<div class="viewcode-block" id="NeighborsProperty.average_neighborhood_radius"><a class="viewcode-back"
+                                                                                  href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty.average_neighborhood_radius">[docs]</a>    <span
+        class="k">def</span> <span class="nf">average_neighborhood_radius</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compute the average radius of all the point neighborhood in the class</span>
+
+<span class="sd">        :return: the average radius</span>
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">__averageRadius</span> <span class="ow">is</span> <span class="kc">None</span><span
+            class="p">:</span>
+            <span class="n">radii</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">point_neighborhood</span> <span class="ow">in</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__pointsNeighborsArray</span><span
+            class="p">:</span>
+                <span class="n">radii</span><span class="o">.</span><span class="n">append</span><span
+            class="p">(</span><span class="n">point_neighborhood</span><span class="o">.</span><span
+            class="n">radius</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__averageRadius</span> <span
+            class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span
+            class="p">(</span><span class="n">radii</span><span class="p">)</span><span class="o">.</span><span
+            class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__averageRadius</span></div>
+
+<div class="viewcode-block" id="NeighborsProperty.average_neighborhood_size"><a class="viewcode-back"
+                                                                                href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty.average_neighborhood_size">[docs]</a>    <span
+        class="k">def</span> <span class="nf">average_neighborhood_size</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        compute the average number of neighbors of all the point neighborhood in the class</span>
+
+<span class="sd">        :return: the average radius</span>
+
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__averageNeighborsNumber</span> <span
+            class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">point_neighborhood</span> <span class="ow">in</span> <span
+            class="bp">self</span><span class="o">.</span><span class="n">__pointsNeighborsArray</span><span
+            class="p">:</span>
+                <span class="n">size</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">point_neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span><span
+            class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">__averageNeighborsNumber</span> <span
+            class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">size</span><span
+            class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__averageNeighborsNumber</span></div></div>
 </pre>
                         </div>
 
@@ -265,7 +335,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -284,30 +354,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>

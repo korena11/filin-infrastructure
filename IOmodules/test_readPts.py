@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 import ReadFunctions
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from PointSet import PointSet
 
 

@@ -16,4 +16,5 @@ The following are the existing dataset classes:
     BallTreePointSet
     RasterData
     CurveData
+    KdTreePointSet
 

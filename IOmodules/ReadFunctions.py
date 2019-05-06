@@ -16,7 +16,7 @@ import warnings
 # from laspy.file import file
 import numpy as np
 
-from ColorFactory import ColorFactory
+from Color.ColorFactory import ColorFactory
 from PointSet import PointSet
 from RasterData import RasterData
 from TransformationMatrixProperty import TransformationMatrixProperty

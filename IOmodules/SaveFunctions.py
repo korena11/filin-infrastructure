@@ -21,7 +21,7 @@ from numpy import hstack, tile, ndarray, savetxt
 
 from BaseData import BaseData
 from BaseProperty import BaseProperty
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SegmentationProperty import SegmentationProperty

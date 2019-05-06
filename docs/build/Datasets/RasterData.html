@@ -11,23 +11,34 @@
     <title>RasterData class &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
     <link href="CurveData.html" rel="next" title="CurveData class"/>
-    <link href="PointSetOpen3D.html" rel="prev" title="PointSetOpen3D class"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
+    <link href="BallTreePointSet.html" rel="prev" title="BallTreePointSet class"/>
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -69,6 +80,8 @@
                             <li class="toctree-l2"><a class="reference internal" href="PointSet.html">PointSet class</a>
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="PointSetOpen3D.html">PointSetOpen3D
+                                class</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="BallTreePointSet.html">BallTreePointSet
                                 class</a></li>
                             <li class="toctree-l2 current"><a class="current reference internal" href="#">RasterData
                                 class</a></li>
@@ -153,197 +166,21 @@
                                 </dt>
                                 <dd><p>A raster representation of the point set and manipulations on it</p>
                                     <p class="rubric">Attributes</p>
-                                    <table border="1" class="longtable docutils">
+                                    <table class="longtable docutils align-center">
                                         <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
+                                            <col style="width: 10%"/>
+                                            <col style="width: 90%"/>
                                         </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.accuracy"
-                                                   title="RasterData.RasterData.accuracy"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">accuracy</span></code></a></td>
-                                            <td>Measurement accuracy</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.cols"
-                                                   title="RasterData.RasterData.cols"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">cols</span></code></a></td>
-                                            <td>Number of columns in the raster</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">data</span></code></td>
-                                            <td>The data as stored in self.__data</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.min_range"
-                                                   title="RasterData.RasterData.min_range"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">min_range</span></code></a></td>
-                                            <td>The closest range in the data</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">path</span></code></td>
-                                            <td>Path to datafile, if exists</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.resolution"
-                                                   title="RasterData.RasterData.resolution"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">resolution</span></code></a></td>
-                                            <td>Raster resolution</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.rows"
-                                                   title="RasterData.RasterData.rows"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">rows</span></code></a></td>
-                                            <td>Number of rows in the raster</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.scaleX"
-                                                   title="RasterData.RasterData.scaleX"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">scaleX</span></code></a></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.scaleY"
-                                                   title="RasterData.RasterData.scaleY"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">scaleY</span></code></a></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.shape"
-                                                   title="RasterData.RasterData.shape"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">shape</span></code></a></td>
-                                            <td>Raster’s rows and columns size</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal"
-                                                   href="#RasterData.RasterData.spatialReference"
-                                                   title="RasterData.RasterData.spatialReference"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">spatialReference</span></code></a></td>
-                                            <td>The spatial reference information</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.translationX"
-                                                   title="RasterData.RasterData.translationX"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">translationX</span></code></a></td>
-                                            <td>The east translation</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.translationY"
-                                                   title="RasterData.RasterData.translationY"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">translationY</span></code></a></td>
-                                            <td>The north translation</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.voidData"
-                                                   title="RasterData.RasterData.voidData"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">voidData</span></code></a></td>
-                                            <td>The value set to represent void data (usually when exported from arcgis
-                                                or qgis)
-                                            </td>
-                                        </tr>
+                                        <tbody>
                                         </tbody>
                                     </table>
                                     <p class="rubric">Methods</p>
-                                    <table border="1" class="longtable docutils">
+                                    <table class="longtable docutils align-center">
                                         <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
+                                            <col style="width: 10%"/>
+                                            <col style="width: 90%"/>
                                         </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.ToPointSet"
-                                                   title="RasterData.RasterData.ToPointSet"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">ToPointSet</span></code></a>()
-                                            </td>
-                                            <td>Transforms raster to PointSet data</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal"
-                                                   href="#RasterData.RasterData.getGtidPoints"
-                                                   title="RasterData.RasterData.getGtidPoints"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">getGtidPoints</span></code></a>([xmin,&nbsp;ymin,&nbsp;xmax,&nbsp;ymax,&nbsp;…])
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal"
-                                                   href="#RasterData.RasterData.intepolateAtPixel"
-                                                   title="RasterData.RasterData.intepolateAtPixel"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">intepolateAtPixel</span></code></a>(row,&nbsp;col[,&nbsp;method])
-                                            </td>
-                                            <td>Computing the height(s) of a given pixel(s) based on a given method</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal"
-                                                   href="#RasterData.RasterData.interpolateAtPoint"
-                                                   title="RasterData.RasterData.interpolateAtPoint"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">interpolateAtPoint</span></code></a>(x,&nbsp;y[,&nbsp;spatialRef,&nbsp;method])
-                                            </td>
-                                            <td>Computing the height(s) of a given point(s) based on a given method</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.pixelToWorld"
-                                                   title="RasterData.RasterData.pixelToWorld"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">pixelToWorld</span></code></a>(row,&nbsp;col)
-                                            </td>
-                                            <td>Transform a pixel to world coordinate system</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.roughness"
-                                                   title="RasterData.RasterData.roughness"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">roughness</span></code></a>(**kwargs)
-                                            </td>
-                                            <td>An estimation of the surface roughness</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">save</span></code>(path_or_buf,&nbsp;**kwargs)
-                                            </td>
-                                            <td>Save the PointSet in either json or hdf5.</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">setPath</span></code>(path)
-                                            </td>
-                                            <td>Sets path to dataset</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.setValues"
-                                                   title="RasterData.RasterData.setValues"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">setValues</span></code></a>(**kwargs)
-                                            </td>
-                                            <td>sets self values</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#RasterData.RasterData.worldToPixel"
-                                                   title="RasterData.RasterData.worldToPixel"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">worldToPixel</span></code></a>(x,&nbsp;y[,&nbsp;spatialRef])
-                                            </td>
-                                            <td>Conversion of a point from world coordinates to pixel ones</td>
-                                        </tr>
+                                        <tbody>
                                         </tbody>
                                     </table>
                                     <dl class="method">
@@ -357,23 +194,16 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Transforms raster to PointSet data</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">PointSet of the raster data</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><a class="reference internal"
-                                                                              href="PointSet.html#PointSet.PointSet"
-                                                                              title="PointSet.PointSet">PointSet</a>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>PointSet of the raster data</p>
+                                                </dd>
+                                                <dt class="field-even">Return type</dt>
+                                                <dd class="field-even"><p><a class="reference internal"
+                                                                             href="PointSet.html#PointSet.PointSet"
+                                                                             title="PointSet.PointSet">PointSet</a></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -422,31 +252,23 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Computing the height(s) of a given pixel(s) based on a given method</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first simple">
-                                                            <li><strong>row</strong> – The row(s) of the pixel(s)</li>
-                                                            <li><strong>col</strong> – The column(s) of the pixel(s)
-                                                            </li>
-                                                            <li><strong>method</strong> – The method to be used for the
-                                                                interpolation (same as methods as in interpolateAtPoint
-                                                                method)
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body"><p class="first last"></p>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>row</strong> – The row(s) of the pixel(s)</p>
+                                                        </li>
+                                                        <li><p><strong>col</strong> – The column(s) of the pixel(s)</p>
+                                                        </li>
+                                                        <li><p><strong>method</strong> – The method to be used for the
+                                                            interpolation (same as methods as in interpolateAtPoint
+                                                            method)</p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -462,38 +284,28 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Computing the height(s) of a given point(s) based on a given method</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first simple">
-                                                            <li><strong>x</strong> – x-coordinate(s) of the point(s)
-                                                            </li>
-                                                            <li><strong>y</strong> – y-coordinate(s) of the point(s)
-                                                            </li>
-                                                            <li><strong>spatialRef</strong> – The spatial reference of
-                                                                the point(s), given as an ESPG code
-                                                            </li>
-                                                            <li><strong>method</strong> – The method to be used for the
-                                                                interpolation:
-                                                                - ‘nearest’ - for nearest neighbor
-                                                                - ‘bilinear’ - for bilinear intepolation (default)
-                                                                - ‘bicubic’ - for bicubic interpolation (to be
-                                                                implemented)
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body"><p class="first last"></p>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>x</strong> – x-coordinate(s) of the point(s)</p>
+                                                        </li>
+                                                        <li><p><strong>y</strong> – y-coordinate(s) of the point(s)</p>
+                                                        </li>
+                                                        <li><p><strong>spatialRef</strong> – The spatial reference of
+                                                            the point(s), given as an ESPG code</p></li>
+                                                        <li><p><strong>method</strong> – The method to be used for the
+                                                            interpolation:
+                                                            - ‘nearest’ - for nearest neighbor
+                                                            - ‘bilinear’ - for bilinear intepolation (default)
+                                                            - ‘bicubic’ - for bicubic interpolation (to be implemented)
+                                                        </p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -518,43 +330,29 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Transform a pixel to world coordinate system</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first simple">
-                                                            <li><strong>row</strong> (<a class="reference external"
-                                                                                         href="https://docs.python.org/3/library/functions.html#int"
-                                                                                         title="(in Python v3.7)"><em>int</em></a>)
-                                                                – the pixel’s row
-                                                            </li>
-                                                            <li><strong>col</strong> (<a class="reference external"
-                                                                                         href="https://docs.python.org/3/library/functions.html#int"
-                                                                                         title="(in Python v3.7)"><em>int</em></a>)
-                                                                – the pixel’s column
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body"><p class="first">x, y in world
-                                                        coordinates</p>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><p class="first last"><a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                            title="(in Python v3.7)">tuple</a></p>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>row</strong> (<a class="reference external"
+                                                                                        href="https://docs.python.org/3/library/functions.html#int"
+                                                                                        title="(in Python v3.7)"><em>int</em></a>)
+                                                            – the pixel’s row</p></li>
+                                                        <li><p><strong>col</strong> (<a class="reference external"
+                                                                                        href="https://docs.python.org/3/library/functions.html#int"
+                                                                                        title="(in Python v3.7)"><em>int</em></a>)
+                                                            – the pixel’s column</p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>x, y in world coordinates</p>
+                                                </dd>
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><a class="reference external"
+                                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                            title="(in Python v3.7)">tuple</a></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -619,64 +417,49 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>sets self values</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>voidData</strong> (<a class="reference external"
-                                                                                              href="https://docs.python.org/3/library/functions.html#int"
-                                                                                              title="(in Python v3.7)"><em>int</em></a>)
-                                                                – A number indicating missing data in the raster
-                                                            </li>
-                                                            <li><strong>geoTrnasform</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                    title="(in Python v3.7)"><em>tuple</em></a>) – The
-                                                                transformation needed to convert from pixel to world
-                                                                coordinates (tx, ty, sx, sx)
-                                                            </li>
-                                                            <li><strong>spatialReference</strong> – spatial reference
-                                                                info
-                                                            </li>
-                                                            <li><strong>dataOrigin</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                    title="(in Python v3.7)"><em>str</em></a>) – A
-                                                                string indicating the point acquiring means:
-                                                                ‘terrestrial’,
-                                                            </li>
-                                                            <li><strong>dataFeature</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                    title="(in Python v3.7)"><em>str</em></a>) – A
-                                                                string indicating the type of data stored (e.g. range,
-                                                                intensity, etc.)
-                                                            </li>
-                                                            <li><strong>accuracy</strong> (<a class="reference external"
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>voidData</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#int"
+                                                                                             title="(in Python v3.7)"><em>int</em></a>)
+                                                            – A number indicating missing data in the raster</p></li>
+                                                        <li><p><strong>geoTrnasform</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                title="(in Python v3.7)"><em>tuple</em></a>) – The
+                                                            transformation needed to convert from pixel to world
+                                                            coordinates (tx, ty, sx, sx)</p></li>
+                                                        <li><p><strong>spatialReference</strong> – spatial reference
+                                                            info</p></li>
+                                                        <li><p><strong>dataOrigin</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                title="(in Python v3.7)"><em>str</em></a>) – A string
+                                                            indicating the point acquiring means: ‘terrestrial’,</p>
+                                                        </li>
+                                                        <li><p><strong>dataFeature</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                title="(in Python v3.7)"><em>str</em></a>) – A string
+                                                            indicating the type of data stored (e.g. range, intensity,
+                                                            etc.)</p></li>
+                                                        <li><p><strong>accuracy</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#float"
+                                                                                             title="(in Python v3.7)"><em>float</em></a>)
+                                                            – measurement accuracy estimation</p></li>
+                                                        <li><p><strong>roughness</strong> (<a class="reference external"
                                                                                               href="https://docs.python.org/3/library/functions.html#float"
                                                                                               title="(in Python v3.7)"><em>float</em></a>)
-                                                                – measurement accuracy estimation
-                                                            </li>
-                                                            <li><strong>roughness</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – an
-                                                                estimation of the surface roughness
-                                                            </li>
-                                                            <li><strong>path</strong> (<a class="reference external"
-                                                                                          href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                          title="(in Python v3.7)"><em>str</em></a>)
-                                                                – the path for the datafile
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                                            – an estimation of the surface roughness</p></li>
+                                                        <li><p><strong>path</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                         title="(in Python v3.7)"><em>str</em></a>)
+                                                            – the path for the datafile</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -728,18 +511,13 @@
                                         </dt>
                                         <dd><p>The value set to represent void data (usually when exported from arcgis
                                             or qgis)</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><a class="reference external"
-                                                                              href="https://docs.python.org/3/library/functions.html#int"
-                                                                              title="(in Python v3.7)">int</a></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><a class="reference external"
+                                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                                            title="(in Python v3.7)">int</a></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -755,53 +533,39 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Conversion of a point from world coordinates to pixel ones</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first simple">
-                                                            <li><strong>x</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/functions.html#float"
-                                                                                       title="(in Python v3.7)"><em>float</em></a>)
-                                                                – The X-axis coordinate of the point to convert
-                                                            </li>
-                                                            <li><strong>y</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/functions.html#float"
-                                                                                       title="(in Python v3.7)"><em>float</em></a>)
-                                                                – The Y-axis coordinate of the point to convert
-                                                            </li>
-                                                            <li><strong>spatialRef</strong> (<em>ESPG code</em>) – The
-                                                                spatial reference of the point to convert given in EPSG
-                                                                code
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body"><p class="first">the row and column that
-                                                        correspond to the given point (tuple of two float numbers)</p>
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><p class="first last"><a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                            title="(in Python v3.7)">tuple</a> (<a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                            title="(in Python v3.7)">int</a>, <a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                            title="(in Python v3.7)">int</a>)</p>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>x</strong> (<a class="reference external"
+                                                                                      href="https://docs.python.org/3/library/functions.html#float"
+                                                                                      title="(in Python v3.7)"><em>float</em></a>)
+                                                            – The X-axis coordinate of the point to convert</p></li>
+                                                        <li><p><strong>y</strong> (<a class="reference external"
+                                                                                      href="https://docs.python.org/3/library/functions.html#float"
+                                                                                      title="(in Python v3.7)"><em>float</em></a>)
+                                                            – The Y-axis coordinate of the point to convert</p></li>
+                                                        <li><p><strong>spatialRef</strong> (<em>ESPG code</em>) – The
+                                                            spatial reference of the point to convert given in EPSG code
+                                                        </p></li>
+                                                    </ul>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>the row and column that correspond to the
+                                                    given point (tuple of two float numbers)</p>
+                                                </dd>
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p><a class="reference external"
+                                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                            title="(in Python v3.7)">tuple</a> (<a
+                                                        class="reference external"
+                                                        href="https://docs.python.org/3/library/functions.html#int"
+                                                        title="(in Python v3.7)">int</a>, <a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#int"
+                                                                                             title="(in Python v3.7)">int</a>)
+                                                </p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -822,8 +586,8 @@
                            title="CurveData class">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a accesskey="p" class="btn btn-neutral" href="PointSetOpen3D.html" rel="prev"
-                           title="PointSetOpen3D class"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral float-left" href="BallTreePointSet.html" rel="prev"
+                           title="BallTreePointSet class"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -832,7 +596,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -851,30 +615,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>

@@ -1,10 +1,11 @@
 from unittest import TestCase
 
+from Visualization import VisualizationVTK
+
 from CurvatureFactory import CurvatureFactory
 from IOFactory import IOFactory
 from NeighborsFactory import NeighborsFactory
 from PointSetOpen3D import PointSetOpen3D
-from Visualization import VisualizationVTK
 
 
 class TestVisualizationVTK(TestCase):

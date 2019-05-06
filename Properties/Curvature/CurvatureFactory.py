@@ -5,7 +5,7 @@
 import numpy as np
 from tqdm import tqdm
 
-import RotationUtils
+import Transformations.RotationUtils as RotationUtils
 from CurvatureProperty import CurvatureProperty
 from RasterData import RasterData
 
@@ -290,10 +290,9 @@ class CurvatureFactory:
 
                 # check if the projections are statistically zero
                 epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
-                projections[np.where(projections < -epsilon) and np.where(projections > epsilon)] = 0
+                # projections[np.where(projections > -epsilon) and np.where(projections < epsilon)] = 0
 
-                umbrellaCurvature.append(np.sum(projections) / projections.shape)
-
+                umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)

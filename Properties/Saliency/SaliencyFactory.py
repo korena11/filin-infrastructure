@@ -152,7 +152,7 @@ class SaliencyFactory(object):
 
         :rtype: SaliencyProperty
         """
-        import CurvatureProperty
+
         from warnings import warn
         from matplotlib import pyplot as plt
 
@@ -168,15 +168,16 @@ class SaliencyFactory(object):
 
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
-            if isinstance(curvature_property, CurvatureProperty.CurvatureProperty):
+            try:
                 current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
                     neighborhood.neighborhoodIndices]
-            elif isinstance(curvature_property, np.ndarray):
-                current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
-            else:
-                warn(
+            except:
+                try:
+                    current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
+                except TypeError:
+                    warn(
                     'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
-                return 1
+                    return 1
 
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
@@ -196,26 +197,26 @@ class SaliencyFactory(object):
             dn_normed = np.exp(-(dn + 1))
 
             tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
-            j += 1
-            import scipy.stats as stats
-            from VisualizationO3D import VisualizationO3D
-            vis = VisualizationO3D()
-            if j % 500:
-                fig, axes = plt.subplots(2, 2)
-                axes[0, 0].set_title('dk')
-                axes[0, 0].hist(dk)
-                axes[0, 1].set_title('dk_normed')
-                axes[0, 1].hist(dk_normed)
-                axes[1, 0].hist(dn)
-                axes[1, 0].set_title('dn')
-                axes[1, 1].hist(dn_normed)
-                axes[1, 1].set_title('dn_normed')
-                plt.show()
-                st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
-                print(st)
-                if st[1] > 0.005:
-                    vis.visualize_pointset(neighborhood)
-                
+            if verbose:
+                j += 1
+                import scipy.stats as stats
+                from VisualizationO3D import VisualizationO3D
+                vis = VisualizationO3D()
+                if j % 500:
+                    fig, axes = plt.subplots(2, 2)
+                    axes[0, 0].set_title('dk')
+                    axes[0, 0].hist(dk)
+                    axes[0, 1].set_title('dk_normed')
+                    axes[0, 1].hist(dk_normed)
+                    axes[1, 0].hist(dn)
+                    axes[1, 0].set_title('dn')
+                    axes[1, 1].hist(dn_normed)
+                    axes[1, 1].set_title('dn_normed')
+                    plt.show()
+                    st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
+                    print(st)
+                    if st[1] > 0.005:
+                        vis.visualize_pointset(neighborhood)
 
         # Use only percentage of the highest low level distinctness to compute the high-level one
         tensor_saliency = np.asarray(tensor_saliency)

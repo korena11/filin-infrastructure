@@ -1,6 +1,6 @@
 from numpy import nonzero, zeros, uint8  # logical_and
 
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from PointSet import PointSet
 
 

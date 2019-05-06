@@ -13,7 +13,7 @@ import ReadFunctions
 import SaveFunctions
 from BaseData import BaseData
 from BaseProperty import BaseProperty
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from IO_Tools import CreateFilename
 from PointSet import PointSet
 from PointSubSet import PointSubSet

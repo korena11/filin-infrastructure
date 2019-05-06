@@ -59,7 +59,7 @@ class VisualizationO3D:
 
         :type pointset: PointSetOpen3D, PointSet.PointSet
         """
-        from ColorProperty import ColorProperty
+        from Color.ColorProperty import ColorProperty
         key_to_callback = cls.initialize_key_to_callback()
 
         # Change the pointset to an instance of PointSetOpen3D

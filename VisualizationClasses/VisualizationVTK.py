@@ -5,7 +5,7 @@ import vtk
 import VisualizationUtils
 # Framework Imports
 from BaseProperty import BaseProperty
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SegmentationProperty import SegmentationProperty

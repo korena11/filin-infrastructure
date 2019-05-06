@@ -1,7 +1,7 @@
 import numpy as np
 
-import RotationUtils
-from Transformations.TransformationMatrixProperty import TransformationMatrixProperty
+from . import RotationUtils
+from .TransformationMatrixProperty import TransformationMatrixProperty
 
 
 class TransformationMatrixFactory(object):

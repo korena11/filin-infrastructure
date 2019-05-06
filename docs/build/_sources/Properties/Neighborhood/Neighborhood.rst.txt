@@ -11,33 +11,33 @@ Point Neighborhood
     :members:
     :undoc-members:
 
-    .. rubric:: Attributes
+.. rubric:: Attributes
 
-    .. autoautosummary:: PointNeighborhood.PointNeighborhood
-        :attributes:
+.. autoautosummary:: PointNeighborhood.PointNeighborhood
+   :attributes:
 
-    .. rubric:: Methods
+.. rubric:: Methods
 
-    .. autoautosummary:: PointNeighborhood.PointNeighborhood
-        :methods:
+.. autoautosummary:: PointNeighborhood.PointNeighborhood
+    :methods:
 
 Neighbors Property
 ------------------
+.. rubric:: Attributes
 
+.. autoautosummary:: NeighborsProperty.NeighborsProperty
+    :attributes:
 
 .. autoclass:: NeighborsProperty.NeighborsProperty
     :members:
     :undoc-members:
 
-    .. rubric:: Attributes
 
-    .. autoautosummary:: NeighborsProperty.NeighborsProperty
-        :attributes:
 
-    .. rubric:: Methods
+.. rubric:: Methods
 
-    .. autoautosummary:: NeighborsProperty.NeighborsProperty
-        :methods:
+.. autoautosummary:: NeighborsProperty.NeighborsProperty
+    :methods:
 
 
 Neighbors Factory
@@ -47,10 +47,11 @@ Neighbors Factory
    :members:
    :undoc-members:
 
-    .. rubric:: Methods
+.. rubric:: Methods
 
-    .. autoautosummary:: NeighborsFactory.NeighborsFactory
-        :methods:
+.. autoautosummary::
+    NeighborsFactory.NeighborsFactory
+    :methods:
 
 .. note::
 

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 import ReadFunctions
-from ColorProperty import ColorProperty
+from Color.ColorProperty import ColorProperty
 from IOFactory import IOFactory
 from PointSet import PointSet
 from TransformationMatrixProperty import TransformationMatrixProperty

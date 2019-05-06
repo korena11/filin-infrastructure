@@ -1,7 +1,7 @@
 import numpy as np
 
 from BaseProperty import BaseProperty
-from PointNeighborhood import PointNeighborhood
+from Neighborhood.PointNeighborhood import PointNeighborhood
 
 
 class NeighborsProperty(BaseProperty):

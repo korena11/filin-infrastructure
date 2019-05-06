@@ -11,23 +11,34 @@
     <title>Eigen Factory Documentation &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
     <link href="Utils.html" rel="next" title="General Utilities"/>
     <link href="../LevelSets/Saliency.html" rel="prev" title="Saliency computations"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -138,32 +149,12 @@
                                 <dd>
                                     <blockquote>
                                         <div><p class="rubric">Methods</p>
-                                            <table border="1" class="longtable docutils">
+                                            <table class="longtable docutils align-center">
                                                 <colgroup>
-                                                    <col width="10%"/>
-                                                    <col width="90%"/>
+                                                    <col style="width: 10%"/>
+                                                    <col style="width: 90%"/>
                                                 </colgroup>
-                                                <tbody valign="top">
-                                                <tr class="row-odd">
-                                                    <td><a class="reference internal"
-                                                           href="#EigenFactory.EigenFactory.eigen_Hessian"
-                                                           title="EigenFactory.EigenFactory.eigen_Hessian"><code
-                                                            class="xref py py-obj docutils literal notranslate"><span
-                                                            class="pre">eigen_Hessian</span></code></a>(data,&nbsp;winsize[,&nbsp;resolution])
-                                                    </td>
-                                                    <td>Compute the eigenvalues and eigenvectors from the Hessian
-                                                        Matrix
-                                                    </td>
-                                                </tr>
-                                                <tr class="row-even">
-                                                    <td><a class="reference internal"
-                                                           href="#EigenFactory.EigenFactory.eigen_PCA"
-                                                           title="EigenFactory.EigenFactory.eigen_PCA"><code
-                                                            class="xref py py-obj docutils literal notranslate"><span
-                                                            class="pre">eigen_PCA</span></code></a>(points[,&nbsp;rad,&nbsp;pt_index])
-                                                    </td>
-                                                    <td>Compute eigenvalues and eigenvectors about a point.</td>
-                                                </tr>
+                                                <tbody>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -204,28 +195,22 @@
                                                 +4\cdot Z_{xy}^{2}}}{2}\]
                                             </div>
                                             <div class="admonition warning">
-                                                <p class="first admonition-title">Warning</p>
-                                                <p class="last">This function does not compute eigenvectors,
-                                                    <em>only</em> minimal and maximal eigen values.</p>
+                                                <p class="admonition-title">Warning</p>
+                                                <p>This function does not compute eigenvectors, <em>only</em> minimal
+                                                    and maximal eigen values.</p>
                                             </div>
                                             <p>:param winsize - the window size for filtering
                                                 :param resolution - filter resolution</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">eigen values and eigen vectors</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><a class="reference external"
-                                                                              href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                              title="(in Python v3.7)">tuple</a></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>eigen values and eigen vectors</p>
+                                                </dd>
+                                                <dt class="field-even">Return type</dt>
+                                                <dd class="field-even"><p><a class="reference external"
+                                                                             href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                             title="(in Python v3.7)">tuple</a></p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -241,33 +226,24 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Compute eigenvalues and eigenvectors about a point.</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>points</strong> (<a class="reference internal"
-                                                                                            href="../Datasets/PointSet.html#PointSet.PointSet"
-                                                                                            title="PointSet.PointSet"><em>PointSet</em></a>)
-                                                                – the point set
-                                                            </li>
-                                                            <li><strong>rad</strong> – the radius according to which
-                                                                weights are being computes (if None, then unit weight is
-                                                                used)
-                                                            </li>
-                                                            <li><strong>pt_index</strong> – the index of the point about
-                                                                which the PCA (or tensor) is computed. If about the
-                                                                centroid, use
-                                                                (-1). Defualt: (-1)
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>points</strong> (<a class="reference internal"
+                                                                                           href="../Datasets/PointSet.html#PointSet.PointSet"
+                                                                                           title="PointSet.PointSet"><em>PointSet</em></a>)
+                                                            – the point set</p></li>
+                                                        <li><p><strong>rad</strong> – the radius according to which
+                                                            weights are being computes (if None, then unit weight is
+                                                            used)</p></li>
+                                                        <li><p><strong>pt_index</strong> – the index of the point about
+                                                            which the PCA (or tensor) is computed. If about the
+                                                            centroid, use
+                                                            (-1). Defualt: (-1)</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -288,7 +264,7 @@
                            title="General Utilities">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a accesskey="p" class="btn btn-neutral" href="../LevelSets/Saliency.html" rel="prev"
+                        <a accesskey="p" class="btn btn-neutral float-left" href="../LevelSets/Saliency.html" rel="prev"
                            title="Saliency computations"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
@@ -298,7 +274,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -317,30 +293,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>
