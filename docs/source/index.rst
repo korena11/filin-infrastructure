@@ -39,7 +39,9 @@ This project is implemented for Python 3.6
 - `vtk <https://www.vtk.org/>`_
    Installation via `pip install vtk`
 - `opencv <https://opencv.org/>`_
-   Installation via `pip install opencv-python`
+   Installation via `pip install opencv-contrib-python`
+- `open3d <http://www.open3d.org/>`_
+   Installation via `pip install open3d-python`
 - `geopandas <http://geopandas.org/>`_
    Installation via `conda install -c conda-forge geopandas`
 - `gdal <https://www.gdal.org/>`_

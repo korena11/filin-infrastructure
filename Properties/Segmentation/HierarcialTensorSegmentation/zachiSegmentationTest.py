@@ -4,7 +4,6 @@ DO NOT USE FOR OTHER PURPOSES
 """
 
 from IOFactory import IOFactory
-from Segmentation.SegmentationProperty import SegmentationProperty
 from SegmentationFactory import SegmentationFactory
 from VisualizationO3D import VisualizationO3D
 
@@ -13,7 +12,5 @@ if __name__ == '__main__':
     pntSet = IOFactory.ReadPly(filename, returnAdditionalAttributes=False)
     segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
 
-    print(type(segmentation))
-    print(isinstance(segmentation, SegmentationProperty))
     visObj = VisualizationO3D()
     visObj.visualize_pointset(pointset=segmentation, drawCoordianteFrame=True, coordinateFrameOrigin='min')
