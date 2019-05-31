@@ -1,11 +1,11 @@
-from numpy import array, nonzero
+from numpy import array, nonzero, dot
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
 
 class TensorConnectivityGraph(object):
 
-    def __init__(self, tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold=None,
+    def __init__(self, tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
                  mode='binrary', linearityThreshold=5):
         # self.__tensors = tensors
         self.__cogs = array(list(map(lambda t: t.reference_point, tensors)))
@@ -22,17 +22,26 @@ class TensorConnectivityGraph(object):
 
         numTensors = len(tensors)
         self.__simMatrix = coo_matrix((numTensors, numTensors), dtype='f').tolil()
-        list(map(lambda i: self.__computeSimilarityForTensor(i, mode), range(numTensors)))
+        self.__simMatrix[range(numTensors), range(numTensors)] = 1  # TODO: check if works, if not use np.ones
+
+        validNodes = nonzero(self.__eigVals[:, 0] < self.__varianceThreshold)[0]
+
+        list(map(lambda i: self.__computeSimilarityForTensor(i, mode), validNodes))
 
     def __computeSimilarityForTensor(self, index, mode='binary'):
-        self.__simMatrix[index, index] = 1  # TODO: Move to __init__
+        # self.__simMatrix[index, index] = 1  # TODO: Move to __init__
         lambda3 = self.__eigVals[index, 0]
         lambda2 = self.__eigVals[index, 1]
         eigRatio = self.__eigVals[index, -1] / self.__eigVals[index, 1]
         neighbors = self.__neighbors[index]
 
-        if lambda3 < self.__varianceThreshold:  # TODO: Move to __init__, filter nodes that fail test
-            deltas = cogs[neighbors] - cogs[index]
+        # if lambda3 < self.__varianceThreshold:  # TODO: Move to __init__, filter nodes that fail test
+        deltas = cogs[neighbors] - cogs[index]
+
+        if eigRatio < self.__linearityThreshold:
+            distances = abs(dot(self.__plateAxes[index].reshape((1, 3)), deltas.T))
+            directionalDiffs = abs(dot(self.__plateAxes[index].reshape((1, 3)),
+                                       self.__plateAxes[neighbors].T))
 
     def connected_componnents(self):
         """

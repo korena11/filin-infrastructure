@@ -4,8 +4,8 @@ DO NOT USE FOR OTHER PURPOSES
 """
 
 from IOFactory import IOFactory
-from Segmentation.SegmentationProperty import SegmentationProperty
 from SegmentationFactory import SegmentationFactory
+from TensorBallTreeSegmentation import tensorConnectedComponents
 from VisualizationO3D import VisualizationO3D
 
 if __name__ == '__main__':
@@ -13,7 +13,9 @@ if __name__ == '__main__':
     pntSet = IOFactory.ReadPly(filename, returnAdditionalAttributes=False)
     segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
 
-    print(type(segmentation))
-    print(isinstance(segmentation, SegmentationProperty))
+    tensors = segmentation.getSegmentAttributes
+    temp = tensorConnectedComponents(tensors, 10, linearityThreshold=5, varianceThreshold=0.1,
+                                     normalSimilarityThreshold=0.9, distanceThreshold=0.1)
+
     visObj = VisualizationO3D()
     visObj.visualize_pointset(pointset=segmentation, drawCoordianteFrame=True, coordinateFrameOrigin='min')

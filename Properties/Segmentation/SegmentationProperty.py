@@ -1,4 +1,4 @@
-from numpy import nonzero, random, zeros, uint8, unique, all
+from numpy import nonzero, random, zeros, uint8, unique
 
 from BaseProperty import BaseProperty
 from PointSubSet import PointSubSet
@@ -39,22 +39,24 @@ class SegmentationProperty(BaseProperty):
         if uniqueSegmentKeys.shape[0] > uniqueSegmentKeys[-1] + 1:
             raise ValueError('Segment labels cannot exceed number of segments')
 
-        if segmentKeys is None:
-            if uniqueSegmentKeys.shape[0] != segmentKeys.shape or all(segmentKeys[segmentKeys.argsort()] !=
-                                                                              uniqueSegmentKeys):
+        if not (segmentKeys is None):
+            if uniqueSegmentKeys.shape[0] != segmentKeys.shape[0]:
                 raise ValueError('Mismatch between unique segment labels and keys')
+            self.__segmentKeys = segmentKeys
+
+        if not (segmentAttributes is None):
+            if uniqueSegmentKeys.shape[0] != len(segmentAttributes):
+                raise ValueError('Mismatch between number of unique segment labels and length of number attributes')
+            self.__attributes = segmentAttributes
 
         self.__segments = segments
         self.__nSegments = uniqueSegmentKeys.shape[0]
-        
-        # Color segments
+
         # Create a unique color for each segment. Save for future use.
         self.__segmentsColors = 255 * random.random((self.__nSegments, 3))
 
-        nPoints = points.Size
-
         # Assign for each point a color according to the segments it belongs to.
-        self.__rgb = zeros((nPoints, 3), dtype=uint8)
+        self.__rgb = zeros((points.Size, 3), dtype=uint8)
         self.__rgb = self.__segmentsColors[segments]
             
     @property
@@ -104,3 +106,11 @@ class SegmentationProperty(BaseProperty):
             # Updating label of point
             self.__segments[pointIndex] = newLabel
             self.__rgb[pointIndex, :] = self.__segmentsColors[newLabel]
+
+    @property
+    def getSegmentAttributes(self):
+        """
+        Retrieves the attributes for all the segments
+        :return: list of attributes
+        """
+        return self.__attributes
