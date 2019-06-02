@@ -32,8 +32,8 @@ def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
     # Getting the lists of points for each initial segment
     pointsOfNodes = list(map(ballTree.getPointsOfNode, nodesOfInterest))
 
-    tensors = list(map(TensorFactory.tensorFromPoints,
-                       list(map(ballTree.ToNumpy().__getitem__, pointsOfNodes))))
+    tensorCompFunc = lambda p: TensorFactory.tensorFromPoints(p, keepPoints=False)
+    tensors = list(map(tensorCompFunc, list(map(ballTree.ToNumpy().__getitem__, pointsOfNodes))))
 
     # Assigning initial labels to the points
     labels = zeros((ballTree.Size,), dtype='i')
@@ -44,6 +44,16 @@ def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
 
 def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearityThreshold, normalSimilarityThreshold,
                               distanceThreshold):
+    """
+
+    :param tensors:
+    :param numNeigbhors:
+    :param varianceThreshold:
+    :param linearityThreshold:
+    :param normalSimilarityThreshold:
+    :param distanceThreshold:
+    :return:
+    """
     cogs = array(list(map(lambda t: t.reference_point, tensors)))
     cogsBallTree = BallTreePointSet(cogs, leaf_size=20)
     neighbors = cogsBallTree.query(cogs, numNeigbhors + 1)[:, 1:]

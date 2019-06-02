@@ -9,8 +9,6 @@ reuma\Reuma
 A tensor is constructed to a set of points, either around a specific point or around the centeroid (center of gravity)  
 '''
 
-from warnings import warn
-
 import numpy as np
 import numpy.linalg as la
 
@@ -71,7 +69,7 @@ class Tensor(object):
         if self.__pts is not None:
             return self.__pts
         else:
-            warn('No points were inserted to object. Refer to relevant neighbors property')
+            # warn('No points were inserted to object. Refer to relevant neighbors property')
             return None
 
     @property

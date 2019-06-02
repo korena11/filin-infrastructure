@@ -24,7 +24,7 @@ class TensorFactory(object):
     """
 
     @classmethod
-    def tensorFromPoints(cls, points, point_index=-1, **kwargs):
+    def tensorFromPoints(cls, points, point_index=-1, keepPoints=True, **kwargs):
         """
         Create a Tensor from 3D points
 
@@ -35,11 +35,13 @@ class TensorFactory(object):
         **Optionals**
 
         :param radius: the radius according to which weights are being computed (if not set, then unit weight is used)
+        :param keepPoints: indicator whether to keep the points as part of the tensor object
 
-        :type points: PointSet
+        :type points: PointSet or np.ndarray
         :type point_index: int
+        :type keepPoints: bool
 
-        :return: TensorProperty object
+        :return: Tensor object
 
         :rtype: Tensor
 
@@ -78,12 +80,12 @@ class TensorFactory(object):
         else:
             w = 1
 
-        t, _ = TensorFactory.tensorGeneral(points_array, ref_point, weights=w)
+        t, _ = TensorFactory.tensorGeneral(points_array, ref_point, weights=w, keepPoints=keepPoints)
 
         return t
 
     @classmethod
-    def tensorGeneral(cls, arrays, ref_array=-1, weights=1, min_points=3):
+    def tensorGeneral(cls, arrays, ref_array=-1, weights=1, min_points=3, keepPoints=True):
         """
         Compute a general tensor (not necessarily 3D)
 
@@ -97,8 +99,10 @@ class TensorFactory(object):
 
         :param weights: the weights for the tensor computation. Default 1 for all
         :param min_points: minimal number of points that can define a tensor (default: 3)
+        :param keepPoints: indicator whether to keep the points as part of the tensor object
 
         :type min_points: int
+        :type keepPoints: bool
 
         :return: a tensor
 
@@ -131,7 +135,10 @@ class TensorFactory(object):
         if arrays.shape[0] < min_points:
             covMat = np.eye(covMat.shape[0])
 
-        t = Tensor(covMat, ref_array, arrays.shape[0], points=arrays)
+        if keepPoints:
+            t = Tensor(covMat, ref_array, arrays.shape[0], points=arrays)
+        else:
+            t = Tensor(covMat, ref_array, arrays.shape[0])
 
         return t, ref_array
 
