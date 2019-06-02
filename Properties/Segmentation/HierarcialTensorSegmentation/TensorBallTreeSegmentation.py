@@ -1,9 +1,10 @@
 import warnings
 
-from numpy import zeros
+from numpy import zeros, array
 
 from BallTreePointSet import BallTreePointSet
 from PointSet import PointSet
+from TensorConnectivityGraph import TensorConnectivityGraph
 from TensorFactory import TensorFactory
 
 
@@ -39,3 +40,23 @@ def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
     for i in range(len(tensors)):
         labels[pointsOfNodes[i]] = i
     return ballTree, labels, nodesOfInterest, tensors
+
+
+def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearityThreshold, normalSimilarityThreshold,
+                              distanceThreshold):
+    cogs = array(list(map(lambda t: t.reference_point, tensors)))
+    cogsBallTree = BallTreePointSet(cogs, leaf_size=20)
+    neighbors = cogsBallTree.query(cogs, numNeigbhors + 1)[:, 1:]
+
+    graph = TensorConnectivityGraph(tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
+                                    linearityThreshold=linearityThreshold)
+
+    # graph.spyGraph()
+    nComponents, labels = graph.connected_componnents()
+    # graph.connected_segments()
+
+    return labels
+
+
+if __name__ == '__main__':
+    pass

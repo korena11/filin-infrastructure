@@ -173,6 +173,7 @@ class SegmentationFactory:
         bt, labels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
         return SegmentationProperty(points, labels, nodeIds, tensors)
 
+
 if __name__ == '__main__':
     pass
     # TODO: obsolete code needs to be deleted
