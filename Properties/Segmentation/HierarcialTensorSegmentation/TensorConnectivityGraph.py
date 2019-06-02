@@ -1,4 +1,4 @@
-from numpy import array, nonzero, dot
+from numpy import array, nonzero, dot, logical_and, int_
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
@@ -6,7 +6,7 @@ from scipy.sparse.csgraph import connected_components
 class TensorConnectivityGraph(object):
 
     def __init__(self, tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
-                 mode='binrary', linearityThreshold=5):
+                 mode='binary', linearityThreshold=5):
         # self.__tensors = tensors
         self.__cogs = array(list(map(lambda t: t.reference_point, tensors)))
         self.__eigVals = array(list(map(lambda t: t.eigenvalues, tensors)))
@@ -22,26 +22,34 @@ class TensorConnectivityGraph(object):
 
         numTensors = len(tensors)
         self.__simMatrix = coo_matrix((numTensors, numTensors), dtype='f').tolil()
-        self.__simMatrix[range(numTensors), range(numTensors)] = 1  # TODO: check if works, if not use np.ones
+        self.__simMatrix[range(numTensors), range(numTensors)] = 1
 
         validNodes = nonzero(self.__eigVals[:, 0] < self.__varianceThreshold)[0]
 
         list(map(lambda i: self.__computeSimilarityForTensor(i, mode), validNodes))
 
     def __computeSimilarityForTensor(self, index, mode='binary'):
-        # self.__simMatrix[index, index] = 1  # TODO: Move to __init__
         lambda3 = self.__eigVals[index, 0]
         lambda2 = self.__eigVals[index, 1]
         eigRatio = self.__eigVals[index, -1] / self.__eigVals[index, 1]
         neighbors = self.__neighbors[index]
+        neighbors = neighbors[self.__eigVals[neighbors, 0] < self.__varianceThreshold]
 
-        # if lambda3 < self.__varianceThreshold:  # TODO: Move to __init__, filter nodes that fail test
-        deltas = cogs[neighbors] - cogs[index]
+        deltas = self.__cogs[neighbors] - self.__cogs[index]
 
         if eigRatio < self.__linearityThreshold:
-            distances = abs(dot(self.__plateAxes[index].reshape((1, 3)), deltas.T))
+            distances = abs(dot(self.__plateAxes[index].reshape((1, 3)), deltas.T)).reshape((-1,))
             directionalDiffs = abs(dot(self.__plateAxes[index].reshape((1, 3)),
-                                       self.__plateAxes[neighbors].T))
+                                       self.__plateAxes[neighbors].T)).reshape((-1,))
+
+            if mode == 'binary':
+                distanceTest = distances < self.__distanceThreshold
+                directionTest = directionalDiffs > 1 - self.__normalSimilarityThreshold
+                similarityValues = int_(logical_and(distanceTest, directionTest))
+            elif mode == '':
+                a = 1
+
+            self.__simMatrix[index, neighbors] = similarityValues
 
     def connected_componnents(self):
         """

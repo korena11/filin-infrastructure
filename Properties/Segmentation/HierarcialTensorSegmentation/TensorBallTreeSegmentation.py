@@ -51,6 +51,12 @@ def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearit
     graph = TensorConnectivityGraph(tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
                                     linearityThreshold=linearityThreshold)
 
+    # graph.spyGraph()
+    nComponents, labels = graph.connected_componnents()
+    # graph.connected_segments()
+
+    return labels
+
 
 if __name__ == '__main__':
     pass

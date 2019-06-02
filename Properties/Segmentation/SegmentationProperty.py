@@ -62,7 +62,8 @@ class SegmentationProperty(BaseProperty):
     @property
     def RGB(self):
         return self.__rgb
-         
+
+    @property
     def GetAllSegments(self):
         
         return self.__segments
