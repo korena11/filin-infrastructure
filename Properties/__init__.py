@@ -12,3 +12,12 @@ for file in files_list:
         __all__.append(file[:-3])
     else:
         sys.path.append(module_path + '/' + file)
+
+# from . import Neighborhood
+# from . import Normals
+# from . import Tensors
+# from . import Saliency
+# from . import Color
+# from . import Panoramas
+# from . import Curvature
+# from . import Transformations

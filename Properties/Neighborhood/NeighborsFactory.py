@@ -44,6 +44,7 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -67,6 +68,11 @@ class NeighborsFactory:
                 elif method.__name__ == 'pointSetOpen3D_rnn_kdTree':
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, search_radius)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
                     neighbors = method(pointset, search_radius)
 
         if neighbors == -1:
@@ -101,6 +107,7 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -125,6 +132,11 @@ class NeighborsFactory:
                 elif method.__name__ == 'pointSetOpen3D_knn_kdTree':
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, k_nearest_neighbors)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
                     neighbors = method(pointset, k_nearest_neighbors)
 
         if neighbors == -1:

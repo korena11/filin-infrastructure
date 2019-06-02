@@ -13,4 +13,4 @@ for directory in list_directories:
     if directory_path not in sys.path:
         sys.path.append(directory_path)
 
-print('Filin infrastructure fully loaded')
+print('Infrastructure loaded')

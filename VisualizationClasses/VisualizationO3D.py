@@ -82,13 +82,20 @@ class VisualizationO3D:
 
         o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
-    def visualize_property(self, propertyclass):
+    def visualize_property(self, propertyclass, attribute_name=None, zero_black=False, epsilon=0.05):
         """
         Visualize property classes
 
         :param propertyclass: a property class. Can have multiple attributes to visualize
+        :param attribute_name: name of the attribute to visualize. If None -- can cycle through the attribute using "A"
+        :param zero_black: show close to zero values as black dots. Default: False
+        :param epsilon: the thershold for zero value       
 
         :type propertyclass: BaseProperty
+        :type attribute_name: str
+        :type zero_black: bool
+        :type epsilon: float
+
         """
 
         # initialize custom keys for visualization window
@@ -103,7 +110,7 @@ class VisualizationO3D:
                 continue
             # filter out properties that are not arrays and cannot be converted into color arrays
             if isinstance(propertyclass.__getattribute__(att), np.ndarray):
-                colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att)))
+                colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att), zero_black, epsilon))
                 attribute_name.append(att)
         if len(colors_new) == 0:
             colors_new = [self.__make_color_array(propertyclass.getValues())]
@@ -115,8 +122,8 @@ class VisualizationO3D:
         self.attribute_name = attribute_name
 
         from itertools import cycle
-        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray'])
-        key_to_callback[ord('a')] = self.toggle_attributes_colors
+        self.colormap_list = cycle(['coolwarm', 'RdYlBu', 'PuOr', 'PiYG', 'jet', 'summer', 'winter', 'hot', 'gray'])
+        key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
         o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
@@ -175,13 +182,16 @@ class VisualizationO3D:
         return o3d.Vector3dVector(np.vstack((R, G, B)).T)
 
     @classmethod
-    def __make_color_array(cls, array):
+    def __make_color_array(cls, array, zero_black=False, epsilon=0.05):
         """
         Prepare an array to be used as a color array for visualization
 
         :param array: array of numbers to be converted into color array
+        :param zero_black: show close to zero values as black dots
+        :param epsilon: the definition of "close to" 
 
         :type array: numpy.array
+        :type zero_black: bool
 
         :return: an open3d vector
         :rtype: o3d.Vector3D
@@ -202,7 +212,16 @@ class VisualizationO3D:
         else:
             rgb = array
 
-        # normalize to range [0...1]
-        rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
+        if zero_black:
+            if rgb[np.where(rgb < 0)].size == 0:
+                rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
+            else:
+                # make zero the lowest number, number below zero higher in a notch
+                rgb[np.where(np.abs(array) < epsilon), :] = 0
+                rgb_normed = np.max(rgb[np.where(rgb < 0)]) + (rgb - rgb.min()) / (rgb.max() - rgb.min())
+                rgb_normed[np.where(np.abs(array) < epsilon), :] = 0
+        else:
+            # normalize to range [0...1]
+            rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
 
         return o3d.Vector3dVector(rgb_normed)

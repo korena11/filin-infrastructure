@@ -61,7 +61,7 @@ class SaliencyProperty(BaseProperty):
 
         return saliency
 
-    def getPointSaliency(self, idx):
+    def getPointSaliency(self, idx=None):
         """
         Retrieve the saliency value of a specific point
 
@@ -72,7 +72,10 @@ class SaliencyProperty(BaseProperty):
         :rtype: float
 
         """
-        return self.__saliency[idx]
+        if idx is None:
+            return self.__saliency
+        else:
+            return self.__saliency[idx]
 
     def setPointSaliency(self, idx, values):
         """

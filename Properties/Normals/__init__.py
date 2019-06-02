@@ -1,5 +1,7 @@
 import os
 
+# from NormalsFactory import NormalsProperty, NormalsFactory
+
 module_path = os.path.dirname(os.path.abspath(__file__))
 files_list = [f for f in os.listdir(module_path) if f.endswith('.py')]
 __all__ = []

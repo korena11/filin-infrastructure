@@ -110,7 +110,7 @@ class SaliencyFactory(object):
 
     @classmethod
     def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           weight_distance_sigma=0.05, association_percentage=20, association_weight=0.5,
+                           weight_distance_sigma=0.05, alpha=0.05, min_obj_size=0.01,
                            verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature and normal, as a function of the distance
@@ -155,6 +155,9 @@ class SaliencyFactory(object):
 
         from warnings import warn
         from matplotlib import pyplot as plt
+        from scipy import stats
+
+        epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
 
         tensor_saliency = []
         j = 0
@@ -182,21 +185,27 @@ class SaliencyFactory(object):
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
             # difference in curvature
-            dk = np.abs(current_curvatures[1:] - current_curvatures[0])
+            dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+            dk[np.where(np.abs(dk) < epsilon)] = 0
             dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+            # dk = current_curvatures[0]
+
             kstd.append(np.std(dk))
             kmean.append(np.mean(dk))
 
             # distances influence
             dist_element = 1 / (2 * np.pi * weight_distance_sigma ** 2) * \
                            np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
-            dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min())
+            dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
 
             # normal influence
-            dn = current_normals[1:, :].dot(current_normals[0, :])
-            dn_normed = np.exp(-(dn + 1))
+            # dn = current_normals[1:, :].dot(current_normals[0, :])
+            dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+                        neighborhood.numberOfNeighbors - 1)
+            # dn_normed = np.exp(-(dn + 1))
 
-            tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
+            tensor_saliency.append(np.sum(dist_element_normed * (dn + dk_normed)))
+            # tensor_saliency.append(np.sum((dn)))
             if verbose:
                 j += 1
                 import scipy.stats as stats
@@ -221,21 +230,21 @@ class SaliencyFactory(object):
         # Use only percentage of the highest low level distinctness to compute the high-level one
         tensor_saliency = np.asarray(tensor_saliency)
         sorted_idx = np.argsort(tensor_saliency)
-        num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
-        focus_points_idx = np.hstack((sorted_idx[:int(num_points_assoc)], sorted_idx[-num_points_assoc:]))
-        focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
-
-        import itertools
-        if association_weight != 0:
-            points_association = list(map(cls.__point_association,
-                                          tqdm(neighbors_property.Points, desc='point association', position=0,
-                                               total=neighbors_property.Size), itertools.repeat(focus_points),
-                                          itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
-                                          itertools.repeat(weight_distance_sigma)))
-            tensor_saliency = association_weight * np.asarray(points_association) + (
-                    1 - association_weight) * tensor_saliency
-        else:
-            tensor_saliency = (1 - association_weight) * tensor_saliency
+        # num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
+        # focus_points_idx = np.hstack((sorted_idx[:int(num_points_assoc)], sorted_idx[-num_points_assoc:]))
+        # focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
+        #
+        # import itertools
+        # if association_weight != 0:
+        #     points_association = list(map(cls.__point_association,
+        #                                   tqdm(neighbors_property.Points, desc='point association', position=0,
+        #                                        total=neighbors_property.Size), itertools.repeat(focus_points),
+        #                                   itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
+        #                                   itertools.repeat(weight_distance_sigma)))
+        #     tensor_saliency = association_weight * np.asarray(points_association) + (
+        #             1 - association_weight) * tensor_saliency
+        # else:
+        tensor_saliency = tensor_saliency
         print('kmean {a} kstd {b}'.format(a=np.asarray(kmean).mean(), b=np.asarray(kstd).mean()))
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 

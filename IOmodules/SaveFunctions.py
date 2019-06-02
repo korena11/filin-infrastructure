@@ -35,7 +35,6 @@ def WriteToPts(points, path):
         :param points: PointSet
         :param path: to the directory of a new file + file name
     '''
-
     fields_num = points.FieldsDimension
     if fields_num == 7:
         data = hstack((points.ToNumpy(), points.Intensity, points.RGB))
