@@ -14,13 +14,17 @@ if __name__ == '__main__':
     # pntSet = IOFactory.ReadPly(path + filename, returnAdditionalAttributes=False)
 
     filename = 'test_tensors_2planarSurfaces.pts'
+
+    path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
+    # filename = 'agriculture1_clean.pts'
+    filename = 'oldSchool2.pts'
     pntSet = IOFactory.ReadPts(path + filename)
 
     segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
 
     tensors = segmentation.getSegmentAttributes
     temp = tensorConnectedComponents(tensors, 10, linearityThreshold=5, varianceThreshold=0.1 ** 2,
-                                     normalSimilarityThreshold=0.05, distanceThreshold=0.1)
+                                     normalSimilarityThreshold=0.001, distanceThreshold=0.01, mode='soft_clipping')
 
     segmentation2 = SegmentationProperty(pntSet, temp[segmentation.GetAllSegments])
 

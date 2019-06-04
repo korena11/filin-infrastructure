@@ -178,14 +178,11 @@ class Tensor(object):
         :rtype: float
 
         """
-        from numpy import arccos, dot, sin
+        from numpy import dot, cross
         from numpy.linalg import norm
 
         if tensorType == 'stick':
-            distFromCog = norm(point - self.reference_point, axis=0)
-            offAxisAngle = arccos(dot(point - self.reference_point, self.stick_axis.reshape((-1, 1))) / distFromCog)
-
-            return distFromCog * sin(offAxisAngle)
+            return norm(cross(self.__stickAxes, (point - self.reference_point).reshape((-1, 3))), axis=1)
 
         elif tensorType == 'plate':
             dist = dot(point - self.reference_point, self.plate_axis.reshape((-1, 1)))
@@ -193,7 +190,7 @@ class Tensor(object):
             return dist if sign else abs(dist)
 
         elif tensorType == 'ball':
-            return norm(point - self.reference_point, axis=0)
+            return norm(point - self.reference_point, axis=1)
 
         elif tensorType == 'all':
             return min([self.distanceFromPoint(point, 'stick'),
@@ -202,25 +199,25 @@ class Tensor(object):
         else:
             return np.nan
 
-    def VisualizeTensor(self, pntSet, color=(255, 0, 0)):
-        """
-        NOT WORKING
-        
-        :param pntSet:
-        :param color:
-        :return:
-        """
-        from PointSet import PointSet
-        from VisualizationVTK import VisualizationVTK
-        from NormalsProperty import NormalsProperty
-
-        fig = VisualizationVTK.RenderPointSet(pntSet, 'color', pointSize=3, color=color)
-
-        cogPntSet = PointSet(self.reference_point.reshape((1, -1)))
-        normalProperty1 = NormalsProperty(cogPntSet, self.stick_axis.reshape((1, -1)) * 10)
-        normalProperty2 = NormalsProperty(cogPntSet, self.plate_axis.reshape((1, -1)) * 10)
-        normalProperty3 = NormalsProperty(cogPntSet, self.eigenvectors[:, 1].reshape((1, -1)) * 10)
-
-        VisualizationVTK.RenderPointSet(normalProperty1, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
-        VisualizationVTK.RenderPointSet(normalProperty2, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
-        VisualizationVTK.RenderPointSet(normalProperty3, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+    # def VisualizeTensor(self, pntSet, color=(255, 0, 0)):
+    #     """
+    #     NOT WORKING
+    #
+    #     :param pntSet:
+    #     :param color:
+    #     :return:
+    #     """
+    #     from PointSet import PointSet
+    #     from VisualizationVTK import VisualizationVTK
+    #     from NormalsProperty import NormalsProperty
+    #
+    #     fig = VisualizationVTK.RenderPointSet(pntSet, 'color', pointSize=3, color=color)
+    #
+    #     cogPntSet = PointSet(self.reference_point.reshape((1, -1)))
+    #     normalProperty1 = NormalsProperty(cogPntSet, self.stick_axis.reshape((1, -1)) * 10)
+    #     normalProperty2 = NormalsProperty(cogPntSet, self.plate_axis.reshape((1, -1)) * 10)
+    #     normalProperty3 = NormalsProperty(cogPntSet, self.eigenvectors[:, 1].reshape((1, -1)) * 10)
+    #
+    #     VisualizationVTK.RenderPointSet(normalProperty1, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+    #     VisualizationVTK.RenderPointSet(normalProperty2, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)
+    #     VisualizationVTK.RenderPointSet(normalProperty3, 'color', color=(0, 0, 255), pointSize=5, _figure=fig)

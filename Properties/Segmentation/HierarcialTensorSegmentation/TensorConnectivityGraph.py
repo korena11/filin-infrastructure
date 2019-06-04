@@ -1,4 +1,5 @@
-from numpy import array, nonzero, dot, logical_and, int_
+from numpy import array, nonzero, dot, logical_and, int_, cross, log, exp, isnan
+from numpy.linalg import norm
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
@@ -29,7 +30,6 @@ class TensorConnectivityGraph(object):
         list(map(lambda i: self.__computeSimilarityForTensor(i, mode), validNodes))
 
     def __computeSimilarityForTensor(self, index, mode='binary'):
-        lambda3 = self.__eigVals[index, 0]
         lambda2 = self.__eigVals[index, 1]
         eigRatio = self.__eigVals[index, -1] / self.__eigVals[index, 1]
         neighbors = self.__neighbors[index]
@@ -37,19 +37,47 @@ class TensorConnectivityGraph(object):
 
         deltas = self.__cogs[neighbors] - self.__cogs[index]
 
-        if eigRatio < self.__linearityThreshold:
+        if eigRatio < self.__linearityThreshold or lambda2 > self.__varianceThreshold:
             distances = abs(dot(self.__plateAxes[index].reshape((1, 3)), deltas.T)).reshape((-1,))
             directionalDiffs = abs(dot(self.__plateAxes[index].reshape((1, 3)),
                                        self.__plateAxes[neighbors].T)).reshape((-1,))
+        else:
+            distances = norm(cross(self.__stickAxes[index], deltas), axis=1)
+            directionalDiffs = abs(dot(self.__stickAxes[index].reshape((1, 3)),
+                                       self.__stickAxes[neighbors].T)).reshape((-1,))
 
-            if mode == 'binary':
-                distanceTest = distances < self.__distanceThreshold
-                directionTest = directionalDiffs > 1 - self.__normalSimilarityThreshold
-                similarityValues = int_(logical_and(distanceTest, directionTest))
-            elif mode == '':
-                a = 1
+        self.__simMatrix[index, neighbors] = self.__computeEdgeWeight(distances, directionalDiffs, mode)
 
-            self.__simMatrix[index, neighbors] = similarityValues
+    def __computeEdgeWeight(self, distances, directionalDiffs, mode='binary'):
+        """
+
+        :param distances:
+        :param directionalDiffs:
+        :param mode:
+        :return:
+        """
+        if mode == 'binary':
+            distanceTest = distances < self.__distanceThreshold
+            directionTest = directionalDiffs > 1 - self.__normalSimilarityThreshold
+            return int_(logical_and(distanceTest, directionTest))
+        elif mode == 'soft_clipping':
+            distAlpha = 100  # TODO: ADD AS PARAMETER
+            ds = distances / self.__varianceThreshold
+            ds[ds > 5] = 5
+            distanceWeights = 1 - 1 / distAlpha * log((1 + exp(distAlpha * ds)) / (1 + exp(distAlpha * (ds - 1))))
+            distanceWeights[isnan(distanceWeights)] = 0
+
+            angAlpha = 10  # TODO: ADD AS PARAMETER
+            angs = (directionalDiffs - (1 - self.__normalSimilarityThreshold)) / self.__normalSimilarityThreshold
+            angWeights = 1 / angAlpha * log((1 + exp(angAlpha * angs)) /
+                                            (1 + exp(angAlpha * (angs - 1))))
+
+            return distanceWeights * angWeights
+        elif mode == 'exp':
+            return exp(-distances ** 2 / self.__distanceThreshold) * \
+                   exp(directionalDiffs ** 2 / self.__normalSimilarityThreshold)
+        else:
+            raise ValueError('Unrecognised weighting method')
 
     def connected_componnents(self):
         """
@@ -81,7 +109,8 @@ class TensorConnectivityGraph(object):
         numComponnets, labels = connected_components(self.__simMatrix)
         labeledIndexes = [nonzero(labels == l)[0] for l in range(numComponnets)]
         # labeledKeys = list(map(array(list(self.__tensors.keys())).__getitem__, labeledIndexes))
-        labeledTensors = list(map(array(self.__tensors).__getitem__, labeledIndexes))
+        labeledTensors = list(
+            map(array(self.__tensors).__getitem__, labeledIndexes))  # TODO: can be done by numpy.unique
         return None
         # return list(map(self.__createSegment, labeledIndexes, labeledTensors))
 

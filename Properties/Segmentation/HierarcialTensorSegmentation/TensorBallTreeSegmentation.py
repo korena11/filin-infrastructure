@@ -43,7 +43,7 @@ def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
 
 
 def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearityThreshold, normalSimilarityThreshold,
-                              distanceThreshold):
+                              distanceThreshold, mode='binary'):
     """
 
     :param tensors:
@@ -52,6 +52,7 @@ def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearit
     :param linearityThreshold:
     :param normalSimilarityThreshold:
     :param distanceThreshold:
+    :param mode:
     :return:
     """
     cogs = array(list(map(lambda t: t.reference_point, tensors)))
@@ -59,11 +60,10 @@ def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearit
     neighbors = cogsBallTree.query(cogs, numNeigbhors + 1)[:, 1:]
 
     graph = TensorConnectivityGraph(tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
-                                    linearityThreshold=linearityThreshold)
+                                    linearityThreshold=linearityThreshold, mode=mode)
 
     # graph.spyGraph()
     nComponents, labels = graph.connected_componnents()
-    # graph.connected_segments()
 
     return labels
 
