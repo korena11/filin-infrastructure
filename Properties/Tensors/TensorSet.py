@@ -7,11 +7,11 @@ from TensorFactory import TensorFactory
 
 class TensorSet(object):
 
-    self.__overallTensor = None
-    self.__numTensors = 0
-    self.__tensors = None
-
     def __init__(self, tensors=None):
+
+        self.__overallTensor = None
+        self.__numTensors = 0
+        self.__tensors = []
 
         if tensors is None:
             raise UserWarning('\'tensors\' parameter is None')

@@ -201,6 +201,7 @@ class SegmentationFactory:
         :return:
         """
         from TensorBallTreeSegmentation import ExtractSurfaceElements, tensorConnectedComponents
+        from TensorSet import TensorSet
         bt, surfaceElementsLabels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
 
         labels, tensorsPerSegment = tensorConnectedComponents(tensors, numNeighbors, mode=mode,
@@ -208,7 +209,9 @@ class SegmentationFactory:
                                                               varianceThreshold=varianceThreshold,
                                                               normalSimilarityThreshold=normalSimilarityThreshold,
                                                               distanceThreshold=distanceThreshold)
-        tensorsSets = None  # TODO: Create tensor sets
+
+        tensors = asarray(tensors)
+        tensorsSets = list(map(lambda s: TensorSet(tensors[s]), tensorsPerSegment))
 
         return SegmentationProperty(points, labels[surfaceElementsLabels], segmentAttributes=tensorsSets)
 
