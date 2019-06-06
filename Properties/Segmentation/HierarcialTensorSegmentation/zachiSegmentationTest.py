@@ -20,13 +20,16 @@ if __name__ == '__main__':
     filename = 'oldSchool2.pts'
     pntSet = IOFactory.ReadPts(path + filename)
 
-    segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
+    # segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
 
-    tensors = segmentation.getSegmentAttributes
-    temp = tensorConnectedComponents(tensors, 10, linearityThreshold=5, varianceThreshold=0.1 ** 2,
-                                     normalSimilarityThreshold=0.001, distanceThreshold=0.01, mode='soft_clipping')
-
-    segmentation2 = SegmentationProperty(pntSet, temp[segmentation.GetAllSegments])
+    segmentation2 = SegmentationFactory.SurfaceElementsTensorConnectedComponents(pntSet, leafSize=10,
+                                                                                 smallestObjectSize=0.1,
+                                                                                 numNeighbors=10,
+                                                                                 varianceThreshold=0.1 ** 2,
+                                                                                 linearityThreshold=5,
+                                                                                 normalSimilarityThreshold=1e-3,
+                                                                                 distanceThreshold=0.01,
+                                                                                 mode='soft_clipping')
 
     # visObj = VisualizationO3D()
     VisualizationO3D.visualize_pointset(pointset=segmentation2, drawCoordianteFrame=True, coordinateFrameOrigin='min')

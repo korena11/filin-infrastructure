@@ -1,6 +1,6 @@
 import warnings
 
-from numpy import zeros, array
+from numpy import zeros
 
 from BallTreePointSet import BallTreePointSet
 from PointSet import PointSet
@@ -10,11 +10,16 @@ from TensorFactory import TensorFactory
 
 def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
     """
-
-    :param points:
-    :param leafSize:
-    :param smallestObjectSize:
-    :return:
+    Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure
+    :param points: point set object (PointSet)
+    :param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+    :param smallestObjectSize: smallest object expected to be detected in the point set (float)
+    :return: a tuple containing:
+             - the ball tree of the given point set
+             - labels of the points based on the partitioning to nodes
+             - the indexes of the nodes in the ball tree that are larger than the given object size by are deepest in
+             the ball tree hierarchy levels
+             - tensors computed for each of the returned nodes
     """
 
     if not isinstance(points, PointSet):
@@ -42,30 +47,28 @@ def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
     return ballTree, labels, nodesOfInterest, tensors
 
 
-def tensorConnectedComponents(tensors, numNeigbhors, varianceThreshold, linearityThreshold, normalSimilarityThreshold,
+def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearityThreshold, normalSimilarityThreshold,
                               distanceThreshold, mode='binary'):
     """
-
-    :param tensors:
-    :param numNeigbhors:
-    :param varianceThreshold:
-    :param linearityThreshold:
-    :param normalSimilarityThreshold:
-    :param distanceThreshold:
-    :param mode:
+    Merging tensors using connected components
+    :param tensors: list of tensors (list or ndarray of Tensor objects)
+    :param numNeighbors: number of neighbors to find for each tensor (int)
+    :param varianceThreshold: max allowed variance of a surface tensor (float)
+    :param linearityThreshold: the value between the two largest eigenvalues from which a tensor is considered as
+        a linear one (float)
+    :param normalSimilarityThreshold:  max difference allowed between the directions of the tensors,
+        given in values of the angle sine (float)
+    :param distanceThreshold: max distance between two tensors (float)
+    :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
     :return:
     """
-    cogs = array(list(map(lambda t: t.reference_point, tensors)))
-    cogsBallTree = BallTreePointSet(cogs, leaf_size=20)
-    neighbors = cogsBallTree.query(cogs, numNeigbhors + 1)[:, 1:]
-
-    graph = TensorConnectivityGraph(tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
-                                    linearityThreshold=linearityThreshold, mode=mode)
+    graph = TensorConnectivityGraph(tensors, numNeighbors, varianceThreshold, normalSimilarityThreshold,
+                                    distanceThreshold, linearityThreshold=linearityThreshold, mode=mode)
 
     # graph.spyGraph()
-    nComponents, labels = graph.connected_componnents()
+    nComponents, labels, indexesByLabels = graph.connected_componnents()
 
-    return labels
+    return labels, indexesByLabels
 
 
 if __name__ == '__main__':

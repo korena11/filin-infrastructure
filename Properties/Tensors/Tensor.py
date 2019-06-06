@@ -115,7 +115,6 @@ class Tensor(object):
     def plate_axis(self):
         """
         If the covariance relates to a plane (a plate), its normal is the plate_axis
-
         """
         return self.__plateAxis
 
@@ -123,8 +122,6 @@ class Tensor(object):
     def points_number(self):
         """
         Number of points used for tensor computation
-
-
         """
         return self.__num_points
 

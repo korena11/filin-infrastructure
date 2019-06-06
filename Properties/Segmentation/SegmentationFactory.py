@@ -168,10 +168,49 @@ class SegmentationFactory:
         return segmentationProperty
 
     @classmethod
-    def BallTreeSurfaceElementSegmentation(self, points, leafSize=10, smallestObjectSize=0.1):
+    def BallTreeSurfaceElementSegmentation(cls, points, leafSize=10, smallestObjectSize=0.1):
+        """
+        Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure
+        :param points: point set object (PointSet)
+        :param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+        :param smallestObjectSize: smallest object expected to be detected in the point set (float)
+        :return: SegmentationFactory
+        """
         from TensorBallTreeSegmentation import ExtractSurfaceElements
         bt, labels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
         return SegmentationProperty(points, labels, nodeIds, tensors)
+
+    @classmethod
+    def SurfaceElementsTensorConnectedComponents(cls, points, leafSize=10, smallestObjectSize=0.1, numNeighbors=10,
+                                                 varianceThreshold=0.01, linearityThreshold=5,
+                                                 normalSimilarityThreshold = 1e-2, distanceThreshold=0.01,
+                                                 mode='soft_clipping'):
+        """
+
+        :param points: point set object (PointSet)
+        :param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+        :param smallestObjectSize: smallest object expected to be detected in the point set (float)
+        :param numNeighbors: number of neighboring surface elements to find (int)
+        :param varianceThreshold: max allowed variance of a surface tensor (float)
+        :param linearityThreshold: the value between the two largest eigenvalues from which a tensor is considered as
+            a linear one (float)
+        :param normalSimilarityThreshold: max difference allowed between the directions of the tensors,
+            given in values of the angle sine (float)
+        :param distanceThreshold: max distance between two tensors (float)
+        :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
+        :return:
+        """
+        from TensorBallTreeSegmentation import ExtractSurfaceElements, tensorConnectedComponents
+        bt, surfaceElementsLabels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
+
+        labels, tensorsPerSegment = tensorConnectedComponents(tensors, numNeighbors, mode=mode,
+                                                              linearityThreshold=linearityThreshold,
+                                                              varianceThreshold=varianceThreshold,
+                                                              normalSimilarityThreshold=normalSimilarityThreshold,
+                                                              distanceThreshold=distanceThreshold)
+        tensorsSets = None  # TODO: Create tensor sets
+
+        return SegmentationProperty(points, labels[surfaceElementsLabels], segmentAttributes=tensorsSets)
 
 
 if __name__ == '__main__':

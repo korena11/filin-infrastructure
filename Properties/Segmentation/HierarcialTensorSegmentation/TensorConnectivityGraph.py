@@ -2,34 +2,59 @@ from numpy import array, nonzero, dot, logical_and, int_, cross, log, exp, isnan
 from numpy.linalg import norm
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
+from BallTreePointSet import BallTreePointSet
 
 
 class TensorConnectivityGraph(object):
 
-    def __init__(self, tensors, neighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
+    def __init__(self, tensors, numNeighbors, varianceThreshold, normalSimilarityThreshold, distanceThreshold,
                  mode='binary', linearityThreshold=5):
-        # self.__tensors = tensors
+        """
+        Constructing a sparse similarity graph between the given tensors
+        :param tensors: list of tensors (list/ndarray of Tensor objects)
+        :param numNeighbors: the number of neighbors to find for each tensor (int)
+        :param varianceThreshold: max allowed variance of a surface tensor (float)
+        :param normalSimilarityThreshold: max difference allowed between the directions of the tensors,
+        given in values of the angle sine (float)
+        :param distanceThreshold: max distance between two tensors (float)
+        :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
+        :param linearityThreshold: the value between the two largest eigenvalues from which a tensor is considered as
+        a linear one (float)
+        """
+        # parsing data from tensors
         self.__cogs = array(list(map(lambda t: t.reference_point, tensors)))
         self.__eigVals = array(list(map(lambda t: t.eigenvalues, tensors)))
         self.__stickAxes = array(list(map(lambda t: t.stick_axis, tensors)))
         self.__plateAxes = array(list(map(lambda t: t.plate_axis, tensors)))
 
-        self.__neighbors = neighbors
+        # finding neighbors for each tensor
+        cogsBallTree = BallTreePointSet(self.__cogs, leaf_size=20)
+        self.__neighbors = cogsBallTree.query(self.__cogs, numNeighbors + 1)[:, 1:]
+
         self.__varianceThreshold = varianceThreshold
         self.__normalSimilarityThreshold = normalSimilarityThreshold
         self.__distanceThreshold = distanceThreshold
         self.__linearityThreshold = linearityThreshold
         self.__labels = None
 
+        # initializing similarity matrix
         numTensors = len(tensors)
         self.__simMatrix = coo_matrix((numTensors, numTensors), dtype='f').tolil()
         self.__simMatrix[range(numTensors), range(numTensors)] = 1
 
+        # filtering noisy tensors
         validNodes = nonzero(self.__eigVals[:, 0] < self.__varianceThreshold)[0]
 
+        # computing similarity between neighboring tensors
         list(map(lambda i: self.__computeSimilarityForTensor(i, mode), validNodes))
 
     def __computeSimilarityForTensor(self, index, mode='binary'):
+        """
+        Computing the similarity value between a tensor given by its index and its neighbors
+        :param index: index of the tensor (int)
+        :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
+        :return: None
+        """
         lambda2 = self.__eigVals[index, 1]
         eigRatio = self.__eigVals[index, -1] / self.__eigVals[index, 1]
         neighbors = self.__neighbors[index]
@@ -50,11 +75,12 @@ class TensorConnectivityGraph(object):
 
     def __computeEdgeWeight(self, distances, directionalDiffs, mode='binary'):
         """
-
-        :param distances:
-        :param directionalDiffs:
-        :param mode:
-        :return:
+        Computing the similarity values based on the distances and angular difference between a tensor and its neighbor
+        based on a given similarity function
+        :param distances: distance between tensor and its neighbors (1-D ndarray)
+        :param directionalDiffs: angular differences between tensor and its neighbors (1-D ndarray)
+        :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
+        :return: similarity values (1-D ndarray)
         """
         if mode == 'binary':
             distanceTest = distances < self.__distanceThreshold
@@ -82,42 +108,18 @@ class TensorConnectivityGraph(object):
     def connected_componnents(self):
         """
         Graph partitioning by the Connected Components method
-        :return: tuple containing the number of segments the graph was partitioned to and a list of the segments
+        :return: tuple containing the number of segments the graph was partitioned to, labels of each node in graph,
+        and a list containing the list of nodes per segment
         """
         numComponnets, labels = connected_components(self.__simMatrix)
         self.__labels = labels
-        return numComponnets, labels
-
-    def __createSegment(self, keys, tensors):
-        """
-
-        :param keys:
-        :param tensors:
-        :return:
-        """
-        # TODO: Implement TensorSet Class
-        return None
-        # s = Segment()
-        # list(map(s.addPatch, keys, tensors))
-        # return s
-
-    def connected_segments(self):
-        """
-
-        :return:
-        """
-        numComponnets, labels = connected_components(self.__simMatrix)
-        labeledIndexes = [nonzero(labels == l)[0] for l in range(numComponnets)]
-        # labeledKeys = list(map(array(list(self.__tensors.keys())).__getitem__, labeledIndexes))
-        labeledTensors = list(
-            map(array(self.__tensors).__getitem__, labeledIndexes))  # TODO: can be done by numpy.unique
-        return None
-        # return list(map(self.__createSegment, labeledIndexes, labeledTensors))
+        indexesByLabels = [nonzero(labels == l)[0] for l in range(numComponnets)]
+        return numComponnets, labels, indexesByLabels
 
     def spyGraph(self):
         """
-        Plots the connectivity graph
-        :return:
+        Plots the connectivity graph. used for debugging purposes.
+        :return: None
         """
         from matplotlib import pyplot as plt
         plt.spy(self.__simMatrix)
@@ -127,7 +129,7 @@ class TensorConnectivityGraph(object):
         Retrieves the similarity value between two nodes in the connectivity graph
         :param index1: index of 1st node (int)
         :param index2: index of 2nd node (int)
-        :return:
+        :return: similarity value (float)
         """
         return self.__simMatrix[index1, index2]
 
