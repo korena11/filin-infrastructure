@@ -300,6 +300,8 @@ class CurvatureFactory:
                     print('invalid point:', point_neighbors.center_point_idx)
                 umbrellaCurvature.append(invalid_value)
         umbrella_curvature = np.asarray(umbrellaCurvature)
+        if verbose:
+            print(umbrella_curvature.mean())
         if cuvatureProperty is None:
             return CurvatureProperty(neighbrohood.Points, principal_curvatures=None,
                                      umbrella_curvature=umbrella_curvature)

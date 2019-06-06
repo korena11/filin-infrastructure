@@ -110,7 +110,7 @@ class SaliencyFactory(object):
 
     @classmethod
     def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           weight_distance_sigma=0.05, alpha=0.05, min_obj_size=0.01,
+                           weight_distance_sigma=0.05, alpha=0.05, noise_size=0.01,
                            verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature and normal, as a function of the distance
@@ -135,17 +135,15 @@ class SaliencyFactory(object):
         :param normals_property: normals property computed in advance
         :param neighbors_property: the neighborhood property of the point cloud.
         :param weight_distance_sigma: sigma of the Gaussian accoring to which the distances are weighted. Also serves as the sigma for point association. Default: 0.05
-        :param association_percentage: percentage of points to serve as focal points. Default: 20\%
-        :param association_weight: the weight of the association saliency. Default: 0.5
         :param verbose: print running messages. Default: False
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.001
 
         :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
         :type normals_property: NormalsProperty.NormalsProperty
         :type curvature_attribute: str
         :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type weight_distance_sigma: float
-        :type association_percentage: float
-        :type association_weight: float
+        :type noise_size: float
         :type verbose: bool
 
         :return: saliency values for each point
@@ -154,10 +152,8 @@ class SaliencyFactory(object):
         """
 
         from warnings import warn
-        from matplotlib import pyplot as plt
-        from scipy import stats
 
-        epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
+        # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
 
         tensor_saliency = []
         j = 0
@@ -186,7 +182,7 @@ class SaliencyFactory(object):
 
             # difference in curvature
             dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
-            dk[np.where(np.abs(dk) < epsilon)] = 0
+            # dk[np.where(np.abs(dk) < epsilon)] = 0
             dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
             # dk = current_curvatures[0]
 
@@ -202,30 +198,35 @@ class SaliencyFactory(object):
             # dn = current_normals[1:, :].dot(current_normals[0, :])
             dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
                         neighborhood.numberOfNeighbors - 1)
-            # dn_normed = np.exp(-(dn + 1))
+            if verbose:
+                print('normal mean {a}, normal std {b}'.format(a=dn.mean(), b=dn.std()))
+
+            if dn.std() > noise_size:
+                dn = 0
+                dk_normed = 0
 
             tensor_saliency.append(np.sum(dist_element_normed * (dn + dk_normed)))
             # tensor_saliency.append(np.sum((dn)))
-            if verbose:
-                j += 1
-                import scipy.stats as stats
-                from VisualizationO3D import VisualizationO3D
-                vis = VisualizationO3D()
-                if j % 500:
-                    fig, axes = plt.subplots(2, 2)
-                    axes[0, 0].set_title('dk')
-                    axes[0, 0].hist(dk)
-                    axes[0, 1].set_title('dk_normed')
-                    axes[0, 1].hist(dk_normed)
-                    axes[1, 0].hist(dn)
-                    axes[1, 0].set_title('dn')
-                    axes[1, 1].hist(dn_normed)
-                    axes[1, 1].set_title('dn_normed')
-                    plt.show()
-                    st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
-                    print(st)
-                    if st[1] > 0.005:
-                        vis.visualize_pointset(neighborhood)
+            # if verbose:
+            # j += 1
+            # import scipy.stats as stats
+            # from VisualizationO3D import VisualizationO3D
+            # vis = VisualizationO3D()
+            # if j % 500:
+            #     fig, axes = plt.subplots(2, 2)
+            #     axes[0, 0].set_title('dk')
+            #     axes[0, 0].hist(dk)
+            #     axes[0, 1].set_title('dk_normed')
+            #     axes[0, 1].hist(dk_normed)
+            #     axes[1, 0].hist(dn)
+            #     axes[1, 0].set_title('dn')
+            #     axes[1, 1].hist(dn_normed)
+            #     axes[1, 1].set_title('dn_normed')
+            #     plt.show()
+            #     st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
+            #     print(st)
+            #     if st[1] > 0.005:
+            #         vis.visualize_pointset(neighborhood)
 
         # Use only percentage of the highest low level distinctness to compute the high-level one
         tensor_saliency = np.asarray(tensor_saliency)
