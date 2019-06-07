@@ -12,14 +12,15 @@ class SaliencyProperty(BaseProperty):
 
         :type points: PointSet
         """
+        import numpy as np
+
         super(SaliencyProperty, self).__init__(points)
         self.__normalize = False
 
         if saliencyValues is None:
-            import numpy as np
             self.__saliency = np.empty(self.Size)
         else:
-            self.__saliency = saliencyValues
+            self.__saliency = np.asarray(saliencyValues)
 
     def __next__(self):
         self.current += 1

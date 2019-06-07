@@ -196,6 +196,8 @@ class VisualizationO3D:
         :return: an open3d vector
         :rtype: o3d.Vector3D
         """
+        if isinstance(array, list):
+            array = np.asarray(array)
         size_array = array.shape
 
         # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)

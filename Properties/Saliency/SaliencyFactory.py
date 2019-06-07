@@ -206,48 +206,50 @@ class SaliencyFactory(object):
                 dk_normed = 0
 
             tensor_saliency.append(np.sum(dist_element_normed * (dn + dk_normed)))
-            # tensor_saliency.append(np.sum((dn)))
-            # if verbose:
-            # j += 1
-            # import scipy.stats as stats
-            # from VisualizationO3D import VisualizationO3D
-            # vis = VisualizationO3D()
-            # if j % 500:
-            #     fig, axes = plt.subplots(2, 2)
-            #     axes[0, 0].set_title('dk')
-            #     axes[0, 0].hist(dk)
-            #     axes[0, 1].set_title('dk_normed')
-            #     axes[0, 1].hist(dk_normed)
-            #     axes[1, 0].hist(dn)
-            #     axes[1, 0].set_title('dn')
-            #     axes[1, 1].hist(dn_normed)
-            #     axes[1, 1].set_title('dn_normed')
-            #     plt.show()
-            #     st = stats.kstest(dn_normed, 'chi2', *(neighborhood.numberOfNeighbors - 1))
-            #     print(st)
-            #     if st[1] > 0.005:
-            #         vis.visualize_pointset(neighborhood)
 
-        # Use only percentage of the highest low level distinctness to compute the high-level one
-        tensor_saliency = np.asarray(tensor_saliency)
-        sorted_idx = np.argsort(tensor_saliency)
-        # num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
-        # focus_points_idx = np.hstack((sorted_idx[:int(num_points_assoc)], sorted_idx[-num_points_assoc:]))
-        # focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
-        #
-        # import itertools
-        # if association_weight != 0:
-        #     points_association = list(map(cls.__point_association,
-        #                                   tqdm(neighbors_property.Points, desc='point association', position=0,
-        #                                        total=neighbors_property.Size), itertools.repeat(focus_points),
-        #                                   itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
-        #                                   itertools.repeat(weight_distance_sigma)))
-        #     tensor_saliency = association_weight * np.asarray(points_association) + (
-        #             1 - association_weight) * tensor_saliency
-        # else:
-        tensor_saliency = tensor_saliency
         print('kmean {a} kstd {b}'.format(a=np.asarray(kmean).mean(), b=np.asarray(kstd).mean()))
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
+
+    @classmethod
+    def multiscale_saliency(cls, saliencies, percentiles=75):
+        """
+        Aggregates the saliencies computed by multiple scales
+
+        :param saliencies: list of the SaliencyProperty holding the saliency as computed in a specific scale
+        :param percentiles: which percentile to take throughout the scales. If different for each scale, should be a list
+
+        :type saliencies: list
+        :type percentiles: int, list
+
+        :return: Aggregated saliency property as computed in multiple scales.
+
+        :rtype: SaliencyProperty
+
+        """
+        multi_scale_values = np.zeros((saliencies[0].Size, 1))
+        if isinstance(percentiles, int):
+            percentile_ = np.ones(len(saliencies))
+            percentiles *= percentile_
+
+        elif len(percentiles) == 1:
+            percentile_ = np.ones(len(saliencies))
+            percentiles *= percentile_
+
+        for saliency, percentile in zip(saliencies, percentiles):
+            svals = np.asarray(saliency.getPointSaliency())
+
+            # normalize the values of the saliencies to the range of 0-1
+            saliency_normed = (svals - svals.min()) / (svals.max() - svals.min() + EPS)
+
+            # take only n-th percentile
+            percentile_n = np.percentile(saliency_normed, percentile)
+            print('takes the {} percentile'.format(str(percentile)))
+            saliency_normed[saliency_normed < percentile_n] = 0
+
+            multi_scale_values += saliency_normed[:, None]
+
+        return SaliencyProperty(saliencies[0].Points, multi_scale_values)
+
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
