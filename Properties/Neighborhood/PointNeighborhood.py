@@ -1,6 +1,6 @@
 import numpy as np
 
-from PointSubSet import PointSubSet
+from DataClasses.PointSubSet import PointSubSet
 
 
 class PointNeighborhood:

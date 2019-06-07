@@ -2,7 +2,7 @@ import numpy as np
 from numpy import array
 from sklearn.neighbors import KDTree
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 
 class KdTreePointSet(PointSet):

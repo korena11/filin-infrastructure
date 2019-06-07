@@ -1,7 +1,7 @@
 from numpy import nonzero, zeros, uint8  # logical_and
 
-from Color.ColorProperty import ColorProperty
-from PointSet import PointSet
+from Properties.Color.ColorProperty import ColorProperty
+from DataClasses.PointSet import PointSet
 
 
 class ColorFactory:

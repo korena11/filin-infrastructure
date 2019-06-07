@@ -1,6 +1,6 @@
 # Framework Imports
 import VisualizationUtils
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 
 class PointSubSet(PointSet):

@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import open3d as o3d
 
-from BaseProperty import BaseProperty
-from PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 
 
 class VisualizationO3D:

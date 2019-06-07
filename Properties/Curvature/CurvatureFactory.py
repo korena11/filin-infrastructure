@@ -5,7 +5,7 @@
 import numpy as np
 from tqdm import tqdm
 
-import Transformations.RotationUtils as RotationUtils
+import Properties.Transformations as RotationUtils
 from CurvatureProperty import CurvatureProperty
 from RasterData import RasterData
 

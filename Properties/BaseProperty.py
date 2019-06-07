@@ -1,5 +1,5 @@
-from PointSet import PointSet
-from RasterData import RasterData
+from DataClasses.PointSet import PointSet
+from DataClasses.RasterData import RasterData
 
 
 class BaseProperty(object):

@@ -14,7 +14,7 @@ from warnings import warn
 import numpy as np
 import numpy.linalg as la
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 
 class Tensor(object):

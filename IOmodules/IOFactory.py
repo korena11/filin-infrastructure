@@ -7,18 +7,18 @@ from traceback import print_tb
 
 import h5py
 from numpy import array
-from osgeo import gdal
+# from osgeo import gdal
 
 import ReadFunctions
 import SaveFunctions
 from BaseData import BaseData
-from BaseProperty import BaseProperty
-from Color.ColorProperty import ColorProperty
+from Properties.BaseProperty import BaseProperty
+from Properties.Color.ColorProperty import ColorProperty
 from IO_Tools import CreateFilename
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from RasterData import RasterData
-from shapefile import Reader
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
+from DataClasses.RasterData import RasterData
+# from shapefile import Reader
 
 
 class IOFactory:

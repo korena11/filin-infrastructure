@@ -2,7 +2,7 @@ from warnings import warn
 
 import numpy as np
 
-from BaseProperty import BaseProperty
+from Properties.BaseProperty import BaseProperty
 
 
 class TransformationMatrixProperty(BaseProperty):

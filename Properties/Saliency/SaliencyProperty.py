@@ -1,5 +1,5 @@
-from BaseProperty import BaseProperty
-from PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSet import PointSet
 
 
 class SaliencyProperty(BaseProperty):

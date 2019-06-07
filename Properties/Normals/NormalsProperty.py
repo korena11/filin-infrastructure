@@ -1,4 +1,4 @@
-from BaseProperty import BaseProperty
+from Properties.BaseProperty import BaseProperty
 
 
 class NormalsProperty(BaseProperty):

@@ -6,7 +6,7 @@ import open3d as O3D
 
 # from PointNeighborhood import PointNeighborhood
 # Infrastructure Imports
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 

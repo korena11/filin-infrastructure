@@ -20,13 +20,13 @@ import numpy as np
 from numpy import hstack, tile, ndarray, savetxt
 
 from BaseData import BaseData
-from BaseProperty import BaseProperty
-from Color.ColorProperty import ColorProperty
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from SegmentationProperty import SegmentationProperty
+from Properties.BaseProperty import BaseProperty
+from Properties.Color.ColorProperty import ColorProperty
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
+from Properties.SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
-from shapefile import Writer, POINTZ
+# from shapefile import Writer, POINTZ
 
 def WriteToPts(points, path):
     '''

@@ -8,8 +8,8 @@ from numpy import array, floor, nonzero, logical_or, logical_and, logical_not, z
 from numpy import max as npmax
 from pyproj import Proj, transform
 
-from BaseData import BaseData
-from PointSet import PointSet
+from DataClasses.BaseData import BaseData
+from DataClasses.PointSet import PointSet
 
 
 class RasterData(BaseData):

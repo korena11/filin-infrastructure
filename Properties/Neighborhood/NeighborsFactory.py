@@ -6,8 +6,8 @@ from tqdm import tqdm
 
 from NeighborsProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
-from PointSet import PointSet
-from PointSubSet import PointSubSet
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
@@ -234,19 +234,15 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors, parts_size=int(5e5), parts_num=None):
+    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors):
         """
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param k_nearest_neighbors: the number of neighbors
-        :param parts_size: number of points in section for more efficient computation. Defauls: 5e5
-        :param parts_num: number of parts to divide the computation. Defualt: None
-        
+
         :type pointset_kdt: KdTreePointSet.KdTreePointSet
         :type k_nearest_neighbors: int
-        :type parts_size: int
-        :type parts_num: int
 
         :return: NeighborsProperty
 
@@ -254,31 +250,11 @@ class NeighborsFactory:
            :meth:`kdtreePointSet_rnn`
 
         """
-        from tqdm import trange
         print('>>> Find all points neighbors using kd-tree')
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
-        if parts_num is None:
-            parts_num = int(pointset_kdt.Size / parts_size)
-            modulu = pointset_kdt.Size % parts_size
-        else:
-            modulu = pointset_kdt.Size % parts_num
-            parts_size = int(pointset_kdt.Size / parts_num)
 
-        start = 0
-        idx = None
-
-        for part in trange(parts_num):
-            start = int(part * parts_size)
-
-            if part == 0:
-                idx = pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)
-            else:
-                idx = np.vstack(
-                    (idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)))
-        if modulu > 0:
-            idx = np.vstack((idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start + parts_size:], k_nearest_neighbors)))
-
+        idx = pointset_kdt.query(pointset_kdt.ToNumpy(), k_nearest_neighbors)
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
         list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))

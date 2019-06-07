@@ -3,11 +3,11 @@ import numpy as np
 from tqdm import tqdm, trange
 
 import MyTools as mt
-from BaseProperty import BaseProperty
-from PointSet import PointSet
-from SaliencyProperty import SaliencyProperty
-from TensorFactory import TensorFactory
-from TensorProperty import TensorProperty
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSet import PointSet
+from Properties.Saliency.SaliencyProperty import SaliencyProperty
+from Properties.Tensors.TensorFactory import TensorFactory
+from Properties.Tensors.TensorProperty import TensorProperty
 
 EPS = 1e-10
 
