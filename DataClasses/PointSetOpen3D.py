@@ -10,6 +10,7 @@ from DataClasses.PointSet import PointSet
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 
+
 class PointSetOpen3D(PointSet):
 
     def __init__(self, points, path=None, intensity=None, range_accuracy=0.002, angle_accuracy=0.012,
@@ -45,17 +46,20 @@ class PointSetOpen3D(PointSet):
         if isinstance(inputPoints, np.ndarray):
             self.data = O3D.PointCloud()
             self.data.points = O3D.Vector3dVector(inputPoints)
-        elif isinstance(inputPoints, PointSet):
-            self.data = O3D.PointCloud()
-            pts = inputPoints.ToNumpy()[:, :3]
-            self.data.points = O3D.Vector3dVector(pts)
-            self.path = inputPoints.path
 
         elif isinstance(inputPoints, O3D.PointCloud):
             self.data = inputPoints
+
         else:
-            print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
-            raise ValueError("Wrong turn.")
+
+            self.data = O3D.PointCloud()
+            try:
+                pts = inputPoints.ToNumpy()[:, :3]
+                self.data.points = O3D.Vector3dVector(pts)
+                self.path = inputPoints.path
+            except TypeError:
+                print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
+                raise ValueError("Wrong turn.")
 
     def RebuildKDTree(self, verbose=True):
         """

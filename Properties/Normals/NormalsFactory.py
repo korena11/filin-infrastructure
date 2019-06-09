@@ -6,8 +6,8 @@ import numpy as np
 from numpy import dtype, genfromtxt, nonzero, mean, sum
 from sklearn.neighbors import BallTree, KDTree
 
-from Normals.NormalsProperty import NormalsProperty
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
+from Properties.Normals.NormalsProperty import NormalsProperty
 
 if sys.platform == 'linux':
     pass

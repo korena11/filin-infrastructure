@@ -35,6 +35,10 @@ def chi2_distance(histA, histB, eps=1e-10):
     :rtype: np.ndarray
     """
 
+    if np.all(histA == histB):
+        print('same hist')
+        return 0
+
     return np.sum(np.square(histA - histB) / (histA + histB + eps), axis=1)
 
 

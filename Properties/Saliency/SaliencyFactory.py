@@ -3,8 +3,8 @@ import numpy as np
 from tqdm import tqdm, trange
 
 import MyTools as mt
-from Properties.BaseProperty import BaseProperty
 from DataClasses.PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
 from Properties.Saliency.SaliencyProperty import SaliencyProperty
 from Properties.Tensors.TensorFactory import TensorFactory
 from Properties.Tensors.TensorProperty import TensorProperty
@@ -296,7 +296,6 @@ class SaliencyFactory(object):
         """
         from MyTools import chi2_distance
         import itertools
-        from functools import partial
         import open3d as o3d
 
         pointset = neighborhoods.Points
@@ -305,21 +304,22 @@ class SaliencyFactory(object):
         k = 0
         # 1. For each point compute the simplified point feature histogram
 
-        spfh_point = list(map(partial(cls.__SPFH, normals=normals, num_bins=num_bins, verbose=False),
-                              tqdm(neighborhoods, total=neighborhoods.Size, desc='SPFH...')))
-        spfh_property = SPFH_property(pointset, spfh_point)
+        # spfh_point = list(map(partial(cls.__SPFH, normals=normals, num_bins=num_bins, verbose=False),
+        #                       tqdm(neighborhoods, total=neighborhoods.Size, desc='SPFH...')))
+        # spfh_property = SPFH_property(pointset, spfh_point)
         # for neighborhood, i in zip(neighborhoods, tqdm(range(neighborhoods.Size), desc='SPFH for all point cloud')):
         #     spfh_point = cls.__SPFH(neighborhood, normals, num_bins, verbose=False)
         #     spfh_property.set_spfh(neighborhood.center_point_idx, spfh_point)
 
         # 2. For each SPFH compute the FPFH
         # fpfh = []
-        fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
-                        tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
+        # fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
+        #                 tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
 
         # 1 + 2. Compute FPFH open3d
-        # fpfh = SaliencyFactory.FPFH_open3d(pointset, search_param).T
-        # fpfh = fpfh.tolist()
+        fpfh = SaliencyFactory.FPFH_open3d(pointset, normals, search_param).T
+        fpfh = fpfh.tolist()
+
         # 3. Low level distinctness,
         current_hist = []
         pointset_distances = []
@@ -331,8 +331,7 @@ class SaliencyFactory(object):
             current_hist = tmp_fpfh.pop(i)
 
             # 3.1 Compute the Chi-square distance of each histogram to each histogram
-            chi_square_dist = chi2_distance(current_hist, np.asarray(tmp_fpfh))
-            pointset_distances.append(chi_square_dist)
+            pointset_distances.append(chi2_distance(current_hist, np.asarray(tmp_fpfh), eps=10e-8))
 
             # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
         pointset_distances = np.asarray(pointset_distances)
@@ -401,7 +400,7 @@ class SaliencyFactory(object):
         # 1. Compute the high-level dissimilarity
         pi_pj = np.linalg.norm(point - valid_pts, axis=1)
         pi_pj /= pi_pj.max()
-        dh = chi_dist[valid_idx] * np.log(1 + pi_pj)
+        dh = chi_dist[valid_idx, None] * np.log(1 + pi_pj)
 
         # 2. Compute the high-level distinctness
         return 1 - np.exp(-dh.mean())
@@ -615,7 +614,7 @@ class SaliencyFactory(object):
         return spfh_current.getFeatureVector() + np.mean(np.asarray(spfh_neighbors_normalized), axis=0)
 
     @classmethod
-    def FPFH_open3d(self, pointset_open3d, knn_search_param):
+    def FPFH_open3d(self, pointset_open3d, normalsproperty, knn_search_param):
         """
         Compute the FPFH via open3d.
 
@@ -625,9 +624,11 @@ class SaliencyFactory(object):
 
         :param pointset_open3d: the point cloud as PointSetOpen3D. if a PointSet is received it is change to PointSetOpen3D.
         :param knn_search_param: the type of search: knn, rnn or hybrid.
+        :param normalsproperty: the normals property of the point cloud
 
         :type pointset_open3d: PointSet, PointSetOpen3D.PointSetOpen3D
         :type knn_search_param: class
+        :type normalsproperty: NormalsProperty.NormalsPropoerty
 
         :return: feature vector FPFH
 
@@ -645,14 +646,17 @@ class SaliencyFactory(object):
         import open3d as o3d
         from PointSetOpen3D import PointSetOpen3D
 
-        if isinstance(pointset_open3d, PointSetOpen3D):
-            fpfh = o3d.registration.compute_fpfh_feature(pointset_open3d.data, knn_search_param)
-        else:
+        if not isinstance(pointset_open3d, PointSetOpen3D):
             p3d = PointSetOpen3D(pointset_open3d)
-            fpfh = o3d.registration.compute_fpfh_feature(p3d.data, knn_search_param)
 
+        else:
+            p3d = pointset_open3d
+
+        if not p3d.data.has_normals():
+            p3d.data.normals = o3d.Vector3dVector(normalsproperty.Normals)
+
+        fpfh = o3d.registration.compute_fpfh_feature(p3d.data, knn_search_param)
         return fpfh.data
-
 
 
 
