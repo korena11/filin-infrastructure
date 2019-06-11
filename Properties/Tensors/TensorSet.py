@@ -100,18 +100,34 @@ class TensorSet(object):
         """
         return self.__overallTensor.points_number
 
-    def distanceFromPoint(self, pnt, tensorType='plate', sign=False, basedOnGeneralTensor=True):
+    @property
+    def tensors_number(self):
+        """
+        Returns the number of tensors used to compute the overall one
+        :return: number of tensors (int)
+        """
+        return self.__numTensors
+
+    @property
+    def tensors(self):
+        """
+        Returns the list of tensors used to computed the overall one
+        :return: list of Tensor objects
+        """
+        return self.__tensors
+
+    def distanceFromPoint(self, pnt, tensorType='plate', sign=False, basedOnOverallTensor=True):
         """
         Computes the distance of a point from the TensorSet. Computation can be done either based on the overall
         tensor or based on the minimum distance from the set of tensors
         :param pnt: point to compute the distance from
         :param tensorType: indicator for choosing which shape to compute the distance by (optional, string)
         :param sign: indicator whether to returned a signed distance or absolute value (optional, bool)
-        :param basedOnGeneralTensor: indicator whether to compute the distance based on the overall tensor or the
+        :param basedOnOverallTensor: indicator whether to compute the distance based on the overall tensor or the
         list of them (optional, bool)
         :return: distance (float)
         """
-        if basedOnGeneralTensor:
+        if basedOnOverallTensor:
             return self.__overallTensor.distanceFromPoint(pnt, tensorType, sign)
         else:
             refPoints = array(list(map(lambda t: t.referece_point, self.__tensors)))

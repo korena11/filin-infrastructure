@@ -1,11 +1,13 @@
 import warnings
 
-from numpy import zeros
+from numpy import zeros, array, nonzero, triu_indices, unique
 
 from BallTreePointSet import BallTreePointSet
 from PointSet import PointSet
 from TensorConnectivityGraph import TensorConnectivityGraph
 from TensorFactory import TensorFactory
+
+from SegmentMinCutter import SegmentMinCutter
 
 
 def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
@@ -69,6 +71,46 @@ def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearit
     nComponents, labels, indexesByLabels = graph.connected_componnents()
 
     return labels, indexesByLabels
+
+
+def minCutRefinement(tensors, dominantSegmentSize=10, minSegmentSize=3, numNeighbors=10):
+    """
+
+    :param tensors:
+    :param minSegmentSize:
+    :param numNeighbors:
+    :return:
+    """
+    # if isinstance(tensors, list):
+    #     tensors = array(tensors)
+    segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
+
+    dominantSegments = nonzero(segmentSizes > dominantSegmentSize)[0]
+
+    # cogs = array(list(map(lambda t: t.reference_point, tensors[dominantSegments])))
+    # bt = BallTreePointSet(cogs, leaf_size=10)
+    # neighbors = bt.query(cogs, numNeighbors)[:, 1:]
+
+    indexes1, indexes2 = triu_indices(dominantSegments.shape[0], 1)
+    newSegmentLabels = range(len(tensors))
+
+    for i, j in zip(indexes1, indexes2):
+        if newSegmentLabels[dominantSegments[i]] != dominantSegments[i] or \
+                newSegmentLabels[dominantSegments[j]] != dominantSegments[j]:
+            continue  # one of the segments has been merged
+
+        smc = SegmentMinCutter(tensors[dominantSegments[i]], tensors[dominantSegments[j]])
+        if smc.minCut():
+            # merging all the tensors from both segments into one
+            list(map(tensors[dominantSegments[i]].addTensor, tensors[dominantSegments[j]].tensors))
+            newSegmentLabels[dominantSegments[j]] == dominantSegments[i]
+            print(dominantSegments[i], dominantSegments[j])
+
+    uniqueNewLabels = unique(newSegmentLabels)
+    newLabels = range(uniqueNewLabels.shape[0])
+    # newSegmentLabels = newLabels[]
+
+
 
 
 if __name__ == '__main__':
