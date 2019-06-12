@@ -206,26 +206,58 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_rnn(pointset_kdt, search_radius):
-        """
+    def kdtreePointSet_rnn(pointset_kdt, search_radius, parts_size=int(5e5), parts_num=None):
+        r"""
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param search_radius: the neighborhood radius
-        :param verbose: print running messages
+        :param parts_size: number of points in section for more efficient computation. Default: None
+        :param parts_num: number of parts to divide the computation. Default: 1
 
         :type pointset_kdt: KdTreePointSet.KdTreePointSet
         :type search_radius: float
-        :type verbose: bool
+        :type parts_size: int
+        :type parts_num: int
 
         :return: NeighborsProperty
-        """
 
-        print('>>> Find all points neighbors using kd-Tree')
+        .. warning::
+            Division to parts doesn't work
+        """
+        # TODO: division to parts doesn't work. Need to solve the mapping at the end
+
+        from tqdm import trange
+        print('>>> Find all points neighbors in radius %f using kd-Tree' % search_radius)
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+        if parts_num is None and parts_size is None:
+            parts_num = 1
+            modulu = 0
+        elif parts_num is None:
+            parts_num = int(pointset_kdt.Size / parts_size)
+            modulu = pointset_kdt.Size % parts_size
+        else:
+            modulu = pointset_kdt.Size % parts_num
+            parts_size = int(pointset_kdt.Size / parts_num)
 
-        idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy(), search_radius)
+        start = 0
+        idx = []
+        for part in trange(parts_num):
+            start = int(part * parts_size)
+
+            if part == 0:
+                if parts_num == 1:  # patch because the parts dont work. Delete when fixed
+                    idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius)
+                else:
+                    idx.append(
+                        pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius))
+            else:
+                idx.append(
+                    (idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius)))
+        # for the remaining part
+        if modulu > 0:
+            idx.append((idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start + parts_size:], search_radius)))
 
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
@@ -255,7 +287,7 @@ class NeighborsFactory:
 
         """
         from tqdm import trange
-        print('>>> Find all points neighbors using kd-tree')
+        print('>>> Find all {k} points neighbors using kd-tree'.format(k=k_nearest_neighbors))
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
         if parts_num is None:
@@ -268,7 +300,7 @@ class NeighborsFactory:
         start = 0
         idx = None
 
-        for part in trange(parts_num):
+        for part in trange(parts_num, position=0):
             start = int(part * parts_size)
 
             if part == 0:
@@ -276,6 +308,8 @@ class NeighborsFactory:
             else:
                 idx = np.vstack(
                     (idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)))
+
+        # for the remaining part
         if modulu > 0:
             idx = np.vstack((idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start + parts_size:], k_nearest_neighbors)))
 

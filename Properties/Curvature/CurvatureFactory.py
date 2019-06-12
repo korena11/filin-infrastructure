@@ -310,7 +310,7 @@ class CurvatureFactory:
 
     @classmethod
     def filter_curvature_roughness(cls, curvature_property, attribute_name, mean=0, std=1, alpha=0.05,
-                                   verbose=False):
+                                   verbose=False, posonly=False):
         r"""
         Turns curvature values to zero if they are part of a normal distribution N~(mean, std)
 
@@ -347,6 +347,8 @@ class CurvatureFactory:
         new_values = curvature_values.copy()
         zeros_ = np.abs(k) < w_alpha
         new_values[zeros_] = 0
+        if posonly:
+            new_values[new_values > 0] = 0
 
         new_curvature.__setattr__(attribute_name, new_values)
         return new_curvature

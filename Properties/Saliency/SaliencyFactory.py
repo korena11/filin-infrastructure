@@ -150,7 +150,6 @@ class SaliencyFactory(object):
 
         :rtype: SaliencyProperty
         """
-
         from warnings import warn
 
         # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
@@ -160,7 +159,8 @@ class SaliencyFactory(object):
         kstd = []
         kmean = []
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
-                                                              desc='Curvature Saliency for each neighborhood')):
+                                                              desc='Curvature Saliency for each neighborhood',
+                                                              position=0)):
             if neighborhood.numberOfNeighbors < 3:
                 tensor_saliency.append(0)
                 continue
@@ -189,10 +189,16 @@ class SaliencyFactory(object):
             kstd.append(np.std(dk))
             kmean.append(np.mean(dk))
 
-            # distances influence
-            dist_element = 1 / (2 * np.pi * weight_distance_sigma ** 2) * \
+            # distances influence - Laplacian
+            dist_element = 1 / np.sqrt(2 * np.pi) * \
+                           np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+                           1 / np.sqrt(2 * np.pi * weight_distance_sigma ** 2) * \
                            np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
+            # dist_element_normed = dist_element.copy()
+            dist_element[dist_element < 0] = 0
+
             dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
+
 
             # normal influence
             # dn = current_normals[1:, :].dot(current_normals[0, :])
@@ -200,8 +206,9 @@ class SaliencyFactory(object):
                         neighborhood.numberOfNeighbors - 1)
             if verbose:
                 print('normal mean {a}, normal std {b}'.format(a=dn.mean(), b=dn.std()))
+                print('curvature mean {a}, curvature std {b}'.format(a=dk.mean(), b=dk.std()))
 
-            if dn.std() > noise_size:
+            if dn.std() > noise_size or dk.std() > noise_size:
                 dn = 0
                 dk_normed = 0
 
@@ -237,14 +244,13 @@ class SaliencyFactory(object):
 
         for saliency, percentile in zip(saliencies, percentiles):
             svals = np.asarray(saliency.getPointSaliency())
+            # take only n-th percentile
+            percentile_n = np.percentile(svals, percentile)
+            print('takes the {} percentile'.format(str(percentile)))
+            svals[svals < percentile_n] = 0
 
             # normalize the values of the saliencies to the range of 0-1
             saliency_normed = (svals - svals.min()) / (svals.max() - svals.min() + EPS)
-
-            # take only n-th percentile
-            percentile_n = np.percentile(saliency_normed, percentile)
-            print('takes the {} percentile'.format(str(percentile)))
-            saliency_normed[saliency_normed < percentile_n] = 0
 
             multi_scale_values += saliency_normed[:, None]
 
