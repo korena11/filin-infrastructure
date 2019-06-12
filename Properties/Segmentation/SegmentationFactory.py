@@ -204,16 +204,16 @@ class SegmentationFactory:
         from TensorSet import TensorSet
         bt, surfaceElementsLabels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
 
-        labels, tensorsPerSegment = tensorConnectedComponents(tensors, numNeighbors, mode=mode,
-                                                              linearityThreshold=linearityThreshold,
-                                                              varianceThreshold=varianceThreshold,
-                                                              normalSimilarityThreshold=normalSimilarityThreshold,
-                                                              distanceThreshold=distanceThreshold)
+        labels, tensorsPerSegment, segmentNeighbors = tensorConnectedComponents(
+            tensors, numNeighbors, mode=mode, linearityThreshold=linearityThreshold,
+            varianceThreshold=varianceThreshold, normalSimilarityThreshold=normalSimilarityThreshold,
+            distanceThreshold=distanceThreshold)
 
         tensors = asarray(tensors)
-        tensorsSets = list(map(lambda s: TensorSet(tensors[s]), tensorsPerSegment))
+        tensorsSets = asarray(list(map(lambda s: TensorSet(tensors[s]), tensorsPerSegment)))
 
-        return SegmentationProperty(points, labels[surfaceElementsLabels], segmentAttributes=tensorsSets)
+        return SegmentationProperty(points, labels[surfaceElementsLabels],
+                                    segmentAttributes=tensorsSets), segmentNeighbors
 
 
 if __name__ == '__main__':

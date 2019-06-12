@@ -1,11 +1,12 @@
 import warnings
 
-from numpy import zeros, array, nonzero, triu_indices, unique
+from numpy import zeros, array, nonzero, triu_indices, unique, logical_and
 
 from BallTreePointSet import BallTreePointSet
 from PointSet import PointSet
 from TensorConnectivityGraph import TensorConnectivityGraph
 from TensorFactory import TensorFactory
+from TensorSet import TensorSet
 
 from SegmentMinCutter import SegmentMinCutter
 
@@ -67,15 +68,16 @@ def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearit
     graph = TensorConnectivityGraph(tensors, numNeighbors, varianceThreshold, normalSimilarityThreshold,
                                     distanceThreshold, linearityThreshold=linearityThreshold, mode=mode)
 
-    # graph.spyGraph()
     nComponents, labels, indexesByLabels = graph.connected_componnents()
 
-    return labels, indexesByLabels
+    segmentNeighbors = graph.collapseConnectivity()
+
+    return labels, indexesByLabels, segmentNeighbors
 
 
 def minCutRefinement(tensors, dominantSegmentSize=10, minSegmentSize=3, numNeighbors=10):
     """
-
+    WIP - DO NOT USE!!!
     :param tensors:
     :param minSegmentSize:
     :param numNeighbors:
@@ -111,6 +113,67 @@ def minCutRefinement(tensors, dominantSegmentSize=10, minSegmentSize=3, numNeigh
     # newSegmentLabels = newLabels[]
 
 
+def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, dominantSegmentSize=10, minSegmentSize=3,
+                                     varianceThreshold=0.01, distanceThreshold=0.1):
+    """
+
+    :param segmentationProperty:
+    :param segmentNeighbors:
+    :return:
+    """
+    if not isinstance(segmentation.segmentAttributes[0], TensorSet):
+        raise TypeError('Segmentation attributes are not TensorSets objects')
+
+    if segmentNeighbors is None:
+        # TODO: replace with neighbor querying
+        raise AttributeError('Segments neighbors are missing')
+
+    labels = segmentation.GetAllSegments
+    tensors = segmentation.segmentAttributes
+    segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
+
+    smallSegments = nonzero(segmentSizes < minSegmentSize)[0]
+    smallNeighbors = segmentNeighbors[smallSegments]
+    neighborSizes = list(map(segmentSizes.__getitem__, smallNeighbors))
+
+    dominantNeighbors = list(map(lambda neighbors, sizes: neighbors[sizes >= dominantSegmentSize],
+                                 smallNeighbors, neighborSizes))
+    numDominantNeighbors = array(list(map(len, dominantNeighbors)))
+
+    # singleNeighbors = nonzero(list(map(lambda n: len(n) == 1, smallNeighbors)))[0]
+    # singleNeighborsSize = segmentSizes[list(map(lambda i: smallNeighbors[i][0], singleNeighbors))]
+
+    entrappedBySingle = nonzero(numDominantNeighbors == 1)[0]
+    entrappedByDuo = nonzero(numDominantNeighbors == 2)[0]
+
+    if len(entrappedBySingle) > 0 or len(entrappedByDuo) > 0:
+
+        for i in entrappedBySingle:
+            dominantNeighbor = dominantNeighbors[i][numDominantNeighbors[i].argmax()]
+
+            if tensors[smallSegments[i]].eigenvalues[0] > varianceThreshold:
+                continue
+
+            if tensors[dominantNeighbor].distanceFromPoint(
+                    tensors[smallSegments[i]].reference_point) > distanceThreshold:
+                continue
+
+            tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])
+            tensors[smallSegments[i]] = None
+            labels[labels == smallSegments[i]] = dominantNeighbor
+
+        tensors = tensors[nonzero(tensors)[0]]
+
+        uniqueLabels = unique(labels)
+        uniqueNewLabels = range(uniqueLabels.shape[0])
+        newOldCovesion = dict(zip(uniqueLabels, uniqueNewLabels))
+        newLabels = array(list(map(lambda l: newOldCovesion[l], labels)))
+
+        return newLabels, tensors
+
+    else:
+        warnings.warn('No surface elements that are entrapeed by a single segment were found')
+        return labels, tensors
 
 
 if __name__ == '__main__':

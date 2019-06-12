@@ -1,4 +1,4 @@
-from numpy import array, nonzero, dot, logical_and, int_, cross, log, exp, isnan
+from numpy import array, nonzero, dot, logical_and, int_, cross, log, exp, isnan, hstack, unique
 from numpy.linalg import norm
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
@@ -113,8 +113,18 @@ class TensorConnectivityGraph(object):
         """
         numComponnets, labels = connected_components(self.__simMatrix)
         self.__labels = labels
-        indexesByLabels = [nonzero(labels == l)[0] for l in range(numComponnets)]
-        return numComponnets, labels, indexesByLabels
+        self.__indexesByLabels = [nonzero(labels == l)[0] for l in range(numComponnets)]
+        return numComponnets, labels, self.__indexesByLabels
+
+    def collapseConnectivity(self):
+        # unique(labels[hstack(list(map(neighbors.__getitem__, self.__indexesByLabels[2])))])
+        tmp = list(map(lambda l: hstack(list(map(self.__neighbors.__getitem__, l))), self.__indexesByLabels))
+        labelledNeighbors = list(map(unique, list(map(self.__labels.__getitem__, tmp))))
+        labelledNeighbors = array(list(map(lambda l: labelledNeighbors[l][labelledNeighbors[l] != l],
+                                           range(len(labelledNeighbors)))))
+
+        return labelledNeighbors
+
 
     def spyGraph(self):
         """

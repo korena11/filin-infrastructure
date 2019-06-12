@@ -109,7 +109,7 @@ class SegmentationProperty(BaseProperty):
             self.__rgb[pointIndex, :] = self.__segmentsColors[newLabel]
 
     @property
-    def getSegmentAttributes(self):
+    def segmentAttributes(self):
         """
         Retrieves the attributes for all the segments
         :return: list of attributes
