@@ -1,6 +1,13 @@
 import warnings
 
-from numpy import zeros, array, nonzero, triu_indices, unique, logical_and
+from numpy import zeros, array, nonzero, triu_indices, unique, int_, hstack
+from numpy.linalg import norm
+
+from scipy.sparse import coo_matrix
+
+from tqdm import tqdm
+from networkx import DiGraph, minimum_cut
+from networkx.exception import NetworkXUnbounded
 
 from BallTreePointSet import BallTreePointSet
 from PointSet import PointSet
@@ -9,6 +16,7 @@ from TensorFactory import TensorFactory
 from TensorSet import TensorSet
 
 from SegmentMinCutter import SegmentMinCutter
+
 
 
 def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
@@ -113,7 +121,7 @@ def minCutRefinement(tensors, dominantSegmentSize=10, minSegmentSize=3, numNeigh
     # newSegmentLabels = newLabels[]
 
 
-def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, dominantSegmentSize=10, minSegmentSize=3,
+def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, dominantSegmentSize=10, minSegmentSize=5,
                                      varianceThreshold=0.01, distanceThreshold=0.1):
     """
 
@@ -126,44 +134,103 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
 
     if segmentNeighbors is None:
         # TODO: replace with neighbor querying
-        raise AttributeError('Segments neighbors are missing')
+        raise ValueError('Segments neighbors are missing')
 
     labels = segmentation.GetAllSegments
     tensors = segmentation.segmentAttributes
+
+    # getting the number of tensors composing each segment
     segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
 
-    smallSegments = nonzero(segmentSizes < minSegmentSize)[0]
-    smallNeighbors = segmentNeighbors[smallSegments]
-    neighborSizes = list(map(segmentSizes.__getitem__, smallNeighbors))
+    smallSegments = nonzero(segmentSizes <= minSegmentSize)[0]  # extracting small segments
+    smallNeighbors = segmentNeighbors[smallSegments]  # extracting the neighbors of the small segments
+    neighborSizes = list(map(segmentSizes.__getitem__, smallNeighbors))  # getting the sizes of the neighboring segments
 
+    # identifying the dominant segments around each small ones
     dominantNeighbors = list(map(lambda neighbors, sizes: neighbors[sizes >= dominantSegmentSize],
                                  smallNeighbors, neighborSizes))
-    numDominantNeighbors = array(list(map(len, dominantNeighbors)))
+    numDominantNeighbors = array(list(map(len, dominantNeighbors)))  # getting the number of dominant neighbors
 
-    # singleNeighbors = nonzero(list(map(lambda n: len(n) == 1, smallNeighbors)))[0]
-    # singleNeighborsSize = segmentSizes[list(map(lambda i: smallNeighbors[i][0], singleNeighbors))]
-
+    # identifying small segments which have either a single dominant neighbor or a pair of dominant ones
     entrappedBySingle = nonzero(numDominantNeighbors == 1)[0]
-    entrappedByDuo = nonzero(numDominantNeighbors == 2)[0]
+    entrappedByPair = nonzero(numDominantNeighbors == 2)[0]
 
-    if len(entrappedBySingle) > 0 or len(entrappedByDuo) > 0:
+    if len(entrappedBySingle) > 0 or len(entrappedByPair) > 0:
 
-        for i in entrappedBySingle:
-            dominantNeighbor = dominantNeighbors[i][numDominantNeighbors[i].argmax()]
+        # dissolving small segments entrapped by a single dominant segment
+        for i in tqdm(entrappedBySingle, 'Dissolving surface elements entrapped between a single dominant segment'):
+            dominantNeighbor = dominantNeighbors[i][0]  # getting the index of the dominant neighbor
 
+            # skipping segments with high variance
             if tensors[smallSegments[i]].eigenvalues[0] > varianceThreshold:
                 continue
 
+            # skipping segments whose center of gravity is relatively far from the tensor
+            # TODO: redefine in terms of variance of larger segment
             if tensors[dominantNeighbor].distanceFromPoint(
                     tensors[smallSegments[i]].reference_point) > distanceThreshold:
                 continue
 
-            tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])
-            tensors[smallSegments[i]] = None
-            labels[labels == smallSegments[i]] = dominantNeighbor
+            # TODO: change to adding the tensors of the smaller segment and not the overall one
+            tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])  # merging the tensors
+            tensors[smallSegments[i]] = None  # nullifying the tensor of the smaller segment
+            labels[labels == smallSegments[i]] = dominantNeighbor  # reassigning the points of the small segment
 
+        # dissolving small segments entrapped by a pair of dominant segments
+        for i in tqdm(entrappedByPair, 'Dissolving surface elements entrapped between a pair of dominant segments'):
+            segmentPoints = segmentation.GetSegmentIndices(smallSegments[i])
+            dominantNeighbor1 = dominantNeighbors[i][0]
+            dominantNeighbor2 = dominantNeighbors[i][1]
+
+            distancesFrom1 = tensors[dominantNeighbor1].distanceFromPoint(
+                segmentation.Points.ToNumpy()[segmentPoints]).reshape((-1, ))
+            distancesFrom2 = tensors[dominantNeighbor2].distanceFromPoint(
+                segmentation.Points.ToNumpy()[segmentPoints]).reshape((-1, ))
+
+            graph = DiGraph()
+            list(map(lambda p, d: graph.add_edge('source', p, capacity=d ** -2), segmentPoints, distancesFrom1))
+            list(map(lambda p, d: graph.add_edge(p, 'sink', capacity=d ** -2), segmentPoints, distancesFrom2))
+
+            indexes1, indexes2 = triu_indices(segmentPoints.shape[0], 1)
+            indexes1 = segmentPoints[indexes1]
+            indexes2 = segmentPoints[indexes2]
+            pointDistances = norm(segmentation.Points.ToNumpy()[indexes1] -
+                                  segmentation.Points.ToNumpy()[indexes2], axis=1)
+            list(map(lambda pi, pj, d: graph.add_edge(pi, pj, capacity=d ** -2), indexes1, indexes2, pointDistances))
+            list(map(lambda pi, pj, d: graph.add_edge(pj, pi, capacity=d ** -2), indexes1, indexes2, pointDistances))
+
+            try:
+                cutValue, partition = minimum_cut(graph, 'source', 'sink')
+                reachable, notReachable = partition
+
+                reachable = array(list(reachable))
+                notReachable = array(list(notReachable))
+
+                if 'source' in reachable and 'sink' in notReachable:
+                    intReachable = int_(reachable[reachable != 'source'])
+                    intNotReachable = int_(notReachable[notReachable != 'sink'])
+
+                    if len(intReachable) > 0:
+                        newTensor1 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[intReachable])
+                        tensors[dominantNeighbor1].addTensor(newTensor1)
+                        labels[intReachable] = dominantNeighbor1
+
+                    if len(intNotReachable) > 0:
+                        newTensor2 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[intNotReachable])
+                        tensors[dominantNeighbor2].addTensor(newTensor2)
+                        labels[intNotReachable] = dominantNeighbor2
+
+                    tensors[smallSegments[i]] = None
+
+            except NetworkXUnbounded:
+                continue
+            # except LinAlgError:
+            #     continue
+
+        # removing tensors of dissolved segments from the list
         tensors = tensors[nonzero(tensors)[0]]
 
+        # updating points labels
         uniqueLabels = unique(labels)
         uniqueNewLabels = range(uniqueLabels.shape[0])
         newOldCovesion = dict(zip(uniqueLabels, uniqueNewLabels))
@@ -172,8 +239,38 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
         return newLabels, tensors
 
     else:
-        warnings.warn('No surface elements that are entrapeed by a single segment were found')
+        warnings.warn('No surface elements that are entrapped by a single segment were found')
         return labels, tensors
+
+def pointwiseRefinement(segmentation, significantSegmentSize=10):
+    """
+
+    :param segmentation:
+    :param significantSegmentSize:
+    :return:
+    """
+    if not isinstance(segmentation.segmentAttributes[0], TensorSet):
+        raise TypeError('Segmentation attributes are not TensorSets objects')
+
+    labels = segmentation.GetAllSegments
+    tensors = segmentation.segmentAttributes
+
+    # getting the number of tensors composing each segment
+    segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
+
+    smallSegments = nonzero(segmentSizes <= significantSegmentSize)[0]  # extracting small segments
+
+    pointsOfSmallSegments = hstack(list(map(segmentation.GetSegmentIndices, smallSegments)))
+
+    searchRadius = max(list(map(lambda t: t.eigenvalues[-1], tensors[smallSegments]))) ** 0.5
+
+    pointNeighbors = segmentation.Points.queryRadius(segmentation.Points.ToNumpy()[pointsOfSmallSegments], searchRadius)
+    segmentNeighbors = list(map(unique, list(map(labels.__getitem__, pointNeighbors))))
+
+    dataCosts = coo_matrix((pointsOfSmallSegments.shape[0], segmentation.NumberOfSegments), dtype='f').tolil()
+
+
+
 
 
 if __name__ == '__main__':

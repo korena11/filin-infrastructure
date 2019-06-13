@@ -117,7 +117,10 @@ class TensorConnectivityGraph(object):
         return numComponnets, labels, self.__indexesByLabels
 
     def collapseConnectivity(self):
-        # unique(labels[hstack(list(map(neighbors.__getitem__, self.__indexesByLabels[2])))])
+        """
+
+        :return:
+        """
         tmp = list(map(lambda l: hstack(list(map(self.__neighbors.__getitem__, l))), self.__indexesByLabels))
         labelledNeighbors = list(map(unique, list(map(self.__labels.__getitem__, tmp))))
         labelledNeighbors = array(list(map(lambda l: labelledNeighbors[l][labelledNeighbors[l] != l],

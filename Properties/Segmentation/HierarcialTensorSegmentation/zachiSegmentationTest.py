@@ -5,21 +5,22 @@ DO NOT USE FOR OTHER PURPOSES
 
 from IOFactory import IOFactory
 from SegmentationFactory import SegmentationFactory, SegmentationProperty
-from TensorBallTreeSegmentation import tensorConnectedComponents, minCutRefinement, dissolveEntrappedSurfaceElements
+from TensorBallTreeSegmentation import minCutRefinement, dissolveEntrappedSurfaceElements, pointwiseRefinement
 from VisualizationO3D import VisualizationO3D
 
 if __name__ == '__main__':
     path = '../../../test_data/'
-    # filename = 'test_ply.ply'
-    # pntSet = IOFactory.ReadPly(path + filename, returnAdditionalAttributes=False)
+    # filename = 'test_ply'
+    # pntSet = IOFactory.ReadPly(path + filename + '.ply', returnAdditionalAttributes=False)
 
-    filename = 'test_tensors_2planarSurfaces.pts'
+    # filename = 'test_tensors_2planarSurfaces'
 
     path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
-    # filename = 'agriculture1_clean.pts'
-    # filename = 'oldSchool2-clean.pts'
-    filename = 'tiledWall3.pts'
-    pntSet = IOFactory.ReadPts(path + filename)
+    # filename = 'agriculture1_clean'
+    # filename = 'oldSchool2-clean'
+    # filename = 'powerplant5'
+    filename = 'tiledWall2'
+    pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
     # segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
 
@@ -32,7 +33,11 @@ if __name__ == '__main__':
 
     labels, tensors = dissolveEntrappedSurfaceElements(segmentation2, segmentNeighbors,
                                                        varianceThreshold=0.1 ** 2, distanceThreshold=0.05)
-    segmentation3 = SegmentationProperty(pntSet, labels)
+    segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
+
+    temp = list(map(lambda t: t.tensors_number, tensors))
+
+    labels, tensors = pointwiseRefinement(segmentation3)
 
     # from numpy import array
     # import open3d as o3d

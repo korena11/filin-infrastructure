@@ -212,7 +212,7 @@ class SegmentationFactory:
         tensors = asarray(tensors)
         tensorsSets = asarray(list(map(lambda s: TensorSet(tensors[s]), tensorsPerSegment)))
 
-        return SegmentationProperty(points, labels[surfaceElementsLabels],
+        return SegmentationProperty(bt, labels[surfaceElementsLabels],
                                     segmentAttributes=tensorsSets), segmentNeighbors
 
 
