@@ -76,6 +76,16 @@ def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearit
     graph = TensorConnectivityGraph(tensors, numNeighbors, varianceThreshold, normalSimilarityThreshold,
                                     distanceThreshold, linearityThreshold=linearityThreshold, mode=mode)
 
+    from matplotlib import pyplot as plt
+    plt.figure()
+    graph.spyGraph()
+
+    graph.nullifyEdges()
+
+    plt.figure()
+    graph.spyGraph()
+    plt.show()
+
     nComponents, labels, indexesByLabels = graph.connected_componnents()
 
     segmentNeighbors = graph.collapseConnectivity()
@@ -242,7 +252,7 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
         warnings.warn('No surface elements that are entrapped by a single segment were found')
         return labels, tensors
 
-def pointwiseRefinement(segmentation, significantSegmentSize=10):
+def pointwiseRefinement(segmentation, significantSegmentSize=10, maxIterations=1000):
     """
 
     :param segmentation:
@@ -252,22 +262,24 @@ def pointwiseRefinement(segmentation, significantSegmentSize=10):
     if not isinstance(segmentation.segmentAttributes[0], TensorSet):
         raise TypeError('Segmentation attributes are not TensorSets objects')
 
-    labels = segmentation.GetAllSegments
-    tensors = segmentation.segmentAttributes
+    from EnergyBasedSegmentRefiner import EnergyBasedSegmentRefiner
 
-    # getting the number of tensors composing each segment
-    segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
+    refiner = EnergyBasedSegmentRefiner(segmentation, significantSegmentSize)
 
-    smallSegments = nonzero(segmentSizes <= significantSegmentSize)[0]  # extracting small segments
+    fails = 0
+    i = 0
+    print(refiner.energy)
+    while i < maxIterations:
+        if refiner.optimizeEnergy():
+            fails = 0
+            i += 1
+            print(refiner.energy)
+        else:
+            fails += 1
+            if fails > 10:
+                break
 
-    pointsOfSmallSegments = hstack(list(map(segmentation.GetSegmentIndices, smallSegments)))
-
-    searchRadius = max(list(map(lambda t: t.eigenvalues[-1], tensors[smallSegments]))) ** 0.5
-
-    pointNeighbors = segmentation.Points.queryRadius(segmentation.Points.ToNumpy()[pointsOfSmallSegments], searchRadius)
-    segmentNeighbors = list(map(unique, list(map(labels.__getitem__, pointNeighbors))))
-
-    dataCosts = coo_matrix((pointsOfSmallSegments.shape[0], segmentation.NumberOfSegments), dtype='f').tolil()
+    return
 
 
 

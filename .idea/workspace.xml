@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="2018/06/12 - Added segmentation refinement by dissolving small segments which are surrounded by a single large one">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="2018/06/13 - Added segmentation refinement by dissolving small segments which are surrounded by a pair of  large ones and started to work on point-wise refinement">
+      <change afterPath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/EnergyBasedSegmentRefiner.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Segmentation/SegmentationFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Segmentation/SegmentationFactory.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,13 +19,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="270" column="23" selection-start-line="270" selection-start-column="23" selection-end-line="270" selection-end-column="23" />
+            <state relative-caret-position="439">
+              <caret line="88" selection-start-line="88" selection-end-line="88" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/EnergyBasedSegmentRefiner.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="756">
+              <caret line="107" column="67" selection-start-line="107" selection-start-column="67" selection-end-line="107" selection-end-column="67" />
+              <folding>
+                <element signature="e#0#77#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -35,16 +47,16 @@
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/SegmentMinCutter.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1071">
-              <caret line="66" column="46" lean-forward="true" selection-start-line="66" selection-start-column="46" selection-end-line="66" selection-end-column="46" />
+              <caret line="66" column="46" selection-start-line="66" selection-start-column="46" selection-end-line="66" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="41" column="82" lean-forward="true" selection-start-line="41" selection-start-column="38" selection-end-line="41" selection-end-column="82" />
+            <state relative-caret-position="323">
+              <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
               <folding>
                 <element signature="e#0#96#0" expanded="true" />
               </folding>
@@ -55,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Tensors/Tensor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="1088">
               <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
               <folding>
                 <element signature="e#214#232#0" expanded="true" />
@@ -67,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="39" selection-start-line="39" selection-end-line="39" />
+            <state relative-caret-position="289">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="e#113#144#0" expanded="true" />
               </folding>
@@ -77,26 +89,9 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1258">
-              <caret line="100" column="47" selection-start-line="100" selection-start-column="47" selection-end-line="100" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#535#822#0" />
-                <element signature="e#898#1293#0" />
-                <element signature="e#5282#5681#0" />
-                <element signature="e#5728#6052#0" />
-                <element signature="e#6105#6643#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/SegmentationProperty.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
+            <state relative-caret-position="1224">
               <caret line="75" column="24" selection-start-line="75" selection-start-column="8" selection-end-line="75" selection-end-column="24" />
             </state>
           </provider>
@@ -105,22 +100,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Segmentation/SegmentationFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="214" column="38" selection-start-line="214" selection-start-column="38" selection-end-line="214" selection-end-column="38" />
+            <state relative-caret-position="371">
+              <caret line="215" selection-start-line="215" selection-end-line="215" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Tensors/TensorSet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="25" column="17" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="17" />
-              <folding>
-                <element signature="e#0#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -189,7 +172,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" />
         <option value="$PROJECT_DIR$/Neighborhood/NeighborProperty.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/Spherical.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst" />
@@ -236,10 +218,11 @@
         <option value="$PROJECT_DIR$/Properties/Tensors/TensorSet.py" />
         <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/SegmentMinCutter.py" />
         <option value="$PROJECT_DIR$/Properties/Segmentation/SegmentationProperty.py" />
-        <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py" />
         <option value="$PROJECT_DIR$/Properties/Segmentation/SegmentationFactory.py" />
-        <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py" />
+        <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/EnergyBasedSegmentRefiner.py" />
         <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py" />
+        <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py" />
+        <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py" />
       </list>
     </option>
   </component>
@@ -810,7 +793,14 @@
       <option name="project" value="LOCAL" />
       <updated>1560368577920</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="2018/06/13 - Added segmentation refinement by dissolving small segments which are surrounded by a pair of  large ones and started to work on point-wise refinement">
+      <created>1560447954173</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1560447954173</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -858,13 +848,13 @@
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.170706" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.170706" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4963119" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49789253" visible="true" weight="0.39869988" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4963119" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49789253" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -929,7 +919,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Band flow added - not clear if working&#10;open contour (intersection with psi) - working. :)" />
     <MESSAGE value="Added saving properties (with data class) to hdf5. &#10;&#10;Added build and source folders for documentation (sphinx)" />
     <MESSAGE value="Full documentation (by Sphinx)&#10; &#10; Added:&#10; --------&#10; BaseData as DataClass&#10; &#10; setValue() function for the BaseProperty&#10; &#10; load + save from hdf5 file, both for Properties and for Data. &#10; &#10; Open issues:  &#10; -------&#10; ClassificationProperty was changed and should be rechecked. &#10; Other changes to the properties that should be rechecked. &#10;&#10;" />
     <MESSAGE value="Full documentation (by Sphinx)&#10;" />
@@ -954,7 +943,8 @@
     <MESSAGE value="2018/06/04 - Added soft clipping weighting for tensor connectivity graph" />
     <MESSAGE value="2018/06/11 - Added min cut refinement to tensor segmentation" />
     <MESSAGE value="2018/06/12 - Added segmentation refinement by dissolving small segments which are surrounded by a single large one" />
-    <option name="LAST_COMMIT_MESSAGE" value="2018/06/12 - Added segmentation refinement by dissolving small segments which are surrounded by a single large one" />
+    <MESSAGE value="2018/06/13 - Added segmentation refinement by dissolving small segments which are surrounded by a pair of  large ones and started to work on point-wise refinement" />
+    <option name="LAST_COMMIT_MESSAGE" value="2018/06/13 - Added segmentation refinement by dissolving small segments which are surrounded by a pair of  large ones and started to work on point-wise refinement" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1185,19 +1175,39 @@
           <option name="timeStamp" value="400" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py</url>
-          <line>39</line>
-          <option name="timeStamp" value="431" />
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py</url>
+          <line>281</line>
+          <option name="timeStamp" value="440" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/EnergyBasedSegmentRefiner.py</url>
+          <line>99</line>
+          <option name="timeStamp" value="446" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py</url>
-          <line>264</line>
-          <option name="timeStamp" value="433" />
+          <line>88</line>
+          <option name="timeStamp" value="451" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py</url>
-          <line>269</line>
-          <option name="timeStamp" value="435" />
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py</url>
+          <line>86</line>
+          <option name="timeStamp" value="454" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py</url>
+          <line>158</line>
+          <option name="timeStamp" value="455" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py</url>
+          <line>156</line>
+          <option name="timeStamp" value="456" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py</url>
+          <line>155</line>
+          <option name="timeStamp" value="458" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1215,16 +1225,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="920">
-          <caret line="52" column="60" selection-start-line="52" selection-start-column="60" selection-end-line="52" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1508,23 +1508,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Tensors/Tensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
-          <folding>
-            <element signature="e#214#232#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/SegmentMinCutter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="66" column="46" lean-forward="true" selection-start-line="66" selection-start-column="46" selection-end-line="66" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/ProgramData/Anaconda3/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1532,49 +1515,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py">
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tqdm/_tqdm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
-          <folding>
-            <element signature="e#113#144#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="203">
+          <caret line="1036" selection-start-line="1036" selection-end-line="1036" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py">
+    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/SegmentMinCutter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="41" column="82" lean-forward="true" selection-start-line="41" selection-start-column="38" selection-end-line="41" selection-end-column="82" />
+        <state relative-caret-position="1071">
+          <caret line="66" column="46" selection-start-line="66" selection-start-column="46" selection-end-line="66" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Tensors/Tensor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1088">
+          <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
           <folding>
-            <element signature="e#0#96#0" expanded="true" />
+            <element signature="e#214#232#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Segmentation/SegmentationProperty.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
+        <state relative-caret-position="1224">
           <caret line="75" column="24" selection-start-line="75" selection-start-column="8" selection-end-line="75" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Segmentation/SegmentationFactory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="214" column="38" selection-start-line="214" selection-start-column="38" selection-end-line="214" selection-end-column="38" />
+        <state relative-caret-position="371">
+          <caret line="215" selection-start-line="215" selection-end-line="215" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/EnergyBasedSegmentRefiner.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="107" column="67" selection-start-line="107" selection-start-column="67" selection-end-line="107" selection-end-column="67" />
+          <folding>
+            <element signature="e#0#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#113#144#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorBallTreeSegmentation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="270" column="23" selection-start-line="270" selection-start-column="23" selection-end-line="270" selection-end-column="23" />
+        <state relative-caret-position="439">
+          <caret line="88" selection-start-line="88" selection-end-line="88" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/TensorConnectivityGraph.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="91" lean-forward="true" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="e#0#96#0" expanded="true" />
           </folding>
         </state>
       </provider>
