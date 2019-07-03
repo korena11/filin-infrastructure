@@ -183,22 +183,24 @@ class SaliencyFactory(object):
             # difference in curvature
             dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
             # dk[np.where(np.abs(dk) < epsilon)] = 0
+
             dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
             # dk = current_curvatures[0]
 
             kstd.append(np.std(dk))
             kmean.append(np.mean(dk))
 
-            # distances influence - Laplacian
-            dist_element = 1 / np.sqrt(2 * np.pi) * \
-                           np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
-                           1 / np.sqrt(2 * np.pi * weight_distance_sigma ** 2) * \
-                           np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
+            # distances influence - Laplacian (DoG)
+            # dist_element = 1 / np.sqrt(2 * np.pi) * \
+            #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+            #                1 / np.sqrt(2 * np.pi * weight_distance_sigma ** 2) * \
+            #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
             # dist_element_normed = dist_element.copy()
-            dist_element[dist_element < 0] = 0
-
-            dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
-
+            # dist_element[dist_element < 0] = 0
+            # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
+            dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
+            dist_element[0] = neighborhood.Size
+            dist_element_normed = dist_element / np.linalg.norm(dist_element)
 
             # normal influence
             # dn = current_normals[1:, :].dot(current_normals[0, :])
@@ -255,7 +257,6 @@ class SaliencyFactory(object):
             multi_scale_values += saliency_normed[:, None]
 
         return SaliencyProperty(saliencies[0].Points, multi_scale_values)
-
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
@@ -324,22 +325,26 @@ class SaliencyFactory(object):
 
         # 1 + 2. Compute FPFH open3d
         fpfh = SaliencyFactory.FPFH_open3d(pointset, normals, search_param).T
-        fpfh = fpfh.tolist()
+        # fpfh1 = fpfh.tolist()
 
         # 3. Low level distinctness,
         current_hist = []
         pointset_distances = []
 
-        for i, j in zip(range(pointset.Size),
-                        trange(pointset.Size, desc='chi square', position=0)):
+        # for i, j in zip(range(pointset.Size),
+        #                 trange(pointset.Size, desc='chi square', position=0)):
+        #
+        #     tmp_fpfh = fpfh1.copy()
+        #     current_hist = tmp_fpfh.pop(i)
+        #
+        #     # 3.1 Compute the Chi-square distance of each histogram to each histogram
+        #     pointset_distances.append(chi2_distance(current_hist, np.asarray(tmp_fpfh), eps=10e-8))
 
-            tmp_fpfh = fpfh.copy()
-            current_hist = tmp_fpfh.pop(i)
+        # 3.1 Compute the Chi-square distance of each histogram to each histogram
+        from functools import partial
+        pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
 
-            # 3.1 Compute the Chi-square distance of each histogram to each histogram
-            pointset_distances.append(chi2_distance(current_hist, np.asarray(tmp_fpfh), eps=10e-8))
-
-            # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
+        # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
         pointset_distances = np.asarray(pointset_distances)
         dmin = low_level_percentage / 100 * pointset_distances.max(axis=1)
         D_low = list(
@@ -448,11 +453,14 @@ class SaliencyFactory(object):
             return 0
 
         valid_pts = pointset.GetPoint(valid_idx)
-        pi_pj = np.linalg.norm(point - valid_pts, axis=1)
-        dl = chi_dist[valid_idx] / (1 + pi_pj)
+        pi_pj = np.linalg.norm(point - valid_pts[1:], axis=1)
+        dl = chi_dist[valid_idx[1:]] / (1 + pi_pj)
 
         # 3.3 Compute the low-level distinctness
-        return 1 - np.exp(-dl.mean())
+        Dl = 1 - np.exp(-dl.mean())
+        if np.isnan(Dl):
+            Dl = 0
+        return Dl
 
     @classmethod
     def __point_association(cls, point, focus_points, focus_points_idx, distinctness, sigma=0.05):
