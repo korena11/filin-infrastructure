@@ -87,10 +87,11 @@ class TensorConnectivityGraph(object):
             directionalDiffs = dot(self.__stickAxes[index].reshape((1, 3)),
                                    self.__stickAxes[neighbors].T).reshape((-1,))
 
-            don = zeros((neighbors.shape[0], 3)) + 1e-16
-            # don[directionalDiffs < 0, :] = self.__stickAxes[neighbors][directionalDiffs < 0] + self.__stickAxes[index]
+            # TODO: VERIFY CORRECTNESS AND ThRESHOLD FOR LINEAR OBJECTS
+            don = self.__stickAxes[neighbors] - self.__stickAxes[index]  # zeros((neighbors.shape[0], 3)) + 1e-16
+            don[directionalDiffs < 0, :] = self.__stickAxes[neighbors][directionalDiffs < 0] + self.__stickAxes[index]
 
-        self.__simMatrix[index, neighbors] = 1   # self.__computeEdgeWeight(distances, abs(directionalDiffs))
+        self.__simMatrix[index, neighbors] = self.__computeEdgeWeight(distances, norm(don, axis=1) ** 2)
         self.__disMatrix[index, neighbors] = distances
         self.__angMatrix[index, neighbors] = abs(directionalDiffs)
         self.__donMatrix[index, neighbors] = norm(don, axis=1) ** 2
@@ -106,7 +107,8 @@ class TensorConnectivityGraph(object):
         """
         if self.__mode == 'binary':
             distanceTest = distances < self.__distanceThreshold
-            directionTest = directionalDiffs > 1 - self.__normalSimilarityThreshold
+            # directionTest = directionalDiffs > 1 - self.__normalSimilarityThreshold
+            directionTest = directionalDiffs < self.__normalSimilarityThreshold
             return int_(logical_and(distanceTest, directionTest))
         elif self.__mode == 'soft_clipping':
             distAlpha = self.__distanceSoftClippingAlpha

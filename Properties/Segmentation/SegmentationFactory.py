@@ -200,9 +200,9 @@ class SegmentationFactory:
         :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
         :return:
         """
-        from TensorBallTreeSegmentation import ExtractSurfaceElements, tensorConnectedComponents
+        from TensorBallTreeSegmentation import extractSurfaceElements, tensorConnectedComponents
         from TensorSet import TensorSet
-        bt, surfaceElementsLabels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
+        bt, surfaceElementsLabels, nodeIds, tensors = extractSurfaceElements(points, leafSize, smallestObjectSize)
 
         labels, tensorsPerSegment, segmentNeighbors = tensorConnectedComponents(
             tensors, numNeighbors, mode=mode, linearityThreshold=linearityThreshold,

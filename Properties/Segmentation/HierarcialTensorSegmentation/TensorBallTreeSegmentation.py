@@ -18,8 +18,7 @@ from TensorSet import TensorSet
 from SegmentMinCutter import SegmentMinCutter
 
 
-
-def ExtractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
+def extractSurfaceElements(points, leafSize=10, smallestObjectSize=0.1):
     """
     Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure
     :param points: point set object (PointSet)
@@ -75,16 +74,6 @@ def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearit
     """
     graph = TensorConnectivityGraph(tensors, numNeighbors, varianceThreshold, normalSimilarityThreshold,
                                     distanceThreshold, linearityThreshold=linearityThreshold, mode=mode)
-
-    from matplotlib import pyplot as plt
-    plt.figure()
-    graph.spyGraph()
-
-    graph.nullifyEdges()
-
-    plt.figure()
-    graph.spyGraph()
-    plt.show()
 
     nComponents, labels, indexesByLabels = graph.connected_componnents()
 

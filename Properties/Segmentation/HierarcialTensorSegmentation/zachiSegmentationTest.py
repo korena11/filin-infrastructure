@@ -15,9 +15,9 @@ if __name__ == '__main__':
 
     filename = 'test_tensors_2planarSurfaces'
 
-    # path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
+    path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
     # filename = 'agriculture1_clean'
-    # filename = 'oldSchool2-clean'
+    filename = 'oldSchool2-clean'
     # filename = 'powerplant5'
     # filename = 'curvedWall'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
@@ -28,12 +28,12 @@ if __name__ == '__main__':
         SegmentationFactory.SurfaceElementsTensorConnectedComponents(pntSet, leafSize=10,
                                                                      smallestObjectSize=0.1, numNeighbors=10,
                                                                      varianceThreshold=0.1 ** 2, linearityThreshold=5,
-                                                                     normalSimilarityThreshold=1e-3,
-                                                                     distanceThreshold=0.01,  mode='soft_clipping')
+                                                                     normalSimilarityThreshold=0.01,
+                                                                     distanceThreshold=0.08,  mode='binary')
 
-    # labels, tensors = dissolveEntrappedSurfaceElements(segmentation2, segmentNeighbors,
-    #                                                    varianceThreshold=0.1 ** 2, distanceThreshold=0.05)
-    # segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
+    labels, tensors = dissolveEntrappedSurfaceElements(segmentation2, segmentNeighbors,
+                                                       varianceThreshold=0.1 ** 2, distanceThreshold=0.05)
+    segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
     #
     # temp = list(map(lambda t: t.tensors_number, tensors))
     #
@@ -53,5 +53,5 @@ if __name__ == '__main__':
 
     # visObj = VisualizationO3D()
     VisualizationO3D.visualize_pointset(pointset=segmentation2, drawCoordianteFrame=True, coordinateFrameOrigin='min')
-    # VisualizationO3D.visualize_pointset(pointset=segmentation3, drawCoordianteFrame=True, coordinateFrameOrigin='min')
+    VisualizationO3D.visualize_pointset(pointset=segmentation3, drawCoordianteFrame=True, coordinateFrameOrigin='min')
 
