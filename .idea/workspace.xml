@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="before changes to saliency">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Hierarchical saliency faster. before checks for high level distinctness">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utils/MyTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/MyTools.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,8 +29,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="696" column="26" selection-start-line="696" selection-start-column="26" selection-end-line="696" selection-end-column="26" />
+            <state relative-caret-position="174">
+              <caret line="718" selection-start-line="718" selection-end-line="718" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -179,6 +180,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -236,7 +238,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -473,7 +474,9 @@
       <workItem from="1562153396997" duration="586000" />
       <workItem from="1562165444232" duration="563000" />
       <workItem from="1562179553897" duration="215000" />
-      <workItem from="1562180372203" duration="288000" />
+      <workItem from="1562180372203" duration="696000" />
+      <workItem from="1562181357053" duration="884000" />
+      <workItem from="1562231590759" duration="670000" />
     </task>
     <task id="LOCAL-00001" summary="ReumaPhD folder added with circle development">
       <created>1484487854691</created>
@@ -741,7 +744,14 @@
       <option name="project" value="LOCAL" />
       <updated>1560333630266</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="laplacian for saliency instead of LoG">
+      <created>1562180742268</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1562180742268</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -777,7 +787,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="102305000" />
+    <option name="totallyTimeSpent" value="104267000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -792,7 +802,7 @@
     <frame x="1920" y="27" width="1920" height="1053" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.19583778" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.2953451" visible="true" weight="0.20010673" />
       <window_info auto_hide="true" x="703" y="73" width="813" height="925" id="Structure" order="1" sideWeight="0.7046549" side_tool="true" type="FLOATING" weight="1.0" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -878,8 +888,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="NOT WORKING In progress" />
-    <MESSAGE value="Classification Facrtory and Property DONE and working. Need to accelerate" />
     <MESSAGE value="New level set factory" />
     <MESSAGE value="New level set factory, includes the Heaviside and Dirac Delta functions (undebugged)" />
     <MESSAGE value="Added Chan-Vese flow -- working" />
@@ -903,7 +911,9 @@
     <MESSAGE value="saliency factory -- normals filtering for vegetation" />
     <MESSAGE value="modification to large datasets for knn merged with workstation branch" />
     <MESSAGE value="before changes to saliency" />
-    <option name="LAST_COMMIT_MESSAGE" value="before changes to saliency" />
+    <MESSAGE value="laplacian for saliency instead of LoG" />
+    <MESSAGE value="Hierarchical saliency faster. before checks for high level distinctness" />
+    <option name="LAST_COMMIT_MESSAGE" value="Hierarchical saliency faster. before checks for high level distinctness" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -1158,7 +1168,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
-          <line>661</line>
+          <line>666</line>
           <option name="timeStamp" value="399" />
         </line-breakpoint>
       </breakpoints>
@@ -1535,8 +1545,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="696" column="26" selection-start-line="696" selection-start-column="26" selection-end-line="696" selection-end-column="26" />
+        <state relative-caret-position="174">
+          <caret line="718" selection-start-line="718" selection-end-line="718" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

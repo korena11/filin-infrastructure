@@ -260,8 +260,8 @@ class SaliencyFactory(object):
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
-    def hierarchical_saliency(cls, neighborhoods, normals, num_bins=8, low_level_percentage=1, sigma=0.05,
-                              association_percentage=20, high_level_percentage=10, verbose=True):
+    def hierarchical_saliency(cls, neighborhoods, normals, low_level_percentage=1, sigma=0.05,
+                              association_percentage=20, high_level_percentage=10, verbose=True, chi_filename=None):
         r"""
         Compute saliency by hierarchical method.
 
@@ -342,7 +342,13 @@ class SaliencyFactory(object):
 
         # 3.1 Compute the Chi-square distance of each histogram to each histogram
         from functools import partial
-        pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
+        import pickle
+
+        try:
+            pointset_distances = pickle.load(open(chi_filename, 'rb'))
+        except IOError:
+            pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
+            pickle.dump(pointset_distances, open(chi_filename + '.p', 'wb'))
 
         # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
         pointset_distances = np.asarray(pointset_distances)
@@ -410,7 +416,6 @@ class SaliencyFactory(object):
 
         # 1. Compute the high-level dissimilarity
         pi_pj = np.linalg.norm(point - valid_pts, axis=1)
-        pi_pj /= pi_pj.max()
         dh = chi_dist[valid_idx, None] * np.log(1 + pi_pj)
 
         # 2. Compute the high-level distinctness
