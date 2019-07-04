@@ -169,10 +169,10 @@ class TensorFactory(object):
         covMat = n1 * t1.covariance_matrix / (n1 + n2) + n2 * t2.covariance_matrix / (n1 + n2) + \
                  n1 * n2 ** 2 * np.dot((t2.reference_point - t1.reference_point).reshape((-1, 1)),
                                        (t2.reference_point - t1.reference_point).reshape((1, -1))) / \
-                 (n1 + n2) ** 3 + \
+                 (n1 + n2) ** 2 + \
                  n1 ** 2 * n2 * np.dot((t2.reference_point - t1.reference_point).reshape((-1, 1)),
                                        (t2.reference_point - t1.reference_point).reshape((1, -1))) / \
-                 (n1 + n2) ** 3
+                 (n1 + n2) ** 2
 
         return Tensor(covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2), n1 + n2)
 

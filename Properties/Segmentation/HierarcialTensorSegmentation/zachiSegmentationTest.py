@@ -32,7 +32,9 @@ if __name__ == '__main__':
                                                                      distanceThreshold=0.08,  mode='binary')
 
     labels, tensors = dissolveEntrappedSurfaceElements(segmentation2, segmentNeighbors,
-                                                       varianceThreshold=0.1 ** 2, distanceThreshold=0.05)
+                                                       varianceThreshold=0.1 ** 2,
+                                                       distanceThreshold=0.08,
+                                                       minSegmentSize=3)
     segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
     #
     # temp = list(map(lambda t: t.tensors_number, tensors))
