@@ -1,811 +1,663 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Panorama &mdash; infragit 1a documentation</title>
+  
 
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  
+  
+  
 
-    <title>Panorama &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'1a',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
+    
 
-    <script src="../../_static/js/modernizr.min.js" type="text/javascript"></script>
-
-
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"
-            type="text/javascript"></script>
-    <script src="../../_static/jquery.js" type="text/javascript"></script>
-    <script src="../../_static/underscore.js" type="text/javascript"></script>
-    <script src="../../_static/doctools.js" type="text/javascript"></script>
-    <script src="../../_static/language_data.js" type="text/javascript"></script>
-    <script async="async"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
-            type="text/javascript"></script>
-
-    <script src="../../_static/js/theme.js" type="text/javascript"></script>
-
-
-    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
-    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
-    <link href="../../genindex.html" rel="index" title="Index"/>
-    <link href="../../search.html" rel="search" title="Search"/>
-    <link href="../Saliency/Saliency.html" rel="next" title="Saliency"/>
-    <link href="../Neighborhood/Neighborhood.html" rel="prev" title="Neighborhood"/>
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Saliency" href="../Saliency/Saliency.html" />
+    <link rel="prev" title="Neighborhood" href="../Neighborhood/Neighborhood.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-<div class="wy-grid-for-nav">
+          
+            <a href="../../index.html" class="icon icon-home"> infragit
+          
 
-    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                <a class="icon icon-home" href="../../index.html"> infragit
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                </a>
-
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
-                        <input name="q" placeholder="Search docs" type="text"/>
-                        <input name="check_keywords" type="hidden" value="yes"/>
-                        <input name="area" type="hidden" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1 current"><a class="reference internal"
-                                                      href="../BaseProperty.html">Properties</a>
-                        <ul class="current">
-                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
-                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Panorama</a>
-                                <ul>
-                                    <li class="toctree-l3"><a class="reference internal" href="#panorama-property">Panorama
-                                        Property</a></li>
-                                    <li class="toctree-l3"><a class="reference internal" href="#panorama-factory">Panorama
-                                        Factory</a></li>
-                                </ul>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../SphericalCoordinates/Spherical.html">Spherical
-                                Coordinates</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Transformations/Transformation.html">Transformations</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
-                        functions and factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
-                        Factory Documentation</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
-                        Utilities</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../BaseProperty.html">Properties</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Normals/Normals.html">Normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Panorama</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#panorama-property">Panorama Property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panorama-factory">Panorama Factory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SphericalCoordinates/Spherical.html">Spherical Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Transformations/Transformation.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
-    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">infragit</a>
+        
+      </nav>
 
 
-        <nav aria-label="top navigation" class="wy-nav-top">
-
-            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
-            <a href="../../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
 
 
-                <div aria-label="breadcrumbs navigation" role="navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../../index.html">Docs</a> &raquo;</li>
-
-                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
-
-                        <li>Panorama</li>
 
 
-                        <li class="wy-breadcrumbs-aside">
 
 
-                            <a href="../../_sources/Properties/Panorama/Panorama.rst.txt" rel="nofollow"> View page
-                                source</a>
 
 
-                        </li>
-
-                    </ul>
 
 
-                    <hr/>
-                </div>
-                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="panorama">
-                            <h1>Panorama<a class="headerlink" href="#panorama" title="Permalink to this headline">¶</a>
-                            </h1>
-                            <p>The Panorama property holds the panorama created from the point cloud, depending on a
-                                property
-                                (<a class="reference internal" href="../Colors/Colors.html#ColorProperty.ColorProperty"
-                                    title="ColorProperty.ColorProperty"><code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">ColorProperty.ColorProperty</span></code></a>,
-                                <a class="reference internal"
-                                   href="../Curvature/Curvature.html#CurvatureProperty.CurvatureProperty"
-                                   title="CurvatureProperty.CurvatureProperty"><code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">CurvatureProperty.CurvatureProperty</span></code></a>,
-                                etc.).
-                                These are created based on <code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">SphericalCoordinates.SphericalCoordinates</span></code>
-                                class).</p>
-                            <div class="section" id="panorama-property">
-                                <h2>Panorama Property<a class="headerlink" href="#panorama-property"
-                                                        title="Permalink to this headline">¶</a></h2>
-                                <dl class="class">
-                                    <dt id="PanoramaProperty.PanoramaProperty">
-                                        <em class="property">class </em><code
-                                            class="descclassname">PanoramaProperty.</code><code class="descname">PanoramaProperty</code><span
-                                            class="sig-paren">(</span><em>sphericalCoordinates</em>,
-                                        <em>rowIndexes=None</em>, <em>columnIndexes=None</em>,
-                                        <em>panoramaData=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a
-                                            class="reference internal"
-                                            href="../../_modules/PanoramaProperty.html#PanoramaProperty"><span
-                                            class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                        href="#PanoramaProperty.PanoramaProperty"
-                                                                                        title="Permalink to this definition">¶</a>
-                                    </dt>
-                                    <dd><p>A panoramic representation of the point set.</p>
-                                        <div class="admonition note">
-                                            <p class="admonition-title">Note</p>
-                                            <p>For the Scanstation C10 the measurements’ angular resolution for both
-                                                elevation and azimuth directions:</p>
-                                            <ul class="simple">
-                                                <li><p>Low: 0.11 deg</p></li>
-                                                <li><p>Medium: 0.057 deg</p></li>
-                                                <li><p>High: 0.028 deg</p></li>
-                                                <li><p>Highest: <em>TO ADD</em></p></li>
-                                            </ul>
-                                        </div>
-                                        <p class="rubric">Attributes</p>
-                                        <table class="longtable docutils align-center">
-                                            <colgroup>
-                                                <col style="width: 10%"/>
-                                                <col style="width: 90%"/>
-                                            </colgroup>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                        <p class="rubric">Methods</p>
-                                        <table class="longtable docutils align-center">
-                                            <colgroup>
-                                                <col style="width: 10%"/>
-                                                <col style="width: 90%"/>
-                                            </colgroup>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.PanoramaImage">
-                                                <code class="descname">PanoramaImage</code><a class="headerlink"
-                                                                                              href="#PanoramaProperty.PanoramaProperty.PanoramaImage"
-                                                                                              title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Returns the panorama image</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.Size">
-                                                <code class="descname">Size</code><a class="headerlink"
-                                                                                     href="#PanoramaProperty.PanoramaProperty.Size"
-                                                                                     title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>The image panorama shape</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="method">
-                                            <dt id="PanoramaProperty.PanoramaProperty.adaptive_smoothing">
-                                                <code class="descname">adaptive_smoothing</code><span class="sig-paren">(</span><em>panoramaImage</em>,
-                                                <em>phenomena_size</em>, <em>**kwargs</em><span
-                                                    class="sig-paren">)</span><a class="reference internal"
-                                                                                 href="../../_modules/PanoramaProperty.html#PanoramaProperty.adaptive_smoothing"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PanoramaProperty.PanoramaProperty.adaptive_smoothing"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Adaptive smoothing of range image according to another (self)
-                                                panorama image</p>
-                                                <div class="admonition note">
-                                                    <p class="admonition-title">Note</p>
-                                                    <blockquote>
-                                                        <div><p>The function is implemented similar to other smoothing
-                                                            functions (e.g., <cite>cv2.GaussianBlur</cite>; <cite>cv2.Blur</cite>),
-                                                            so
-                                                            different kinds of smoothing functions will be applicable by
-                                                            sending (without <cite>if</cite>).
-                                                            This means that the function will return computed <cite>sigma</cite>
-                                                            and <cite>ksize</cite> according to
-                                                            the average - and they will be returned in the variable.</p>
-                                                        </div>
-                                                    </blockquote>
-                                                    <p>An adaptive smoothing is implemented as a family of convolution
-                                                        kernels characterized by
-                                                        different <span
-                                                                class="math notranslate nohighlight">\(\sigma\)</span>
-                                                        values where:</p>
-                                                </div>
-                                                <div class="math notranslate nohighlight">
-                                                    \[d(\rho )=\frac{D}{\rho \Delta }\]
-                                                </div>
-                                                <p>with :math: <cite>D</cite>, the object-space size of the window, and
-                                                    :math: <cite>Delta</cite> the angular sampling resolution
-                                                    and :math: <cite>rho</cite> is the measured range.</p>
-                                                <p><a class="reference internal" href="../../index.html#arav2013"
-                                                      id="id1">[Ara13]</a></p>
-                                                <div class="admonition-todo admonition" id="index-0">
-                                                    <p class="admonition-title">Todo</p>
-                                                    <p>Add optionality for adaptive smoothing for other properties
-                                                        panoramas, where adaptation is according to
-                                                        range information</p>
-                                                </div>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>phenomena_size</strong> – the minimal size of
-                                                                the phenomena that we don’t want to smooth (:math:
-                                                                <cite>D</cite> above)
-                                                                default: 0.12 m</p></li>
-                                                            <li><p><strong>panoramaImage</strong> – the image to smooth
-                                                            </p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even">
-                                                        <p>
-                                                            <ul class="simple">
-                                                                <li>
-                                                        <p>smoothed image</p></li>
-                                                        <li><p>mean sigma size</p></li>
-                                                        <li><p>mean kernel size</p></li>
-                                                        </ul>
-                                                        </p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference external"
-                                                                                href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                                title="(in Python v3.7)">tuple</a></p>
-                                                    </dd>
-                                                </dl>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.azimuth_spacing">
-                                                <code class="descname">azimuth_spacing</code><a class="headerlink"
-                                                                                                href="#PanoramaProperty.PanoramaProperty.azimuth_spacing"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Azimuth angle resolution size</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.column_indexes">
-                                                <code class="descname">column_indexes</code><a class="headerlink"
-                                                                                               href="#PanoramaProperty.PanoramaProperty.column_indexes"
-                                                                                               title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>The column index of each point</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.elevation_spacing">
-                                                <code class="descname">elevation_spacing</code><a class="headerlink"
-                                                                                                  href="#PanoramaProperty.PanoramaProperty.elevation_spacing"
-                                                                                                  title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Elevation angle resolution size</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="method">
-                                            <dt id="PanoramaProperty.PanoramaProperty.extract_area">
-                                                <code class="descname">extract_area</code><span
-                                                    class="sig-paren">(</span><em>left_top_corner</em>, <em>right_bottom_corner</em><span
-                                                    class="sig-paren">)</span><a class="reference internal"
-                                                                                 href="../../_modules/PanoramaProperty.html#PanoramaProperty.extract_area"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PanoramaProperty.PanoramaProperty.extract_area"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Create a new panorama according to a bounding box</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>left_top_corner</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                    title="(in Python v3.7)"><em>tuple</em></a>) – (row,
-                                                                column) of the left top corner of the extracted area</p>
-                                                            </li>
-                                                            <li><p><strong>right_bottom_corner</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                    title="(in Python v3.7)"><em>tuple</em></a>) – (row,
-                                                                column) of the right bottom corner of the extracted area
-                                                            </p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>a pointsubset according to the bounding
-                                                        box</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference internal"
-                                                                                href="../../Datasets/PointSet.html#PointSubSet.PointSubSet"
-                                                                                title="PointSubSet.PointSubSet">PointSubSet</a>
-                                                    </p>
-                                                    </dd>
-                                                    <dt class="field-even">TODO</dt>
-                                                    <dd class="field-even"><p>Return panorama property of the subset and
-                                                        not the subset</p>
-                                                    </dd>
-                                                </dl>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.getValues">
-                                                <code class="descname">getValues</code><a class="headerlink"
-                                                                                          href="#PanoramaProperty.PanoramaProperty.getValues"
-                                                                                          title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Get a specific characteristic value of the property</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Returns</dt>
-                                                    <dd class="field-odd"><p>value for each point</p>
-                                                    </dd>
-                                                    <dt class="field-even">Return type</dt>
-                                                    <dd class="field-even"><p>np.array</p>
-                                                    </dd>
-                                                </dl>
-                                                <div class="admonition warning">
-                                                    <p class="admonition-title">Warning</p>
-                                                    <p>This function needs to be overwritten for each inheriting
-                                                        property. It is empty at the BaseProperty</p>
-                                                </div>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.max_azimuth">
-                                                <code class="descname">max_azimuth</code><a class="headerlink"
-                                                                                            href="#PanoramaProperty.PanoramaProperty.max_azimuth"
-                                                                                            title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Maximal azimuth value in data</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.max_elevation">
-                                                <code class="descname">max_elevation</code><a class="headerlink"
-                                                                                              href="#PanoramaProperty.PanoramaProperty.max_elevation"
-                                                                                              title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Maximal elevation value in data</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.min_azimuth">
-                                                <code class="descname">min_azimuth</code><a class="headerlink"
-                                                                                            href="#PanoramaProperty.PanoramaProperty.min_azimuth"
-                                                                                            title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Minimal azimuth value in data</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.min_elevation">
-                                                <code class="descname">min_elevation</code><a class="headerlink"
-                                                                                              href="#PanoramaProperty.PanoramaProperty.min_elevation"
-                                                                                              title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Minimal elevation value in data</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="method">
-                                            <dt id="PanoramaProperty.PanoramaProperty.normals">
-                                                <code class="descname">normals</code><span
-                                                    class="sig-paren">(</span><em>phenomenaSize=0.2</em>,
-                                                <em>ksize=(5</em>, <em>5)</em>, <em>gradientType='L1'</em>,
-                                                <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                    class="reference internal"
-                                                    href="../../_modules/PanoramaProperty.html#PanoramaProperty.normals"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PanoramaProperty.PanoramaProperty.normals"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Computing gradients and normals in each direction, via adaptive
-                                                smoothing according to <a class="reference internal"
-                                                                          href="../../index.html#arav2013" id="id2">[Ara13]</a>
-                                            </p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>phenomenaSize</strong> – phenomena size for
-                                                                adaptive smoothing (default: 0.12 m)</p></li>
-                                                            <li><p><strong>ksize</strong> – kernel size for gradient
-                                                                computation (default: (5,5))</p></li>
-                                                            <li><p><strong>gradientType</strong> – ‘L1’ L1 norm of
-                                                                grad(I); ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of
-                                                                gaussian (default: ‘L1’)</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                </dl>
-                                                <p><strong>Optionals</strong></p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>rangeThresh</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) –
-                                                                scanner’s maximum range</p></li>
-                                                            <li><p><strong>smoothing_function</strong> – if other
-                                                                smoothing than adaptive is required (e.g.
-                                                                ‘guassianBlur’))</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even">
-                                                        <p>
-                                                            <ul class="simple">
-                                                                <li>
-                                                        <p>normals: a holding <span
-                                                                class="math notranslate nohighlight">\(n\times m \times 3\)</span>
-                                                            ndarray of the normals in each direction (Nx, Ny, Nz)
-                                                        </p></li>
-                                                        <li><p>gradient: gradient in each pixel</p></li>
-                                                        <li><p>filtered: range image after adaptive smoothing</p></li>
-                                                        <li><p>xyz: points’ list after smoothing, from range image</p>
-                                                        </li>
-                                                        </ul>
-                                                        </p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference external"
-                                                                                href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                                title="(in Python v3.7)">tuple</a></p>
-                                                    </dd>
-                                                </dl>
-                                                <div class="admonition warning">
-                                                    <p class="admonition-title">Warning</p>
-                                                    <p>Implemented for gaussian filtering and adaptive filters. Other
-                                                        adaptations might be
-                                                        needed when using different methods for smoothing.</p>
-                                                </div>
-                                                <div class="admonition seealso">
-                                                    <p class="admonition-title">See also</p>
-                                                    <p>method <a class="reference internal"
-                                                                 href="../Normals/Normals.html#NormalsFactory.NormalsFactory.normalsComputation_in_raster"
-                                                                 title="NormalsFactory.NormalsFactory.normalsComputation_in_raster"><code
-                                                            class="xref py py-meth docutils literal notranslate"><span
-                                                            class="pre">NormalsFactory.NormalsFactory.normalsComputation_in_raster()</span></code></a>
-                                                    </p>
-                                                </div>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.row_indexes">
-                                                <code class="descname">row_indexes</code><a class="headerlink"
-                                                                                            href="#PanoramaProperty.PanoramaProperty.row_indexes"
-                                                                                            title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>The row index of each point</p>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PanoramaProperty.PanoramaProperty.void_data">
-                                                <code class="descname">void_data</code><a class="headerlink"
-                                                                                          href="#PanoramaProperty.PanoramaProperty.void_data"
-                                                                                          title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Value set for void areas</p>
-                                            </dd>
-                                        </dl>
-
-                                    </dd>
-                                </dl>
-
-                            </div>
-                            <div class="section" id="panorama-factory">
-                                <h2>Panorama Factory<a class="headerlink" href="#panorama-factory"
-                                                       title="Permalink to this headline">¶</a></h2>
-                                <dl class="class">
-                                    <dt id="PanoramaFactory.PanoramaFactory">
-                                        <em class="property">class </em><code
-                                            class="descclassname">PanoramaFactory.</code><code class="descname">PanoramaFactory</code><a
-                                            class="reference internal"
-                                            href="../../_modules/PanoramaFactory.html#PanoramaFactory"><span
-                                            class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                        href="#PanoramaFactory.PanoramaFactory"
-                                                                                        title="Permalink to this definition">¶</a>
-                                    </dt>
-                                    <dd><p>Creates a panoramic view from point set based on a certain property (e.g.
-                                        range, intesity, etc.)
-                                        The panoramic view is stored as a PanoramaProperty object</p>
-                                        <blockquote>
-                                            <div><p class="rubric">Methods</p>
-                                                <table class="longtable docutils align-center">
-                                                    <colgroup>
-                                                        <col style="width: 10%"/>
-                                                        <col style="width: 90%"/>
-                                                    </colgroup>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </blockquote>
-                                        <dl class="classmethod">
-                                            <dt id="PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints">
-                                                <em class="property">classmethod </em><code class="descname">CreatePanorama_byPoints</code><span
-                                                    class="sig-paren">(</span><em>points</em>,
-                                                <em>azimuthSpacing=0.057</em>, <em>elevationSpacing=0.057</em>, <em>intensity=False</em>,
-                                                <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                    class="reference internal"
-                                                    href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byPoints"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Create a PanoramaProperty object from a point set based on according
-                                                to range or intensity</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>points</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet</em></a>) –
-                                                                The point set to create the panorama from can be either
-                                                                a PointSet, PointSubSet or
-                                                                BaseProperty-derived objects</p></li>
-                                                            <li><p><strong>azimuthSpacing</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – The
-                                                                spacing between two points of the point set in the
-                                                                azimuth direction (scan property)</p></li>
-                                                            <li><p><strong>elevationSpacing</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – The
-                                                                spacing between two points of the point set in the
-                                                                elevation direction</p></li>
-                                                            <li><p><strong>intensity</strong> – if the pixel’s value
-                                                                should be the intensity value.</p></li>
-                                                            <li><p><strong>void_as_mean</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#bool"
-                                                                    title="(in Python v3.7)"><em>bool</em></a>) – flag
-                                                                to determine the void value as the mean value of the
-                                                                ranges</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>panorama_property</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference internal"
-                                                                                href="#PanoramaProperty.PanoramaProperty"
-                                                                                title="PanoramaProperty.PanoramaProperty">PanoramaProperty</a>
-                                                    </p>
-                                                    </dd>
-                                                </dl>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="classmethod">
-                                            <dt id="PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty">
-                                                <em class="property">classmethod </em><code class="descname">CreatePanorama_byProperty</code><span
-                                                    class="sig-paren">(</span><em>pointSet_property</em>, <em>azimuthSpacing=0.057</em>,
-                                                <em>elevationSpacing=0.057</em>, <em>intensity=False</em>, <em>property_array=None</em>,
-                                                <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                    class="reference internal"
-                                                    href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byProperty"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd><p>Creates panorama with the property as the values of the pixels.</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>pointSet_property</strong> – any PointSet
-                                                                property according to which the pixel’s value should be
-                                                            </p></li>
-                                                            <li><p><strong>azimuthSpacing</strong> – The spacing between
-                                                                two points of the point set in the azimuth direction
-                                                                (scan property)</p></li>
-                                                            <li><p><strong>elevationSpacing</strong> – The spacing
-                                                                between two points of the point set in the elevation
-                                                                direction</p></li>
-                                                            <li><p><strong>property_array</strong> – if the values of
-                                                                the property to present cannot be retrieved by a simple
-                                                                <code class="docutils literal notranslate"><span
-                                                                        class="pre">getValues()</span></code></p></li>
-                                                        </ul>
-                                                    </dd>
-                                                </dl>
-                                                <div class="highlight-python notranslate">
-                                                    <div class="highlight"><pre><span></span><span class="n">PanoramaFactory</span><span
-                                                            class="o">.</span><span
-                                                            class="n">CreatePanorama_byProperty</span><span
-                                                            class="p">(</span><span
-                                                            class="n">curvatureProperty</span><span
-                                                            class="p">,</span> <span
-                                                            class="n">azimuthSpacing</span><span class="o">=</span><span
-                                                            class="mf">0.057</span><span class="p">,</span> <span
-                                                            class="n">elevationSpacing</span><span
-                                                            class="o">=</span><span class="mf">0.057</span><span
-                                                            class="p">,</span>
-                      <span class="n">intensity</span><span class="o">=</span><span class="bp">False</span><span
-                                                                class="p">,</span> <span class="n">property_array</span><span
-                                                                class="o">=</span><span
-                                                                class="n">curvatureProperty</span><span
-                                                                class="o">.</span><span class="n">k1</span><span
-                                                                class="p">)</span>
-</pre>
-                                                    </div>
-                                                </div>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>intensity</strong> – if the pixel’s value
-                                                                should be the intensity value.</p></li>
-                                                            <li><p><strong>voidData</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – the
-                                                                number to set where there is no data</p></li>
-                                                            <li><p><strong>void_as_mean</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#bool"
-                                                                    title="(in Python v3.7)"><em>bool</em></a>) – flag
-                                                                to determine the void value as the mean value of the
-                                                                ranges</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>panorama_property</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference internal"
-                                                                                href="#PanoramaProperty.PanoramaProperty"
-                                                                                title="PanoramaProperty.PanoramaProperty">PanoramaProperty</a>
-                                                    </p>
-                                                    </dd>
-                                                </dl>
-                                            </dd>
-                                        </dl>
-
-                                    </dd>
-                                </dl>
-
-                            </div>
-                        </div>
 
 
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-
-                        <a accesskey="n" class="btn btn-neutral float-right" href="../Saliency/Saliency.html" rel="next"
-                           title="Saliency">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a accesskey="p" class="btn btn-neutral float-left" href="../Neighborhood/Neighborhood.html"
-                           rel="prev" title="Neighborhood"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
-                    </div>
+<div role="navigation" aria-label="breadcrumbs navigation">
 
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+        
+      <li>Panorama</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Properties/Panorama/Panorama.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
 
-                    <hr/>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="panorama">
+<h1>Panorama<a class="headerlink" href="#panorama" title="Permalink to this headline">¶</a></h1>
+<p>The Panorama property holds the panorama created from the point cloud, depending on a property
+(<a class="reference internal" href="../Colors/Colors.html#ColorProperty.ColorProperty" title="ColorProperty.ColorProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorProperty.ColorProperty</span></code></a>, <a class="reference internal" href="../Curvature/Curvature.html#CurvatureProperty.CurvatureProperty" title="CurvatureProperty.CurvatureProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurvatureProperty.CurvatureProperty</span></code></a>, etc.).
+These are created based on <code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalCoordinates.SphericalCoordinates</span></code> class).</p>
+<div class="section" id="panorama-property">
+<h2>Panorama Property<a class="headerlink" href="#panorama-property" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PanoramaProperty.PanoramaProperty">
+<em class="property">class </em><code class="descclassname">PanoramaProperty.</code><code class="descname">PanoramaProperty</code><span class="sig-paren">(</span><em>sphericalCoordinates</em>, <em>rowIndexes=None</em>, <em>columnIndexes=None</em>, <em>panoramaData=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>A panoramic representation of the point set.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>For the Scanstation C10 the measurements’ angular resolution for both elevation and azimuth directions:</p>
+<ul class="last simple">
+<li>Low: 0.11 deg</li>
+<li>Medium: 0.057 deg</li>
+<li>High: 0.028 deg</li>
+<li>Highest: <em>TO ADD</em></li>
+</ul>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.PanoramaImage" title="PanoramaProperty.PanoramaProperty.PanoramaImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PanoramaImage</span></code></a></td>
+<td>Returns the panorama image</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.Size" title="PanoramaProperty.PanoramaProperty.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td>The image panorama shape</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.azimuth_spacing" title="PanoramaProperty.PanoramaProperty.azimuth_spacing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azimuth_spacing</span></code></a></td>
+<td>Azimuth angle resolution size</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.column_indexes" title="PanoramaProperty.PanoramaProperty.column_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_indexes</span></code></a></td>
+<td>The column index of each point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.elevation_spacing" title="PanoramaProperty.PanoramaProperty.elevation_spacing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevation_spacing</span></code></a></td>
+<td>Elevation angle resolution size</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.getValues" title="PanoramaProperty.PanoramaProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a></td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.max_azimuth" title="PanoramaProperty.PanoramaProperty.max_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_azimuth</span></code></a></td>
+<td>Maximal azimuth value in data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.max_elevation" title="PanoramaProperty.PanoramaProperty.max_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_elevation</span></code></a></td>
+<td>Maximal elevation value in data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.min_azimuth" title="PanoramaProperty.PanoramaProperty.min_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_azimuth</span></code></a></td>
+<td>Minimal azimuth value in data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.min_elevation" title="PanoramaProperty.PanoramaProperty.min_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_elevation</span></code></a></td>
+<td>Minimal elevation value in data</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.row_indexes" title="PanoramaProperty.PanoramaProperty.row_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">row_indexes</span></code></a></td>
+<td>The row index of each point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.void_data" title="PanoramaProperty.PanoramaProperty.void_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">void_data</span></code></a></td>
+<td>Value set for void areas</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.adaptive_smoothing" title="PanoramaProperty.PanoramaProperty.adaptive_smoothing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adaptive_smoothing</span></code></a>(panoramaImage,&nbsp;…)</td>
+<td>Adaptive smoothing of range image according to another (self) panorama image</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.extract_area" title="PanoramaProperty.PanoramaProperty.extract_area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_area</span></code></a>(left_top_corner,&nbsp;…)</td>
+<td>Create a new panorama according to a bounding box</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(**kwargs)</td>
+<td>Loads all values of a property.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.normals" title="PanoramaProperty.PanoramaProperty.normals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals</span></code></a>([phenomenaSize,&nbsp;ksize,&nbsp;gradientType])</td>
+<td>Computing gradients and normals in each direction, via adaptive smoothing according to <a class="reference internal" href="../../index.html#arav2013" id="id1">[Ara13]</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.PanoramaImage">
+<code class="descname">PanoramaImage</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.PanoramaImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the panorama image</p>
+</dd></dl>
 
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.Size">
+<code class="descname">Size</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.Size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image panorama shape</p>
+</dd></dl>
 
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.adaptive_smoothing">
+<code class="descname">adaptive_smoothing</code><span class="sig-paren">(</span><em>panoramaImage</em>, <em>phenomena_size</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.adaptive_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.adaptive_smoothing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adaptive smoothing of range image according to another (self) panorama image</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<blockquote>
+<div>The function is implemented similar to other smoothing functions (e.g., <cite>cv2.GaussianBlur</cite>; <cite>cv2.Blur</cite>), so
+different kinds of smoothing functions will be applicable by sending (without <cite>if</cite>).
+This means that the function will return computed <cite>sigma</cite> and <cite>ksize</cite> according to
+the average - and they will be returned in the variable.</div></blockquote>
+<p class="last">An adaptive smoothing is implemented as a family of convolution kernels characterized by
+different <span class="math notranslate nohighlight">\(\sigma\)</span> values where:</p>
+</div>
+<div class="math notranslate nohighlight">
+\[d(\rho )=\frac{D}{\rho \Delta }\]</div>
+<p>with :math: <cite>D</cite>, the object-space size of the window, and :math: <cite>Delta</cite> the angular sampling resolution
+and :math: <cite>rho</cite> is the measured range.</p>
+<p><a class="reference internal" href="../../index.html#arav2013" id="id2">[Ara13]</a></p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add optionality for adaptive smoothing for other properties panoramas, where adaptation is according to
+range information</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>phenomena_size</strong> – the minimal size of the phenomena that we don’t want to smooth (:math: <cite>D</cite> above)
+default: 0.12 m</li>
+<li><strong>panoramaImage</strong> – the image to smooth</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>smoothed image</li>
+<li>mean sigma size</li>
+<li>mean kernel size</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-                </footer>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.azimuth_spacing">
+<code class="descname">azimuth_spacing</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.azimuth_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Azimuth angle resolution size</p>
+</dd></dl>
 
-            </div>
-        </div>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.column_indexes">
+<code class="descname">column_indexes</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.column_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column index of each point</p>
+</dd></dl>
 
-    </section>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.elevation_spacing">
+<code class="descname">elevation_spacing</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.elevation_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elevation angle resolution size</p>
+</dd></dl>
 
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.extract_area">
+<code class="descname">extract_area</code><span class="sig-paren">(</span><em>left_top_corner</em>, <em>right_bottom_corner</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.extract_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.extract_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new panorama according to a bounding box</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>left_top_corner</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – (row, column) of the left top corner of the extracted area</li>
+<li><strong>right_bottom_corner</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – (row, column) of the right bottom corner of the extracted area</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a pointsubset according to the bounding box</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">TODO:</th><td class="field-body"><p class="first last">Return panorama property of the subset and not the subset</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.getValues">
+<code class="descname">getValues</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific characteristic value of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">value for each point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.max_azimuth">
+<code class="descname">max_azimuth</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.max_azimuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximal azimuth value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.max_elevation">
+<code class="descname">max_elevation</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.max_elevation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximal elevation value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.min_azimuth">
+<code class="descname">min_azimuth</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.min_azimuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimal azimuth value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.min_elevation">
+<code class="descname">min_elevation</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.min_elevation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimal elevation value in data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.normals">
+<code class="descname">normals</code><span class="sig-paren">(</span><em>phenomenaSize=0.2</em>, <em>ksize=(5</em>, <em>5)</em>, <em>gradientType='L1'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.normals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.normals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computing gradients and normals in each direction, via adaptive smoothing according to <a class="reference internal" href="../../index.html#arav2013" id="id3">[Ara13]</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>phenomenaSize</strong> – phenomena size for adaptive smoothing (default: 0.12 m)</li>
+<li><strong>ksize</strong> – kernel size for gradient computation (default: (5,5))</li>
+<li><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of gaussian (default: ‘L1’)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optionals</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rangeThresh</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – scanner’s maximum range</li>
+<li><strong>smoothing_function</strong> – if other smoothing than adaptive is required (e.g. ‘guassianBlur’))</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><ul class="simple">
+<li>normals: a holding  <span class="math notranslate nohighlight">\(n\times m \times 3\)</span> ndarray of the normals in each direction (Nx, Ny, Nz)</li>
+<li>gradient: gradient in each pixel</li>
+<li>filtered: range image after adaptive smoothing</li>
+<li>xyz: points’ list after smoothing, from range image</li>
+</ul>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)">tuple</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Implemented for gaussian filtering and adaptive filters. Other adaptations might be
+needed when using different methods for smoothing.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">method <a class="reference internal" href="../Normals/Normals.html#NormalsFactory.NormalsFactory.normalsComputation_in_raster" title="NormalsFactory.NormalsFactory.normalsComputation_in_raster"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NormalsFactory.NormalsFactory.normalsComputation_in_raster()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.row_indexes">
+<code class="descname">row_indexes</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.row_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The row index of each point</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.void_data">
+<code class="descname">void_data</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.void_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value set for void areas</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="panorama-factory">
+<h2>Panorama Factory<a class="headerlink" href="#panorama-factory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PanoramaFactory.PanoramaFactory">
+<em class="property">class </em><code class="descclassname">PanoramaFactory.</code><code class="descname">PanoramaFactory</code><a class="reference internal" href="../../_modules/PanoramaFactory.html#PanoramaFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaFactory.PanoramaFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a panoramic view from point set based on a certain property (e.g. range, intesity, etc.)
+The panoramic view is stored as a PanoramaProperty object</p>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints" title="PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreatePanorama_byPoints</span></code></a>(points[,&nbsp;…])</td>
+<td>Create a PanoramaProperty object from a point set based on according to range or intensity</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty" title="PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreatePanorama_byProperty</span></code></a>(pointSet_property)</td>
+<td>Creates panorama with the property as the values of the pixels.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_PanoramaFactory__computePanoramaIndices</span></code>(…)</td>
+<td>Find the boundaries and the indices of the panorama</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_PanoramaFactory__compute_void_as_mean</span></code>(ranges)</td>
+<td>Sets the void value as the mean value of the ranges</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="classmethod">
+<dt id="PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints">
+<em class="property">classmethod </em><code class="descname">CreatePanorama_byPoints</code><span class="sig-paren">(</span><em>points</em>, <em>azimuthSpacing=0.057</em>, <em>elevationSpacing=0.057</em>, <em>intensity=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byPoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a PanoramaProperty object from a point set based on according to range or intensity</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – The point set to create the panorama from can be either a PointSet, PointSubSet or
+BaseProperty-derived objects</li>
+<li><strong>azimuthSpacing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The spacing between two points of the point set in the azimuth direction (scan property)</li>
+<li><strong>elevationSpacing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The spacing between two points of the point set in the elevation direction</li>
+<li><strong>intensity</strong> – if the pixel’s value should be the intensity value.</li>
+<li><strong>void_as_mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to determine the void value as the mean value of the ranges</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">panorama_property</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty">PanoramaProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty">
+<em class="property">classmethod </em><code class="descname">CreatePanorama_byProperty</code><span class="sig-paren">(</span><em>pointSet_property</em>, <em>azimuthSpacing=0.057</em>, <em>elevationSpacing=0.057</em>, <em>intensity=False</em>, <em>property_array=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates panorama with the property as the values of the pixels.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pointSet_property</strong> – any PointSet property according to which the pixel’s value should be</li>
+<li><strong>azimuthSpacing</strong> – The spacing between two points of the point set in the azimuth direction (scan property)</li>
+<li><strong>elevationSpacing</strong> – The spacing between two points of the point set in the elevation direction</li>
+<li><strong>property_array</strong> – if the values of the property to present cannot be retrieved by a simple <code class="docutils literal notranslate"><span class="pre">getValues()</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PanoramaFactory</span><span class="o">.</span><span class="n">CreatePanorama_byProperty</span><span class="p">(</span><span class="n">curvatureProperty</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.057</span><span class="p">,</span> <span class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.057</span><span class="p">,</span>
+                      <span class="n">intensity</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">property_array</span><span class="o">=</span><span class="n">curvatureProperty</span><span class="o">.</span><span class="n">k1</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>intensity</strong> – if the pixel’s value should be the intensity value.</li>
+<li><strong>voidData</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – the number to set where there is no data</li>
+<li><strong>void_as_mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to determine the void value as the mean value of the ranges</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">panorama_property</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty">PanoramaProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
-<script type="text/javascript">
-    jQuery(function () {
-        SphinxRtdTheme.Navigation.enable(true);
-    });
-</script>
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Saliency/Saliency.html" class="btn btn-neutral float-right" title="Saliency" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../Neighborhood/Neighborhood.html" class="btn btn-neutral float-left" title="Neighborhood" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,1067 +1,959 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>LevelSet Flow &mdash; infragit 1a documentation</title>
+  
 
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  
+  
+  
 
-    <title>LevelSet Flow &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'1a',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+    
 
-    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
-
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
-            type="text/javascript"></script>
-    <script src="../_static/jquery.js" type="text/javascript"></script>
-    <script src="../_static/underscore.js" type="text/javascript"></script>
-    <script src="../_static/doctools.js" type="text/javascript"></script>
-    <script src="../_static/language_data.js" type="text/javascript"></script>
-    <script async="async"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
-            type="text/javascript"></script>
-
-    <script src="../_static/js/theme.js" type="text/javascript"></script>
-
-
-    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
-    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
-    <link href="../genindex.html" rel="index" title="Index"/>
-    <link href="../search.html" rel="search" title="Search"/>
-    <link href="LevelSetFunction.html" rel="next" title="LevelSet Function"/>
-    <link href="LevelSets.html" rel="prev" title="Level Set functions and factory"/>
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LevelSet Function" href="LevelSetFunction.html" />
+    <link rel="prev" title="Level Set functions and factory" href="LevelSets.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-<div class="wy-grid-for-nav">
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
 
-    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                <a class="icon icon-home" href="../index.html"> infragit
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                </a>
-
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
-                        <input name="q" placeholder="Search docs" type="text"/>
-                        <input name="check_keywords" type="hidden" value="yes"/>
-                        <input name="area" type="hidden" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1 current"><a class="reference internal" href="LevelSets.html">Level Set
-                        functions and factory</a>
-                        <ul class="current">
-                            <li class="toctree-l2 current"><a class="current reference internal" href="#">LevelSet
-                                Flow</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="LevelSetFunction.html">LevelSet
-                                Function</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="Saliency.html">Saliency
-                                computations</a></li>
-                        </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory
-                        Documentation</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General
-                        Utilities</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="LevelSets.html">Level Set functions and factory</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">LevelSet Flow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="LevelSetFunction.html">LevelSet Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Saliency.html">Saliency computations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
-    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
-
-
-        <nav aria-label="top navigation" class="wy-nav-top">
-
-            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
-            <a href="../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
-
-
-                <div aria-label="breadcrumbs navigation" role="navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../index.html">Docs</a> &raquo;</li>
-
-                        <li><a href="LevelSets.html">Level Set functions and factory</a> &raquo;</li>
-
-                        <li>LevelSet Flow</li>
-
-
-                        <li class="wy-breadcrumbs-aside">
-
-
-                            <a href="../_sources/LevelSets/LevelSetFlow.rst.txt" rel="nofollow"> View page source</a>
-
-
-                        </li>
-
-                    </ul>
-
-
-                    <hr/>
-                </div>
-                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="levelset-flow">
-                            <h1>LevelSet Flow<a class="headerlink" href="#levelset-flow"
-                                                title="Permalink to this headline">¶</a></h1>
-                            <dl class="class">
-                                <dt id="LevelSetFlow.LevelSetFlow">
-                                    <em class="property">class </em><code
-                                        class="descclassname">LevelSetFlow.</code><code
-                                        class="descname">LevelSetFlow</code><span class="sig-paren">(</span><em>img</em>,
-                                    <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                        href="../_modules/LevelSetFlow.html#LevelSetFlow"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#LevelSetFlow.LevelSetFlow"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p class="rubric">Attributes</p>
-                                    <table class="longtable docutils align-center">
-                                        <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
-                                        </colgroup>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                    <p class="rubric">Methods</p>
-                                    <table class="longtable docutils align-center">
-                                        <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
-                                        </colgroup>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.f">
-                                            <code class="descname">f</code><a class="headerlink"
-                                                                              href="#LevelSetFlow.LevelSetFlow.f"
-                                                                              title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>External force (for gradient vector flow)</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.f_x">
-                                            <code class="descname">f_x</code><a class="headerlink"
-                                                                                href="#LevelSetFlow.LevelSetFlow.f_x"
-                                                                                title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>First order derivative of the external force</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.f_y">
-                                            <code class="descname">f_y</code><a class="headerlink"
-                                                                                href="#LevelSetFlow.LevelSetFlow.f_y"
-                                                                                title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>First order derivative of the external force</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.flow">
-                                            <code class="descname">flow</code><span class="sig-paren">(</span><em>flow_type</em>,
-                                            <em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                class="reference internal"
-                                                href="../_modules/LevelSetFlow.html#LevelSetFlow.flow"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.flow"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Return the flow of the level set according to the type wanted</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>flow_type</strong> –
-                                                            <p>can be one of the following:
-                                                                - ‘constant’:</p>
-                                                            <blockquote>
-                                                                <div>
-                                                                    <div class="math notranslate nohighlight">
-                                                                        \[C_t = N \Rightarrow \phi_t = |\nabla
-                                                                        \varphi|\]
-                                                                    </div>
-                                                                </div>
-                                                            </blockquote>
-                                                            <ul>
-                                                                <li><p>’curvature’:</p>
-                                                                    <blockquote>
-                                                                        <div>
-                                                                            <div class="math notranslate nohighlight">
-                                                                                \[C_t = kN \Rightarrow phi_t =
-                                                                                div\left(\frac{\nabla \varphi}{|\nabla
-                                                                                \varphi|}\right)|\nabla \varphi|\]
-                                                                            </div>
-                                                                        </div>
-                                                                    </blockquote>
-                                                                </li>
-                                                                <li><p>’equi_affine’:</p>
-                                                                    <blockquote>
-                                                                        <div>
-                                                                            <div class="math notranslate nohighlight">
-                                                                                \[C_t = k^{1/3} N \Rightarrow
-                                                                                \phi_t = div\left(\frac{\nabla
-                                                                                \varphi}{|\nabla
-                                                                                \varphi|}\right)^{1/3}*|\nabla
-                                                                                \varphi|\]
-                                                                            </div>
-                                                                        </div>
-                                                                    </blockquote>
-                                                                </li>
-                                                                <li><p>’geodesic’: geodesic active contours, according
-                                                                    to <a class="reference internal"
-                                                                          href="../index.html#caselles-etal1997"
-                                                                          id="id1">[CKS97]</a></p>
-                                                                    <blockquote>
-                                                                        <div>
-                                                                            <div class="math notranslate nohighlight">
-                                                                                \[C_t = (g(I)k -\nabla(g(I))N)N
-                                                                                \Rightarrow
-                                                                                \phi_t = [g(I)\cdot
-                                                                                div\left(\frac{\nabla \varphi}{|\nabla
-                                                                                \varphi|}\right)^{1/3}*|\nabla
-                                                                                \varphi|\]
-                                                                            </div>
-                                                                        </div>
-                                                                    </blockquote>
-                                                                </li>
-                                                                <li><p>’band’: band velocity, according to <a
-                                                                        class="reference internal"
-                                                                        href="../index.html#li-etal2006" id="id2">[LKS06]</a>
-                                                                </p></li>
-                                                            </ul>
-                                                            </p></li>
-                                                        <li><p><strong>function</strong> – the level set according to
-                                                            which the flow goes (usually phi)</p></li>
-                                                        <li><p><strong>open_flag</strong> – boolean for open flag</p>
-                                                        </li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <p><strong>Optionals</strong></p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I);
-                                                            ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of gaussian</p>
-                                                        </li>
-                                                        <li><p><strong>sigma</strong> – sigma for LoG gradient</p></li>
-                                                        <li><p><strong>ksize</strong> – kernel size, for blurring and
-                                                            derivatives</p></li>
-                                                        <li><p><strong>regularization</strong> – regularization note for
-                                                            heaviside and dirac</p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <p><strong>Band velocity optionals</strong></p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>band_width</strong> (<a
-                                                                class="reference external"
-                                                                href="https://docs.python.org/3/library/functions.html#int"
-                                                                title="(in Python v3.7)"><em>int</em></a>) – the width
-                                                            of the contour. default: 5</p></li>
-                                                        <li><p><strong>threshold</strong> (<a class="reference external"
-                                                                                              href="https://docs.python.org/3/library/functions.html#float"
-                                                                                              title="(in Python v3.7)"><em>float</em></a>)
-                                                            – for when the velocity equals zero. default: 0.5</p></li>
-                                                        <li><p><strong>stepsize</strong> (<a class="reference external"
-                                                                                             href="https://docs.python.org/3/library/functions.html#float"
-                                                                                             title="(in Python v3.7)"><em>float</em></a>)
-                                                            – default 0.05</p></li>
-                                                    </ul>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>phi_t</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.flow_types">
-                                            <code class="descname">flow_types</code><a class="headerlink"
-                                                                                       href="#LevelSetFlow.LevelSetFlow.flow_types"
-                                                                                       title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Types of flow used to progress the curves</p>
-                                            <p>Default: {“geodesic”}</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/stdtypes.html#dict"
-                                                                            title="(in Python v3.7)">dict</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.g">
-                                            <code class="descname">g</code><a class="headerlink"
-                                                                              href="#LevelSetFlow.LevelSetFlow.g"
-                                                                              title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Internal force (usually edge function)</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.g_x">
-                                            <code class="descname">g_x</code><a class="headerlink"
-                                                                                href="#LevelSetFlow.LevelSetFlow.g_x"
-                                                                                title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>First order derivative of the internal force</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.g_y">
-                                            <code class="descname">g_y</code><a class="headerlink"
-                                                                                href="#LevelSetFlow.LevelSetFlow.g_y"
-                                                                                title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>First order derivative of the internal force</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.gvf_w">
-                                            <code class="descname">gvf_w</code><a class="headerlink"
-                                                                                  href="#LevelSetFlow.LevelSetFlow.gvf_w"
-                                                                                  title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Gradient vector flow weight</p>
-                                            <p>Default: 1.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                            title="(in Python v3.7)">float</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.img">
-                                            <code class="descname">img</code><span
-                                                class="sig-paren">(</span><em>index=0</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.img"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.img"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>The analyzed image (of the data). Multiple can exist.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>index</strong> (<a
-                                                        class="reference external"
-                                                        href="https://docs.python.org/3/library/functions.html#int"
-                                                        title="(in Python v3.7)"><em>int</em></a>) – the index of the
-                                                    analyzed images.</p>
-                                                </dd>
-                                                <dt class="field-even">Return type</dt>
-                                                <dd class="field-even"><p>np.ndarray</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.imgGradient">
-                                            <code class="descname">imgGradient</code><a class="headerlink"
-                                                                                        href="#LevelSetFlow.LevelSetFlow.imgGradient"
-                                                                                        title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Gradient of the analyzed image</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.img_rgb">
-                                            <code class="descname">img_rgb</code><a class="headerlink"
-                                                                                    href="#LevelSetFlow.LevelSetFlow.img_rgb"
-                                                                                    title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>The analyzed img rgb representation (if exists, otherwise: 0.)</p>
-                                            <p>Default: 0</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array or 0</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_f">
-                                            <code class="descname">init_f</code><span
-                                                class="sig-paren">(</span><em>f</em>, <em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.init_f"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_f"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Initializes the g function (edge function)
-                                            :param g: the function
-                                            :param kwargs: gradient process dictionary</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_g">
-                                            <code class="descname">init_g</code><span
-                                                class="sig-paren">(</span><em>g</em>, <em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.init_g"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_g"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Initializes the g function (edge function)
-                                            :param g: the function
-                                            :param kwargs: gradient process dictionary</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_img">
-                                            <code class="descname">init_img</code><span class="sig-paren">(</span><em>img</em>,
-                                            <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                class="reference internal"
-                                                href="../_modules/LevelSetFlow.html#LevelSetFlow.init_img"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_img"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Set more images for the level set flow, according to which the flow will
-                                            move (each of the Phi’s)</p>
-                                            <div class="admonition warning">
-                                                <p class="admonition-title">Warning</p>
-                                                <p>When initializing a second+ image, one should make sure that</p>
-                                            </div>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>img</strong> – the next image to set
-                                                </p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_phi">
-                                            <code class="descname">init_phi</code><span class="sig-paren">(</span><em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.init_phi"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_phi"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Builds an initial smooth function (Lipschitz continuous) that represents
-                                            the interface as the set where
-                                            phi(x,y,t) = 0 is the curve.</p>
-                                            <p>The function has the following characteristics:</p>
-                                            <div class="math notranslate nohighlight">
-                                                \[\begin{split}\begin{cases}
-                                                \phi(x,y,t) &gt; 0 &amp; \forall (x,y) \in \Omega \\
-                                                \phi(x,y,t) &lt; 0 &amp; \forall (x,y) \not\in \Omega \\
-                                                \phi(x,y,t) = 0 &amp; \forall (x,y) \textrm{ on curve} \\
-                                                \end{cases}\end{split}\]
-                                            </div>
-                                            <p>with <span class="math notranslate nohighlight">\(\left| \nabla \phi \right| = 1\)</span>
-                                            </p>
-                                            <p><strong>Characteristics of the function</strong></p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>processing_props</strong> (<a
-                                                                class="reference external"
-                                                                href="https://docs.python.org/3/library/stdtypes.html#dict"
-                                                                title="(in Python v3.7)"><em>dict</em></a>) – properties
-                                                            for gradient and differentiation:
-                                                            - ‘gradientType’ - distance computation method
-                                                            - ‘sigma’ - for smoothing
-                                                            - ‘ksize’ - for smoothing</p></li>
-                                                        <li><p><strong>radius</strong> (<a class="reference external"
-                                                                                           href="https://docs.python.org/3/library/functions.html#int"
-                                                                                           title="(in Python v3.7)"><em>int</em></a>)
-                                                            – if the curve is a circle, the radius should be specified.
-                                                        </p></li>
-                                                        <li><p><strong>center_pt</strong> (<a class="reference external"
-                                                                                              href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                                              title="(in Python v3.7)"><em>tuple</em></a>)
-                                                            – if the curve is a circle, the center point should be
-                                                            specified.</p></li>
-                                                        <li><p><strong>reularization_note</strong> – regularization note
-                                                            for heaviside function</p></li>
-                                                        <li><p><strong>function_type</strong> (<a
-                                                                class="reference external"
-                                                                href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                title="(in Python v3.7)"><em>str</em></a>) – ‘circle’
-                                                            (default); ‘vertical’ or ‘horizontal’ (for open contours)
-                                                        </p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_psi">
-                                            <code class="descname">init_psi</code><span class="sig-paren">(</span><em>psi</em>,
-                                            <em>**kwargs</em><span class="sig-paren">)</span><a
-                                                class="reference internal"
-                                                href="../_modules/LevelSetFlow.html#LevelSetFlow.init_psi"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_psi"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd>
-                                            <blockquote>
-                                                <div><p>Initializes the psi function (open edges)</p>
-                                                </div>
-                                            </blockquote>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>psi</strong> (<em>nd-array mxn</em>) – the
-                                                            function</p></li>
-                                                        <li><p><strong>processing_props</strong> – gradient process
-                                                            dictionary</p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.init_region">
-                                            <code class="descname">init_region</code><span
-                                                class="sig-paren">(</span><em>region</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.init_region"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.init_region"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Initializes region function. Normalizes between (-1,1)</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>region</strong> – region function
-                                                    initialize</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.iterations">
-                                            <code class="descname">iterations</code><a class="headerlink"
-                                                                                       href="#LevelSetFlow.LevelSetFlow.iterations"
-                                                                                       title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Number of iterations for the level set</p>
-                                            <p>Default: 150</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                                            title="(in Python v3.7)">int</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.moveLS">
-                                            <code class="descname">moveLS</code><span class="sig-paren">(</span><em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.moveLS"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.moveLS"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>The function that moves the level set until the desired contour is
-                                            reached</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>- flow types and their
-                                                    weight</strong><strong>
-                                                    (</strong><strong>string</strong><strong>, </strong><strong>weight</strong><strong>)</strong>
-                                                    (<em>flow_type</em>) – </p>
-                                                </dd>
-                                            </dl>
-                                            <p>‘constant’, ‘curvature’, ‘equi-affine’, ‘geodesic’, ‘chan-vese’,
-                                                ‘band’</p>
-                                            <div class="admonition note">
-                                                <p class="admonition-title">Note</p>
-                                                <p>The ‘chan-vese’ flow requires weights (chanvese_w), for the four
-                                                    components of the model:</p>
-                                            </div>
-                                            <div class="highlight-python notranslate">
-                                                <div class="highlight"><pre><span></span><span class="p">{</span><span
-                                                        class="n">area_w</span><span class="p">,</span> <span class="n">length_w</span><span
-                                                        class="p">,</span> <span class="n">inside_w</span><span
-                                                        class="p">,</span> <span class="n">outside_w</span><span
-                                                        class="p">}</span>
-</pre>
-                                                </div>
-                                            </div>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>gvf_flag</strong> – flag to add gradient vector
-                                                            flow</p></li>
-                                                        <li><p><strong>open_flag</strong> – flag for open contours</p>
-                                                        </li>
-                                                        <li><p><strong>mumford_shah</strong> – flag for mumford_shah
-                                                            flow</p></li>
-                                                        <li><p><strong>scaleX</strong> (<a class="reference external"
-                                                                                           href="https://docs.python.org/3/library/functions.html#float"
-                                                                                           title="(in Python v3.7)"><em>float</em></a>)
-                                                            – enhance X direction</p></li>
-                                                        <li><p><strong>scaleY</strong> (<a class="reference external"
-                                                                                           href="https://docs.python.org/3/library/functions.html#float"
-                                                                                           title="(in Python v3.7)"><em>float</em></a>)
-                                                            – enhance Y direction</p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                            <p>:return the contours after level set</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.mumfordshah_flow">
-                                            <code class="descname">mumfordshah_flow</code><span
-                                                class="sig-paren">(</span><em>img=True</em>, <em>nu=1</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.mumfordshah_flow"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Computes the Mumford-Shah flow for a multi-phase level set, according to
-                                            <a class="reference internal" href="../index.html#vese-chan2002" id="id3">[VC02]</a>.
-                                        </p>
-                                            <p>Updates the self.Phi variable for</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>img</strong> (<em>np.array</em>) – the specific
-                                                            image upon which the level sets are computed</p></li>
-                                                        <li><p><strong>nu</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/functions.html#float"
-                                                                                       title="(in Python v3.7)"><em>float</em></a>)
-                                                            – the length weight</p></li>
-                                                    </ul>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>phi_t - the flows that move the level set</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.num_ls">
-                                            <code class="descname">num_ls</code><a class="headerlink"
-                                                                                   href="#LevelSetFlow.LevelSetFlow.num_ls"
-                                                                                   title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Number of level sets in the flow</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>int</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.phi">
-                                            <code class="descname">phi</code><span
-                                                class="sig-paren">(</span><em>index=0</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.phi"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.phi"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Returns the level set function phi according to the index</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>index</strong> (<a
-                                                        class="reference external"
-                                                        href="https://docs.python.org/3/library/functions.html#int"
-                                                        title="(in Python v3.7)"><em>int</em></a>) – the number of the
-                                                    level set</p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>LevelSetFunction self.__Phi</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.processing_props">
-                                            <code class="descname">processing_props</code><a class="headerlink"
-                                                                                             href="#LevelSetFlow.LevelSetFlow.processing_props"
-                                                                                             title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd></dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.psi">
-                                            <code class="descname">psi</code><a class="headerlink"
-                                                                                href="#LevelSetFlow.LevelSetFlow.psi"
-                                                                                title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Returns the level set function phi according to the index
-                                            :return: LevelSetFunction self.__psi</p>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.region">
-                                            <code class="descname">region</code><a class="headerlink"
-                                                                                   href="#LevelSetFlow.LevelSetFlow.region"
-                                                                                   title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Region constraint</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p>np.array</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.region_w">
-                                            <code class="descname">region_w</code><a class="headerlink"
-                                                                                     href="#LevelSetFlow.LevelSetFlow.region_w"
-                                                                                     title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Region weight</p>
-                                            <p>Default: 1.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                            title="(in Python v3.7)">float</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.regularization_epsilon">
-                                            <code class="descname">regularization_epsilon</code><a class="headerlink"
-                                                                                                   href="#LevelSetFlow.LevelSetFlow.regularization_epsilon"
-                                                                                                   title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                            title="(in Python v3.7)">float</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.set_flow_types">
-                                            <code class="descname">set_flow_types</code><span class="sig-paren">(</span><em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.set_flow_types"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.set_flow_types"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Set the flow types and their weights according to which the level set
-                                            will move</p>
-                                            <p>Options are as in <code
-                                                    class="xref py py-meth docutils literal notranslate"><span
-                                                    class="pre">flow()</span></code></p>
-                                            <p>For example:</p>
-                                            <div class="highlight-python notranslate">
-                                                <div class="highlight"><pre><span></span><span
-                                                        class="n">set_flow_types</span><span class="p">(</span><span
-                                                        class="n">geodesic</span><span class="o">=</span><span
-                                                        class="mf">1.</span><span class="p">,</span> <span class="n">curvature</span><span
-                                                        class="o">=.</span><span class="mi">2</span><span
-                                                        class="p">,</span> <span class="n">equi_affine</span><span
-                                                        class="p">:</span> <span class="mf">0.5</span><span
-                                                        class="p">})</span>
-</pre>
-                                                </div>
-                                            </div>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.set_weights">
-                                            <code class="descname">set_weights</code><span
-                                                class="sig-paren">(</span><em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.set_weights"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.set_weights"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Set weights for constraints.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>gvf_w</strong> (<a class="reference external"
-                                                                                          href="https://docs.python.org/3/library/functions.html#float"
-                                                                                          title="(in Python v3.7)"><em>float</em></a>)
-                                                            – gradient vector flow weight</p></li>
-                                                        <li><p><strong>vo_w</strong> (<a class="reference external"
-                                                                                         href="https://docs.python.org/3/library/functions.html#float"
-                                                                                         title="(in Python v3.7)"><em>float</em></a>)
-                                                            – open contour weight (Not working at the moment)</p></li>
-                                                        <li><p><strong>region_w</strong> (<a class="reference external"
-                                                                                             href="https://docs.python.org/3/library/functions.html#float"
-                                                                                             title="(in Python v3.7)"><em>float</em></a>)
-                                                            – region constraint weight</p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.step">
-                                            <code class="descname">step</code><a class="headerlink"
-                                                                                 href="#LevelSetFlow.LevelSetFlow.step"
-                                                                                 title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Step size for the level set progression</p>
-                                            <p>Default: 0.05</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                            title="(in Python v3.7)">float</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.update_img">
-                                            <code class="descname">update_img</code><span class="sig-paren">(</span><em>new_img</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.update_img"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.update_img"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Adds another image (of the data).</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>new_img</strong> (<em>np.ndarray</em>)
-                                                    – the new image to add</p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="LevelSetFlow.LevelSetFlow.update_region">
-                                            <code class="descname">update_region</code><span
-                                                class="sig-paren">(</span><em>new_region</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../_modules/LevelSetFlow.html#LevelSetFlow.update_region"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#LevelSetFlow.LevelSetFlow.update_region"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Updates the region according to a given new_region</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>new_region</strong> (<em>np.array</em>)
-                                                    – the new region according to which the level set should progress
-                                                </p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                    <dl class="attribute">
-                                        <dt id="LevelSetFlow.LevelSetFlow.vo_w">
-                                            <code class="descname">vo_w</code><a class="headerlink"
-                                                                                 href="#LevelSetFlow.LevelSetFlow.vo_w"
-                                                                                 title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Open velocity flow weight</p>
-                                            <p>Default: 1.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Return type</dt>
-                                                <dd class="field-odd"><p><a class="reference external"
-                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                            title="(in Python v3.7)">float</a></p>
-                                                </dd>
-                                            </dl>
-                                        </dd>
-                                    </dl>
-
-                                </dd>
-                            </dl>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-
-                        <a accesskey="n" class="btn btn-neutral float-right" href="LevelSetFunction.html" rel="next"
-                           title="LevelSet Function">Next <span class="fa fa-arrow-circle-right"></span></a>
-
-
-                        <a accesskey="p" class="btn btn-neutral float-left" href="LevelSets.html" rel="prev"
-                           title="Level Set functions and factory"><span class="fa fa-arrow-circle-left"></span>
-                            Previous</a>
-
-                    </div>
-
-
-                    <hr/>
-
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students
-
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
-
-                </footer>
-
-            </div>
-        </div>
-
-    </section>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="LevelSets.html">Level Set functions and factory</a> &raquo;</li>
+        
+      <li>LevelSet Flow</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/LevelSets/LevelSetFlow.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="levelset-flow">
+<h1>LevelSet Flow<a class="headerlink" href="#levelset-flow" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="LevelSetFlow.LevelSetFlow">
+<em class="property">class </em><code class="descclassname">LevelSetFlow.</code><code class="descname">LevelSetFlow</code><span class="sig-paren">(</span><em>img</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.f" title="LevelSetFlow.LevelSetFlow.f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f</span></code></a></td>
+<td>External force (for gradient vector flow)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.f_x" title="LevelSetFlow.LevelSetFlow.f_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_x</span></code></a></td>
+<td>First order derivative of the external force</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.f_y" title="LevelSetFlow.LevelSetFlow.f_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">f_y</span></code></a></td>
+<td>First order derivative of the external force</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.flow_types" title="LevelSetFlow.LevelSetFlow.flow_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flow_types</span></code></a></td>
+<td>Types of flow used to progress the curves</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.g" title="LevelSetFlow.LevelSetFlow.g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g</span></code></a></td>
+<td>Internal force (usually edge function)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.g_x" title="LevelSetFlow.LevelSetFlow.g_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g_x</span></code></a></td>
+<td>First order derivative of the internal force</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.g_y" title="LevelSetFlow.LevelSetFlow.g_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">g_y</span></code></a></td>
+<td>First order derivative of the internal force</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.gvf_w" title="LevelSetFlow.LevelSetFlow.gvf_w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gvf_w</span></code></a></td>
+<td>Gradient vector flow weight</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.imgGradient" title="LevelSetFlow.LevelSetFlow.imgGradient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">imgGradient</span></code></a></td>
+<td>Gradient of the analyzed image</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.img_rgb" title="LevelSetFlow.LevelSetFlow.img_rgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img_rgb</span></code></a></td>
+<td>The analyzed img rgb representation (if exists, otherwise: 0.)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.iterations" title="LevelSetFlow.LevelSetFlow.iterations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iterations</span></code></a></td>
+<td>Number of iterations for the level set</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.num_ls" title="LevelSetFlow.LevelSetFlow.num_ls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_ls</span></code></a></td>
+<td>Number of level sets in the flow</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.processing_props" title="LevelSetFlow.LevelSetFlow.processing_props"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processing_props</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.psi" title="LevelSetFlow.LevelSetFlow.psi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">psi</span></code></a></td>
+<td>Returns the level set function phi according to the index :return: LevelSetFunction self.__psi</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.region" title="LevelSetFlow.LevelSetFlow.region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">region</span></code></a></td>
+<td>Region constraint</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.region_w" title="LevelSetFlow.LevelSetFlow.region_w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">region_w</span></code></a></td>
+<td>Region weight</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.regularization_epsilon" title="LevelSetFlow.LevelSetFlow.regularization_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularization_epsilon</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.step" title="LevelSetFlow.LevelSetFlow.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a></td>
+<td>Step size for the level set progression</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.vo_w" title="LevelSetFlow.LevelSetFlow.vo_w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vo_w</span></code></a></td>
+<td>Open velocity flow weight</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__compute_vb</span></code>(**kwargs)</td>
+<td>Computes the band velocity, according to Li et al., 2006.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__compute_vo</span></code>(**kwargs)</td>
+<td>Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal to another function (psi)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__compute_vt</span></code>(vectorField[,&nbsp;verbose])</td>
+<td>Computes the vector field derivative in each direction</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__ms_element</span></code>(combination,&nbsp;img)</td>
+<td>An element for summation within the Mumford-Shah model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.flow" title="LevelSetFlow.LevelSetFlow.flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flow</span></code></a>(flow_type,&nbsp;function,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Return the flow of the level set according to the type wanted</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.img" title="LevelSetFlow.LevelSetFlow.img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img</span></code></a>([index])</td>
+<td>The analyzed image (of the data).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_f" title="LevelSetFlow.LevelSetFlow.init_f"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_f</span></code></a>(f,&nbsp;**kwargs)</td>
+<td>Initializes the g function (edge function) :param g: the function :param kwargs: gradient process dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_g" title="LevelSetFlow.LevelSetFlow.init_g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_g</span></code></a>(g,&nbsp;**kwargs)</td>
+<td>Initializes the g function (edge function) :param g: the function :param kwargs: gradient process dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_img" title="LevelSetFlow.LevelSetFlow.init_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_img</span></code></a>(img,&nbsp;**kwargs)</td>
+<td>Set more images for the level set flow, according to which the flow will move (each of the Phi’s)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_phi" title="LevelSetFlow.LevelSetFlow.init_phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_phi</span></code></a>(**kwargs)</td>
+<td>Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where phi(x,y,t) = 0 is the curve.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_psi" title="LevelSetFlow.LevelSetFlow.init_psi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_psi</span></code></a>(psi,&nbsp;**kwargs)</td>
+<td>Initializes the psi function (open edges)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_region" title="LevelSetFlow.LevelSetFlow.init_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_region</span></code></a>(region)</td>
+<td>Initializes region function.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.moveLS" title="LevelSetFlow.LevelSetFlow.moveLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moveLS</span></code></a>(**kwargs)</td>
+<td>The function that moves the level set until the desired contour is reached</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="LevelSetFlow.LevelSetFlow.mumfordshah_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mumfordshah_flow</span></code></a>([img,&nbsp;nu])</td>
+<td>Computes the Mumford-Shah flow for a multi-phase level set, according to <a class="reference internal" href="../index.html#vese-chan2002" id="id1">[VC02]</a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.phi" title="LevelSetFlow.LevelSetFlow.phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phi</span></code></a>([index])</td>
+<td>Returns the level set function phi according to the index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_flow_types" title="LevelSetFlow.LevelSetFlow.set_flow_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_flow_types</span></code></a>(**kwargs)</td>
+<td>Set the flow types and their weights according to which the level set will move</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_weights" title="LevelSetFlow.LevelSetFlow.set_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights</span></code></a>(**kwargs)</td>
+<td>Set weights for constraints.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_img" title="LevelSetFlow.LevelSetFlow.update_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_img</span></code></a>(new_img)</td>
+<td>Adds another image (of the data).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_region" title="LevelSetFlow.LevelSetFlow.update_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_region</span></code></a>(new_region)</td>
+<td>Updates the region according to a given new_region</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.f">
+<code class="descname">f</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.f" title="Permalink to this definition">¶</a></dt>
+<dd><p>External force (for gradient vector flow)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.f_x">
+<code class="descname">f_x</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.f_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>First order derivative of the external force</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.f_y">
+<code class="descname">f_y</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.f_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>First order derivative of the external force</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.flow">
+<code class="descname">flow</code><span class="sig-paren">(</span><em>flow_type</em>, <em>function</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the flow of the level set according to the type wanted</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>flow_type</strong> – <p>can be one of the following:
+- ‘constant’:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[C_t = N \Rightarrow \phi_t = |\nabla \varphi|\]</div>
+</div></blockquote>
+<ul>
+<li>’curvature’:<blockquote>
+<div><div class="math notranslate nohighlight">
+\[C_t = kN \Rightarrow phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)|\nabla \varphi|\]</div>
+</div></blockquote>
+</li>
+<li>’equi_affine’:<blockquote>
+<div><div class="math notranslate nohighlight">
+\[C_t = k^{1/3} N \Rightarrow
+\phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|\]</div>
+</div></blockquote>
+</li>
+<li>’geodesic’: geodesic active contours, according to <a class="reference internal" href="../index.html#caselles-etal1997" id="id2">[CKS97]</a><blockquote>
+<div><div class="math notranslate nohighlight">
+\[C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
+\phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|\]</div>
+</div></blockquote>
+</li>
+<li>’band’: band velocity, according to <a class="reference internal" href="../index.html#li-etal2006" id="id3">[LKS06]</a></li>
+</ul>
+</li>
+<li><strong>function</strong> – the level set according to which the flow goes (usually phi)</li>
+<li><strong>open_flag</strong> – boolean for open flag</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optionals</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of gaussian</li>
+<li><strong>sigma</strong> – sigma for LoG gradient</li>
+<li><strong>ksize</strong> – kernel size, for blurring and derivatives</li>
+<li><strong>regularization</strong> – regularization note for heaviside and dirac</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Band velocity optionals</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>band_width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the width of the contour. default: 5</li>
+<li><strong>threshold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – for when the velocity equals zero. default: 0.5</li>
+<li><strong>stepsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – default 0.05</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">phi_t</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.flow_types">
+<code class="descname">flow_types</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.flow_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Types of flow used to progress the curves</p>
+<p>Default: {“geodesic”}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.g">
+<code class="descname">g</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal force (usually edge function)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.g_x">
+<code class="descname">g_x</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.g_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>First order derivative of the internal force</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.g_y">
+<code class="descname">g_y</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.g_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>First order derivative of the internal force</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.gvf_w">
+<code class="descname">gvf_w</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.gvf_w" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gradient vector flow weight</p>
+<p>Default: 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.img">
+<code class="descname">img</code><span class="sig-paren">(</span><em>index=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.img" title="Permalink to this definition">¶</a></dt>
+<dd><p>The analyzed image (of the data). Multiple can exist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the index of the analyzed images.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.imgGradient">
+<code class="descname">imgGradient</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.imgGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gradient of the analyzed image</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.img_rgb">
+<code class="descname">img_rgb</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.img_rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>The analyzed img rgb representation (if exists, otherwise: 0.)</p>
+<p>Default: 0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array or 0</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_f">
+<code class="descname">init_f</code><span class="sig-paren">(</span><em>f</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_f"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the g function (edge function)
+:param g: the function
+:param kwargs: gradient process dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_g">
+<code class="descname">init_g</code><span class="sig-paren">(</span><em>g</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_g"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_g" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the g function (edge function)
+:param g: the function
+:param kwargs: gradient process dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_img">
+<code class="descname">init_img</code><span class="sig-paren">(</span><em>img</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set more images for the level set flow, according to which the flow will move (each of the Phi’s)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When initializing a second+ image, one should make sure that</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>img</strong> – the next image to set</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_phi">
+<code class="descname">init_phi</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
+phi(x,y,t) = 0 is the curve.</p>
+<p>The function has the following characteristics:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+ \phi(x,y,t) &gt; 0 &amp; \forall (x,y) \in \Omega \\
+ \phi(x,y,t) &lt; 0 &amp; \forall (x,y) \not\in \Omega \\
+ \phi(x,y,t) = 0 &amp; \forall (x,y) \textrm{ on curve} \\
+ \end{cases}\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\left| \nabla \phi \right| = 1\)</span></p>
+<p><strong>Characteristics of the function</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>processing_props</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – properties for gradient and differentiation:
+- ‘gradientType’ - distance computation method
+- ‘sigma’ - for smoothing
+- ‘ksize’ - for smoothing</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – if the curve is a circle, the radius should be specified.</li>
+<li><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – if the curve is a circle, the center point should be specified.</li>
+<li><strong>reularization_note</strong> – regularization note for heaviside function</li>
+<li><strong>function_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – ‘circle’ (default); ‘vertical’ or ‘horizontal’ (for open contours)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_psi">
+<code class="descname">init_psi</code><span class="sig-paren">(</span><em>psi</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_psi" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Initializes the psi function (open edges)</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>psi</strong> (<em>nd-array mxn</em>) – the function</li>
+<li><strong>processing_props</strong> – gradient process dictionary</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.init_region">
+<code class="descname">init_region</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes region function. Normalizes between (-1,1)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>region</strong> – region function initialize</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.iterations">
+<code class="descname">iterations</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.iterations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of iterations for the level set</p>
+<p>Default: 150</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.moveLS">
+<code class="descname">moveLS</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.moveLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.moveLS" title="Permalink to this definition">¶</a></dt>
+<dd><p>The function that moves the level set until the desired contour is reached</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>-  flow types and their weight</strong><strong> (</strong><strong>string</strong><strong>, </strong><strong>weight</strong><strong>)</strong> (<em>flow_type</em>) – </td>
+</tr>
+</tbody>
+</table>
+<p>‘constant’, ‘curvature’, ‘equi-affine’, ‘geodesic’, ‘chan-vese’, ‘band’</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ‘chan-vese’ flow requires weights (chanvese_w), for the four components of the model:</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">area_w</span><span class="p">,</span> <span class="n">length_w</span><span class="p">,</span> <span class="n">inside_w</span><span class="p">,</span> <span class="n">outside_w</span><span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gvf_flag</strong> – flag to add gradient vector flow</li>
+<li><strong>open_flag</strong> – flag for open contours</li>
+<li><strong>mumford_shah</strong> – flag for mumford_shah flow</li>
+<li><strong>scaleX</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – enhance X direction</li>
+<li><strong>scaleY</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – enhance Y direction</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:return the contours after level set</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.mumfordshah_flow">
+<code class="descname">mumfordshah_flow</code><span class="sig-paren">(</span><em>img=True</em>, <em>nu=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.mumfordshah_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Mumford-Shah flow for a multi-phase level set, according to <a class="reference internal" href="../index.html#vese-chan2002" id="id4">[VC02]</a>.</p>
+<p>Updates the self.Phi variable for</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>img</strong> (<em>np.array</em>) – the specific image upon which the level sets are computed</li>
+<li><strong>nu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – the length weight</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">phi_t - the flows that move the level set</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.num_ls">
+<code class="descname">num_ls</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.num_ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of level sets in the flow</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.phi">
+<code class="descname">phi</code><span class="sig-paren">(</span><em>index=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the level set function phi according to the index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the number of the level set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">LevelSetFunction self.__Phi</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.processing_props">
+<code class="descname">processing_props</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.processing_props" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.psi">
+<code class="descname">psi</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.psi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the level set function phi according to the index
+:return: LevelSetFunction self.__psi</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.region">
+<code class="descname">region</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Region constraint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.region_w">
+<code class="descname">region_w</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.region_w" title="Permalink to this definition">¶</a></dt>
+<dd><p>Region weight</p>
+<p>Default: 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.regularization_epsilon">
+<code class="descname">regularization_epsilon</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.regularization_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.set_flow_types">
+<code class="descname">set_flow_types</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.set_flow_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.set_flow_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the flow types and their weights according to which the level set will move</p>
+<p>Options are as in <code class="xref py py-meth docutils literal notranslate"><span class="pre">flow()</span></code></p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">set_flow_types</span><span class="p">(</span><span class="n">geodesic</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">curvature</span><span class="o">=.</span><span class="mi">2</span><span class="p">,</span> <span class="n">equi_affine</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.set_weights">
+<code class="descname">set_weights</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.set_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.set_weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set weights for constraints.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>gvf_w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – gradient vector flow weight</li>
+<li><strong>vo_w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – open contour weight (Not working at the moment)</li>
+<li><strong>region_w</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – region constraint weight</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.step">
+<code class="descname">step</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step size for the level set progression</p>
+<p>Default: 0.05</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.update_img">
+<code class="descname">update_img</code><span class="sig-paren">(</span><em>new_img</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.update_img"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.update_img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds another image (of the data).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_img</strong> (<em>np.ndarray</em>) – the new image to add</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="LevelSetFlow.LevelSetFlow.update_region">
+<code class="descname">update_region</code><span class="sig-paren">(</span><em>new_region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.update_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.update_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the region according to a given new_region</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_region</strong> (<em>np.array</em>) – the new region according to which the level set should progress</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="LevelSetFlow.LevelSetFlow.vo_w">
+<code class="descname">vo_w</code><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.vo_w" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open velocity flow weight</p>
+<p>Default: 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
 
 </div>
 
 
-<script type="text/javascript">
-    jQuery(function () {
-        SphinxRtdTheme.Navigation.enable(true);
-    });
-</script>
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="LevelSetFunction.html" class="btn btn-neutral float-right" title="LevelSet Function" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="LevelSets.html" class="btn btn-neutral float-left" title="Level Set functions and factory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

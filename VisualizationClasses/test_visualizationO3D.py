@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from CurvatureFactory import CurvatureFactory
-from IOFactory import IOFactory
-from NeighborsFactory import NeighborsFactory
-from PointSetOpen3D import PointSetOpen3D
-from VisualizationO3D import VisualizationO3D
+from DataClasses.PointSetOpen3D import PointSetOpen3D
+from IOmodules.IOFactory import IOFactory
+from Properties.Curvature.CurvatureFactory import CurvatureFactory
+from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
+from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
 
 class TestVisualizationO3D(TestCase):
