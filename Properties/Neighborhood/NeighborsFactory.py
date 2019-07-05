@@ -248,13 +248,16 @@ class NeighborsFactory:
 
             if part == 0:
                 if parts_num == 1:  # patch because the parts dont work. Delete when fixed
-                    idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius)
+                    idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                   sort_results=True)
                 else:
                     idx.append(
-                        pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius))
+                        pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                 sort_results=True))
             else:
                 idx.append(
-                    (idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius)))
+                    (idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                   sort_results=True)))
         # for the remaining part
         if modulu > 0:
             idx.append((idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start + parts_size:], search_radius)))

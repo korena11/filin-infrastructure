@@ -14,7 +14,6 @@ class PointNeighborhood:
         :type distances: np.array
 
         """
-
         self.__distances = distances
         self.__neighbors = points_subset
 
@@ -115,6 +114,32 @@ class PointNeighborhood:
         self.__distances = np.linalg.norm(pts - center_pt, axis=1)
 
         return self.__distances
+
+    def color_neighborhood(self, point_color='red', neighbors_color='black'):
+        """
+        Assign red color to the center point and black to the rest
+
+        :param point_color: name or rgb of the center point. Default: 'red'
+        :param neighbors_color: name or rgb of neighbor points. Default: 'black'
+
+        :type point_color: (str, tuple)
+        :type neighbors_color: (str, tuple)
+        :return: array with colors
+
+        :rtype: ColorProperty.ColorProperty
+        """
+        import webcolors
+        from Properties.Color.ColorProperty import ColorProperty
+        if type(neighbors_color) is str:
+            neighbors_color = webcolors.name_to_rgb(neighbors_color)
+
+        if type(point_color) is str:
+            point_color = webcolors.name_to_rgb(point_color)
+
+        colors = np.ones((self.Size, 3)) * neighbors_color
+        colors[0, :] = point_color
+
+        return ColorProperty(self.__neighbors, colors)
 
     def neighbors_vectors(self):
         """

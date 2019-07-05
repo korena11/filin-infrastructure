@@ -151,6 +151,7 @@ class SaliencyFactory(object):
         :rtype: SaliencyProperty
         """
         from warnings import warn
+        from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
         # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
 
@@ -158,6 +159,7 @@ class SaliencyFactory(object):
         j = 0
         kstd = []
         kmean = []
+
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
                                                               desc='Curvature Saliency for each neighborhood',
                                                               position=0)):
@@ -183,8 +185,8 @@ class SaliencyFactory(object):
             # difference in curvature
             dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
             # dk[np.where(np.abs(dk) < epsilon)] = 0
-
-            dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+            dk_normed = dk
+            # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
             # dk = current_curvatures[0]
 
             kstd.append(np.std(dk))
@@ -206,9 +208,14 @@ class SaliencyFactory(object):
             # dn = current_normals[1:, :].dot(current_normals[0, :])
             dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
                         neighborhood.numberOfNeighbors - 1)
-            if verbose:
+            if i % 150 == 0:
                 print('normal mean {a}, normal std {b}'.format(a=dn.mean(), b=dn.std()))
                 print('curvature mean {a}, curvature std {b}'.format(a=dk.mean(), b=dk.std()))
+
+                if verbose:
+                    pts = neighborhood.color_neighborhood()
+                    vis = VisualizationO3D()
+                    vis.visualize_property(pts)
 
             if dn.std() > noise_size or dk.std() > noise_size:
                 dn = 0

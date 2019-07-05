@@ -1,7 +1,7 @@
 from numpy import nonzero, zeros, uint8  # logical_and
 
-from Properties.Color.ColorProperty import ColorProperty
 from DataClasses.PointSet import PointSet
+from Properties.Color.ColorProperty import ColorProperty
 
 
 class ColorFactory:
@@ -33,7 +33,6 @@ class ColorFactory:
 
         colorProp = ColorProperty(points, colors)
         return colorProp
-
 
     @staticmethod
     def ProjectImages(points, images, matrices):
