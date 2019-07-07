@@ -248,19 +248,23 @@ class NeighborsFactory:
 
             if part == 0:
                 if parts_num == 1:  # patch because the parts dont work. Delete when fixed
-                    idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
-                                                   sort_results=True)
+                    idx = (pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                    sort_results=True))
                 else:
-                    idx.append(
-                        pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
-                                                 sort_results=True))
+                    idx = np.hstack((idx,
+                                     pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                              sort_results=True)))
             else:
-                idx.append(
-                    (idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                idx = np.hstack((idx,
+                                 pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
+                                                          search_radius,
                                                    sort_results=True)))
         # for the remaining part
+        # if parts_num != 1:
         if modulu > 0:
-            idx.append((idx, pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start + parts_size:], search_radius)))
+            idx = np.hstack((idx,
+                             pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
+                                                      sort_results=True)))
 
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))

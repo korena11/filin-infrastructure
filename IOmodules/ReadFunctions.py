@@ -71,7 +71,7 @@ def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
     intensity = []
 
     for batch in batches:
-        pt_batch = (np.array(list(map(__splitPtsString, batch))))
+        pt_batch = (np.asarray(list(map(__splitPtsString, batch))))
         if merge:
             pts.append(pt_batch[:, :3])
         else:
@@ -426,4 +426,4 @@ def __splitPtsString(line):
     """
 
     tmp = line.split()
-    return np.array(list(map(float, tmp)))
+    return np.asarray(list(map(float, tmp)))

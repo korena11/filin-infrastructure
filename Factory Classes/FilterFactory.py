@@ -2,7 +2,8 @@ from numba import jit
 from numpy import sqrt, arctan, ones, uint8, pi, min, max, logical_and, nonzero
 
 from PointSet import PointSet
-from SegmentationProperty import SegmentationProperty
+from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
+from Properties.SegmentationProperty import SegmentationProperty
 
 
 class FilterFactory:
@@ -11,46 +12,6 @@ class FilterFactory:
     """
 
     @staticmethod
-    @jit
-    def SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold):
-        """
-
-        :param pntData:
-        :param searchRadius:
-        :param slopeThreshold:
-
-        :return:
-
-        """
-        numPoints = len(pntData)
-        groundPointsIndices = []
-
-        slopeThreshold = slopeThreshold * pi / 180
-
-        for i in range(numPoints):
-            isGround = True
-            for j in range(numPoints):
-                dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
-                if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
-                    slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)
-                    if (slope > slopeThreshold):
-                        isGround = False
-                        break
-
-            if (isGround):
-                groundPointsIndices.append(i)
-
-        return groundPointsIndices
-
-    @staticmethod
-    def __CreateSegmentationProperty(points, indices):
-        numPoints = points.Size()
-        segments = ones((numPoints), dtype=uint8)
-        segments[indices] = 0
-        
-        return SegmentationProperty(points, segments) 
-        
-    @staticmethod        
     def SlopeBasedMorphologicFilter(points, searchRadius, slopeThreshold):
         """
         Slope Based Morphological Filter
@@ -69,8 +30,7 @@ class FilterFactory:
 
         """
         pntData = points.ToNumpy()
-
-        groundPointsIndices = FilterFactory.SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold)
+        groundPointsIndices = FilterFactory.__slopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold)
 
         # 0 - terrain, 1 - cover
         return FilterFactory.__CreateSegmentationProperty(points, groundPointsIndices)        
@@ -142,7 +102,101 @@ class FilterFactory:
                                                               sphCoorProp.Ranges() <= maxRange)))
 
         return FilterFactory.__CreateSegmentationProperty(sphCoorProp.Points(), insidePointIndices)
-            
+
+    @staticmethod
+    def SmoothPointSet_MLS(pointset, radius, polynomial_order, polynomial_fit):
+        r"""
+        Smoothing with pcl's Moving Least Squares (MLS) for data smoothing and imporved normal estimation
+
+        :param pointset: PointSet  to smooth
+        :param radius:  radius that is to be used for determining the k-nearest neighbors used for fitting.
+        :param polynomial_order: Set the order of the polynomial to be fit.
+        :param polynomial_fit: Set the surface and normal are approximated using a polynomial, or only via tangent estimation.
+
+        :type pointset: PointSet
+        :type radius: float
+        :type polynomial_fit: bool
+        :type polynomial_order: int
+
+        :return:
+
+        .. warning::
+           NOT WORKING. PCL-PYTHON CANNOT BE IMPORTED. WAS NOT DEBUGGED
+        """
+        import pcl
+        import numpy as np
+
+        p = pcl.PointCloud()
+        p.from_array(pointset.ToNumpy(), dtype=np.float32)
+        mls = p.make_moving_least_squares()
+        mls.set_search_radius(radius)
+        mls.set_polynomial_order(polynomial_order)
+        mls.set_polynomial_fit(polynomial_fit)
+        smoothed_p = mls.reconstruct()
+
+        return PointSet(smoothed_p.to_array())
+
+    @staticmethod
+    def smooth_simple(neighbors_property):
+        """
+        Smoothing by replacement of each point with its neighbors average value
+
+        :param neighbors_property: the neighborhood property for averaging
+
+        :type neighbors_property: NeighborsProperty
+
+        :return: new smoothed pointset
+
+        :rtype: PointSet
+        """
+        import numpy as np
+        smoothed_pcl = list(
+            map(lambda neighborhood: np.mean(neighborhood.neighbors.ToNumpy(), axis=0), neighbors_property))
+
+        return PointSet(smoothed_pcl)
+
+    @staticmethod
+    @jit
+    def __slopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold):
+        """
+        Runs slope based morphological filter via jit
+
+        :param pntData:
+        :param searchRadius:
+        :param slopeThreshold:
+
+        :return:
+
+        """
+        numPoints = len(pntData)
+        groundPointsIndices = []
+
+        slopeThreshold = slopeThreshold * pi / 180
+
+        for i in range(numPoints):
+            isGround = True
+            for j in range(numPoints):
+                dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
+                if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
+                    slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)
+                    if (slope > slopeThreshold):
+                        isGround = False
+                        break
+
+            if (isGround):
+                groundPointsIndices.append(i)
+
+        return groundPointsIndices
+
+    @staticmethod
+    def __CreateSegmentationProperty(points, indices):
+        numPoints = points.Size()
+        segments = ones((numPoints), dtype=uint8)
+        segments[indices] = 0
+
+        return SegmentationProperty(points, segments)
+
+
 if __name__ == '__main__':
     pass
     #     pointSetList = []

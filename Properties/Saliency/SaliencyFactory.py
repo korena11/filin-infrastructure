@@ -110,7 +110,7 @@ class SaliencyFactory(object):
 
     @classmethod
     def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           weight_distance_sigma=0.05, alpha=0.05, noise_size=0.01,
+                           min_obj_size=0.05, alpha=0.05, noise_size=0.01,
                            verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature and normal, as a function of the distance
@@ -154,7 +154,8 @@ class SaliencyFactory(object):
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
         # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
-
+        win_size = min_obj_size / 2  # window size is half the minimal object size
+        
         tensor_saliency = []
         j = 0
         kstd = []
@@ -183,14 +184,11 @@ class SaliencyFactory(object):
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
             # difference in curvature
-            dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+            # dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
             # dk[np.where(np.abs(dk) < epsilon)] = 0
-            dk_normed = dk
+            # dk_normed = dk
             # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
             # dk = current_curvatures[0]
-
-            kstd.append(np.std(dk))
-            kmean.append(np.mean(dk))
 
             # distances influence - Laplacian (DoG)
             # dist_element = 1 / np.sqrt(2 * np.pi) * \
@@ -200,14 +198,30 @@ class SaliencyFactory(object):
             # dist_element_normed = dist_element.copy()
             # dist_element[dist_element < 0] = 0
             # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
-            dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
-            dist_element[0] = neighborhood.Size
-            dist_element_normed = dist_element / np.linalg.norm(dist_element)
+            # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
+            # dist_element[0] = neighborhood.Size
+            # dist_element_normed = dist_element / np.linalg.norm(dist_element)
 
+            # define window
+            dist_element = np.ones((neighborhood.Size, 1))
+            dist_element[neighborhood.distances > win_size] = -1
+
+            # normalize to equal area (inside and out)
+            s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
+            dist_element_normed = dist_element.copy()
+            dist_element_normed[neighborhood.distances > win_size] *= s
+
+            dk_normed = current_curvatures
+            dk = np.sum(dk_normed * dist_element_normed)
+            
             # normal influence
             # dn = current_normals[1:, :].dot(current_normals[0, :])
             dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
                         neighborhood.numberOfNeighbors - 1)
+
+            kstd.append(np.std(dk))
+            kmean.append(np.mean(dk))
+            
             if i % 150 == 0:
                 print('normal mean {a}, normal std {b}'.format(a=dn.mean(), b=dn.std()))
                 print('curvature mean {a}, curvature std {b}'.format(a=dk.mean(), b=dk.std()))
@@ -697,7 +711,7 @@ class SaliencyFactory(object):
 
         :param panorama_property: the property according to which the saliency is computed
         :param filters: list of filters (either sigmas or kernel sizes) to run with the DoG filter.
-        :param sigma_sent: sigma sizes are in ``filters`` (true) as opposed to kernel sizes (false). (default: True)
+        :param sigma_sent: sigma sizes are in ``filters'' (true) as opposed to kernel sizes (false). (default: True)
         :param feature: according to which property the saliency is computed, can be:
 
             - 'pixel_val' - the value of the pixel itself
