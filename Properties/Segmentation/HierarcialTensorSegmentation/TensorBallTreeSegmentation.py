@@ -158,6 +158,8 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
 
         # dissolving small segments entrapped by a single dominant segment
         for i in tqdm(entrappedBySingle, 'Dissolving surface elements entrapped between a single dominant segment'):
+            # if i == 45:
+            #     a = 1
             dominantNeighbor = dominantNeighbors[i][0]  # getting the index of the dominant neighbor
 
             # skipping segments with high variance
@@ -170,7 +172,6 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
                     tensors[smallSegments[i]].reference_point) > distanceThreshold:
                 continue
 
-            # TODO: change to adding the tensors of the smaller segment and not the overall one
             tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])  # merging the tensors
             tensors[smallSegments[i]] = None  # nullifying the tensor of the smaller segment
             labels[labels == smallSegments[i]] = dominantNeighbor  # reassigning the points of the small segment

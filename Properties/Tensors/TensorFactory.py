@@ -56,6 +56,9 @@ class TensorFactory(object):
                 raise TypeError('Unexpected type of \'points\' object')
             ref_point = -1
 
+            if points_array.shape[0] == 0:
+                raise ValueError('Number of points should be at least one')
+
         else:
             ref_point = points.GetPoint(point_index)
             points_array = points.ToNumpy()
@@ -163,8 +166,8 @@ class TensorFactory(object):
         if not isinstance(t1, Tensor) and isinstance(t2, Tensor):
             raise TypeError('Argument must be a Tensor object')
 
-        n1 = t1.points_number
-        n2 = t2.points_number
+        n1 = np.int64(t1.points_number)
+        n2 = np.int64(t2.points_number)
 
         covMat = n1 * t1.covariance_matrix / (n1 + n2) + n2 * t2.covariance_matrix / (n1 + n2) + \
                  n1 * n2 ** 2 * np.dot((t2.reference_point - t1.reference_point).reshape((-1, 1)),
@@ -175,6 +178,36 @@ class TensorFactory(object):
                  (n1 + n2) ** 3
 
         return Tensor(covMat, (n1 * t1.reference_point + n2 * t2.reference_point) / (n1 + n2), n1 + n2)
+
+
+    @classmethod
+    def unifyTensors(cls, tensorList):
+        """
+        Create a new tensor by joining multiple ones
+        :param tensorList: List of Tensor objects (list/ndarray)
+        :return: A new tensor which is the result of merging the given list of tensors
+        """
+        if not np.all(list(map(lambda t: isinstance(t, Tensor), tensorList))):
+            raise TypeError('All arguments in list must be a Tensor object')
+
+        # getting the number of points that each tensor consist
+        nPnts = np.array(list(map(lambda t: t.points_number, tensorList)))
+        totalNumPnts = nPnts.sum()  # computing the total number of points
+
+        # getting the reference points and the covariance matrices of each tensor
+        refPnts = np.array(list(map(lambda t: t.reference_point, tensorList)))
+        covMats = np.array(list(map(lambda t: t.covariance_matrix, tensorList)))
+
+        # computing the reference point of the unified tensor, set is the weighted average of the individual ones
+        unifiedRefPnt = np.dot(nPnts.reshape((1, -1)), refPnts) / totalNumPnts
+
+        # computing the covariance matrix of the unified tensor
+        deltas = refPnts - unifiedRefPnt
+        translateTensors = np.array(list(map(lambda d: np.dot(d.reshape((-1, 1)), d.reshape((1, -1))), deltas)))
+        unifiedCovMat = np.array(
+            list(map(lambda t, dt, n: n * t + n * dt, covMats, translateTensors, nPnts))).sum(axis=0) / totalNumPnts
+
+        return Tensor(unifiedCovMat, unifiedRefPnt, totalNumPnts)
 
     @staticmethod
     def computeTensorsProperty_givenNeighborhood(points, neighborhoodProperty=None, neighborsFunc=None,
