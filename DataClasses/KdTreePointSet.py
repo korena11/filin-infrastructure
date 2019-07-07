@@ -120,7 +120,10 @@ class KdTreePointSet(PointSet):
                 indexes = indexes[0]
 
         else:
-            indexes, _ = self.data.query_radius(pnts, radius, return_distance=sort_results, sort_results=sort_results)
+            indexes = self.data.query_radius(pnts, radius, return_distance=sort_results, sort_results=sort_results)
+            if sort_results:
+                indexes = indexes[0]
+
 
         return indexes
 
