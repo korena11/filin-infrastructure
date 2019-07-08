@@ -199,7 +199,7 @@ class TensorFactory(object):
         covMats = np.array(list(map(lambda t: t.covariance_matrix, tensorList)))
 
         # computing the reference point of the unified tensor, set is the weighted average of the individual ones
-        unifiedRefPnt = np.dot(nPnts.reshape((1, -1)), refPnts) / totalNumPnts
+        unifiedRefPnt = np.dot(nPnts.reshape((1, -1)), refPnts).reshape((-1, )) / totalNumPnts
 
         # computing the covariance matrix of the unified tensor
         deltas = refPnts - unifiedRefPnt

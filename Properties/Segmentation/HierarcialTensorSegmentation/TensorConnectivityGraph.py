@@ -33,7 +33,11 @@ class TensorConnectivityGraph(object):
 
         # finding neighbors for each tensor
         cogsBallTree = BallTreePointSet(self.__cogs, leaf_size=20)
-        self.__neighbors = cogsBallTree.query(self.__cogs, numNeighbors + 1)[:, 1:]
+        if self.__cogs.shape[0] > numNeighbors:
+            self.__neighbors = cogsBallTree.query(self.__cogs, numNeighbors + 1)[:, 1:]
+        else:
+            # creating a fully connected graph in case of small dataset
+            self.__neighbors = cogsBallTree.query(self.__cogs, self.__cogs.shape[0])[:, 1:]
 
         self.__varianceThreshold = varianceThreshold
         self.__normalSimilarityThreshold = normalSimilarityThreshold
@@ -92,7 +96,7 @@ class TensorConnectivityGraph(object):
             don[directionalDiffs < 0, :] = self.__stickAxes[neighbors][directionalDiffs < 0] + self.__stickAxes[index]
 
         self.__simMatrix[index, neighbors] = self.__computeEdgeWeight(distances, norm(don, axis=1) ** 2)
-        self.__disMatrix[index, neighbors] = distances
+        self.__disMatrix[index, neighbors] = distances + 1e-16
         self.__angMatrix[index, neighbors] = abs(directionalDiffs)
         self.__donMatrix[index, neighbors] = norm(don, axis=1) ** 2
 
@@ -130,55 +134,6 @@ class TensorConnectivityGraph(object):
                    exp(directionalDiffs ** 2 / self.__normalSimilarityThreshold)
         else:
             raise ValueError('Unrecognised weighting method')
-
-    def nullifyEdges(self, p=0.99):
-        """
-
-        :param p:
-        :return:
-        """
-        r, c, dis = find(self.__disMatrix)
-        disStd = dis.sum() / dis.shape[0]
-        # disCounts, disBins, _ = plt.hist(dis, bins='auto')
-        # disBins = array(list(map(lambda i: 0.5 * (disBins[i] + disBins[i + 1]), range(disBins.shape[0] - 1))))
-        # disFreqs = disCounts / disCounts.sum()
-        # disThr = disBins[nonzero(cumsum(disFreqs) <= p)[0][-1]]
-        disThr = chi2.ppf(q=p, df=1, scale=disStd)
-        self.__simMatrix[r[dis > disThr], c[dis > disThr]] = 0
-
-        r, c, don = find(self.__donMatrix)
-        donStd = don.sum() / don.shape[0]
-        # donCounts, donBins, _ = plt.hist(don, bins='auto')
-        # donBins = array(list(map(lambda i: 0.5 * (donBins[i] + donBins[i + 1]), range(donBins.shape[0] - 1))))
-        # donFreqs = donCounts / donCounts.sum()
-        # donThr = donBins[nonzero(cumsum(donFreqs) <= p)[0][-1]]
-        donThr = chi2.ppf(q=p, df=2, scale=donStd)
-        self.__simMatrix[r[don > donThr], c[don > donThr]] = 0
-
-        # temp = nonzero(logical_and(self.__disMatrix < disThr, self.__donMatrix < donThr))[0]
-        # self.__simMatrix[temp[0], temp[1]] = 0
-
-        # plt.figure()
-        # plt.title('Distances histogram')
-        # plt.hist(dis, bins=100)
-        # plt.yscale('log')
-        #
-        # # plt.figure()
-        # # plt.title('direction dot product histogram')
-        # # plt.hist(ang, bins=100)
-        # # plt.yscale('log')
-        #
-        # plt.figure()
-        # plt.title('difference of normals histogram')
-        # plt.hist(don, bins=100)
-        # plt.yscale('log')
-        #
-        # # plt.figure()
-        # # plt.scatter(don, ang)
-        # # plt.xlabel('squared norm of difference of normals')
-        # # plt.ylabel('cosine of angle between normals')
-        #
-        # plt.show()
 
     def connected_componnents(self):
         """

@@ -21,13 +21,9 @@ class TensorSet(object):
             self.__tensors.append(tensors)
         else:
             # adding all the tensors to the set and updating the general tensor
-            # list(map(self.addTensor, tensors))
             self.__overallTensor = TensorFactory.unifyTensors(tensors)
             self.__numTensors = len(tensors)
             self.__tensors = tensors if isinstance(tensors, list) else tensors.tolist()
-
-            if abs(norm(self.__overallTensor.covariance_matrix)) < 1e-6:
-                a = 1
 
     def addTensor(self, tensor):
         """
@@ -36,17 +32,24 @@ class TensorSet(object):
         :return: None
         """
         if isinstance(tensor, TensorSet):
-            # tensor to add is a TensorSet object: adding all the individual tensors
-            list(map(self.addTensor, tensor.tensors))
+            # tensor to add is a TensorSet object
+            if self.__overallTensor is None:
+                self.__overallTensor = tensor
+            else:
+                self.__overallTensor = TensorFactory.joinTensors(self.__overallTensor, tensor.__overallTensor)
 
-        if self.__overallTensor is None:
-            self.__overallTensor = tensor
+            self.tensors.extend(tensor.tensors)
+            self.__numTensors += tensor.__numTensors
 
         else:
-            self.__overallTensor = TensorFactory.joinTensors(self.__overallTensor, tensor)
+            if self.__overallTensor is None:
+                self.__overallTensor = tensor
 
-        self.__tensors.append(tensor)
-        self.__numTensors += 1
+            else:
+                self.__overallTensor = TensorFactory.joinTensors(self.__overallTensor, tensor)
+
+            self.__tensors.append(tensor)
+            self.__numTensors += 1
 
     @property
     def points(self):

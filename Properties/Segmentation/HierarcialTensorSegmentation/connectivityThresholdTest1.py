@@ -16,7 +16,7 @@ from VisualizationO3D import VisualizationO3D
 
 if __name__ == '__main__':
     path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/ThresholdLearning/'
-    surfaceType = 'smooth'
+    surfaceType = 'linear'
 
     fileList = glob(path + surfaceType + "/*/*.pts")
     numFiles = len(fileList)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         ballTree, labels, nodesOfInterest, tensors = extractSurfaceElements(pntSet,
                                                                             leafSize=10, smallestObjectSize=0.1)
 
-        graph = TensorConnectivityGraph(tensors, numNeighbors=10, varianceThreshold=0.01 ** 2,
+        graph = TensorConnectivityGraph(tensors, numNeighbors=10, varianceThreshold=0.05 ** 2,
                                         distanceThreshold=0.1, normalSimilarityThreshold=1e-3)
         rDis, cDis, dis = find(graph._TensorConnectivityGraph__disMatrix)
         rDon, cDon, don = find(graph._TensorConnectivityGraph__donMatrix)

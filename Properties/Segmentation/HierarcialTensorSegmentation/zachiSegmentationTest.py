@@ -27,15 +27,19 @@ if __name__ == '__main__':
     segmentation2, segmentNeighbors = \
         SegmentationFactory.SurfaceElementsTensorConnectedComponents(pntSet, leafSize=10,
                                                                      smallestObjectSize=0.1, numNeighbors=10,
-                                                                     varianceThreshold=0.1 ** 2, linearityThreshold=5,
+                                                                     varianceThreshold=0.05 ** 2, linearityThreshold=5,
                                                                      normalSimilarityThreshold=0.01,
                                                                      distanceThreshold=0.08,  mode='binary')
 
-    labels, tensors = dissolveEntrappedSurfaceElements(segmentation2, segmentNeighbors,
-                                                       varianceThreshold=0.1 ** 2,
+    labels, tensors, neighbors = minCutRefinement(segmentation2, segmentNeighbors)
+    segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
+
+    labels, tensors = dissolveEntrappedSurfaceElements(segmentation3, neighbors,
+                                                       varianceThreshold=0.05 ** 2,
                                                        distanceThreshold=0.08,
                                                        minSegmentSize=3)
-    segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
+    segmentation4 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
+
     #
     # temp = list(map(lambda t: t.tensors_number, tensors))
     #
@@ -56,4 +60,5 @@ if __name__ == '__main__':
     # visObj = VisualizationO3D()
     VisualizationO3D.visualize_pointset(pointset=segmentation2, drawCoordianteFrame=True, coordinateFrameOrigin='min')
     VisualizationO3D.visualize_pointset(pointset=segmentation3, drawCoordianteFrame=True, coordinateFrameOrigin='min')
+    VisualizationO3D.visualize_pointset(pointset=segmentation4, drawCoordianteFrame=True, coordinateFrameOrigin='min')
 

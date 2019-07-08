@@ -2,6 +2,7 @@ import warnings
 
 from numpy import zeros, array, nonzero, triu_indices, unique, int_, hstack
 from numpy.linalg import norm
+from scipy.io import netcdf_file
 
 from scipy.sparse import coo_matrix
 
@@ -82,64 +83,85 @@ def tensorConnectedComponents(tensors, numNeighbors, varianceThreshold, linearit
     return labels, indexesByLabels, segmentNeighbors
 
 
-def minCutRefinement(tensors, dominantSegmentSize=10, minSegmentSize=3, numNeighbors=10):
+def minCutRefinement(segmentation, neighbors, dominantSegmentSize=10):
     """
     WIP - DO NOT USE!!!
     :param tensors:
-    :param minSegmentSize:
-    :param numNeighbors:
     :return:
     """
-    # if isinstance(tensors, list):
-    #     tensors = array(tensors)
+    tensors = segmentation.segmentAttributes
+    labels = segmentation.GetAllSegments
+
+    # getting segment sizes
     segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
 
+    # extracting the dominant segments based on their size
     dominantSegments = nonzero(segmentSizes > dominantSegmentSize)[0]
 
-    # cogs = array(list(map(lambda t: t.reference_point, tensors[dominantSegments])))
-    # bt = BallTreePointSet(cogs, leaf_size=10)
-    # neighbors = bt.query(cogs, numNeighbors)[:, 1:]
-
     indexes1, indexes2 = triu_indices(dominantSegments.shape[0], 1)
-    newSegmentLabels = range(len(tensors))
+    segmentLabels = array(range(len(tensors)))
+    mergeMapper = dict(zip(segmentLabels, segmentLabels))
 
-    for i, j in zip(indexes1, indexes2):
-        if newSegmentLabels[dominantSegments[i]] != dominantSegments[i] or \
-                newSegmentLabels[dominantSegments[j]] != dominantSegments[j]:
+    for i, j in tqdm(zip(indexes1, indexes2), desc='Merging dominant segment via min-cut', total=indexes1.shape[0]):
+        if segmentLabels[dominantSegments[i]] != dominantSegments[i] or \
+                segmentLabels[dominantSegments[j]] != dominantSegments[j]:
             continue  # one of the segments has been merged
 
         smc = SegmentMinCutter(tensors[dominantSegments[i]], tensors[dominantSegments[j]])
         if smc.minCut():
             # merging all the tensors from both segments into one
-            list(map(tensors[dominantSegments[i]].addTensor, tensors[dominantSegments[j]].tensors))
-            newSegmentLabels[dominantSegments[j]] == dominantSegments[i]
-            print(dominantSegments[i], dominantSegments[j])
+            tensors[dominantSegments[i]].addTensor(tensors[dominantSegments[j]])
 
-    uniqueNewLabels = unique(newSegmentLabels)
-    newLabels = range(uniqueNewLabels.shape[0])
-    # newSegmentLabels = newLabels[]
+            # updating the merged segment's label
+            segmentLabels[dominantSegments[j]] = dominantSegments[i]
+            labels[labels == dominantSegments[j]] = dominantSegments[i]
+            mergeMapper[dominantSegments[j]] = dominantSegments[i]
+
+            # merging list of neighbors
+            neighbors[dominantSegments[i]] = hstack((neighbors[dominantSegments[i]], neighbors[dominantSegments[j]]))
+            neighbors[dominantSegments[j]] = None
+            # print(dominantSegments[i], dominantSegments[j])
+
+    # updating points labels
+    uniqueLabels = unique(labels)
+    uniqueNewLabels = array(range(uniqueLabels.shape[0]))
+    newOldConvertion = dict(zip(uniqueLabels, uniqueNewLabels))
+    newLabels = array(list(map(lambda l: newOldConvertion[l], labels)))
+
+    remainingSegments = nonzero(list(map(lambda n: not (n is None), neighbors)))[0]
+    tmpNeighbors = array(list(map(lambda n: unique(list(map(mergeMapper.get, n))),
+                                  neighbors[remainingSegments])))
+    newNeighbors = array(list(map(lambda n: unique(list(map(lambda l: newOldConvertion[l], n))), tmpNeighbors)))
+
+    return newLabels, tensors[remainingSegments], newNeighbors
 
 
-def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, dominantSegmentSize=10, minSegmentSize=5,
+def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNeighbors=10,
+                                     dominantSegmentSize=10, minSegmentSize=5,
                                      varianceThreshold=0.01, distanceThreshold=0.1):
     """
 
-    :param segmentationProperty:
+    :param segmentation:
     :param segmentNeighbors:
     :return:
     """
     if not isinstance(segmentation.segmentAttributes[0], TensorSet):
         raise TypeError('Segmentation attributes are not TensorSets objects')
 
-    if segmentNeighbors is None:
-        # TODO: replace with neighbor querying
-        raise ValueError('Segments neighbors are missing')
-
     labels = segmentation.GetAllSegments
     tensors = segmentation.segmentAttributes
 
     # getting the number of tensors composing each segment
     segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
+
+    if segmentNeighbors is None:
+        # TODO: replace with neighbor querying
+        raise ValueError('Segments neighbors are missing')
+
+        cogs = array(list(map(lambda t: t.reference_point, tensors)))
+        bt = BallTreePointSet(cogs)
+
+        segmentNeighbors = bt.query(cogs, numNeighbors + 1)[:, 1:]
 
     smallSegments = nonzero(segmentSizes <= minSegmentSize)[0]  # extracting small segments
     smallNeighbors = segmentNeighbors[smallSegments]  # extracting the neighbors of the small segments
@@ -167,9 +189,8 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
                 continue
 
             # skipping segments whose center of gravity is relatively far from the tensor
-            # TODO: redefine in terms of variance of larger segment
-            if tensors[dominantNeighbor].distanceFromPoint(
-                    tensors[smallSegments[i]].reference_point) > distanceThreshold:
+            if tensors[dominantNeighbor].distanceFromPoint(tensors[smallSegments[i]].reference_point) / \
+                    distanceThreshold > 3:
                 continue
 
             tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])  # merging the tensors
@@ -186,6 +207,22 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
                 segmentation.Points.ToNumpy()[segmentPoints]).reshape((-1, ))
             distancesFrom2 = tensors[dominantNeighbor2].distanceFromPoint(
                 segmentation.Points.ToNumpy()[segmentPoints]).reshape((-1, ))
+
+            # ratios = distancesFrom2 / distancesFrom1
+            #
+            # assignedTo1 = segmentPoints[ratios < 1]
+            # if assignedTo1.shape[0] > 0:
+            #     newTensor1 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[assignedTo1])
+            #     tensors[dominantNeighbor1].addTensor(newTensor1)
+            #     labels[assignedTo1] = dominantNeighbor1
+            #
+            # assignedTo2 = segmentPoints[ratios >= 1]
+            # if assignedTo2.shape[0] > 0:
+            #     newTensor2 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[assignedTo2])
+            #     tensors[dominantNeighbor1].addTensor(newTensor2)
+            #     labels[assignedTo2] = dominantNeighbor2
+            #
+            # tensors[smallSegments[i]] = None
 
             graph = DiGraph()
             list(map(lambda p, d: graph.add_edge('source', p, capacity=d ** -2), segmentPoints, distancesFrom1))
@@ -224,8 +261,6 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
 
             except NetworkXUnbounded:
                 continue
-            # except LinAlgError:
-            #     continue
 
         # removing tensors of dissolved segments from the list
         tensors = tensors[nonzero(tensors)[0]]
@@ -233,8 +268,8 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, domina
         # updating points labels
         uniqueLabels = unique(labels)
         uniqueNewLabels = range(uniqueLabels.shape[0])
-        newOldCovesion = dict(zip(uniqueLabels, uniqueNewLabels))
-        newLabels = array(list(map(lambda l: newOldCovesion[l], labels)))
+        newOldConvertion = dict(zip(uniqueLabels, uniqueNewLabels))
+        newLabels = array(list(map(lambda l: newOldConvertion[l], labels)))
 
         return newLabels, tensors
 

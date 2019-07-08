@@ -27,7 +27,7 @@ class SegmentMinCutter(object):
         self.__neighbors = vstack([neighobors1, neighobors2])
         self.__tensors = hstack([segment1.tensors, segment2.tensors])
         if offset is None:
-            self.__offset = max(segment1.eigenvalues[0], segment2.eigenvalues[0]) ** 0.5 * 10
+            self.__offset = max(segment1.eigenvalues[0], segment2.eigenvalues[0]) ** 0.5
         else:
             self.__offset = offset
 
@@ -66,7 +66,8 @@ class SegmentMinCutter(object):
         notReachable = array(list(notReachable))
         intNotReachable = int_(notReachable[notReachable != 'sink'])
 
-        if len(intReachable) == 0 and len(intNotReachable) == self.__numNodes:
+        if (len(intReachable) == 0 and len(intNotReachable) == self.__numNodes) or \
+                (len(intReachable) == self.__numNodes and len(intNotReachable) == 0):
             return True
         else:
             return False
