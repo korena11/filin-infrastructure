@@ -150,10 +150,18 @@ class FilterFactory:
         :rtype: PointSet
         """
         import numpy as np
-        smoothed_pcl = list(
-            map(lambda neighborhood: np.mean(neighborhood.neighbors.ToNumpy(), axis=0), neighbors_property))
+        from tqdm import tqdm
+        smoothed_pcl_list = list(
+            map(lambda neighborhood: np.mean(neighborhood.neighbors.ToNumpy(), axis=0),
+                tqdm(neighbors_property, total=neighbors_property.Size, leave=True, position=0)))
+        # create a class according to the neighbors' points class and populate it with the smoothed points
+        smoothed_pcl = type(neighbors_property.Points).__init__(
+            type(neighbors_property.Points).__new__(type(neighbors_property.Points)), np.array(smoothed_pcl_list))
+        smoothed_neigborhood = NeighborsProperty(smoothed_pcl)
+        smoothed_neigborhood.setNeighborhood(range(neighbors_property.Size),
+                                             neighbors_property.getNeighborhood(range(neighbors_property.Size)))
 
-        return PointSet(smoothed_pcl)
+        return smoothed_neigborhood
 
     @staticmethod
     @jit

@@ -13,8 +13,8 @@ EPS = 1e-10
 
 class SaliencyFactory(object):
 
-    @classmethod
-    def pointwise_pca_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
+    @staticmethod
+    def pointwise_pca_saliency(tensor_property, principal_components_number=3, weights=1, verbose=False):
         r"""
         Compute saliency according to PCA (tensors) similarity.
 
@@ -108,41 +108,26 @@ class SaliencyFactory(object):
 
         return SaliencyProperty(tensor_property.Points, G)
 
-    @classmethod
-    def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           min_obj_size=0.05, alpha=0.05, noise_size=0.01,
-                           verbose=False):
-        r"""
-        Computes saliency in each point according to difference in curvature and normal, as a function of the distance
+    # ----------------- DIRECTIONAL SALIENCY -----------------------
+    @staticmethod
+    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute,
+                             min_obj_size=0.05, noise_size=0.01, curvature_weight=.5, verbose=False):
+        """
 
-        For each point, the angle between the normals is computed, as well as the difference in curvature magnitude:
-
-        .. math::
-            \begin{eqnarray}
-            d\kappa_{ij} = |\kappa_i - \kappa_j| \\
-            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
-            \end{eqnarray}
-
-        The distances are weighted as Gaussians: the closest and farthest get low weights.
-
-        The saliency of the point is the sum:
-
-        .. math::
-            s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}
-
+        :param neighbors_property: the neighborhood property of the point cloud.
+        :param normals_property: normals at the neighborhood
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
-        :param normals_property: normals property computed in advance
-        :param neighbors_property: the neighborhood property of the point cloud.
-        :param weight_distance_sigma: sigma of the Gaussian accoring to which the distances are weighted. Also serves as the sigma for point association. Default: 0.05
+        :param min_obj_size: the minimal object size to look for. Dictates the window size
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param curvature_weight: the weight of the curvature in the saliency computation
         :param verbose: print running messages. Default: False
-        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.001
 
         :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
-        :type normals_property: NormalsProperty.NormalsProperty
+        :type normals_property: np.array
         :type curvature_attribute: str
         :type neighbors_property: NeighborsProperty.NeighborsProperty
-        :type weight_distance_sigma: float
+        :type min_obj_size: float
         :type noise_size: float
         :type verbose: bool
 
@@ -150,12 +135,13 @@ class SaliencyFactory(object):
 
         :rtype: SaliencyProperty
         """
+
         from warnings import warn
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
         # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
         win_size = min_obj_size / 2  # window size is half the minimal object size
-        
+
         tensor_saliency = []
         j = 0
         kstd = []
@@ -178,70 +164,140 @@ class SaliencyFactory(object):
                     current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
                 except TypeError:
                     warn(
-                    'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
+                        'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
                     return 1
 
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
-            # difference in curvature
-            # dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
-            # dk[np.where(np.abs(dk) < epsilon)] = 0
-            # dk_normed = dk
-            # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
-            # dk = current_curvatures[0]
+            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, win_size, noise_size, verbose)
+            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size, verbose)
 
-            # distances influence - Laplacian (DoG)
-            # dist_element = 1 / np.sqrt(2 * np.pi) * \
-            #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
-            #                1 / np.sqrt(2 * np.pi * weight_distance_sigma ** 2) * \
-            #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
-            # dist_element_normed = dist_element.copy()
-            # dist_element[dist_element < 0] = 0
-            # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
-            # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
-            # dist_element[0] = neighborhood.Size
-            # dist_element_normed = dist_element / np.linalg.norm(dist_element)
+            if verbose:
+                pts = neighborhood.color_neighborhood()
+                vis = VisualizationO3D()
+                vis.visualize_property(pts)
 
-            # define window
-            dist_element = np.ones((neighborhood.Size, 1))
-            dist_element[neighborhood.distances > win_size] = -1
+            normal_weight = 1 - curvature_weight
+            tensor_saliency.append(normal_weight * dn + curvature_weight * dk)
 
-            # normalize to equal area (inside and out)
-            s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
-            dist_element_normed = dist_element.copy()
-            dist_element_normed[neighborhood.distances > win_size] *= s
-
-            dk_normed = current_curvatures
-            dk = np.sum(dk_normed * dist_element_normed)
-            
-            # normal influence
-            # dn = current_normals[1:, :].dot(current_normals[0, :])
-            dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
-                        neighborhood.numberOfNeighbors - 1)
-
-            kstd.append(np.std(dk))
-            kmean.append(np.mean(dk))
-            
-            if i % 150 == 0:
-                print('normal mean {a}, normal std {b}'.format(a=dn.mean(), b=dn.std()))
-                print('curvature mean {a}, curvature std {b}'.format(a=dk.mean(), b=dk.std()))
-
-                if verbose:
-                    pts = neighborhood.color_neighborhood()
-                    vis = VisualizationO3D()
-                    vis.visualize_property(pts)
-
-            if dn.std() > noise_size or dk.std() > noise_size:
-                dn = 0
-                dk_normed = 0
-
-            tensor_saliency.append(np.sum(dist_element_normed * (dn + dk_normed)))
-
-        print('kmean {a} kstd {b}'.format(a=np.asarray(kmean).mean(), b=np.asarray(kstd).mean()))
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
-    @classmethod
-    def multiscale_saliency(cls, saliencies, percentiles=75):
+    @staticmethod
+    def __normal_saliency(neighborhood, current_normals, win_size=0.05, noise_size=0.01, verbose=False):
+        """
+        Checks the saliency of a point based on  normals property
+
+        .. math::
+                d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
+
+        The distances are weighted as Gaussians: the closest and farthest get low weights.
+
+        :param neighborhood: the neighborhood of a point
+        :param current_normals: normals array of the current point
+        :param win_size: search window size.
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param verbose: print running messages. Default: False
+
+        :type current_normals: np.array
+        :type neighborhood: PointNeighborhood.PointNeighborhood
+        :type verbose: bool
+
+        :return: array of saliency value of a point in a neighborhood according to normals
+
+        :rtype: np.array
+        """
+        # normal influence
+        # dn = current_normals[1:, :].dot(current_normals[0, :])
+        dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+                neighborhood.numberOfNeighbors - 1)
+
+        # distances influence - Laplacian (DoG)
+        dist_element = 1 / np.sqrt(2 * np.pi) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+                       1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        # dist_element[dist_element < 0] = 0
+        # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
+        # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
+        # dist_element[0] = neighborhood.Size
+        dist_element_normed = dist_element / np.linalg.norm(dist_element)
+
+        dn = np.abs(np.sum(dn * dist_element_normed))
+
+        if dn.std() > noise_size:
+            dn = 0
+
+        return dn
+
+    @staticmethod
+    def __curvature_saliency(neighborhood, current_curvatures, win_size=0.05, noise_size=0.01, verbose=False):
+        r"""
+        Computes saliency in each point according to difference in curvature.
+
+        For each point, the difference in curvature between a close point's surrounding  and its farther area are tested
+
+        .. math::
+            d\kappa_{ij} = |\kappa_i - \kappa_j|
+
+        The distances are weighted as Gaussians: the closest and farthest get low weights.
+
+        The saliency of the point is the sum:
+
+        .. math::
+            s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}
+
+        :param current_curvatures: curvatures of the points in neighborhood
+        :param neighborhood: the point neighborhood.
+        :param win_size: search window size.
+        :param verbose: print running messages. Default: False
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+
+        :type current_curvatures: np.ndarray
+        :type neighborhood: PointNeighborhood.PointNeighborhood
+        :type win_size: float
+        :type noise_size: float
+        :type verbose: bool
+
+        :return: array of saliency value of a point in a neighborhood according to curvature variations
+
+        :rtype: np.array
+        """
+
+        # difference in curvature
+        # dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+        # dk[np.where(np.abs(dk) < epsilon)] = 0
+        # dk_normed = dk
+        # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+        dk = current_curvatures[1:]
+        #
+        # dist_element = 1 / np.sqrt(2 * np.pi) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+        #                1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        # dist_element_normed = dist_element / np.linalg.norm(dist_element)
+
+        # if dk.std() > noise_size:
+        #     return 0
+        # define window
+        dist_element = np.ones((neighborhood.Size, 1))
+        min_dist = neighborhood.distances < win_size
+        s2 = np.sum(min_dist)
+        s1 = neighborhood.Size - s2
+
+        dist_element[min_dist == 0] = -1 / s1
+        dist_element[min_dist] /= s2
+        # dist_element[neighborhood.distances > win_size + .5 * win_size] = 0
+        # normalize to equal area (inside and out)
+
+        # s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
+        # dist_element_normed = dist_element.copy()
+        # dist_element_normed[neighborhood.distances > win_size] *= s
+        dist_element_normed = dist_element
+
+        return np.abs(np.sum(dk * dist_element_normed))
+
+    @staticmethod
+    def multiscale_saliency(saliencies, percentiles=75):
         """
         Aggregates the saliencies computed by multiple scales
 

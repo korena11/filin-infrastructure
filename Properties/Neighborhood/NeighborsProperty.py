@@ -80,7 +80,7 @@ class NeighborsProperty(BaseProperty):
         :param idx: the index (or indices) of the point(s) to set
         :param point_neighbors: the PointeNeighborhood object to set
 
-        :type idx: int
+        :type idx: int, np.array
         :type point_neighbors: PointNeighborhood
 
         """
