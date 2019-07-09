@@ -38,7 +38,7 @@ class TestFilterFactory(TestCase):
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts',
                                 pts, colors, merge=True)
         kdt_pcl = KdTreePointSet(pcl)
-        neighborhood = NeighborsFactory.kdtreePointSet_rnn(kdt_pcl, 0.1)
+        neighborhood = NeighborsFactory.kdtreePointSet_rnn(kdt_pcl, 0.05)
         pcl_smoothed = FilterFactory.smooth_simple(neighborhood)
         np.savetxt(folderPath + dataName + 'smoothed.txt', pcl_smoothed.ToNumpy())
         vis.visualize_pointset(pcl_smoothed)
