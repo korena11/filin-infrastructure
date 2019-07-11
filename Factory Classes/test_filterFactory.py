@@ -33,13 +33,13 @@ class TestFilterFactory(TestCase):
         pts = []
         # for curvature and normal computations
         folderPath = '../test_data/'
-        dataName = 'test_pts'
+        dataName = 'bunny_20'
         vis = VisualizationO3D()
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts',
                                 pts, colors, merge=True)
         kdt_pcl = KdTreePointSet(pcl)
         neighborhood = NeighborsFactory.kdtreePointSet_rnn(kdt_pcl, 0.05)
-        pcl_smoothed = FilterFactory.smooth_simple(neighborhood)
-        np.savetxt(folderPath + dataName + 'smoothed.txt', pcl_smoothed.ToNumpy())
-        vis.visualize_pointset(pcl_smoothed)
+        neighborhood_smoothed = FilterFactory.smooth_simple(neighborhood)
+        np.savetxt(folderPath + dataName + 'smoothed.txt', neighborhood_smoothed.Points.ToNumpy())
+        # vis.visualize_pointset(pcl_smoothed)
         # self.fail()

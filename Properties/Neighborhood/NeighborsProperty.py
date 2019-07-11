@@ -84,7 +84,7 @@ class NeighborsProperty(BaseProperty):
         :type point_neighbors: PointNeighborhood
 
         """
-        if isinstance(point_neighbors, PointNeighborhood):
+        if isinstance(point_neighbors, PointNeighborhood) or isinstance(point_neighbors[-1], PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
         else:
             subset = point_neighbors.neighbors

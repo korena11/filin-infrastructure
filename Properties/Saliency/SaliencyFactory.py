@@ -264,35 +264,35 @@ class SaliencyFactory(object):
         """
 
         # difference in curvature
-        # dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
         # dk[np.where(np.abs(dk) < epsilon)] = 0
         # dk_normed = dk
         # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
-        dk = current_curvatures[1:]
+        # dk = current_curvatures[1:]
         #
-        # dist_element = 1 / np.sqrt(2 * np.pi) * \
-        #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
-        #                1 / np.sqrt(2 * np.pi * win_size ** 2) * \
-        #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
-        # dist_element_normed = dist_element / np.linalg.norm(dist_element)
+        dist_element = 1 / np.sqrt(2 * np.pi) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+                       1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        dist_element_normed = dist_element / np.linalg.norm(dist_element)
 
         # if dk.std() > noise_size:
         #     return 0
         # define window
-        dist_element = np.ones((neighborhood.Size, 1))
-        min_dist = neighborhood.distances < win_size
-        s2 = np.sum(min_dist)
-        s1 = neighborhood.Size - s2
-
-        dist_element[min_dist == 0] = -1 / s1
-        dist_element[min_dist] /= s2
+        # dist_element = np.ones((neighborhood.Size, 1))
+        # min_dist = neighborhood.distances < win_size
+        # s2 = np.sum(min_dist)
+        # s1 = neighborhood.Size - s2
+        #
+        # dist_element[min_dist == 0] = -1 / s1
+        # dist_element[min_dist] /= s2
         # dist_element[neighborhood.distances > win_size + .5 * win_size] = 0
         # normalize to equal area (inside and out)
 
         # s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
         # dist_element_normed = dist_element.copy()
         # dist_element_normed[neighborhood.distances > win_size] *= s
-        dist_element_normed = dist_element
+        # dist_element_normed = dist_element
 
         return np.abs(np.sum(dk * dist_element_normed))
 
