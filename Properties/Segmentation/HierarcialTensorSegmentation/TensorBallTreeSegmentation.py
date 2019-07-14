@@ -277,6 +277,7 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
         warnings.warn('No surface elements that are entrapped by a single segment were found')
         return labels, tensors
 
+
 def pointwiseRefinement(segmentation, significantSegmentSize=10, maxIterations=1000):
     """
 
