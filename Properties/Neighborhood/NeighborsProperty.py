@@ -86,11 +86,17 @@ class NeighborsProperty(BaseProperty):
         """
         if isinstance(point_neighbors, PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
-        elif isinstance(point_neighbors, np.ndarray) and isinstance(point_neighbors[0], PointNeighborhood):
-            self.__pointsNeighborsArray = point_neighbors
+
         else:
-            subset = point_neighbors.neighbors
-            self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
+            if isinstance(point_neighbors, np.ndarray):
+                if isinstance(point_neighbors[0], PointNeighborhood):
+                    self.__pointsNeighborsArray = point_neighbors
+            else:
+                subset = point_neighbors.neighbors
+                self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
+
+
+
 
     def average_neighborhood_radius(self):
         """
