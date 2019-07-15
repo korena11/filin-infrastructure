@@ -145,9 +145,9 @@ class FilterFactory:
 
         :type neighbors_property: NeighborsProperty
 
-        :return: new smoothed pointset
+        :return: new smoothed pointset and its neighborhood (not recomputed)
 
-        :rtype: NeighborsProperty
+        :rtype: (PointSet, NeighborsProperty)
         """
         import numpy as np
         from tqdm import tqdm
@@ -161,7 +161,7 @@ class FilterFactory:
         smoothed_neigborhood.setNeighborhood(range(neighbors_property.Size),
                                              neighbors_property.getNeighborhood(range(neighbors_property.Size)))
 
-        return smoothed_neigborhood
+        return smoothed_pcl, smoothed_neigborhood
 
     @staticmethod
     @jit

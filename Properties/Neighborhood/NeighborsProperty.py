@@ -84,8 +84,10 @@ class NeighborsProperty(BaseProperty):
         :type point_neighbors: PointNeighborhood
 
         """
-        if isinstance(point_neighbors, PointNeighborhood) or isinstance(point_neighbors[-1], PointNeighborhood):
+        if isinstance(point_neighbors, PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
+        elif isinstance(point_neighbors, np.ndarray) and isinstance(point_neighbors[0], PointNeighborhood):
+            self.__pointsNeighborsArray = point_neighbors
         else:
             subset = point_neighbors.neighbors
             self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
