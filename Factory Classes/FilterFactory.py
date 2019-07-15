@@ -155,8 +155,8 @@ class FilterFactory:
             map(lambda neighborhood: np.mean(neighborhood.neighbors.ToNumpy(), axis=0),
                 tqdm(neighbors_property, total=neighbors_property.Size, leave=True, position=0)))
         # create a class according to the neighbors' points class and populate it with the smoothed points
-        smoothed_pcl = type(neighbors_property.Points).__init__(
-            type(neighbors_property.Points).__new__(type(neighbors_property.Points)), np.array(smoothed_pcl_list))
+        smoothed_pcl = type(neighbors_property.Points).__new__(type(neighbors_property.Points))
+        smoothed_pcl.__init__(np.asarray(smoothed_pcl_list))
         smoothed_neigborhood = NeighborsProperty(smoothed_pcl)
         smoothed_neigborhood.setNeighborhood(range(neighbors_property.Size),
                                              neighbors_property.getNeighborhood(range(neighbors_property.Size)))
