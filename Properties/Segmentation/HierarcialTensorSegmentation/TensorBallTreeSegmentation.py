@@ -193,6 +193,9 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
                     distanceThreshold > 3:
                 continue
 
+            if abs(tensors[dominantNeighbor].plate_axis.dot(tensors[smallSegments[i]].plate_axis)) < 0.9:
+                continue
+
             tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])  # merging the tensors
             tensors[smallSegments[i]] = None  # nullifying the tensor of the smaller segment
             labels[labels == smallSegments[i]] = dominantNeighbor  # reassigning the points of the small segment

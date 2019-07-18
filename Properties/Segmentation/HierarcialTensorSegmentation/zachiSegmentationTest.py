@@ -17,9 +17,10 @@ if __name__ == '__main__':
 
     path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
     # filename = 'agriculture1_clean'
-    filename = 'oldSchool2-clean'
+    # filename = 'oldSchool2-clean'
     # filename = 'powerplant5'
     # filename = 'curvedWall'
+    filename = 'waterTower2'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
     # segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)

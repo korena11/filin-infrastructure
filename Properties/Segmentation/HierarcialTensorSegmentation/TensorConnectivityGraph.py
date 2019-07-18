@@ -92,8 +92,9 @@ class TensorConnectivityGraph(object):
                                    self.__stickAxes[neighbors].T).reshape((-1,))
 
             # TODO: VERIFY CORRECTNESS AND ThRESHOLD FOR LINEAR OBJECTS
-            don = self.__stickAxes[neighbors] - self.__stickAxes[index]  # zeros((neighbors.shape[0], 3)) + 1e-16
+            don = self.__stickAxes[neighbors] - self.__stickAxes[index]
             don[directionalDiffs < 0, :] = self.__stickAxes[neighbors][directionalDiffs < 0] + self.__stickAxes[index]
+            # don /= 3
 
         self.__simMatrix[index, neighbors] = self.__computeEdgeWeight(distances, norm(don, axis=1) ** 2)
         self.__disMatrix[index, neighbors] = distances + 1e-16
