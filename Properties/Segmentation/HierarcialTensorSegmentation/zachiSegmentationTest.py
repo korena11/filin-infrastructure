@@ -17,34 +17,39 @@ if __name__ == '__main__':
 
     path = 'C:/Users/zachis/Dropbox/Research/Code/Segmentation/data/'
     # filename = 'agriculture1_clean'
-    # filename = 'oldSchool2-clean'
+    filename = 'oldSchool2-clean'
     # filename = 'powerplant5'
     # filename = 'curvedWall'
-    filename = 'waterTower2'
+    # filename = 'waterTower2'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
-    # segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet, leafSize=10, smallestObjectSize=0.1)
+    # # segmentation = SegmentationFactory.BallTreeSurfaceElementSegmentation(pntSet,
+    # #                                                                       leafSize=10, smallestObjectSize=0.1)
 
-    segmentation2, segmentNeighbors = \
-        SegmentationFactory.SurfaceElementsTensorConnectedComponents(pntSet, leafSize=10,
-                                                                     smallestObjectSize=0.1, numNeighbors=10,
-                                                                     varianceThreshold=0.05 ** 2, linearityThreshold=5,
-                                                                     normalSimilarityThreshold=0.01,
-                                                                     distanceThreshold=0.08,  mode='binary')
-
-    labels, tensors, neighbors = minCutRefinement(segmentation2, segmentNeighbors)
-    segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
-
-    labels, tensors = dissolveEntrappedSurfaceElements(segmentation3, neighbors,
-                                                       varianceThreshold=0.05 ** 2,
-                                                       distanceThreshold=0.08,
-                                                       minSegmentSize=3)
-    segmentation4 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
-
+    # segmentation2, segmentNeighbors = \
+    #     SegmentationFactory.SurfaceElementsTensorConnectedComponents(pntSet, leafSize=10,
+    #                                                                  smallestObjectSize=0.1, numNeighbors=10,
+    #                                                                  varianceThreshold=0.05 ** 2, linearityThreshold=5,
+    #                                                                  normalSimilarityThreshold=0.01,
+    #                                                                  distanceThreshold=0.08,  mode='binary')
     #
-    # temp = list(map(lambda t: t.tensors_number, tensors))
+    # labels, tensors, neighbors = minCutRefinement(segmentation2, segmentNeighbors)
+    # segmentation3 = SegmentationProperty(segmentation2.Points, labels, segmentAttributes=tensors)
     #
-    # labels, tensors = pointwiseRefinement(segmentation3)
+    # labels, tensors, neighbors = dissolveEntrappedSurfaceElements(segmentation3, neighbors,
+    #                                                               varianceThreshold=0.05 ** 2,
+    #                                                               distanceThreshold=0.08,
+    #                                                               minSegmentSize=3)
+    #
+    # #
+    # # temp = list(map(lambda t: t.tensors_number, tensors))
+    # #
+    from pickle import dump, load
+    # dump((labels, tensors, neighbors), open(filename + '_seg.p', 'wb'))
+    labels, tensors, neighbors = load(open(filename + '_seg.p', 'rb'))
+
+    segmentation4 = SegmentationProperty(pntSet, labels, segmentAttributes=tensors)
+    labels, tensors = pointwiseRefinement(segmentation4, neighbors)
 
     # from numpy import array
     # import open3d as o3d
@@ -59,7 +64,7 @@ if __name__ == '__main__':
     # temp = minCutRefinement(segmentation2.segmentAttributes, minSegmentSize=3)
 
     # visObj = VisualizationO3D()
-    VisualizationO3D.visualize_pointset(pointset=segmentation2, drawCoordianteFrame=True, coordinateFrameOrigin='min')
-    VisualizationO3D.visualize_pointset(pointset=segmentation3, drawCoordianteFrame=True, coordinateFrameOrigin='min')
+    # VisualizationO3D.visualize_pointset(pointset=segmentation2, drawCoordianteFrame=True, coordinateFrameOrigin='min')
+    # VisualizationO3D.visualize_pointset(pointset=segmentation3, drawCoordianteFrame=True, coordinateFrameOrigin='min')
     VisualizationO3D.visualize_pointset(pointset=segmentation4, drawCoordianteFrame=True, coordinateFrameOrigin='min')
 

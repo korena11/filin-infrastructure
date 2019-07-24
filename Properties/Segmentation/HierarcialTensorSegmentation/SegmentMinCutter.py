@@ -27,7 +27,7 @@ class SegmentMinCutter(object):
         self.__neighbors = vstack([neighobors1, neighobors2])
         self.__tensors = hstack([segment1.tensors, segment2.tensors])
         if offset is None:
-            self.__offset = max(segment1.eigenvalues[0], segment2.eigenvalues[0]) ** 0.5
+            self.__offset = max(segment1.eigenvalues[0], segment2.eigenvalues[0]) ** 0.5 * 3
         else:
             self.__offset = offset
 

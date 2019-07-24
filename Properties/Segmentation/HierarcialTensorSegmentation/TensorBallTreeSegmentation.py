@@ -175,6 +175,7 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
     # identifying small segments which have either a single dominant neighbor or a pair of dominant ones
     entrappedBySingle = nonzero(numDominantNeighbors == 1)[0]
     entrappedByPair = nonzero(numDominantNeighbors == 2)[0]
+    deletedSegments = []
 
     if len(entrappedBySingle) > 0 or len(entrappedByPair) > 0:
 
@@ -199,6 +200,7 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
             tensors[dominantNeighbor].addTensor(tensors[smallSegments[i]])  # merging the tensors
             tensors[smallSegments[i]] = None  # nullifying the tensor of the smaller segment
             labels[labels == smallSegments[i]] = dominantNeighbor  # reassigning the points of the small segment
+            deletedSegments.append(smallSegments[i])
 
         # dissolving small segments entrapped by a pair of dominant segments
         for i in tqdm(entrappedByPair, 'Dissolving surface elements entrapped between a pair of dominant segments'):
@@ -211,22 +213,6 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
             distancesFrom2 = tensors[dominantNeighbor2].distanceFromPoint(
                 segmentation.Points.ToNumpy()[segmentPoints]).reshape((-1, ))
 
-            # ratios = distancesFrom2 / distancesFrom1
-            #
-            # assignedTo1 = segmentPoints[ratios < 1]
-            # if assignedTo1.shape[0] > 0:
-            #     newTensor1 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[assignedTo1])
-            #     tensors[dominantNeighbor1].addTensor(newTensor1)
-            #     labels[assignedTo1] = dominantNeighbor1
-            #
-            # assignedTo2 = segmentPoints[ratios >= 1]
-            # if assignedTo2.shape[0] > 0:
-            #     newTensor2 = TensorFactory.tensorFromPoints(segmentation.Points.ToNumpy()[assignedTo2])
-            #     tensors[dominantNeighbor1].addTensor(newTensor2)
-            #     labels[assignedTo2] = dominantNeighbor2
-            #
-            # tensors[smallSegments[i]] = None
-
             graph = DiGraph()
             list(map(lambda p, d: graph.add_edge('source', p, capacity=d ** -2), segmentPoints, distancesFrom1))
             list(map(lambda p, d: graph.add_edge(p, 'sink', capacity=d ** -2), segmentPoints, distancesFrom2))
@@ -238,6 +224,8 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
                                   segmentation.Points.ToNumpy()[indexes2], axis=1)
             list(map(lambda pi, pj, d: graph.add_edge(pi, pj, capacity=d ** -2), indexes1, indexes2, pointDistances))
             list(map(lambda pi, pj, d: graph.add_edge(pj, pi, capacity=d ** -2), indexes1, indexes2, pointDistances))
+
+            # TODO: add relevant points from dominant segments
 
             try:
                 cutValue, partition = minimum_cut(graph, 'source', 'sink')
@@ -261,12 +249,15 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
                         labels[intNotReachable] = dominantNeighbor2
 
                     tensors[smallSegments[i]] = None
+                    deletedSegments.append(smallSegments[i])
 
             except NetworkXUnbounded:
                 continue
 
         # removing tensors of dissolved segments from the list
-        tensors = tensors[nonzero(tensors)[0]]
+        remainingSegments = nonzero(tensors)[0]
+        tensors = tensors[remainingSegments]
+        segmentNeighbors = segmentNeighbors[remainingSegments]
 
         # updating points labels
         uniqueLabels = unique(labels)
@@ -274,14 +265,24 @@ def dissolveEntrappedSurfaceElements(segmentation, segmentNeighbors=None, numNei
         newOldConvertion = dict(zip(uniqueLabels, uniqueNewLabels))
         newLabels = array(list(map(lambda l: newOldConvertion[l], labels)))
 
-        return newLabels, tensors
+        # removing deleted segments from neighbors lists
+        tmpNeighbors = list(map(lambda neighbors: array(list(map(lambda n: None if n in deletedSegments else n,
+                                                                 neighbors))),
+                                segmentNeighbors))
+        tmpNeighbors = array(list(map(lambda n: n[nonzero(n)[0]], tmpNeighbors)))
+
+        # applying new labelling on neighbors lists
+        newNeighbors = array(list(map(lambda n: unique(list(map(lambda l: newOldConvertion[l], n))), tmpNeighbors)))
+
+        return newLabels, tensors, newNeighbors
 
     else:
         warnings.warn('No surface elements that are entrapped by a single segment were found')
-        return labels, tensors
+        return labels, tensors, segmentNeighbors
 
 
-def pointwiseRefinement(segmentation, significantSegmentSize=10, maxIterations=1000):
+def pointwiseRefinement(segmentation, neighbors, significantSegmentSize=10, maxIterations=1000, linearaityThreshold=5,
+                        varianceThredhold=0.01**2):
     """
 
     :param segmentation:
@@ -293,7 +294,8 @@ def pointwiseRefinement(segmentation, significantSegmentSize=10, maxIterations=1
 
     from EnergyBasedSegmentRefiner import EnergyBasedSegmentRefiner
 
-    refiner = EnergyBasedSegmentRefiner(segmentation, significantSegmentSize)
+    refiner = EnergyBasedSegmentRefiner(segmentation, neighbors, significantSegmentSize,
+                                        linearaityThreshold=linearaityThreshold, varianceThredhold=varianceThredhold)
 
     fails = 0
     i = 0
@@ -309,9 +311,6 @@ def pointwiseRefinement(segmentation, significantSegmentSize=10, maxIterations=1
                 break
 
     return
-
-
-
 
 
 if __name__ == '__main__':

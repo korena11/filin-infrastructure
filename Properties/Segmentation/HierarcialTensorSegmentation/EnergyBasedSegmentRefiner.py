@@ -1,4 +1,4 @@
-from numpy import array, nonzero, unique, hstack, log, exp, isnan, inf, isinf
+from numpy import array, nonzero, unique, hstack, log, exp, isnan, inf, isinf, int_, tile
 from numpy.random import choice
 from scipy.sparse import coo_matrix
 
@@ -7,7 +7,8 @@ from tqdm import trange
 
 class EnergyBasedSegmentRefiner(object):
 
-    def __init__(self, originalSegmentation, significantSegmentSize=10, searchRadis=None):
+    def __init__(self, originalSegmentation, neighbors, significantSegmentSize=10,
+                 searchRadis=None, linearaityThreshold=5, varianceThredhold=0.01**2):
         """
 
         :param originalSegmentation:
@@ -21,16 +22,26 @@ class EnergyBasedSegmentRefiner(object):
         # getting the number of tensors composing each segment
         segmentSizes = array(list(map(lambda t: t.tensors_number, tensors)))
 
-        smallSegments = nonzero(segmentSizes <= significantSegmentSize)[0]  # extracting small segments
+        significantSegmens = nonzero(segmentSizes > significantSegmentSize)[0]
+        surfaceElementSegments = nonzero(segmentSizes == 1)[0]
+        neighborsOfSignificantSegments = neighbors[significantSegmens]
+        neighborsOfSignificantSegmentsSizes = array(list(map(segmentSizes.__getitem__, neighborsOfSignificantSegments)))
+        surfaceElementNeighbors = list(map(lambda i: neighborsOfSignificantSegments[i][
+            nonzero(neighborsOfSignificantSegmentsSizes[i] == 1)[0]], range(neighborsOfSignificantSegments.shape[0])))
+        smallSegments = unique(hstack(surfaceElementNeighbors))
 
-        self.__pointsOfSmallSegments = hstack(list(map(originalSegmentation.GetSegmentIndices, smallSegments)))
+        tmpPnts = array(list(map(lambda s: originalSegmentation.GetSegmentIndices(s), smallSegments)))
+        numPntsPerSegments = list(map(len, tmpPnts))
+
+        pntSegments = int_(hstack(list(map(lambda i: tile(smallSegments[i], numPntsPerSegments[i]),
+                                           range(smallSegments.shape[0])))))
+        pntNeighbors = neighbors[pntSegments]
+
+        # smallSegments = nonzero(segmentSizes <= significantSegmentSize)[0]  # extracting small segments
+
+        self.__pointsOfSmallSegments = hstack(tmpPnts)
         self.__numPoints = self.__pointsOfSmallSegments.shape[0]
-
-        if searchRadis is None:
-            searchRadius = max(list(map(lambda t: t.eigenvalues[-1], tensors[smallSegments]))) ** 0.5 * 100
-
-        self.__pointNeighbors = originalSegmentation.Points.queryRadius(
-            originalSegmentation.Points.ToNumpy()[self.__pointsOfSmallSegments], searchRadius)
+        self.__pointNeighbors = pntNeighbors
 
         self.__dataCosts = coo_matrix((self.__numPoints,
                                        originalSegmentation.NumberOfSegments + 1), dtype='f').tolil()

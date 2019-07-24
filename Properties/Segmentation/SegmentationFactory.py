@@ -176,8 +176,8 @@ class SegmentationFactory:
         :param smallestObjectSize: smallest object expected to be detected in the point set (float)
         :return: SegmentationFactory
         """
-        from TensorBallTreeSegmentation import ExtractSurfaceElements
-        bt, labels, nodeIds, tensors = ExtractSurfaceElements(points, leafSize, smallestObjectSize)
+        from TensorBallTreeSegmentation import extractSurfaceElements
+        bt, labels, nodeIds, tensors = extractSurfaceElements(points, leafSize, smallestObjectSize)
         return SegmentationProperty(points, labels, nodeIds, tensors)
 
     @classmethod
