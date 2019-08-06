@@ -2,10 +2,14 @@ from IOFactory import IOFactory
 from PointSet import PointSet
 from SegmentationFactory import SegmentationProperty
 from VisualizationO3D import VisualizationO3D
+from CurvatureProperty import CurvatureProperty
 
-from numpy import arange, int_, vstack, unique
+from numpy import arange, int_, vstack, unique, nonzero, array, zeros
 from numpy.linalg import norm
 from scipy.sparse import lil_matrix
+from tqdm import tqdm
+
+import cProfile
 
 
 def arrangeInUniformCells(pntSet, cellSize):
@@ -34,7 +38,7 @@ def arrangeInUniformCells(pntSet, cellSize):
 
     # applying labels to points
     labels = int_(list(map(lambda r, c: cellLabels[r, c] - 1, rows, cols)))
-    return cols, rows, labels, cellLabels
+    return cols, rows, labels, uniqueCellIds, cellLabels
 
 
 def smoothPointsWithinEachCell(segProp):
@@ -47,32 +51,95 @@ def smoothPointsWithinEachCell(segProp):
 
     # computing mean height within each cell
     meanHeightPerCell = list(map(lambda l: segProp.Points.ToNumpy()[segProp.GetSegmentIndices(l), 2].mean(),
-                                 range(numLabels)))
+                                 tqdm(range(numLabels), desc='Computing mean height for each cell')))
     pnts = segProp.Points.ToNumpy()
     newHeights = pnts[:, 2]  # getting original heights
-    list(map(lambda l: newHeights.__setitem__(segProp.GetSegmentIndices(l), meanHeightPerCell[l]), range(numLabels)))
+    list(map(lambda l: newHeights.__setitem__(segProp.GetSegmentIndices(l), meanHeightPerCell[l]),
+             tqdm(range(numLabels), desc='Updating points heights')))
     pnts[:, 2] = newHeights  # updating heights
 
     # recreating segmentation property with smoothed points
     return SegmentationProperty(PointSet(pnts), segProp.GetAllSegments)
 
 
-def computeUmbrellaCurvaturePerCell(cellPoints, cellTensor):
+def isValidCell(uniqueCells, labelMapping, label, minNumNeighbors=7):
     """
 
-    :param cellPoints:
-    :param cellTensor:
+    :param uniqueCells: list of existing cells given as a list of their respective rows and cols (nx2, ndarray)
+    :param labelMapping: grid mapping of the labels of all existing cells (lil_matrix)
+    :param label: label of the cell to check
+    :param minNumNeighbors: minimum number of neighboring cells required for cell to valid
+    :return: True if cell has a minimum required number of neighbors, otherwise False
+    """
+    row, col = uniqueCells[label]
+    numNeighbors = 0
+
+    if row > 0 and labelMapping[row - 1, col] > 0:
+        numNeighbors += 1
+
+    if row > 0 and col > 0 and labelMapping[row - 1, col - 1] > 0:
+        numNeighbors += 1
+
+    if row > 0 and col < labelMapping.shape[1] - 1 and labelMapping[row - 1, col + 1] > 0:
+        numNeighbors += 1
+
+    if row < labelMapping.shape[0] - 1 and labelMapping[row + 1, col] > 0:
+        numNeighbors += 1
+
+    if row < labelMapping.shape[0] - 1and col > 0 and labelMapping[row + 1, col - 1] > 0:
+        numNeighbors += 1
+
+    if row < labelMapping.shape[0] - 1 and col < labelMapping.shape[1] - 1 and labelMapping[row + 1, col + 1] > 0:
+        numNeighbors += 1
+
+    if col > 0 and labelMapping[row, col - 1] > 0:
+        numNeighbors += 1
+
+    if col < labelMapping.shape[1] - 1 and labelMapping[row, col + 1] > 0:
+        numNeighbors += 1
+
+    return numNeighbors >= minNumNeighbors
+
+
+def computeUmbrellaCurvaturePerCell(segProp, tensor, uniqueCells, labelMapping, label):
+    """
+
+    :param segProp:
+    :param tensor:
+    :param labelMapping:
+    :param label:
     :return:
     """
-    if cellPoints.Size < 8:
-        return 0.0
-    else:
-        deltas = cellPoints.ToNumpy() - cellTensor.reference_point
-        normDeltas = norm(deltas, axis=1)
-        deltas[:, 0] /= normDeltas
-        deltas[:, 1] /= normDeltas
-        deltas[:, 2] /= normDeltas
-        return cellTensor.plate_axis.reshape((1, -1)).dot(deltas.T).sum()
+    # if cellPoints.Size < 8:
+    #     return 0.0
+    # else:
+    #     deltas = cellPoints.ToNumpy() - cellTensor.reference_point
+    #     normDeltas = norm(deltas, axis=1)
+    #     deltas[:, 0] /= normDeltas
+    #     deltas[:, 1] /= normDeltas
+    #     deltas[:, 2] /= normDeltas
+    #     return cellTensor.plate_axis.reshape((1, -1)).dot(deltas.T).sum()
+    row, col = uniqueCells[label]
+    neighboringLabels = array([labelMapping[row - 1, col - 1],
+                               labelMapping[row - 1, col],
+                               labelMapping[row - 1, col + 1],
+                               labelMapping[row, col - 1],
+                               labelMapping[row, col + 1],
+                               labelMapping[row + 1, col - 1],
+                               labelMapping[row + 1, col],
+                               labelMapping[row + 1, col + 1]]) - 1
+
+    neighboringPoints = vstack(list(map(segProp.GetSegment, neighboringLabels)))
+    neighboringPoints = neighboringPoints[not(neighboringPoints is None)]
+    neighboringPoints = vstack(list(map(lambda n: n.ToNumpy(), neighboringPoints)))
+
+    deltas = neighboringPoints - tensor.reference_point
+    normDeltas = norm(deltas, axis=1)
+    deltas[:, 0] /= normDeltas
+    deltas[:, 1] /= normDeltas
+    deltas[:, 2] /= normDeltas
+
+    return tensor.plate_axis.reshape((1, -1)).dot(deltas.T).sum()
 
 
 if __name__ == '__main__':
@@ -80,16 +147,41 @@ if __name__ == '__main__':
     filename = 'Achziv_middle - Cloud_97'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
-    cellSize = 0.50
+    cellSize = 0.1
 
-    rows, cols, labels, cellLabels = arrangeInUniformCells(pntSet, cellSize)
+    rows, cols, labels, uniqueCells, cellLabels = arrangeInUniformCells(pntSet, cellSize)
     numLabels = labels.max() + 1
 
-    segProp = smoothPointsWithinEachCell(SegmentationProperty(pntSet, labels))
+    segProp = SegmentationProperty(pntSet, labels)
+    smoothSegProp = smoothPointsWithinEachCell(segProp)
 
     from TensorFactory import TensorFactory
-    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l)), range(numLabels)))
+    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(smoothSegProp.GetSegment(l)),
+                       tqdm(range(numLabels), desc='Computing tensors for each cell')))
 
-    computeUmbrellaCurvaturePerCell(segProp.GetSegment(0), tensors[0])
+    validCells = nonzero(list(map(lambda l: isValidCell(uniqueCells, cellLabels, l, 7),
+                                  tqdm(range(numLabels), 'checking validity of each cell'))))[0]
 
-    VisualizationO3D.visualize_pointset(segProp)
+    curvatures = zeros((numLabels, ))
+    curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(smoothSegProp, tensors[l], uniqueCells,
+                                                                                cellLabels, l),
+                                      tqdm(validCells, desc='computing curvatures for each valid cell')))
+    pntCurvatures = zeros((pntSet.Size, ))
+    list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
+             tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
+
+
+
+    curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=curvatures)
+
+    # VisualizationO3D.visualize_pointset(smoothSegProp)
+    visObj = VisualizationO3D()
+    visObj.visualize_property(curveProp)
+
+    curvatureMat = zeros(cellLabels.shape) + curvatures.min()
+    curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
+
+    from matplotlib import pyplot as plt
+    plt.imshow(curvatureMat, cmap='jet')
+    plt.colorbar()
+    plt.show()
