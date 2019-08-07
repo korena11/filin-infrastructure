@@ -71,67 +71,54 @@ def isValidCell(uniqueCells, labelMapping, label, minNumNeighbors=7):
     :param minNumNeighbors: minimum number of neighboring cells required for cell to valid
     :return: True if cell has a minimum required number of neighbors, otherwise False
     """
-    row, col = uniqueCells[label]
-    numNeighbors = 0
+    return getNeighbotingLabels(uniqueCells, labelMapping, label).shape[0] >= minNumNeighbors
 
+
+def getNeighbotingLabels(uniqueCells, labelMapping, label):
+    """
+    Getting the neighbors labels of a given cell (defined by its own label)
+    :param uniqueCells: list of existing cells given as a list of their respective rows and cols (nx2, ndarray)
+    :param labelMapping: grid mapping of the labels of all existing cells (lil_matrix)
+    :param label: label of the cell to retrieve its neighbors
+    :return: list of neighboring labels (ndarray)
+    """
+    row, col = uniqueCells[label]
+    neighbors = []
     if row > 0 and labelMapping[row - 1, col] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row - 1, col] - 1)
 
     if row > 0 and col > 0 and labelMapping[row - 1, col - 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row - 1, col - 1] - 1)
 
     if row > 0 and col < labelMapping.shape[1] - 1 and labelMapping[row - 1, col + 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row - 1, col + 1] - 1)
 
     if row < labelMapping.shape[0] - 1 and labelMapping[row + 1, col] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row + 1, col] - 1)
 
     if row < labelMapping.shape[0] - 1and col > 0 and labelMapping[row + 1, col - 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row + 1, col - 1] - 1)
 
     if row < labelMapping.shape[0] - 1 and col < labelMapping.shape[1] - 1 and labelMapping[row + 1, col + 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row + 1, col + 1] - 1)
 
     if col > 0 and labelMapping[row, col - 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row, col - 1] - 1)
 
     if col < labelMapping.shape[1] - 1 and labelMapping[row, col + 1] > 0:
-        numNeighbors += 1
+        neighbors.append(labelMapping[row, col + 1] - 1)
 
-    return numNeighbors >= minNumNeighbors
+    return array(neighbors)
 
 
-def computeUmbrellaCurvaturePerCell(segProp, tensor, uniqueCells, labelMapping, label):
+def computeUmbrellaCurvaturePerCell(segProp, tensor, cellNeighbors):
     """
 
     :param segProp:
     :param tensor:
-    :param labelMapping:
-    :param label:
     :return:
     """
-    # if cellPoints.Size < 8:
-    #     return 0.0
-    # else:
-    #     deltas = cellPoints.ToNumpy() - cellTensor.reference_point
-    #     normDeltas = norm(deltas, axis=1)
-    #     deltas[:, 0] /= normDeltas
-    #     deltas[:, 1] /= normDeltas
-    #     deltas[:, 2] /= normDeltas
-    #     return cellTensor.plate_axis.reshape((1, -1)).dot(deltas.T).sum()
-    row, col = uniqueCells[label]
-    neighboringLabels = array([labelMapping[row - 1, col - 1],
-                               labelMapping[row - 1, col],
-                               labelMapping[row - 1, col + 1],
-                               labelMapping[row, col - 1],
-                               labelMapping[row, col + 1],
-                               labelMapping[row + 1, col - 1],
-                               labelMapping[row + 1, col],
-                               labelMapping[row + 1, col + 1]]) - 1
-
-    neighboringPoints = vstack(list(map(segProp.GetSegment, neighboringLabels)))
-    neighboringPoints = neighboringPoints[not(neighboringPoints is None)]
-    neighboringPoints = vstack(list(map(lambda n: n.ToNumpy(), neighboringPoints)))
+    neighboringPoints = vstack(list(map(lambda n: segProp.GetSegment(n).ToNumpy(), cellNeighbors)))
 
     deltas = neighboringPoints - tensor.reference_point
     normDeltas = norm(deltas, axis=1)
@@ -153,28 +140,32 @@ if __name__ == '__main__':
     numLabels = labels.max() + 1
 
     segProp = SegmentationProperty(pntSet, labels)
+
+    VisualizationO3D.visualize_pointset(segProp)
+
     smoothSegProp = smoothPointsWithinEachCell(segProp)
 
     from TensorFactory import TensorFactory
     tensors = list(map(lambda l: TensorFactory.tensorFromPoints(smoothSegProp.GetSegment(l)),
                        tqdm(range(numLabels), desc='Computing tensors for each cell')))
 
-    validCells = nonzero(list(map(lambda l: isValidCell(uniqueCells, cellLabels, l, 7),
-                                  tqdm(range(numLabels), 'checking validity of each cell'))))[0]
+    neighbors = list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l),
+                         tqdm(range(numLabels), desc='retrieving neighbors for all cells')))
+    validCells = nonzero(list(map(lambda n: n.shape[0] >= 7, neighbors)))[0]
+    # validCells = nonzero(list(map(lambda l: isValidCell(uniqueCells, cellLabels, l, 7),
+    #                               tqdm(range(numLabels), 'checking validity of each cell'))))[0]
 
     curvatures = zeros((numLabels, ))
-    curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(smoothSegProp, tensors[l], uniqueCells,
-                                                                                cellLabels, l),
+    curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(smoothSegProp,
+                                                                                tensors[l], neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
     pntCurvatures = zeros((pntSet.Size, ))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
 
-
-
     curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=curvatures)
 
-    # VisualizationO3D.visualize_pointset(smoothSegProp)
+
     visObj = VisualizationO3D()
     visObj.visualize_property(curveProp)
 
