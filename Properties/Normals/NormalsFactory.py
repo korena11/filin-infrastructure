@@ -29,6 +29,17 @@ class NormalsFactory:
         normals = list(map(lambda t: t.plate_axis, tensorProperty))
         return NormalsProperty(tensorProperty.Points, np.asarray(normals))
 
+    @classmethod
+    def normal_from_tensors_with_CUDA(cls, neighborProperty):
+        """
+        Compute normals of each point using CUDA
+        :param neighborProperty: neighborProperty to compute normal for each of its points
+        :type neighborProperty: NeighborProperty
+        :return:
+        """
+        pnts = neighborProperty.Points.ToNumpy()
+        cudaNeighbors, numNeighbors = neighborProperty.ToCUDA()
+
 
     @staticmethod
     def normals_from_file(points, normalsFileName):
