@@ -15,8 +15,16 @@ if sys.platform == 'linux':
 
 class NormalsFactory:
 
-    @classmethod
-    def normals_from_tensors(cls, tensorProperty):
+    @staticmethod
+    def normals_from_tensors_CUDA(neighborhoodProperty):
+        """
+        
+        :param neighborhoodProperty: 
+        :return: 
+        """
+
+    @staticmethod
+    def normals_from_tensors(tensorProperty):
         """
         Compute normals of each tensors reference point and create a property
 
