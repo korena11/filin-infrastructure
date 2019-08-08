@@ -2,7 +2,7 @@ import numexpr as ne
 import numpy as np
 from numpy import pi
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 from SphericalCoordinatesProperty import SphericalCoordinatesProperty
 
 

@@ -1,5 +1,5 @@
-from BaseProperty import BaseProperty
-from PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSet import PointSet
 
 
 class SaliencyProperty(BaseProperty):
@@ -12,14 +12,15 @@ class SaliencyProperty(BaseProperty):
 
         :type points: PointSet
         """
+        import numpy as np
+
         super(SaliencyProperty, self).__init__(points)
         self.__normalize = False
 
         if saliencyValues is None:
-            import numpy as np
             self.__saliency = np.empty(self.Size)
         else:
-            self.__saliency = saliencyValues
+            self.__saliency = np.asarray(saliencyValues)
 
     def __next__(self):
         self.current += 1
@@ -61,7 +62,7 @@ class SaliencyProperty(BaseProperty):
 
         return saliency
 
-    def getPointSaliency(self, idx):
+    def getPointSaliency(self, idx=None):
         """
         Retrieve the saliency value of a specific point
 
@@ -72,7 +73,10 @@ class SaliencyProperty(BaseProperty):
         :rtype: float
 
         """
-        return self.__saliency[idx]
+        if idx is None:
+            return self.__saliency
+        else:
+            return self.__saliency[idx]
 
     def setPointSaliency(self, idx, values):
         """

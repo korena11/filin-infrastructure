@@ -2,7 +2,7 @@ KdTreePointSet class
 ======================
 
 .. autoclass:: KdTreePointSet.KdTreePointSet
-:members:
+   :members:
         :undoc-members:
 
             .. automethod:: __init__
@@ -10,12 +10,12 @@ KdTreePointSet class
     .. rubric:: Attributes
 
     .. autoautosummary:: KdTreePointSet.KdTreePointSet
-:attributes:
+        :attributes:
 
     .. rubric:: Methods
 
     .. autoautosummary:: KdTreePointSet.KdTreePointSet
-:methods:
+        :methods:
 
     .. rubric:: Private Methods
 

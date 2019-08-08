@@ -4,10 +4,10 @@ from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import kdtree as cKDTree
 from tqdm import tqdm
 
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
 from NeighborsProperty import NeighborsProperty
 from PointNeighborhood import PointNeighborhood
-from PointSet import PointSet
-from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
@@ -44,6 +44,7 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -67,6 +68,11 @@ class NeighborsFactory:
                 elif method.__name__ == 'pointSetOpen3D_rnn_kdTree':
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, search_radius)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
                     neighbors = method(pointset, search_radius)
 
         if neighbors == -1:
@@ -101,6 +107,7 @@ class NeighborsFactory:
         """
         from BallTreePointSet import BallTreePointSet
         from PointSetOpen3D import PointSetOpen3D
+        from KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -125,6 +132,11 @@ class NeighborsFactory:
                 elif method.__name__ == 'pointSetOpen3D_knn_kdTree':
                     print('Build PointSetOpen3D object')
                     pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, k_nearest_neighbors)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
                     neighbors = method(pointset, k_nearest_neighbors)
 
         if neighbors == -1:
@@ -194,26 +206,65 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_rnn(pointset_kdt, search_radius):
-        """
+    def kdtreePointSet_rnn(pointset_kdt, search_radius, parts_size=int(5e5), parts_num=None):
+        r"""
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param search_radius: the neighborhood radius
-        :param verbose: print running messages
+        :param parts_size: number of points in section for more efficient computation. Default: None
+        :param parts_num: number of parts to divide the computation. Default: 1
 
         :type pointset_kdt: KdTreePointSet.KdTreePointSet
         :type search_radius: float
-        :type verbose: bool
+        :type parts_size: int
+        :type parts_num: int
 
         :return: NeighborsProperty
-        """
 
-        print('>>> Find all points neighbors using kd-Tree')
+        .. warning::
+            Division to parts doesn't work
+        """
+        # TODO: division to parts doesn't work. Need to solve the mapping at the end
+
+        from tqdm import trange
+        print('>>> Find all points neighbors in radius %f using kd-Tree' % search_radius)
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+        if parts_num is None and parts_size is None:
+            parts_num = 1
+            modulu = 0
+        elif parts_num is None:
+            parts_num = int(pointset_kdt.Size / parts_size)
+            modulu = pointset_kdt.Size % parts_size
+        else:
+            modulu = pointset_kdt.Size % parts_num
+            parts_size = int(pointset_kdt.Size / parts_num)
 
-        idx = pointset_kdt.queryRadius(pointset_kdt.ToNumpy(), search_radius)
+        start = 0
+        idx = []
+        for part in trange(parts_num):
+            start = int(part * parts_size)
+
+            if part == 0:
+                if parts_num == 1:  # patch because the parts dont work. Delete when fixed
+                    idx = (pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                    sort_results=True))
+                else:
+                    idx = np.hstack((idx,
+                                     pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                              sort_results=True)))
+            else:
+                idx = np.hstack((idx,
+                                 pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
+                                                          search_radius,
+                                                   sort_results=True)))
+        # for the remaining part
+        # if parts_num != 1:
+        if modulu > 0:
+            idx = np.hstack((idx,
+                             pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
+                                                      sort_results=True)))
 
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
@@ -222,15 +273,19 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors):
+    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors, parts_size=int(5e5), parts_num=None):
         """
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param k_nearest_neighbors: the number of neighbors
+        :param parts_size: number of points in section for more efficient computation. Defauls: 5e5
+        :param parts_num: number of parts to divide the computation. Defualt: None
 
         :type pointset_kdt: KdTreePointSet.KdTreePointSet
         :type k_nearest_neighbors: int
+        :type parts_size: int
+        :type parts_num: int
 
         :return: NeighborsProperty
 
@@ -238,11 +293,33 @@ class NeighborsFactory:
            :meth:`kdtreePointSet_rnn`
 
         """
-        print('>>> Find all points neighbors using kd-tree')
+        from tqdm import trange
+        print('>>> Find all {k} points neighbors using kd-tree'.format(k=k_nearest_neighbors))
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+        if parts_num is None:
+            parts_num = int(pointset_kdt.Size / parts_size)
+            modulu = pointset_kdt.Size % parts_size
+        else:
+            modulu = pointset_kdt.Size % parts_num
+            parts_size = int(pointset_kdt.Size / parts_num)
 
-        idx = pointset_kdt.query(pointset_kdt.ToNumpy(), k_nearest_neighbors)
+        start = 0
+        idx = None
+
+        for part in trange(parts_num, position=0):
+            start = int(part * parts_size)
+
+            if part == 0:
+                idx = pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)
+            else:
+                idx = np.vstack(
+                    (idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)))
+
+        # for the remaining part
+        if modulu > 0:
+            idx = np.vstack((idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start + parts_size:], k_nearest_neighbors)))
+
         pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
         pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
         list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))

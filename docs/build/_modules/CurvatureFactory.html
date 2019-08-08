@@ -11,21 +11,32 @@
     <title>CurvatureFactory &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -126,6 +137,7 @@
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
 <span class="kn">import</span> <span class="nn">RotationUtils</span>
 <span class="kn">from</span> <span class="nn">CurvatureProperty</span> <span class="k">import</span> <span class="n">CurvatureProperty</span>
@@ -474,7 +486,10 @@
         class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">umbrella_curvature</span><span class="p">(</span><span
             class="bp">cls</span><span class="p">,</span> <span class="n">neighbrohood</span><span
-            class="p">,</span> <span class="n">normals</span><span class="p">,</span>
+            class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span
+            class="n">min_obj_size</span><span class="o">=</span><span class="mf">0.01</span><span
+            class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span
+            class="p">,</span>
                            <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span
             class="mi">8</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span
             class="o">=</span><span class="mi">1</span><span class="p">,</span> <span
@@ -497,8 +512,13 @@
 
 <span class="sd">        with :math:`N_i` the neighbor i of point :math:`p`, and :math:`\bf{n}` the normal at point :math:`p`.</span>
 
+<span class="sd">        .. note::</span>
+<span class="sd">            Each projection is checked so it will not be statistically zero in confidence level of :math:`\alpha`.</span>
+
 <span class="sd">        :param neighbrohood: neighborhood property of a point cloud</span>
 <span class="sd">        :param normals: normals property of a point cloud</span>
+<span class="sd">        :param min_obj_size: minimal object size - usually refers to surface roughness</span>
+<span class="sd">        :param alpha: confidence value for statistical test</span>
 <span class="sd">        :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 8</span>
 <span class="sd">        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 1</span>
 <span class="sd">        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7</span>
@@ -509,6 +529,8 @@
 
 <span class="sd">        :type neighbrohood: NeighborsProperty.NeighborsProperty</span>
 <span class="sd">        :type normals: NormalsProperty.NormalsProperty</span>
+<span class="sd">        :type min_obj_size: float</span>
+<span class="sd">        :type alpha: float</span>
 <span class="sd">        :type min_points_in_neighborhood: int</span>
 <span class="sd">        :type min_points_in_sector: int</span>
 <span class="sd">        :type valid_sectors: int</span>
@@ -526,13 +548,16 @@
 <span class="sd">           :meth:`__good_point` and :meth:`__checkNeighborhood`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span
+            class="n">stats</span>
         <span class="n">umbrellaCurvature</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Compute umbrella curvature for all point cloud&#39;</span><span
-            class="p">)</span>
-
-        <span class="k">for</span> <span class="n">point_neighbors</span> <span class="ow">in</span> <span class="n">neighbrohood</span><span
-            class="p">:</span>
+        <span class="k">for</span> <span class="n">point_neighbors</span> <span class="ow">in</span> <span class="n">tqdm</span><span
+            class="p">(</span><span class="n">neighbrohood</span><span class="p">,</span> <span
+            class="n">total</span><span class="o">=</span><span class="n">neighbrohood</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute umbrella curvature for all point cloud&#39;</span><span
+            class="p">):</span>
             <span class="c1"># check if the neighborhood is valid</span>
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__checkNeighborhood</span><span
             class="p">(</span><span class="n">point_neighbors</span><span class="p">,</span> <span class="n">min_points_in_neighborhood</span><span
@@ -553,12 +578,28 @@
             class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
                 <span class="c1"># compute the directions projections  on the normal at the center point of each neighbor</span>
-                <span class="n">directions</span> <span class="o">=</span> <span class="n">point_neighbors</span><span
+                <span class="n">projections</span> <span class="o">=</span> <span class="n">point_neighbors</span><span
             class="o">.</span><span class="n">neighbors_vectors</span><span class="p">()</span><span
             class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+                <span class="c1"># check if the projections are statistically zero</span>
+                <span class="n">epsilon</span> <span class="o">=</span> <span class="n">stats</span><span
+            class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span
+            class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span
+            class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span
+            class="n">min_obj_size</span>
+                <span class="n">projections</span><span class="p">[</span><span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span
+            class="n">projections</span> <span class="o">&lt;</span> <span class="o">-</span><span
+            class="n">epsilon</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span
+            class="n">projections</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span
+            class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
                 <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span
-            class="p">(</span><span class="n">directions</span><span class="p">))</span>
+            class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span
+            class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -986,7 +1027,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -1005,30 +1046,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>

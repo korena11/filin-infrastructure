@@ -2,7 +2,7 @@ import numpy as np
 from numpy import array
 from sklearn.neighbors import KDTree
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 
 class KdTreePointSet(PointSet):
@@ -89,15 +89,17 @@ class KdTreePointSet(PointSet):
         distances, indexes = self.data.query(pnts, k=k)
         return indexes
 
-    def queryRadius(self, pnts, radius):
+    def queryRadius(self, pnts, radius, sort_results=False):
         """
         Query the kd-tree to find the neighbors of a given set of point inside a given radius
 
         :param pnts: The query points
         :param radius: The query radius
+        :param sort_results: if True, the distances and indices will be sorted before being returned. If False, the results will not be sorted. If return_distance == False, setting sort_results = True will result in an error.
 
         :type pnts: np.array nx3
         :type radius: float
+        :type sort_results: bool
 
         :return: The indexes for the neighbors of the points
 
@@ -111,13 +113,17 @@ class KdTreePointSet(PointSet):
             pnts = array(pnts)
 
         if pnts.ndim == 1:
-            indexes = self.data.query_radius(pnts.reshape((1, -1)), radius)
+            indexes, _ = self.data.query_radius(pnts.reshape((1, -1)), radius, return_distance=sort_results,
+                                                sort_results=sort_results)
 
             if indexes.dtype == object:
                 indexes = indexes[0]
 
         else:
-            indexes = self.data.query_radius(pnts, radius)
+            indexes = self.data.query_radius(pnts, radius, return_distance=sort_results, sort_results=sort_results)
+            if sort_results:
+                indexes = indexes[0]
+
 
         return indexes
 

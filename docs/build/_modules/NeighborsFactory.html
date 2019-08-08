@@ -11,21 +11,32 @@
     <title>NeighborsFactory &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -133,10 +144,10 @@
                                 class="p">,</span> <span class="n">expand_dims</span>
 <span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="k">import</span> <span
                                 class="n">kdtree</span> <span class="k">as</span> <span class="n">cKDTree</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">NeighborsProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
 <span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
-<span class="c1"># Infrastructure imports</span>
 <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
                                 class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
@@ -359,14 +370,17 @@
             class="n">search_radius</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span
-            class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span
-            class="n">idx</span><span class="p">)):</span>
+            class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span
+            class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">)),</span> <span
+            class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span
+            class="n">idx</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span
+            class="s1">&#39;rnn neighbors by ball tree&#39;</span><span class="p">,</span> <span
+            class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
             <span class="n">current_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
             class="n">asarray</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span
             class="nb">id</span><span class="p">])</span>
             <span class="n">tmp_subset</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
-            class="p">(</span><span class="n">pointset_bt</span><span class="o">.</span><span
-            class="n">GetPoint</span><span class="p">(</span><span class="n">current_id</span><span class="p">),</span> <span
+            class="p">(</span><span class="n">pointset_bt</span><span class="p">,</span> <span
             class="n">current_id</span><span class="p">)</span>
             <span class="n">tmp_point_neighborhood</span> <span class="o">=</span> <span
             class="n">PointNeighborhood</span><span class="p">(</span><span class="n">tmp_subset</span><span
@@ -377,6 +391,154 @@
 
         <span class="k">return</span> <span class="n">neighbors</span></div>
 
+<div class="viewcode-block" id="NeighborsFactory.balltreePointSet_knn"><a class="viewcode-back"
+                                                                          href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.balltreePointSet_knn">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">balltreePointSet_knn</span><span class="p">(</span><span class="n">pointset_bt</span><span
+            class="p">,</span> <span class="n">k_nearest_neighbors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</span>
+
+<span class="sd">        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed</span>
+<span class="sd">        :param k_nearest_neighbors: the number of neighbors</span>
+
+<span class="sd">        :type pointset_bt: BallTreePointSet.BallTreePointSet</span>
+<span class="sd">        :type k_nearest_neighbors: int</span>
+
+<span class="sd">        :return: NeighborsProperty</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">           :meth:`balltreePointSet_rnn`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using ball tree&#39;</span><span
+            class="p">)</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
+            class="p">(</span><span class="n">pointset_bt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_bt</span><span
+            class="o">.</span><span class="n">query</span><span class="p">(</span><span
+            class="n">pointset_bt</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span
+            class="n">k_nearest_neighbors</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span
+            class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span
+            class="nb">len</span><span class="p">(</span><span class="n">idx</span><span class="p">)),</span> <span
+            class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span
+            class="n">idx</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span
+            class="s1">&#39;knn neighbors by ball tree&#39;</span><span class="p">,</span> <span
+            class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">current_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span
+            class="nb">id</span><span class="p">])</span>
+            <span class="n">tmp_subset</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
+            class="p">(</span><span class="n">pointset_bt</span><span class="p">,</span> <span
+            class="n">current_id</span><span class="p">)</span>
+            <span class="n">tmp_point_neighborhood</span> <span class="o">=</span> <span
+            class="n">PointNeighborhood</span><span class="p">(</span><span class="n">tmp_subset</span><span
+            class="p">)</span>
+            <span class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
+            class="p">(</span><span class="nb">id</span><span class="p">,</span> <span
+            class="n">tmp_point_neighborhood</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">neighbors</span></div>
+
+<div class="viewcode-block" id="NeighborsFactory.kdtreePointSet_rnn"><a class="viewcode-back"
+                                                                        href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kdtreePointSet_rnn</span><span class="p">(</span><span class="n">pointset_kdt</span><span
+            class="p">,</span> <span class="n">search_radius</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)</span>
+
+<span class="sd">        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed</span>
+<span class="sd">        :param search_radius: the neighborhood radius</span>
+<span class="sd">        :param verbose: print running messages</span>
+
+<span class="sd">        :type pointset_kdt: KdTreePointSet.KdTreePointSet</span>
+<span class="sd">        :type search_radius: float</span>
+<span class="sd">        :type verbose: bool</span>
+
+<span class="sd">        :return: NeighborsProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using kd-Tree&#39;</span><span
+            class="p">)</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">queryRadius</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">(),</span> <span class="n">search_radius</span><span class="p">)</span>
+
+        <span class="n">pointSubSets</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
+            class="nb">id</span><span class="p">:</span> <span class="n">PointSubSet</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="p">,</span> <span class="nb">id</span><span
+            class="p">),</span> <span class="n">idx</span><span class="p">))</span>
+        <span class="n">pointNeighborhoods</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
+            class="n">pntSubSet</span><span class="p">:</span> <span class="n">PointNeighborhood</span><span
+            class="p">(</span><span class="n">pntSubSet</span><span class="p">),</span> <span
+            class="n">pointSubSets</span><span class="p">))</span>
+        <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
+            class="p">,</span> <span class="nb">range</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">),</span> <span class="n">pointNeighborhoods</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">neighbors</span></div>
+
+<div class="viewcode-block" id="NeighborsFactory.kdtreePointSet_knn"><a class="viewcode-back"
+                                                                        href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.kdtreePointSet_knn">[docs]</a>    <span
+        class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">kdtreePointSet_knn</span><span class="p">(</span><span class="n">pointset_kdt</span><span
+            class="p">,</span> <span class="n">k_nearest_neighbors</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</span>
+
+<span class="sd">        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed</span>
+<span class="sd">        :param k_nearest_neighbors: the number of neighbors</span>
+
+<span class="sd">        :type pointset_kdt: KdTreePointSet.KdTreePointSet</span>
+<span class="sd">        :type k_nearest_neighbors: int</span>
+
+<span class="sd">        :return: NeighborsProperty</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">           :meth:`kdtreePointSet_rnn`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using kd-tree&#39;</span><span
+            class="p">)</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
+
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">query</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">(),</span> <span class="n">k_nearest_neighbors</span><span class="p">)</span>
+        <span class="n">pointSubSets</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
+            class="nb">id</span><span class="p">:</span> <span class="n">PointSubSet</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="p">,</span> <span class="nb">id</span><span
+            class="p">),</span> <span class="n">idx</span><span class="p">))</span>
+        <span class="n">pointNeighborhoods</span> <span class="o">=</span> <span class="nb">list</span><span
+            class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
+            class="n">pntSubSet</span><span class="p">:</span> <span class="n">PointNeighborhood</span><span
+            class="p">(</span><span class="n">pntSubSet</span><span class="p">),</span> <span
+            class="n">pointSubSets</span><span class="p">))</span>
+        <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span
+            class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
+            class="p">,</span> <span class="nb">range</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">),</span> <span class="n">pointNeighborhoods</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">neighbors</span></div>
 
 <div class="viewcode-block" id="NeighborsFactory.pointSetOpen3D_rnn_kdTree"><a class="viewcode-back"
                                                                                href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree">[docs]</a>    <span
@@ -416,10 +578,15 @@
             class="p">(</span><span class="n">pointset3d</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span class="n">i</span> <span
-            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
-            class="n">pointset3d</span><span class="p">,</span> <span class="nb">range</span><span
-            class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
-            class="p">)):</span>
+            class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span
+            class="p">(</span><span class="n">pointset3d</span><span class="p">,</span> <span
+            class="nb">range</span><span class="p">(</span><span class="n">pointset3d</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">)),</span> <span class="n">total</span><span
+            class="o">=</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute rnn neighbors for all point cloud&#39;</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">):</span>
             <span class="n">k</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span
             class="n">distances</span> <span class="o">=</span> <span class="n">pointset3d</span><span
             class="o">.</span><span class="n">kdTreeOpen3D</span><span class="o">.</span><span class="n">search_radius_vector_3d</span><span
@@ -441,55 +608,6 @@
             class="p">,</span> <span class="n">distances</span><span class="p">)</span>
             <span class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
             class="p">(</span><span class="n">i</span><span class="p">,</span> <span
-            class="n">tmp_point_neighborhood</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">neighbors</span></div>
-
-<div class="viewcode-block" id="NeighborsFactory.balltreePointSet_knn"><a class="viewcode-back"
-                                                                          href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.balltreePointSet_knn">[docs]</a>    <span
-        class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">balltreePointSet_knn</span><span class="p">(</span><span class="n">pointset_bt</span><span
-            class="p">,</span> <span class="n">k_nearest_neighbors</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</span>
-
-<span class="sd">        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed</span>
-<span class="sd">        :param k_nearest_neighbors: the number of neighbors</span>
-
-<span class="sd">        :type pointset_bt: BallTreePointSet.BallTreePointSet</span>
-<span class="sd">        :type search_radius: int</span>
-
-<span class="sd">        :return: NeighborsProperty</span>
-
-<span class="sd">        .. seealso::</span>
-<span class="sd">           :meth:`balltreePointSet_rnn`</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using ball tree&#39;</span><span
-            class="p">)</span>
-
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
-            class="p">(</span><span class="n">pointset_bt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
-
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_bt</span><span
-            class="o">.</span><span class="n">query</span><span class="p">(</span><span
-            class="n">pointset_bt</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span
-            class="n">k_nearest_neighbors</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span
-            class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span
-            class="n">idx</span><span class="p">)):</span>
-            <span class="n">current_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
-            class="n">asarray</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span
-            class="nb">id</span><span class="p">])</span>
-            <span class="n">tmp_subset</span> <span class="o">=</span> <span class="n">PointSubSet</span><span
-            class="p">(</span><span class="n">pointset_bt</span><span class="p">,</span> <span
-            class="n">current_id</span><span class="p">)</span>
-            <span class="n">tmp_point_neighborhood</span> <span class="o">=</span> <span
-            class="n">PointNeighborhood</span><span class="p">(</span><span class="n">tmp_subset</span><span
-            class="p">)</span>
-            <span class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
-            class="p">(</span><span class="nb">id</span><span class="p">,</span> <span
             class="n">tmp_point_neighborhood</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">neighbors</span></div>
@@ -526,10 +644,15 @@
             class="p">(</span><span class="n">pointset3d</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span class="n">i</span> <span
-            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
-            class="n">pointset3d</span><span class="p">,</span> <span class="nb">range</span><span
-            class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
-            class="p">)):</span>
+            class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span
+            class="p">(</span><span class="n">pointset3d</span><span class="p">,</span> <span
+            class="nb">range</span><span class="p">(</span><span class="n">pointset3d</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">)),</span> <span class="n">total</span><span
+            class="o">=</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute knn neighbors for all point cloud&#39;</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">):</span>
             <span class="n">k</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span
             class="n">distances</span> <span class="o">=</span> <span class="n">pointset3d</span><span
             class="o">.</span><span class="n">kdTreeOpen3D</span><span class="o">.</span><span class="n">search_knn_vector_3d</span><span
@@ -595,10 +718,15 @@
             class="p">(</span><span class="n">pointset3d</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">point</span><span class="p">,</span> <span class="n">i</span> <span
-            class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
-            class="n">pointset3d</span><span class="p">,</span> <span class="nb">range</span><span
-            class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
-            class="p">)):</span>
+            class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span
+            class="p">(</span><span class="n">pointset3d</span><span class="p">,</span> <span
+            class="nb">range</span><span class="p">(</span><span class="n">pointset3d</span><span
+            class="o">.</span><span class="n">Size</span><span class="p">)),</span> <span class="n">total</span><span
+            class="o">=</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute rknn neighbors for all point cloud&#39;</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">):</span>
             <span class="n">k</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span
             class="n">distances</span> <span class="o">=</span> <span class="n">pointset3d</span><span
             class="o">.</span><span class="n">kdTreeOpen3D</span><span class="o">.</span><span class="n">search_hybrid_vector_3d</span><span
@@ -623,7 +751,7 @@
             class="p">,</span> <span class="n">distances</span><span class="p">)</span>
 
             <span class="c1"># set in neighbors property</span>
-            <span class="n">neighbors</span><span class="o">.</span><span class="n">setNeighbor</span><span
+            <span class="n">neighbors</span><span class="o">.</span><span class="n">setNeighborhood</span><span
             class="p">(</span><span class="n">i</span><span class="p">,</span> <span
             class="n">tmp_point_neighborhood</span><span class="p">)</span>
 
@@ -1360,7 +1488,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -1379,30 +1507,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 from numpy import nonzero, random, zeros, uint8, unique
 
-from BaseProperty import BaseProperty
-from PointSubSet import PointSubSet
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSubSet import PointSubSet
 
 
 class SegmentationProperty(BaseProperty):

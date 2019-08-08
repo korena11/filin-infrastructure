@@ -11,23 +11,34 @@
     <title>PointSet class &mdash; infragit 1a documentation</title>
 
 
+    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
+
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
+            type="text/javascript"></script>
+    <script src="../_static/jquery.js" type="text/javascript"></script>
+    <script src="../_static/underscore.js" type="text/javascript"></script>
+    <script src="../_static/doctools.js" type="text/javascript"></script>
+    <script src="../_static/language_data.js" type="text/javascript"></script>
+    <script async="async"
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
+            type="text/javascript"></script>
+
+    <script src="../_static/js/theme.js" type="text/javascript"></script>
+
+
     <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
     <link href="PointSetOpen3D.html" rel="next" title="PointSetOpen3D class"/>
     <link href="BaseData.html" rel="prev" title="BaseData class"/>
-
-
-    <script src="../_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
 
 <div class="wy-grid-for-nav">
-
 
     <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
@@ -166,21 +177,22 @@
                                 <dd><p>Basic point cloud</p>
                                     <p>Mandatory Data (must be different from None):</p>
                                     <blockquote>
-                                        <div>__xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D
-                                            currently)
+                                        <div><p>__xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D
+                                            currently)</p>
                                         </div>
                                     </blockquote>
-                                    <dl class="docutils">
+                                    <dl class="simple">
                                         <dt>Optional Data (can be None or default value):</dt>
                                         <dd>
-                                            <ul class="first last simple">
-                                                <li>intensity - intensity of each point (ndarray)</li>
-                                                <li>range_accuracy: range measurement accuracy (default 0.002 m)</li>
-                                                <li>angle_accuracy: angle measurement accuracy (default <span
-                                                        class="math notranslate nohighlight">\(0.012^\circ\)</span>)
+                                            <ul class="simple">
+                                                <li><p>intensity - intensity of each point (ndarray)</p></li>
+                                                <li><p>range_accuracy: range measurement accuracy (default 0.002 m)</p>
                                                 </li>
-                                                <li>measurement_accuracy: noise of modeled surface (default 0.002 m)
+                                                <li><p>angle_accuracy: angle measurement accuracy (default <span
+                                                        class="math notranslate nohighlight">\(0.012^\circ\)</span>)</p>
                                                 </li>
+                                                <li><p>measurement_accuracy: noise of modeled surface (default 0.002
+                                                    m)</p></li>
                                             </ul>
                                         </dd>
                                     </dl>
@@ -196,163 +208,61 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Initialize the PointSet object</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body"><strong>points</strong> – ndarray of xyz or
-                                                        xy
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>points</strong> – ndarray of xyz or xy
+                                                </p>
+                                                </dd>
+                                            </dl>
                                             <p><strong>Optionals</strong></p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>intensity</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#int"
-                                                                    title="(in Python v3.7)"><em>int</em></a>) –
-                                                                intensity values for each point(optional)
-                                                            </li>
-                                                            <li><strong>path</strong> (<a class="reference external"
-                                                                                          href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                          title="(in Python v3.7)"><em>str</em></a>)
-                                                                – path to PointSet file
-                                                            </li>
-                                                            <li><strong>range_accuracy</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – range
-                                                                measurement accuracy in m (default 0.002 m)
-                                                            </li>
-                                                            <li><strong>angle_accuracy</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – angle
-                                                                measurement accuracy in degrees (default <span
-                                                                        class="math notranslate nohighlight">\(0.012^\circ\)</span>)
-                                                            </li>
-                                                            <li><strong>measurement_accuracy</strong> – noise of modeled
-                                                                surface (default 0.002 m)
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>intensity</strong> (<a class="reference external"
+                                                                                              href="https://docs.python.org/3/library/functions.html#int"
+                                                                                              title="(in Python v3.7)"><em>int</em></a>)
+                                                            – intensity values for each point(optional)</p></li>
+                                                        <li><p><strong>path</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                         title="(in Python v3.7)"><em>str</em></a>)
+                                                            – path to PointSet file</p></li>
+                                                        <li><p><strong>range_accuracy</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/functions.html#float"
+                                                                title="(in Python v3.7)"><em>float</em></a>) – range
+                                                            measurement accuracy in m (default 0.002 m)</p></li>
+                                                        <li><p><strong>angle_accuracy</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/functions.html#float"
+                                                                title="(in Python v3.7)"><em>float</em></a>) – angle
+                                                            measurement accuracy in degrees (default <span
+                                                                    class="math notranslate nohighlight">\(0.012^\circ\)</span>)
+                                                        </p></li>
+                                                        <li><p><strong>measurement_accuracy</strong> – noise of modeled
+                                                            surface (default 0.002 m)</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
                                     <p class="rubric">Attributes</p>
-                                    <table border="1" class="longtable docutils">
+                                    <table class="longtable docutils align-center">
                                         <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
+                                            <col style="width: 10%"/>
+                                            <col style="width: 90%"/>
                                         </colgroup>
-                                        <tbody valign="top">
+                                        <tbody>
                                         </tbody>
                                     </table>
                                     <p class="rubric">Methods</p>
-                                    <table border="1" class="longtable docutils">
+                                    <table class="longtable docutils align-center">
                                         <colgroup>
-                                            <col width="10%"/>
-                                            <col width="90%"/>
+                                            <col style="width: 10%"/>
+                                            <col style="width: 90%"/>
                                         </colgroup>
-                                        <tbody valign="top">
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.AddData2Fields"
-                                                   title="PointSet.PointSet.AddData2Fields"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">AddData2Fields</span></code></a>(data[,&nbsp;field])
-                                            </td>
-                                            <td>Add data to a field</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.GetPoint"
-                                                   title="PointSet.PointSet.GetPoint"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">GetPoint</span></code></a>(index)
-                                            </td>
-                                            <td>Retrieve specific point(s) by index</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.ToGeoPandas"
-                                                   title="PointSet.PointSet.ToGeoPandas"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">ToGeoPandas</span></code></a>([crs])
-                                            </td>
-                                            <td>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">param crs:</th>
-                                                        <td class="field-body">coordinate spatial reference, if exists
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.ToNumpy"
-                                                   title="PointSet.PointSet.ToNumpy"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">ToNumpy</span></code></a>()
-                                            </td>
-                                            <td>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">return:</th>
-                                                        <td class="field-body">points as numpy nX3 ndarray</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.ToPolyData"
-                                                   title="PointSet.PointSet.ToPolyData"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">ToPolyData</span></code></a>()
-                                            </td>
-                                            <td>Create and return vtkPolyData object</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.ToRDD"
-                                                   title="PointSet.PointSet.ToRDD"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">ToRDD</span></code></a>()
-                                            </td>
-                                            <td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
-                                        </tr>
-                                        <tr class="row-odd">
-                                            <td><a class="reference internal" href="#PointSet.PointSet.UpdateFields"
-                                                   title="PointSet.PointSet.UpdateFields"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">UpdateFields</span></code></a>(**kwargs)
-                                            </td>
-                                            <td>Update a field within the PointSet</td>
-                                        </tr>
-                                        <tr class="row-even">
-                                            <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">setValues</span></code>(**kwargs)
-                                            </td>
-                                            <td></td>
-                                        </tr>
+                                        <tbody>
                                         </tbody>
                                     </table>
                                     <dl class="method">
@@ -389,22 +299,15 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Retrieve specific point(s) by index</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body"><strong>index</strong> – the index of the
-                                                        point to return
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">specific point/s as numpy nX3 ndarray</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>index</strong> – the index of the point
+                                                    to return</p>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -425,16 +328,11 @@
                                                                                  title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">number of points</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>number of points</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -449,28 +347,19 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body"><strong>crs</strong> – coordinate spatial
-                                                        reference, if exists
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">pointSet as GeoPandas (geoseries) object
-                                                        (Points)
-                                                    </td>
-                                                </tr>
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body">geopandas.geoseries</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd"><p><strong>crs</strong> – coordinate spatial
+                                                    reference, if exists</p>
+                                                </dd>
+                                                <dt class="field-even">Returns</dt>
+                                                <dd class="field-even"><p>pointSet as GeoPandas (geoseries) object
+                                                    (Points)</p>
+                                                </dd>
+                                                <dt class="field-odd">Return type</dt>
+                                                <dd class="field-odd"><p>geopandas.geoseries</p>
+                                                </dd>
+                                            </dl>
                                             <p>#TODO: there might be a smarter way to do it</p>
                                         </dd>
                                     </dl>
@@ -485,16 +374,11 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">points as numpy nX3 ndarray</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>points as numpy nX3 ndarray</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -537,25 +421,17 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Update a field within the PointSet</p>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Parameters:</th>
-                                                    <td class="field-body">
-                                                        <ul class="first last simple">
-                                                            <li><strong>Y</strong><strong>, </strong><strong>Z</strong>
-                                                                (<em>X</em><em>,</em>) – which field to update
-                                                            </li>
-                                                            <li><strong>indices</strong> – which indices to update
-                                                                (optional)
-                                                            </li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Parameters</dt>
+                                                <dd class="field-odd">
+                                                    <ul class="simple">
+                                                        <li><p><strong>Y</strong><strong>, </strong><strong>Z</strong> (<em>X</em><em>,</em>)
+                                                            – which field to update</p></li>
+                                                        <li><p><strong>indices</strong> – which indices to update
+                                                            (optional)</p></li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -566,20 +442,14 @@
                                                                               title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">X coordinates</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body">nx1 nd-array</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>X coordinates</p>
+                                                </dd>
+                                                <dt class="field-even">Return type</dt>
+                                                <dd class="field-even"><p>nx1 nd-array</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -590,20 +460,14 @@
                                                                               title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">Y coordinates</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body">nx1 nd-array</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>Y coordinates</p>
+                                                </dd>
+                                                <dt class="field-even">Return type</dt>
+                                                <dd class="field-even"><p>nx1 nd-array</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -614,20 +478,14 @@
                                                                               title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">Returns:</th>
-                                                    <td class="field-body">Z coordinates</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">Return type:</th>
-                                                    <td class="field-body">nx1 nd-array</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                            <dl class="field-list simple">
+                                                <dt class="field-odd">Returns</dt>
+                                                <dd class="field-odd"><p>Z coordinates</p>
+                                                </dd>
+                                                <dt class="field-even">Return type</dt>
+                                                <dd class="field-even"><p>nx1 nd-array</p>
+                                                </dd>
+                                            </dl>
                                         </dd>
                                     </dl>
 
@@ -653,107 +511,21 @@
                                     <dd><p>Holds a subset of a PointSet</p>
                                         <p>Provides the same interface as PointSet</p>
                                         <p class="rubric">Attributes</p>
-                                        <table border="1" class="longtable docutils">
+                                        <table class="longtable docutils align-center">
                                             <colgroup>
-                                                <col width="10%"/>
-                                                <col width="90%"/>
+                                                <col style="width: 10%"/>
+                                                <col style="width: 90%"/>
                                             </colgroup>
-                                            <tbody valign="top">
+                                            <tbody>
                                             </tbody>
                                         </table>
                                         <p class="rubric">Methods</p>
-                                        <table border="1" class="longtable docutils">
+                                        <table class="longtable docutils align-center">
                                             <colgroup>
-                                                <col width="10%"/>
-                                                <col width="90%"/>
+                                                <col style="width: 10%"/>
+                                                <col style="width: 90%"/>
                                             </colgroup>
-                                            <tbody valign="top">
-                                            <tr class="row-odd">
-                                                <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">AddData2Fields</span></code>(data[,&nbsp;field])
-                                                </td>
-                                                <td>Add data to a field</td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><a class="reference internal"
-                                                       href="#PointSubSet.PointSubSet.GetPoint"
-                                                       title="PointSubSet.PointSubSet.GetPoint"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">GetPoint</span></code></a>(index)
-                                                </td>
-                                                <td>Retrieve specific point(s) by index (when the index is according to
-                                                    the subset and not to the original set)
-                                                </td>
-                                            </tr>
-                                            <tr class="row-odd">
-                                                <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">ToGeoPandas</span></code>([crs])
-                                                </td>
-                                                <td>
-                                                    <table class="docutils field-list" frame="void" rules="none">
-                                                        <col class="field-name"/>
-                                                        <col class="field-body"/>
-                                                        <tbody valign="top">
-                                                        <tr class="field-odd field">
-                                                            <th class="field-name">param crs:</th>
-                                                            <td class="field-body">coordinate spatial reference, if
-                                                                exists
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><a class="reference internal"
-                                                       href="#PointSubSet.PointSubSet.ToNumpy"
-                                                       title="PointSubSet.PointSubSet.ToNumpy"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">ToNumpy</span></code></a>()
-                                                </td>
-                                                <td>Return the points as numpy nX3 ndarray</td>
-                                            </tr>
-                                            <tr class="row-odd">
-                                                <td><a class="reference internal"
-                                                       href="#PointSubSet.PointSubSet.ToPolyData"
-                                                       title="PointSubSet.PointSubSet.ToPolyData"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">ToPolyData</span></code></a>()
-                                                </td>
-                                                <td>
-                                                    <table class="docutils field-list" frame="void" rules="none">
-                                                        <col class="field-name"/>
-                                                        <col class="field-body"/>
-                                                        <tbody valign="top">
-                                                        <tr class="field-odd field">
-                                                            <th class="field-name">return:</th>
-                                                            <td class="field-body">tvtk.PolyData of the current
-                                                                PointSet
-                                                            </td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">ToRDD</span></code>()
-                                                </td>
-                                                <td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)
-                                                </td>
-                                            </tr>
-                                            <tr class="row-odd">
-                                                <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">UpdateFields</span></code>(**kwargs)
-                                                </td>
-                                                <td>Update a field within the PointSet</td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><code class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">setValues</span></code>(**kwargs)
-                                                </td>
-                                                <td></td>
-                                            </tr>
+                                            <tbody>
                                             </tbody>
                                         </table>
                                         <dl class="attribute">
@@ -778,23 +550,15 @@
                                             </dt>
                                             <dd><p>Retrieve specific point(s) by index (when the index is according to
                                                 the subset and not to the original set)</p>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">Parameters:</th>
-                                                        <td class="field-body"><strong>index</strong> – the index of the
-                                                            point to return
-                                                        </td>
-                                                    </tr>
-                                                    <tr class="field-even field">
-                                                        <th class="field-name">Returns:</th>
-                                                        <td class="field-body">specific point/s as numpy nX3 ndarray
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Parameters</dt>
+                                                    <dd class="field-odd"><p><strong>index</strong> – the index of the
+                                                        point to return</p>
+                                                    </dd>
+                                                    <dt class="field-even">Returns</dt>
+                                                    <dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
+                                                    </dd>
+                                                </dl>
                                             </dd>
                                         </dl>
 
@@ -815,16 +579,11 @@
                                                                                      title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">Returns:</th>
-                                                        <td class="field-body">number of points</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Returns</dt>
+                                                    <dd class="field-odd"><p>number of points</p>
+                                                    </dd>
+                                                </dl>
                                             </dd>
                                         </dl>
 
@@ -852,17 +611,11 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">Returns:</th>
-                                                        <td class="field-body">tvtk.PolyData of the current PointSet
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
+                                                <dl class="field-list simple">
+                                                    <dt class="field-odd">Returns</dt>
+                                                    <dd class="field-odd"><p>tvtk.PolyData of the current PointSet</p>
+                                                    </dd>
+                                                </dl>
                                             </dd>
                                         </dl>
 
@@ -884,8 +637,8 @@
                            title="PointSetOpen3D class">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a accesskey="p" class="btn btn-neutral" href="BaseData.html" rel="prev" title="BaseData class"><span
-                                class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral float-left" href="BaseData.html" rel="prev"
+                           title="BaseData class"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -894,7 +647,7 @@
 
                     <div role="contentinfo">
                         <p>
-                            &copy; Copyright 2018, Sagi Students.
+                            &copy; Copyright 2018, Sagi Students
 
                         </p>
                     </div>
@@ -913,30 +666,11 @@
 
 
 <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT: '../',
-        VERSION: '1a',
-        LANGUAGE: 'None',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE: true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-</script>
-<script src="../_static/jquery.js" type="text/javascript"></script>
-<script src="../_static/underscore.js" type="text/javascript"></script>
-<script src="../_static/doctools.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-        type="text/javascript"></script>
-
-
-<script src="../_static/js/theme.js" type="text/javascript"></script>
-
-<script type="text/javascript">
     jQuery(function () {
         SphinxRtdTheme.Navigation.enable(true);
     });
 </script>
+
 
 </body>
 </html>

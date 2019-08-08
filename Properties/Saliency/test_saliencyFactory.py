@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from IOFactory import IOFactory
-from SaliencyFactory import SaliencyFactory
+from IOmodules.IOFactory import IOFactory
+from Properties.Saliency.SaliencyFactory import SaliencyFactory
 
 
 class TestSaliencyFactory(TestCase):
@@ -53,3 +53,18 @@ class TestSaliencyFactory(TestCase):
         hyb = o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=100)
 
         fpfh = SaliencyFactory.FPFH_open3d(p3d, knn)
+        print(fpfh.data)
+
+
+if __name__ == '__main__':
+    from DataClasses.PointSetOpen3D import PointSetOpen3D
+    import open3d as o3d
+
+    pcl = IOFactory.ReadPts('../../test_data/test_pts2.pts', merge=True)
+    p3d = PointSetOpen3D(pcl)
+    knn = o3d.geometry.KDTreeSearchParamKNN(100)
+    rad = o3d.geometry.KDTreeSearchParamRadius(radius=0.1)
+    hyb = o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=100)
+
+    fpfh = SaliencyFactory.FPFH_open3d(p3d, knn)
+    print(fpfh.data)

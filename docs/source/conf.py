@@ -55,7 +55,7 @@ sys.path.insert(0, os.path.abspath('../../Properties'))
 sys.path.insert(0, os.path.abspath('../../Third Party'))
 
 sys.path.insert(0, os.path.abspath('../../Utils'))
-sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
+sys.path.insert(0, os.path.abspath('../../VisualizationClasses'))
 
 # sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
 

@@ -1,7 +1,7 @@
 from numpy import zeros, arange, array, cos, pi, sin
 
-from BaseProperty import BaseProperty
-from PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSet import PointSet
 
 
 # from tvtk.api import tvtk

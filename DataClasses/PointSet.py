@@ -50,6 +50,8 @@ class PointSet(BaseData):
 
         """
         super(PointSet, self).__init__()
+        if type(points) is list:
+            points = np.array(points)
 
         self.data = points
 

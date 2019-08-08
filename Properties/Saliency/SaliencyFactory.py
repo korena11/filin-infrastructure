@@ -3,18 +3,18 @@ import numpy as np
 from tqdm import tqdm, trange
 
 import MyTools as mt
-from BaseProperty import BaseProperty
-from PointSet import PointSet
-from SaliencyProperty import SaliencyProperty
-from TensorFactory import TensorFactory
-from TensorProperty import TensorProperty
+from DataClasses.PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from Properties.Saliency.SaliencyProperty import SaliencyProperty
+from Properties.Tensors.TensorFactory import TensorFactory
+from Properties.Tensors.TensorProperty import TensorProperty
 
 EPS = 1e-10
 
 class SaliencyFactory(object):
 
-    @classmethod
-    def pointwise_pca_saliency(cls, tensor_property, principal_components_number=3, weights=1, verbose=False):
+    @staticmethod
+    def pointwise_pca_saliency(tensor_property, principal_components_number=3, weights=1, verbose=False):
         r"""
         Compute saliency according to PCA (tensors) similarity.
 
@@ -108,20 +108,136 @@ class SaliencyFactory(object):
 
         return SaliencyProperty(tensor_property.Points, G)
 
-    @classmethod
-    def curvature_saliency(cls, neighbors_property, normals_property, curvature_property, curvature_attribute,
-                           weight_distance_sigma=0.05, association_percentage=20, association_weight=0.5,
-                           verbose=False):
-        r"""
-        Computes saliency in each point according to difference in curvature and normal, as a function of the distance
+    # ----------------- DIRECTIONAL SALIENCY -----------------------
+    @staticmethod
+    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute,
+                             min_obj_size=0.05, noise_size=0.01, curvature_weight=.5, verbose=False):
+        """
 
-        For each point, the angle between the normals is computed, as well as the difference in curvature magnitude:
+        :param neighbors_property: the neighborhood property of the point cloud.
+        :param normals_property: normals at the neighborhood
+        :param curvature_property: curvature property computed in advance
+        :param curvature_attribute: the attribute according to which the curvature is measured.
+        :param min_obj_size: the minimal object size to look for. Dictates the window size
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param curvature_weight: the weight of the curvature in the saliency computation
+        :param verbose: print running messages. Default: False
+
+        :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
+        :type normals_property: np.array
+        :type curvature_attribute: str
+        :type neighbors_property: NeighborsProperty.NeighborsProperty
+        :type min_obj_size: float
+        :type noise_size: float
+        :type verbose: bool
+
+        :return: saliency values for each point
+
+        :rtype: SaliencyProperty
+        """
+
+        from warnings import warn
+        from VisualizationClasses.VisualizationO3D import VisualizationO3D
+
+        # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
+        win_size = min_obj_size / 2  # window size is half the minimal object size
+
+        tensor_saliency = []
+        j = 0
+        kstd = []
+        kmean = []
+
+        for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
+                                                              desc='Curvature Saliency for each neighborhood',
+                                                              position=0)):
+            if neighborhood.numberOfNeighbors < 3:
+                tensor_saliency.append(0)
+                continue
+
+            # get all the current values of curvature and normals. The first is the point to which the
+            # computation is made
+            try:
+                current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
+                    neighborhood.neighborhoodIndices]
+            except:
+                try:
+                    current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
+                except TypeError:
+                    warn(
+                        'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
+                    return 1
+
+            current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
+
+            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, win_size, noise_size, verbose)
+            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size, verbose)
+
+            if verbose:
+                pts = neighborhood.color_neighborhood()
+                vis = VisualizationO3D()
+                vis.visualize_property(pts)
+
+            normal_weight = 1 - curvature_weight
+            tensor_saliency.append(normal_weight * dn + curvature_weight * dk)
+
+        return SaliencyProperty(neighbors_property.Points, tensor_saliency)
+
+    @staticmethod
+    def __normal_saliency(neighborhood, current_normals, win_size=0.05, noise_size=0.01, verbose=False):
+        """
+        Checks the saliency of a point based on  normals property
 
         .. math::
-            \begin{eqnarray}
-            d\kappa_{ij} = |\kappa_i - \kappa_j| \\
-            d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
-            \end{eqnarray}
+                d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
+
+        The distances are weighted as Gaussians: the closest and farthest get low weights.
+
+        :param neighborhood: the neighborhood of a point
+        :param current_normals: normals array of the current point
+        :param win_size: search window size.
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param verbose: print running messages. Default: False
+
+        :type current_normals: np.array
+        :type neighborhood: PointNeighborhood.PointNeighborhood
+        :type verbose: bool
+
+        :return: array of saliency value of a point in a neighborhood according to normals
+
+        :rtype: np.array
+        """
+        # normal influence
+        # dn = current_normals[1:, :].dot(current_normals[0, :])
+        dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+                neighborhood.numberOfNeighbors - 1)
+
+        # distances influence - Laplacian (DoG)
+        dist_element = 1 / np.sqrt(2 * np.pi) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+                       1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+                       np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        # dist_element[dist_element < 0] = 0
+        # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
+        # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
+        # dist_element[0] = neighborhood.Size
+        dist_element_normed = dist_element / np.linalg.norm(dist_element)
+
+        dn = np.abs(np.sum(dn * dist_element_normed))
+
+        if dn.std() > noise_size:
+            dn = 0
+
+        return dn
+
+    @staticmethod
+    def __curvature_saliency(neighborhood, current_curvatures, win_size=0.05, noise_size=0.01, verbose=False):
+        r"""
+        Computes saliency in each point according to difference in curvature.
+
+        For each point, the difference in curvature between a close point's surrounding  and its farther area are tested
+
+        .. math::
+            d\kappa_{ij} = |\kappa_i - \kappa_j|
 
         The distances are weighted as Gaussians: the closest and farthest get low weights.
 
@@ -130,98 +246,99 @@ class SaliencyFactory(object):
         .. math::
             s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}
 
-        :param curvature_property: curvature property computed in advance
-        :param curvature_attribute: the attribute according to which the curvature is measured.
-        :param normals_property: normals property computed in advance
-        :param neighbors_property: the neighborhood property of the point cloud.
-        :param weight_distance_sigma: sigma of the Gaussian accoring to which the distances are weighted. Also serves as the sigma for point association. Default: 0.05
-        :param association_percentage: percentage of points to serve as focal points. Default: 20\%
-        :param association_weight: the weight of the association saliency. Default: 0.5
+        :param current_curvatures: curvatures of the points in neighborhood
+        :param neighborhood: the point neighborhood.
+        :param win_size: search window size.
         :param verbose: print running messages. Default: False
+        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
 
-        :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
-        :type normals_property: NormalsProperty.NormalsProperty
-        :type curvature_attribute: str
-        :type neighbors_property: NeighborsProperty.NeighborsProperty
-        :type weight_distance_sigma: float
-        :type association_percentage: float
-        :type association_weight: float
+        :type current_curvatures: np.ndarray
+        :type neighborhood: PointNeighborhood.PointNeighborhood
+        :type win_size: float
+        :type noise_size: float
         :type verbose: bool
 
-        :return: saliency values for each point
+        :return: array of saliency value of a point in a neighborhood according to curvature variations
+
+        :rtype: np.array
+        """
+
+        # difference in curvature
+        # dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+        # dk[np.where(np.abs(dk) < epsilon)] = 0
+        # dk_normed = dk
+        # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+        dk = current_curvatures[1:]
+        #
+        # dist_element = 1 / np.sqrt(2 * np.pi) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+        #                1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        # dist_element_normed = dist_element / np.linalg.norm(dist_element)
+
+        # if dk.std() > noise_size:
+        #     return 0
+        # define window
+        dist_element = np.ones((neighborhood.Size, 1))
+        min_dist = neighborhood.distances < win_size
+        s2 = np.sum(min_dist)
+        s1 = neighborhood.Size - s2
+
+        dist_element[min_dist == 0] = -1 / s1
+        dist_element[min_dist] /= s2
+        # dist_element[neighborhood.distances > win_size + .5 * win_size] = 0
+        # normalize to equal area (inside and out)
+
+        # s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
+        # dist_element_normed = dist_element.copy()
+        # dist_element_normed[neighborhood.distances > win_size] *= s
+        dist_element_normed = dist_element
+
+        return np.abs(np.sum(dk * dist_element_normed))
+
+    @staticmethod
+    def multiscale_saliency(saliencies, percentiles=75):
+        """
+        Aggregates the saliencies computed by multiple scales
+
+        :param saliencies: list of the SaliencyProperty holding the saliency as computed in a specific scale
+        :param percentiles: which percentile to take throughout the scales. If different for each scale, should be a list
+
+        :type saliencies: list
+        :type percentiles: int, list
+
+        :return: Aggregated saliency property as computed in multiple scales.
 
         :rtype: SaliencyProperty
+
         """
-        import CurvatureProperty
-        from warnings import warn
+        multi_scale_values = np.zeros((saliencies[0].Size, 1))
+        if isinstance(percentiles, int):
+            percentile_ = np.ones(len(saliencies))
+            percentiles *= percentile_
 
-        tensor_saliency = []
-        j = 0
-        kstd = []
-        kmean = []
-        for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
-                                                              desc='Curvature Saliency for each neighborhood')):
-            if neighborhood.numberOfNeighbors < 3:
-                tensor_saliency.append(0)
-                continue
+        elif len(percentiles) == 1:
+            percentile_ = np.ones(len(saliencies))
+            percentiles *= percentile_
 
-            # get all the current values of curvature and normals. The first is the point to which the
-            # computation is made
-            if isinstance(curvature_property, CurvatureProperty.CurvatureProperty):
-                current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
-                    neighborhood.neighborhoodIndices]
-            elif isinstance(curvature_property, np.ndarray):
-                current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
-            else:
-                warn(
-                    'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
-                return 1
+        for saliency, percentile in zip(saliencies, percentiles):
+            svals = np.asarray(saliency.getPointSaliency())
+            # take only n-th percentile
+            percentile_n = np.percentile(svals, percentile)
+            print('takes the {} percentile'.format(str(percentile)))
+            svals[svals < percentile_n] = 0
 
-            current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
+            # normalize the values of the saliencies to the range of 0-1
+            saliency_normed = (svals - svals.min()) / (svals.max() - svals.min() + EPS)
 
-            # difference in curvature
-            dk = np.abs(current_curvatures[1:] - current_curvatures[0])
-            dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
-            kstd.append(np.std(dk))
-            kmean.append(np.mean(dk))
+            multi_scale_values += saliency_normed[:, None]
 
-            # distances influence
-            dist_element = 1 / (2 * np.pi * weight_distance_sigma ** 2) * \
-                           np.exp(-neighborhood.distances[1:] ** 2 / (2 * weight_distance_sigma ** 2))
-            dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min())
-
-            # normal influence
-            dn = current_normals[1:, :].dot(current_normals[0, :])
-            dn_normed = np.exp(-(dn + 1))
-
-            tensor_saliency.append(np.sum(dist_element_normed * (dn_normed + dk_normed)))
-            j += 1
-
-        # Use only percentage of the highest low level distinctness to compute the high-level one
-        tensor_saliency = np.asarray(tensor_saliency)
-        sorted_idx = np.argsort(tensor_saliency)
-        num_points_assoc = int(association_percentage / 100 * neighbors_property.Size)
-        focus_points_idx = np.hstack((sorted_idx[:int(num_points_assoc)], sorted_idx[-num_points_assoc:]))
-        focus_points = neighbors_property.Points.GetPoint(focus_points_idx)
-
-        import itertools
-        if association_weight != 0:
-            points_association = list(map(cls.__point_association,
-                                          tqdm(neighbors_property.Points, desc='point association', position=0,
-                                               total=neighbors_property.Size), itertools.repeat(focus_points),
-                                          itertools.repeat(focus_points_idx), itertools.repeat(tensor_saliency),
-                                          itertools.repeat(weight_distance_sigma)))
-            tensor_saliency = association_weight * np.asarray(points_association) + (
-                    1 - association_weight) * tensor_saliency
-        else:
-            tensor_saliency = (1 - association_weight) * tensor_saliency
-        print('kmean {a} kstd {b}'.format(a=np.asarray(kmean).mean(), b=np.asarray(kstd).mean()))
-        return SaliencyProperty(neighbors_property.Points, tensor_saliency)
+        return SaliencyProperty(saliencies[0].Points, multi_scale_values)
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
-    def hierarchical_saliency(cls, neighborhoods, normals, num_bins=8, low_level_percentage=1, sigma=0.05,
-                              association_percentage=20, high_level_percentage=10, verbose=True):
+    def hierarchical_saliency(cls, neighborhoods, normals, low_level_percentage=1, sigma=0.05,
+                              association_percentage=20, high_level_percentage=10, verbose=True, chi_filename=None):
         r"""
         Compute saliency by hierarchical method.
 
@@ -263,7 +380,6 @@ class SaliencyFactory(object):
         """
         from MyTools import chi2_distance
         import itertools
-        from functools import partial
         import open3d as o3d
 
         pointset = neighborhoods.Points
@@ -272,36 +388,46 @@ class SaliencyFactory(object):
         k = 0
         # 1. For each point compute the simplified point feature histogram
 
-        spfh_point = list(map(partial(cls.__SPFH, normals=normals, num_bins=num_bins, verbose=False),
-                              tqdm(neighborhoods, total=neighborhoods.Size, desc='SPFH...')))
-        spfh_property = SPFH_property(pointset, spfh_point)
+        # spfh_point = list(map(partial(cls.__SPFH, normals=normals, num_bins=num_bins, verbose=False),
+        #                       tqdm(neighborhoods, total=neighborhoods.Size, desc='SPFH...')))
+        # spfh_property = SPFH_property(pointset, spfh_point)
         # for neighborhood, i in zip(neighborhoods, tqdm(range(neighborhoods.Size), desc='SPFH for all point cloud')):
         #     spfh_point = cls.__SPFH(neighborhood, normals, num_bins, verbose=False)
         #     spfh_property.set_spfh(neighborhood.center_point_idx, spfh_point)
 
         # 2. For each SPFH compute the FPFH
         # fpfh = []
-        fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
-                        tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
+        # fpfh = list(map(partial(cls.__FPFH, spfh_property=spfh_property),
+        #                 tqdm(spfh_property, total=spfh_property.Size, position=0, desc='FPFH... ')))
 
         # 1 + 2. Compute FPFH open3d
-        # fpfh = SaliencyFactory.FPFH_open3d(pointset, search_param).T
-        # fpfh = fpfh.tolist()
+        fpfh = SaliencyFactory.FPFH_open3d(pointset, normals, search_param).T
+        # fpfh1 = fpfh.tolist()
+
         # 3. Low level distinctness,
         current_hist = []
         pointset_distances = []
 
-        for i, j in zip(range(pointset.Size),
-                        trange(pointset.Size, desc='chi square', position=0)):
+        # for i, j in zip(range(pointset.Size),
+        #                 trange(pointset.Size, desc='chi square', position=0)):
+        #
+        #     tmp_fpfh = fpfh1.copy()
+        #     current_hist = tmp_fpfh.pop(i)
+        #
+        #     # 3.1 Compute the Chi-square distance of each histogram to each histogram
+        #     pointset_distances.append(chi2_distance(current_hist, np.asarray(tmp_fpfh), eps=10e-8))
 
-            tmp_fpfh = fpfh.copy()
-            current_hist = tmp_fpfh.pop(i)
+        # 3.1 Compute the Chi-square distance of each histogram to each histogram
+        from functools import partial
+        import pickle
 
-            # 3.1 Compute the Chi-square distance of each histogram to each histogram
-            chi_square_dist = chi2_distance(current_hist, np.asarray(tmp_fpfh))
-            pointset_distances.append(chi_square_dist)
+        try:
+            pointset_distances = pickle.load(open(chi_filename, 'rb'))
+        except IOError:
+            pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
+            pickle.dump(pointset_distances, open(chi_filename + '.p', 'wb'))
 
-            # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
+        # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
         pointset_distances = np.asarray(pointset_distances)
         dmin = low_level_percentage / 100 * pointset_distances.max(axis=1)
         D_low = list(
@@ -367,8 +493,7 @@ class SaliencyFactory(object):
 
         # 1. Compute the high-level dissimilarity
         pi_pj = np.linalg.norm(point - valid_pts, axis=1)
-        pi_pj /= pi_pj.max()
-        dh = chi_dist[valid_idx] * np.log(1 + pi_pj)
+        dh = chi_dist[valid_idx, None] * np.log(1 + pi_pj)
 
         # 2. Compute the high-level distinctness
         return 1 - np.exp(-dh.mean())
@@ -410,11 +535,14 @@ class SaliencyFactory(object):
             return 0
 
         valid_pts = pointset.GetPoint(valid_idx)
-        pi_pj = np.linalg.norm(point - valid_pts, axis=1)
-        dl = chi_dist[valid_idx] / (1 + pi_pj)
+        pi_pj = np.linalg.norm(point - valid_pts[1:], axis=1)
+        dl = chi_dist[valid_idx[1:]] / (1 + pi_pj)
 
         # 3.3 Compute the low-level distinctness
-        return 1 - np.exp(-dl.mean())
+        Dl = 1 - np.exp(-dl.mean())
+        if np.isnan(Dl):
+            Dl = 0
+        return Dl
 
     @classmethod
     def __point_association(cls, point, focus_points, focus_points_idx, distinctness, sigma=0.05):
@@ -582,7 +710,7 @@ class SaliencyFactory(object):
         return spfh_current.getFeatureVector() + np.mean(np.asarray(spfh_neighbors_normalized), axis=0)
 
     @classmethod
-    def FPFH_open3d(self, pointset_open3d, knn_search_param):
+    def FPFH_open3d(self, pointset_open3d, normalsproperty, knn_search_param):
         """
         Compute the FPFH via open3d.
 
@@ -592,9 +720,11 @@ class SaliencyFactory(object):
 
         :param pointset_open3d: the point cloud as PointSetOpen3D. if a PointSet is received it is change to PointSetOpen3D.
         :param knn_search_param: the type of search: knn, rnn or hybrid.
+        :param normalsproperty: the normals property of the point cloud
 
         :type pointset_open3d: PointSet, PointSetOpen3D.PointSetOpen3D
         :type knn_search_param: class
+        :type normalsproperty: NormalsProperty.NormalsPropoerty
 
         :return: feature vector FPFH
 
@@ -612,14 +742,17 @@ class SaliencyFactory(object):
         import open3d as o3d
         from PointSetOpen3D import PointSetOpen3D
 
-        if isinstance(pointset_open3d, PointSetOpen3D):
-            fpfh = o3d.registration.compute_fpfh_feature(pointset_open3d.data, knn_search_param)
-        else:
+        if not isinstance(pointset_open3d, PointSetOpen3D):
             p3d = PointSetOpen3D(pointset_open3d)
-            fpfh = o3d.registration.compute_fpfh_feature(p3d.data, knn_search_param)
 
+        else:
+            p3d = pointset_open3d
+
+        if not p3d.data.has_normals():
+            p3d.data.normals = o3d.Vector3dVector(normalsproperty.Normals)
+
+        fpfh = o3d.registration.compute_fpfh_feature(p3d.data, knn_search_param)
         return fpfh.data
-
 
 
 
@@ -634,7 +767,7 @@ class SaliencyFactory(object):
 
         :param panorama_property: the property according to which the saliency is computed
         :param filters: list of filters (either sigmas or kernel sizes) to run with the DoG filter.
-        :param sigma_sent: sigma sizes are in ``filters`` (true) as opposed to kernel sizes (false). (default: True)
+        :param sigma_sent: sigma sizes are in ``filters'' (true) as opposed to kernel sizes (false). (default: True)
         :param feature: according to which property the saliency is computed, can be:
 
             - 'pixel_val' - the value of the pixel itself

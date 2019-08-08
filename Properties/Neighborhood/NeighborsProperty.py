@@ -1,7 +1,7 @@
 import numpy as np
 
-from BaseProperty import BaseProperty
-from PointNeighborhood import PointNeighborhood
+from Properties.BaseProperty import BaseProperty
+from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 
 
 class NeighborsProperty(BaseProperty):
@@ -80,7 +80,7 @@ class NeighborsProperty(BaseProperty):
         :param idx: the index (or indices) of the point(s) to set
         :param point_neighbors: the PointeNeighborhood object to set
 
-        :type idx: int
+        :type idx: int, np.array
         :type point_neighbors: PointNeighborhood
 
         """

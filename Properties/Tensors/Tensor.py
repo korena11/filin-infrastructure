@@ -12,7 +12,7 @@ A tensor is constructed to a set of points, either around a specific point or ar
 import numpy as np
 import numpy.linalg as la
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 
 class Tensor(object):
