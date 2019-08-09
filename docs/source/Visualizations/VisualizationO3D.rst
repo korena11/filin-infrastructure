@@ -10,7 +10,7 @@ The VisualizationO3D can work both with PointSet and BaseProperty.
 PointSet visualization
 ''''''''''''''''''''''
 
-.. literalinclude:: ../../../Visualization Classes/test_visualizationO3D.py
+.. literalinclude:: ../../../VisualizationClasses/test_visualizationO3D.py
    :language: python
    :lineno-start: 13
    :lines: 13-19
@@ -21,7 +21,7 @@ This function gets a PointSet and a ColorProperty, if exists, and shows the poin
 BaseProperty visualization
 ''''''''''''''''''''''''''
 
-.. literalinclude:: ../../../Visualization Classes/test_visualizationO3D.py
+.. literalinclude:: ../../../VisualizationClasses/test_visualizationO3D.py
    :language: python
    :lineno-start: 22
    :lines: 22-33

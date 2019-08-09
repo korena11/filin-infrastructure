@@ -12,11 +12,13 @@ Spherical Property
     :members:
     :undoc-members:
 
-.. rubric:: Attributes
+    .. rubric:: Attributes
+
     .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
         :attributes:
 
-.. rubric:: Methods
+    .. rubric:: Methods
+
     .. autoautosummary:: SphericalCoordinatesProperty.SphericalCoordinatesProperty
         :methods:
 
@@ -28,7 +30,8 @@ SphericalCoordinates Factory
    :members:
    :undoc-members:
 
-.. rubric:: Methods
+
+   .. rubric:: Methods
 
 .. autoautosummary:: SphericalCoordinatesFactory.SphericalCoordinatesFactory
-    :methods:
+   :methods:

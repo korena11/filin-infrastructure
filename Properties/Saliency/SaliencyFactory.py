@@ -730,7 +730,7 @@ class SaliencyFactory(object):
 
         :rtype: np.array
 
-        ** Usage example **
+        **Usage example**
 
         .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
            :lines: 50-60
@@ -767,7 +767,7 @@ class SaliencyFactory(object):
 
         :param panorama_property: the property according to which the saliency is computed
         :param filters: list of filters (either sigmas or kernel sizes) to run with the DoG filter.
-        :param sigma_sent: sigma sizes are in ``filters'' (true) as opposed to kernel sizes (false). (default: True)
+        :param sigma_sent: sigma sizes are in ''filters'' (true) as opposed to kernel sizes (false). (default: True)
         :param feature: according to which property the saliency is computed, can be:
 
             - 'pixel_val' - the value of the pixel itself
@@ -778,8 +778,6 @@ class SaliencyFactory(object):
         :type sigma_sent: bool
         :type feature: str
 
-        .. note::
-           Other features can be added.
 
         :return: saliency image
 
@@ -801,6 +799,8 @@ class SaliencyFactory(object):
             s2 = Saliency.Factory.panorama_frequency(normals_panorama, filters= [3, 5, 7],
             feature = 'pixel_val')
 
+         .. note::
+           Other features can be added.
         """
 
         image = panorama_property.PanoramaImage.astype(np.float32)

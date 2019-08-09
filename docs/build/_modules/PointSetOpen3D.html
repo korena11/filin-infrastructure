@@ -84,6 +84,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -140,8 +141,7 @@
 
 <span class="c1"># from PointNeighborhood import PointNeighborhood</span>
 <span class="c1"># Infrastructure Imports</span>
-<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
-                                class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 
 <span class="n">np</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span
                                 class="n">formatter</span><span class="o">=</span><span class="p">{</span><span
@@ -149,6 +149,7 @@
                                 class="n">x</span><span class="p">:</span> <span class="s2">&quot;</span><span
                                 class="si">{0:0.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span
                                 class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">)})</span>
+
 
 <div class="viewcode-block" id="PointSetOpen3D"><a class="viewcode-back"
                                                    href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D">[docs]</a><span
@@ -219,31 +220,35 @@
             class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span
             class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span
             class="p">)</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span
-            class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span
-            class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span
-            class="p">()</span>
-            <span class="n">pts</span> <span class="o">=</span> <span class="n">inputPoints</span><span
-            class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="p">:</span><span
-            class="mi">3</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span
-            class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span
-            class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span
-            class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">path</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span
             class="p">,</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span
             class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span
             class="o">=</span> <span class="n">inputPoints</span>
+
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Given type: &quot;</span> <span
-            class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span
-            class="p">(</span><span class="n">inputPoints</span><span class="p">))</span> <span class="o">+</span> <span
-            class="s2">&quot; as input. Not sure what to do with that...&quot;</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong turn.&quot;</span><span
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span
+            class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span
+            class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pts</span> <span class="o">=</span> <span class="n">inputPoints</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="p">:</span><span
+            class="mi">3</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span
+            class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span
+            class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span
+            class="n">pts</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span
+            class="n">inputPoints</span><span class="o">.</span><span class="n">path</span>
+            <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span
+            class="s2">&quot;Given type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span
+            class="p">(</span><span class="nb">type</span><span class="p">(</span><span
+            class="n">inputPoints</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; as input. Not sure what to do with that...&quot;</span><span
+            class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong turn.&quot;</span><span
             class="p">)</span></div>
 
 <div class="viewcode-block" id="PointSetOpen3D.RebuildKDTree"><a class="viewcode-back"

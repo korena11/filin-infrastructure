@@ -84,6 +84,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -146,11 +147,11 @@
                                 class="n">kdtree</span> <span class="k">as</span> <span class="n">cKDTree</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
+<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span
+                                class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">NeighborsProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
 <span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
-<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span
-                                class="n">PointSet</span>
-<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesFactory</span> <span class="k">import</span> <span
                                 class="n">SphericalCoordinatesFactory</span>
 
@@ -197,6 +198,8 @@
             class="n">BallTreePointSet</span>
         <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span
             class="n">PointSetOpen3D</span>
+        <span class="kn">from</span> <span class="nn">KdTreePointSet</span> <span class="k">import</span> <span
+            class="n">KdTreePointSet</span>
         <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span
             class="n">warn</span>
 
@@ -243,6 +246,16 @@
             class="p">(</span><span class="n">pointset</span><span class="p">,</span> <span
             class="n">search_radius</span><span class="p">)</span>
 
+                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span
+            class="o">==</span> <span class="s1">&#39;kdtreePointSet_rnn&#39;</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Build KDTreePointSet object&#39;</span><span
+            class="p">)</span>
+                    <span class="n">pointset</span> <span class="o">=</span> <span class="n">KdTreePointSet</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">)</span>
+                    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">method</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">,</span> <span
+            class="n">search_radius</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">neighbors</span> <span class="o">==</span> <span
             class="o">-</span><span class="mi">1</span><span class="p">:</span>
             <span class="n">neighbors</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
@@ -284,6 +297,8 @@
             class="n">BallTreePointSet</span>
         <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span
             class="n">PointSetOpen3D</span>
+        <span class="kn">from</span> <span class="nn">KdTreePointSet</span> <span class="k">import</span> <span
+            class="n">KdTreePointSet</span>
         <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span
             class="n">warn</span>
 
@@ -326,6 +341,16 @@
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Build PointSetOpen3D object&#39;</span><span
             class="p">)</span>
                     <span class="n">pointset</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">)</span>
+                    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">method</span><span
+            class="p">(</span><span class="n">pointset</span><span class="p">,</span> <span class="n">k_nearest_neighbors</span><span
+            class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span> <span
+            class="o">==</span> <span class="s1">&#39;kdtreePointSet_rnn&#39;</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Build KDTreePointSet object&#39;</span><span
+            class="p">)</span>
+                    <span class="n">pointset</span> <span class="o">=</span> <span class="n">KdTreePointSet</span><span
             class="p">(</span><span class="n">pointset</span><span class="p">)</span>
                     <span class="n">neighbors</span> <span class="o">=</span> <span class="n">method</span><span
             class="p">(</span><span class="n">pointset</span><span class="p">,</span> <span class="n">k_nearest_neighbors</span><span
@@ -448,31 +473,113 @@
                                                                         href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">kdtreePointSet_rnn</span><span class="p">(</span><span class="n">pointset_kdt</span><span
-            class="p">,</span> <span class="n">search_radius</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+            class="p">,</span> <span class="n">search_radius</span><span class="p">,</span> <span
+            class="n">parts_size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span
+            class="mf">5e5</span><span class="p">),</span> <span class="n">parts_num</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)</span>
 
 <span class="sd">        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed</span>
 <span class="sd">        :param search_radius: the neighborhood radius</span>
-<span class="sd">        :param verbose: print running messages</span>
+<span class="sd">        :param parts_size: number of points in section for more efficient computation. Default: None</span>
+<span class="sd">        :param parts_num: number of parts to divide the computation. Default: 1</span>
 
 <span class="sd">        :type pointset_kdt: KdTreePointSet.KdTreePointSet</span>
 <span class="sd">        :type search_radius: float</span>
-<span class="sd">        :type verbose: bool</span>
+<span class="sd">        :type parts_size: int</span>
+<span class="sd">        :type parts_num: int</span>
 
 <span class="sd">        :return: NeighborsProperty</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using kd-Tree&#39;</span><span
+<span class="sd">        .. warning::</span>
+<span class="sd">            Division to parts doesn&#39;t work</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: division to parts doesn&#39;t work. Need to solve the mapping at the end</span>
+
+        <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span
+            class="n">trange</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors in radius </span><span
+            class="si">%f</span><span class="s1"> using kd-Tree&#39;</span> <span class="o">%</span> <span class="n">search_radius</span><span
             class="p">)</span>
 
         <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
             class="p">(</span><span class="n">pointset_kdt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
+        <span class="k">if</span> <span class="n">parts_num</span> <span class="ow">is</span> <span
+            class="kc">None</span> <span class="ow">and</span> <span class="n">parts_size</span> <span
+            class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parts_num</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">modulu</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">parts_num</span> <span class="ow">is</span> <span
+            class="kc">None</span><span class="p">:</span>
+            <span class="n">parts_num</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">Size</span> <span class="o">/</span> <span class="n">parts_size</span><span class="p">)</span>
+            <span class="n">modulu</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">Size</span> <span class="o">%</span> <span class="n">parts_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">modulu</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">Size</span> <span class="o">%</span> <span class="n">parts_num</span>
+            <span class="n">parts_size</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">Size</span> <span class="o">/</span> <span class="n">parts_num</span><span class="p">)</span>
 
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span
+            class="n">trange</span><span class="p">(</span><span class="n">parts_num</span><span class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">part</span> <span class="o">*</span> <span
+            class="n">parts_size</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">part</span> <span class="o">==</span> <span
+            class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">parts_num</span> <span class="o">==</span> <span
+            class="mi">1</span><span class="p">:</span>  <span class="c1"># patch because the parts dont work. Delete when fixed</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">pointset_kdt</span><span
             class="o">.</span><span class="n">queryRadius</span><span class="p">(</span><span
             class="n">pointset_kdt</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">search_radius</span><span class="p">)</span>
+            class="p">()[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span
+            class="o">+</span> <span class="n">parts_size</span><span class="p">],</span> <span
+            class="n">search_radius</span><span class="p">,</span>
+                                                    <span class="n">sort_results</span><span class="o">=</span><span
+            class="kc">True</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">idx</span><span
+            class="p">,</span>
+                                     <span class="n">pointset_kdt</span><span class="o">.</span><span class="n">queryRadius</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">ToNumpy</span><span class="p">()[</span><span class="n">start</span><span class="p">:</span><span
+            class="n">start</span> <span class="o">+</span> <span class="n">parts_size</span><span
+            class="p">],</span> <span class="n">search_radius</span><span class="p">,</span>
+                                                              <span class="n">sort_results</span><span
+            class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">idx</span><span
+            class="p">,</span>
+                                 <span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">queryRadius</span><span class="p">(</span><span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="n">start</span><span
+            class="p">:</span><span class="n">start</span> <span class="o">+</span> <span
+            class="n">parts_size</span><span class="p">],</span>
+                                                          <span class="n">search_radius</span><span class="p">,</span>
+                                                   <span class="n">sort_results</span><span class="o">=</span><span
+            class="kc">True</span><span class="p">)))</span>
+        <span class="c1"># for the remaining part</span>
+        <span class="c1"># if parts_num != 1:</span>
+        <span class="k">if</span> <span class="n">modulu</span> <span class="o">&gt;</span> <span
+            class="mi">0</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">hstack</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span>
+                             <span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">queryRadius</span><span class="p">(</span><span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="n">parts_size</span> <span
+            class="o">*</span> <span class="n">parts_num</span><span class="p">:],</span> <span
+            class="n">search_radius</span><span class="p">,</span>
+                                                      <span class="n">sort_results</span><span class="o">=</span><span
+            class="kc">True</span><span class="p">)))</span>
 
         <span class="n">pointSubSets</span> <span class="o">=</span> <span class="nb">list</span><span
             class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
@@ -496,15 +603,22 @@
                                                                         href="../Properties/Neighborhood/Neighborhood.html#NeighborsFactory.NeighborsFactory.kdtreePointSet_knn">[docs]</a>    <span
         class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">kdtreePointSet_knn</span><span class="p">(</span><span class="n">pointset_kdt</span><span
-            class="p">,</span> <span class="n">k_nearest_neighbors</span><span class="p">):</span>
+            class="p">,</span> <span class="n">k_nearest_neighbors</span><span class="p">,</span> <span class="n">parts_size</span><span
+            class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">5e5</span><span
+            class="p">),</span> <span class="n">parts_num</span><span class="o">=</span><span
+            class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</span>
 
 <span class="sd">        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed</span>
 <span class="sd">        :param k_nearest_neighbors: the number of neighbors</span>
+<span class="sd">        :param parts_size: number of points in section for more efficient computation. Defauls: 5e5</span>
+<span class="sd">        :param parts_num: number of parts to divide the computation. Defualt: None</span>
 
 <span class="sd">        :type pointset_kdt: KdTreePointSet.KdTreePointSet</span>
 <span class="sd">        :type k_nearest_neighbors: int</span>
+<span class="sd">        :type parts_size: int</span>
+<span class="sd">        :type parts_num: int</span>
 
 <span class="sd">        :return: NeighborsProperty</span>
 
@@ -512,16 +626,69 @@
 <span class="sd">           :meth:`kdtreePointSet_rnn`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all points neighbors using kd-tree&#39;</span><span
-            class="p">)</span>
+        <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span
+            class="n">trange</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Find all </span><span
+            class="si">{k}</span><span class="s1"> points neighbors using kd-tree&#39;</span><span
+            class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span
+            class="o">=</span><span class="n">k_nearest_neighbors</span><span class="p">))</span>
 
         <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span
             class="p">(</span><span class="n">pointset_kdt</span><span class="p">)</span>  <span class="c1"># initialization of the neighborhood property</span>
+        <span class="k">if</span> <span class="n">parts_num</span> <span class="ow">is</span> <span
+            class="kc">None</span><span class="p">:</span>
+            <span class="n">parts_num</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">Size</span> <span class="o">/</span> <span class="n">parts_size</span><span class="p">)</span>
+            <span class="n">modulu</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">Size</span> <span class="o">%</span> <span class="n">parts_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">modulu</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">Size</span> <span class="o">%</span> <span class="n">parts_num</span>
+            <span class="n">parts_size</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">Size</span> <span class="o">/</span> <span class="n">parts_num</span><span class="p">)</span>
 
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span
+            class="n">trange</span><span class="p">(</span><span class="n">parts_num</span><span
+            class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span
+            class="p">):</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span
+            class="p">(</span><span class="n">part</span> <span class="o">*</span> <span
+            class="n">parts_size</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">part</span> <span class="o">==</span> <span
+            class="mi">0</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">pointset_kdt</span><span
             class="o">.</span><span class="n">query</span><span class="p">(</span><span
             class="n">pointset_kdt</span><span class="o">.</span><span class="n">ToNumpy</span><span
-            class="p">(),</span> <span class="n">k_nearest_neighbors</span><span class="p">)</span>
+            class="p">()[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span
+            class="o">+</span> <span class="n">parts_size</span><span class="p">],</span> <span class="n">k_nearest_neighbors</span><span
+            class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">pointset_kdt</span><span
+            class="o">.</span><span class="n">query</span><span class="p">(</span><span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">ToNumpy</span><span
+            class="p">()[</span><span class="n">start</span><span class="p">:</span><span class="n">start</span> <span
+            class="o">+</span> <span class="n">parts_size</span><span class="p">],</span> <span class="n">k_nearest_neighbors</span><span
+            class="p">)))</span>
+
+        <span class="c1"># for the remaining part</span>
+        <span class="k">if</span> <span class="n">modulu</span> <span class="o">&gt;</span> <span
+            class="mi">0</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">vstack</span><span class="p">((</span><span class="n">idx</span><span class="p">,</span> <span
+            class="n">pointset_kdt</span><span class="o">.</span><span class="n">query</span><span
+            class="p">(</span><span class="n">pointset_kdt</span><span class="o">.</span><span
+            class="n">ToNumpy</span><span class="p">()[</span><span class="n">start</span> <span
+            class="o">+</span> <span class="n">parts_size</span><span class="p">:],</span> <span class="n">k_nearest_neighbors</span><span
+            class="p">)))</span>
+
         <span class="n">pointSubSets</span> <span class="o">=</span> <span class="nb">list</span><span
             class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span
             class="nb">id</span><span class="p">:</span> <span class="n">PointSubSet</span><span class="p">(</span><span
