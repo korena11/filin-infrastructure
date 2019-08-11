@@ -1,8 +1,8 @@
-from IOFactory import IOFactory
-from PointSet import PointSet
-from SegmentationFactory import SegmentationProperty
-from VisualizationO3D import VisualizationO3D
-from CurvatureProperty import CurvatureProperty
+from IOmodules.IOFactory import IOFactory
+from DataClasses.PointSet import PointSet
+from Properties.Segmentation.SegmentationProperty import SegmentationProperty
+from VisualizationClasses.VisualizationO3D import VisualizationO3D
+from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
 from numpy import arange, int_, vstack, unique, nonzero, array, zeros
 from numpy.linalg import norm
@@ -130,7 +130,7 @@ def computeUmbrellaCurvaturePerCell(segProp, tensor, cellNeighbors):
 
 
 if __name__ == '__main__':
-    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
+    path = '/home/reuma/PycharmProjects/phd/ReumaPhD/data/Achziv/'
     filename = 'Achziv_middle - Cloud_97'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 

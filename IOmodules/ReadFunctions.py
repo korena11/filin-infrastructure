@@ -16,10 +16,10 @@ import warnings
 # from laspy.file import file
 import numpy as np
 
-from ColorFactory import ColorFactory
-from PointSet import PointSet
-from RasterData import RasterData
-from TransformationMatrixProperty import TransformationMatrixProperty
+from Properties.Color.ColorFactory import ColorFactory
+from DataClasses.PointSet import PointSet
+from DataClasses.RasterData import RasterData
+from Properties.Transformations.TransformationMatrixProperty import TransformationMatrixProperty
 
 try:
     from plyfile import PlyData

@@ -3,7 +3,7 @@
 import numpy as np
 import open3d as O3D
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
 
