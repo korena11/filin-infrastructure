@@ -148,7 +148,7 @@ class SaliencyFactory(object):
         kmean = []
 
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
-                                                              desc='Curvature Saliency for each neighborhood',
+                                                              desc='Directional Saliency for each neighborhood',
                                                               position=0)):
             if neighborhood.numberOfNeighbors < 3:
                 tensor_saliency.append(0)
