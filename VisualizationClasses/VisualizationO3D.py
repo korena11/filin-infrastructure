@@ -141,7 +141,7 @@ class VisualizationO3D:
 
         from itertools import cycle
         self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray'])
-        key_to_callback[ord('a')] = self.toggle_attributes_colors
+        key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
         o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
