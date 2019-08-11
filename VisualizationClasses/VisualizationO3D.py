@@ -140,7 +140,7 @@ class VisualizationO3D:
         self.attribute_name = attribute_name
 
         from itertools import cycle
-        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray'])
+        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray', 'PiYG', 'coolwarm', 'RdYlBu'])
         key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
