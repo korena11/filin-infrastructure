@@ -27,11 +27,8 @@ Panorama Property
         :methods:
 
 
-
-
 Panorama Factory
 ----------------
-
 
 .. autoclass:: PanoramaFactory.PanoramaFactory
    :members:

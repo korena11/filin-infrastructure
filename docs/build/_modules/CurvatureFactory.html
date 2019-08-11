@@ -84,6 +84,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -139,7 +140,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
-<span class="kn">import</span> <span class="nn">RotationUtils</span>
+<span class="kn">import</span> <span class="nn">Properties.Transformations</span> <span class="k">as</span> <span
+                                class="nn">RotationUtils</span>
 <span class="kn">from</span> <span class="nn">CurvatureProperty</span> <span class="k">import</span> <span class="n">CurvatureProperty</span>
 <span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span
                                 class="n">RasterData</span>
@@ -257,10 +259,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span
             class="n">PointSetOpen3D</span>
-        <span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span
-            class="n">PointNeighborhood</span>
+        <span class="kn">from</span> <span class="nn">Neighborhood.PointNeighborhood</span> <span
+            class="k">import</span> <span class="n">PointNeighborhood</span>
         <span class="n">k1</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">invalid_curvature</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of points that their curvature wasn&#39;t estimated</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Compute all points curvatures using the 3-parameters algorithm&#39;</span><span
             class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span
@@ -302,12 +305,13 @@
 
         <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span
             class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span
-            class="n">neighbors_property</span><span class="p">,</span> <span class="nb">range</span><span
-            class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
-            class="p">)):</span>
-            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span
-            class="mi">578</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            class="n">neighbors_property</span><span class="p">,</span> <span class="n">tqdm</span><span
+            class="p">(</span><span class="nb">range</span><span class="p">(</span><span
+            class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span
+            class="p">),</span> <span class="n">total</span><span class="o">=</span><span
+            class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
+                                                            <span class="n">desc</span><span class="o">=</span><span
+            class="s1">&#39;Compute principal curvatures for all point cloud&#39;</span><span class="p">)):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">neighborhood</span><span
             class="p">,</span> <span class="n">PointNeighborhood</span><span class="p">)</span> <span
             class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span
@@ -337,7 +341,7 @@
             class="p">,</span> <span class="n">k2_</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">invalid_curvature</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">k1</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
                 <span class="n">k2</span><span class="o">.</span><span class="n">append</span><span
@@ -354,6 +358,8 @@
             class="n">T</span><span class="p">)</span>
         <span class="n">curvatures</span><span class="o">.</span><span class="n">set_invalid_value</span><span
             class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">invalid_curvature</span><span
+            class="p">)</span>
         <span class="k">return</span> <span class="n">curvatures</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.curvature_by_3parameters"><a class="viewcode-back"
@@ -398,8 +404,8 @@
 <span class="sd">                \kappa_{1,2} = \frac{a+b}{2}\pm C</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">PointNeighborhood</span> <span class="k">import</span> <span
-            class="n">PointNeighborhood</span>
+        <span class="kn">from</span> <span class="nn">Neighborhood.PointNeighborhood</span> <span
+            class="k">import</span> <span class="n">PointNeighborhood</span>
         <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
@@ -550,6 +556,12 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span
             class="n">stats</span>
+
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">stats</span><span
+            class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span
+            class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span
+            class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span
+            class="n">min_obj_size</span>
         <span class="n">umbrellaCurvature</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">point_neighbors</span> <span class="ow">in</span> <span class="n">tqdm</span><span
@@ -583,24 +595,13 @@
             class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
                 <span class="c1"># check if the projections are statistically zero</span>
-                <span class="n">epsilon</span> <span class="o">=</span> <span class="n">stats</span><span
-            class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span
-            class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span
-            class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span
-            class="n">min_obj_size</span>
-                <span class="n">projections</span><span class="p">[</span><span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span
-            class="n">projections</span> <span class="o">&lt;</span> <span class="o">-</span><span
-            class="n">epsilon</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span
-            class="o">.</span><span class="n">where</span><span class="p">(</span><span
-            class="n">projections</span> <span class="o">&gt;</span> <span class="n">epsilon</span><span
-            class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="c1"># projections[np.where(projections &gt; -epsilon) and np.where(projections &lt; epsilon)] = 0</span>
 
                 <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span
-            class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span
+            class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span
             class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span
-            class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-
+            class="n">projections</span><span class="o">.</span><span class="n">shape</span><span
+            class="p">)[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span
@@ -612,6 +613,9 @@
         <span class="n">umbrella_curvature</span> <span class="o">=</span> <span class="n">np</span><span
             class="o">.</span><span class="n">asarray</span><span class="p">(</span><span
             class="n">umbrellaCurvature</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">umbrella_curvature</span><span
+            class="o">.</span><span class="n">mean</span><span class="p">())</span>
         <span class="k">if</span> <span class="n">cuvatureProperty</span> <span class="ow">is</span> <span class="kc">None</span><span
             class="p">:</span>
             <span class="k">return</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span
@@ -626,6 +630,74 @@
             class="n">umbrella_curvature</span><span class="o">=</span><span class="n">umbrella_curvature</span><span
             class="p">)</span></div>
 
+<div class="viewcode-block" id="CurvatureFactory.filter_curvature_roughness"><a class="viewcode-back"
+                                                                                href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.filter_curvature_roughness">[docs]</a>    <span
+        class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">filter_curvature_roughness</span><span class="p">(</span><span
+            class="bp">cls</span><span class="p">,</span> <span class="n">curvature_property</span><span
+            class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">mean</span><span
+            class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span
+            class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span
+            class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                                   <span class="n">verbose</span><span class="o">=</span><span
+            class="kc">False</span><span class="p">,</span> <span class="n">posonly</span><span class="o">=</span><span
+            class="kc">False</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turns curvature values to zero if they are part of a normal distribution N~(mean, std)</span>
+
+<span class="sd">        ..math::</span>
+<span class="sd">            H_0:\qquad |\kappa| \leq Z_{1-\frac{\alpha}{2}}</span>
+
+<span class="sd">        :param curvature_property: the curvature property to which the filterization is applied</span>
+<span class="sd">        :param attribute_name: the curvature attribute to filter</span>
+<span class="sd">        :param mean: the mean value which will turn to zero if a value is part of the population. Default: 0</span>
+<span class="sd">        :param std: the standard deviation from the mean value. Usually defined by the data texture/roughness. Defualt: 1</span>
+<span class="sd">        :param alpha: the confidence level according to which a value is measured</span>
+<span class="sd">        :param verbose: print inter-running messages</span>
+
+<span class="sd">        :type curvature_property: CurvatureProperty</span>
+<span class="sd">        :type attribute_name: str</span>
+<span class="sd">        :type mean: float</span>
+<span class="sd">        :type std: float</span>
+<span class="sd">        :type alpha: float</span>
+<span class="sd">        :type verbose: bool</span>
+
+<span class="sd">        :return: a new curvature property with filterized values. All values that were in the old property are kept.</span>
+
+<span class="sd">        :rtype: CurvatureProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span
+            class="n">stats</span>
+
+        <span class="n">w_alpha</span> <span class="o">=</span> <span class="n">stats</span><span
+            class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span
+            class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span
+            class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">new_curvature</span> <span class="o">=</span> <span class="n">curvature_property</span>
+        <span class="n">curvature_values</span> <span class="o">=</span> <span class="n">curvature_property</span><span
+            class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">attribute_name</span><span
+            class="p">)</span>
+
+        <span class="c1"># check that the value statistically differ from the mean</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">curvature_values</span> <span class="o">-</span> <span class="n">mean</span><span
+            class="p">)</span> <span class="o">/</span> <span class="n">std</span>
+
+        <span class="n">new_values</span> <span class="o">=</span> <span class="n">curvature_values</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">zeros_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">abs</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span
+            class="o">&lt;</span> <span class="n">w_alpha</span>
+        <span class="n">new_values</span><span class="p">[</span><span class="n">zeros_</span><span
+            class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">posonly</span><span class="p">:</span>
+            <span class="n">new_values</span><span class="p">[</span><span class="n">new_values</span> <span class="o">&gt;</span> <span
+            class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">new_curvature</span><span class="o">.</span><span class="fm">__setattr__</span><span
+            class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span
+            class="n">new_values</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_curvature</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.raster_fundamentalForm"><a class="viewcode-back"
                                                                             href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.raster_fundamentalForm">[docs]</a>    <span

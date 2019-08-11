@@ -114,6 +114,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -181,21 +182,80 @@
                                 </dt>
                                 <dd><p>Property that holds eigen propoerties (e.g., eigen vectors, eigen values)</p>
                                     <p class="rubric">Attributes</p>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Points</span></code></td>
+                                            <td>Holds the points dataset</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Raster</span></code></td>
+                                            <td>Holds raster dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Size</span></code></td>
+                                            <td>Return the size of the property</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#EigenProperty.EigenProperty.eigenValues"
+                                                   title="EigenProperty.EigenProperty.eigenValues"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">eigenValues</span></code></a></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#EigenProperty.EigenProperty.eigenVectors"
+                                                   title="EigenProperty.EigenProperty.eigenVectors"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">eigenVectors</span></code></a></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">path</span></code></td>
+                                            <td>The path of the dataset</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <p class="rubric">Methods</p>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_BaseProperty__getPointProperty</span></code>(idx)
+                                            </td>
+                                            <td>Retrieve the point property (object or value) of a specific point</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#EigenProperty.EigenProperty.getValues"
+                                                   title="EigenProperty.EigenProperty.getValues"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">getValues</span></code></a>()
+                                            </td>
+                                            <td>Get a specific characteristic value of the property</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#EigenProperty.EigenProperty.load"
+                                                   title="EigenProperty.EigenProperty.load"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">load</span></code></a>(**kwargs)
+                                            </td>
+                                            <td>Sets eigen values and eigen vectors into the EigenProperty object</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <dl class="attribute">
@@ -226,18 +286,24 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Get a specific characteristic value of the property</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>value for each point</p>
-                                                </dd>
-                                                <dt class="field-even">Return type</dt>
-                                                <dd class="field-even"><p>np.array</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">value for each point</td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Return type:</th>
+                                                    <td class="field-body">np.array</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                             <div class="admonition warning">
-                                                <p class="admonition-title">Warning</p>
-                                                <p>This function needs to be overwritten for each inheriting property.
-                                                    It is empty at the BaseProperty</p>
+                                                <p class="first admonition-title">Warning</p>
+                                                <p class="last">This function needs to be overwritten for each
+                                                    inheriting property. It is empty at the BaseProperty</p>
                                             </div>
                                         </dd>
                                     </dl>
@@ -252,18 +318,24 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Sets eigen values and eigen vectors into the EigenProperty object</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>eigenValues</strong> (<em>np.array</em>) – if two
-                                                            nd-arrays were sent for raster data. np.array([minVals,
-                                                            maxVals])</p></li>
-                                                        <li><p><strong>eigenVectors</strong> (<em>np.array</em>) – </p>
-                                                        </li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>eigenValues</strong> (<em>np.array</em>) – if
+                                                                two nd-arrays were sent for raster data.
+                                                                np.array([minVals, maxVals])
+                                                            </li>
+                                                            <li><strong>eigenVectors</strong> (<em>np.array</em>) –</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 

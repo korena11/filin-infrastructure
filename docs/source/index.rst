@@ -29,6 +29,8 @@ Contents:
     Utils/EigenFactory
     Utils/Utils
     Visualizations/Visualization
+    zreferences
+
 	   
 Dependencies
 ============
@@ -49,11 +51,7 @@ This project is implemented for Python 3.6
 
    Installation via `pip install pyspark`
 
-References
-----------
 
-.. bibliography:: zrefs1.bib
-   :cited:
 
 
 

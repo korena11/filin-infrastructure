@@ -124,6 +124,8 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a>
+                    </li>
                 </ul>
 
 
@@ -200,21 +202,105 @@
                                     </dt>
                                     <dd><p>This class represents a 4x4 3D transformation matrix</p>
                                         <p class="rubric">Attributes</p>
-                                        <table class="longtable docutils align-center">
+                                        <table border="1" class="longtable docutils">
                                             <colgroup>
-                                                <col style="width: 10%"/>
-                                                <col style="width: 90%"/>
+                                                <col width="10%"/>
+                                                <col width="90%"/>
                                             </colgroup>
-                                            <tbody>
+                                            <tbody valign="top">
+                                            <tr class="row-odd">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Points</span></code></td>
+                                                <td>Holds the points dataset</td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Raster</span></code></td>
+                                                <td>Holds raster dataset</td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Size</span></code></td>
+                                                <td>Return the size of the property</td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">path</span></code></td>
+                                                <td>The path of the dataset</td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.rotationMatrix"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">rotationMatrix</span></code></a></td>
+                                                <td>Points’ rotation matrix with respect to reference pointset</td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.transformationMatrix"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">transformationMatrix</span></code></a></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.translationMatrix"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">translationMatrix</span></code></a></td>
+                                                <td>Points’ translation matrix with respect to reference pointset</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <p class="rubric">Methods</p>
-                                        <table class="longtable docutils align-center">
+                                        <table border="1" class="longtable docutils">
                                             <colgroup>
-                                                <col style="width: 10%"/>
-                                                <col style="width: 90%"/>
+                                                <col width="10%"/>
+                                                <col width="90%"/>
                                             </colgroup>
-                                            <tbody>
+                                            <tbody valign="top">
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.FromFile"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.FromFile"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">FromFile</span></code></a>()
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">_BaseProperty__getPointProperty</span></code>(idx)
+                                                </td>
+                                                <td>Retrieve the point property (object or value) of a specific point
+                                                </td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.eulerAngles_from_R"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">eulerAngles_from_R</span></code></a>([dtype])
+                                                </td>
+                                                <td>Extracts euler rotation angles from the rotation matrix</td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">getValues</span></code>()
+                                                </td>
+                                                <td>Get a specific characteristic value of the property</td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixProperty.TransformationMatrixProperty.load"
+                                                       title="TransformationMatrixProperty.TransformationMatrixProperty.load"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">load</span></code></a>(*args,&nbsp;**kwargs)
+                                                </td>
+                                                <td>Sets the rotation and translation matrices</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <dl class="staticmethod">
@@ -242,27 +328,37 @@
                                             </dt>
                                             <dd><p>Extracts euler rotation angles from the rotation matrix</p>
                                                 <div class="admonition warning">
-                                                    <p class="admonition-title">Warning</p>
-                                                    <p>The angles returned are subjected to ambiguity</p>
+                                                    <p class="first admonition-title">Warning</p>
+                                                    <p class="last">The angles returned are subjected to ambiguity</p>
                                                 </div>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>dtype</strong> (<a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                            title="(in Python v3.7)"><em>str</em></a>) – the output in
-                                                        ‘degrees’ or ‘radians’ (default ‘degrees’)</p>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>(omega, phi, kappa) according to the
-                                                        dtype</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p><a class="reference external"
-                                                                                href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                                title="(in Python v3.7)">tuple</a></p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>dtype</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                title="(in Python v3.7)"><em>str</em></a>) – the output
+                                                            in ‘degrees’ or ‘radians’ (default ‘degrees’)
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body">(omega, phi, kappa) according to the
+                                                            dtype
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body"><a class="reference external"
+                                                                                  href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                                  title="(in Python v3.7)">tuple</a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -277,24 +373,38 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Sets the rotation and translation matrices</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>transformationMatrix</strong> – 4x4
-                                                        transformation matrix</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>transformationMatrix</strong> –
+                                                            4x4 transformation matrix
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                                 <p><em>Options</em></p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>translationMatrix</strong> (<em>np.array</em>)
-                                                                – 1x3 translation matrix</p></li>
-                                                            <li><p><strong>rotationMatrix</strong> (<em>np.array</em>) –
-                                                                3x3 rotation.</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first last simple">
+                                                                <li><strong>translationMatrix</strong>
+                                                                    (<em>np.array</em>) – 1x3 translation matrix
+                                                                </li>
+                                                                <li><strong>rotationMatrix</strong> (<em>np.array</em>)
+                                                                    – 3x3 rotation.
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -305,15 +415,21 @@
                                                                                                title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Points’ rotation matrix with respect to reference pointset</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>dimensions</strong> (<a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                            title="(in Python v3.7)"><em>int</em></a>) – the dimensions
-                                                        of the returned vector. Either 3 or 4</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>dimensions</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/functions.html#int"
+                                                                title="(in Python v3.7)"><em>int</em></a>) – the
+                                                            dimensions of the returned vector. Either 3 or 4
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -333,15 +449,21 @@
                                                                                                   title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Points’ translation matrix with respect to reference pointset</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>dimensions</strong> (<a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                            title="(in Python v3.7)"><em>int</em></a>) – the dimensions
-                                                        of the returned vector. Either 3 or 4</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>dimensions</strong> (<a
+                                                                class="reference external"
+                                                                href="https://docs.python.org/3/library/functions.html#int"
+                                                                title="(in Python v3.7)"><em>int</em></a>) – the
+                                                            dimensions of the returned vector. Either 3 or 4
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -365,12 +487,50 @@
                                     </dt>
                                     <dd><p>Different methods for rotation matrix computation</p>
                                         <p class="rubric">Methods</p>
-                                        <table class="longtable docutils align-center">
+                                        <table border="1" class="longtable docutils">
                                             <colgroup>
-                                                <col style="width: 10%"/>
-                                                <col style="width: 90%"/>
+                                                <col width="10%"/>
+                                                <col width="90%"/>
                                             </colgroup>
-                                            <tbody>
+                                            <tbody valign="top">
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixFactory.TransformationMatrixFactory.Rotation_2Vectors"
+                                                       title="TransformationMatrixFactory.TransformationMatrixFactory.Rotation_2Vectors"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Rotation_2Vectors</span></code></a>(points,&nbsp;a1,&nbsp;a2)
+                                                </td>
+                                                <td>compute rotation matrix from vector a1 to a2 rotation by angle
+                                                    between a1 and a2 around the unit vector
+                                                </td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixFactory.TransformationMatrixFactory.Rotation_AxisAngle"
+                                                       title="TransformationMatrixFactory.TransformationMatrixFactory.Rotation_AxisAngle"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Rotation_AxisAngle</span></code></a>(points,&nbsp;axis,&nbsp;theta)
+                                                </td>
+                                                <td>create rotation matrix given axis and angle</td>
+                                            </tr>
+                                            <tr class="row-odd">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixFactory.TransformationMatrixFactory.Rotation_EulerAngles"
+                                                       title="TransformationMatrixFactory.TransformationMatrixFactory.Rotation_EulerAngles"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Rotation_EulerAngles</span></code></a>(points,&nbsp;angles[,&nbsp;dtype])
+                                                </td>
+                                                <td>Given rotation angles build a rotation matrix</td>
+                                            </tr>
+                                            <tr class="row-even">
+                                                <td><a class="reference internal"
+                                                       href="#TransformationMatrixFactory.TransformationMatrixFactory.Rotation_Quaternion"
+                                                       title="TransformationMatrixFactory.TransformationMatrixFactory.Rotation_Quaternion"><code
+                                                        class="xref py py-obj docutils literal notranslate"><span
+                                                        class="pre">Rotation_Quaternion</span></code></a>(points,&nbsp;q)
+                                                </td>
+                                                <td>create rotation matrix given axis and angle</td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <dl class="staticmethod">
@@ -385,25 +545,36 @@
                                             </dt>
                                             <dd><p>compute rotation matrix from vector a1 to a2
                                                 rotation by angle between a1 and a2 around the unit vector</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>points</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet</em></a>) –
-                                                                points to rotate</p></li>
-                                                            <li><p><strong>a1</strong> – a2: row vectors</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>R rotation matrix</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p>3x3 nd-array</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first simple">
+                                                                <li><strong>points</strong> (<a
+                                                                        class="reference internal"
+                                                                        href="../../Datasets/PointSet.html#PointSet.PointSet"
+                                                                        title="PointSet.PointSet"><em>PointSet</em></a>)
+                                                                    – points to rotate
+                                                                </li>
+                                                                <li><strong>a1</strong> – a2: row vectors</li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body"><p class="first">R rotation matrix</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body"><p class="first last">3x3 nd-array</p>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -419,25 +590,35 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>create rotation matrix given axis and angle</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>points</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet</em></a>) –
-                                                                points to rotate</p></li>
-                                                            <li><p><strong>axis</strong> (<em>nx1</em><em> or </em><em>1xn
-                                                                nd-array</em>) – axis to rotate around</p></li>
-                                                            <li><p><strong>theta</strong> – rotation angle in degrees
-                                                            </p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Return type</dt>
-                                                    <dd class="field-even"><p>3x3 nd-array</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first simple">
+                                                                <li><strong>points</strong> (<a
+                                                                        class="reference internal"
+                                                                        href="../../Datasets/PointSet.html#PointSet.PointSet"
+                                                                        title="PointSet.PointSet"><em>PointSet</em></a>)
+                                                                    – points to rotate
+                                                                </li>
+                                                                <li><strong>axis</strong> (<em>nx1</em><em> or </em><em>1xn
+                                                                    nd-array</em>) – axis to rotate around
+                                                                </li>
+                                                                <li><strong>theta</strong> – rotation angle in degrees
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body"><p class="first last">3x3 nd-array</p>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -454,42 +635,62 @@
                                             <dd><p>Given rotation angles build a rotation matrix</p>
                                                 <blockquote>
                                                     <div>
-                                                        <dl class="field-list simple">
-                                                            <dt class="field-odd">param points</dt>
-                                                            <dd class="field-odd"><p>points to rotate</p>
-                                                            </dd>
-                                                            <dt class="field-even">param angles</dt>
-                                                            <dd class="field-even"><p>omega, phi, kappa</p>
-                                                            </dd>
-                                                            <dt class="field-odd">param dtype</dt>
-                                                            <dd class="field-odd"><p>radians, degrees or symbolic</p>
-                                                            </dd>
-                                                        </dl>
+                                                        <table class="docutils field-list" frame="void" rules="none">
+                                                            <col class="field-name"/>
+                                                            <col class="field-body"/>
+                                                            <tbody valign="top">
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name">param points:</th>
+                                                                <td class="field-body">points to rotate</td>
+                                                            </tr>
+                                                            <tr class="field-even field">
+                                                                <th class="field-name">param angles:</th>
+                                                                <td class="field-body">omega, phi, kappa</td>
+                                                            </tr>
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name">param dtype:</th>
+                                                                <td class="field-body">radians, degrees or symbolic</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
                                                         <div class="admonition warning">
-                                                            <p class="admonition-title">Warning</p>
-                                                            <p>Symbolic option should be checked</p>
+                                                            <p class="first admonition-title">Warning</p>
+                                                            <p class="last">Symbolic option should be checked</p>
                                                         </div>
-                                                        <dl class="field-list simple">
-                                                            <dt class="field-odd">type points</dt>
-                                                            <dd class="field-odd"><p>PointSet</p>
-                                                            </dd>
-                                                            <dt class="field-even">type angles</dt>
-                                                            <dd class="field-even"><p>tuple</p>
-                                                            </dd>
-                                                            <dt class="field-odd">type dtype</dt>
-                                                            <dd class="field-odd"><p>str</p>
-                                                            </dd>
-                                                        </dl>
+                                                        <table class="docutils field-list" frame="void" rules="none">
+                                                            <col class="field-name"/>
+                                                            <col class="field-body"/>
+                                                            <tbody valign="top">
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name">type points:</th>
+                                                                <td class="field-body">PointSet</td>
+                                                            </tr>
+                                                            <tr class="field-even field">
+                                                                <th class="field-name">type angles:</th>
+                                                                <td class="field-body">tuple</td>
+                                                            </tr>
+                                                            <tr class="field-odd field">
+                                                                <th class="field-name">type dtype:</th>
+                                                                <td class="field-body">str</td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </blockquote>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Returns</dt>
-                                                    <dd class="field-odd"><p>R rotation matrix</p>
-                                                    </dd>
-                                                    <dt class="field-even">Return type</dt>
-                                                    <dd class="field-even"><p>3x3 nd-array</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body">R rotation matrix</td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body">3x3 nd-array</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -504,26 +705,38 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>create rotation matrix given axis and angle</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>points</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet</em></a>) –
-                                                                (PointSet) points to rotate</p></li>
-                                                            <li><p><strong>q</strong> (<em>np.ndarray 4x1</em>) –
-                                                                quaternion</p></li>
-                                                        </ul>
-                                                    </dd>
-                                                    <dt class="field-even">Returns</dt>
-                                                    <dd class="field-even"><p>R rotation matrix</p>
-                                                    </dd>
-                                                    <dt class="field-odd">Return type</dt>
-                                                    <dd class="field-odd"><p>np.ndarray 3x3</p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first simple">
+                                                                <li><strong>points</strong> (<a
+                                                                        class="reference internal"
+                                                                        href="../../Datasets/PointSet.html#PointSet.PointSet"
+                                                                        title="PointSet.PointSet"><em>PointSet</em></a>)
+                                                                    – (PointSet) points to rotate
+                                                                </li>
+                                                                <li><strong>q</strong> (<em>np.ndarray 4x1</em>) –
+                                                                    quaternion
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body"><p class="first">R rotation matrix</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body"><p class="first last">np.ndarray 3x3</p>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -536,12 +749,12 @@
                                 <h2>Rotation Utilities<a class="headerlink" href="#module-RotationUtils"
                                                          title="Permalink to this headline">¶</a></h2>
                                 <p class="rubric">Methods</p>
-                                <table class="longtable docutils align-center">
+                                <table border="1" class="longtable docutils">
                                     <colgroup>
-                                        <col style="width: 10%"/>
-                                        <col style="width: 90%"/>
+                                        <col width="10%"/>
+                                        <col width="90%"/>
                                     </colgroup>
-                                    <tbody>
+                                    <tbody valign="top">
                                     </tbody>
                                 </table>
                                 <dl class="function">
@@ -571,33 +784,46 @@
                                             0 &amp; 0 &amp; 1
                                             \end{bmatrix}\end{split}\]
                                         </div>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>omega</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/functions.html#float"
-                                                                                      title="(in Python v3.7)"><em>float</em></a>)
-                                                        – rotation about x-axis</p></li>
-                                                    <li><p><strong>phi</strong> (<a class="reference external"
-                                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                                    title="(in Python v3.7)"><em>float</em></a>)
-                                                        – rotation about y-axis</p></li>
-                                                    <li><p><strong>kappa</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/functions.html#float"
-                                                                                      title="(in Python v3.7)"><em>float</em></a>)
-                                                        – rotation about z-axis</p></li>
-                                                    <li><p><strong>dtype</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
-                                                        ‘degrees’</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>rotation matrix 3x3 nd-array</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>omega</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#float"
+                                                                                       title="(in Python v3.7)"><em>float</em></a>)
+                                                            – rotation about x-axis
+                                                        </li>
+                                                        <li><strong>phi</strong> (<a class="reference external"
+                                                                                     href="https://docs.python.org/3/library/functions.html#float"
+                                                                                     title="(in Python v3.7)"><em>float</em></a>)
+                                                            – rotation about y-axis
+                                                        </li>
+                                                        <li><strong>kappa</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#float"
+                                                                                       title="(in Python v3.7)"><em>float</em></a>)
+                                                            – rotation about z-axis
+                                                        </li>
+                                                        <li><strong>dtype</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                            – angles units (‘radians’ / ‘degrees’ / ‘symbolic’).
+                                                            Default: ‘degrees’
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first last">rotation matrix 3x3
+                                                    nd-array</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -613,26 +839,36 @@
                                     </dt>
                                     <dd><p>Extracts rotation angles from the rotation matrix</p>
                                         <div class="admonition note">
-                                            <p class="admonition-title">Note</p>
-                                            <p>The angles returned are subjected to ambiguity</p>
+                                            <p class="first admonition-title">Note</p>
+                                            <p class="last">The angles returned are subjected to ambiguity</p>
                                         </div>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>R</strong> (<em>nd-array 3x3</em>) – rotation matrix
-                                                    </p></li>
-                                                    <li><p><strong>dtype</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – should the output be in ‘degrees’ or ‘radians’ (default
-                                                        ‘degrees’)</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>(omega, phi, kappa) according to the dtype</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>R</strong> (<em>nd-array 3x3</em>) – rotation matrix
+                                                        </li>
+                                                        <li><strong>dtype</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                            – should the output be in ‘degrees’ or ‘radians’ (default
+                                                            ‘degrees’)
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first last">(omega, phi, kappa)
+                                                    according to the dtype</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -647,25 +883,36 @@
                                                                                         title="Permalink to this definition">¶</a>
                                     </dt>
                                     <dd><p>Builds a rotation matrix about the z-axis</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>kappa</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/functions.html#float"
-                                                                                      title="(in Python v3.7)"><em>float</em></a>)
-                                                        – angle</p></li>
-                                                    <li><p><strong>dtype</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
-                                                        ‘degrees’</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>a 3x3 rotation matrix, around the z-axis</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>kappa</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#float"
+                                                                                       title="(in Python v3.7)"><em>float</em></a>)
+                                                            – angle
+                                                        </li>
+                                                        <li><strong>dtype</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                            – angles units (‘radians’ / ‘degrees’ / ‘symbolic’).
+                                                            Default: ‘degrees’
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first last">a 3x3 rotation matrix,
+                                                    around the z-axis</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -680,28 +927,41 @@
                                                                                         title="Permalink to this definition">¶</a>
                                     </dt>
                                     <dd><p>Builds a rotation matrix about the x-axis</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>omega</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/functions.html#float"
-                                                                                      title="(in Python v3.7)"><em>float</em></a>)
-                                                        – angle</p></li>
-                                                    <li><p><strong>dtype</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
-                                                        ‘degrees’</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>a 3x3 rotation matrix, around the x-axis</p>
-                                            </dd>
-                                            <dt class="field-odd">Return type</dt>
-                                            <dd class="field-odd"><p>np.array</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>omega</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#float"
+                                                                                       title="(in Python v3.7)"><em>float</em></a>)
+                                                            – angle
+                                                        </li>
+                                                        <li><strong>dtype</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                            – angles units (‘radians’ / ‘degrees’ / ‘symbolic’).
+                                                            Default: ‘degrees’
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first">a 3x3 rotation matrix, around
+                                                    the x-axis</p>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Return type:</th>
+                                                <td class="field-body"><p class="first last">np.array</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -716,25 +976,36 @@
                                                                                         title="Permalink to this definition">¶</a>
                                     </dt>
                                     <dd><p>Builds a rotation matrix about the y-axis</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>phi</strong> (<a class="reference external"
-                                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                                    title="(in Python v3.7)"><em>float</em></a>)
-                                                        – angle</p></li>
-                                                    <li><p><strong>dtype</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – angles units (‘radians’ / ‘degrees’ / ‘symbolic’). Default:
-                                                        ‘degrees’</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>a 3x3 rotation matrix, around the y-axis</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>phi</strong> (<a class="reference external"
+                                                                                     href="https://docs.python.org/3/library/functions.html#float"
+                                                                                     title="(in Python v3.7)"><em>float</em></a>)
+                                                            – angle
+                                                        </li>
+                                                        <li><strong>dtype</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                            – angles units (‘radians’ / ‘degrees’ / ‘symbolic’).
+                                                            Default: ‘degrees’
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first last">a 3x3 rotation matrix,
+                                                    around the y-axis</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -762,24 +1033,35 @@
                                             (i.e., <span class="math notranslate nohighlight">\(v=a_\text{from vector}\cdot b_\text{to vector}\)</span>;
                                             and <span class="math notranslate nohighlight">\(\alpha\)</span> the
                                             angle between from and to vectors</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd">
-                                                <ul class="simple">
-                                                    <li><p><strong>from_vector</strong> (<em>np.ndarray</em>) – the
-                                                        vector from which the rotation matrix should be computed</p>
-                                                    </li>
-                                                    <li><p><strong>to_vector</strong> (<em>np.ndarray</em>) – the vector
-                                                        to which the matrix should rotate to</p></li>
-                                                </ul>
-                                            </dd>
-                                            <dt class="field-even">Returns</dt>
-                                            <dd class="field-even"><p>rotation matrix</p>
-                                            </dd>
-                                            <dt class="field-odd">Return type</dt>
-                                            <dd class="field-odd"><p>np.ndarray</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body">
+                                                    <ul class="first simple">
+                                                        <li><strong>from_vector</strong> (<em>np.ndarray</em>) – the
+                                                            vector from which the rotation matrix should be computed
+                                                        </li>
+                                                        <li><strong>to_vector</strong> (<em>np.ndarray</em>) – the
+                                                            vector to which the matrix should rotate to
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body"><p class="first">rotation matrix</p>
+                                                </td>
+                                            </tr>
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Return type:</th>
+                                                <td class="field-body"><p class="first last">np.ndarray</p>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 
@@ -794,12 +1076,18 @@
                                                                                         title="Permalink to this definition">¶</a>
                                     </dt>
                                     <dd><p>Builds a skew symmetric matrix from an array</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Parameters</dt>
-                                            <dd class="field-odd"><p><strong>v</strong> (<em>nd-array</em>) – 3x1 array
-                                            </p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Parameters:</th>
+                                                <td class="field-body"><strong>v</strong> (<em>nd-array</em>) – 3x1
+                                                    array
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                         <p>:return skew symmetric matrix</p>
                                     </dd>
                                 </dl>
@@ -817,17 +1105,24 @@
                                     <dd><p>Convert from decimal degrees to degree-minute-second
                                         :param dd: degree in decimal degrees
                                         :type dd: float</p>
-                                        <dl class="field-list simple">
-                                            <dt class="field-odd">Returns</dt>
-                                            <dd class="field-odd"><p>degree in dms</p>
-                                            </dd>
-                                            <dt class="field-even">Return type</dt>
-                                            <dd class="field-even"><p><a class="reference external"
-                                                                         href="https://docs.python.org/3/library/stdtypes.html#tuple"
-                                                                         title="(in Python v3.7)">tuple</a> (degree,
-                                                minutes, seconds)</p>
-                                            </dd>
-                                        </dl>
+                                        <table class="docutils field-list" frame="void" rules="none">
+                                            <col class="field-name"/>
+                                            <col class="field-body"/>
+                                            <tbody valign="top">
+                                            <tr class="field-odd field">
+                                                <th class="field-name">Returns:</th>
+                                                <td class="field-body">degree in dms</td>
+                                            </tr>
+                                            <tr class="field-even field">
+                                                <th class="field-name">Return type:</th>
+                                                <td class="field-body"><a class="reference external"
+                                                                          href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                                          title="(in Python v3.7)">tuple</a> (degree,
+                                                    minutes, seconds)
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </dd>
                                 </dl>
 

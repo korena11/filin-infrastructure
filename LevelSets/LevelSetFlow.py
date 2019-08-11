@@ -514,14 +514,14 @@ class LevelSetFlow:
                 .. math::
 
                     C_t = k^{1/3} N \Rightarrow
-                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}\cdot|\nabla \varphi|
 
             - 'geodesic': geodesic active contours, according to :cite:`Caselles.etal1997`
 
                 .. math::
 
-                    C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
-                    \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                    C_t = (g(I)(c+\kappa) -\nabla(g(I))N)N \Rightarrow \\
+                    \phi_t = g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)\cdot|\nabla \varphi| + g(I)|\nabla \varphi|
 
             - 'band': band velocity, according to :cite:`Li.etal2006`
 
@@ -575,7 +575,7 @@ class LevelSetFlow:
             flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
                                                                     function._y)
             if open_flag:
-                psi_t = self.g * self.phi().kappa * self.psi.norm_nabla + (
+                psi_t = self.g * self.function.kappa * self.psi.norm_nabla + (
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
                 self.psi.update(self.psi.value - psi_t, regularization_note=processing_props['regularization'])
 

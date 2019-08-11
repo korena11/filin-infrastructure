@@ -84,6 +84,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -137,9 +138,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">o3d</span>
 
-<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">PointSubSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span><span
-                                class="p">,</span> <span class="n">PointSubSetOpen3D</span>
+<span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span
+                                class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSubSetOpen3D</span> <span class="k">import</span> <span
+                                class="n">PointSetOpen3D</span><span class="p">,</span> <span class="n">PointSubSetOpen3D</span>
 
 
 <div class="viewcode-block" id="VisualizationO3D"><a class="viewcode-back"
@@ -225,7 +227,7 @@
 
 <span class="sd">        :type pointset: PointSetOpen3D, PointSet.PointSet</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span
+        <span class="kn">from</span> <span class="nn">Color.ColorProperty</span> <span class="k">import</span> <span
             class="n">ColorProperty</span>
         <span class="n">key_to_callback</span> <span class="o">=</span> <span class="bp">cls</span><span
             class="o">.</span><span class="n">initialize_key_to_callback</span><span class="p">()</span>
@@ -269,13 +271,24 @@
 <div class="viewcode-block" id="VisualizationO3D.visualize_property"><a class="viewcode-back"
                                                                         href="../Visualizations/VisualizationO3D.html#VisualizationO3D.VisualizationO3D.visualize_property">[docs]</a>    <span
         class="k">def</span> <span class="nf">visualize_property</span><span class="p">(</span><span
-        class="bp">self</span><span class="p">,</span> <span class="n">propertyclass</span><span class="p">):</span>
+        class="bp">self</span><span class="p">,</span> <span class="n">propertyclass</span><span
+        class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span
+        class="kc">None</span><span class="p">,</span> <span class="n">zero_black</span><span class="o">=</span><span
+        class="kc">False</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span
+        class="mf">0.05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize property classes</span>
 
 <span class="sd">        :param propertyclass: a property class. Can have multiple attributes to visualize</span>
+<span class="sd">        :param attribute_name: name of the attribute to visualize. If None -- can cycle through the attribute using &quot;A&quot;</span>
+<span class="sd">        :param zero_black: show close to zero values as black dots. Default: False</span>
+<span class="sd">        :param epsilon: the thershold for zero value       </span>
 
 <span class="sd">        :type propertyclass: BaseProperty</span>
+<span class="sd">        :type attribute_name: str</span>
+<span class="sd">        :type zero_black: bool</span>
+<span class="sd">        :type epsilon: float</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># initialize custom keys for visualization window</span>
@@ -302,7 +315,8 @@
             class="p">(</span><span class="bp">self</span><span class="o">.</span><span
             class="n">__make_color_array</span><span class="p">(</span><span class="n">propertyclass</span><span
             class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">att</span><span
-            class="p">)))</span>
+            class="p">),</span> <span class="n">zero_black</span><span class="p">,</span> <span class="n">epsilon</span><span
+            class="p">))</span>
                 <span class="n">attribute_name</span><span class="o">.</span><span class="n">append</span><span
             class="p">(</span><span class="n">att</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span
@@ -326,11 +340,13 @@
         <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colormap_list</span> <span
             class="o">=</span> <span class="n">cycle</span><span class="p">([</span><span
-            class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span
+            class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="s1">&#39;RdYlBu&#39;</span><span
+            class="p">,</span> <span class="s1">&#39;PuOr&#39;</span><span class="p">,</span> <span class="s1">&#39;PiYG&#39;</span><span
+            class="p">,</span> <span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span
             class="p">,</span> <span class="s1">&#39;winter&#39;</span><span class="p">,</span> <span class="s1">&#39;hot&#39;</span><span
             class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">])</span>
         <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span
-            class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)]</span> <span
+            class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)]</span> <span
             class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toggle_attributes_colors</span>
         <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span
             class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)]</span> <span
@@ -436,17 +452,27 @@
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">__make_color_array</span><span class="p">(</span><span
-            class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+            class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span
+            class="n">zero_black</span><span class="o">=</span><span class="kc">False</span><span
+            class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span
+            class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prepare an array to be used as a color array for visualization</span>
 
 <span class="sd">        :param array: array of numbers to be converted into color array</span>
+<span class="sd">        :param zero_black: show close to zero values as black dots</span>
+<span class="sd">        :param epsilon: the definition of &quot;close to&quot; </span>
 
 <span class="sd">        :type array: numpy.array</span>
+<span class="sd">        :type zero_black: bool</span>
 
 <span class="sd">        :return: an open3d vector</span>
 <span class="sd">        :rtype: o3d.Vector3D</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">array</span><span
+            class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
         <span class="n">size_array</span> <span class="o">=</span> <span class="n">array</span><span
             class="o">.</span><span class="n">shape</span>
 
@@ -474,8 +500,41 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rgb</span> <span class="o">=</span> <span class="n">array</span>
 
-        <span class="c1"># normalize to range [0...1]</span>
-        <span class="n">rgb_normed</span> <span class="o">=</span> <span class="p">(</span><span
+        <span class="k">if</span> <span class="n">zero_black</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rgb</span><span class="p">[</span><span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rgb</span> <span
+            class="o">&lt;</span> <span class="mi">0</span><span class="p">)]</span><span class="o">.</span><span
+            class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">rgb_normed</span> <span class="o">=</span> <span class="p">(</span><span
+            class="n">rgb</span> <span class="o">-</span> <span class="n">rgb</span><span class="o">.</span><span
+            class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span
+            class="n">rgb</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span
+            class="o">-</span> <span class="n">rgb</span><span class="o">.</span><span class="n">min</span><span
+            class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># make zero the lowest number, number below zero higher in a notch</span>
+                <span class="n">rgb</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span
+            class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span
+            class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span
+            class="o">&lt;</span> <span class="n">epsilon</span><span class="p">),</span> <span
+            class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">rgb_normed</span> <span class="o">=</span> <span class="n">np</span><span
+            class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rgb</span><span
+            class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span
+            class="p">(</span><span class="n">rgb</span> <span class="o">&lt;</span> <span class="mi">0</span><span
+            class="p">)])</span> <span class="o">+</span> <span class="p">(</span><span class="n">rgb</span> <span
+            class="o">-</span> <span class="n">rgb</span><span class="o">.</span><span class="n">min</span><span
+            class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">rgb</span><span
+            class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span
+            class="n">rgb</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+                <span class="n">rgb_normed</span><span class="p">[</span><span class="n">np</span><span
+            class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span
+            class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span
+            class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">),</span> <span
+            class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># normalize to range [0...1]</span>
+            <span class="n">rgb_normed</span> <span class="o">=</span> <span class="p">(</span><span
             class="n">rgb</span> <span class="o">-</span> <span class="n">rgb</span><span class="o">.</span><span
             class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span
             class="n">rgb</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span
