@@ -6,7 +6,7 @@ Created on Nov 25, 2015
 
 import cv2
 #
-import geopandas as gpd
+# import geopandas as gpd
 import h5py
 # import the necessary packages
 import matplotlib.pyplot as plt

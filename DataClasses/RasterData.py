@@ -6,10 +6,12 @@ photo-lab-3\Reuma
 
 from numpy import array, floor, nonzero, logical_or, logical_and, logical_not, zeros
 from numpy import max as npmax
-from pyproj import Proj, transform
 
 from DataClasses.BaseData import BaseData
 from DataClasses.PointSet import PointSet
+
+
+# from pyproj.Proj import Proj, transform
 
 
 class RasterData(BaseData):

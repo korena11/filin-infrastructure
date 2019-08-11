@@ -114,6 +114,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -182,21 +183,178 @@
                                 <dd><p>TriangulationProperty - Class for holding and analyzing the triangulation data of
                                     a given point set</p>
                                     <p class="rubric">Attributes</p>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.NumberOfTriangles"
+                                                   title="TriangulationProperty.TriangulationProperty.NumberOfTriangles"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">NumberOfTriangles</span></code></a></td>
+                                            <td>Number of triangles</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Points</span></code></td>
+                                            <td>Holds the points dataset</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Raster</span></code></td>
+                                            <td>Holds raster dataset</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Size</span></code></td>
+                                            <td>Return the size of the property</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TrianglesIndices"
+                                                   title="TriangulationProperty.TriangulationProperty.TrianglesIndices"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">TrianglesIndices</span></code></a></td>
+                                            <td>Indices of all the triangles</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">path</span></code></td>
+                                            <td>The path of the dataset</td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <p class="rubric">Methods</p>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AreaOfTriangle"
+                                                   title="TriangulationProperty.TriangulationProperty.AreaOfTriangle"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">AreaOfTriangle</span></code></a>(index)
+                                            </td>
+                                            <td>Calculates the area of a specific triangle defined by its index in the
+                                                triangles list
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AverageEdgeLength"
+                                                   title="TriangulationProperty.TriangulationProperty.AverageEdgeLength"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">AverageEdgeLength</span></code></a>()
+                                            </td>
+                                            <td>Calculating the average edge length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.AverageTriangleArea"
+                                                   title="TriangulationProperty.TriangulationProperty.AverageTriangleArea"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">AverageTriangleArea</span></code></a>()
+                                            </td>
+                                            <td>Calculating the average area of all triangles</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.IsPointInTriangle"
+                                                   title="TriangulationProperty.TriangulationProperty.IsPointInTriangle"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">IsPointInTriangle</span></code></a>(x,&nbsp;y,&nbsp;triangleIndex)
+                                            </td>
+                                            <td>Finding if a given point (x, y) is inside one of the triangles (defined
+                                                by its index) &#64;return: 1 - if the point is inside the triangle, 0 -
+                                                if the point lies on one or more of the triangle edges, -1 - the point
+                                                is outside the triangle
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.LengthOfAllEdges"
+                                                   title="TriangulationProperty.TriangulationProperty.LengthOfAllEdges"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">LengthOfAllEdges</span></code></a>()
+                                            </td>
+                                            <td>Calculating edges’ length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.LengthOfEdge"
+                                                   title="TriangulationProperty.TriangulationProperty.LengthOfEdge"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">LengthOfEdge</span></code></a>(triangleIndex,&nbsp;edgeIndex)
+                                            </td>
+                                            <td>Calculating the length of a specific edge of one of the triangles</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.MedianEdgeLength"
+                                                   title="TriangulationProperty.TriangulationProperty.MedianEdgeLength"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">MedianEdgeLength</span></code></a>()
+                                            </td>
+                                            <td>Calculating the median edge length in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.MedianTriangleArea"
+                                                   title="TriangulationProperty.TriangulationProperty.MedianTriangleArea"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">MedianTriangleArea</span></code></a>()
+                                            </td>
+                                            <td>Calculating the median area of all triangles</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TotalArea"
+                                                   title="TriangulationProperty.TriangulationProperty.TotalArea"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">TotalArea</span></code></a>()
+                                            </td>
+                                            <td>Calculates the total area enclosed in the triangulation</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.TrimEdgesByLength"
+                                                   title="TriangulationProperty.TriangulationProperty.TrimEdgesByLength"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">TrimEdgesByLength</span></code></a>(maxLength)
+                                            </td>
+                                            <td>Removing all triangles which have an edge longer than a given
+                                                threshold
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_BaseProperty__getPointProperty</span></code>(idx)
+                                            </td>
+                                            <td>Retrieve the point property (object or value) of a specific point</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">getValues</span></code>()
+                                            </td>
+                                            <td>Get a specific characteristic value of the property</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#TriangulationProperty.TriangulationProperty.load"
+                                                   title="TriangulationProperty.TriangulationProperty.load"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">load</span></code></a>(*args,&nbsp;**kwargs)
+                                            </td>
+                                            <td>Sets the TriagulationProperty attributes :param trianglesIndices: each
+                                                row representing a triangle, holding the indices
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <dl class="method">
@@ -210,15 +368,22 @@
                                         </dt>
                                         <dd><p>Calculates the area of a specific triangle defined by its index in the
                                             triangles list</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>index</strong> – The index of the
-                                                    triangle</p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>The area of the triangle</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>index</strong> – The index of the
+                                                        triangle
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">The area of the triangle</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -247,11 +412,16 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Calculating the average area of all triangles</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>The average area of all the triangles</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">The average area of all the triangles</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -299,20 +469,29 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Calculating the length of a specific edge of one of the triangles</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd">
-                                                    <ul class="simple">
-                                                        <li><p><strong>triangleIndex</strong> – The index of a triangle
-                                                        </p></li>
-                                                        <li><p><strong>edgeIndex</strong> – The index of the edge
-                                                            * 0 - the edge between the first two points of the triangle,
-                                                            * 1 - the edge between the last two points of the triangle,
-                                                            * 2 - the edge between the first point and the last point)
-                                                        </p></li>
-                                                    </ul>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>triangleIndex</strong> – The index of a triangle
+                                                            </li>
+                                                            <li><strong>edgeIndex</strong> – The index of the edge
+                                                                * 0 - the edge between the first two points of the
+                                                                triangle,
+                                                                * 1 - the edge between the last two points of the
+                                                                triangle,
+                                                                * 2 - the edge between the first point and the last
+                                                                point)
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -341,11 +520,16 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Calculating the median area of all triangles</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>The median area of all the triangles</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">The median area of all the triangles</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -369,12 +553,18 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd><p>Calculates the total area enclosed in the triangulation</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>The total area of all the triangles in the
-                                                    triangulation</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">The total area of all the triangles in the
+                                                        triangulation
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -400,11 +590,16 @@
                                         </dt>
                                         <dd><p>Removing all triangles which have an edge longer than a given
                                             threshold</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Returns</dt>
-                                                <dd class="field-odd"><p>Number of triangles removed</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">Number of triangles removed</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 

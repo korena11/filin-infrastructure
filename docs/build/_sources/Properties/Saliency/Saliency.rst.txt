@@ -2,6 +2,8 @@ Saliency
 ========
 The saliency property hold the colors used for the point cloud.
 
+References are found at :ref:`my-references-label`.
+
 Saliency Property
 -----------------
 
@@ -36,4 +38,5 @@ Saliency Factory
     :members:
     :private-members:
     :undoc-members: SaliencyFactory.SaliencyFactory.pointwise_tensor_saliency
+
 
