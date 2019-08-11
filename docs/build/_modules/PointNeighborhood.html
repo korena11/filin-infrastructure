@@ -84,6 +84,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -135,7 +136,8 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span
                                 class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span
+                                class="n">PointSubSet</span>
 
 
 <div class="viewcode-block" id="PointNeighborhood"><a class="viewcode-back"
@@ -153,7 +155,6 @@
 <span class="sd">        :type distances: np.array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">=</span> <span
             class="n">distances</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span> <span class="o">=</span> <span
@@ -288,6 +289,51 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
             class="n">__distances</span></div>
+
+<div class="viewcode-block" id="PointNeighborhood.color_neighborhood"><a class="viewcode-back"
+                                                                         href="../Properties/Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood.color_neighborhood">[docs]</a>    <span
+        class="k">def</span> <span class="nf">color_neighborhood</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">point_color</span><span class="o">=</span><span
+        class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">neighbors_color</span><span
+        class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign red color to the center point and black to the rest</span>
+
+<span class="sd">        :param point_color: name or rgb of the center point. Default: &#39;red&#39;</span>
+<span class="sd">        :param neighbors_color: name or rgb of neighbor points. Default: &#39;black&#39;</span>
+
+<span class="sd">        :type point_color: (str, tuple)</span>
+<span class="sd">        :type neighbors_color: (str, tuple)</span>
+<span class="sd">        :return: array with colors</span>
+
+<span class="sd">        :rtype: ColorProperty.ColorProperty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">webcolors</span>
+        <span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span
+            class="k">import</span> <span class="n">ColorProperty</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span
+            class="n">neighbors_color</span><span class="p">)</span> <span class="ow">is</span> <span
+            class="nb">str</span><span class="p">:</span>
+            <span class="n">neighbors_color</span> <span class="o">=</span> <span class="n">webcolors</span><span
+            class="o">.</span><span class="n">name_to_rgb</span><span class="p">(</span><span
+            class="n">neighbors_color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">point_color</span><span
+            class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">point_color</span> <span class="o">=</span> <span class="n">webcolors</span><span class="o">.</span><span
+            class="n">name_to_rgb</span><span class="p">(</span><span class="n">point_color</span><span
+            class="p">)</span>
+
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span
+            class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span
+            class="n">Size</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span
+            class="o">*</span> <span class="n">neighbors_color</span>
+        <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span
+            class="p">:]</span> <span class="o">=</span> <span class="n">point_color</span>
+
+        <span class="k">return</span> <span class="n">ColorProperty</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span><span
+            class="p">,</span> <span class="n">colors</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PointNeighborhood.neighbors_vectors"><a class="viewcode-back"
                                                                         href="../Properties/Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood.neighbors_vectors">[docs]</a>    <span

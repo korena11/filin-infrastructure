@@ -12,10 +12,10 @@ The factory either creates a TensorProperty or a tensor for each point in a poin
 
 import numpy as np
 
-from NeighborsProperty import NeighborsProperty
-from PointSet import PointSet
-from TensorProperty import TensorProperty
-from Tensors.Tensor import Tensor
+from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
+from DataClasses.PointSet import PointSet
+from Properties.Tensors.TensorProperty import TensorProperty
+from Properties.Tensors.Tensor import Tensor
 
 
 class TensorFactory(object):

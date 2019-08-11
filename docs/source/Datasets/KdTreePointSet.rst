@@ -3,9 +3,9 @@ KdTreePointSet class
 
 .. autoclass:: KdTreePointSet.KdTreePointSet
    :members:
-        :undoc-members:
+   :undoc-members:
 
-            .. automethod:: __init__
+.. automethod:: __init__
 
     .. rubric:: Attributes
 

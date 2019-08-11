@@ -31,7 +31,7 @@
     <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
     <link href="../genindex.html" rel="index" title="Index"/>
     <link href="../search.html" rel="search" title="Search"/>
-    <link href="../Properties/BaseProperty.html" rel="next" title="Properties"/>
+    <link href="KdTreePointSet.html" rel="next" title="KdTreePointSet class"/>
     <link href="RasterData.html" rel="prev" title="RasterData class"/>
 </head>
 
@@ -87,6 +87,8 @@
                                 class</a></li>
                             <li class="toctree-l2 current"><a class="current reference internal" href="#">CurveData
                                 class</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="KdTreePointSet.html">KdTreePointSet
+                                class</a></li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
@@ -101,6 +103,7 @@
                         Utilities</a></li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -170,20 +173,152 @@
                                         <div><p class="rubric">Attributes</p>
                                         </div>
                                     </blockquote>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
                                         </tbody>
                                     </table>
-                                    <table class="longtable docutils align-center">
+                                    <table border="1" class="longtable docutils">
                                         <colgroup>
-                                            <col style="width: 10%"/>
-                                            <col style="width: 90%"/>
+                                            <col width="10%"/>
+                                            <col width="90%"/>
                                         </colgroup>
-                                        <tbody>
+                                        <tbody valign="top">
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#CurveData.Curve.CalculateCDF"
+                                                   title="CurveData.Curve.CalculateCDF"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">CalculateCDF</span></code></a>()
+                                            </td>
+                                            <td>Calculates the curve’s CDF :return: None</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#CurveData.Curve.CalculateCurvatureAndUnitBinormalVector"
+                                                   title="CurveData.Curve.CalculateCurvatureAndUnitBinormalVector"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">CalculateCurvatureAndUnitBinormalVector</span></code></a>()
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#CurveData.Curve.CalculatePCA"
+                                                   title="CurveData.Curve.CalculatePCA"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">CalculatePCA</span></code></a>()
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#CurveData.Curve.CalculateStartEndStraightDistance"
+                                                   title="CurveData.Curve.CalculateStartEndStraightDistance"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">CalculateStartEndStraightDistance</span></code></a>()
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal"
+                                                   href="#CurveData.Curve.CalculateTangentAndNormalVectors"
+                                                   title="CurveData.Curve.CalculateTangentAndNormalVectors"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">CalculateTangentAndNormalVectors</span></code></a>([…])
+                                            </td>
+                                            <td>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name" colspan="2">param minEuclideanDistance:
+                                                        </th>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <td>&#160;</td>
+                                                        <td class="field-body">Minimum distance constraint between
+                                                            selected points for derivative calculations.
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><a class="reference internal" href="#CurveData.Curve.InitializePoints"
+                                                   title="CurveData.Curve.InitializePoints"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">InitializePoints</span></code></a>(points)
+                                            </td>
+                                            <td>Builds the curve points from numpy array, PointSet or
+                                                PointSetOpen3D.rst.
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><a class="reference internal" href="#CurveData.Curve.Visualize"
+                                                   title="CurveData.Curve.Visualize"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">Visualize</span></code></a>(vectors)
+                                            </td>
+                                            <td>## Temporary Implementation, will be moved to Visualization based
+                                                Open3D.
+                                            </td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculateBackwardSecondDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the Second Order Forward Derivative.</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculateCentralFirstDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the First Order Central Derivative.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculateCentralSecondDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the Second Order Central Derivative.</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculateForwardFirstDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the First Order Forward Derivative.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculateForwardSecondDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the Second Order Forward Derivative.</td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__CalculatebackwardFirstDerivative</span></code>(…)
+                                            </td>
+                                            <td>Calculate the First Order Backward Derivative.</td>
+                                        </tr>
+                                        <tr class="row-even">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__GetNextPointIndex</span></code>(currentPointIndex,&nbsp;…)
+                                            </td>
+                                            <td>Given a current point index and a minimum euclidean distance, find the
+                                                next point that satisfies the minimum distance condition.
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
+                                            <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">_Curve__GetPreviousPointIndex</span></code>(…)
+                                            </td>
+                                            <td>Given a current point index and a minimum euclidean distance, find the
+                                                previous point that satisfies the minimum distance condition.
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                     <dl class="method">
@@ -251,16 +386,23 @@
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
                                         <dd>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>minEuclideanDistance</strong> – Minimum
-                                                    distance constraint between selected points for derivative
-                                                    calculations.</p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p></p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>minEuclideanDistance</strong> –
+                                                        Minimum distance constraint between selected points for
+                                                        derivative calculations.
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -276,15 +418,22 @@
                                         </dt>
                                         <dd><p>Builds the curve points from numpy array, PointSet or
                                             PointSetOpen3D.rst.</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>points</strong> – Curve Points
-                                                    (ordered)</p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>Curve points as numpy array</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>points</strong> – Curve Points
+                                                        (ordered)
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">Curve points as numpy array</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -307,15 +456,22 @@
                                             <p>To draw all three vectors at once for each point, should use something
                                                 like this:
                                                 draw_geometries([point_cloud, line_set])</p>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">Parameters</dt>
-                                                <dd class="field-odd"><p><strong>vectors</strong> – Either ‘T’, ‘N’ or
-                                                    ‘B’/</p>
-                                                </dd>
-                                                <dt class="field-even">Returns</dt>
-                                                <dd class="field-even"><p>None</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>vectors</strong> – Either ‘T’, ‘N’ or
+                                                        ‘B’/
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">None</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </dd>
                                     </dl>
 
@@ -332,8 +488,8 @@
 
                     <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-                        <a accesskey="n" class="btn btn-neutral float-right" href="../Properties/BaseProperty.html"
-                           rel="next" title="Properties">Next <span class="fa fa-arrow-circle-right"></span></a>
+                        <a accesskey="n" class="btn btn-neutral float-right" href="KdTreePointSet.html" rel="next"
+                           title="KdTreePointSet class">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
                         <a accesskey="p" class="btn btn-neutral float-left" href="RasterData.html" rel="prev"

@@ -1,8 +1,8 @@
-from IOFactory import IOFactory
-from PointSet import PointSet
-from SegmentationFactory import SegmentationProperty
-from VisualizationO3D import VisualizationO3D
-from CurvatureProperty import CurvatureProperty
+from IOmodules.IOFactory import IOFactory
+from DataClasses.PointSet import PointSet
+from Properties.Segmentation.SegmentationProperty import SegmentationProperty
+from VisualizationClasses.VisualizationO3D import VisualizationO3D
+from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
 from numpy import arange, int_, vstack, unique, nonzero, array, zeros
 from numpy.linalg import norm
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     filename = 'Achziv_middle - Cloud_97'
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
-    cellSize = 0.1
+    cellSize = 0.35
 
     rows, cols, labels, uniqueCells, cellLabels = arrangeInUniformCells(pntSet, cellSize)
     numLabels = labels.max() + 1
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
 
-    curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=curvatures)
+    curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=pntCurvatures)
 
 
     visObj = VisualizationO3D()

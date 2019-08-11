@@ -103,6 +103,7 @@
                                 Visualization Documentation</a></li>
                         </ul>
                     </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -161,8 +162,7 @@
                             <p>Visualization class that uses Open3D for showing point clouds and their properties</p>
                             <p>The VisualizationO3D can work both with PointSet and BaseProperty.</p>
                             <ul class="simple">
-                                <li><p><strong>‘K’</strong>: pressing this button the background will change to black
-                                </p></li>
+                                <li><strong>‘K’</strong>: pressing this button the background will change to black</li>
                             </ul>
                             <div class="section" id="pointset-visualization">
                                 <h2>PointSet visualization<a class="headerlink" href="#pointset-visualization"
@@ -276,14 +276,15 @@
                                 </div>
                                 <p>Here two new keyboard functions added:</p>
                                 <ul class="simple">
-                                    <li><p><strong>‘P’</strong>: changes the attribute shown from the property (every
-                                        attribute that is not private and that is described by a numpy array.</p></li>
-                                    <li><p><strong>‘.’</strong>: changes the colormap of the attribute shown.</p></li>
+                                    <li><strong>‘P’</strong>: changes the attribute shown from the property (every
+                                        attribute that is not private and that is described by a numpy array.
+                                    </li>
+                                    <li><strong>‘.’</strong>: changes the colormap of the attribute shown.</li>
                                 </ul>
                                 <p>Both keys are cyclic, so every press will change the colormap or the attribute.</p>
                                 <div class="admonition note">
-                                    <p class="admonition-title">Note</p>
-                                    <p>Other colormaps can be added, according the definition of matplotlib
+                                    <p class="first admonition-title">Note</p>
+                                    <p class="last">Other colormaps can be added, according the definition of matplotlib
                                         colormaps.</p>
                                 </div>
                                 <dl class="class">
@@ -299,21 +300,95 @@
                                     <dd>
                                         <blockquote>
                                             <div><p class="rubric">Attributes</p>
-                                                <table class="longtable docutils align-center">
+                                                <table border="1" class="longtable docutils">
                                                     <colgroup>
-                                                        <col style="width: 10%"/>
-                                                        <col style="width: 90%"/>
+                                                        <col width="10%"/>
+                                                        <col width="90%"/>
                                                     </colgroup>
-                                                    <tbody>
+                                                    <tbody valign="top">
                                                     </tbody>
                                                 </table>
                                                 <p class="rubric">Methods</p>
-                                                <table class="longtable docutils align-center">
+                                                <table border="1" class="longtable docutils">
                                                     <colgroup>
-                                                        <col style="width: 10%"/>
-                                                        <col style="width: 90%"/>
+                                                        <col width="10%"/>
+                                                        <col width="90%"/>
                                                     </colgroup>
-                                                    <tbody>
+                                                    <tbody valign="top">
+                                                    <tr class="row-odd">
+                                                        <td><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">_VisualizationO3D__change_colormap</span></code>(colormap)
+                                                        </td>
+                                                        <td>changes the array to a given colormap</td>
+                                                    </tr>
+                                                    <tr class="row-even">
+                                                        <td><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">_VisualizationO3D__make_color_array</span></code>(array[,&nbsp;…])
+                                                        </td>
+                                                        <td>Prepare an array to be used as a color array for
+                                                            visualization
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row-odd">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.initialize_key_to_callback"
+                                                               title="VisualizationO3D.VisualizationO3D.initialize_key_to_callback"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">initialize_key_to_callback</span></code></a>()
+                                                        </td>
+                                                        <td>Sets extra keys to callback, to be available for all
+                                                            VisualizeO3D
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row-even">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.toggle_attributes_colors"
+                                                               title="VisualizationO3D.VisualizationO3D.toggle_attributes_colors"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">toggle_attributes_colors</span></code></a>(vis)
+                                                        </td>
+                                                        <td>Change visualization colors according to attributes of the
+                                                            property
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="row-odd">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.toggle_black_white_background"
+                                                               title="VisualizationO3D.VisualizationO3D.toggle_black_white_background"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">toggle_black_white_background</span></code></a>(vis)
+                                                        </td>
+                                                        <td>Change background from white to black and vise versa</td>
+                                                    </tr>
+                                                    <tr class="row-even">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.toggle_colormaps"
+                                                               title="VisualizationO3D.VisualizationO3D.toggle_colormaps"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">toggle_colormaps</span></code></a>(vis)
+                                                        </td>
+                                                        <td>changes between colormaps :param vis: :return:</td>
+                                                    </tr>
+                                                    <tr class="row-odd">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.visualize_pointset"
+                                                               title="VisualizationO3D.VisualizationO3D.visualize_pointset"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">visualize_pointset</span></code></a>(pointset[,&nbsp;colors])
+                                                        </td>
+                                                        <td>Visualize PointSet with color property, if exists</td>
+                                                    </tr>
+                                                    <tr class="row-even">
+                                                        <td><a class="reference internal"
+                                                               href="#VisualizationO3D.VisualizationO3D.visualize_property"
+                                                               title="VisualizationO3D.VisualizationO3D.visualize_property"><code
+                                                                class="xref py py-obj docutils literal notranslate"><span
+                                                                class="pre">visualize_property</span></code></a>(propertyclass[,&nbsp;…])
+                                                        </td>
+                                                        <td>Visualize property classes</td>
+                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -329,16 +404,22 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Sets extra keys to callback, to be available for all VisualizeO3D</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Returns</dt>
-                                                    <dd class="field-odd"><p>key_to_callback dictionary</p>
-                                                    </dd>
-                                                    <dt class="field-even">Return type</dt>
-                                                    <dd class="field-even"><p><a class="reference external"
-                                                                                 href="https://docs.python.org/3/library/stdtypes.html#dict"
-                                                                                 title="(in Python v3.7)">dict</a></p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Returns:</th>
+                                                        <td class="field-body">key_to_callback dictionary</td>
+                                                    </tr>
+                                                    <tr class="field-even field">
+                                                        <th class="field-name">Return type:</th>
+                                                        <td class="field-body"><a class="reference external"
+                                                                                  href="https://docs.python.org/3/library/stdtypes.html#dict"
+                                                                                  title="(in Python v3.7)">dict</a></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -354,12 +435,18 @@
                                             </dt>
                                             <dd><p>Change visualization colors according to attributes of the
                                                 property</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>vis</strong>
-                                                        (<em>open3d.Visualizer</em>) – </p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>vis</strong> (<em>open3d.Visualizer</em>)
+                                                            –
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -374,13 +461,18 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Change background from white to black and vise versa</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>vis</strong>
-                                                        (<em>open3d.Visualizer</em>) – an open3d visualization object
-                                                    </p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body"><strong>vis</strong> (<em>open3d.Visualizer</em>)
+                                                            – an open3d visualization object
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
@@ -412,29 +504,38 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Visualize PointSet with color property, if exists</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd">
-                                                        <ul class="simple">
-                                                            <li><p><strong>pointset</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
-                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a><em>, </em><a
-                                                                    class="reference internal"
-                                                                    href="../Datasets/PointSet.html#PointSet.PointSet"
-                                                                    title="PointSet.PointSet"><em>PointSet.PointSet</em></a>)
-                                                                – the point set to visualize</p></li>
-                                                            <li><p><strong>colors</strong> – ColorProperty.ColorProperty
-                                                            </p></li>
-                                                        </ul>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first last simple">
+                                                                <li><strong>pointset</strong> (<a
+                                                                        class="reference internal"
+                                                                        href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                                        title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a><em>, </em><a
+                                                                        class="reference internal"
+                                                                        href="../Datasets/PointSet.html#PointSet.PointSet"
+                                                                        title="PointSet.PointSet"><em>PointSet.PointSet</em></a>)
+                                                                    – the point set to visualize
+                                                                </li>
+                                                                <li><strong>colors</strong> –
+                                                                    ColorProperty.ColorProperty
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 
                                         <dl class="method">
                                             <dt id="VisualizationO3D.VisualizationO3D.visualize_property">
-                                                <code class="descname">visualize_property</code><span class="sig-paren">(</span><em>propertyclass</em><span
+                                                <code class="descname">visualize_property</code><span class="sig-paren">(</span><em>propertyclass</em>,
+                                                <em>attribute_name=None</em>, <em>zero_black=False</em>, <em>epsilon=0.05</em><span
                                                     class="sig-paren">)</span><a class="reference internal"
                                                                                  href="../_modules/VisualizationO3D.html#VisualizationO3D.visualize_property"><span
                                                     class="viewcode-link">[source]</span></a><a class="headerlink"
@@ -442,13 +543,43 @@
                                                                                                 title="Permalink to this definition">¶</a>
                                             </dt>
                                             <dd><p>Visualize property classes</p>
-                                                <dl class="field-list simple">
-                                                    <dt class="field-odd">Parameters</dt>
-                                                    <dd class="field-odd"><p><strong>propertyclass</strong> (<em>BaseProperty</em>)
-                                                        – a property class. Can have multiple attributes to visualize
-                                                    </p>
-                                                    </dd>
-                                                </dl>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name">Parameters:</th>
+                                                        <td class="field-body">
+                                                            <ul class="first last simple">
+                                                                <li><strong>propertyclass</strong>
+                                                                    (<em>BaseProperty</em>) – a property class. Can have
+                                                                    multiple attributes to visualize
+                                                                </li>
+                                                                <li><strong>attribute_name</strong> (<a
+                                                                        class="reference external"
+                                                                        href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                        title="(in Python v3.7)"><em>str</em></a>) –
+                                                                    name of the attribute to visualize. If None – can
+                                                                    cycle through the attribute using “A”
+                                                                </li>
+                                                                <li><strong>zero_black</strong> (<a
+                                                                        class="reference external"
+                                                                        href="https://docs.python.org/3/library/functions.html#bool"
+                                                                        title="(in Python v3.7)"><em>bool</em></a>) –
+                                                                    show close to zero values as black dots. Default:
+                                                                    False
+                                                                </li>
+                                                                <li><strong>epsilon</strong> (<a
+                                                                        class="reference external"
+                                                                        href="https://docs.python.org/3/library/functions.html#float"
+                                                                        title="(in Python v3.7)"><em>float</em></a>) –
+                                                                    the thershold for zero value
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
                                             </dd>
                                         </dl>
 

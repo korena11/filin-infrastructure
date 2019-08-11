@@ -5,9 +5,9 @@
 import numpy as np
 from tqdm import tqdm
 
-import RotationUtils
-from CurvatureProperty import CurvatureProperty
-from RasterData import RasterData
+import Properties.Transformations as RotationUtils
+from DataClasses.RasterData import RasterData
+from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
 
 class CurvatureFactory:
@@ -89,9 +89,10 @@ class CurvatureFactory:
             :meth:`curvature_by_3parameters`
         """
         from PointSetOpen3D import PointSetOpen3D
-        from PointNeighborhood import PointNeighborhood
+        from Neighborhood.PointNeighborhood import PointNeighborhood
         k1 = []
         k2 = []
+        invalid_curvature = 0  # number of points that their curvature wasn't estimated
         print('>>> Compute all points curvatures using the 3-parameters algorithm')
         if not isinstance(pointset3d, PointSetOpen3D):
             import warnings
@@ -111,9 +112,8 @@ class CurvatureFactory:
         normals = np.asarray(pointset3d.data.normals)
         neighbors_property.__reset__()  # reset iterable
 
-        for neighborhood, i in zip(neighbors_property, range(pointset3d.Size)):
-            if i == 578:
-                print(i)
+        for neighborhood, i in zip(neighbors_property, tqdm(range(pointset3d.Size), total=pointset3d.Size,
+                                                            desc='Compute principal curvatures for all point cloud')):
             if isinstance(neighborhood, PointNeighborhood) and cls.__checkNeighborhood(neighborhood,
                                                                                        min_points_in_neighborhood=min_points_in_neighborhood,
                                                                                        min_points_in_sector=min_points_in_sector,
@@ -128,7 +128,7 @@ class CurvatureFactory:
                     print(k1_, k2_)
 
             else:
-                print(i)
+                invalid_curvature += 1
                 k1.append(invalid_value)
                 k2.append(invalid_value)
         k1 = np.asarray(k1)
@@ -136,6 +136,7 @@ class CurvatureFactory:
 
         curvatures = CurvatureProperty(pointset3d, np.vstack((k1, k2)).T)
         curvatures.set_invalid_value(invalid_value)
+        print(invalid_curvature)
         return curvatures
 
     @classmethod
@@ -176,7 +177,7 @@ class CurvatureFactory:
                 \kappa_{1,2} = \frac{a+b}{2}\pm C
 
         """
-        from PointNeighborhood import PointNeighborhood
+        from Neighborhood.PointNeighborhood import PointNeighborhood
         from PointSet import PointSet
 
         if isinstance(neighborhood, PointNeighborhood):
@@ -271,6 +272,8 @@ class CurvatureFactory:
 
         """
         from scipy import stats
+
+        epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
         umbrellaCurvature = []
 
         for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
@@ -289,21 +292,66 @@ class CurvatureFactory:
                 projections = point_neighbors.neighbors_vectors().dot(n)
 
                 # check if the projections are statistically zero
-                epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
-                projections[np.where(projections < -epsilon) and np.where(projections > epsilon)] = 0
+                # projections[np.where(projections > -epsilon) and np.where(projections < epsilon)] = 0
 
-                umbrellaCurvature.append(np.sum(projections) / projections.shape)
-
+                umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)
                 umbrellaCurvature.append(invalid_value)
         umbrella_curvature = np.asarray(umbrellaCurvature)
+        if verbose:
+            print(umbrella_curvature.mean())
         if cuvatureProperty is None:
             return CurvatureProperty(neighbrohood.Points, principal_curvatures=None,
                                      umbrella_curvature=umbrella_curvature)
         else:
             cuvatureProperty.load(None, umbrella_curvature=umbrella_curvature)
+
+    @classmethod
+    def filter_curvature_roughness(cls, curvature_property, attribute_name, mean=0, std=1, alpha=0.05,
+                                   verbose=False, posonly=False):
+        r"""
+        Turns curvature values to zero if they are part of a normal distribution N~(mean, std)
+
+        ..math::
+            H_0:\qquad |\kappa| \leq Z_{1-\frac{\alpha}{2}}
+
+        :param curvature_property: the curvature property to which the filterization is applied
+        :param attribute_name: the curvature attribute to filter
+        :param mean: the mean value which will turn to zero if a value is part of the population. Default: 0
+        :param std: the standard deviation from the mean value. Usually defined by the data texture/roughness. Defualt: 1
+        :param alpha: the confidence level according to which a value is measured
+        :param verbose: print inter-running messages
+
+        :type curvature_property: CurvatureProperty
+        :type attribute_name: str
+        :type mean: float
+        :type std: float
+        :type alpha: float
+        :type verbose: bool
+
+        :return: a new curvature property with filterized values. All values that were in the old property are kept.
+
+        :rtype: CurvatureProperty
+        """
+        from scipy import stats
+
+        w_alpha = stats.norm.ppf(1 - alpha / 2)
+        new_curvature = curvature_property
+        curvature_values = curvature_property.__getattribute__(attribute_name)
+
+        # check that the value statistically differ from the mean
+        k = (curvature_values - mean) / std
+
+        new_values = curvature_values.copy()
+        zeros_ = np.abs(k) < w_alpha
+        new_values[zeros_] = 0
+        if posonly:
+            new_values[new_values > 0] = 0
+
+        new_curvature.__setattr__(attribute_name, new_values)
+        return new_curvature
 
     @classmethod
     def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
@@ -389,7 +437,7 @@ class CurvatureFactory:
                                 num_sectors)
 
     @staticmethod
-    def __good_point(neighbors, pnt=np.array([0, 0, 0]), min_points_in_sector=2, valid_sectors=7, num_sectors=8):
+    def __good_point(neighbors, pnt=np.array([0, 0, 0]), min_points_in_sector=2, valid_sectors=7, num_sectors=4):
         '''
         Determine whether the point is appropriate for curvature calculation according to the spread of its neighbours.
 

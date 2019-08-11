@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import open3d as o3d
 
-from BaseProperty import BaseProperty
-from Normals.NormalsProperty import NormalsProperty
-from PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
+from Properties.BaseProperty import BaseProperty
+from Properties.Normals.NormalsProperty import NormalsProperty
+from DataClasses.PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 
 
 class VisualizationO3D:
@@ -61,8 +61,8 @@ class VisualizationO3D:
 
         :type pointset: PointSetOpen3D, PointSet.PointSet
         """
-        from ColorProperty import ColorProperty
-        from Segmentation.SegmentationProperty import SegmentationProperty
+        from Properties.Color.ColorProperty import ColorProperty
+        from Properties.Segmentation.SegmentationProperty import SegmentationProperty
 
         key_to_callback = cls.initialize_key_to_callback()
 
@@ -74,7 +74,7 @@ class VisualizationO3D:
             pcd = pointset
 
         elif isinstance(pointset, SegmentationProperty):
-            pcd = PointSetOpen3D(pointset.Points.ToNumpy())
+            pcd = PointSetOpen3D(pointset.Points)
             colors = pointset.RGB
 
         else:
@@ -111,7 +111,7 @@ class VisualizationO3D:
 
         :type propertyclass: BaseProperty
         """
-
+        from numpy import ndarray
         # initialize custom keys for visualization window
         key_to_callback = self.initialize_key_to_callback()
 
@@ -127,7 +127,7 @@ class VisualizationO3D:
             if '__' in att:
                 continue
             # filter out properties that are not arrays and cannot be converted into color arrays
-            if isinstance(propertyclass.__getattribute__(att), np.ndarray):
+            if isinstance(propertyclass.__getattribute__(att), (np.ndarray, ndarray)):
                 colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att)))
                 attribute_name.append(att)
         if len(colors_new) == 0:
@@ -140,8 +140,8 @@ class VisualizationO3D:
         self.attribute_name = attribute_name
 
         from itertools import cycle
-        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray'])
-        key_to_callback[ord('a')] = self.toggle_attributes_colors
+        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray', 'PiYG', 'coolwarm', 'RdYlBu'])
+        key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
         o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)

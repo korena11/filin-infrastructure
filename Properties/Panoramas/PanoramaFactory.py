@@ -1,12 +1,11 @@
+from numpy import min, max, int
 from warnings import warn
 
-from numpy import min, max, int
-
-from BaseProperty import BaseProperty
-from PanoramaProperty import PanoramaProperty
-from PointSet import PointSet
-from SphericalCoordinatesFactory import SphericalCoordinatesFactory
-from SphericalCoordinatesProperty import SphericalCoordinatesProperty
+from DataClasses.PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from Properties.Panoramas.PanoramaProperty import PanoramaProperty
+from Properties.Transformations.SphericalCoordinatesFactory import SphericalCoordinatesFactory
+from Properties.Transformations.SphericalCoordinatesProperty import SphericalCoordinatesProperty
 
 
 class PanoramaFactory:

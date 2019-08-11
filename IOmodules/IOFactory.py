@@ -11,7 +11,7 @@ from numpy import array
 
 import ReadFunctions
 import SaveFunctions
-from BaseData import BaseData
+from DataClasses.BaseData import BaseData
 from Properties.BaseProperty import BaseProperty
 from Properties.Color.ColorProperty import ColorProperty
 from IO_Tools import CreateFilename
