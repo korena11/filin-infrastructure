@@ -5,7 +5,7 @@ from VisualizationClasses.VisualizationO3D import VisualizationO3D
 from Properties.Curvature.CurvatureProperty import CurvatureProperty
 from Properties.Tensors.TensorFactory import TensorFactory
 
-from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil
+from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil, savetxt, hstack
 from numpy.linalg import norm
 from scipy.sparse import lil_matrix, find
 from tqdm import tqdm
@@ -165,7 +165,6 @@ def getNeighbotingLabels(uniqueCells, labelMapping, label, bufferSize, minNeighb
 
     if label in neighbors:
         raise UserWarning('the cell with label :' + label + ' is found as its own neighbor')
-        a = 1
 
     return array(neighbors, dtype=int), validSectors
 
@@ -175,7 +174,7 @@ def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
 
     :param tensors:
     :param label:
-    ":param c
+    :param cellNeighbors:
     :return:
     """
     neighboringPoints = vstack(list(map(lambda n: tensors[n].reference_point, cellNeighbors)))
@@ -190,14 +189,19 @@ def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
 
 
 if __name__ == '__main__':
-    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
-    filename = 'Achziv_middle - Cloud_97'
+    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
+    # filename = 'Achziv_middle - Cloud_97'
+
+    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
+    filename = 'tigers - cloud_1M'
+
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
     cellSize = 0.05
-    phenomSize = 0.35
+    phenomSize = 0.10
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
+    print('Neighbor Radius (in num cells): ', buffer)
 
     rows, cols, labels, uniqueCells, cellLabels = arrangeInUniformCells(pntSet, cellSize)
     numLabels = labels.max() + 1
@@ -209,7 +213,7 @@ if __name__ == '__main__':
     # smoothSegProp = smoothPointsWithinEachCell(segProp)
     smoothSegProp = segProp
 
-    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(smoothSegProp.GetSegment(l)),
+    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(smoothSegProp.GetSegment(l), keepPoints=False),
                        tqdm(range(numLabels), desc='Computing tensors for each cell')))
 
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
@@ -220,12 +224,19 @@ if __name__ == '__main__':
     # validCells = nonzero(list(map(lambda l: isValidCell(uniqueCells, cellLabels, l, 7),
     #                               tqdm(range(numLabels), 'checking validity of each cell'))))[0]
 
+    # numNeighbors = list(map(len, neighbors))
+    # validCells2 = nonzero(numNeighbors >= ((2 * buffer + 1) ** 2 - 1) * 0.875)[0]
+
     curvatures = zeros((numLabels, ))
     curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
-    pntCurvatures = zeros((pntSet.Size, ))
+    pntCurvatures = zeros((pntSet.Size, ))  # - 999
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
+
+    tmp = hstack((pntSet.ToNumpy(), pntCurvatures.reshape((-1, 1))))
+    savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
+            tmp, delimiter=',')
 
     curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=pntCurvatures)
 
