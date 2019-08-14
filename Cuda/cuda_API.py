@@ -5,7 +5,7 @@ import numpy as np
 from Cuda.cuda_functions import *
 
 
-def cumpute_normals_by_tensor_cuda(pntSet, neighborsNumber, neighbors):
+def compute_normals_by_tensor_cuda(pntSet, neighborsNumber, neighbors):
     """
     :param pntSet: the points set
     :param neighborsNumber: neighbors number for each point at the points set

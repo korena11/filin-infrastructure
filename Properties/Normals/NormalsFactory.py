@@ -6,6 +6,7 @@ import numpy as np
 from numpy import dtype, genfromtxt
 from sklearn.neighbors import BallTree, KDTree
 
+from Cuda.cuda_API import *
 from Normals.NormalsProperty import NormalsProperty
 from PointSet import PointSet
 from PointSetOpen3D import PointSetOpen3D
@@ -40,6 +41,8 @@ class NormalsFactory:
         pnts = neighborProperty.Points.ToNumpy()
         cudaNeighbors, numNeighbors = neighborProperty.ToCUDA()
 
+        normals = compute_normals_by_tensor_cuda(pnts, numNeighbors, cudaNeighbors)
+        return NormalsProperty(pnts, normals.reshape((-1, 3)))
 
     @staticmethod
     def normals_from_file(points, normalsFileName):
