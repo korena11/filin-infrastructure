@@ -183,11 +183,47 @@ def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
     deltas[:, 1] /= normDeltas
     deltas[:, 2] /= normDeltas
 
+    normalVec = tensors[label].plate_axis / norm(tensors[label].plate_axis)
+    if normalVec[2] < 0:
+        normalVec *= 1
+
     # computing and returning the umbrella curvature
-    return tensors[label].plate_axis.reshape((1, -1)).dot(deltas.T).sum() / neighboringPoints.shape[0]
+    return normalVec.reshape((1, -1)).dot(deltas.T).sum() / neighboringPoints.shape[0]
+
+
+def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, buffer):
+    """
+
+    :param uniqueCells:
+    :param normals:
+    :param curvatures:
+    :param label:
+    :param cellNeighbors:
+    :param phenomSize:
+    :return:
+    """
+    cell = uniqueCells[label]
+    neighobrs = uniqueCells[cellNeighbors]
+    distanceFromCell = norm(neighobrs - cell, axis=1)
+    weights = zeros(distanceFromCell.shape)
+    weights[distanceFromCell <= buffer] = 2
+    weights[distanceFromCell > buffer] = -1
+
+    curvatureDiffs = curvatures[cellNeighbors] - curvatures[label]
+    don = norm(normals[cellNeighbors] - normals[label], axis=1)
+
+    return (weights * curvatureDiffs).sum() / weights.sum(), (weights * don).sum() / weights.sum()
 
 
 def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecotrs=7):
+    """
+
+    :param pntSet:
+    :param cellSize:
+    :param phenomSize:
+    :param numValidSecotrs:
+    :return:
+    """
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
     print('Neighbor Radius (in num cells): ', buffer)
@@ -200,8 +236,13 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     segProp = SegmentationProperty(pntSet, labels)
 
     # computing tensors for each cell
+    # tensor = TensorFactory.tensorFromPoints(segProp.GetSegment(9), keepPoints=False)
     tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l), keepPoints=False),
-                       tqdm(range(numLabels), desc='Computing tensors for each cell')))
+                       tqdm(range(numLabels), desc='computing tensors for each cell')))
+
+    cogs = array(list(map(lambda t: t.reference_point, tensors)))
+    normals = array(list(map(lambda t: t.plate_axis, tensors)))
+    normals[normals[:, 2] < 0] *= -1
 
     # finding the neighboring cells for each one based on the ratio between cell and phenomena sizes
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
@@ -216,10 +257,15 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
 
+    saliency = zeros((numLabels,))
+    partialSaliency = array(list(map(lambda l: computeCellSaliency(uniqueCells, normals, curvatures, l, neighbors[l],
+                                                                   buffer),
+                                     tqdm(validCells, desc='computing saliency for each cell'))))
+
     # updating curvatures of points based on the cell they are located in
     pntCurvatures = zeros((pntSet.Size,))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
-             tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
+             tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
 
     # curvatureMat = zeros(cellLabels.shape) + curvatures.min()
     # curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
@@ -234,7 +280,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
 
 def computeDownsampledUmbrellaCurvature(pntSet, cellSize, searchRadius):
     """
-    Computing the umbrella curvature on a down sampled version of the given point set (WIP)
+    Computing the umbrella curvature on a down sampled version of the given point set
     :param pntSet:
     :param cellSize:
     :param searchRadius:
@@ -256,7 +302,7 @@ def computeDownsampledUmbrellaCurvature(pntSet, cellSize, searchRadius):
 
     pntCurvatures = zeros((pntSet.Size, ))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(i), curvatures.umbrella_curvature[i]),
-             tqdm(range(downSampledPointSet.Size), desc='Updating curvatures for the original point-set')))
+             tqdm(range(downSampledPointSet.Size), desc='updating curvatures for the original point-set')))
 
     return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures)
 
@@ -266,7 +312,7 @@ if __name__ == '__main__':
     # filename = 'Achziv_middle - Cloud_97'
 
     path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
-    filename = 'tigers - cloud_1M'
+    filename = 'tigers - cloud_78'
 
     # reading data from file
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
@@ -274,21 +320,28 @@ if __name__ == '__main__':
     cellSize = 0.05
     phenomSize = 0.10
 
-    # computing umbrella curvature by first down sampling the point cloud
-    pntCurveProp = computeDownsampledUmbrellaCurvature(pntSet, cellSize, phenomSize)
+    pntCurveProp = None
+    cellCurveProp = None
+
+    # # computing umbrella curvature by first down sampling the point cloud
+    # pntCurveProp = computeDownsampledUmbrellaCurvature(pntSet, cellSize, phenomSize)
 
     # computing umbrella curvature using a uniform cells data structure
     cellCurveProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
 
     # saving computed curvature to files
-    tmp = hstack((pntSet.ToNumpy(), cellCurveProp.umbrella_curvature.reshape((-1, 1))))
-    savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
-            tmp, delimiter=',')
+    if not(cellCurveProp is None):
+        tmp = hstack((pntSet.ToNumpy(), cellCurveProp.umbrella_curvature.reshape((-1, 1))))
+        savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
+                tmp, delimiter=',')
 
-    tmp = hstack((pntSet.ToNumpy(), pntCurveProp.umbrella_curvature.reshape((-1, 1))))
-    savetxt(path + 'curvature/' + filename + '_downsampled_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
-            tmp, delimiter=',')
+    if not(pntCurveProp is None):
+        tmp = hstack((pntSet.ToNumpy(), pntCurveProp.umbrella_curvature.reshape((-1, 1))))
+        savetxt(path + 'curvature/' + filename + '_downsampled_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
+                tmp, delimiter=',')
 
     visObj = VisualizationO3D()
-    visObj.visualize_property(pntCurveProp)
-    visObj.visualize_property(cellCurveProp)
+    if not(pntCurveProp is None):
+        visObj.visualize_property(pntCurveProp)
+    if not(cellCurveProp is None):
+        visObj.visualize_property(cellCurveProp)
