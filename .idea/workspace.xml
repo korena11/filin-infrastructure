@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Documentation updated with t">
-      <change afterPath="$PROJECT_DIR$/Cuda/cuda_API.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Cuda/cuda_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/infraGit.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/infraGit.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="computing normals by tensor cuda">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,12 +84,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="MERGE" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1920" />
-    <option name="y" value="27" />
-    <option name="width" value="1920" />
-    <option name="height" value="1053" />
-  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -105,7 +94,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
     <property name="settings.editor.splitter.proportion" value="0.2560214" />
   </component>
   <component name="RecentsManager">
@@ -274,7 +263,7 @@
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>$USER_HOME$/.subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -633,7 +622,14 @@
       <option name="project" value="LOCAL" />
       <updated>1562520730332</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="computing normals by tensor cuda">
+      <created>1565271813470</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1565271813470</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -671,21 +667,46 @@
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="138599000" />
   </component>
-  <component name="TodoView">
-    <todo-panel id="selected-file">
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-    <todo-panel id="all">
-      <are-packages-shown value="true" />
-      <is-autoscroll-to-source value="true" />
-    </todo-panel>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="range">
+                    <value>
+                      <list>
+                        <option value="HEAD..origin/Zachi2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="2">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="range">
+                    <value>
+                      <list>
+                        <option value="HEAD..origin/Zachi2" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -711,7 +732,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Band flow added - not clear if working&#10;open contour (intersection with psi) - working. :)" />
     <MESSAGE value="Added saving properties (with data class) to hdf5. &#10;&#10;Added build and source folders for documentation (sphinx)" />
     <MESSAGE value="Full documentation (by Sphinx)&#10; &#10; Added:&#10; --------&#10; BaseData as DataClass&#10; &#10; setValue() function for the BaseProperty&#10; &#10; load + save from hdf5 file, both for Properties and for Data. &#10; &#10; Open issues:  &#10; -------&#10; ClassificationProperty was changed and should be rechecked. &#10; Other changes to the properties that should be rechecked. &#10;&#10;" />
     <MESSAGE value="Full documentation (by Sphinx)&#10;" />
@@ -736,7 +756,8 @@
     <MESSAGE value="KD tree change to scipy.spatial" />
     <MESSAGE value="neighbors by radius bug fixed" />
     <MESSAGE value="added smoothing and bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="added smoothing and bug fixes" />
+    <MESSAGE value="computing normals by tensor cuda" />
+    <option name="LAST_COMMIT_MESSAGE" value="computing normals by tensor cuda" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
