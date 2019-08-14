@@ -2,11 +2,11 @@ import cv2
 import numpy as np
 from numpy import ones
 
-from BaseProperty import BaseProperty
-from NormalsFactory import NormalsFactory
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from SphericalCoordinatesProperty import SphericalCoordinatesProperty
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
+from Properties.BaseProperty import BaseProperty
+from Properties.Normals.NormalsFactory import NormalsFactory
+from Properties.Transformations.SphericalCoordinatesProperty import SphericalCoordinatesProperty
 
 
 class PanoramaProperty(BaseProperty):

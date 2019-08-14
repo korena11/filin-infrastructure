@@ -514,14 +514,14 @@ class LevelSetFlow:
                 .. math::
 
                     C_t = k^{1/3} N \Rightarrow
-                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                    \phi_t = div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}\cdot|\nabla \varphi|
 
             - 'geodesic': geodesic active contours, according to :cite:`Caselles.etal1997`
 
                 .. math::
 
-                    C_t = (g(I)k -\nabla(g(I))N)N \Rightarrow
-                    \phi_t = [g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)^{1/3}*|\nabla \varphi|
+                    C_t = (g(I)(c+\kappa) -\nabla(g(I))N)N \Rightarrow \\
+                    \phi_t = g(I)\cdot div\left(\frac{\nabla \varphi}{|\nabla \varphi|}\right)\cdot|\nabla \varphi| + g(I)|\nabla \varphi|
 
             - 'band': band velocity, according to :cite:`Li.etal2006`
 
@@ -575,7 +575,7 @@ class LevelSetFlow:
             flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
                                                                     function._y)
             if open_flag:
-                psi_t = self.g * self.phi().kappa * self.psi.norm_nabla + (
+                psi_t = self.g * self.function.kappa * self.psi.norm_nabla + (
                         self.g_x * self.psi._x + self.g_y * self.psi._y)
                 self.psi.update(self.psi.value - psi_t, regularization_note=processing_props['regularization'])
 
@@ -834,6 +834,14 @@ class LevelSetFlow:
         :return the contours after level set
 
          """
+        from matplotlib import animation
+        # ================================ MOVIE INITIALIZATIONS ===========================
+        # Movie initializations
+
+        metadata = dict(title='Level set example', artist='Reuma',
+                        comment='Movie support!')
+        writer = animation.FFMpegFileWriter(fps=30, metadata=metadata)
+
         # ------inputs--------
         verbose = kwargs.get('verbose', False)
         open_flag = kwargs.get('open_flag', False)
@@ -868,14 +876,14 @@ class LevelSetFlow:
         else:
             mt.imshow(self.img(0))
 
-        ax2 = plt.figure("phi")
+        _, ax2 = plt.subplots(num='phi')
         mt.imshow(self.phi().value)
         fig3, ax3 = plt.subplots(num='kappa')
         mt.imshow(self.phi().kappa)
         if open_flag:
             fig4, ax4 = plt.subplots(num='psi')
             mt.imshow(self.psi.value)
-
+        # with writer.saving(fig, "level_set.mp4", 100):
         for iteration in range(iterations):
             print(iteration)
             if verbose:
@@ -925,6 +933,7 @@ class LevelSetFlow:
 
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
+
             plt.figure('kappa')
             mt.imshow(self.phi().kappa)
             plt.pause(.5e-10)
@@ -941,8 +950,8 @@ class LevelSetFlow:
 
             plt.figure('img')
             if open_flag:
-                _, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
-                                         open=True)
+                l_curve, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
+                                               open=True)
             else:
                 colors = 'rbgm'
                 for i in range(len(self.__Phi)):
@@ -952,7 +961,7 @@ class LevelSetFlow:
                     else:
                         l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
                                                        color=colors[i], blob_size=blob_size)
-            plt.pause(.5e-10)
+            # writer.grab_frame()
         plt.show()
         print('Done')
         return l_curve

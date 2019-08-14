@@ -3,6 +3,7 @@ import numpy as np
 import open3d as o3d
 
 from Properties.BaseProperty import BaseProperty
+from Properties.Normals.NormalsProperty import NormalsProperty
 from DataClasses.PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 
 
@@ -50,7 +51,8 @@ class VisualizationO3D:
         return False
 
     @classmethod
-    def visualize_pointset(cls, pointset, colors=None):
+    def visualize_pointset(cls, pointset, colors=None, drawCoordianteFrame=False,
+                           coordinateFrameSize=2.0, coordinateFrameOrigin='default', originOffset=1.5):
         """
         Visualize PointSet with color property, if exists
 
@@ -59,7 +61,9 @@ class VisualizationO3D:
 
         :type pointset: PointSetOpen3D, PointSet.PointSet
         """
-        from Color.ColorProperty import ColorProperty
+        from Properties.Color.ColorProperty import ColorProperty
+        from Properties.Segmentation.SegmentationProperty import SegmentationProperty
+
         key_to_callback = cls.initialize_key_to_callback()
 
         # Change the pointset to an instance of PointSetOpen3D
@@ -69,6 +73,10 @@ class VisualizationO3D:
         elif isinstance(pointset, PointSetOpen3D):
             pcd = pointset
 
+        elif isinstance(pointset, SegmentationProperty):
+            pcd = PointSetOpen3D(pointset.Points)
+            colors = pointset.RGB
+
         else:
             try:
                 pcd = PointSetOpen3D(pointset)
@@ -76,32 +84,42 @@ class VisualizationO3D:
                 print('pointset type has to be convertible to PointSetOpen3D')
                 raise TypeError
 
-        if isinstance(colors, ColorProperty):
-            colors_ = colors.rgb
+        if not (colors is None):
+            if isinstance(colors, ColorProperty):
+                colors_ = colors.rgb
+            elif isinstance(colors, np.ndarray):
+                colors_ = colors
+            if colors_.max() > 1:
+                colors_ /= 255
             pcd.data.colors = o3d.Vector3dVector(colors_)
 
-        o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
+        if drawCoordianteFrame:
+            if coordinateFrameOrigin == 'min':
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize,
+                                                               origin=pcd.ToNumpy().min(axis=0) - originOffset)
+            else:
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize)
+            o3d.draw_geometries_with_key_callbacks([pcd.data, cf], key_to_callback)
+        else:
+            o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
-    def visualize_property(self, propertyclass, attribute_name=None, zero_black=False, epsilon=0.05):
+    def visualize_property(self, propertyclass):
         """
         Visualize property classes
 
         :param propertyclass: a property class. Can have multiple attributes to visualize
-        :param attribute_name: name of the attribute to visualize. If None -- can cycle through the attribute using "A"
-        :param zero_black: show close to zero values as black dots. Default: False
-        :param epsilon: the thershold for zero value       
 
         :type propertyclass: BaseProperty
-        :type attribute_name: str
-        :type zero_black: bool
-        :type epsilon: float
-
         """
-
+        from numpy import ndarray
         # initialize custom keys for visualization window
         key_to_callback = self.initialize_key_to_callback()
 
         self.pointset = PointSetOpen3D(propertyclass.Points)
+        if isinstance(propertyclass, NormalsProperty):
+            self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
+        elif isinstance(propertyclass.Points, PointSetOpen3D):
+            self.pointset.data.normals = propertyclass.Points.data.normals
         colors_new = []
         attribute_name = []
         for att in dir(propertyclass):
@@ -109,8 +127,8 @@ class VisualizationO3D:
             if '__' in att:
                 continue
             # filter out properties that are not arrays and cannot be converted into color arrays
-            if isinstance(propertyclass.__getattribute__(att), np.ndarray):
-                colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att), zero_black, epsilon))
+            if isinstance(propertyclass.__getattribute__(att), (np.ndarray, ndarray)):
+                colors_new.append(self.__make_color_array(propertyclass.__getattribute__(att)))
                 attribute_name.append(att)
         if len(colors_new) == 0:
             colors_new = [self.__make_color_array(propertyclass.getValues())]
@@ -122,7 +140,7 @@ class VisualizationO3D:
         self.attribute_name = attribute_name
 
         from itertools import cycle
-        self.colormap_list = cycle(['coolwarm', 'RdYlBu', 'PuOr', 'PiYG', 'jet', 'summer', 'winter', 'hot', 'gray'])
+        self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray', 'PiYG', 'coolwarm', 'RdYlBu'])
         key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
@@ -182,22 +200,17 @@ class VisualizationO3D:
         return o3d.Vector3dVector(np.vstack((R, G, B)).T)
 
     @classmethod
-    def __make_color_array(cls, array, zero_black=False, epsilon=0.05):
+    def __make_color_array(cls, array):
         """
         Prepare an array to be used as a color array for visualization
 
         :param array: array of numbers to be converted into color array
-        :param zero_black: show close to zero values as black dots
-        :param epsilon: the definition of "close to" 
 
         :type array: numpy.array
-        :type zero_black: bool
 
         :return: an open3d vector
         :rtype: o3d.Vector3D
         """
-        if isinstance(array, list):
-            array = np.asarray(array)
         size_array = array.shape
 
         # check the dimension of the array, if only a list of numbers, it should be transformed into a 2D array (nx3)
@@ -214,16 +227,7 @@ class VisualizationO3D:
         else:
             rgb = array
 
-        if zero_black:
-            if rgb[np.where(rgb < 0)].size == 0:
-                rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
-            else:
-                # make zero the lowest number, number below zero higher in a notch
-                rgb[np.where(np.abs(array) < epsilon), :] = 0
-                rgb_normed = np.max(rgb[np.where(rgb < 0)]) + (rgb - rgb.min()) / (rgb.max() - rgb.min())
-                rgb_normed[np.where(np.abs(array) < epsilon), :] = 0
-        else:
-            # normalize to range [0...1]
-            rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
+        # normalize to range [0...1]
+        rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
 
         return o3d.Vector3dVector(rgb_normed)

@@ -1,15 +1,11 @@
 # Utils Imports
 # General Imports
 import numpy as np
-# 3rd Party Imports
 import open3d as O3D
 
-# from PointNeighborhood import PointNeighborhood
-# Infrastructure Imports
 from DataClasses.PointSet import PointSet
 
 np.set_printoptions(formatter={'float': lambda x: "{0:0.3f}".format(x)})
-
 
 class PointSetOpen3D(PointSet):
 
@@ -46,20 +42,17 @@ class PointSetOpen3D(PointSet):
         if isinstance(inputPoints, np.ndarray):
             self.data = O3D.PointCloud()
             self.data.points = O3D.Vector3dVector(inputPoints)
+        elif isinstance(inputPoints, PointSet):
+            self.data = O3D.PointCloud()
+            pts = inputPoints.ToNumpy()[:, :3]
+            self.data.points = O3D.Vector3dVector(pts)
+            self.path = inputPoints.path
 
         elif isinstance(inputPoints, O3D.PointCloud):
             self.data = inputPoints
-
         else:
-
-            self.data = O3D.PointCloud()
-            try:
-                pts = inputPoints.ToNumpy()[:, :3]
-                self.data.points = O3D.Vector3dVector(pts)
-                self.path = inputPoints.path
-            except TypeError:
-                print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
-                raise ValueError("Wrong turn.")
+            print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
+            raise ValueError("Wrong turn.")
 
     def RebuildKDTree(self, verbose=True):
         """
@@ -102,8 +95,7 @@ class PointSetOpen3D(PointSet):
         """
 
         print(">>> Calculating point-cloud normals. Neighborhood Parameters -- r:" + str(
-            search_radius) + "\tnn:" + str(
-                maxNN))
+            search_radius) + "\tnn:" + str(maxNN))
 
         if maxNN <= 0:
             O3D.estimate_normals(self.data,

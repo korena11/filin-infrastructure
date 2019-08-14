@@ -3,11 +3,12 @@ import sys
 from warnings import warn
 
 import numpy as np
-from numpy import dtype, genfromtxt, nonzero, mean, sum
+from numpy import dtype, genfromtxt
 from sklearn.neighbors import BallTree, KDTree
 
-from DataClasses.PointSet import PointSet
-from Properties.Normals.NormalsProperty import NormalsProperty
+from Normals.NormalsProperty import NormalsProperty
+from PointSet import PointSet
+from PointSetOpen3D import PointSetOpen3D
 
 if sys.platform == 'linux':
     pass
@@ -15,16 +16,8 @@ if sys.platform == 'linux':
 
 class NormalsFactory:
 
-    @staticmethod
-    def normals_from_tensors_CUDA(neighborhoodProperty):
-        """
-        
-        :param neighborhoodProperty: 
-        :return: 
-        """
-
-    @staticmethod
-    def normals_from_tensors(tensorProperty):
+    @classmethod
+    def normals_from_tensors(cls, tensorProperty):
         """
         Compute normals of each tensors reference point and create a property
 
@@ -33,11 +26,19 @@ class NormalsFactory:
 
         :return: normals property for the tensors
         """
-        normals = []
-        for tensor in tensorProperty:
-            normals.append(tensor.normal())
-
+        normals = list(map(lambda t: t.plate_axis, tensorProperty))
         return NormalsProperty(tensorProperty.Points, np.asarray(normals))
+
+    @classmethod
+    def normal_from_tensors_with_CUDA(cls, neighborProperty):
+        """
+        Compute normals of each point using CUDA
+        :param neighborProperty: neighborProperty to compute normal for each of its points
+        :type neighborProperty: NeighborProperty
+        :return:
+        """
+        pnts = neighborProperty.Points.ToNumpy()
+        cudaNeighbors, numNeighbors = neighborProperty.ToCUDA()
 
 
     @staticmethod
@@ -204,7 +205,6 @@ class NormalsFactory:
         :rtype: np.ndarray [:math:`n\times m \times 3`]
 
         """
-        import MyTools as mt
         # Local derivatives (according to Zeibak p. 56)
         dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order=1)
         dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order=1)
@@ -227,26 +227,40 @@ class NormalsFactory:
         return n
 
     @staticmethod
-    def normals_open3D(pointcloud):
+    def normals_open3D(pointcloud, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.)):
         """
         Computes the normals using open 3D
 
         :param pointcloud: an open 3d point cloud object
+        :param search_radius: neighbors radius for normal computation. Default: 0.05
+        :param maxNN: maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.
+        :param orientation: "camera" orientation. The orientation towards which the normals are computed. Default: (0,0,0)
 
-        :type pointcloud: open3d.PointCloud
+        :type pointcloud: PointSetOpen3D
+        :type search_radius: float
+        :type maxNN: int
+        :type orientation: tuple
 
         :return: normals property and the pointcloud with normals
-
-        .. warning::
-            Empty. Needs to be filled
         """
+        # checking if the set point set is an object of PointSetOpen3D
+        if not isinstance(pointcloud, PointSetOpen3D):
+            _pointcloud = PointSetOpen3D(pointcloud)
+        else:
+            _pointcloud = pointcloud
 
-    @staticmethod
-    def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
+        _pointcloud.CalculateNormals(search_radius, maxNN, orientation)  # computing the normals using open3D method
+        normals = np.array(_pointcloud.data.normals)
 
-        indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
-        return mean(normals[indices], axis=0)
+        return NormalsProperty(pointcloud, normals)
 
+        # TODO: obsolete code for computing normals using vtk, should probably be deleted
+        # @staticmethod
+        # def __CalcAverageNormal(x, y, z, normalsPoints, normals, eps=0.00001):
+        #
+        #     indices = nonzero(sum((normalsPoints - [x, y, z]) ** 2, axis=-1) < eps ** 2)[0]
+        #     return mean(normals[indices], axis=0)
+        #
     # @staticmethod
     # def VtkNormals(points, triangulation=None):
     #     """
@@ -288,6 +302,7 @@ class NormalsFactory:
 #
 
 if __name__ == "__main__":
+    # TODO: Obsolete code, should be deleted or modified to a newer version
     from IOFactory import IOFactory
     from VisualizationVTK import VisualizationVTK
 
@@ -304,5 +319,5 @@ if __name__ == "__main__":
     VisualizationVTK.Show()
 
 #    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
-#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())    
+#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())
 #    show()

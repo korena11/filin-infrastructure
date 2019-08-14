@@ -6,8 +6,8 @@ import numpy as np
 from tqdm import tqdm
 
 import Properties.Transformations as RotationUtils
-from CurvatureProperty import CurvatureProperty
-from RasterData import RasterData
+from DataClasses.RasterData import RasterData
+from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
 
 class CurvatureFactory:
@@ -315,7 +315,7 @@ class CurvatureFactory:
         Turns curvature values to zero if they are part of a normal distribution N~(mean, std)
 
         ..math::
-            H_0:\, |\kappa| \leq Z_{1-\frac{\alpha}{2}}
+            H_0:\qquad |\kappa| \leq Z_{1-\frac{\alpha}{2}}
 
         :param curvature_property: the curvature property to which the filterization is applied
         :param attribute_name: the curvature attribute to filter

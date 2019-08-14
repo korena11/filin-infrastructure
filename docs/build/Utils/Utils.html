@@ -86,6 +86,7 @@
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
                         Classes</a></li>
+                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
                 </ul>
 
 
@@ -144,21 +145,21 @@
                             <span class="target" id="module-MyTools"></span>
                             <p>Created on Nov 25, 2015</p>
                             <p>&#64;author: Reuma</p>
-                            <table class="longtable docutils align-center">
+                            <table border="1" class="longtable docutils">
                                 <colgroup>
-                                    <col style="width: 10%"/>
-                                    <col style="width: 90%"/>
+                                    <col width="10%"/>
+                                    <col width="90%"/>
                                 </colgroup>
-                                <tbody>
+                                <tbody valign="top">
                                 </tbody>
                             </table>
                             <p class="rubric">Methods</p>
-                            <table class="longtable docutils align-center">
+                            <table border="1" class="longtable docutils">
                                 <colgroup>
-                                    <col style="width: 10%"/>
-                                    <col style="width: 90%"/>
+                                    <col width="10%"/>
+                                    <col width="90%"/>
                                 </colgroup>
-                                <tbody>
+                                <tbody valign="top">
                                 </tbody>
                             </table>
                             <dl class="function">
@@ -172,42 +173,51 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd>
-                                    <dl class="simple">
+                                    <dl class="docutils">
                                         <dt>Checks or creates a file object according to specifications given.</dt>
-                                        <dd><p>Default is hdf5.</p>
-                                        </dd>
+                                        <dd>Default is hdf5.</dd>
                                     </dl>
                                     <div class="admonition warning">
-                                        <p class="admonition-title">Warning</p>
-                                        <p>Need to be implemented for other formats than hdf5</p>
+                                        <p class="first admonition-title">Warning</p>
+                                        <p class="last">Need to be implemented for other formats than hdf5</p>
                                     </div>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd">
-                                            <ul class="simple">
-                                                <li><p><strong>filename</strong> (<a class="reference external"
-                                                                                     href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                     title="(in Python v3.7)"><em>str</em></a>)
-                                                    – can be a filename or a path and filename, with or without
-                                                    extension.</p></li>
-                                                <li><p><strong>mode</strong> (<a class="reference external"
-                                                                                 href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                 title="(in Python v3.7)"><em>str</em></a>)
-                                                    – is an optional string that specifies the mode in which the file is
-                                                    opened.
-                                                    It defaults to ‘w’ which means open for writing in text mode.</p>
-                                                </li>
-                                                <li><p><strong>extension</strong> (<a class="reference external"
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>filename</strong> (<a class="reference external"
                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
                                                                                       title="(in Python v3.7)"><em>str</em></a>)
-                                                    – ‘h5’, ‘json’, ‘shp’, ‘pts’, etc…</p></li>
-                                            </ul>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>a file object (according to the extension) and its
-                                            extension</p>
-                                        </dd>
-                                    </dl>
+                                                        – can be a filename or a path and filename, with or without
+                                                        extension.
+                                                    </li>
+                                                    <li><strong>mode</strong> (<a class="reference external"
+                                                                                  href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                  title="(in Python v3.7)"><em>str</em></a>)
+                                                        – is an optional string that specifies the mode in which the
+                                                        file is opened.
+                                                        It defaults to ‘w’ which means open for writing in text mode.
+                                                    </li>
+                                                    <li><strong>extension</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                       title="(in Python v3.7)"><em>str</em></a>)
+                                                        – ‘h5’, ‘json’, ‘shp’, ‘pts’, etc…
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">a file object (according to the
+                                                extension) and its extension</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -247,75 +257,94 @@
                                     <p>The saliency for every set of points within a ball-tree cell is computed as one
                                         for all points.</p>
                                     <div class="admonition seealso">
-                                        <p class="admonition-title">See also</p>
-                                        <p><code class="xref py py-meth docutils literal notranslate"><span class="pre">SaliencyFactory.curvature_saliency()</span></code>
-                                        </p>
+                                        <p class="first admonition-title">See also</p>
+                                        <p class="last"><code class="xref py py-meth docutils literal notranslate"><span
+                                                class="pre">SaliencyFactory.curvature_saliency()</span></code></p>
                                     </div>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd">
-                                            <ul class="simple">
-                                                <li><p><strong>pointset</strong> (<em>np.ndarray</em><em>, </em><a
-                                                        class="reference internal"
-                                                        href="../Datasets/PointSet.html#PointSet.PointSet"
-                                                        title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a
-                                                        class="reference internal"
-                                                        href="../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet"
-                                                        title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a
-                                                        class="reference internal"
-                                                        href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
-                                                        title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>)
-                                                    – a point cloud of any sort</p></li>
-                                                <li><p><strong>scale</strong> (<a class="reference external"
-                                                                                  href="https://docs.python.org/3/library/functions.html#float"
-                                                                                  title="(in Python v3.7)"><em>float</em></a>)
-                                                    – the scale of the minimal phenomena (size of the smallest ball-tree
-                                                    cell)</p></li>
-                                                <li><p><strong>neighborhood_properties</strong> (<a
-                                                        class="reference external"
-                                                        href="https://docs.python.org/3/library/functions.html#int"
-                                                        title="(in Python v3.7)"><em>int</em></a><em> or </em><a
-                                                        class="reference external"
-                                                        href="https://docs.python.org/3/library/functions.html#float"
-                                                        title="(in Python v3.7)"><em>float</em></a>) – k nearest
-                                                    neighbors</p></li>
-                                                <li><p><strong>curvature_attribute</strong> – the attribute according to
-                                                    which the curvature is measured.</p></li>
-                                                <li><p><strong>leaf_size</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/functions.html#int"
-                                                                                      title="(in Python v3.7)"><em>int</em></a>)
-                                                    – the minimum number of points in the ball tree leaves. Default: 10
-                                                </p></li>
-                                                <li><p><strong>weight_distance</strong> (<a class="reference external"
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>pointset</strong> (<em>np.ndarray</em><em>, </em><a
+                                                            class="reference internal"
+                                                            href="../Datasets/PointSet.html#PointSet.PointSet"
+                                                            title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a
+                                                            class="reference internal"
+                                                            href="../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet"
+                                                            title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a
+                                                            class="reference internal"
+                                                            href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
+                                                            title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>)
+                                                        – a point cloud of any sort
+                                                    </li>
+                                                    <li><strong>scale</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/functions.html#float"
+                                                                                   title="(in Python v3.7)"><em>float</em></a>)
+                                                        – the scale of the minimal phenomena (size of the smallest
+                                                        ball-tree cell)
+                                                    </li>
+                                                    <li><strong>neighborhood_properties</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                            title="(in Python v3.7)"><em>int</em></a><em> or </em><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#float"
+                                                            title="(in Python v3.7)"><em>float</em></a>) – k nearest
+                                                        neighbors
+                                                    </li>
+                                                    <li><strong>curvature_attribute</strong> – the attribute according
+                                                        to which the curvature is measured.
+                                                    </li>
+                                                    <li><strong>leaf_size</strong> (<a class="reference external"
+                                                                                       href="https://docs.python.org/3/library/functions.html#int"
+                                                                                       title="(in Python v3.7)"><em>int</em></a>)
+                                                        – the minimum number of points in the ball tree leaves. Default:
+                                                        10
+                                                    </li>
+                                                    <li><strong>weight_distance</strong> (<a class="reference external"
+                                                                                             href="https://docs.python.org/3/library/functions.html#float"
+                                                                                             title="(in Python v3.7)"><em>float</em></a>)
+                                                        – weights for distance element. Default: 1.
+                                                    </li>
+                                                    <li><strong>weight_normals</strong> (<a class="reference external"
                                                                                             href="https://docs.python.org/3/library/functions.html#float"
                                                                                             title="(in Python v3.7)"><em>float</em></a>)
-                                                    – weights for distance element. Default: 1.</p></li>
-                                                <li><p><strong>weight_normals</strong> (<a class="reference external"
-                                                                                           href="https://docs.python.org/3/library/functions.html#float"
-                                                                                           title="(in Python v3.7)"><em>float</em></a>)
-                                                    – weights for normal element. Default: 1.</p></li>
-                                                <li><p><strong>verbose</strong> (<a class="reference external"
-                                                                                    href="https://docs.python.org/3/library/functions.html#bool"
-                                                                                    title="(in Python v3.7)"><em>bool</em></a>)
-                                                    – print running messages. Default: False</p></li>
-                                            </ul>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>curvature property, normals property, saliency
-                                            property</p>
-                                        </dd>
-                                        <dt class="field-odd">Return type</dt>
-                                        <dd class="field-odd"><p><a class="reference internal"
-                                                                    href="../Properties/Curvature/Curvature.html#CurvatureProperty.CurvatureProperty"
-                                                                    title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>,
-                                            <a class="reference internal"
-                                               href="../Properties/Normals/Normals.html#NormalsProperty.NormalsProperty"
-                                               title="NormalsProperty.NormalsProperty">NormalsProperty</a>, <a
-                                                    class="reference internal"
-                                                    href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty"
-                                                    title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a></p>
-                                        </dd>
-                                    </dl>
+                                                        – weights for normal element. Default: 1.
+                                                    </li>
+                                                    <li><strong>verbose</strong> (<a class="reference external"
+                                                                                     href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                     title="(in Python v3.7)"><em>bool</em></a>)
+                                                        – print running messages. Default: False
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first">curvature property, normals
+                                                property, saliency property</p>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body"><p class="first last"><a class="reference internal"
+                                                                                            href="../Properties/Curvature/Curvature.html#CurvatureProperty.CurvatureProperty"
+                                                                                            title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>,
+                                                <a class="reference internal"
+                                                   href="../Properties/Normals/Normals.html#NormalsProperty.NormalsProperty"
+                                                   title="NormalsProperty.NormalsProperty">NormalsProperty</a>, <a
+                                                        class="reference internal"
+                                                        href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty"
+                                                        title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a>
+                                            </p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -343,23 +372,32 @@
                                         ight)^2}{hist_A + hist_B}</p>
                                     <blockquote>
                                         <div>
-                                            <dl class="field-list simple">
-                                                <dt class="field-odd">param histA</dt>
-                                                <dd class="field-odd"><p>histogram A</p>
-                                                </dd>
-                                                <dt class="field-even">param histB</dt>
-                                                <dd class="field-even"><p>histogram B (which A compares to)</p>
-                                                </dd>
-                                                <dt class="field-odd">param eps</dt>
-                                                <dd class="field-odd"><p>an epsilon for non-zero division</p>
-                                                </dd>
-                                                <dt class="field-even">return</dt>
-                                                <dd class="field-even"><p>the distance between the histograms</p>
-                                                </dd>
-                                                <dt class="field-odd">rtype</dt>
-                                                <dd class="field-odd"><p>np.ndarray</p>
-                                                </dd>
-                                            </dl>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">param histA:</th>
+                                                    <td class="field-body">histogram A</td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">param histB:</th>
+                                                    <td class="field-body">histogram B (which A compares to)</td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">param eps:</th>
+                                                    <td class="field-body">an epsilon for non-zero division</td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">return:</th>
+                                                    <td class="field-body">the distance between the histograms</td>
+                                                </tr>
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">rtype:</th>
+                                                    <td class="field-body">np.ndarray</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </blockquote>
                                 </dd>
@@ -394,25 +432,33 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>Computes image derivatives up to order 2. Normalizes the derivatives.</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd">
-                                            <ul class="simple">
-                                                <li><p><strong>img</strong> – the image to which the derivatives should
-                                                    be computed</p></li>
-                                                <li><p><strong>order</strong> – order needed (1 or 2)</p></li>
-                                                <li><p><strong>ksize</strong> – filter kernel size (3,and up)</p></li>
-                                                <li><p><strong>resolution</strong> – kernel resolution</p></li>
-                                                <li><p><strong>sigma</strong> – sigma for gaussian blurring</p></li>
-                                                <li><p><strong>window</strong> – tuple of window size for blurring</p>
-                                                </li>
-                                            </ul>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>tuple of the derivatives in the following order: (dx,
-                                            dy, dxx, dyy, dxy)</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>img</strong> – the image to which the derivatives should
+                                                        be computed
+                                                    </li>
+                                                    <li><strong>order</strong> – order needed (1 or 2)</li>
+                                                    <li><strong>ksize</strong> – filter kernel size (3,and up)</li>
+                                                    <li><strong>resolution</strong> – kernel resolution</li>
+                                                    <li><strong>sigma</strong> – sigma for gaussian blurring</li>
+                                                    <li><strong>window</strong> – tuple of window size for blurring</li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">tuple of the derivatives in the
+                                                following order: (dx, dy, dxx, dyy, dxy)</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -427,23 +473,34 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>Computes the gradient to a given image</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd">
-                                            <ul class="simple">
-                                                <li><p><strong>I</strong> – image to which the gradient is computed</p>
-                                                </li>
-                                                <li><p><strong>ksize</strong> – kernel size, for blurring and
-                                                    derivatives</p></li>
-                                                <li><p><strong>sigma</strong> – sigma for LoG gradient</p></li>
-                                                <li><p><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’
-                                                    L2-norm of grad(I); ‘LoG’ Laplacian of gaussian</p></li>
-                                            </ul>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>an image of the gradient magnitude</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>I</strong> – image to which the gradient is computed
+                                                    </li>
+                                                    <li><strong>ksize</strong> – kernel size, for blurring and
+                                                        derivatives
+                                                    </li>
+                                                    <li><strong>sigma</strong> – sigma for LoG gradient</li>
+                                                    <li><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’
+                                                        L2-norm of grad(I); ‘LoG’ Laplacian of gaussian
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">an image of the gradient
+                                                magnitude</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -456,14 +513,20 @@
                                         class="headerlink" href="#MyTools.curve2D_toGeoSeries"
                                         title="Permalink to this definition">¶</a></dt>
                                 <dd><p>Transforms a 2D line to a geopandas GeoSeries</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd"><p><strong>curve</strong> – pyplot.2Dline</p>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>geopandas GeoSeries of a polygon</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>curve</strong> – pyplot.2Dline</td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">geopandas GeoSeries of a polygon</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -497,14 +560,20 @@
                                 </dt>
                                 <dd><p>Transforms multiple 2D lines to geopandas GeoDataFrame
                                     :param curves: list of pyplot.lines.Line2D</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Returns</dt>
-                                        <dd class="field-odd"><p>geodataframe of the polygons</p>
-                                        </dd>
-                                        <dt class="field-even">Return type</dt>
-                                        <dd class="field-even"><p>gpd.GeoDataFrame</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body">geodataframe of the polygons</td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Return type:</th>
+                                            <td class="field-body">gpd.GeoDataFrame</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -520,36 +589,49 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>Draws the contours of a specific iteration</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd">
-                                            <ul class="simple">
-                                                <li><p><strong>func</strong> (<em>np.ndarray</em>) – the function which
-                                                    contours should be drawn</p></li>
-                                                <li><p><strong>ax</strong> (<em>plt.axes</em>) – the axes to draw upon
-                                                </p></li>
-                                                <li><p><strong>image</strong> – the image on which the contours will be
-                                                    drawn</p></li>
-                                                <li><p><strong>hold</strong> (<a class="reference external"
-                                                                                 href="https://docs.python.org/3/library/functions.html#bool"
-                                                                                 title="(in Python v3.7)"><em>bool</em></a>)
-                                                    – erase image from previous drawings or not. Default: False</p></li>
-                                                <li><p><strong>color</strong> (<a class="reference external"
-                                                                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                  title="(in Python v3.7)"><em>str</em></a><em>
-                                                    or </em><a class="reference external"
-                                                               href="https://docs.python.org/3/library/functions.html#bool"
-                                                               title="(in Python v3.7)"><em>bool</em></a>) – the color
-                                                    which the contour will be drawn. Default: random for each curve
-                                                    (send True)</p></li>
-                                                <li><p><strong>blob_size</strong> – the minimal area of a contour to
-                                                    draw</p></li>
-                                            </ul>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p>the figure</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body">
+                                                <ul class="first simple">
+                                                    <li><strong>func</strong> (<em>np.ndarray</em>) – the function which
+                                                        contours should be drawn
+                                                    </li>
+                                                    <li><strong>ax</strong> (<em>plt.axes</em>) – the axes to draw upon
+                                                    </li>
+                                                    <li><strong>image</strong> – the image on which the contours will be
+                                                        drawn
+                                                    </li>
+                                                    <li><strong>hold</strong> (<a class="reference external"
+                                                                                  href="https://docs.python.org/3/library/functions.html#bool"
+                                                                                  title="(in Python v3.7)"><em>bool</em></a>)
+                                                        – erase image from previous drawings or not. Default: False
+                                                    </li>
+                                                    <li><strong>color</strong> (<a class="reference external"
+                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
+                                                                                   title="(in Python v3.7)"><em>str</em></a><em>
+                                                        or </em><a class="reference external"
+                                                                   href="https://docs.python.org/3/library/functions.html#bool"
+                                                                   title="(in Python v3.7)"><em>bool</em></a>) – the
+                                                        color which the contour will be drawn. Default: random for each
+                                                        curve (send True)
+                                                    </li>
+                                                    <li><strong>blob_size</strong> – the minimal area of a contour to
+                                                        draw
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"><p class="first last">the figure</p>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -564,15 +646,25 @@
                                 </dt>
                                 <dd><p>Computes eigenvalues and eigenvectors and returns them sorted from smallest
                                     eigenvalues to largest</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd"><p><strong>matrix</strong> (<em>nd-array</em>) – matrix to
-                                            compute the eigenvalues and eigenvectors</p>
-                                        </dd>
-                                        <dt class="field-even">Return eigenValues, eigenVectors</dt>
-                                        <dd class="field-even"><p>sorted from small to large</p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>matrix</strong> (<em>nd-array</em>) – matrix
+                                                to compute the eigenvalues and eigenvectors
+                                            </td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name" colspan="2">Return eigenValues, eigenVectors:</th>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <td>&#160;</td>
+                                            <td class="field-body">sorted from small to large</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 
@@ -618,14 +710,20 @@
                                                                                     title="Permalink to this definition">¶</a>
                                 </dt>
                                 <dd><p>finds the recurring elements in two arrays (row-wise)</p>
-                                    <dl class="field-list simple">
-                                        <dt class="field-odd">Parameters</dt>
-                                        <dd class="field-odd"><p><strong>axis</strong> – column-wise</p>
-                                        </dd>
-                                        <dt class="field-even">Returns</dt>
-                                        <dd class="field-even"><p></p>
-                                        </dd>
-                                    </dl>
+                                    <table class="docutils field-list" frame="void" rules="none">
+                                        <col class="field-name"/>
+                                        <col class="field-body"/>
+                                        <tbody valign="top">
+                                        <tr class="field-odd field">
+                                            <th class="field-name">Parameters:</th>
+                                            <td class="field-body"><strong>axis</strong> – column-wise</td>
+                                        </tr>
+                                        <tr class="field-even field">
+                                            <th class="field-name">Returns:</th>
+                                            <td class="field-body"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </dd>
                             </dl>
 

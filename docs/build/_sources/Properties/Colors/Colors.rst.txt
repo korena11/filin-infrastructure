@@ -6,47 +6,45 @@ The color property hold the colors used for the point cloud.
 Color Property
 '''''''''''''''
 
-
-.. autoclass:: ColorProperty.ColorProperty
-    :members:
-    :undoc-members:
-
     .. rubric:: Attributes
 
-    .. autoautosummary:: ColorProperty.ColorProperty
+    .. autoautosummary:: Properties.Color.ColorProperty.ColorProperty
         :attributes:
 
     .. rubric:: Methods
 
-    .. autoautosummary:: ColorProperty.ColorProperty
+    .. autoautosummary:: Properties.Color.ColorProperty.ColorProperty
         :methods:
 
+    .. autoclass:: Properties.Color.ColorProperty.ColorProperty
+        :members:
+        :undoc-members:
 
 Color Factory
 '''''''''''''
-
-
-.. autoclass:: ColorFactory.ColorFactory
-    :members:
-    :undoc-members:
-
     .. rubric:: Methods
 
-    .. autoautosummary:: ColorFactory.ColorFactory
+    .. autoautosummary:: Properties.Color.ColorFactory.ColorFactory
         :methods:
+
+
+    .. autoclass:: Properties.Color.ColorFactory.ColorFactory
+        :members:
+        :undoc-members:
+
+
 
 Color utilities
 '''''''''''''''
 
-
 RandomColors choose colors such that they are farthest from each other as possible.
-
-
-.. autoclass:: RandomColors.LetThereBeRandomColors
-    :members:
-    :undoc-members:
 
     .. rubric:: Methods
 
-    .. autoautosummary:: RandomColors.LetThereBeRandomColors
+    .. autoautosummary:: Utils.RandomColors.LetThereBeRandomColors
         :methods:
+
+    .. autoclass:: Utils.RandomColors.LetThereBeRandomColors
+        :members:
+        :undoc-members:
+

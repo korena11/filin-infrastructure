@@ -6,10 +6,10 @@ Created on 30 march 2014
 
 import numpy as np
 import numpy.matlib as matlib
+from Registration import Registration
 
 from IOFactory import IOFactory
 from NormalsFactory import NormalsFactory
-from Registration import Registration
 
 
 def PointSet2Array_Norm(fileName):

@@ -4,11 +4,12 @@ Created on Nov 2, 2014
 @author: Vera
 '''
 
+import matplotlib.pyplot as plt
 import numpy as np
-from scipy.spatial import cKDTree
 from Registration import Registration
 from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
+from scipy.spatial import cKDTree
+
 
 def MovingDirection(pntSet, b, p_gm, s_pi, max_dim):
     '''

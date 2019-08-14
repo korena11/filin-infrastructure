@@ -12,6 +12,46 @@ class FilterFactory:
     """
 
     @staticmethod
+    @jit
+    def SlopeBasedMorphologicFilter(pntData, searchRadius, slopeThreshold):
+        """
+
+        :param pntData:
+        :param searchRadius:
+        :param slopeThreshold:
+
+        :return:
+
+        """
+        numPoints = len(pntData)
+        groundPointsIndices = []
+
+        slopeThreshold = slopeThreshold * pi / 180
+
+        for i in range(numPoints):
+            isGround = True
+            for j in range(numPoints):
+                dist = sqrt((pntData[i, 0] - pntData[j, 0]) ** 2 + (pntData[i, 1] - pntData[j, 1]) ** 2)
+                if (dist < searchRadius and pntData[i, 2] > pntData[j, 2]):
+                    slope = arctan((pntData[i, 2] - pntData[j, 2]) / dist)
+                    if (slope > slopeThreshold):
+                        isGround = False
+                        break
+
+            if (isGround):
+                groundPointsIndices.append(i)
+
+        return groundPointsIndices
+
+    @staticmethod
+    def __CreateSegmentationProperty(points, indices):
+        numPoints = points.Size()
+        segments = ones((numPoints), dtype=uint8)
+        segments[indices] = 0
+
+        return SegmentationProperty(points, segments)
+
+    @staticmethod
     def SlopeBasedMorphologicFilter(points, searchRadius, slopeThreshold):
         """
         Slope Based Morphological Filter
@@ -145,9 +185,9 @@ class FilterFactory:
 
         :type neighbors_property: NeighborsProperty
 
-        :return: new smoothed pointset
+        :return: new smoothed pointset and its neighborhood (not recomputed)
 
-        :rtype: PointSet
+        :rtype: (PointSet, NeighborsProperty)
         """
         import numpy as np
         from tqdm import tqdm
@@ -155,13 +195,13 @@ class FilterFactory:
             map(lambda neighborhood: np.mean(neighborhood.neighbors.ToNumpy(), axis=0),
                 tqdm(neighbors_property, total=neighbors_property.Size, leave=True, position=0)))
         # create a class according to the neighbors' points class and populate it with the smoothed points
-        smoothed_pcl = type(neighbors_property.Points).__init__(
-            type(neighbors_property.Points).__new__(type(neighbors_property.Points)), np.array(smoothed_pcl_list))
+        smoothed_pcl = type(neighbors_property.Points).__new__(type(neighbors_property.Points))
+        smoothed_pcl.__init__(np.asarray(smoothed_pcl_list))
         smoothed_neigborhood = NeighborsProperty(smoothed_pcl)
         smoothed_neigborhood.setNeighborhood(range(neighbors_property.Size),
                                              neighbors_property.getNeighborhood(range(neighbors_property.Size)))
 
-        return smoothed_neigborhood
+        return smoothed_pcl, smoothed_neigborhood
 
     @staticmethod
     @jit
