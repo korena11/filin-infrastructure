@@ -1,9 +1,13 @@
 from IOmodules.IOFactory import IOFactory
 from DataClasses.PointSet import PointSet
+from DataClasses.KdTreePointSet import KdTreePointSet
 from Properties.Segmentation.SegmentationProperty import SegmentationProperty
 from VisualizationClasses.VisualizationO3D import VisualizationO3D
+from Properties.Curvature.CurvatureFactory import CurvatureFactory
+from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
 from Properties.Curvature.CurvatureProperty import CurvatureProperty
 from Properties.Tensors.TensorFactory import TensorFactory
+from Properties.Normals.NormalsFactory import NormalsFactory
 
 from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil, savetxt, hstack
 from numpy.linalg import norm
@@ -62,16 +66,17 @@ def smoothPointsWithinEachCell(segProp):
     return SegmentationProperty(PointSet(pnts), segProp.GetAllSegments)
 
 
-def isValidCell(uniqueCells, labelMapping, label, minNumNeighbors=7):
-    """
-
-    :param uniqueCells: list of existing cells given as a list of their respective rows and cols (nx2, ndarray)
-    :param labelMapping: grid mapping of the labels of all existing cells (lil_matrix)
-    :param label: label of the cell to check
-    :param minNumNeighbors: minimum number of neighboring cells required for cell to valid
-    :return: True if cell has a minimum required number of neighbors, otherwise False
-    """
-    return getNeighbotingLabels(uniqueCells, labelMapping, label).shape[0] >= minNumNeighbors
+# TODO: Check if method is used, if not delete it
+# def isValidCell(uniqueCells, labelMapping, label, minNumNeighbors=7):
+#     """
+#
+#     :param uniqueCells: list of existing cells given as a list of their respective rows and cols (nx2, ndarray)
+#     :param labelMapping: grid mapping of the labels of all existing cells (lil_matrix)
+#     :param label: label of the cell to check
+#     :param minNumNeighbors: minimum number of neighboring cells required for cell to valid
+#     :return: True if cell has a minimum required number of neighbors, otherwise False
+#     """
+#     return getNeighbotingLabels(uniqueCells, labelMapping, label).shape[0] >= minNumNeighbors
 
 
 def __searchEntries(sparseMatrix, existingEntries=[]):
@@ -187,24 +192,31 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     buffer = 1 if buffer == 0 else buffer
     print('Neighbor Radius (in num cells): ', buffer)
 
+    # arranging point set into a 2-D uniform cells data structure
     rows, cols, labels, uniqueCells, cellLabels = arrangeInUniformCells(pntSet, cellSize)
     numLabels = labels.max() + 1
 
+    # creating segmentation based on cell location of each point
     segProp = SegmentationProperty(pntSet, labels)
 
+    # computing tensors for each cell
     tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l), keepPoints=False),
                        tqdm(range(numLabels), desc='Computing tensors for each cell')))
 
+    # finding the neighboring cells for each one based on the ratio between cell and phenomena sizes
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
                                tqdm(range(numLabels), desc='retrieving neighbors for all cells'))))
+
     validCells = neighbors[:, 1]
     neighbors = neighbors[:, 0]
-    validCells = nonzero(validCells >= numValidSecotrs)[0]
+    validCells = nonzero(validCells >= numValidSecotrs)[0]  # checking for valid cells based on sector analysis
 
+    # computing curvature for each cell
     curvatures = zeros((numLabels,))
     curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
 
+    # updating curvatures of points based on the cell they are located in
     pntCurvatures = zeros((pntSet.Size,))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
@@ -228,7 +240,25 @@ def computeDownsampledUmbrellaCurvature(pntSet, cellSize, searchRadius):
     :param searchRadius:
     :return:
     """
-    pass
+    rows, cols, labels, uniqueCells, cellLabels = arrangeInUniformCells(pntSet, cellSize)
+    numLabels = labels.max() + 1
+
+    # TODO: check if segmentation property is required
+    segProp = SegmentationProperty(pntSet, labels)
+    cogs = array(list(map(lambda l: segProp.GetSegment(l).ToNumpy().mean(axis=0), tqdm(range(numLabels),
+                        desc='down sampling point-set by computing center of mass in each cell'))))
+
+    downSampledPointSet = KdTreePointSet(cogs)
+    neighbors = NeighborsFactory.kdtreePointSet_rnn(downSampledPointSet, searchRadius)
+    tensors = TensorFactory.computeTensorsProperty_givenNeighborhood(downSampledPointSet, neighbors)
+    normals = NormalsFactory.normals_from_tensors(tensors)
+    curvatures = CurvatureFactory.umbrella_curvature(neighbors, normals, invalid_value=0)
+
+    pntCurvatures = zeros((pntSet.Size, ))
+    list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(i), curvatures.umbrella_curvature[i]),
+             tqdm(range(downSampledPointSet.Size), desc='Updating curvatures for the original point-set')))
+
+    return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures)
 
 
 if __name__ == '__main__':
@@ -236,7 +266,7 @@ if __name__ == '__main__':
     # filename = 'Achziv_middle - Cloud_97'
 
     path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
-    filename = 'tigers - cloud_78'
+    filename = 'tigers - cloud_1M'
 
     # reading data from file
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
@@ -244,13 +274,21 @@ if __name__ == '__main__':
     cellSize = 0.05
     phenomSize = 0.10
 
-    # computing umbrella curvature using a uniform cells data structure
-    curveProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
+    # computing umbrella curvature by first down sampling the point cloud
+    pntCurveProp = computeDownsampledUmbrellaCurvature(pntSet, cellSize, phenomSize)
 
-    # saving computed curvature to file
-    tmp = hstack((pntSet.ToNumpy(), curveProp.umbrella_curvature.reshape((-1, 1))))
+    # computing umbrella curvature using a uniform cells data structure
+    cellCurveProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
+
+    # saving computed curvature to files
+    tmp = hstack((pntSet.ToNumpy(), cellCurveProp.umbrella_curvature.reshape((-1, 1))))
     savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
             tmp, delimiter=',')
 
+    tmp = hstack((pntSet.ToNumpy(), pntCurveProp.umbrella_curvature.reshape((-1, 1))))
+    savetxt(path + 'curvature/' + filename + '_downsampled_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
+            tmp, delimiter=',')
+
     visObj = VisualizationO3D()
-    visObj.visualize_property(curveProp)
+    visObj.visualize_property(pntCurveProp)
+    visObj.visualize_property(cellCurveProp)
