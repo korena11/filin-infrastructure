@@ -74,6 +74,20 @@ def isValidCell(uniqueCells, labelMapping, label, minNumNeighbors=7):
     return getNeighbotingLabels(uniqueCells, labelMapping, label).shape[0] >= minNumNeighbors
 
 
+def __searchEntries(sparseMatrix, existingEntries=[]):
+    """
+    Finding all entries in a given matrix around a certain label
+    :param sparseMatrix: a sparse matrix to search for entries in it (lil_matrix)
+    :param existingEntries: a list of existing entries to add those found into (list, optional)
+    :return: a list of found existing entries (list) and their number (int)
+    """
+    rows, cols, labels = find(sparseMatrix)
+    if labels.shape[0] > 0:
+        existingEntries.extend(labels - 1)
+
+    return existingEntries, labels.shape[0]
+
+
 def getNeighbotingLabels(uniqueCells, labelMapping, label, bufferSize, minNeighborsPerSector=1):
     """
     Getting the neighbors labels of a given cell (defined by its own label)
@@ -87,7 +101,7 @@ def getNeighbotingLabels(uniqueCells, labelMapping, label, bufferSize, minNeighb
     """
     row, col = uniqueCells[label]  # getting the row and column of the cell based on its label
     neighbors = []  # creating an empty list of neighbors
-    validSectors = 0  # counter of the number of valid sectors
+    validSectors = []  # counter of the number of valid sectors
 
     # getting the search boundaries based on the search radius (buffer size) and uniform cells grid size
     minRow = max([0, row - bufferSize])
@@ -95,92 +109,53 @@ def getNeighbotingLabels(uniqueCells, labelMapping, label, bufferSize, minNeighb
     maxRow = min([labelMapping.shape[0], row + bufferSize])
     maxCol = min([labelMapping.shape[1], col + bufferSize])
 
-    # TODO: create a private function for finding the neighbors (remove repetitive code)
     if row > 0:
         # finding all the neighbors that are directly below the cell
-        rows, cols, labels = find(labelMapping[minRow:row, col])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[minRow:row, col], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if row > 0 and col > 0:
         # finding all the neighbors that are below and to the left of the cell
-        rows, cols, labels = find(labelMapping[minRow:row, minCol:col])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[minRow:row, minCol:col], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if row > 0 and col < labelMapping.shape[1] - 1:
         # finding all the neighbors that are below and to the right of the cell
-        rows, cols, labels = find(labelMapping[minRow:row, col + 1:maxCol + 1])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[minRow:row, col + 1:maxCol + 1], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if row < labelMapping.shape[0] - 1:
         # finding all the neighbors that are directly above the cell
-        rows, cols, labels = find(labelMapping[row + 1:maxRow + 1, col])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[row + 1:maxRow + 1, col], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if row < labelMapping.shape[0] - 1 and col > 0:
         # finding all the neighbors that are above and to the left of the cell
-        rows, cols, labels = find(labelMapping[row + 1:maxRow + 1, minCol:col])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[row + 1:maxRow + 1, minCol:col], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if row < labelMapping.shape[0] - 1:
         # finding all the neighbors that are above and to the right of the cell
-        rows, cols, labels = find(labelMapping[row + 1:maxRow + 1, col + 1:maxCol + 1])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[row + 1:maxRow + 1,
+                                                          col + 1:maxCol + 1], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if col > 0:
         # finding all the neighbors that are directly to the left of the cell
-        rows, cols, labels = find(labelMapping[row, minCol:col])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[row, minCol:col], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     if col < labelMapping.shape[1] - 1:
         # finding all the neighbors that are directly to the right of the cell
-        rows, cols, labels = find(labelMapping[row, col + 1:maxCol + 1])
-
-        if labels.shape[0] > 0:
-            neighbors.extend(labels - 1)
-
-        if labels.shape[0] >= minNeighborsPerSector:
-            validSectors += 1
+        neighbors, numNeighborsInSector = __searchEntries(labelMapping[row, col + 1:maxCol + 1], neighbors)
+        validSectors.append(numNeighborsInSector >= minNeighborsPerSector)
 
     # checking if the cell is not considered as its own neighbor
     if label in neighbors:
         raise UserWarning('the cell with label :' + label + ' is found as its own neighbor')
 
-    return array(neighbors, dtype=int), validSectors
+    numValidSectors = nonzero(array(validSectors))[0].shape[0]
+    return array(neighbors, dtype=int), numValidSectors
 
 
 def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
@@ -207,17 +182,7 @@ def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
     return tensors[label].plate_axis.reshape((1, -1)).dot(deltas.T).sum() / neighboringPoints.shape[0]
 
 
-if __name__ == '__main__':
-    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
-    # filename = 'Achziv_middle - Cloud_97'
-
-    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
-    filename = 'tigers - cloud_1M'
-
-    pntSet = IOFactory.ReadPts(path + filename + '.pts')
-
-    cellSize = 0.05
-    phenomSize = 0.10
+def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecotrs=7):
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
     print('Neighbor Radius (in num cells): ', buffer)
@@ -227,45 +192,65 @@ if __name__ == '__main__':
 
     segProp = SegmentationProperty(pntSet, labels)
 
-    # VisualizationO3D.visualize_pointset(segProp)
-
-    # smoothSegProp = smoothPointsWithinEachCell(segProp)
-    smoothSegProp = segProp
-
-    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(smoothSegProp.GetSegment(l), keepPoints=False),
+    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l), keepPoints=False),
                        tqdm(range(numLabels), desc='Computing tensors for each cell')))
 
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
-                           tqdm(range(numLabels), desc='retrieving neighbors for all cells'))))
+                               tqdm(range(numLabels), desc='retrieving neighbors for all cells'))))
     validCells = neighbors[:, 1]
     neighbors = neighbors[:, 0]
-    validCells = nonzero(validCells >= 7)[0]
-    # validCells = nonzero(list(map(lambda l: isValidCell(uniqueCells, cellLabels, l, 7),
-    #                               tqdm(range(numLabels), 'checking validity of each cell'))))[0]
+    validCells = nonzero(validCells >= numValidSecotrs)[0]
 
-    # numNeighbors = list(map(len, neighbors))
-    # validCells2 = nonzero(numNeighbors >= ((2 * buffer + 1) ** 2 - 1) * 0.875)[0]
-
-    curvatures = zeros((numLabels, ))
+    curvatures = zeros((numLabels,))
     curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
-    pntCurvatures = zeros((pntSet.Size, ))  # - 999
+
+    pntCurvatures = zeros((pntSet.Size,))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='Updating points curvatures')))
 
-    tmp = hstack((pntSet.ToNumpy(), pntCurvatures.reshape((-1, 1))))
+    # curvatureMat = zeros(cellLabels.shape) + curvatures.min()
+    # curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
+    #
+    # from matplotlib import pyplot as plt
+    # plt.imshow(curvatureMat, cmap='jet')
+    # plt.colorbar()
+    # plt.show()
+
+    return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures)
+
+
+def computeDownsampledUmbrellaCurvature(pntSet, cellSize, searchRadius):
+    """
+    Computing the umbrella curvature on a down sampled version of the given point set (WIP)
+    :param pntSet:
+    :param cellSize:
+    :param searchRadius:
+    :return:
+    """
+    pass
+
+
+if __name__ == '__main__':
+    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
+    # filename = 'Achziv_middle - Cloud_97'
+
+    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
+    filename = 'tigers - cloud_78'
+
+    # reading data from file
+    pntSet = IOFactory.ReadPts(path + filename + '.pts')
+
+    cellSize = 0.05
+    phenomSize = 0.10
+
+    # computing umbrella curvature using a uniform cells data structure
+    curveProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
+
+    # saving computed curvature to file
+    tmp = hstack((pntSet.ToNumpy(), curveProp.umbrella_curvature.reshape((-1, 1))))
     savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
             tmp, delimiter=',')
 
-    curveProp = CurvatureProperty(smoothSegProp.Points, umbrella_curvature=pntCurvatures)
-
     visObj = VisualizationO3D()
     visObj.visualize_property(curveProp)
-
-    curvatureMat = zeros(cellLabels.shape) + curvatures.min()
-    curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
-
-    from matplotlib import pyplot as plt
-    plt.imshow(curvatureMat, cmap='jet')
-    plt.colorbar()
-    plt.show()
