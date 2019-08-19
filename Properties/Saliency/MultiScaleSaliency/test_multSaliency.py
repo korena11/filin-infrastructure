@@ -1,3 +1,5 @@
+from sqlalchemy.util import safe_reraise
+
 from IOmodules.IOFactory import IOFactory
 from DataClasses.PointSet import PointSet
 from DataClasses.KdTreePointSet import KdTreePointSet
@@ -8,6 +10,7 @@ from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
 from Properties.Curvature.CurvatureProperty import CurvatureProperty
 from Properties.Tensors.TensorFactory import TensorFactory
 from Properties.Normals.NormalsFactory import NormalsFactory
+from Properties.Saliency.SaliencyProperty import SaliencyProperty
 
 from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil, savetxt, hstack
 from numpy.linalg import norm
@@ -163,19 +166,17 @@ def getNeighbotingLabels(uniqueCells, labelMapping, label, bufferSize, minNeighb
     return array(neighbors, dtype=int), numValidSectors
 
 
-def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
+def computeUmbrellaCurvaturePerCell(cog, neighborCogs, normal):
     """
-    Computing the umbrella curvature of a cell based on its neighbours
-    :param tensors: list of tensors for each cell (list)
-    :param label: label of the tensor to compute its curvature (int)
-    :param cellNeighbors: the neighboring cells (ndarray of ints)
+
     :return: the computed umbrella curvature (float)
     """
     # getting the representative points of the neighboring cells
-    neighboringPoints = vstack(list(map(lambda n: tensors[n].reference_point, cellNeighbors)))
+    # neighboringPoints = vstack(list(map(lambda n: tensors[n].reference_point, cellNeighbors)))
 
     # computing the difference vectors of neighboring points with respect to the representative point of the cell
-    deltas = neighboringPoints - tensors[label].reference_point
+    # deltas = neighboringPoints - tensors[label].reference_point
+    deltas = neighborCogs - cog
 
     # normalizing the difference vectors
     normDeltas = norm(deltas, axis=1)
@@ -183,12 +184,12 @@ def computeUmbrellaCurvaturePerCell(tensors, label, cellNeighbors):
     deltas[:, 1] /= normDeltas
     deltas[:, 2] /= normDeltas
 
-    normalVec = tensors[label].plate_axis / norm(tensors[label].plate_axis)
-    if normalVec[2] < 0:
-        normalVec *= 1
+    # normalVec = tensors[label].plate_axis / norm(tensors[label].plate_axis)
+    # if normalVec[2] < 0:
+    #     normalVec *= 1
 
     # computing and returning the umbrella curvature
-    return normalVec.reshape((1, -1)).dot(deltas.T).sum() / neighboringPoints.shape[0]
+    return normal.reshape((1, -1)).dot(deltas.T).sum() / neighborCogs.shape[0]
 
 
 def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, buffer):
@@ -204,18 +205,23 @@ def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, 
     """
     cell = uniqueCells[label]
     neighobrs = uniqueCells[cellNeighbors]
-    distanceFromCell = norm(neighobrs - cell, axis=1)
+    distanceFromCell = norm(neighobrs - cell, ord=1, axis=1)
     weights = zeros(distanceFromCell.shape)
     weights[distanceFromCell <= buffer] = 2
     weights[distanceFromCell > buffer] = -1
 
-    curvatureDiffs = curvatures[cellNeighbors] - curvatures[label]
+    curvatureDiffs = abs(curvatures[cellNeighbors] - curvatures[label])
     don = norm(normals[cellNeighbors] - normals[label], axis=1)
 
-    return (weights * curvatureDiffs).sum() / weights.sum(), (weights * don).sum() / weights.sum()
+    curvatureDiffs = (curvatureDiffs - curvatureDiffs.min()) / (curvatureDiffs.max() - curvatureDiffs.min() - 1e-12)
+    don = (don - don.min()) / (don.max() - don.min() - 1e-12)  # normalizing difference of normals
+
+    curvaturePart = (weights * curvatureDiffs).sum() / weights.sum()
+    normalPart = (weights * don).sum() / weights.sum()
+    return curvaturePart + normalPart
 
 
-def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecotrs=7):
+def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecotrs=7, curvatureStd=0.05):
     """
 
     :param pntSet:
@@ -226,6 +232,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     """
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
+    saliencyBuffer = int_(ceil(buffer * 2))
     print('Neighbor Radius (in num cells): ', buffer)
 
     # arranging point set into a 2-D uniform cells data structure
@@ -241,8 +248,10 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
                        tqdm(range(numLabels), desc='computing tensors for each cell')))
 
     cogs = array(list(map(lambda t: t.reference_point, tensors)))
-    normals = array(list(map(lambda t: t.plate_axis, tensors)))
-    normals[normals[:, 2] < 0] *= -1
+    # normals = array(list(map(lambda t: t.plate_axis, tensors)))
+    # normals[normals[:, 2] < 0] *= -1
+    normals = zeros((numLabels, 3))
+    normals[:, 2] = 1
 
     # finding the neighboring cells for each one based on the ratio between cell and phenomena sizes
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
@@ -254,17 +263,28 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
 
     # computing curvature for each cell
     curvatures = zeros((numLabels,))
-    curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(tensors, l, neighbors[l]),
+    curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(
+        cogs[l], cogs[neighbors[l]], normals[l]),  # tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
-
-    saliency = zeros((numLabels,))
-    partialSaliency = array(list(map(lambda l: computeCellSaliency(uniqueCells, normals, curvatures, l, neighbors[l],
-                                                                   buffer),
-                                     tqdm(validCells, desc='computing saliency for each cell'))))
+    curvatures[abs(curvatures) < curvatureStd] = 0
 
     # updating curvatures of points based on the cell they are located in
     pntCurvatures = zeros((pntSet.Size,))
     list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
+             tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
+
+    # neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, saliencyBuffer),
+    #                            tqdm(range(numLabels),
+    #                                 desc='retrieving neighbors for all cells for saliency computation'))))
+    # neighbors = neighbors[:, 0]
+
+    saliency = zeros((numLabels,))
+    saliency[validCells] = array(list(map(lambda l: computeCellSaliency(uniqueCells, normals, curvatures, l,
+                                                                        neighbors[l], buffer),
+                                     tqdm(validCells, desc='computing saliency for each cell'))))
+
+    pntSaliency = zeros((pntSet.Size, ))
+    list(map(lambda i: pntSaliency.__setitem__(segProp.GetSegmentIndices(validCells[i]), saliency[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
 
     # curvatureMat = zeros(cellLabels.shape) + curvatures.min()
@@ -275,7 +295,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     # plt.colorbar()
     # plt.show()
 
-    return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures)
+    return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures), SaliencyProperty(pntSet, pntSaliency)
 
 
 def computeDownsampledUmbrellaCurvature(pntSet, cellSize, searchRadius):
@@ -317,7 +337,7 @@ if __name__ == '__main__':
     # reading data from file
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
-    cellSize = 0.05
+    cellSize = 0.025
     phenomSize = 0.10
 
     pntCurveProp = None
@@ -327,7 +347,7 @@ if __name__ == '__main__':
     # pntCurveProp = computeDownsampledUmbrellaCurvature(pntSet, cellSize, phenomSize)
 
     # computing umbrella curvature using a uniform cells data structure
-    cellCurveProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
+    cellCurveProp, cellSalProp = computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize)
 
     # saving computed curvature to files
     if not(cellCurveProp is None):
@@ -345,3 +365,4 @@ if __name__ == '__main__':
         visObj.visualize_property(pntCurveProp)
     if not(cellCurveProp is None):
         visObj.visualize_property(cellCurveProp)
+        visObj.visualize_property(cellSalProp)
