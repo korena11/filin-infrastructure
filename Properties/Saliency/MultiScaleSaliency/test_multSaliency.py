@@ -12,7 +12,7 @@ from Properties.Tensors.TensorFactory import TensorFactory
 from Properties.Normals.NormalsFactory import NormalsFactory
 from Properties.Saliency.SaliencyProperty import SaliencyProperty
 
-from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil, savetxt, hstack
+from numpy import arange, int_, vstack, unique, nonzero, array, zeros, ceil, savetxt, hstack, inf
 from numpy.linalg import norm
 from scipy.sparse import lil_matrix, find
 from tqdm import tqdm
@@ -205,10 +205,13 @@ def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, 
     """
     cell = uniqueCells[label]
     neighobrs = uniqueCells[cellNeighbors]
-    distanceFromCell = norm(neighobrs - cell, ord=1, axis=1)
+    distanceFromCell = norm(neighobrs - cell, ord=inf, axis=1)
+
+    numClosePoints = (nonzero(distanceFromCell <= buffer)[0]).shape[0]
+    numFarPoints = distanceFromCell.shape[0] - numClosePoints
     weights = zeros(distanceFromCell.shape)
-    weights[distanceFromCell <= buffer] = 2
     weights[distanceFromCell > buffer] = -1
+    weights[distanceFromCell <= buffer] = numFarPoints / numClosePoints
 
     curvatureDiffs = abs(curvatures[cellNeighbors] - curvatures[label])
     don = norm(normals[cellNeighbors] - normals[label], axis=1)
@@ -216,8 +219,8 @@ def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, 
     curvatureDiffs = (curvatureDiffs - curvatureDiffs.min()) / (curvatureDiffs.max() - curvatureDiffs.min() - 1e-12)
     don = (don - don.min()) / (don.max() - don.min() - 1e-12)  # normalizing difference of normals
 
-    curvaturePart = (weights * curvatureDiffs).sum() / weights.sum()
-    normalPart = (weights * don).sum() / weights.sum()
+    curvaturePart = (weights * curvatureDiffs).sum()  # / weights.sum()
+    normalPart = (weights * don).sum()  # / weights.sum()
     return curvaturePart + normalPart
 
 
@@ -232,7 +235,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     """
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
-    saliencyBuffer = int_(ceil(buffer * 2))
+    saliencyBuffer = int_(buffer * 2)
     print('Neighbor Radius (in num cells): ', buffer)
 
     # arranging point set into a 2-D uniform cells data structure
@@ -242,17 +245,6 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     # creating segmentation based on cell location of each point
     segProp = SegmentationProperty(pntSet, labels)
 
-    # computing tensors for each cell
-    # tensor = TensorFactory.tensorFromPoints(segProp.GetSegment(9), keepPoints=False)
-    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l), keepPoints=False),
-                       tqdm(range(numLabels), desc='computing tensors for each cell')))
-
-    cogs = array(list(map(lambda t: t.reference_point, tensors)))
-    # normals = array(list(map(lambda t: t.plate_axis, tensors)))
-    # normals[normals[:, 2] < 0] *= -1
-    normals = zeros((numLabels, 3))
-    normals[:, 2] = 1
-
     # finding the neighboring cells for each one based on the ratio between cell and phenomena sizes
     neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, buffer),
                                tqdm(range(numLabels), desc='retrieving neighbors for all cells'))))
@@ -261,16 +253,42 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     neighbors = neighbors[:, 0]
     validCells = nonzero(validCells >= numValidSecotrs)[0]  # checking for valid cells based on sector analysis
 
+    cogs = array(list(map(lambda l: segProp.GetSegment(l).ToNumpy().mean(axis=0),
+                          tqdm(range(numLabels), desc='computing center of mass for each cell'))))
+    tensors = list(map(lambda l: TensorFactory.tensorFromPoints(vstack([cogs[l], cogs[neighbors[l]]]),
+                                                                point_index=0, keepPoints=False),
+                       tqdm(range(numLabels), desc='computing tensors for each cell')))
+
+    # computing tensors for each cell
+    # tensors = list(map(lambda l: TensorFactory.tensorFromPoints(segProp.GetSegment(l), keepPoints=False),
+    #                    tqdm(range(numLabels), desc='computing tensors for each cell')))
+
+    normals = array(list(map(lambda t: t.plate_axis, tensors)))
+    normals[normals[:, 2] < 0] *= -1
+
+    from Properties.Normals.NormalsProperty import NormalsProperty
+    normProp = NormalsProperty(PointSet(cogs), normals)
+    visObj = VisualizationO3D()
+    visObj.visualize_property(normProp)
+    # normals = zeros((numLabels, 3))
+    # normals[:, 2] = 1
+
     # computing curvature for each cell
     curvatures = zeros((numLabels,))
     curvatures[validCells] = list(map(lambda l: computeUmbrellaCurvaturePerCell(
         cogs[l], cogs[neighbors[l]], normals[l]),  # tensors, l, neighbors[l]),
                                       tqdm(validCells, desc='computing curvatures for each valid cell')))
+
+    # filtering insignificant curvatures
     curvatures[abs(curvatures) < curvatureStd] = 0
+    from numpy import median
+    smooothCurvatures = array(list(map(lambda i: median(hstack((curvatures[i], curvatures[neighbors[i]]))),
+                                                        tqdm(range(numLabels), desc='applying median smoothing'))))
 
     # updating curvatures of points based on the cell they are located in
     pntCurvatures = zeros((pntSet.Size,))
-    list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]), curvatures[validCells[i]]),
+    list(map(lambda i: pntCurvatures.__setitem__(segProp.GetSegmentIndices(validCells[i]),
+                                                 curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
 
     # neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, saliencyBuffer),
