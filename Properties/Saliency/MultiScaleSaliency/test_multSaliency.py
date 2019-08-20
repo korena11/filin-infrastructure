@@ -207,21 +207,28 @@ def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, 
     neighobrs = uniqueCells[cellNeighbors]
     distanceFromCell = norm(neighobrs - cell, ord=inf, axis=1)
 
-    numClosePoints = (nonzero(distanceFromCell <= buffer)[0]).shape[0]
+    maxNumExpectedNeighbors = (2 * 1.5 * buffer + 1) ** 2
+    maxNumExpectedInnerNeighbots = (buffer + 1) ** 2
+    numClosePoints = (nonzero(distanceFromCell <= buffer / 2)[0]).shape[0]
     numFarPoints = distanceFromCell.shape[0] - numClosePoints
+
+    farWeight = -1
+    closeWeight = maxNumExpectedNeighbors / maxNumExpectedInnerNeighbots
+
     weights = zeros(distanceFromCell.shape)
-    weights[distanceFromCell > buffer] = -1
-    weights[distanceFromCell <= buffer] = numFarPoints / numClosePoints
+    weights[distanceFromCell > buffer / 2] = farWeight
+    weights[distanceFromCell <= buffer / 2] = closeWeight
 
+    currentCurvatures = curvatures[cellNeighbors]
     curvatureDiffs = abs(curvatures[cellNeighbors] - curvatures[label])
-    don = norm(normals[cellNeighbors] - normals[label], axis=1)
+    # don = norm(normals[cellNeighbors] - normals[label], axis=1)
 
-    curvatureDiffs = (curvatureDiffs - curvatureDiffs.min()) / (curvatureDiffs.max() - curvatureDiffs.min() - 1e-12)
-    don = (don - don.min()) / (don.max() - don.min() - 1e-12)  # normalizing difference of normals
+    # curvatureDiffs = (curvatureDiffs - curvatureDiffs.min()) / (curvatureDiffs.max() - curvatureDiffs.min() - 1e-12)
+    # don = (don - don.min()) / (don.max() - don.min() - 1e-12)  # normalizing difference of normals
 
-    curvaturePart = (weights * curvatureDiffs).sum()  # / weights.sum()
-    normalPart = (weights * don).sum()  # / weights.sum()
-    return curvaturePart + normalPart
+    curvaturePart = (weights * currentCurvatures).sum() + curvatures[label] * closeWeight # / weights.sum()
+    # normalPart = (weights * don).sum()  # / weights.sum()
+    return abs(curvaturePart)  # + normalPart
 
 
 def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecotrs=7, curvatureStd=0.05):
@@ -235,7 +242,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     """
     buffer = int_(ceil(phenomSize / cellSize) / 2)
     buffer = 1 if buffer == 0 else buffer
-    saliencyBuffer = int_(buffer * 2)
+    saliencyBuffer = int_(buffer * 1.5)
     print('Neighbor Radius (in num cells): ', buffer)
 
     # arranging point set into a 2-D uniform cells data structure
@@ -266,10 +273,10 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     normals = array(list(map(lambda t: t.plate_axis, tensors)))
     normals[normals[:, 2] < 0] *= -1
 
-    from Properties.Normals.NormalsProperty import NormalsProperty
-    normProp = NormalsProperty(PointSet(cogs), normals)
-    visObj = VisualizationO3D()
-    visObj.visualize_property(normProp)
+    # from Properties.Normals.NormalsProperty import NormalsProperty
+    # normProp = NormalsProperty(PointSet(cogs), normals)
+    # visObj = VisualizationO3D()
+    # visObj.visualize_property(normProp)
     # normals = zeros((numLabels, 3))
     # normals[:, 2] = 1
 
@@ -281,9 +288,9 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
 
     # filtering insignificant curvatures
     curvatures[abs(curvatures) < curvatureStd] = 0
-    from numpy import median
-    smooothCurvatures = array(list(map(lambda i: median(hstack((curvatures[i], curvatures[neighbors[i]]))),
-                                                        tqdm(range(numLabels), desc='applying median smoothing'))))
+    # from numpy import median
+    # smooothCurvatures = array(list(map(lambda i: median(hstack((curvatures[i], curvatures[neighbors[i]]))),
+    #                                                     tqdm(range(numLabels), desc='applying median smoothing'))))
 
     # updating curvatures of points based on the cell they are located in
     pntCurvatures = zeros((pntSet.Size,))
@@ -291,10 +298,10 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
                                                  curvatures[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
 
-    # neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, saliencyBuffer),
-    #                            tqdm(range(numLabels),
-    #                                 desc='retrieving neighbors for all cells for saliency computation'))))
-    # neighbors = neighbors[:, 0]
+    neighbors = array(list(map(lambda l: getNeighbotingLabels(uniqueCells, cellLabels, l, saliencyBuffer),
+                               tqdm(range(numLabels),
+                                    desc='retrieving neighbors for all cells for saliency computation'))))
+    neighbors = neighbors[:, 0]
 
     saliency = zeros((numLabels,))
     saliency[validCells] = array(list(map(lambda l: computeCellSaliency(uniqueCells, normals, curvatures, l,
@@ -303,7 +310,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
 
     pntSaliency = zeros((pntSet.Size, ))
     list(map(lambda i: pntSaliency.__setitem__(segProp.GetSegmentIndices(validCells[i]), saliency[validCells[i]]),
-             tqdm(range(validCells.shape[0]), desc='updating points curvatures')))
+             tqdm(range(validCells.shape[0]), desc='updating points saliencies')))
 
     # curvatureMat = zeros(cellLabels.shape) + curvatures.min()
     # curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
@@ -352,11 +359,14 @@ if __name__ == '__main__':
     path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
     filename = 'tigers - cloud_78'
 
+    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Bulbus/'
+    # filename = 'bulbus_levelled_500K'
+
     # reading data from file
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
-    cellSize = 0.025
-    phenomSize = 0.10
+    cellSize = 0.01
+    phenomSize = 0.05
 
     pntCurveProp = None
     cellCurveProp = None
@@ -372,6 +382,10 @@ if __name__ == '__main__':
         tmp = hstack((pntSet.ToNumpy(), cellCurveProp.umbrella_curvature.reshape((-1, 1))))
         savetxt(path + 'curvature/' + filename + '_uniformCell_' + str(cellSize) + '_' + str(phenomSize) + '.txt',
                 tmp, delimiter=',')
+
+        tmp = hstack((pntSet.ToNumpy(), cellSalProp.getValues().reshape((-1, 1))))
+        savetxt(path + 'curvature/' + filename + '_saliency_uniformCell_' + str(cellSize) + '_' +
+                str(phenomSize) + '.txt', tmp, delimiter=',')
 
     if not(pntCurveProp is None):
         tmp = hstack((pntSet.ToNumpy(), pntCurveProp.umbrella_curvature.reshape((-1, 1))))

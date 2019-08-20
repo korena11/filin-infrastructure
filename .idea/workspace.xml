@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="2019/08/19 - start of data commit">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="2019/08/19 - end of day commit, fixed normal computation + bugs in tensor computation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Tensors/Tensor.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Tensors/Tensor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,12 +19,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="237" column="37" lean-forward="true" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
+            <state relative-caret-position="112">
+              <caret line="367" column="19" selection-start-line="367" selection-start-column="19" selection-end-line="367" selection-end-column="19" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
                 <element signature="e#13144#14477#0" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2023">
+              <caret line="146" column="23" selection-start-line="146" selection-start-column="23" selection-end-line="146" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -172,9 +179,9 @@
       <list>
         <option value="$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/multiScaleSaliency.py" />
         <option value="$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py" />
-        <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" />
         <option value="$PROJECT_DIR$/Properties/Tensors/Tensor.py" />
         <option value="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" />
+        <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" />
         <option value="$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py" />
       </list>
     </option>
@@ -444,13 +451,6 @@
       <workItem from="1565530293988" duration="1053000" />
       <workItem from="1565536124589" duration="1230000" />
       <workItem from="1565537464221" duration="369000" />
-    </task>
-    <task id="LOCAL-00015" summary="Added Chan-Vese flow -- working">
-      <created>1521054395137</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1521054395137</updated>
     </task>
     <task id="LOCAL-00016" summary="Added Chan-Vese flow -- working">
       <created>1521111868869</created>
@@ -788,7 +788,14 @@
       <option name="project" value="LOCAL" />
       <updated>1566203702202</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="2019/08/19 - end of day commit, fixed normal computation + bugs in tensor computation">
+      <created>1566236640275</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1566236640275</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -834,15 +841,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.170706" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19020021" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4947313" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49736565" visible="true" weight="0.39869988" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4947313" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49736565" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -918,7 +924,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="2019/04/16 - added KdTreePointSet data class" />
     <MESSAGE value="2019/04/16 - added methods to NeighborsFactory for neighbor querying using the KdTreePointSet class" />
     <MESSAGE value="2019/04/21 - added reading ply file functionality to IOFactory + unit test" />
     <MESSAGE value="2019/04/23 - added computation of NormalsProperty from Open3D as a method in NormalsFactory and modified VisulizationO3D for visualizing a NormalsProperty" />
@@ -943,7 +948,8 @@
     <MESSAGE value="2019/08/14 - commit before merge" />
     <MESSAGE value="2019/08/14 - begining work on saliency" />
     <MESSAGE value="2019/08/19 - start of data commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="2019/08/19 - start of data commit" />
+    <MESSAGE value="2019/08/19 - end of day commit, fixed normal computation + bugs in tensor computation" />
+    <option name="LAST_COMMIT_MESSAGE" value="2019/08/19 - end of day commit, fixed normal computation + bugs in tensor computation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1215,23 +1221,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py</url>
-          <line>334</line>
+          <line>341</line>
           <option name="timeStamp" value="621" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py</url>
-          <line>315</line>
-          <option name="timeStamp" value="631" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py</url>
-          <line>276</line>
-          <option name="timeStamp" value="636" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py</url>
-          <line>241</line>
-          <option name="timeStamp" value="638" />
+          <line>310</line>
+          <option name="timeStamp" value="647" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1335,29 +1331,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
-          <folding>
-            <element signature="e#113#154#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1159">
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="230" column="71" selection-start-line="230" selection-start-column="71" selection-end-line="230" selection-end-column="71" />
         </state>
       </provider>
     </entry>
@@ -1388,10 +1367,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py">
+    <entry file="file://$PROJECT_DIR$/Properties/Segmentation/HierarcialTensorSegmentation/zachiSegmentationTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="237" column="37" lean-forward="true" selection-start-line="237" selection-start-column="37" selection-end-line="237" selection-end-column="37" />
+          <caret line="19" column="37" selection-start-line="19" selection-start-column="37" selection-end-line="19" selection-end-column="37" />
+          <folding>
+            <element signature="e#113#154#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2023">
+          <caret line="146" column="23" selection-start-line="146" selection-start-column="23" selection-end-line="146" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/tigers_78_cell_5cm_phenom_10cm.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/tigers_78_cell_1cm_phenom_10cm.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/MultiScaleSaliency/test_multSaliency.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="367" column="19" selection-start-line="367" selection-start-column="19" selection-end-line="367" selection-end-column="19" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
             <element signature="e#13144#14477#0" />
