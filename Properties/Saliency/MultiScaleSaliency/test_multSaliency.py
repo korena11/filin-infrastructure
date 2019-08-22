@@ -260,7 +260,7 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     neighbors = neighbors[:, 0]
     validCells = nonzero(validCells >= numValidSecotrs)[0]  # checking for valid cells based on sector analysis
 
-    cogs = array(list(map(lambda l: segProp.GetSegment(l).ToNumpy().mean(axis=0),
+    cogs = array(list(map(lambda l: pntSet.ToNumpy()[segProp.GetSegmentIndices(l)].mean(axis=0),
                           tqdm(range(numLabels), desc='computing center of mass for each cell'))))
     tensors = list(map(lambda l: TensorFactory.tensorFromPoints(vstack([cogs[l], cogs[neighbors[l]]]),
                                                                 point_index=0, keepPoints=False),
@@ -312,13 +312,18 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
     list(map(lambda i: pntSaliency.__setitem__(segProp.GetSegmentIndices(validCells[i]), saliency[validCells[i]]),
              tqdm(range(validCells.shape[0]), desc='updating points saliencies')))
 
-    # curvatureMat = zeros(cellLabels.shape) + curvatures.min()
-    # curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
-    #
+    curvatureMat = zeros(cellLabels.shape) # + curvatures.min()
+    curvatureMat[uniqueCells[validCells, 0], uniqueCells[validCells, 1]] = curvatures[validCells]
+
     # from matplotlib import pyplot as plt
+    # from scipy.ndimage.filters import gaussian_laplace
     # plt.imshow(curvatureMat, cmap='jet')
     # plt.colorbar()
     # plt.show()
+    #
+    # gl1 = gaussian_laplace(curvatureMat, sigma=0.5)
+    # gl2 = gaussian_laplace(curvatureMat, sigma=1)
+    # gl3 = gaussian_laplace(curvatureMat, sigma=3)
 
     return CurvatureProperty(pntSet, umbrella_curvature=pntCurvatures), SaliencyProperty(pntSet, pntSaliency)
 
@@ -356,17 +361,17 @@ if __name__ == '__main__':
     # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Achziv/'
     # filename = 'Achziv_middle - Cloud_97'
 
-    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
-    filename = 'tigers - cloud_78'
+    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Tigers/'
+    # filename = 'tigers - cloud_1M'
 
-    # path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Bulbus/'
-    # filename = 'bulbus_levelled_500K'
+    path = 'C:/Zachi/Code/saliency_experiments/ReumaPhD/data/Bulbus/'
+    filename = 'bulbus_levelled_500K'
 
     # reading data from file
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
     cellSize = 0.01
-    phenomSize = 0.05
+    phenomSize = 0.30
 
     pntCurveProp = None
     cellCurveProp = None
