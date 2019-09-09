@@ -219,14 +219,14 @@ def computeCellSaliency(uniqueCells, normals, curvatures, label, cellNeighbors, 
     weights[distanceFromCell > buffer / 2] = farWeight
     weights[distanceFromCell <= buffer / 2] = closeWeight
 
-    currentCurvatures = curvatures[cellNeighbors]
+    currentCurvatures = abs(curvatures[cellNeighbors])
     curvatureDiffs = abs(curvatures[cellNeighbors] - curvatures[label])
     # don = norm(normals[cellNeighbors] - normals[label], axis=1)
 
     # curvatureDiffs = (curvatureDiffs - curvatureDiffs.min()) / (curvatureDiffs.max() - curvatureDiffs.min() - 1e-12)
     # don = (don - don.min()) / (don.max() - don.min() - 1e-12)  # normalizing difference of normals
 
-    curvaturePart = (weights * currentCurvatures).sum() + curvatures[label] * closeWeight # / weights.sum()
+    curvaturePart = (weights * currentCurvatures).sum() + abs(curvatures[label]) * closeWeight # / weights.sum()
     # normalPart = (weights * don).sum()  # / weights.sum()
     return abs(curvaturePart)  # + normalPart
 
@@ -272,13 +272,22 @@ def computeCellwiseUmbrellaCurvature(pntSet, cellSize, phenomSize, numValidSecot
 
     normals = array(list(map(lambda t: t.plate_axis, tensors)))
     normals[normals[:, 2] < 0] *= -1
-
     # from Properties.Normals.NormalsProperty import NormalsProperty
     # normProp = NormalsProperty(PointSet(cogs), normals)
     # visObj = VisualizationO3D()
     # visObj.visualize_property(normProp)
     # normals = zeros((numLabels, 3))
     # normals[:, 2] = 1
+
+    import open3d as o3d
+    pcd = o3d.PointCloud()
+    pcd.points = o3d.Vector3dVector(cogs)
+    pcd.normals = o3d.Vector3dVector(normals)
+    pcd_fpfh = o3d.registration.compute_fpfh_feature(pcd, o3d.geometry.KDTreeSearchParamRadius(radius=phenomSize))
+    fpfh = pcd_fpfh.data.T
+    tmp = SaliencyProperty(PointSet(cogs), fpfh.std(axis=1).reshape((-1,)))
+    visObj = VisualizationO3D()
+    visObj.visualize_property(tmp)
 
     # computing curvature for each cell
     curvatures = zeros((numLabels,))
@@ -371,7 +380,7 @@ if __name__ == '__main__':
     pntSet = IOFactory.ReadPts(path + filename + '.pts')
 
     cellSize = 0.01
-    phenomSize = 0.30
+    phenomSize = 0.40
 
     pntCurveProp = None
     cellCurveProp = None
