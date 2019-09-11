@@ -7,9 +7,7 @@ from numpy import dtype, genfromtxt
 from sklearn.neighbors import BallTree, KDTree
 
 from Cuda.cuda_API import *
-from Normals.NormalsProperty import NormalsProperty
-from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
+from Properties.Normals.NormalsProperty import NormalsProperty
 
 if sys.platform == 'linux':
     pass
@@ -39,10 +37,14 @@ class NormalsFactory:
         :return:
         """
         pnts = neighborProperty.Points.ToNumpy()
-        cudaNeighbors, numNeighbors = neighborProperty.ToCUDA()
-
+        cudaNeighbors, numNeighbors = neighborProperty.ToCUDA
+        numNeighbors = numNeighbors.reshape((-1, 1))
+        print("start gpu normals")
+        start = timer()
         normals = compute_normals_by_tensor_cuda(pnts, numNeighbors, cudaNeighbors)
-        return NormalsProperty(pnts, normals.reshape((-1, 3)))
+        duration = timer() - start
+        print("gpu : ", duration)
+        return NormalsProperty(neighborProperty.Points, normals.reshape((-1, 3))), normals
 
     @staticmethod
     def normals_from_file(points, normalsFileName):
@@ -304,23 +306,68 @@ class NormalsFactory:
 
 #
 
+# if __name__ == "__main__":
+#     # TODO: Obsolete code, should be deleted or modified to a newer version
+#     from IOFactory import IOFactory
+#     from VisualizationVTK import VisualizationVTK
+#
+#     pointSetList = []
+#
+#     #    IOFactory.ReadXYZ('..\\Sample Data\\cubeSurface.xyz', pointSetList)
+#     #    normalsFileName = '..\\Sample Data\\cubeSurfaceNormals.xyz'
+#     #    normals = NormalsFactory.ReadNormalsFromFile(pointSetList[0], normalsFileName)
+#     IOFactory.ReadXYZ(r'D:\\Documents\\Pointsets\\cylinder_1.3_Points.txt', pointSetList)
+#     #    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])
+#     normals = NormalsFactory.VtkNormals(pointSetList[0])  # , triangulation)
+#
+#     VisualizationVTK.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3)
+#     VisualizationVTK.Show()
+#
+# #    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
+# #    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())
+# #    show()
+
+
 if __name__ == "__main__":
     # TODO: Obsolete code, should be deleted or modified to a newer version
-    from IOFactory import IOFactory
-    from VisualizationVTK import VisualizationVTK
+    import IOFactory
+    from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
+    from Properties.Curvature.CurvatureFactory import CurvatureFactory
+    from DataClasses.KdTreePointSet import KdTreePointSet
+    from DataClasses.PointSubSetOpen3D import PointSetOpen3D
+    from DataClasses.PointSet import PointSet
+    from VisualizationO3D import VisualizationO3D
+    from timeit import default_timer as timer
 
-    pointSetList = []
+    # points = np.loadtxt("/home/user/PycharmProjects/Filin-Infrastructure/test_data/tigers1M.txt")
+    # pnts = points[:, :3]
+    # pntSet=PointSet(pnts)
+    pntSet = IOFactory.ReadFunctions.ReadPts("/home/user/PycharmProjects/Filin-Infrastructure/test_data/test_pts.pts")
+    neiProp = NeighborsFactory.kdtreePointSet_knn(KdTreePointSet(pntSet), 20)
+    # normals = np.array(list(map(lambda i: computeNormalByTensor(pntSet[ind[i, 1:], :], pntSet[i]), range(numPnts))))
+    # neiProp2Bool = np.array(list(map(lambda i: CurvatureFactory.checkNeighborhood(neiProp), range(pntSet.Size))))
+    # for p in neiProp :
+    #     CurvatureFactory.checkNeighborhood(p)
+    # neiProp2Bool = CurvatureFactory.checkNeighborhood(neiProp)
 
-    #    IOFactory.ReadXYZ('..\\Sample Data\\cubeSurface.xyz', pointSetList)
-    #    normalsFileName = '..\\Sample Data\\cubeSurfaceNormals.xyz'
-    #    normals = NormalsFactory.ReadNormalsFromFile(pointSetList[0], normalsFileName)
-    IOFactory.ReadXYZ(r'D:\\Documents\\Pointsets\\cylinder_1.3_Points.txt', pointSetList)
-    #    triangulation = TriangulationFactory.Delaunay2D(pointSetList[0])
-    normals = NormalsFactory.VtkNormals(pointSetList[0])  # , triangulation)
+    normalsProp, normals = NormalsFactory.normal_from_tensors_with_CUDA(neiProp)
+    curv = CurvatureFactory.curvature_with_CUDA(neiProp, normals)
 
-    VisualizationVTK.RenderPointSet(normals, 'color', color=(0, 0, 0), pointSize=3)
-    VisualizationVTK.Show()
+    p3d = PointSetOpen3D(pntSet)
 
-#    points3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), scale_factor=.25)
-#    quiver3d(pointSetList[0].X(), pointSetList[0].Y(), pointSetList[0].Z(), normals.dX(), normals.dY(), normals.dZ())
-#    show()
+    print("start cpu normals")
+    start = timer()
+    p3d.CalculateNormals(1.5, maxNN=500)
+    duration = timer() - start
+    print("cpu : ", duration)
+    open3d_normals = np.array(p3d.data.normals)
+    v3d = VisualizationO3D()
+    # gpu_normals = normalsProp.Normals
+    # dot_pro = np.dot(gpu_normals, open3d_normals.T).diagonal()
+    # v3d.visualize_property(normalsProp)
+
+    # p3d.data.normals = o3d.Vector3dVector(normalsProp.Normals)
+    v3d.visualize_pointset(p3d)
+    # normals_o3d = np.asarray(o3d.data.normals)
+
+    print("done")
