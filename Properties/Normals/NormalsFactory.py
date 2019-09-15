@@ -34,7 +34,19 @@ class NormalsFactory:
         Compute normals of each point using CUDA
         :param neighborProperty: neighborProperty to compute normal for each of its points
         :type neighborProperty: NeighborProperty
-        :return:
+        :return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals
+
+        **Usage example**
+
+
+
+        .. literalinclude:: ../../NormalsFactory.py
+
+            :lines: 358-365
+
+            :linenos:
+
+
         """
         pnts = neighborProperty.Points.ToNumpy()
         cudaNeighbors, numNeighbors = neighborProperty.ToCUDA
@@ -330,26 +342,25 @@ class NormalsFactory:
 
 if __name__ == "__main__":
     # TODO: Obsolete code, should be deleted or modified to a newer version
-    import IOFactory
     from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
     from Properties.Curvature.CurvatureFactory import CurvatureFactory
+    from Properties.Curvature.CurvatureProperty import CurvatureProperty
     from DataClasses.KdTreePointSet import KdTreePointSet
     from DataClasses.PointSubSetOpen3D import PointSetOpen3D
     from DataClasses.PointSet import PointSet
     from VisualizationO3D import VisualizationO3D
     from timeit import default_timer as timer
 
-    # points = np.loadtxt("/home/user/PycharmProjects/Filin-Infrastructure/test_data/tigers1M.txt")
-    # pnts = points[:, :3]
-    # pntSet=PointSet(pnts)
-    pntSet = IOFactory.ReadFunctions.ReadPts("/home/user/PycharmProjects/Filin-Infrastructure/test_data/test_pts.pts")
-    neiProp = NeighborsFactory.kdtreePointSet_knn(KdTreePointSet(pntSet), 20)
+    points = np.loadtxt("/home/user/PycharmProjects/Filin-Infrastructure/test_data/tigers1M.txt")
+    pnts = points[:, :3]
+    pntSet = PointSet(pnts)
+    # pntSet = IOFactory.ReadFunctions.ReadPts("/home/user/PycharmProjects/Filin-Infrastructure/test_data/test_pts.pts")
+    neiProp = NeighborsFactory.kdtreePointSet_knn(KdTreePointSet(pntSet), 500)
     # normals = np.array(list(map(lambda i: computeNormalByTensor(pntSet[ind[i, 1:], :], pntSet[i]), range(numPnts))))
     # neiProp2Bool = np.array(list(map(lambda i: CurvatureFactory.checkNeighborhood(neiProp), range(pntSet.Size))))
     # for p in neiProp :
     #     CurvatureFactory.checkNeighborhood(p)
     # neiProp2Bool = CurvatureFactory.checkNeighborhood(neiProp)
-
     normalsProp, normals = NormalsFactory.normal_from_tensors_with_CUDA(neiProp)
     curv = CurvatureFactory.curvature_with_CUDA(neiProp, normals)
 
@@ -357,17 +368,35 @@ if __name__ == "__main__":
 
     print("start cpu normals")
     start = timer()
-    p3d.CalculateNormals(1.5, maxNN=500)
+    p3d.CalculateNormals(1, maxNN=500)
     duration = timer() - start
     print("cpu : ", duration)
     open3d_normals = np.array(p3d.data.normals)
+
     v3d = VisualizationO3D()
     # gpu_normals = normalsProp.Normals
     # dot_pro = np.dot(gpu_normals, open3d_normals.T).diagonal()
     # v3d.visualize_property(normalsProp)
 
     # p3d.data.normals = o3d.Vector3dVector(normalsProp.Normals)
-    v3d.visualize_pointset(p3d)
+    # v3d.visualize_pointset(p3d)
     # normals_o3d = np.asarray(o3d.data.normals)
+
+    search_radius = 0.25
+    max_nn = 20
+
+    normals0 = NormalsProperty(p3d, normals.reshape((-1, 3)))
+    normals1 = NormalsProperty(p3d, np.asarray(p3d.data.normals))
+
+    # neighborsProperty = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, max_nn)
+    curvatures = CurvatureFactory.umbrella_curvature(neiProp, normals1, valid_sectors=4, invalid_value=0,
+                                                     verbose=True)
+
+    curvatures1 = CurvatureProperty(neiProp.Points, principal_curvatures=None,
+                                    umbrella_curvature=curv)
+
+    v3d.visualize_property(curvatures)
+    v3d.visualize_property(curvatures1)
+
 
     print("done")

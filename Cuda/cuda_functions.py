@@ -541,23 +541,24 @@ def umbrelaCurvatureGPU(pnts, normals, neighborsNumber, neighbors, out):
         end = ((neighborsNum >= (k + stride)) * (k + stride)) + (
                 (neighborsNum < (k + stride)) * neighborsNum)
 
+        for i in range(start, 128, stride):
+            sharedTmp[0, i] = 0
+            sharedTmp[1, i] = 0
+            sharedTmp[2, i] = 0
+            sharedTmp_scalarProduct[0, i] = 0
+        cuda.syncthreads()
+
         for i in range(start + k, end, stride):
             j = i - k
 
             sharedTmp[0, j] = neighbors[ty, i * 3]
             sharedTmp[1, j] = neighbors[ty, 1 + i * 3]
             sharedTmp[2, j] = neighbors[ty, 2 + i * 3]
-            if ty == 0 and tx == 0:
-                print(neighbors[0, 0], neighbors[0, 1], neighbors[0, 2])
-                print(point[0, 0], point[1, 0], point[2, 0])
+
         cuda.syncthreads()
 
-        if ty == 0 and tx == 0:
-            print("ok")
         for i in range(start + k, end, stride):
             j = i - k
-            # if ty == 0 and tx == 0:
-            #     print("start1=", start, tx, k, end, stride)
 
             sharedTmp[0, j] -= point[0, 0]
             sharedTmp[1, j] -= point[1, 0]
@@ -567,20 +568,23 @@ def umbrelaCurvatureGPU(pnts, normals, neighborsNumber, neighbors, out):
             # if ty == 0 and tx == 0:
             #     print(sharedTmp[0, 0],sharedTmp[1, 0],sharedTmp[2, 0])
             sharedTmp_scalarProduct[0, j] = scalarProduct_1x3_index(normal, sharedTmp, j) / (norm_v * norm[0])
+            # if ty == 494120 :
+            #     print(j, sharedTmp_scalarProduct[0, j], "\n")
 
-        if ty == 0 and tx == 1:
-            print("start2=", start, tx, k, end, stride)
+        # for i in range(start, 128, stride):
+        #     if ty == 494120:
+        #         print(i, sharedTmp_scalarProduct[0, i], "\n")
+        # cuda.syncthreads()
+        #
+        # if ty == 0 and tx == 0:
+        #     print("start2=", start, tx, k, end, stride)
         cuda.syncthreads()
 
         len = int(stride / 2)
 
         while len >= 1:
-            # if ty == 0 and len == 1:
-            #     print("start",tx)
 
             for j in range(tx, len, stride):
-                if ty == 0 and len == 1:
-                    print(tx)
                 sharedTmp_scalarProduct[0, j] += sharedTmp_scalarProduct[0, j + len]
 
             cuda.syncthreads()
@@ -589,7 +593,8 @@ def umbrelaCurvatureGPU(pnts, normals, neighborsNumber, neighbors, out):
         # if ty==0:
         #     print("aaaa", out[ty], "=",sharedTmp_scalarProduct[0, 0])
         if tx == 0:
-            out[ty] += sharedTmp_scalarProduct[0, 0]
+            out[ty] += sharedTmp_scalarProduct[0, 0] / neighborsNum
+
 
 
 @cuda.jit()

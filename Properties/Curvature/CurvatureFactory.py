@@ -22,7 +22,17 @@ class CurvatureFactory:
         Compute normals of each point using CUDA
         :param neighborProperty: neighborProperty to compute normal for each of its points
         :type neighborProperty: NeighborProperty
-        :return:
+        :param normals: normals shape (3*n,) while n is the number of normals
+        :return:curvature as 1 dim numpy array
+         **Usage example**
+
+
+
+        .. literalinclude:: ../../NormalsFactory.py
+
+            :lines: 358-366
+
+            :linenos:
         """
         pnts = neighborProperty.Points.ToNumpy()
         cudaNeighbors, numNeighbors = neighborProperty.ToCUDA
@@ -33,6 +43,7 @@ class CurvatureFactory:
         duration = timer() - start
         print("gpu : ", duration)
         return curv
+
     @classmethod
     def tensorProperty_3parameters(cls, tensorProperty, min_points=5):
         r"""
@@ -303,8 +314,8 @@ class CurvatureFactory:
                 point_idx = point_neighbors.neighborhoodIndices[0]
                 n = normals.Normals[point_idx]
 
-                if verbose:
-                    print(point_idx, n)
+                # if verbose:
+                #     print(point_idx, n)
 
                 # compute the directions projections  on the normal at the center point of each neighbor
                 projections = point_neighbors.neighbors_vectors().dot(n)
@@ -314,8 +325,8 @@ class CurvatureFactory:
 
                 umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
-                if verbose:
-                    print('invalid point:', point_neighbors.center_point_idx)
+                # if verbose:
+                #     print('invalid point:', point_neighbors.center_point_idx)
                 umbrellaCurvature.append(invalid_value)
         umbrella_curvature = np.asarray(umbrellaCurvature)
         if verbose:
@@ -444,6 +455,7 @@ class CurvatureFactory:
         """
         return cls.__checkNeighborhood(neighborhood, min_points_in_neighborhood, min_points_in_sector, valid_sectors,
                                        num_sectors)
+
     # ------------------ PRIVATE METHODS ----------------------------
     @classmethod
     def __checkNeighborhood(cls, neighborhood, min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7,
@@ -516,8 +528,6 @@ class CurvatureFactory:
 
         if num_sectors is None:
             num_sectors = 4
-
-
 
         if isinstance(neighbors, np.ndarray):
             neighbor_points = neighbors
@@ -608,4 +618,3 @@ class CurvatureFactory:
         p = np.linalg.solve(N, u)
 
         return p
-
