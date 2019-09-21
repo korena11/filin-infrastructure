@@ -3,6 +3,8 @@ import numpy as np
 from Properties.BaseProperty import BaseProperty
 from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 
+from tqdm import tqdm
+
 
 class NeighborsProperty(BaseProperty):
     """
@@ -86,9 +88,17 @@ class NeighborsProperty(BaseProperty):
         """
         if isinstance(point_neighbors, PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
+
         else:
-            subset = point_neighbors.neighbors
-            self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
+            if isinstance(point_neighbors, np.ndarray):
+                if isinstance(point_neighbors[0], PointNeighborhood):
+                    self.__pointsNeighborsArray = point_neighbors
+            else:
+                subset = point_neighbors.neighbors
+                self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
+
+
+
 
     def average_neighborhood_radius(self):
         """
@@ -121,3 +131,32 @@ class NeighborsProperty(BaseProperty):
 
             self.__averageNeighborsNumber = int(np.asarray(size).mean())
         return self.__averageNeighborsNumber
+
+    @property
+    def ToCUDA(self):
+        """
+        changing NeighborProperty format for using with CUDA functionality
+        :return:
+        """
+
+        if isinstance(self.__pointsNeighborsArray[0], PointNeighborhood):
+            neighborsCount = np.array(list(map(lambda n: n.Size,
+                                               tqdm(self.__pointsNeighborsArray,
+                                                    'Getting number of neighbors for each point'))))
+            neighbors = list(map(lambda n: n.neighbors.ToNumpy().reshape((-1, )),
+                                 tqdm(self.__pointsNeighborsArray, desc='Retrieving neighbors')))
+
+            maxNeighbors = neighborsCount.max()
+
+            neighbors = np.array(list(map(
+                lambda n: n if n.shape[0] == 3 * maxNeighbors
+                else np.hstack([n, np.zeros((3 * maxNeighbors - n.shape[0], ))]),
+                tqdm(neighbors, desc='Zero-padding neighbors array'))))
+
+        elif isinstance(self.__pointsNeighborsArray[0], np.ndarray):
+            # TODO: convert numpy array
+            return None
+        else:
+            raise TypeError('Cannot convert property for CUDA')
+
+        return neighbors, neighborsCount

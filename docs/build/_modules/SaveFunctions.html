@@ -92,7 +92,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
             
@@ -178,13 +177,13 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">savetxt</span>
 
 <span class="kn">from</span> <span class="nn">BaseData</span> <span class="k">import</span> <span class="n">BaseData</span>
-<span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
-<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
-<span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
-<span class="kn">from</span> <span class="nn">Properties.SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
+<span class="kn">from</span> <span class="nn">BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
+<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
+<span class="kn">from</span> <span class="nn">SegmentationProperty</span> <span class="k">import</span> <span class="n">SegmentationProperty</span>
 <span class="kn">from</span> <span class="nn">SphericalCoordinatesProperty</span> <span class="k">import</span> <span class="n">SphericalCoordinatesProperty</span>
-<span class="c1"># from shapefile import Writer, POINTZ</span>
+<span class="kn">from</span> <span class="nn">shapefile</span> <span class="k">import</span> <span class="n">Writer</span><span class="p">,</span> <span class="n">POINTZ</span>
 
 <div class="viewcode-block" id="WriteToPts"><a class="viewcode-back" href="../IOFactory.html#SaveFunctions.WriteToPts">[docs]</a><span class="k">def</span> <span class="nf">WriteToPts</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -193,6 +192,7 @@
 <span class="sd">        :param points: PointSet</span>
 <span class="sd">        :param path: to the directory of a new file + file name</span>
 <span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="n">fields_num</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">FieldsDimension</span>
     <span class="k">if</span> <span class="n">fields_num</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span class="n">points</span><span class="o">.</span><span class="n">Intensity</span><span class="p">,</span> <span class="n">points</span><span class="o">.</span><span class="n">RGB</span><span class="p">))</span>

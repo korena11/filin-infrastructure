@@ -103,7 +103,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
             
@@ -181,148 +180,44 @@
 <dt id="KdTreePointSet.KdTreePointSet.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>A kd-tree representation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>points</strong> (<a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em>, </em><em>np.array</em>) – the points to represent as kd-tree</li>
-<li><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – minimal number of points in a leaf, with the maximal <span class="math notranslate nohighlight">\(2\cdot\)</span> leaf_size</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em>, </em><em>np.array</em>) – the points to represent as kd-tree</p></li>
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – minimal number of points in a leaf, with the maximal <span class="math notranslate nohighlight">\(2\cdot\)</span> leaf_size</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div></blockquote>
 <p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></td>
-<td>Return number of columns (channels)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></td>
-<td>Return nX1 ndarray of intensity values</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">number of points</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">X coordinates</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Y coordinates</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Z coordinates</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
-<td>The data as stored in self.__data</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
-<td>Path to datafile, if exists</td>
-</tr>
+<tbody>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])</td>
-<td>Add data to a field</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code>(index)</td>
-<td>Retrieve specific point(s) by index</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code>([crs])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code>()</td>
-<td>Points as numpy</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code>()</td>
-<td>Create and return vtkPolyData object</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code>()</td>
-<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code>(**kwargs)</td>
-<td>Update a field within the PointSet</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_KdTreePointSet__initializeKdTree</span></code>(…)</td>
-<td>Initialize the object according to the type of the input points</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">query</span></code>(pnts,&nbsp;k)</td>
-<td>Query the kd-tree for the k nearest neighbors of a given set of points</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">queryRadius</span></code>(pnts,&nbsp;radius[,&nbsp;sort_results])</td>
-<td>Query the kd-tree to find the neighbors of a given set of point inside a given radius</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code>(path_or_buf,&nbsp;**kwargs)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
-<td></td>
-</tr>
+<tbody>
 </tbody>
 </table>
 <p class="rubric">Private Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">BallTreePointSet._BallTreePointSet__initializeKdTree</span></code></td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BallTreePointSet._BallTreePointSet__initializeKdTree</span></code></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>

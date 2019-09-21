@@ -5,7 +5,6 @@ Created on Dec 2, 2014
 '''
 
 import datetime
-# from mayavi import mlab
 import functools
 import itertools
 
@@ -22,7 +21,6 @@ from scipy.spatial import cKDTree
 
 from IOFactory import IOFactory
 from NeighborsFactory import NeighborsFactory
-# from Visualization import Visualization
 from PointSet import PointSet
 from PointSubSet import PointSubSet
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory

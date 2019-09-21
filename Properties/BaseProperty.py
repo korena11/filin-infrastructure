@@ -66,6 +66,9 @@ class BaseProperty(object):
         """
         if isinstance(self.__dataset, PointSet):
             return self.__dataset
+
+        # if not isinstance(self.__dataset, RasterData):
+        #     return self.__dataset
         else:
             # warn('Wrong data type data for this instance')
             return False

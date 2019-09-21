@@ -6,8 +6,8 @@ import numpy as np
 from tqdm import tqdm
 
 import Properties.Transformations as RotationUtils
-from CurvatureProperty import CurvatureProperty
-from RasterData import RasterData
+from DataClasses.RasterData import RasterData
+from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
 
 class CurvatureFactory:

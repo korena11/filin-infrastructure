@@ -3,7 +3,7 @@ from random import randint
 
 from numpy import fabs, nonzero, asarray, int, ones, arange
 
-from SegmentationProperty import SegmentationProperty
+from Segmentation.SegmentationProperty import SegmentationProperty
 from SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
@@ -166,24 +166,74 @@ class SegmentationFactory:
         list(map(segmentationProperty.UpdatePointLabel, unsortedIndexes, closestLineIndex))
         
         return segmentationProperty
-        
+
+    @classmethod
+    def BallTreeSurfaceElementSegmentation(cls, points, leafSize=10, smallestObjectSize=0.1):
+        """
+        Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure
+        :param points: point set object (PointSet)
+        :param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+        :param smallestObjectSize: smallest object expected to be detected in the point set (float)
+        :return: SegmentationFactory
+        """
+        from TensorBallTreeSegmentation import extractSurfaceElements
+        bt, labels, nodeIds, tensors = extractSurfaceElements(points, leafSize, smallestObjectSize)
+        return SegmentationProperty(points, labels, nodeIds, tensors)
+
+    @classmethod
+    def SurfaceElementsTensorConnectedComponents(cls, points, leafSize=10, smallestObjectSize=0.1, numNeighbors=10,
+                                                 varianceThreshold=0.01, linearityThreshold=5,
+                                                 normalSimilarityThreshold = 1e-2, distanceThreshold=0.01,
+                                                 mode='soft_clipping'):
+        """
+
+        :param points: point set object (PointSet)
+        :param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+        :param smallestObjectSize: smallest object expected to be detected in the point set (float)
+        :param numNeighbors: number of neighboring surface elements to find (int)
+        :param varianceThreshold: max allowed variance of a surface tensor (float)
+        :param linearityThreshold: the value between the two largest eigenvalues from which a tensor is considered as
+            a linear one (float)
+        :param normalSimilarityThreshold: max difference allowed between the directions of the tensors,
+            given in values of the angle sine (float)
+        :param distanceThreshold: max distance between two tensors (float)
+        :param mode: similarity function indicator. Valid values include: 'binary' (default), 'soft_clipping' and 'exp'
+        :return:
+        """
+        from TensorBallTreeSegmentation import extractSurfaceElements, tensorConnectedComponents
+        from TensorSet import TensorSet
+        bt, surfaceElementsLabels, nodeIds, tensors = extractSurfaceElements(points, leafSize, smallestObjectSize)
+
+        labels, tensorsPerSegment, segmentNeighbors = tensorConnectedComponents(
+            tensors, numNeighbors, mode=mode, linearityThreshold=linearityThreshold,
+            varianceThreshold=varianceThreshold, normalSimilarityThreshold=normalSimilarityThreshold,
+            distanceThreshold=distanceThreshold)
+
+        tensors = asarray(tensors)
+        tensorsSets = asarray(list(map(lambda s: TensorSet(tensors[s]), tensorsPerSegment)))
+
+        return SegmentationProperty(bt, labels[surfaceElementsLabels],
+                                    segmentAttributes=tensorsSets), segmentNeighbors
+
+
 if __name__ == '__main__':
-    
-    from IOFactory import IOFactory
-    from VisualizationVTK import VisualizationVTK
-    from numpy import random
-       
-    pointSetList = []
-    fileName = 'D:\\Documents\\Pointsets\\set3_1.pts' 
-    IOFactory.ReadPts(fileName, pointSetList)
-    
-    scanLineSegmentation = SegmentationFactory.ParabolicScanLineSegmentation(pointSetList[0], 0.1, minimalScanLineLength=5)
-        
-    colors = 255 * random.random((scanLineSegmentation.NumberOfSegments, 3))
-    print (colors)
-    
-    _figure = None
-    for i in range(scanLineSegmentation.NumberOfSegments):
-        scanLinei = scanLineSegmentation.GetSegment(i)
-        _figure = VisualizationVTK.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
-    VisualizationVTK.Show()
+    pass
+    # TODO: obsolete code needs to be deleted
+    # from IOFactory import IOFactory
+    # from VisualizationVTK import VisualizationVTK
+    # from numpy import random
+    #
+    # pointSetList = []
+    # fileName = 'D:\\Documents\\Pointsets\\set3_1.pts'
+    # IOFactory.ReadPts(fileName, pointSetList)
+    #
+    # scanLineSegmentation = SegmentationFactory.ParabolicScanLineSegmentation(pointSetList[0], 0.1, minimalScanLineLength=5)
+    #
+    # colors = 255 * random.random((scanLineSegmentation.NumberOfSegments, 3))
+    # print(colors)
+    #
+    # _figure = None
+    # for i in range(scanLineSegmentation.NumberOfSegments):
+    #     scanLinei = scanLineSegmentation.GetSegment(i)
+    #     _figure = VisualizationVTK.RenderPointSet(scanLinei, 'color', color=colors[i], _figure=_figure, pointSize=3)
+    # VisualizationVTK.Show()

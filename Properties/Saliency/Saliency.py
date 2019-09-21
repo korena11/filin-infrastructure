@@ -266,28 +266,6 @@ def distance_based(image, **kwargs):
     return np.mean(saliency_map, axis=0)
 
 
-def range_saliency(image, salient_range):
-    """
-    Mark closer ranges as salient
-
-    :param image: a range image for saliency
-    :param salient_range: the range threshold for saliency
-
-    :type image: np.array
-    :type salient_range: float
-
-    :return: saliency image according to the salient range
-
-    :rtype: np.array
-
-    """
-
-    pass
-    # return image_salient
-
-
-
-
 def __frequencyTuned(image, sigma_flag, filters):
     """
     Saliency computed according to :cite:`Achanta.etal2009`
@@ -333,7 +311,7 @@ def __regionConstrast(image, region1_size):
     return np.array([map_R1 - map_R2 for map_R2 in maps_R2])
 
 
-def _contextAware(image, ksize, image_feature, **kwargs):
+def __contextAware(image, ksize, image_feature, **kwargs):
     """
     Saliency computed according to :cite:`Goferman.etal2012`
 
@@ -465,7 +443,7 @@ def __dissimilarity(A, B, **kwargs):
 
 if __name__ == '__main__':
     # --- initializations
-    img = cv2.cvtColor(cv2.imread(r'/home/photo-lab-3/ownCloud/Data/Images/mult1.png'), cv2.COLOR_BGR2RGB)
+    img = cv2.cvtColor(cv2.imread(r'/home/reuma/ownCloud/Data/Images/channel91.png'), cv2.COLOR_BGR2RGB)
     sigma = 2.5
 
     print('-' * 20, 'frequency tuned', '-' * 20)

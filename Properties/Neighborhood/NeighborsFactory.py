@@ -6,9 +6,9 @@ from tqdm import tqdm
 
 from DataClasses.PointSet import PointSet
 from DataClasses.PointSubSet import PointSubSet
-from NeighborsProperty import NeighborsProperty
-from PointNeighborhood import PointNeighborhood
-from SphericalCoordinatesFactory import SphericalCoordinatesFactory
+from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
+from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+from Properties.Transformations.SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
 class NeighborsFactory:
