@@ -102,7 +102,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
             
@@ -174,54 +176,136 @@
 <dl class="class">
 <dt id="KdTreePointSet.KdTreePointSet">
 <em class="property">class </em><code class="descclassname">KdTreePointSet.</code><code class="descname">KdTreePointSet</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><blockquote>
-<div><dl class="method">
-<dt id="KdTreePointSet.KdTreePointSet.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>A kd-tree representation</p>
+<dd><dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.GetPoint">
+<code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.GetPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve specific point(s) by index</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em>, </em><em>np.array</em>) – the points to represent as kd-tree</p></li>
-<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – minimal number of points in a leaf, with the maximal <span class="math notranslate nohighlight">\(2\cdot\)</span> leaf_size</p></li>
-</ul>
+<dd class="field-odd"><p><strong>index</strong> – the index of the point to return</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div></blockquote>
-<p class="rubric">Attributes</p>
-<table class="longtable docutils align-center">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table class="longtable docutils align-center">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-</tbody>
-</table>
-<p class="rubric">Private Methods</p>
-<table class="longtable docutils align-center">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">BallTreePointSet._BallTreePointSet__initializeKdTree</span></code></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
+<dl class="attribute">
+<dt id="KdTreePointSet.KdTreePointSet.Size">
+<code class="descname">Size</code><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.Size" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>number of points</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.ToNumpy">
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Points as numpy</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.ToPolyData">
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return vtkPolyData object</p>
+<p>:return vtk.vtkPolyData of the current PointSet</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="KdTreePointSet.KdTreePointSet.X">
+<code class="descname">X</code><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.X" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>X coordinates</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>nx1 nd-array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="KdTreePointSet.KdTreePointSet.Y">
+<code class="descname">Y</code><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.Y" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Y coordinates</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>nx1 nd-array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="KdTreePointSet.KdTreePointSet.Z">
+<code class="descname">Z</code><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.Z" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Z coordinates</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>nx1 nd-array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>pnts</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the kd-tree for the k nearest neighbors of a given set of points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</p></li>
+<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of neighbors to find for the point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The indexes for the neighbors of the points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of np.array</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Return the query points themselves as the first index of each list</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.queryRadius">
+<code class="descname">queryRadius</code><span class="sig-paren">(</span><em>pnts</em>, <em>radius</em>, <em>sort_results=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.queryRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.queryRadius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query the kd-tree to find the neighbors of a given set of point inside a given radius</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</p></li>
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – The query radius</p></li>
+<li><p><strong>sort_results</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – if True, the distances and indices will be sorted before being returned. If False, the results will not be sorted. If return_distance == False, setting sort_results = True will result in an error.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The indexes for the neighbors of the points</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list of np.array</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Return the query points themselves as the first index of each list</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="KdTreePointSet.KdTreePointSet.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>path_or_buf</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/KdTreePointSet.html#KdTreePointSet.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#KdTreePointSet.KdTreePointSet.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

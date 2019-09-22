@@ -1,815 +1,502 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>General Utilities &mdash; infragit 1a documentation</title>
+  
 
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
+  
+  
+  
 
-    <title>General Utilities &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
+    
 
-    <script src="../_static/js/modernizr.min.js" type="text/javascript"></script>
-
-
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"
-            type="text/javascript"></script>
-    <script src="../_static/jquery.js" type="text/javascript"></script>
-    <script src="../_static/underscore.js" type="text/javascript"></script>
-    <script src="../_static/doctools.js" type="text/javascript"></script>
-    <script src="../_static/language_data.js" type="text/javascript"></script>
-    <script async="async"
-            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"
-            type="text/javascript"></script>
-
-    <script src="../_static/js/theme.js" type="text/javascript"></script>
-
-
-    <link href="../_static/css/theme.css" rel="stylesheet" type="text/css"/>
-    <link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
-    <link href="../genindex.html" rel="index" title="Index"/>
-    <link href="../search.html" rel="search" title="Search"/>
-    <link href="../Visualizations/Visualization.html" rel="next" title="Visualization Classes"/>
-    <link href="EigenFactory.html" rel="prev" title="Eigen Factory Documentation"/>
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CUDA Utilities" href="cuda_API.html" />
+    <link rel="prev" title="Eigen Factory Documentation" href="EigenFactory.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-<div class="wy-grid-for-nav">
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
 
-    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                <a class="icon icon-home" href="../index.html"> infragit
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                </a>
-
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
-                        <input name="q" placeholder="Search docs" type="text"/>
-                        <input name="check_keywords" type="hidden" value="yes"/>
-                        <input name="area" type="hidden" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set
-                        functions and factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="EigenFactory.html">Eigen Factory
-                        Documentation</a></li>
-                    <li class="toctree-l1 current"><a class="current reference internal" href="#">General Utilities</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
-    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
 
 
-        <nav aria-label="top navigation" class="wy-nav-top">
-
-            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
-            <a href="../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
 
 
-                <div aria-label="breadcrumbs navigation" role="navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../index.html">Docs</a> &raquo;</li>
-
-                        <li>General Utilities</li>
 
 
-                        <li class="wy-breadcrumbs-aside">
 
 
-                            <a href="../_sources/Utils/Utils.rst.txt" rel="nofollow"> View page source</a>
 
 
-                        </li>
-
-                    </ul>
 
 
-                    <hr/>
-                </div>
-                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="general-utilities">
-                            <h1>General Utilities<a class="headerlink" href="#general-utilities"
-                                                    title="Permalink to this headline">¶</a></h1>
-                            <p>General utilities are gathered in <a class="reference internal" href="#module-MyTools"
-                                                                    title="MyTools"><code
-                                    class="xref py py-mod docutils literal notranslate"><span class="pre">MyTools</span></code></a>
-                            </p>
-                            <span class="target" id="module-MyTools"></span>
-                            <p>Created on Nov 25, 2015</p>
-                            <p>&#64;author: Reuma</p>
-                            <table border="1" class="longtable docutils">
-                                <colgroup>
-                                    <col width="10%"/>
-                                    <col width="90%"/>
-                                </colgroup>
-                                <tbody valign="top">
-                                </tbody>
-                            </table>
-                            <p class="rubric">Methods</p>
-                            <table border="1" class="longtable docutils">
-                                <colgroup>
-                                    <col width="10%"/>
-                                    <col width="90%"/>
-                                </colgroup>
-                                <tbody valign="top">
-                                </tbody>
-                            </table>
-                            <dl class="function">
-                                <dt id="MyTools.CreateFilename">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">CreateFilename</code><span class="sig-paren">(</span><em>filename</em>,
-                                    <em>mode='w'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a
-                                        class="reference internal" href="../_modules/MyTools.html#CreateFilename"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.CreateFilename"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd>
-                                    <dl class="docutils">
-                                        <dt>Checks or creates a file object according to specifications given.</dt>
-                                        <dd>Default is hdf5.</dd>
-                                    </dl>
-                                    <div class="admonition warning">
-                                        <p class="first admonition-title">Warning</p>
-                                        <p class="last">Need to be implemented for other formats than hdf5</p>
-                                    </div>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first simple">
-                                                    <li><strong>filename</strong> (<a class="reference external"
-                                                                                      href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                      title="(in Python v3.7)"><em>str</em></a>)
-                                                        – can be a filename or a path and filename, with or without
-                                                        extension.
-                                                    </li>
-                                                    <li><strong>mode</strong> (<a class="reference external"
-                                                                                  href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                  title="(in Python v3.7)"><em>str</em></a>)
-                                                        – is an optional string that specifies the mode in which the
-                                                        file is opened.
-                                                        It defaults to ‘w’ which means open for writing in text mode.
-                                                    </li>
-                                                    <li><strong>extension</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                       title="(in Python v3.7)"><em>str</em></a>)
-                                                        – ‘h5’, ‘json’, ‘shp’, ‘pts’, etc…
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"><p class="first last">a file object (according to the
-                                                extension) and its extension</p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.DoG_filter">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">DoG_filter</code><span class="sig-paren">(</span><em>image</em>,
-                                    <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                        href="../_modules/MyTools.html#DoG_filter"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.DoG_filter"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Compute the difference of gaussians filter.
-                                    :param image: the image
-                                    :param sigma1, sigma2: the sigma to be used for blurring. cv2 will decide the size
-                                    accordingly.
-                                    :param ksize1, ksize2: the size of the filter to be used for blurring. cv2 will
-                                    decide the sigma accordingly.
-                                    :return: filtered image</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.ballTree_saliency">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">ballTree_saliency</code><span class="sig-paren">(</span><em>pointset</em>,
-                                    <em>scale</em>, <em>neighborhood_properties</em>, <em>curvature_attribute</em>, <em>leaf_size=10</em>,
-                                    <em>weight_distance=1</em>, <em>weight_normals=1</em>, <em>verbose=False</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#ballTree_saliency"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.ballTree_saliency"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Compute curvature based saliency using ball-tree and k-nearest-neighbors.</p>
-                                    <p>The saliency for every set of points within a ball-tree cell is computed as one
-                                        for all points.</p>
-                                    <div class="admonition seealso">
-                                        <p class="first admonition-title">See also</p>
-                                        <p class="last"><code class="xref py py-meth docutils literal notranslate"><span
-                                                class="pre">SaliencyFactory.curvature_saliency()</span></code></p>
-                                    </div>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first simple">
-                                                    <li><strong>pointset</strong> (<em>np.ndarray</em><em>, </em><a
-                                                            class="reference internal"
-                                                            href="../Datasets/PointSet.html#PointSet.PointSet"
-                                                            title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a
-                                                            class="reference internal"
-                                                            href="../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet"
-                                                            title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a
-                                                            class="reference internal"
-                                                            href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
-                                                            title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>)
-                                                        – a point cloud of any sort
-                                                    </li>
-                                                    <li><strong>scale</strong> (<a class="reference external"
-                                                                                   href="https://docs.python.org/3/library/functions.html#float"
-                                                                                   title="(in Python v3.7)"><em>float</em></a>)
-                                                        – the scale of the minimal phenomena (size of the smallest
-                                                        ball-tree cell)
-                                                    </li>
-                                                    <li><strong>neighborhood_properties</strong> (<a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#int"
-                                                            title="(in Python v3.7)"><em>int</em></a><em> or </em><a
-                                                            class="reference external"
-                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                            title="(in Python v3.7)"><em>float</em></a>) – k nearest
-                                                        neighbors
-                                                    </li>
-                                                    <li><strong>curvature_attribute</strong> – the attribute according
-                                                        to which the curvature is measured.
-                                                    </li>
-                                                    <li><strong>leaf_size</strong> (<a class="reference external"
-                                                                                       href="https://docs.python.org/3/library/functions.html#int"
-                                                                                       title="(in Python v3.7)"><em>int</em></a>)
-                                                        – the minimum number of points in the ball tree leaves. Default:
-                                                        10
-                                                    </li>
-                                                    <li><strong>weight_distance</strong> (<a class="reference external"
-                                                                                             href="https://docs.python.org/3/library/functions.html#float"
-                                                                                             title="(in Python v3.7)"><em>float</em></a>)
-                                                        – weights for distance element. Default: 1.
-                                                    </li>
-                                                    <li><strong>weight_normals</strong> (<a class="reference external"
-                                                                                            href="https://docs.python.org/3/library/functions.html#float"
-                                                                                            title="(in Python v3.7)"><em>float</em></a>)
-                                                        – weights for normal element. Default: 1.
-                                                    </li>
-                                                    <li><strong>verbose</strong> (<a class="reference external"
-                                                                                     href="https://docs.python.org/3/library/functions.html#bool"
-                                                                                     title="(in Python v3.7)"><em>bool</em></a>)
-                                                        – print running messages. Default: False
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"><p class="first">curvature property, normals
-                                                property, saliency property</p>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Return type:</th>
-                                            <td class="field-body"><p class="first last"><a class="reference internal"
-                                                                                            href="../Properties/Curvature/Curvature.html#CurvatureProperty.CurvatureProperty"
-                                                                                            title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>,
-                                                <a class="reference internal"
-                                                   href="../Properties/Normals/Normals.html#NormalsProperty.NormalsProperty"
-                                                   title="NormalsProperty.NormalsProperty">NormalsProperty</a>, <a
-                                                        class="reference internal"
-                                                        href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty"
-                                                        title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a>
-                                            </p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.chi2_distance">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">chi2_distance</code><span
-                                        class="sig-paren">(</span><em>histA</em>, <em>histB</em>,
-                                    <em>eps=1e-10</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                         href="../_modules/MyTools.html#chi2_distance"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.chi2_distance"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd>
-                                    <blockquote>
-                                        <div><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span>
-                                            distance between two histograms</p>
-                                            <div class="math notranslate nohighlight">
-                                                \[D_{\chi^2}(hist_A, hist_B) = \sum_{n=0}^N \]
-                                            </div>
-                                        </div>
-                                    </blockquote>
-                                    <p>rac{left(hist_A - hist_B
-                                        ight)^2}{hist_A + hist_B}</p>
-                                    <blockquote>
-                                        <div>
-                                            <table class="docutils field-list" frame="void" rules="none">
-                                                <col class="field-name"/>
-                                                <col class="field-body"/>
-                                                <tbody valign="top">
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">param histA:</th>
-                                                    <td class="field-body">histogram A</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">param histB:</th>
-                                                    <td class="field-body">histogram B (which A compares to)</td>
-                                                </tr>
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">param eps:</th>
-                                                    <td class="field-body">an epsilon for non-zero division</td>
-                                                </tr>
-                                                <tr class="field-even field">
-                                                    <th class="field-name">return:</th>
-                                                    <td class="field-body">the distance between the histograms</td>
-                                                </tr>
-                                                <tr class="field-odd field">
-                                                    <th class="field-name">rtype:</th>
-                                                    <td class="field-body">np.ndarray</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </blockquote>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.chooseLargestContours">
-                                    <code class="descclassname">MyTools.</code><code class="descname">chooseLargestContours</code><span
-                                        class="sig-paren">(</span><em>contours</em>, <em>labelProp</em>,
-                                    <em>minArea</em><span class="sig-paren">)</span><a class="reference internal"
-                                                                                       href="../_modules/MyTools.html#chooseLargestContours"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.chooseLargestContours"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>leaves only contours with area larger than minArea
-                                    :param contours: list of contours
-                                    :param labelProp: properties of labeled area
-                                    :param minArea: minimal area needed
-                                    :return: list of “large” contours</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.computeImageDerivatives">
-                                    <code class="descclassname">MyTools.</code><code class="descname">computeImageDerivatives</code><span
-                                        class="sig-paren">(</span><em>img</em>, <em>order</em>, <em>**kwargs</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#computeImageDerivatives"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.computeImageDerivatives"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Computes image derivatives up to order 2. Normalizes the derivatives.</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first simple">
-                                                    <li><strong>img</strong> – the image to which the derivatives should
-                                                        be computed
-                                                    </li>
-                                                    <li><strong>order</strong> – order needed (1 or 2)</li>
-                                                    <li><strong>ksize</strong> – filter kernel size (3,and up)</li>
-                                                    <li><strong>resolution</strong> – kernel resolution</li>
-                                                    <li><strong>sigma</strong> – sigma for gaussian blurring</li>
-                                                    <li><strong>window</strong> – tuple of window size for blurring</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"><p class="first last">tuple of the derivatives in the
-                                                following order: (dx, dy, dxx, dyy, dxy)</p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.computeImageGradient">
-                                    <code class="descclassname">MyTools.</code><code class="descname">computeImageGradient</code><span
-                                        class="sig-paren">(</span><em>I</em>, <em>**kwargs</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#computeImageGradient"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.computeImageGradient"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Computes the gradient to a given image</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first simple">
-                                                    <li><strong>I</strong> – image to which the gradient is computed
-                                                    </li>
-                                                    <li><strong>ksize</strong> – kernel size, for blurring and
-                                                        derivatives
-                                                    </li>
-                                                    <li><strong>sigma</strong> – sigma for LoG gradient</li>
-                                                    <li><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’
-                                                        L2-norm of grad(I); ‘LoG’ Laplacian of gaussian
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"><p class="first last">an image of the gradient
-                                                magnitude</p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.curve2D_toGeoSeries">
-                                    <code class="descclassname">MyTools.</code><code class="descname">curve2D_toGeoSeries</code><span
-                                        class="sig-paren">(</span><em>curve</em><span class="sig-paren">)</span><a
-                                        class="reference internal"
-                                        href="../_modules/MyTools.html#curve2D_toGeoSeries"><span class="viewcode-link">[source]</span></a><a
-                                        class="headerlink" href="#MyTools.curve2D_toGeoSeries"
-                                        title="Permalink to this definition">¶</a></dt>
-                                <dd><p>Transforms a 2D line to a geopandas GeoSeries</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body"><strong>curve</strong> – pyplot.2Dline</td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body">geopandas GeoSeries of a polygon</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.curveCentralDerivatives">
-                                    <code class="descclassname">MyTools.</code><code class="descname">curveCentralDerivatives</code><span
-                                        class="sig-paren">(</span><em>c</em>, <em>repartition=5</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#curveCentralDerivatives"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.curveCentralDerivatives"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Computes the first and second central derivative of a curve
-                                    :param c: curve points, not necessarily arc-length
-                                    :param repartition: the step for repartition. if negative does not change the curve
-                                    partition
-                                    :return: tuple, (c’, c”)</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.curves2D_toGeoDataframe">
-                                    <code class="descclassname">MyTools.</code><code class="descname">curves2D_toGeoDataframe</code><span
-                                        class="sig-paren">(</span><em>curves</em><span class="sig-paren">)</span><a
-                                        class="reference internal"
-                                        href="../_modules/MyTools.html#curves2D_toGeoDataframe"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.curves2D_toGeoDataframe"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Transforms multiple 2D lines to geopandas GeoDataFrame
-                                    :param curves: list of pyplot.lines.Line2D</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body">geodataframe of the polygons</td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Return type:</th>
-                                            <td class="field-body">gpd.GeoDataFrame</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.draw_contours">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">draw_contours</code><span
-                                        class="sig-paren">(</span><em>func</em>, <em>ax</em>, <em>img</em>, <em>hold=False</em>,
-                                    <em>blob_size=5</em>, <em>**kwargs</em><span class="sig-paren">)</span><a
-                                        class="reference internal" href="../_modules/MyTools.html#draw_contours"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.draw_contours"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Draws the contours of a specific iteration</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body">
-                                                <ul class="first simple">
-                                                    <li><strong>func</strong> (<em>np.ndarray</em>) – the function which
-                                                        contours should be drawn
-                                                    </li>
-                                                    <li><strong>ax</strong> (<em>plt.axes</em>) – the axes to draw upon
-                                                    </li>
-                                                    <li><strong>image</strong> – the image on which the contours will be
-                                                        drawn
-                                                    </li>
-                                                    <li><strong>hold</strong> (<a class="reference external"
-                                                                                  href="https://docs.python.org/3/library/functions.html#bool"
-                                                                                  title="(in Python v3.7)"><em>bool</em></a>)
-                                                        – erase image from previous drawings or not. Default: False
-                                                    </li>
-                                                    <li><strong>color</strong> (<a class="reference external"
-                                                                                   href="https://docs.python.org/3/library/stdtypes.html#str"
-                                                                                   title="(in Python v3.7)"><em>str</em></a><em>
-                                                        or </em><a class="reference external"
-                                                                   href="https://docs.python.org/3/library/functions.html#bool"
-                                                                   title="(in Python v3.7)"><em>bool</em></a>) – the
-                                                        color which the contour will be drawn. Default: random for each
-                                                        curve (send True)
-                                                    </li>
-                                                    <li><strong>blob_size</strong> – the minimal area of a contour to
-                                                        draw
-                                                    </li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"><p class="first last">the figure</p>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.eig">
-                                    <code class="descclassname">MyTools.</code><code class="descname">eig</code><span
-                                        class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a
-                                        class="reference internal" href="../_modules/MyTools.html#eig"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.eig"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Computes eigenvalues and eigenvectors and returns them sorted from smallest
-                                    eigenvalues to largest</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body"><strong>matrix</strong> (<em>nd-array</em>) – matrix
-                                                to compute the eigenvalues and eigenvectors
-                                            </td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name" colspan="2">Return eigenValues, eigenVectors:</th>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <td>&#160;</td>
-                                            <td class="field-body">sorted from small to large</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.im2double">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">im2double</code><span
-                                        class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a
-                                        class="reference internal" href="../_modules/MyTools.html#im2double"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.im2double"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>MATLAB equivalent
-                                    &#64;param img: image to convert into double
-                                    &#64;return: numpy array as a double array</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.imshow">
-                                    <code class="descclassname">MyTools.</code><code class="descname">imshow</code><span
-                                        class="sig-paren">(</span><em>img</em>, <em>scale_val=1</em>, <em>ax=None</em>,
-                                    <em>cmap='gray'</em>, <em>*args</em>, <em>**kwargs</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#imshow"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.imshow"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>shows pixel value in the image window</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.intersect2d">
-                                    <code class="descclassname">MyTools.</code><code class="descname">intersect2d</code><span
-                                        class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>**kwargs</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#intersect2d"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.intersect2d"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>finds the recurring elements in two arrays (row-wise)</p>
-                                    <table class="docutils field-list" frame="void" rules="none">
-                                        <col class="field-name"/>
-                                        <col class="field-body"/>
-                                        <tbody valign="top">
-                                        <tr class="field-odd field">
-                                            <th class="field-name">Parameters:</th>
-                                            <td class="field-body"><strong>axis</strong> – column-wise</td>
-                                        </tr>
-                                        <tr class="field-even field">
-                                            <th class="field-name">Returns:</th>
-                                            <td class="field-body"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.is_pos_semidef">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">is_pos_semidef</code><span class="sig-paren">(</span><em>x</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#is_pos_semidef"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.is_pos_semidef"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>check if a matrix is positive semidefinite
-                                    :param x: the matrix
-                                    :return: Boolean: True if it is, False is not.</p>
-                                </dd>
-                            </dl>
-
-                            <dl class="function">
-                                <dt id="MyTools.repartitionCurve">
-                                    <code class="descclassname">MyTools.</code><code
-                                        class="descname">repartitionCurve</code><span
-                                        class="sig-paren">(</span><em>c</em>, <em>dh</em><span
-                                        class="sig-paren">)</span><a class="reference internal"
-                                                                     href="../_modules/MyTools.html#repartitionCurve"><span
-                                        class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                    href="#MyTools.repartitionCurve"
-                                                                                    title="Permalink to this definition">¶</a>
-                                </dt>
-                                <dd><p>Re-partitions the curve according to dh
-                                    :param c: curve
-                                    :param dh: length between points
-                                    :return: the re-partitioned curve</p>
-                                </dd>
-                            </dl>
-
-                        </div>
 
 
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
-
-                        <a accesskey="n" class="btn btn-neutral float-right" href="../Visualizations/Visualization.html"
-                           rel="next" title="Visualization Classes">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a accesskey="p" class="btn btn-neutral float-left" href="EigenFactory.html" rel="prev"
-                           title="Eigen Factory Documentation"><span class="fa fa-arrow-circle-left"></span>
-                            Previous</a>
 
-                    </div>
+<div role="navigation" aria-label="breadcrumbs navigation">
 
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>General Utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Utils/Utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
 
-                    <hr/>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="general-utilities">
+<h1>General Utilities<a class="headerlink" href="#general-utilities" title="Permalink to this headline">¶</a></h1>
+<p>General utilities are gathered in <a class="reference internal" href="#module-MyTools" title="MyTools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">MyTools</span></code></a></p>
+<span class="target" id="module-MyTools"></span><p>Created on Nov 25, 2015</p>
+<p>&#64;author: Reuma</p>
+<table class="longtable docutils align-center">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-center">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+</tbody>
+</table>
+<dl class="function">
+<dt id="MyTools.CreateFilename">
+<code class="descclassname">MyTools.</code><code class="descname">CreateFilename</code><span class="sig-paren">(</span><em>filename</em>, <em>mode='w'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#CreateFilename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.CreateFilename" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Checks or creates a file object according to specifications given.</dt><dd><p>Default is hdf5.</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Need to be implemented for other formats than hdf5</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – can be a filename or a path and filename, with or without extension.</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – is an optional string that specifies the mode in which the file is opened.
+It defaults to ‘w’ which means open for writing in text mode.</p></li>
+<li><p><strong>extension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – ‘h5’, ‘json’, ‘shp’, ‘pts’, etc…</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a file object (according to the extension) and its extension</p>
+</dd>
+</dl>
+</dd></dl>
 
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students
+<dl class="function">
+<dt id="MyTools.DoG_filter">
+<code class="descclassname">MyTools.</code><code class="descname">DoG_filter</code><span class="sig-paren">(</span><em>image</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#DoG_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.DoG_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the difference of gaussians filter.
+:param image: the image
+:param sigma1, sigma2: the sigma to be used for blurring. cv2 will decide the size accordingly.
+:param ksize1, ksize2: the size of the filter to be used for blurring. cv2 will decide the sigma accordingly.
+:return: filtered image</p>
+</dd></dl>
 
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
+<dl class="function">
+<dt id="MyTools.ballTree_saliency">
+<code class="descclassname">MyTools.</code><code class="descname">ballTree_saliency</code><span class="sig-paren">(</span><em>pointset</em>, <em>scale</em>, <em>neighborhood_properties</em>, <em>curvature_attribute</em>, <em>leaf_size=10</em>, <em>weight_distance=1</em>, <em>weight_normals=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#ballTree_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.ballTree_saliency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute curvature based saliency using ball-tree and k-nearest-neighbors.</p>
+<p>The saliency for every set of points within a ball-tree cell is computed as one for all points.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">SaliencyFactory.curvature_saliency()</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pointset</strong> (<em>np.ndarray</em><em>, </em><a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a class="reference internal" href="../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet" title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a class="reference internal" href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – a point cloud of any sort</p></li>
+<li><p><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – the scale of the minimal phenomena (size of the smallest ball-tree cell)</p></li>
+<li><p><strong>neighborhood_properties</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – k nearest neighbors</p></li>
+<li><p><strong>curvature_attribute</strong> – the attribute according to which the curvature is measured.</p></li>
+<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the minimum number of points in the ball tree leaves. Default: 10</p></li>
+<li><p><strong>weight_distance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – weights for distance element. Default: 1.</p></li>
+<li><p><strong>weight_normals</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – weights for normal element. Default: 1.</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – print running messages. Default: False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>curvature property, normals property, saliency property</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="../Properties/Curvature/Curvature.html#CurvatureProperty.CurvatureProperty" title="CurvatureProperty.CurvatureProperty">CurvatureProperty</a>, <a class="reference internal" href="../Properties/Normals/Normals.html#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a>, <a class="reference internal" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty" title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a></p>
+</dd>
+</dl>
+</dd></dl>
 
-                </footer>
+<dl class="function">
+<dt id="MyTools.chi2_distance">
+<code class="descclassname">MyTools.</code><code class="descname">chi2_distance</code><span class="sig-paren">(</span><em>histA</em>, <em>histB</em>, <em>eps=1e-10</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#chi2_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.chi2_distance" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Compute the <span class="math notranslate nohighlight">\(\chi^2\)</span> distance between two histograms</p>
+<div class="math notranslate nohighlight">
+\[D_{\chi^2}(hist_A, hist_B) = \sum_{n=0}^N \]</div>
+</div></blockquote>
+<p>rac{left(hist_A - hist_B
+ight)^2}{hist_A + hist_B}</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">param histA</dt>
+<dd class="field-odd"><p>histogram A</p>
+</dd>
+<dt class="field-even">param histB</dt>
+<dd class="field-even"><p>histogram B (which A compares to)</p>
+</dd>
+<dt class="field-odd">param eps</dt>
+<dd class="field-odd"><p>an epsilon for non-zero division</p>
+</dd>
+<dt class="field-even">return</dt>
+<dd class="field-even"><p>the distance between the histograms</p>
+</dd>
+<dt class="field-odd">rtype</dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
 
-            </div>
-        </div>
+<dl class="function">
+<dt id="MyTools.chooseLargestContours">
+<code class="descclassname">MyTools.</code><code class="descname">chooseLargestContours</code><span class="sig-paren">(</span><em>contours</em>, <em>labelProp</em>, <em>minArea</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#chooseLargestContours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.chooseLargestContours" title="Permalink to this definition">¶</a></dt>
+<dd><p>leaves only contours with area larger than minArea
+:param contours: list of contours
+:param labelProp: properties of labeled area
+:param minArea: minimal area needed
+:return: list of “large” contours</p>
+</dd></dl>
 
-    </section>
+<dl class="function">
+<dt id="MyTools.computeImageDerivatives">
+<code class="descclassname">MyTools.</code><code class="descname">computeImageDerivatives</code><span class="sig-paren">(</span><em>img</em>, <em>order</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#computeImageDerivatives"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.computeImageDerivatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes image derivatives up to order 2. Normalizes the derivatives.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> – the image to which the derivatives should be computed</p></li>
+<li><p><strong>order</strong> – order needed (1 or 2)</p></li>
+<li><p><strong>ksize</strong> – filter kernel size (3,and up)</p></li>
+<li><p><strong>resolution</strong> – kernel resolution</p></li>
+<li><p><strong>sigma</strong> – sigma for gaussian blurring</p></li>
+<li><p><strong>window</strong> – tuple of window size for blurring</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.computeImageGradient">
+<code class="descclassname">MyTools.</code><code class="descname">computeImageGradient</code><span class="sig-paren">(</span><em>I</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#computeImageGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.computeImageGradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the gradient to a given image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>I</strong> – image to which the gradient is computed</p></li>
+<li><p><strong>ksize</strong> – kernel size, for blurring and derivatives</p></li>
+<li><p><strong>sigma</strong> – sigma for LoG gradient</p></li>
+<li><p><strong>gradientType</strong> – ‘L1’ L1 norm of grad(I); ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of gaussian</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an image of the gradient magnitude</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.curve2D_toGeoSeries">
+<code class="descclassname">MyTools.</code><code class="descname">curve2D_toGeoSeries</code><span class="sig-paren">(</span><em>curve</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#curve2D_toGeoSeries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.curve2D_toGeoSeries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a 2D line to a geopandas GeoSeries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>curve</strong> – pyplot.2Dline</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>geopandas GeoSeries of a polygon</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.curveCentralDerivatives">
+<code class="descclassname">MyTools.</code><code class="descname">curveCentralDerivatives</code><span class="sig-paren">(</span><em>c</em>, <em>repartition=5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#curveCentralDerivatives"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.curveCentralDerivatives" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the first and second central derivative of a curve
+:param c: curve points, not necessarily arc-length
+:param repartition: the step for repartition. if negative does not change the curve partition
+:return: tuple, (c’, c”)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.curves2D_toGeoDataframe">
+<code class="descclassname">MyTools.</code><code class="descname">curves2D_toGeoDataframe</code><span class="sig-paren">(</span><em>curves</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#curves2D_toGeoDataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.curves2D_toGeoDataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms multiple 2D lines to geopandas GeoDataFrame
+:param curves: list of pyplot.lines.Line2D</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>geodataframe of the polygons</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.draw_contours">
+<code class="descclassname">MyTools.</code><code class="descname">draw_contours</code><span class="sig-paren">(</span><em>func</em>, <em>ax</em>, <em>img</em>, <em>hold=False</em>, <em>blob_size=5</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#draw_contours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.draw_contours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws the contours of a specific iteration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>np.ndarray</em>) – the function which contours should be drawn</p></li>
+<li><p><strong>ax</strong> (<em>plt.axes</em>) – the axes to draw upon</p></li>
+<li><p><strong>image</strong> – the image on which the contours will be drawn</p></li>
+<li><p><strong>hold</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – erase image from previous drawings or not. Default: False</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – the color which the contour will be drawn. Default: random for each curve (send True)</p></li>
+<li><p><strong>blob_size</strong> – the minimal area of a contour to draw</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.eig">
+<code class="descclassname">MyTools.</code><code class="descname">eig</code><span class="sig-paren">(</span><em>matrix</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#eig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.eig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes eigenvalues and eigenvectors and returns them sorted from smallest eigenvalues to largest</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>nd-array</em>) – matrix to compute the eigenvalues and eigenvectors</p>
+</dd>
+<dt class="field-even">Return eigenValues, eigenVectors</dt>
+<dd class="field-even"><p>sorted from small to large</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.im2double">
+<code class="descclassname">MyTools.</code><code class="descname">im2double</code><span class="sig-paren">(</span><em>img</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#im2double"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.im2double" title="Permalink to this definition">¶</a></dt>
+<dd><p>MATLAB equivalent
+&#64;param img: image to convert into double
+&#64;return: numpy array as a double array</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.imshow">
+<code class="descclassname">MyTools.</code><code class="descname">imshow</code><span class="sig-paren">(</span><em>img</em>, <em>scale_val=1</em>, <em>ax=None</em>, <em>cmap='gray'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#imshow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.imshow" title="Permalink to this definition">¶</a></dt>
+<dd><p>shows pixel value in the image window</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.intersect2d">
+<code class="descclassname">MyTools.</code><code class="descname">intersect2d</code><span class="sig-paren">(</span><em>a</em>, <em>b</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#intersect2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.intersect2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>finds the recurring elements in two arrays (row-wise)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>axis</strong> – column-wise</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.is_pos_semidef">
+<code class="descclassname">MyTools.</code><code class="descname">is_pos_semidef</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#is_pos_semidef"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.is_pos_semidef" title="Permalink to this definition">¶</a></dt>
+<dd><p>check if a matrix is positive semidefinite
+:param x: the matrix
+:return:  Boolean: True if it is, False is not.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MyTools.repartitionCurve">
+<code class="descclassname">MyTools.</code><code class="descname">repartitionCurve</code><span class="sig-paren">(</span><em>c</em>, <em>dh</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/MyTools.html#repartitionCurve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#MyTools.repartitionCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Re-partitions the curve according to dh
+:param c: curve
+:param dh: length between points
+:return: the re-partitioned curve</p>
+</dd></dl>
 
 </div>
 
 
-<script type="text/javascript">
-    jQuery(function () {
-        SphinxRtdTheme.Navigation.enable(true);
-    });
-</script>
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cuda_API.html" class="btn btn-neutral float-right" title="CUDA Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="EigenFactory.html" class="btn btn-neutral float-left" title="Eigen Factory Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

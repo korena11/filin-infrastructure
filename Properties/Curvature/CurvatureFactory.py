@@ -20,18 +20,19 @@ class CurvatureFactory:
     def curvature_with_CUDA(cls, neighborProperty, normals):
         """
         Compute normals of each point using CUDA
+
         :param neighborProperty: neighborProperty to compute normal for each of its points
-        :type neighborProperty: NeighborProperty
         :param normals: normals shape (3*n,) while n is the number of normals
-        :return:curvature as 1 dim numpy array
+
+        :type neighborProperty: NeighborProperty
+        :type normals: np.array (3xn,)
+
+        :return: curvature as 1 dim numpy array
+
          **Usage example**
 
-
-
-        .. literalinclude:: ../../NormalsFactory.py
-
+        .. literalinclude:: ../../../../Properties/Normals/NormalsFactory.py
             :lines: 358-366
-
             :linenos:
         """
         pnts = neighborProperty.Points.ToNumpy()
@@ -343,8 +344,8 @@ class CurvatureFactory:
         r"""
         Turns curvature values to zero if they are part of a normal distribution N~(mean, std)
 
-        ..math::
-            H_0:\qquad |\kappa| \leq Z_{1-\frac{\alpha}{2}}
+        .. math::
+            H_0:\qquad \left|\kappa \right| \leq Z_{1-\frac{\alpha}{2}}
 
         :param curvature_property: the curvature property to which the filterization is applied
         :param attribute_name: the curvature attribute to filter

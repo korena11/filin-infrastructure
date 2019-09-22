@@ -33,6 +33,7 @@ def chi2_distance(histA, histB, eps=1e-10):
     :return: the distance between the histograms
 
     :rtype: np.ndarray
+
     """
 
     if np.all(histA == histB):

@@ -14,6 +14,7 @@ with different data-class.
 Visualization is applicable through Visualization Classes. 
 
 Other general utilities are in :py:mod:`~MyTools`.
+Functions that are implemented in CUDA can be found in :py:mod:`~cuda_API`, though they are integrated within the relevant factories.
 
 Contents:
 =========
@@ -28,6 +29,7 @@ Contents:
     LevelSets/LevelSets
     Utils/EigenFactory
     Utils/Utils
+    Utils/cuda_API
     Visualizations/Visualization
     zreferences
 
