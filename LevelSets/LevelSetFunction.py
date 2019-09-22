@@ -271,8 +271,13 @@ class LevelSetFunction(object):
         x = np.arange(width)
         y = np.arange(height)
         xx, yy = np.meshgrid(ksize * x, ksize * y)
+        x_x0 = (xx - center_pt[1] * ksize) # (x-x0)
+        y_y0 =  (yy - center_pt[0] * ksize) #(y-y0)
 
-        phi = radius - np.sqrt((xx - center_pt[1] * ksize) ** 2 + (yy - center_pt[0] * ksize) ** 2)
+        phi = radius - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
+        # gradient should equal 1
+        # norm_nabla = mt.computeImageGradient(phi, ksize=ksize, gradientType='L2')
+        # phi /= norm_nabla**2
         phi = cv2.normalize(phi, None, -1, 1, cv2.NORM_MINMAX)
         return phi
 
