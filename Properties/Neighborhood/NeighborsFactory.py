@@ -42,9 +42,9 @@ class NeighborsFactory:
             :linenos:
 
         """
-        from BallTreePointSet import BallTreePointSet
-        from PointSetOpen3D import PointSetOpen3D
-        from KdTreePointSet import KdTreePointSet
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -105,9 +105,9 @@ class NeighborsFactory:
             :linenos:
 
         """
-        from BallTreePointSet import BallTreePointSet
-        from PointSetOpen3D import PointSetOpen3D
-        from KdTreePointSet import KdTreePointSet
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -351,7 +351,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_ , :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -390,7 +390,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -433,7 +433,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -484,7 +484,7 @@ class NeighborsFactory:
 
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`pointSetOpen3D_rknn_kdTree`
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
 
         # check which parameters were received
         if radius is not None:
@@ -838,7 +838,7 @@ class NeighborsFactory:
         # [False] * maxProcesses)
         # print("Done??????")
 
-        from PointSetOpen3D import PointSetOpen3D
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
         print('>>> Find all points neighbors')
         # Function will be used with multiprocessing.
         # To run it without:

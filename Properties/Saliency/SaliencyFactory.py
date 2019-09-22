@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from tqdm import tqdm, trange
 
-import MyTools as mt
+import Utils.MyTools as mt
 from DataClasses.PointSet import PointSet
 from Properties.BaseProperty import BaseProperty
 from Properties.Saliency.SaliencyProperty import SaliencyProperty
@@ -740,7 +740,7 @@ class SaliencyFactory(object):
         """
 
         import open3d as o3d
-        from PointSetOpen3D import PointSetOpen3D
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
 
         if not isinstance(pointset_open3d, PointSetOpen3D):
             p3d = PointSetOpen3D(pointset_open3d)
@@ -1002,7 +1002,7 @@ class SaliencyFactory(object):
 
         :rtype: tuple
         """
-        import MyTools as mt
+        # import Utils.MyTools as mt
         n = points.Size
 
         # find the centroid
