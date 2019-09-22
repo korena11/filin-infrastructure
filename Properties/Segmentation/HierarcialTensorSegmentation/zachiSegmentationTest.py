@@ -3,10 +3,11 @@ Code for debugging creation of segmentation property based on Zachi's PhD
 DO NOT USE FOR OTHER PURPOSES
 """
 
-from IOFactory import IOFactory
-from SegmentationFactory import SegmentationFactory, SegmentationProperty
+from IOmodules.IOFactory import IOFactory
+from Properties.Segmentation.SegmentationFactory import SegmentationFactory   #, SegmentationProperty
+from Properties.Segmentation.SegmentationProperty import SegmentationProperty
 from TensorBallTreeSegmentation import minCutRefinement, dissolveEntrappedSurfaceElements, pointwiseRefinement
-from VisualizationO3D import VisualizationO3D
+from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
 if __name__ == '__main__':
     path = '../../../test_data/'
