@@ -141,13 +141,10 @@ class NeighborsProperty(BaseProperty):
         """
 
         if isinstance(self.__pointsNeighborsArray[0], PointNeighborhood):
-            neighborsCount = np.array(list(map(lambda n: n.Size - 1,
-
             # getting number of neighboring points
             neighborsCount = np.array(list(map(lambda n: n.Size - 1,
                                                tqdm(self.__pointsNeighborsArray,
                                                     'Getting number of neighbors for each point'))))
-            neighbors = list(map(lambda n: n.neighbors.ToNumpy()[1:].reshape((-1,)),
 
             # getting list of neighbors per point (without the point itself)
             neighbors = list(map(lambda n: n.neighbors.ToNumpy()[1:].reshape((-1, )),
