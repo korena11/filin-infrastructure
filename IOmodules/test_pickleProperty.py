@@ -24,7 +24,7 @@ class TestPickleProperty(TestCase):
         normals = NormalsProperty(pts, np.asarray(p3d.data.normals))
         neighbors = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, 50)
         curvatureProperty = CurvatureFactory.pointSetOpen3D_3parameters(p3d, neighbors)
-        CurvatureFactory.umbrella_curvature(neighbors, normals, cuvatureProperty=curvatureProperty)
+        CurvatureFactory.umbrella_curvature(neighbors, normals, curvatureProperty=curvatureProperty)
         neighbors._BaseProperty__dataset = pts
         # SaveFunctions.pickleProperty(color_property, 'test_pts.p', save_dataset=True)
         IOFactory.saveDataset(pts, 'test_pts.p')

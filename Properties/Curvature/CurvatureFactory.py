@@ -5,7 +5,7 @@
 import numpy as np
 from tqdm import tqdm
 
-import Properties.Transformations as RotationUtils
+import Properties.Transformations.RotationUtils as RotationUtils
 from DataClasses.RasterData import RasterData
 from Properties.Curvature.CurvatureProperty import CurvatureProperty
 
@@ -88,8 +88,8 @@ class CurvatureFactory:
 
             :meth:`curvature_by_3parameters`
         """
-        from PointSetOpen3D import PointSetOpen3D
-        from Neighborhood.PointNeighborhood import PointNeighborhood
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
         k1 = []
         k2 = []
         invalid_curvature = 0  # number of points that their curvature wasn't estimated
@@ -177,8 +177,8 @@ class CurvatureFactory:
                 \kappa_{1,2} = \frac{a+b}{2}\pm C
 
         """
-        from Neighborhood.PointNeighborhood import PointNeighborhood
-        from PointSet import PointSet
+        from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+        from DataClasses.PointSet import PointSet
 
         if isinstance(neighborhood, PointNeighborhood):
             neighbors = neighborhood.neighbors.ToNumpy()
@@ -222,7 +222,7 @@ class CurvatureFactory:
     @classmethod
     def umbrella_curvature(cls, neighbrohood, normals, min_obj_size=0.01, alpha=0.05,
                            min_points_in_neighborhood=8, min_points_in_sector=1, valid_sectors=7, num_sectors=8,
-                           invalid_value=-999, cuvatureProperty=None, verbose=False):
+                           invalid_value=-999, curvatureProperty=None, verbose=False):
         r"""
         Compute an umbrella curvature,
 
@@ -247,7 +247,7 @@ class CurvatureFactory:
         :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
         :param num_sectors: the number of sectors the circle is divided to. Default: 8
         :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999
-        :param cuvatureProperty: A curvature property to update with the umbrella curvature. If None, a new curvature property will be created, with the principal curvatures as None.
+        :param curvatureProperty: A curvature property to update with the umbrella curvature. If None, a new curvature property will be created, with the principal curvatures as None.
         :param verbose: print inter running messages. default: False
 
         :type neighbrohood: NeighborsProperty.NeighborsProperty
@@ -259,7 +259,7 @@ class CurvatureFactory:
         :type valid_sectors: int
         :type num_sectors: int
         :type invalid_value: float
-        :type cuvatureProperty: CurvatureProperty
+        :type curvatureProperty: CurvatureProperty
         :type verbose: bool
 
         :return: umbrella curvature for all points that have enough neighbors for the curvature to be computed.
@@ -277,7 +277,7 @@ class CurvatureFactory:
         umbrellaCurvature = []
 
         for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
-                                    desc='Compute umbrella curvature for all point cloud'):
+                                    desc='Compute umbrella curvature for all point cloud', position=0):
             # check if the neighborhood is valid
             if cls.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
                                        min_points_in_sector=min_points_in_sector, valid_sectors=valid_sectors,
@@ -302,11 +302,12 @@ class CurvatureFactory:
         umbrella_curvature = np.asarray(umbrellaCurvature)
         if verbose:
             print(umbrella_curvature.mean())
-        if cuvatureProperty is None:
+        if curvatureProperty is None:
             return CurvatureProperty(neighbrohood.Points, principal_curvatures=None,
                                      umbrella_curvature=umbrella_curvature)
         else:
-            cuvatureProperty.load(None, umbrella_curvature=umbrella_curvature)
+            curvatureProperty.load(None, umbrella_curvature=umbrella_curvature)
+            return curvatureProperty
 
     @classmethod
     def filter_curvature_roughness(cls, curvature_property, attribute_name, mean=0, std=1, alpha=0.05,

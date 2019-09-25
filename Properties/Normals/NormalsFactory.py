@@ -6,9 +6,9 @@ import numpy as np
 from numpy import dtype, genfromtxt
 from sklearn.neighbors import BallTree, KDTree
 
-from Normals.NormalsProperty import NormalsProperty
-from PointSet import PointSet
-from PointSetOpen3D import PointSetOpen3D
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSetOpen3D import PointSetOpen3D
+from Properties.Normals.NormalsProperty import NormalsProperty
 
 if sys.platform == 'linux':
     pass
@@ -252,7 +252,7 @@ class NormalsFactory:
         _pointcloud.CalculateNormals(search_radius, maxNN, orientation)  # computing the normals using open3D method
         normals = np.array(_pointcloud.data.normals)
 
-        return NormalsProperty(pointcloud, normals)
+        return NormalsProperty(pointcloud, normals), _pointcloud
 
         # TODO: obsolete code for computing normals using vtk, should probably be deleted
         # @staticmethod
