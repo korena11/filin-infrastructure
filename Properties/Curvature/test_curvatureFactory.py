@@ -88,8 +88,8 @@ class TestCurvatureFactory(TestCase):
         curvatures = CurvatureFactory.umbrella_curvature(neighborsProperty, normals, valid_sectors=4, invalid_value=0,
                                                          verbose=True)
 
-        from ColorProperty import ColorProperty
-        colors_curvature = ColorProperty(p3d, curvatures)
+        # from ColorProperty import ColorProperty
+        # colors_curvature = ColorProperty(p3d, curvatures)
 
         vis = VisualizationO3D()
-        vis.visualize_pointset(p3d, colors=colors_curvature)
+        vis.visualize_pointset(p3d, colors=curvatures)

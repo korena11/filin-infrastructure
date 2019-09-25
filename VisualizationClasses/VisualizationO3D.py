@@ -228,6 +228,6 @@ class VisualizationO3D:
             rgb = array
 
         # normalize to range [0...1]
-        rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min())
+        rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min() + 1e-12)
 
         return o3d.Vector3dVector(rgb_normed)

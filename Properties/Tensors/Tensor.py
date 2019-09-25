@@ -155,10 +155,10 @@ class Tensor(object):
         self.__eigenvalues[abs(self.eigenvalues) <= 1e-8] = 0
 
         # Computing the plate parameters defined by the tensor
-        self.__plateAxis = self.eigenvectors[:, 0]
+        self.__plateAxis = self.eigenvectors[:, 0] / la.norm(self.eigenvectors[:, 0])
 
         # Computing the stick axis defined by the tensor
-        self.__stickAxis = self.eigenvectors[:, 2]
+        self.__stickAxis = self.eigenvectors[:, 2] / la.norm(self.eigenvectors[:, 0])
 
     def distanceFromPoint(self, point, tensorType='all', sign=False):
         """

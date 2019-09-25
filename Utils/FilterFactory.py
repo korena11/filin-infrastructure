@@ -1,9 +1,9 @@
 from numba import jit
 from numpy import sqrt, arctan, ones, uint8, pi, min, max, logical_and, nonzero
 
-from PointSet import PointSet
+from DataClasses.PointSet import PointSet
 from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
-from Properties.SegmentationProperty import SegmentationProperty
+from Properties.Segmentation.SegmentationProperty import SegmentationProperty
 
 
 class FilterFactory:

@@ -117,6 +117,13 @@ def norm_1x3(v):
 
 
 @cuda.jit(device=True)
+def norm_3xk_index(v, i):
+    sum = v[0, i] ** 2 + v[1, i] ** 2 + v[2, i] ** 2
+    sum = sum ** 0.5
+    return sum
+
+
+@cuda.jit(device=True)
 def cross_product_1x3(v1, v2, v):
     v[0] = v1[1] * v2[2] - v1[2] * v2[1]
     v[1] = -v1[0] * v2[2] + v1[2] * v2[0]
@@ -169,7 +176,12 @@ def A33_inverse(A33, A33_inv):
 @cuda.jit(device=True)
 def scalarProduct_1x3(v1, v2):
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
-    v1[0] = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
+    # v1[0] = v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
+
+
+@cuda.jit(device=True)
+def scalarProduct_1x3_index(n, v, i):
+    return n[0] * v[0, i] + n[1] * v[1, i] + n[2] * v[2, i]
 
 
 # @cuda.jit('void(float64[:,:], int64[:,:], float64[:,:], float64[:,:])')
@@ -178,23 +190,19 @@ def computeNormalByTensorGPU(pnts, neighborsNumber, neighbors, tensors):
     tx = cuda.threadIdx.x
     ty = cuda.blockIdx.x
     block_size = cuda.blockDim.x
-    # grid_size = cuda.gridDim.x
-    # start = tx + ty * block_size
     start = tx
-    # stride = block_size * grid_size
     stride = block_size
-    # tmp = cuda.local.array(shape=(10, 3), dtype=double)
     sharedTmp = cuda.shared.array(shape=(3, 128), dtype=double)
     point = cuda.shared.array(shape=(3, 1), dtype=double)
     tensor = cuda.shared.array(shape=(3, 3 * 128), dtype=double)
-    # tensor = cuda.shared.array(shape=(3, 3), dtype=double)
     neighborsNum = neighborsNumber[ty, 0]
-    # import numpy
-    # tmp = cuda.local.array(numpy.empty([10, 3], dtype=float))
+
     if (tx == 0):
         point[0, 0] = pnts[0, ty]
         point[1, 0] = pnts[1, ty]
         point[2, 0] = pnts[2, ty]
+    cuda.syncthreads()
+
     for k in range(0, neighborsNum, stride):
         end = ((neighborsNum >= (k + stride)) * (k + stride)) + (
                 (neighborsNum < (k + stride)) * neighborsNum)
@@ -202,9 +210,9 @@ def computeNormalByTensorGPU(pnts, neighborsNumber, neighbors, tensors):
         for i in range(start + k, end, stride):
             j = i - k
 
-            sharedTmp[0, j] = neighbors[3 * ty, i]
-            sharedTmp[1, j] = neighbors[3 * ty + 1, i]
-            sharedTmp[2, j] = neighbors[3 * ty + 2, i]
+            sharedTmp[0, j] = neighbors[ty, i * 3]
+            sharedTmp[1, j] = neighbors[ty, 1 + i * 3]
+            sharedTmp[2, j] = neighbors[ty, 2 + i * 3]
         cuda.syncthreads()
         for i in range(start + k, end, stride):
             j = i - k
@@ -212,17 +220,10 @@ def computeNormalByTensorGPU(pnts, neighborsNumber, neighbors, tensors):
             sharedTmp[0, j] -= point[0, 0]
             sharedTmp[1, j] -= point[1, 0]
             sharedTmp[2, j] -= point[2, 0]
-            # if ty ==2 and tx==9:
-            #     print(sharedTmp[0, j])
-            #     print(sharedTmp[1, j])
-            #     print(sharedTmp[2, j])
-            # points_before_rot[0,ty*11+j]=sharedTmp
+
         cuda.syncthreads()
-        # if (neighborsNum < (end )):
-        #     print("yes",k,tx)
-        #     for i in range(start, end, stride):
+
         for i in range(start, 128, stride):
-            j = i
             tensor[0, j * 3] = 0
             tensor[0, j * 3 + 1] = 0
             tensor[0, j * 3 + 2] = 0
@@ -289,24 +290,9 @@ def computeNormalByTensorGPU(pnts, neighborsNumber, neighbors, tensors):
             tensors[2, 3 * ty] += tensor[2, 0]
             tensors[2, 3 * ty + 1] += tensor[2, 1]
             tensors[2, 3 * ty + 2] += tensor[2, 2]
+            j = i
 
-        start += stride
-
-    # cuda.atomic.add(tensors, (0, 0), a00)
-    # cuda.atomic.add(tensors,(0,1),a01)
-    # cuda.atomic.add(tensors,(0,2),a02)
-    # cuda.atomic.add(tensors,(1,0),a10)
-    # cuda.atomic.add(tensors,(1,1),a11)
-    # cuda.atomic.add(tensors,(1,2),a12)
-    # cuda.atomic.add(tensors,(2,0),a20)
-    # cuda.atomic.add(tensors,(2,1),a21)
-    # cuda.atomic.add(tensors,(2,2),a22)
-
-
-# for i in range(start, pnts.shape[1], stride):
-#     tmp = diff(i, tmp, pnts, ind, points_before_rot)
-#     product(tmp, tensors, i)
-#
+        # start += stride
 
 
 @cuda.jit()
@@ -528,31 +514,87 @@ def calcBiquadraticVals(points, out, out2):
 
 
 @cuda.jit()
-def umbrelaCurvatureGPU(normals, vectors, out):
+def umbrelaCurvatureGPU(pnts, normals, neighborsNumber, neighbors, out):
     tx = cuda.threadIdx.x
     ty = cuda.blockIdx.x
     block_size = cuda.blockDim.x
+    start = tx
+    stride = block_size
+    sharedTmp = cuda.shared.array(shape=(3, 128), dtype=double)
+    sharedTmp_scalarProduct = cuda.shared.array(shape=(1, 128), dtype=double)
+    point = cuda.shared.array(shape=(3, 1), dtype=double)
+    normal = cuda.shared.array(shape=3, dtype=double)
+    norm = cuda.shared.array(shape=1, dtype=double)
+    neighborsNum = neighborsNumber[ty, 0]
+    if (tx == 0):
+        normal[0] = normals[0 + ty * 3]
+        normal[1] = normals[1 + ty * 3]
+        normal[2] = normals[2 + ty * 3]
+        norm[0] = norm_1x3(normal)
+        point[0, 0] = pnts[0, ty]
+        point[1, 0] = pnts[1, ty]
+        point[2, 0] = pnts[2, ty]
 
-    grid_size = cuda.gridDim.x
-    stride = block_size * grid_size
-    start = tx + ty * block_size
-    size = int(vectors.shape[1] / 3)
-    v = cuda.local.array(shape=3, dtype=double)
-    normal = cuda.local.array(shape=3, dtype=double)
+    cuda.syncthreads()
 
-    for i in range(start, size, stride):
-        normal[0] = normals[0 + i * 3]
-        normal[1] = normals[1 + i * 3]
-        normal[2] = normals[2 + i * 3]
-        norm = norm_1x3(normal)
-        out[i] = 0
+    for k in range(0, neighborsNum, stride):
+        end = ((neighborsNum >= (k + stride)) * (k + stride)) + (
+                (neighborsNum < (k + stride)) * neighborsNum)
 
-        for j in range(vectors.shape[0]):
-            v[0] = vectors[j, 0 + i * 3]
-            v[1] = vectors[j, 1 + i * 3]
-            v[2] = vectors[j, 2 + i * 3]
-            norm_v = norm_1x3(v)
-            out[i] += (scalarProduct_1x3(normal, v)) / (norm_v * norm)
+        for i in range(start, 128, stride):
+            sharedTmp[0, i] = 0
+            sharedTmp[1, i] = 0
+            sharedTmp[2, i] = 0
+            sharedTmp_scalarProduct[0, i] = 0
+        cuda.syncthreads()
+
+        for i in range(start + k, end, stride):
+            j = i - k
+
+            sharedTmp[0, j] = neighbors[ty, i * 3]
+            sharedTmp[1, j] = neighbors[ty, 1 + i * 3]
+            sharedTmp[2, j] = neighbors[ty, 2 + i * 3]
+
+        cuda.syncthreads()
+
+        for i in range(start + k, end, stride):
+            j = i - k
+
+            sharedTmp[0, j] -= point[0, 0]
+            sharedTmp[1, j] -= point[1, 0]
+            sharedTmp[2, j] -= point[2, 0]
+
+            norm_v = norm_3xk_index(sharedTmp, j)
+            # if ty == 0 and tx == 0:
+            #     print(sharedTmp[0, 0],sharedTmp[1, 0],sharedTmp[2, 0])
+            sharedTmp_scalarProduct[0, j] = scalarProduct_1x3_index(normal, sharedTmp, j) / (norm_v * norm[0])
+            # if ty == 494120 :
+            #     print(j, sharedTmp_scalarProduct[0, j], "\n")
+
+        # for i in range(start, 128, stride):
+        #     if ty == 494120:
+        #         print(i, sharedTmp_scalarProduct[0, i], "\n")
+        # cuda.syncthreads()
+        #
+        # if ty == 0 and tx == 0:
+        #     print("start2=", start, tx, k, end, stride)
+        cuda.syncthreads()
+
+        len = int(stride / 2)
+
+        while len >= 1:
+
+            for j in range(tx, len, stride):
+                sharedTmp_scalarProduct[0, j] += sharedTmp_scalarProduct[0, j + len]
+
+            cuda.syncthreads()
+            len = int(len / 2)
+
+        # if ty==0:
+        #     print("aaaa", out[ty], "=",sharedTmp_scalarProduct[0, 0])
+        if tx == 0:
+            out[ty] += sharedTmp_scalarProduct[0, 0] / neighborsNum
+
 
 
 @cuda.jit()

@@ -302,7 +302,7 @@ def __regionConstrast(image, region1_size):
     k_R1 = np.ones((region1_size, region1_size)) * 1 / region1_size ** 2
 
     row_size, column_size = image.shape[:2]
-    k_R2 = [np.ones((ksize, ksize)) / ksize ** 2 for ksize in [row_size / 2, row_size / 4, row_size / 8]]
+    k_R2 = [np.ones((ksize, ksize)) / ksize ** 2 for ksize in [int(row_size / 2), int(row_size / 4), int(row_size / 8)]]
 
     # 2. Create convoluted map according to region1
     map_R1 = cv2.filter2D(image, -1, k_R1)
@@ -405,8 +405,8 @@ def __dcolor(p_i, image, image_feature, **kwargs):
         dcolors = np.sqrt((p_i - image) ** 2)
 
     K_closest = np.argsort(dcolors, axis=None)[:K]
-    i = K_closest / n
-    j = K_closest % n
+    i = np.int32(K_closest / n)
+    j = np.int32(K_closest % n)
 
     if verbose:
         print(dcolors[i, j])

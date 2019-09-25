@@ -91,7 +91,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
             
@@ -159,11 +161,11 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KDTree</span>
 
-<span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 
 
 <div class="viewcode-block" id="KdTreePointSet"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet">[docs]</a><span class="k">class</span> <span class="nc">KdTreePointSet</span><span class="p">(</span><span class="n">PointSet</span><span class="p">):</span>
-<div class="viewcode-block" id="KdTreePointSet.__init__"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">range_accuracy</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">angle_accuracy</span><span class="o">=</span><span class="mf">0.012</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">range_accuracy</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">angle_accuracy</span><span class="o">=</span><span class="mf">0.012</span><span class="p">,</span>
                  <span class="n">measurement_accuracy</span><span class="o">=</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">leaf_size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A kd-tree representation</span>
@@ -178,7 +180,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">KdTreePointSet</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">range_accuracy</span><span class="p">,</span> <span class="n">angle_accuracy</span><span class="p">,</span>
                                              <span class="n">measurement_accuracy</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__initializeKdTree</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">leaf_size</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__initializeKdTree</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">leaf_size</span><span class="p">)</span>
 
     <span class="c1"># ---------------- PRIVATES-------------</span>
     <span class="k">def</span> <span class="nf">__initializeKdTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputPoints</span><span class="p">,</span> <span class="n">leafsize</span><span class="p">):</span>
@@ -225,7 +227,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># ------------ GENERAL FUNCTIONS------------------</span>
-    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pnts</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+<div class="viewcode-block" id="KdTreePointSet.query"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pnts</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Query the kd-tree for the k nearest neighbors of a given set of points</span>
 
@@ -244,17 +246,19 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">distances</span><span class="p">,</span> <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">pnts</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">indexes</span>
+        <span class="k">return</span> <span class="n">indexes</span></div>
 
-    <span class="k">def</span> <span class="nf">queryRadius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pnts</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+<div class="viewcode-block" id="KdTreePointSet.queryRadius"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.queryRadius">[docs]</a>    <span class="k">def</span> <span class="nf">queryRadius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pnts</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">sort_results</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Query the kd-tree to find the neighbors of a given set of point inside a given radius</span>
 
 <span class="sd">        :param pnts: The query points</span>
 <span class="sd">        :param radius: The query radius</span>
+<span class="sd">        :param sort_results: if True, the distances and indices will be sorted before being returned. If False, the results will not be sorted. If return_distance == False, setting sort_results = True will result in an error.</span>
 
 <span class="sd">        :type pnts: np.array nx3</span>
 <span class="sd">        :type radius: float</span>
+<span class="sd">        :type sort_results: bool</span>
 
 <span class="sd">        :return: The indexes for the neighbors of the points</span>
 
@@ -268,34 +272,38 @@
             <span class="n">pnts</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">pnts</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">pnts</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">pnts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">radius</span><span class="p">)</span>
+            <span class="n">indexes</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">pnts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="n">sort_results</span><span class="p">,</span>
+                                                <span class="n">sort_results</span><span class="o">=</span><span class="n">sort_results</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">indexes</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
                 <span class="n">indexes</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">pnts</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+            <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">query_radius</span><span class="p">(</span><span class="n">pnts</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">return_distance</span><span class="o">=</span><span class="n">sort_results</span><span class="p">,</span> <span class="n">sort_results</span><span class="o">=</span><span class="n">sort_results</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sort_results</span><span class="p">:</span>
+                <span class="n">indexes</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">indexes</span>
 
-    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">indexes</span></div>
+
+<div class="viewcode-block" id="KdTreePointSet.ToNumpy"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.ToNumpy">[docs]</a>    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Points as numpy</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_arrays</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_arrays</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span>
+<div class="viewcode-block" id="KdTreePointSet.GetPoint"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.GetPoint">[docs]</a>    <span class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span></div>
 
-    <span class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="KdTreePointSet.ToPolyData"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.ToPolyData">[docs]</a>    <span class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">VisualizationUtils</span> <span class="k">import</span> <span class="n">MakeVTKPointsMesh</span>
         <span class="n">vtkPolyData</span> <span class="o">=</span> <span class="n">MakeVTKPointsMesh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">())</span>
-        <span class="k">return</span> <span class="n">vtkPolyData</span>
+        <span class="k">return</span> <span class="n">vtkPolyData</span></div>
 
-    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_or_buf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="KdTreePointSet.save"><a class="viewcode-back" href="../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_or_buf</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># TODO: IMPLEMENT save to json file</span>
-        <span class="k">pass</span></div>
+        <span class="k">pass</span></div></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

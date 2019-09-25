@@ -1,9 +1,10 @@
 import numpy as np
+from tqdm import tqdm
 
 from Properties.BaseProperty import BaseProperty
 from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 
-from tqdm import tqdm
+
 
 
 class NeighborsProperty(BaseProperty):
@@ -140,13 +141,16 @@ class NeighborsProperty(BaseProperty):
         """
 
         if isinstance(self.__pointsNeighborsArray[0], PointNeighborhood):
-            neighborsCount = np.array(list(map(lambda n: n.Size,
+            # getting number of neighboring points
+            neighborsCount = np.array(list(map(lambda n: n.Size - 1,
                                                tqdm(self.__pointsNeighborsArray,
                                                     'Getting number of neighbors for each point'))))
-            neighbors = list(map(lambda n: n.neighbors.ToNumpy().reshape((-1, )),
+
+            # getting list of neighbors per point (without the point itself)
+            neighbors = list(map(lambda n: n.neighbors.ToNumpy()[1:].reshape((-1, )),
                                  tqdm(self.__pointsNeighborsArray, desc='Retrieving neighbors')))
 
-            maxNeighbors = neighborsCount.max()
+            maxNeighbors = neighborsCount.max()  # getting the number of maximum point
 
             neighbors = np.array(list(map(
                 lambda n: n if n.shape[0] == 3 * maxNeighbors

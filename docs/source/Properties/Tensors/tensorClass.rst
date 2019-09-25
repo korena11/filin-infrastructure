@@ -2,24 +2,24 @@ Tensors
 =======
 
 The tensor property holds a tensor for a point or a segment. Each tensor is defined by a
-:class:`tensor.Tensor`. The :class:`TensorProperty.TensorProperty` holds all the tensors for a point-cloud.
+:class:`Tensor.Tensor`. The :class:`TensorProperty.TensorProperty` holds all the tensors for a point-cloud.
 
-The :class:`TensorFactory.TensorFactory` builds either a `tensor` (:ref:`Tensor Class`) object or a `TensorProperty` (:ref:`tensor Property`).
+The :class:`TensorFactory.TensorFactory` builds either a `Tensor` (:ref:`Tensor Class`) object or a `TensorProperty` (:ref:`Tensor Property`).
 
 Tensor Class
 ------------
 
-.. autoclass:: tensor.Tensor
+.. autoclass:: Tensor.Tensor
     :members:
 
     .. rubric:: Attributes
 
-    .. autoautosummary:: tensor.Tensor
+    .. autoautosummary:: Tensor.Tensor
         :attributes:
 
     .. rubric:: Methods
 
-    .. autoautosummary:: tensor.Tensor
+    .. autoautosummary:: Tensor.Tensor
         :methods:
 
 

@@ -42,9 +42,9 @@ class NeighborsFactory:
             :linenos:
 
         """
-        from BallTreePointSet import BallTreePointSet
-        from PointSetOpen3D import PointSetOpen3D
-        from KdTreePointSet import KdTreePointSet
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -105,9 +105,9 @@ class NeighborsFactory:
             :linenos:
 
         """
-        from BallTreePointSet import BallTreePointSet
-        from PointSetOpen3D import PointSetOpen3D
-        from KdTreePointSet import KdTreePointSet
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
         from warnings import warn
 
         neighbors = -1
@@ -252,13 +252,14 @@ class NeighborsFactory:
                                                     sort_results=True))
                 else:
                     idx = np.hstack((idx,
-                                     pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                     pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
+                                                              search_radius,
                                                               sort_results=True)))
             else:
                 idx = np.hstack((idx,
                                  pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
                                                           search_radius,
-                                                   sort_results=True)))
+                                                          sort_results=True)))
         # for the remaining part
         # if parts_num != 1:
         if modulu > 0:
@@ -275,7 +276,7 @@ class NeighborsFactory:
     @staticmethod
     def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors, parts_size=int(5e5), parts_num=None):
         """
-        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
+        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (KNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param k_nearest_neighbors: the number of neighbors
@@ -297,12 +298,17 @@ class NeighborsFactory:
         print('>>> Find all {k} points neighbors using kd-tree'.format(k=k_nearest_neighbors))
 
         neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
-        if parts_num is None:
-            parts_num = int(pointset_kdt.Size / parts_size)
-            modulu = pointset_kdt.Size % parts_size
+        if parts_size > pointset_kdt.Size:
+            parts_num = 1
+            parts_size = pointset_kdt.Size
+            modulu = 0
         else:
-            modulu = pointset_kdt.Size % parts_num
-            parts_size = int(pointset_kdt.Size / parts_num)
+            if parts_num is None:
+                parts_num = int(pointset_kdt.Size / parts_size)
+                modulu = pointset_kdt.Size % parts_size
+            else:
+                modulu = pointset_kdt.Size % parts_num
+                parts_size = int(pointset_kdt.Size / parts_num)
 
         start = 0
         idx = None
@@ -351,7 +357,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_ , :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -390,7 +396,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -433,7 +439,7 @@ class NeighborsFactory:
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`
 
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
         print('>>> Find all points neighbors using open3d')
 
         neighbors = NeighborsProperty(pointset3d)
@@ -484,7 +490,7 @@ class NeighborsFactory:
 
             `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`pointSetOpen3D_rknn_kdTree`
         """
-        from PointSubSetOpen3D import PointSubSetOpen3D
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
 
         # check which parameters were received
         if radius is not None:
@@ -616,7 +622,7 @@ class NeighborsFactory:
         if tree == None:
             tree = cKDTree(pntSet.ToNumpy())
         pnt = pntSet.GetPoint(ind)
-        l = tree.query(pnt, pSize, p = 2, distance_upper_bound = radius)
+        l = tree.query(pnt, pSize, p=2, distance_upper_bound=radius)
         #         neighbor = PointSubSet(pntSet, l[1][where(l[0] != inf)[0]])
         neighbor = l[1][where(l[0] != inf)[0]]
         return PointSubSet(pntSet, neighbor), tree
@@ -838,7 +844,7 @@ class NeighborsFactory:
         # [False] * maxProcesses)
         # print("Done??????")
 
-        from PointSetOpen3D import PointSetOpen3D
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
         print('>>> Find all points neighbors')
         # Function will be used with multiprocessing.
         # To run it without:

@@ -60,8 +60,15 @@ class TensorFactory(object):
                 raise ValueError('Number of points should be at least one')
 
         else:
-            ref_point = points.GetPoint(point_index)
-            points_array = points.ToNumpy()
+
+            if isinstance(points, PointSet):
+                ref_point = points.GetPoint(point_index)
+                points_array = points.ToNumpy()
+            elif isinstance(points, np.ndarray):
+                ref_point = points[point_index]
+                points_array = points
+            else:
+                raise TypeError('Unexpected type of \'points\' object')
 
             # TODO: check validity and remove redundant code
             local_idx = np.nonzero(ref_point in points_array)

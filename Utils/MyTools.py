@@ -33,6 +33,7 @@ def chi2_distance(histA, histB, eps=1e-10):
     :return: the distance between the histograms
 
     :rtype: np.ndarray
+
     """
 
     if np.all(histA == histB):
@@ -92,8 +93,8 @@ def computeImageGradient(I, **kwargs):
 
     gradient = None
 
-    img = cv2.GaussianBlur(I, (ksize, ksize), sigma)
-
+    # img = cv2.GaussianBlur(I, (ksize, ksize), sigma)
+    img = I
     # compute image gradient
     dx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = ksize)
     dy = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
@@ -548,8 +549,12 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
 
 
 if __name__ == '__main__':
-    img_orig = cv2.cvtColor(cv2.imread(r'D:\Documents\ownCloud\Data\Images\Image.bmp'), cv2.COLOR_BGR2GRAY)
+    img_orig = cv2.cvtColor(cv2.imread(r'/home/reuma/ownCloud/Data/Images/channel91.png'), cv2.COLOR_BGR2GRAY)
     img_normed = cv2.normalize(img_orig.astype('float'), None, 0.0, 1.0,
                                cv2.NORM_MINMAX)  # Convert to normalized floating point
 
-    computeImageDerivatives(img_normed, 1, ksize = 5)
+    xx, yy = computeImageDerivatives(img_normed, 1, ksize = 5)
+    norm_nabla = computeImageGradient(img_normed, gradientType='L2')
+    diff = np.sqrt(xx**2 + yy**2) - norm_nabla
+
+    print(diff)
