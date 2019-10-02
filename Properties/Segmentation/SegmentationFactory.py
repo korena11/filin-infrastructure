@@ -98,7 +98,7 @@ class SegmentationFactory:
                "- Starting Phase 1 of Sorting Process"))
         startTime = now
         
-        azimuths = sphCoorProp.Azimuths
+        azimuths = sphCoorProp.azimuths
         elevationAngles = sphCoorProp.ElevationAngles
         
         while (len(pntIndexes) > 0):

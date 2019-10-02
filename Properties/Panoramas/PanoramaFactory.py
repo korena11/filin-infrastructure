@@ -25,11 +25,13 @@ class PanoramaFactory:
         :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param intensity: if the pixel's value should be the intensity value.
+        :param voidData: the value for NoData. Default: 250 (meters)
 
         :type points: PointSet
         :type azimuthSpacing: float
         :type elevationSpacing: float
         :type intensity: bool
+        :type voidData: float
 
          **Optionals**
 
@@ -58,7 +60,7 @@ class PanoramaFactory:
         # Create the panorama
         if not intensity:
             # range as pixel value
-            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.Ranges,
+            panorama = PanoramaProperty(sphCoords, elevationIndexes, azimuthIndexes, sphCoords.ranges,
                                         minAzimuth=minAz, maxAzimuth=maxAz,
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
                                         elevationSpacing=elevationSpacing, **kwargs)
@@ -69,7 +71,7 @@ class PanoramaFactory:
                                         minElevation=minEl, maxElevation=maxEl, azimuthSpacing=azimuthSpacing,
                                         elevationSpacing=elevationSpacing, **kwargs)
         if void_as_mean:
-            void = cls.__compute_void_as_mean(sphCoords.Ranges)
+            void = cls.__compute_void_as_mean(sphCoords.ranges)
             panorama.load(voidData=void)
 
         return panorama
@@ -84,12 +86,6 @@ class PanoramaFactory:
         :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)
         :param elevationSpacing: The spacing between two points of the point set in the elevation direction
         :param property_array: if the values of the property to present cannot be retrieved by a simple ``getValues()``
-
-        .. code-block:: python
-
-            PanoramaFactory.CreatePanorama_byProperty(curvatureProperty, azimuthSpacing=0.057, elevationSpacing=0.057,
-                                  intensity=False, property_array=curvatureProperty.k1)
-
         :param intensity: if the pixel's value should be the intensity value.
         :param voidData: the number to set where there is no data
         :param void_as_mean: flag to determine the void value as the mean value of the ranges
@@ -101,6 +97,12 @@ class PanoramaFactory:
         :type property_array: numpy.array
         :type void_as_mean: bool
         :type voidData: float
+
+        .. code-block:: python
+
+            PanoramaFactory.CreatePanorama_byProperty(curvatureProperty, azimuthSpacing=0.057, elevationSpacing=0.057,
+                                  intensity=False, property_array=curvatureProperty.k1)
+
 
         :return: panorama_property
         :rtype: PanoramaProperty
@@ -140,7 +142,7 @@ class PanoramaFactory:
                                         elevationSpacing=elevationSpacing, **kwargs)
 
         if void_as_mean:
-            void = cls.__compute_void_as_mean(sphCoords.Ranges)
+            void = cls.__compute_void_as_mean(sphCoords.ranges)
             panorama.load(voidData=void)
 
         return panorama
@@ -165,15 +167,16 @@ class PanoramaFactory:
         :rtype: tuple
 
         """
+        import numpy as np
 
         # Finding the boundaries of the panorama
-        minAz = min(sphCoords.Azimuths)
-        maxAz = max(sphCoords.Azimuths)
-        minEl = min(sphCoords.ElevationAngles)
-        maxEl = max(sphCoords.ElevationAngles)
+        minAz = min(sphCoords.azimuths)
+        maxAz = max(sphCoords.azimuths)
+        minEl = min(sphCoords.elevations)
+        maxEl = max(sphCoords.elevations)
 
         # Calculating the location of each point in the panorama
-        azimuthIndexes = ((sphCoords.Azimuths - minAz) / azimuthSpacing).astype(int)
-        elevationIndexes = ((maxEl - sphCoords.ElevationAngles) / elevationSpacing).astype(int)
+        azimuthIndexes = np.ceil((sphCoords.azimuths - minAz) / azimuthSpacing).astype(int)
+        elevationIndexes = np.ceil((maxEl - sphCoords.elevations) / elevationSpacing).astype(int)
 
         return (minAz, maxAz), (minEl, maxEl), (azimuthIndexes, elevationIndexes)

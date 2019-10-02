@@ -924,7 +924,7 @@ class LevelSetFlow:
                 phi_t = self.step * (intrinsic - extrinsic)
                 # reinitializtion every 5 iterations:
                 if iteration % 10 == 0 and iteration != 0:
-                    # self.phi(k).reinitialization(phi_t)
+                    self.phi(k).reinitialization(phi_t)
                     pass
                 else:
                     self.phi(k).move_function(phi_t)

@@ -131,15 +131,15 @@ class FilterFactory:
             
         # If maxRange was not provided, defining as the highest range
         if (maxRange == None):
-            maxRange = max(sphCoorProp.Ranges())
+            maxRange = max(sphCoorProp.ranges())
         
         # Finding the indices of all the points inside the defined bounds
-        insidePointIndices = nonzero(logical_and(logical_and(logical_and(sphCoorProp.Azimuths() >= minAzimuth, 
-                                                                          sphCoorProp.Azimuths() <= maxAzimuth),
-                                                              logical_and(sphCoorProp.ElevationAngles() >= minElevationAngle, 
+        insidePointIndices = nonzero(logical_and(logical_and(logical_and(sphCoorProp.azimuths() >= minAzimuth,
+                                                                         sphCoorProp.azimuths() <= maxAzimuth),
+                                                             logical_and(sphCoorProp.ElevationAngles() >= minElevationAngle,
                                                                           sphCoorProp.ElevationAngles() <= maxElevationAngle)),
-                                                  logical_and(sphCoorProp.Ranges() >= minRange, 
-                                                              sphCoorProp.Ranges() <= maxRange)))
+                                                 logical_and(sphCoorProp.ranges() >= minRange,
+                                                             sphCoorProp.ranges() <= maxRange)))
 
         return FilterFactory.__CreateSegmentationProperty(sphCoorProp.Points(), insidePointIndices)
 

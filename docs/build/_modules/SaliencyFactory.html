@@ -1071,7 +1071,7 @@
 
 <span class="sd">        Saliency is computed based on the distances between regions and their positions :cite:`Goferman.etal2012`.</span>
 
-<span class="sd">        :param panorama_property: the property according to which the saliency is computed</span>
+<span class="sd">        :param panorama_property: the property according to which the saliency is computed, or a raster image</span>
 <span class="sd">        :param scale_r: scale for multiscale saliency, according to which the neighboring scales are defined:</span>
 
 <span class="sd">            .. math::</span>
@@ -1094,7 +1094,7 @@
 <span class="sd">        :param constant: a constant; default: 3 (paper implementation)</span>
 <span class="sd">        :param verbose: print inter-running results</span>
 
-<span class="sd">        :type panorama_property: PanoramaProperty.PanoramaProperty</span>
+<span class="sd">        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array</span>
 <span class="sd">        :type scale_r: float</span>
 <span class="sd">        :type scales_number: int</span>
 <span class="sd">        :type feature: str</span>
@@ -1117,7 +1117,11 @@
 <span class="sd">          :emphasize-lines: 5</span>
 <span class="sd">          :linenos:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="kn">from</span> <span class="nn">Properties.Panoramas.PanoramaProperty</span> <span class="k">import</span> <span class="n">PanoramaProperty</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">panorama_property</span><span class="p">,</span> <span class="n">PanoramaProperty</span><span class="p">):</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="c1"># if the image feature is CIELAB, the image should be transformed to CIELab</span>
         <span class="k">if</span> <span class="n">feature</span> <span class="o">==</span> <span class="s1">&#39;LAB&#39;</span><span class="p">:</span>

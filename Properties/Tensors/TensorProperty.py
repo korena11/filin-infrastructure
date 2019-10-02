@@ -13,8 +13,8 @@ not computed, a PointTensor should be constructed and inserted here for the resp
 
 import numpy as np
 
-from BaseProperty import BaseProperty
-from Tensor import Tensor
+from Properties.BaseProperty import BaseProperty
+from Properties.Tensors.Tensor import Tensor
 
 
 class TensorProperty(BaseProperty):

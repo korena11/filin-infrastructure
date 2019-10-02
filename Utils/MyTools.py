@@ -15,7 +15,7 @@ import pandas as pd
 from numpy.linalg import norm
 from scipy.interpolate import interp1d
 from scipy.ndimage import filters
-from shapely.geometry import Polygon
+# from shapely.geometry import Polygon
 from skimage import measure
 
 
@@ -169,8 +169,9 @@ def computeImageDerivatives(img, order, **kwargs):
         :param order: order needed (1 or 2)
         :param ksize: filter kernel size (3,and up)
         :param resolution: kernel resolution
-        :param sigma: sigma for gaussian blurring
+        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
         :param window: tuple of window size for blurring
+
 
         :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)
     """
@@ -181,36 +182,38 @@ def computeImageDerivatives(img, order, **kwargs):
               'sigma': 1.,
               'window': (0,0)}
     params.update(kwargs)
-    ksize = params['ksize']
+    ksize = np.int(params['ksize'])
 
     img = np.float64(img)
 
-    img_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize = ksize)
-    img_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize = ksize)
+    img_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=ksize)
+    img_y = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=ksize)
 
-    img_x = cv2.GaussianBlur(img_x, params['window'], params['sigma'])
-    img_y = cv2.GaussianBlur(img_y, params['window'], params['sigma'])
+    if params['sigma'] != 0:
+        img_x = cv2.GaussianBlur(img_x, params['window'], params['sigma'])
+        img_y = cv2.GaussianBlur(img_y, params['window'], params['sigma'])
 
-    img_x = cv2.normalize(img_x.astype('float'), None, 0.0, 1.0,
-                          cv2.NORM_MINMAX)
-    img_y = cv2.normalize(img_y.astype('float'), None, 0.0, 1.0,
-                          cv2.NORM_MINMAX)
+    # img_x = cv2.normalize(img_x.astype('float'), None, 0.0, 1.0,
+    #                       cv2.NORM_MINMAX)
+    # img_y = cv2.normalize(img_y.astype('float'), None, 0.0, 1.0,
+    #                       cv2.NORM_MINMAX)
 
     if order == 2:
         img_xx = cv2.Sobel(img_x, cv2.CV_64F, 1, 0, ksize = ksize)
         img_yy = cv2.Sobel(img_y, cv2.CV_64F, 0, 1, ksize = ksize)
         img_xy = cv2.Sobel(img_x, cv2.CV_64F, 0, 1, ksize = ksize)
 
-        img_xx = cv2.GaussianBlur(img_xx, params['window'], params['sigma'])
-        img_yy = cv2.GaussianBlur(img_yy, params['window'], params['sigma'])
-        img_xy = cv2.GaussianBlur(img_xy, params['window'], params['sigma'])
+        if params['sigma'] !=0:
+            img_xx = cv2.GaussianBlur(img_xx, params['window'], params['sigma'])
+            img_yy = cv2.GaussianBlur(img_yy, params['window'], params['sigma'])
+            img_xy = cv2.GaussianBlur(img_xy, params['window'], params['sigma'])
 
-        img_xx = cv2.normalize(img_xx.astype('float'), None, 0.0, 1.0,
-                               cv2.NORM_MINMAX)
-        img_yy = cv2.normalize(img_yy.astype('float'), None, 0.0, 1.0,
-                               cv2.NORM_MINMAX)
-        img_xy = cv2.normalize(img_xy.astype('float'), None, 0.0, 1.0,
-                               cv2.NORM_MINMAX)
+        # img_xx = cv2.normalize(img_xx.astype('float'), None, 0.0, 1.0,
+        #                        cv2.NORM_MINMAX)
+        # img_yy = cv2.normalize(img_yy.astype('float'), None, 0.0, 1.0,
+        #                        cv2.NORM_MINMAX)
+        # img_xy = cv2.normalize(img_xy.astype('float'), None, 0.0, 1.0,
+        #                        cv2.NORM_MINMAX)
 
         return img_x, img_y, img_xx, img_yy, img_xy
     else:
@@ -546,6 +549,15 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
         pcl_normals.setPointNormal(idx, normal)
 
     return pcl_saliency, pcl_curvature, pcl_normals
+
+def chunking_dot(big_matrix, small_matrix, chunk_size=100):
+    # Make a copy if the array is not already contiguous
+    small_matrix = np.ascontiguousarray(small_matrix)
+    R = np.empty((big_matrix.shape[0], small_matrix.shape[1]))
+    for i in range(0, R.shape[0], chunk_size):
+        end = i + chunk_size
+        R[i:end] = np.dot(big_matrix[i:end], small_matrix)
+    return R
 
 
 if __name__ == '__main__':

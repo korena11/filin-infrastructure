@@ -2,7 +2,7 @@ import numpy as np
 import open3d as O3D
 
 # Framework Imports
-from PointSetOpen3D import PointSetOpen3D
+from DataClasses.PointSetOpen3D import PointSetOpen3D
 
 
 class PointSubSetOpen3D(PointSetOpen3D):

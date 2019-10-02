@@ -755,8 +755,7 @@ class SaliencyFactory(object):
         return fpfh.data
 
 
-
-    # ------------------- Saliency on Panorama Property ---------------------
+    # ------------------- Saliency on Panorama Property or rasters ---------------------
     @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):
         """
@@ -912,7 +911,7 @@ class SaliencyFactory(object):
 
         Saliency is computed based on the distances between regions and their positions :cite:`Goferman.etal2012`.
 
-        :param panorama_property: the property according to which the saliency is computed
+        :param panorama_property: the property according to which the saliency is computed, or a raster image
         :param scale_r: scale for multiscale saliency, according to which the neighboring scales are defined:
 
             .. math::
@@ -935,7 +934,7 @@ class SaliencyFactory(object):
         :param constant: a constant; default: 3 (paper implementation)
         :param verbose: print inter-running results
 
-        :type panorama_property: PanoramaProperty.PanoramaProperty
+        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array
         :type scale_r: float
         :type scales_number: int
         :type feature: str
@@ -954,11 +953,15 @@ class SaliencyFactory(object):
             s3[s3 < 1.e-5] = 0
 
        .. literalinclude:: ../../../../Properties/Saliency/test_saliencyFactory.py
-          :lines: 42-48
+          :lines: 42-49
           :emphasize-lines: 5
           :linenos:
         """
-        image = panorama_property.PanoramaImage.astype(np.float32)
+        from Properties.Panoramas.PanoramaProperty import PanoramaProperty
+        if isinstance(panorama_property, PanoramaProperty):
+            image = panorama_property.PanoramaImage.astype(np.float32)
+        else:
+            image = panorama_property.astype(np.float32)
 
         # if the image feature is CIELAB, the image should be transformed to CIELab
         if feature == 'LAB':
@@ -973,7 +976,7 @@ class SaliencyFactory(object):
                                 kpatches=kpatches,
                                 c=constant,
                                 verbose=verbose)
-             for ksize in ksizes]
+             for ksize in ksizes if ksize.astype('int') !=0 ]
         saliency_map = np.array(s)
         return np.mean(saliency_map, axis=0)
 
@@ -1095,16 +1098,20 @@ class SaliencyFactory(object):
         averaged_image = cv2.filter2D(image, -1, patch)
 
         m, n = image.shape[:2]
+        saliency = np.zeros((m, n))
+
+        if np.int(ksize/2) == 0:
+            return saliency
 
         ind_list = np.arange(0, m * n, np.int(ksize / 2), dtype='float')
-        saliency = np.zeros((m, n))
+
 
         if image_feature == 'pixel_val':
             averaged_image = cv2.normalize(averaged_image, averaged_image, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
                                            dtype=cv2.CV_32F)
 
         # 2. distance between colors of each patch
-        for k in ind_list:
+        for k in tqdm(ind_list, total=ind_list.shape[0], desc='distance between colors of each patch'):
             if np.isnan(k):
                 continue
             else:
@@ -1171,13 +1178,12 @@ class SaliencyFactory(object):
             dcolors = np.sqrt((p_i - image) ** 2)
 
         K_closest = np.argsort(dcolors, axis=None)[:kpatches]
-        i = K_closest / n
+        i = (K_closest / n).astype('int')
         j = K_closest % n
 
         if verbose:
             print(dcolors[i, j])
         return dcolors[i, j], i, j
-
 
 class SPFH_property(BaseProperty):
     """

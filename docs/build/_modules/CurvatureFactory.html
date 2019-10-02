@@ -164,8 +164,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
-<span class="kn">import</span> <span class="nn">Properties.Transformations</span> <span class="k">as</span> <span class="nn">RotationUtils</span>
 <span class="kn">from</span> <span class="nn">Cuda.cuda_API</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">Properties.Transformations.RotationUtils</span> <span class="k">as</span> <span class="nn">RotationUtils</span>
 <span class="kn">from</span> <span class="nn">DataClasses.RasterData</span> <span class="k">import</span> <span class="n">RasterData</span>
 <span class="kn">from</span> <span class="nn">Properties.Curvature.CurvatureProperty</span> <span class="k">import</span> <span class="n">CurvatureProperty</span>
 
@@ -277,8 +277,8 @@
 
 <span class="sd">            :meth:`curvature_by_3parameters`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
-        <span class="kn">from</span> <span class="nn">Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+        <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
         <span class="n">k1</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">invalid_curvature</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of points that their curvature wasn&#39;t estimated</span>
@@ -366,8 +366,8 @@
 <span class="sd">                \kappa_{1,2} = \frac{a+b}{2}\pm C</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
-        <span class="kn">from</span> <span class="nn">PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+        <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">PointNeighborhood</span><span class="p">):</span>
             <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
@@ -411,7 +411,7 @@
 <div class="viewcode-block" id="CurvatureFactory.umbrella_curvature"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.umbrella_curvature">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">umbrella_curvature</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">neighbrohood</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">min_obj_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
                            <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_sectors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                           <span class="n">invalid_value</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span> <span class="n">cuvatureProperty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                           <span class="n">invalid_value</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span> <span class="n">curvatureProperty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute an umbrella curvature,</span>
 
@@ -436,7 +436,7 @@
 <span class="sd">        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7</span>
 <span class="sd">        :param num_sectors: the number of sectors the circle is divided to. Default: 8</span>
 <span class="sd">        :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999</span>
-<span class="sd">        :param cuvatureProperty: A curvature property to update with the umbrella curvature. If None, a new curvature property will be created, with the principal curvatures as None.</span>
+<span class="sd">        :param curvatureProperty: A curvature property to update with the umbrella curvature. If None, a new curvature property will be created, with the principal curvatures as None.</span>
 <span class="sd">        :param verbose: print inter running messages. default: False</span>
 
 <span class="sd">        :type neighbrohood: NeighborsProperty.NeighborsProperty</span>
@@ -448,7 +448,7 @@
 <span class="sd">        :type valid_sectors: int</span>
 <span class="sd">        :type num_sectors: int</span>
 <span class="sd">        :type invalid_value: float</span>
-<span class="sd">        :type cuvatureProperty: CurvatureProperty</span>
+<span class="sd">        :type curvatureProperty: CurvatureProperty</span>
 <span class="sd">        :type verbose: bool</span>
 
 <span class="sd">        :return: umbrella curvature for all points that have enough neighbors for the curvature to be computed.</span>
@@ -466,7 +466,7 @@
         <span class="n">umbrellaCurvature</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">point_neighbors</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">neighbrohood</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">neighbrohood</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
-                                    <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute umbrella curvature for all point cloud&#39;</span><span class="p">):</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute umbrella curvature for all point cloud&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
             <span class="c1"># check if the neighborhood is valid</span>
             <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__checkNeighborhood</span><span class="p">(</span><span class="n">point_neighbors</span><span class="p">,</span> <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="n">min_points_in_neighborhood</span><span class="p">,</span>
                                        <span class="n">min_points_in_sector</span><span class="o">=</span><span class="n">min_points_in_sector</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="n">valid_sectors</span><span class="p">,</span>
@@ -474,8 +474,8 @@
                 <span class="n">point_idx</span> <span class="o">=</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">normals</span><span class="o">.</span><span class="n">Normals</span><span class="p">[</span><span class="n">point_idx</span><span class="p">]</span>
 
-                <span class="c1"># if verbose:</span>
-                <span class="c1">#     print(point_idx, n)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="n">point_idx</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
                 <span class="c1"># compute the directions projections  on the normal at the center point of each neighbor</span>
                 <span class="n">projections</span> <span class="o">=</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">neighbors_vectors</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -485,17 +485,18 @@
 
                 <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># if verbose:</span>
-                <span class="c1">#     print(&#39;invalid point:&#39;, point_neighbors.center_point_idx)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invalid point:&#39;</span><span class="p">,</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">center_point_idx</span><span class="p">)</span>
                 <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
         <span class="n">umbrella_curvature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">umbrellaCurvature</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">umbrella_curvature</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-        <span class="k">if</span> <span class="n">cuvatureProperty</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">curvatureProperty</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span class="n">neighbrohood</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">principal_curvatures</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                      <span class="n">umbrella_curvature</span><span class="o">=</span><span class="n">umbrella_curvature</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">cuvatureProperty</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">umbrella_curvature</span><span class="o">=</span><span class="n">umbrella_curvature</span><span class="p">)</span></div>
+            <span class="n">curvatureProperty</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">umbrella_curvature</span><span class="o">=</span><span class="n">umbrella_curvature</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">curvatureProperty</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.filter_curvature_roughness"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.filter_curvature_roughness">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">filter_curvature_roughness</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">curvature_property</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>

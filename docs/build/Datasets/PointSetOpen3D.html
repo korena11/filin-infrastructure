@@ -184,92 +184,202 @@
 <dt id="PointSetOpen3D.PointSetOpen3D">
 <em class="property">class </em><code class="descclassname">PointSetOpen3D.</code><code class="descname">PointSetOpen3D</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSetOpen3D.html#PointSetOpen3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Attributes</p>
-<table class="longtable docutils align-center">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></td>
+<td>Return number of columns (channels)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></td>
+<td>Return nX1 ndarray of intensity values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.Size" title="PointSetOpen3D.PointSetOpen3D.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">X coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Y coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Z coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
+<td>The data as stored in self.__data</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>Path to datafile, if exists</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-center">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])</td>
+<td>Add data to a field</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.CalculateNormals" title="PointSetOpen3D.PointSetOpen3D.CalculateNormals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalculateNormals</span></code></a>([search_radius,&nbsp;maxNN,&nbsp;…])</td>
+<td>Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.GetPoint" title="PointSetOpen3D.PointSetOpen3D.GetPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code></a>(index)</td>
+<td>Retrieve specific point(s) by index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.InitializeOpen3dObject" title="PointSetOpen3D.PointSetOpen3D.InitializeOpen3dObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InitializeOpen3dObject</span></code></a>(inputPoints)</td>
+<td>Initializes the object according to the type of the input points</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.RebuildKDTree" title="PointSetOpen3D.PointSetOpen3D.RebuildKDTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RebuildKDTree</span></code></a>([verbose])</td>
+<td>Builds the KD-tree again</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code>([crs])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSetOpen3D.PointSetOpen3D.ToNumpy" title="PointSetOpen3D.PointSetOpen3D.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td>Convert data to numpy array :return:</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code>()</td>
+<td>Create and return vtkPolyData object</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code>()</td>
+<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code>(**kwargs)</td>
+<td>Update a field within the PointSet</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="PointSetOpen3D.PointSetOpen3D.CalculateNormals">
 <code class="descname">CalculateNormals</code><span class="sig-paren">(</span><em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>orientation=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSetOpen3D.html#PointSetOpen3D.CalculateNormals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D.CalculateNormals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – neighbors radius for normal computation. Default: 0.05</p></li>
-<li><p><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.</p></li>
-<li><p><strong>orientation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – “camera” orientation. The orientation towards which the normals are computed. Default: (0,0,0)</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – print inter-running messages.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – neighbors radius for normal computation. Default: 0.05</li>
+<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.</li>
+<li><strong>orientation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – “camera” orientation. The orientation towards which the normals are computed. Default: (0,0,0)</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – print inter-running messages.</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSetOpen3D.PointSetOpen3D.GetPoint">
 <code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSetOpen3D.html#PointSetOpen3D.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D.GetPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve specific point(s) by index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> – the index of the point to return</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – the index of the point to return</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">specific point/s as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSetOpen3D.PointSetOpen3D.InitializeOpen3dObject">
 <code class="descname">InitializeOpen3dObject</code><span class="sig-paren">(</span><em>inputPoints</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSetOpen3D.html#PointSetOpen3D.InitializeOpen3dObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D.InitializeOpen3dObject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the object according to the type of the input points</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>inputPoints</strong> (<em>np.ndarray</em><em>, </em><em>o3D.PointCloud</em><em>, </em><a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – the points from which the object should be initialized to</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inputPoints</strong> (<em>np.ndarray</em><em>, </em><em>o3D.PointCloud</em><em>, </em><a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – the points from which the object should be initialized to</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSetOpen3D.PointSetOpen3D.RebuildKDTree">
 <code class="descname">RebuildKDTree</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSetOpen3D.html#PointSetOpen3D.RebuildKDTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D.RebuildKDTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds the KD-tree again</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>verbose</strong> – </p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="PointSetOpen3D.PointSetOpen3D.Size">
 <code class="descname">Size</code><a class="headerlink" href="#PointSetOpen3D.PointSetOpen3D.Size" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of points</p>
-</dd>
-</dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -289,21 +399,92 @@
 <dd><p>Holds a subset of a PointSetOpen3D</p>
 <p>Provides the same interface as PointSetOpen3D and PointSubSet</p>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-center">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></td>
+<td>Return number of columns (channels)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.GetIndices" title="PointSubSetOpen3D.PointSubSetOpen3D.GetIndices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetIndices</span></code></a></td>
+<td>Return points’ indices</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.Intensity" title="PointSubSetOpen3D.PointSubSetOpen3D.Intensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></a></td>
+<td>Return nX1 ndarray of intensity values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.Size" title="PointSubSetOpen3D.PointSubSetOpen3D.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td>Return number of points</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.X" title="PointSubSetOpen3D.PointSubSetOpen3D.X"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></a></td>
+<td>Return nX1 ndarray of X coordinate</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.Y" title="PointSubSetOpen3D.PointSubSetOpen3D.Y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></a></td>
+<td>Return nX1 ndarray of Y coordinate</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.Z" title="PointSubSetOpen3D.PointSubSetOpen3D.Z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></a></td>
+<td>Return nX1 ndarray of Z coordinate</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
+<td>The data as stored in self.__data</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>Path to datafile, if exists</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-center">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])</td>
+<td>Add data to a field</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalculateNormals</span></code>([search_radius,&nbsp;maxNN,&nbsp;…])</td>
+<td>Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code>(index)</td>
+<td>Retrieve specific point(s) by index</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">InitializeOpen3dObject</span></code>(inputPoints)</td>
+<td>Initializes the object according to the type of the input points</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">RebuildKDTree</span></code>([verbose])</td>
+<td>Builds the KD-tree again</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code>([crs])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.ToNumpy" title="PointSubSetOpen3D.PointSubSetOpen3D.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td>Return the points as numpy nX3 ndarray (in case we change the type of __xyz in the future)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code>()</td>
+<td>Create and return vtkPolyData object</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code>()</td>
+<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code>(**kwargs)</td>
+<td>Update a field within the PointSet</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSetOpen3D.PointSubSetOpen3D.Visualize" title="PointSubSetOpen3D.PointSubSetOpen3D.Visualize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Visualize</span></code></a>([original,&nbsp;both])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="attribute">

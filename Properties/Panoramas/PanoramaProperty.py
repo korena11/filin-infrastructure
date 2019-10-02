@@ -15,15 +15,16 @@ class PanoramaProperty(BaseProperty):
 
     .. note:: For the Scanstation C10 the measurements' angular resolution for both elevation and azimuth directions:
 
-            * Low: 0.11 deg
-            * Medium: 0.057 deg
-            * High: 0.028 deg
-            * Highest: *TO ADD*
+            * Low: :math: 0.2^\circ
+            * Medium: :math: 0.11^\circ
+            * High: :math: 0.057^\circ
+            * Highest: :math: 0.028^\circ
     """
 
     __rowIndexes = None  # An array of indexes corresponding to the row number to which each point belongs to
     __columnIndexes = None  # An array of indexes corresponding to the column number to which each point belongs to
     __panoramaData = None  # A m-by-n-by-p array in which the panorama is stored
+    __sphericalCoordinates = None # the points coordinate in spheric coordinates
     __panoramaIndex = None  # A m-by-n-by-p array in which the indices of the points are stored
     __voidData = 250  # A number indicating missing data in the panorama
     __minAzimuth = 0  # The minimal azimuth value
@@ -32,6 +33,7 @@ class PanoramaProperty(BaseProperty):
     __maxElevation = 90  # The maximal elevation angle value
     __azimuthSpacing = 0.057  # The spacing between points in the azimuth direction
     __elevationSpacing = 0.057  # The spacing between points in the elevation angle direction
+
 
     def __init__(self, sphericalCoordinates, rowIndexes=None, columnIndexes=None, panoramaData=None, **kwargs):
         """
@@ -55,9 +57,10 @@ class PanoramaProperty(BaseProperty):
 
         self.__columnIndexes = columnIndexes
         self.__rowIndexes = rowIndexes
+        self.__sphericalCoordinates = sphericalCoordinates
 
-        numRows = int((self.max_elevation - self.min_elevation) / self.elevation_spacing) + 1
-        numColumns = int((self.max_azimuth - self.min_azimuth) / self.azimuth_spacing) + 1
+        numRows = int((self.max_elevation - self.min_elevation) / self.elevation_spacing) + 2
+        numColumns = int((self.max_azimuth - self.min_azimuth) / self.azimuth_spacing) + 2
         self.__panoramaIndex = ones((numRows, numColumns)) * np.NaN
 
         if len(panoramaData.shape) == 1:
@@ -83,11 +86,18 @@ class PanoramaProperty(BaseProperty):
     #
     #     self.__panoramaIndex = panoramaIndex
     #     return panoramaIndex
+    @property
+    def sphericalCoordinates(self):
+        """
+        Point in spherical coordinates
+
+        """
+        return self.__sphericalCoordinates
 
     @property
     def PanoramaImage(self):
         """
-        Returns the panorama image
+        The data as panorama image
         """
         return self.__panoramaData
 
@@ -345,7 +355,7 @@ class PanoramaProperty(BaseProperty):
            range information
 
         :param phenomena_size: the minimal size of the phenomena that we don't want to smooth (:math: `D` above)
-         default: 0.12 m
+         default: 0.2 m
 
         :param panoramaImage: the image to smooth
 
@@ -374,13 +384,16 @@ class PanoramaProperty(BaseProperty):
                     continue
                 else:
                     # Create the filter and define the window size according to the changing resolution (sigma)
-                    current_sigma = 2.5 * phenomena_size / (rho * scan_resolution)
-                    sigmas.append(current_sigma)
-                    ksize = np.ceil(2 * current_sigma + 1).astype(int)
-                    if ksize % 2 == 0:
-                        ksize += 1
+                    # current_sigma = 2.5 * phenomena_size / (rho * scan_resolution)
+                    #
+                    #
+                    # ksize = np.ceil(2 * current_sigma + 1).astype(int)
+                    # if ksize % 2 == 0:
+                    #     ksize += 1
+                    ksize, current_sigma, patch = self.__create_patch_adaptive(i,j,phenomena_size,scan_resolution)
 
                     ksizes.append(ksize)
+                    sigmas.append(current_sigma)
 
                     gauss_kernel = cv2.getGaussianKernel(ksize, current_sigma)
                     gauss_kernel = gauss_kernel.dot(gauss_kernel.T)
@@ -397,7 +410,7 @@ class PanoramaProperty(BaseProperty):
                     j_end = min(self.Size[1], j + win_size + 1)
                     j_end_win = min(gauss_kernel.shape[1], gauss_kernel.shape[1] - ((j + win_size) - j_end))
 
-                    patch = panoramaImage[i_start:i_end, j_start: j_end]
+                    # patch = panoramaImage[i_start:i_end, j_start: j_end]
                     gauss_win = gauss_kernel[i_start_win:i_end_win, j_start_win: j_end_win]
 
                     non_nan = np.where(patch != self.void_data)
@@ -406,3 +419,51 @@ class PanoramaProperty(BaseProperty):
         sigma = np.mean(sigmas)
         ksize = np.mean(ksizes)
         return filtered_image, sigma, ksize
+
+    # def panorama_derivatives_adaptive_numeric(self, phenomena_size, order=1):
+    #     """
+    #     Compute numerical derivatives on the panorama, using adaptive kernel
+    #
+    #     :param phenomena_size: the minimal size of the phenomena that we don't want to smooth (:math: `D` above).  Default 0.2 meters
+    #     :param order: order of differentiation (1 or 2)
+    #     :return:
+    #     """
+    #
+    #     if phenomena_size == 0:
+    #         phenomena_size = 0.2  # in meters
+    #
+    #     for i in range(self.Size[0]):
+    #         for j in range(self.Size[0]):
+
+
+
+    def __create_patch_adaptive(self, i,j, phenomena_size, scan_resolution):
+        """
+        Create the patch window according to range and scan resolution
+        :param scan_resolution:
+        :param i: row start index
+        :param j: column start index
+
+        :return:
+        """
+
+        rho = self.PanoramaImage[i, j]
+
+        # Create the filter and define the window size according to the changing resolution (sigma)
+        current_sigma = 2.5 * phenomena_size / (rho * scan_resolution)
+
+        ksize = np.ceil(2 * current_sigma + 1).astype(int)
+        if ksize % 2 == 0:
+            ksize += 1
+
+        # Define the window
+        win_size = (ksize / 2).astype(int)
+        i_start = max(0, i - win_size)
+        i_end = min(self.Size[0], i + win_size + 1)
+
+        j_start = max(0, j - win_size)
+        j_end = min(self.Size[1], j + win_size + 1)
+
+        patch = self.PanoramaImage[i_start:i_end, j_start: j_end]
+
+        return ksize, current_sigma, patch

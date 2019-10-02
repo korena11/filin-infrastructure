@@ -175,12 +175,72 @@
 <p>Write PointSet Data to different types of file: .pts(TODO), .xyz(TODO), shapeFile</p>
 <blockquote>
 <div><p class="rubric">Methods</p>
-<table class="longtable docutils align-center">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.GetCurvatureFilePath" title="IOFactory.IOFactory.GetCurvatureFilePath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetCurvatureFilePath</span></code></a>(folderPath,&nbsp;dataName,&nbsp;…)</td>
+<td>Gets the curvature files according to path</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadHDF" title="IOFactory.IOFactory.ReadHDF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadHDF</span></code></a>(f,&nbsp;classname,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadLAS" title="IOFactory.IOFactory.ReadLAS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadLAS</span></code></a>(fileName[,&nbsp;classification_flag])</td>
+<td>Reads LAS or LAZ file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadPickle" title="IOFactory.IOFactory.ReadPickle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadPickle</span></code></a>(fileobj,&nbsp;classname)</td>
+<td>Reads any pickle and assigns it according to given class.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadPly" title="IOFactory.IOFactory.ReadPly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadPly</span></code></a>(filename[,&nbsp;returnAdditionalAttributes])</td>
+<td>Reading ply file The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and their intensity values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadPts" title="IOFactory.IOFactory.ReadPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadPts</span></code></a>(filename[,&nbsp;pointsetlist,&nbsp;…])</td>
+<td>Reading points from .pts file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadPtx" title="IOFactory.IOFactory.ReadPtx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadPtx</span></code></a>(filename[,&nbsp;pointsetlist,&nbsp;…])</td>
+<td>Reads .ptx file, created by Leica Cyclone</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadShapeFile" title="IOFactory.IOFactory.ReadShapeFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadShapeFile</span></code></a>(fileName,&nbsp;pointSetList)</td>
+<td>Importing points from shapefiles</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.ReadXYZ" title="IOFactory.IOFactory.ReadXYZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ReadXYZ</span></code></a>(fileName[,&nbsp;pointsetlist,&nbsp;merge])</td>
+<td>Reading points from .xyz file Creates one PointSet objects returned through pointSetList</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.WriteToPts" title="IOFactory.IOFactory.WriteToPts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteToPts</span></code></a>(points,&nbsp;path)</td>
+<td>Write to pts file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.WriteToShapeFile" title="IOFactory.IOFactory.WriteToShapeFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WriteToShapeFile</span></code></a>(pointSet,&nbsp;fileName[,&nbsp;colors])</td>
+<td>Exporting points to shapefile</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_IOFactory__ConvertRecodrsToPoints</span></code>(shapeRecord)</td>
+<td>Converting polyline into points</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_IOFactory__loadata_hdf5</span></code>(group,&nbsp;classname,&nbsp;…)</td>
+<td>Loads a data file (PointSet or RasterData) from an hdf5 group</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.curve2shp" title="IOFactory.IOFactory.curve2shp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curve2shp</span></code></a>(curves,&nbsp;filename)</td>
+<td>TODO: make function Turn curves to shapefiles</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.load" title="IOFactory.IOFactory.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(filename[,&nbsp;classname,&nbsp;pointsetlist,&nbsp;…])</td>
+<td>Loads an object file (json or hdf5)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.rasterFromAscFile" title="IOFactory.IOFactory.rasterFromAscFile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasterFromAscFile</span></code></a>(path[,&nbsp;projection])</td>
+<td>Reads raster from .txt or .asc files</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.rasterFromGDAL" title="IOFactory.IOFactory.rasterFromGDAL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rasterFromGDAL</span></code></a>(path)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.read2_PointSetOpen3D" title="IOFactory.IOFactory.read2_PointSetOpen3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read2_PointSetOpen3D</span></code></a>(file_path[,&nbsp;…])</td>
+<td>Reads a file into a PointSetOpen3D object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#IOFactory.IOFactory.saveDataset" title="IOFactory.IOFactory.saveDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveDataset</span></code></a>(dataset,&nbsp;filename[,&nbsp;name])</td>
+<td>Save dataset according to filename extensioin.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#IOFactory.IOFactory.saveProperty" title="IOFactory.IOFactory.saveProperty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">saveProperty</span></code></a>(property_class,&nbsp;filename[,&nbsp;…])</td>
+<td>Saves a property to hdf5 or json file</td>
+</tr>
 </tbody>
 </table>
 </div></blockquote>
@@ -188,27 +248,31 @@
 <dt id="IOFactory.IOFactory.GetCurvatureFilePath">
 <em class="property">classmethod </em><code class="descname">GetCurvatureFilePath</code><span class="sig-paren">(</span><em>folderPath</em>, <em>dataName</em>, <em>currentFileIndex</em>, <em>localNeighborhoodParameters</em>, <em>decimationRadius</em>, <em>testRun</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.GetCurvatureFilePath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.GetCurvatureFilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curvature files according to path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folderPath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Path to curvature-files folder</p></li>
-<li><p><strong>dataName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the new file</p></li>
-<li><p><strong>currentFileIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – indexing for saving (file1.txt, file2.txt, etc)</p></li>
-<li><p><strong>localNeighborhoodParameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dictionary holding the neighborhood parameters (radius and maximum number of neighbors)</p></li>
-<li><p><strong>decimationRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – minimal distance between two points for downsampling .</p></li>
-<li><p><strong>testRun</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true then only temporary files will be saved that are cleaned at each run.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folderPath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Path to curvature-files folder</li>
+<li><strong>dataName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the new file</li>
+<li><strong>currentFileIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – indexing for saving (file1.txt, file2.txt, etc)</li>
+<li><strong>localNeighborhoodParameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dictionary holding the neighborhood parameters (radius and maximum number of neighbors)</li>
+<li><strong>decimationRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – minimal distance between two points for downsampling .</li>
+<li><strong>testRun</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true then only temporary files will be saved that are cleaned at each run.</li>
 </ul>
-</dd>
-<dt class="field-even">TODO</dt>
-<dd class="field-even"><p>Elia – please provide better explanation</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>full filename and path for loading (or saving) curvature files</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">TODO:</th><td class="field-body"><p class="first">Elia – please provide better explanation</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">full filename and path for loading (or saving) curvature files</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -220,40 +284,48 @@
 <dt id="IOFactory.IOFactory.ReadLAS">
 <em class="property">classmethod </em><code class="descname">ReadLAS</code><span class="sig-paren">(</span><em>fileName</em>, <em>classification_flag=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.ReadLAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.ReadLAS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads LAS or LAZ file. Can return classification property in addition to the point cloud</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to file (LAS or LAZ)</p></li>
-<li><p><strong>classification_flag</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – a flag whether to return a classification property or not (default: False)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to file (LAS or LAZ)</li>
+<li><strong>classification_flag</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – a flag whether to return a classification property or not (default: False)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pointcloud, classification</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, ClassificationProperty</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointcloud, classification</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, ClassificationProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="IOFactory.IOFactory.ReadPickle">
 <em class="property">classmethod </em><code class="descname">ReadPickle</code><span class="sig-paren">(</span><em>fileobj</em>, <em>classname</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.ReadPickle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.ReadPickle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads any pickle and assigns it according to given class.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fileobj</strong> (<em>file</em>) – the filename</p></li>
-<li><p><strong>classname</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the class to assign the pickle to</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fileobj</strong> (<em>file</em>) – the filename</li>
+<li><strong>classname</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the class to assign the pickle to</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the object loaded from the pickle</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData">BaseData</a> or BaseProperty</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the object loaded from the pickle</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData">BaseData</a> or BaseProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -263,20 +335,24 @@
 The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and
 their intensity values. If additional attributes exist they are returned as a dictionary with the attribute
 names as the keys</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to <a href="#id1"><span class="problematic" id="id2">*</span></a>.ply file</p></li>
-<li><p><strong>returnAdditionalAttributes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Indicator whether or not return the additional attributes that exist</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to <a href="#id1"><span class="problematic" id="id2">*</span></a>.ply file</li>
+<li><strong>returnAdditionalAttributes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Indicator whether or not return the additional attributes that exist</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>PointSet object and dictionary with additional properties (optional)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple of PointSet object and a dictionary</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">PointSet object and dictionary with additional properties (optional)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple of PointSet object and a dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -284,27 +360,34 @@ names as the keys</p>
 <em class="property">classmethod </em><code class="descname">ReadPts</code><span class="sig-paren">(</span><em>filename</em>, <em>pointsetlist=None</em>, <em>colorslist=None</em>, <em>merge=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.ReadPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.ReadPts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
 otherwise).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fileName</strong> – name of .pts file</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – name of .pts file</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – placeholder for created PointSet objects</p></li>
-<li><p><strong>colorslist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – placeholder for ColorProperty for PointSet object(s)</p></li>
-<li><p><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – merge points in file into one PointSet or not. Default: True.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – placeholder for created PointSet objects</li>
+<li><strong>colorslist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – placeholder for ColorProperty for PointSet object(s)</li>
+<li><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – merge points in file into one PointSet or not. Default: True.</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The created PointSet or the list of the PointSets created and the ColorProperty that belongs to it</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The created PointSet or the list of the PointSets created and the ColorProperty that belongs to it</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -313,30 +396,37 @@ otherwise).</p>
 <dd><p>Reads .ptx file, created by Leica Cyclone</p>
 <p>File is built according to:
 <a class="reference external" href="https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2">https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2</a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – path to file + file</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – path to file + file</td>
+</tr>
+</tbody>
+</table>
 <p><em>Optionals</em></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the uploaded PointSet</p></li>
-<li><p><strong>colorslist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the color properties that relate to the PointSet</p></li>
-<li><p><strong>transformationMatrices</strong> – list that holds all the transformation properties that relate to the PointSet</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the uploaded PointSet</li>
+<li><strong>colorslist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the color properties that relate to the PointSet</li>
+<li><strong>transformationMatrices</strong> – list that holds all the transformation properties that relate to the PointSet</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pointSet list</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointSet list</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Doesn’t read the transformation matrices.</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Doesn’t read the transformation matrices.</p>
 </div>
 </dd></dl>
 
@@ -344,14 +434,18 @@ otherwise).</p>
 <dt id="IOFactory.IOFactory.ReadShapeFile">
 <em class="property">classmethod </em><code class="descname">ReadShapeFile</code><span class="sig-paren">(</span><em>fileName</em>, <em>pointSetList</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.ReadShapeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.ReadShapeFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Importing points from shapefiles</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</p></li>
-<li><p><strong>pointSetList</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet objects</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</li>
+<li><strong>pointSetList</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet objects</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -359,20 +453,24 @@ otherwise).</p>
 <em class="property">classmethod </em><code class="descname">ReadXYZ</code><span class="sig-paren">(</span><em>fileName</em>, <em>pointsetlist=None</em>, <em>merge=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.ReadXYZ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.ReadXYZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading points from .xyz file
 Creates one PointSet objects returned through pointSetList</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of .xyz file</p></li>
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet object</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of .xyz file</li>
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet object</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Number of PointSet objects created</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Number of PointSet objects created</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -380,14 +478,16 @@ Creates one PointSet objects returned through pointSetList</p>
 <em class="property">classmethod </em><code class="descname">WriteToPts</code><span class="sig-paren">(</span><em>points</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.WriteToPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.WriteToPts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write to pts file</p>
 <blockquote>
-<div><dl class="field-list simple">
-<dt class="field-odd">param points</dt>
-<dd class="field-odd"><p>PointSet</p>
-</dd>
-<dt class="field-even">param path</dt>
-<dd class="field-even"><p>to the directory of a new file + file name</p>
-</dd>
-</dl>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">PointSet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param path:</th><td class="field-body">to the directory of a new file + file name</td>
+</tr>
+</tbody>
+</table>
 </div></blockquote>
 </dd></dl>
 
@@ -395,19 +495,23 @@ Creates one PointSet objects returned through pointSetList</p>
 <dt id="IOFactory.IOFactory.WriteToShapeFile">
 <em class="property">classmethod </em><code class="descname">WriteToShapeFile</code><span class="sig-paren">(</span><em>pointSet</em>, <em>fileName</em>, <em>colors=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.WriteToShapeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.WriteToShapeFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exporting points to shapefile</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pointSet</strong> (<a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><a class="reference internal" href="Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet"><em>PointSubSet</em></a>) – A PointSetPointSubSet object with the points to be extracted</p></li>
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</p></li>
-<li><p><strong>kwargs</strong> – Additional properties can be sent using kwargs which will be added as attributes in the shapfile</p></li>
-<li><p><strong>colors</strong> (<a class="reference internal" href="Properties/Colors/Colors.html#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty"><em>ColorProperty</em></a>) – ColorProperty object with the points colors</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointSet</strong> (<a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><a class="reference internal" href="Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet"><em>PointSubSet</em></a>) – A PointSetPointSubSet object with the points to be extracted</li>
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</li>
+<li><strong>kwargs</strong> – Additional properties can be sent using kwargs which will be added as attributes in the shapfile</li>
+<li><strong>colors</strong> (<a class="reference internal" href="Properties/Colors/Colors.html#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty"><em>ColorProperty</em></a>) – ColorProperty object with the points colors</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -415,23 +519,30 @@ Creates one PointSet objects returned through pointSetList</p>
 <em class="property">static </em><code class="descname">curve2shp</code><span class="sig-paren">(</span><em>curves</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.curve2shp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.curve2shp" title="Permalink to this definition">¶</a></dt>
 <dd><p>TODO: make function
 Turn curves to shapefiles</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>curves</strong> – curves as represented by matplotlib.plot</p></li>
-<li><p><strong>filename</strong> – file to save the curve</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>curves</strong> – curves as represented by matplotlib.plot</li>
+<li><strong>filename</strong> – file to save the curve</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Empty function.</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Empty function.</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -439,46 +550,57 @@ Turn curves to shapefiles</p>
 <em class="property">classmethod </em><code class="descname">load</code><span class="sig-paren">(</span><em>filename</em>, <em>classname=None</em>, <em>pointsetlist=None</em>, <em>colorlist=None</em>, <em>merge=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads an object file (json or hdf5)</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The option is not implemented for json</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">The option is not implemented for json</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the path</p></li>
-<li><p><strong>classname</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the property or data class that the filename stores</p></li>
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list to store pointset list if more than one cloud is in the file (applicaple for pts, ptx and shapefiles)</p></li>
-<li><p><strong>colorlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list to store colors proeprty, if colors are within the file (applicaple for pts and ptx)</p></li>
-<li><p><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to merge multiple clouds into one pointset (applicaple for pts)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the path</li>
+<li><strong>classname</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.7)"><em>type</em></a>) – the property or data class that the filename stores</li>
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list to store pointset list if more than one cloud is in the file (applicaple for pts, ptx and shapefiles)</li>
+<li><strong>colorlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list to store colors proeprty, if colors are within the file (applicaple for pts and ptx)</li>
+<li><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to merge multiple clouds into one pointset (applicaple for pts)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the property or dataset</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the property or dataset</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
 <dt id="IOFactory.IOFactory.rasterFromAscFile">
 <em class="property">classmethod </em><code class="descname">rasterFromAscFile</code><span class="sig-paren">(</span><em>path</em>, <em>projection=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.rasterFromAscFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.rasterFromAscFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads raster from .txt or .asc files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path+filename</p></li>
-<li><p><strong>projection</strong> – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path+filename</li>
+<li><strong>projection</strong> – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>a RasterData object</p>
-<dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>RasterData</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>a RasterData object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">RasterData</td>
+</tr>
+</tbody>
+</table>
 </p>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -490,30 +612,34 @@ Turn curves to shapefiles</p>
 <dt id="IOFactory.IOFactory.read2_PointSetOpen3D">
 <em class="property">classmethod </em><code class="descname">read2_PointSetOpen3D</code><span class="sig-paren">(</span><em>file_path</em>, <em>voxel_size=-1</em>, <em>print_bb=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.read2_PointSetOpen3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.read2_PointSetOpen3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a file into a PointSetOpen3D object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> – Path of pointcloud file</p></li>
-<li><p><strong>voxel_size</strong> – If &gt;0 then decimate point cloud with this parameter as min points distance</p></li>
-<li><p><strong>print_bb</strong> – Print boundarybox values</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> – Path of pointcloud file</li>
+<li><strong>voxel_size</strong> – If &gt;0 then decimate point cloud with this parameter as min points distance</li>
+<li><strong>print_bb</strong> – Print boundarybox values</li>
 </ul>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
-</dd>
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Positive double</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>pointsetExtra Object</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>PointSetExtra</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first">Positive double</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointsetExtra Object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">PointSetExtra</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -521,18 +647,22 @@ Turn curves to shapefiles</p>
 <em class="property">classmethod </em><code class="descname">saveDataset</code><span class="sig-paren">(</span><em>dataset</em>, <em>filename</em>, <em>name='dataset'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IOFactory.html#IOFactory.saveDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOFactory.IOFactory.saveDataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save dataset according to filename extensioin.</p>
 <p>The extension depends on the filename extension.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a>) – the dataset to save</p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the filename to save the dataset to</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – for h5 files, the name of the group</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a>) – the dataset to save</li>
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the filename to save the dataset to</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – for h5 files, the name of the group</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -541,21 +671,25 @@ Turn curves to shapefiles</p>
 <dd><p>Saves a property to hdf5 or json file</p>
 <p>Default: hdf5</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Json file save is unavailable</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Json file save is unavailable</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> – path or file object</p></li>
-<li><p><strong>property_class</strong> (<em>BaseProperty</em><em> or </em><em>subclasses</em>) – the property which is needed to be saved</p></li>
-<li><p><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: True</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file</strong> – path or file object</li>
+<li><strong>property_class</strong> (<em>BaseProperty</em><em> or </em><em>subclasses</em>) – the property which is needed to be saved</li>
+<li><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: True</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -567,47 +701,55 @@ Turn curves to shapefiles</p>
 <dt id="ReadFunctions.GetCurvatureFilePath">
 <code class="descclassname">ReadFunctions.</code><code class="descname">GetCurvatureFilePath</code><span class="sig-paren">(</span><em>folderPath</em>, <em>dataName</em>, <em>currentFileIndex</em>, <em>localNeighborhoodParameters</em>, <em>decimationRadius</em>, <em>testRun</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#GetCurvatureFilePath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.GetCurvatureFilePath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curvature files according to path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>folderPath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Path to curvature-files folder</p></li>
-<li><p><strong>dataName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the new file</p></li>
-<li><p><strong>currentFileIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – indexing for saving (file1.txt, file2.txt, etc)</p></li>
-<li><p><strong>localNeighborhoodParameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dictionary holding the neighborhood parameters (radius and maximum number of neighbors)</p></li>
-<li><p><strong>decimationRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – minimal distance between two points for downsampling .</p></li>
-<li><p><strong>testRun</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true then only temporary files will be saved that are cleaned at each run.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folderPath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Path to curvature-files folder</li>
+<li><strong>dataName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the new file</li>
+<li><strong>currentFileIndex</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – indexing for saving (file1.txt, file2.txt, etc)</li>
+<li><strong>localNeighborhoodParameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – dictionary holding the neighborhood parameters (radius and maximum number of neighbors)</li>
+<li><strong>decimationRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – minimal distance between two points for downsampling .</li>
+<li><strong>testRun</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – If true then only temporary files will be saved that are cleaned at each run.</li>
 </ul>
-</dd>
-<dt class="field-even">TODO</dt>
-<dd class="field-even"><p>Elia – please provide better explanation</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>full filename and path for loading (or saving) curvature files</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">TODO:</th><td class="field-body"><p class="first">Elia – please provide better explanation</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">full filename and path for loading (or saving) curvature files</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="ReadFunctions.ReadLAS">
 <code class="descclassname">ReadFunctions.</code><code class="descname">ReadLAS</code><span class="sig-paren">(</span><em>filename</em>, <em>classification=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#ReadLAS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.ReadLAS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads LAS or LAZ files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to LAS or LAZ</p></li>
-<li><p><strong>classification</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – return a SegmentationProperty according to the LAS file or not (default: False)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to LAS or LAZ</li>
+<li><strong>classification</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – return a SegmentationProperty according to the LAS file or not (default: False)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pointcloud, (classification as received from LAS file)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointcloud, (classification as received from LAS file)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -617,20 +759,24 @@ Turn curves to shapefiles</p>
 The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and
 their intensity values. If additional attributes exist they are returned as a dictionary with the attribute names
 as the keys</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to <a href="#id3"><span class="problematic" id="id4">*</span></a>.ply file</p></li>
-<li><p><strong>returnAdditionalAttributes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Indicator whether or not return the additional attributes that exist in the file</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path to <a href="#id3"><span class="problematic" id="id4">*</span></a>.ply file</li>
+<li><strong>returnAdditionalAttributes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Indicator whether or not return the additional attributes that exist in the file</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>PointSet object and a dictionary with additional properties (optional)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>tuple of a PointSet object and a dictionary</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">PointSet object and a dictionary with additional properties (optional)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple of a PointSet object and a dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -638,25 +784,29 @@ as the keys</p>
 <code class="descclassname">ReadFunctions.</code><code class="descname">ReadPts</code><span class="sig-paren">(</span><em>filename</em>, <em>pointsetlist=None</em>, <em>colorslist=None</em>, <em>merge=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#ReadPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.ReadPts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading points from .pts file. If the pts file holds more than one PointSet merge into one PointSet (unless told
 otherwise).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>fileName</strong> – name of .pts file</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fileName</strong> – name of .pts file</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong>
 :param pointsetlist: placeholder for created PointSet objects
 :param colorslist: placeholder for ColorProperty for PointSet object(s)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – merge points in file into one PointSet or not. Default: True.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The created PointSet or the list of the PointSets</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>merge</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – merge points in file into one PointSet or not. Default: True.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The created PointSet or the list of the PointSets</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -665,31 +815,38 @@ otherwise).</p>
 <dd><p>Reads .ptx file, created by Leica Cyclone</p>
 <p>File is build according to:
 <a class="reference external" href="https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2">https://w3.leica-geosystems.com/kb/?guid=5532D590-114C-43CD-A55F-FE79E5937CB2</a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> – path to file + file</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – path to file + file</td>
+</tr>
+</tbody>
+</table>
 <p><em>Optionals</em></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the uploaded PointSet</p></li>
-<li><p><strong>colorslist</strong> (<em>list of ColorProperty</em>) – list that holds all the color properties that relate to the PointSet</p></li>
-<li><p><strong>transformationMatrices</strong> – list that holds all the transformation properties that relate to the PointSet</p></li>
-<li><p><strong>removeEmpty</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to remove or leave empty points. Default: True</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list that holds all the uploaded PointSet</li>
+<li><strong>colorslist</strong> (<em>list of ColorProperty</em>) – list that holds all the color properties that relate to the PointSet</li>
+<li><strong>transformationMatrices</strong> – list that holds all the transformation properties that relate to the PointSet</li>
+<li><strong>removeEmpty</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to remove or leave empty points. Default: True</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pointSet list</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointSet list</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Doesn’t read the transformation matrices.</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Doesn’t read the transformation matrices.</p>
 </div>
 </dd></dl>
 
@@ -698,20 +855,24 @@ otherwise).</p>
 <code class="descclassname">ReadFunctions.</code><code class="descname">ReadXYZ</code><span class="sig-paren">(</span><em>fileName</em>, <em>pointsetlist=[]</em>, <em>merge=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#ReadXYZ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.ReadXYZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reading points from .xyz file
 Creates one PointSet objects returned through pointSetList</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of .xyz file</p></li>
-<li><p><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet object</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of .xyz file</li>
+<li><strong>pointsetlist</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – place holder for created PointSet object</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Number of PointSet objects created</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Number of PointSet objects created</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -719,70 +880,85 @@ Creates one PointSet objects returned through pointSetList</p>
 <code class="descclassname">ReadFunctions.</code><code class="descname">loadPickle_dataset</code><span class="sig-paren">(</span><em>filename</em>, <em>type=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#loadPickle_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.loadPickle_dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a pickle file of a dataset.</p>
 <p>The user can specify which type of data it is .</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – file and path to file</p></li>
-<li><p><strong>type</strong> (<em>class</em>) – the type of class (BallTreePointSet, PointSet, PointSubSet, etc.)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – file and path to file</li>
+<li><strong>type</strong> (<em>class</em>) – the type of class (BallTreePointSet, PointSet, PointSubSet, etc.)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>BaseData</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">BaseData</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="ReadFunctions.rasterFromAscFile">
 <code class="descclassname">ReadFunctions.</code><code class="descname">rasterFromAscFile</code><span class="sig-paren">(</span><em>path</em>, <em>projection=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#rasterFromAscFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.rasterFromAscFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads raster from .txt or .asc files</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path+filename</p></li>
-<li><p><strong>projection</strong> – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – path+filename</li>
+<li><strong>projection</strong> – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p>a RasterData object</p>
-<dl class="field-list simple">
-<dt class="field-odd">rtype</dt>
-<dd class="field-odd"><p>RasterData</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>a RasterData object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">rtype:</th><td class="field-body">RasterData</td>
+</tr>
+</tbody>
+</table>
 </p>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="ReadFunctions.read2_PointSetOpen3D">
 <code class="descclassname">ReadFunctions.</code><code class="descname">read2_PointSetOpen3D</code><span class="sig-paren">(</span><em>file_path</em>, <em>voxel_size=-1</em>, <em>print_bb=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ReadFunctions.html#read2_PointSetOpen3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ReadFunctions.read2_PointSetOpen3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads a file into a PointSetOpen3D object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> – Path of pointcloud file</p></li>
-<li><p><strong>voxel_size</strong> – If &gt;0 then decimate point cloud with this parameter as min points distance</p></li>
-<li><p><strong>print_bb</strong> – Print boundarybox values</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>file_path</strong> – Path of pointcloud file</li>
+<li><strong>voxel_size</strong> – If &gt;0 then decimate point cloud with this parameter as min points distance</li>
+<li><strong>print_bb</strong> – Print boundarybox values</li>
 </ul>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
-</dd>
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>Positive double</p>
-</dd>
-<dt class="field-even">Type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>pointsetExtra Object</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>PointSetExtra</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><p class="first">Positive double</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">pointsetExtra Object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">PointSetExtra</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -794,14 +970,16 @@ Creates one PointSet objects returned through pointSetList</p>
 <code class="descclassname">SaveFunctions.</code><code class="descname">WriteToPts</code><span class="sig-paren">(</span><em>points</em>, <em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SaveFunctions.html#WriteToPts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaveFunctions.WriteToPts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write to pts file</p>
 <blockquote>
-<div><dl class="field-list simple">
-<dt class="field-odd">param points</dt>
-<dd class="field-odd"><p>PointSet</p>
-</dd>
-<dt class="field-even">param path</dt>
-<dd class="field-even"><p>to the directory of a new file + file name</p>
-</dd>
-</dl>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">PointSet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param path:</th><td class="field-body">to the directory of a new file + file name</td>
+</tr>
+</tbody>
+</table>
 </div></blockquote>
 </dd></dl>
 
@@ -809,19 +987,23 @@ Creates one PointSet objects returned through pointSetList</p>
 <dt id="SaveFunctions.WriteToShapeFile">
 <code class="descclassname">SaveFunctions.</code><code class="descname">WriteToShapeFile</code><span class="sig-paren">(</span><em>pointSet</em>, <em>fileName</em>, <em>colors=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SaveFunctions.html#WriteToShapeFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaveFunctions.WriteToShapeFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exporting points to shapefile</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pointSet</strong> (<a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><a class="reference internal" href="Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet"><em>PointSubSet</em></a>) – A PointSetPointSubSet object with the points to be extracted</p></li>
-<li><p><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</p></li>
-<li><p><strong>kwargs</strong> – Additional properties can be sent using kwargs which will be added as attributes in the shapfile</p></li>
-<li><p><strong>colors</strong> (<a class="reference internal" href="Properties/Colors/Colors.html#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty"><em>ColorProperty</em></a>) – ColorProperty object with the points colors</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointSet</strong> (<a class="reference internal" href="Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><a class="reference internal" href="Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet"><em>PointSubSet</em></a>) – A PointSetPointSubSet object with the points to be extracted</li>
+<li><strong>fileName</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Full path and name of the shapefile to be created (not including the extension)</li>
+<li><strong>kwargs</strong> – Additional properties can be sent using kwargs which will be added as attributes in the shapfile</li>
+<li><strong>colors</strong> (<a class="reference internal" href="Properties/Colors/Colors.html#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty"><em>ColorProperty</em></a>) – ColorProperty object with the points colors</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -830,18 +1012,22 @@ Creates one PointSet objects returned through pointSetList</p>
 <dd><p>Save the PointSet in either json or hdf5.</p>
 <p>Default is hdf5.</p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Need to be implemented for json</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Need to be implemented for json</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a><em> or </em><em>subclass</em>) – the dataset to save</p></li>
-<li><p><strong>path_or_buf</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>h5py.File</em><em> or </em><em>file</em>) – the path (string) or file object</p></li>
-<li><p><strong>extension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – ‘h5’ or ‘p’ or ‘pickle’</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a><em> or </em><em>subclass</em>) – the dataset to save</li>
+<li><strong>path_or_buf</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>h5py.File</em><em> or </em><em>file</em>) – the path (string) or file object</li>
+<li><strong>extension</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – ‘h5’ or ‘p’ or ‘pickle’</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <p>:return the file after saving
 :rtype: file</p>
 </dd></dl>
@@ -850,55 +1036,67 @@ Creates one PointSet objects returned through pointSetList</p>
 <dt id="SaveFunctions.pickleProperty">
 <code class="descclassname">SaveFunctions.</code><code class="descname">pickleProperty</code><span class="sig-paren">(</span><em>property</em>, <em>fileobj</em>, <em>save_dataset=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SaveFunctions.html#pickleProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaveFunctions.pickleProperty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves a property to a filename</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>property</strong> (<em>BaseProperty</em>) – The property to save</p></li>
-<li><p><strong>fileobj</strong> (<em>file</em>) – The filename to which the property will be saved</p></li>
-<li><p><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>property</strong> (<em>BaseProperty</em>) – The property to save</li>
+<li><strong>fileobj</strong> (<em>file</em>) – The filename to which the property will be saved</li>
+<li><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>success of failure</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">success of failure</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Does not work for properties that hold PointSetOpen3D</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Does not work for properties that hold PointSetOpen3D</p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="SaveFunctions.save_dataset_h5">
 <code class="descclassname">SaveFunctions.</code><code class="descname">save_dataset_h5</code><span class="sig-paren">(</span><em>dataset</em>, <em>h5file</em>, <em>name='dataset'</em>, <em>save_dataset=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SaveFunctions.html#save_dataset_h5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaveFunctions.save_dataset_h5" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a>) – dataset to save</p></li>
-<li><p><strong>h5file</strong> (<em>h5py.File</em>) – file object of hdf5</p></li>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the group for the dataset (default: ‘dataset’)</p></li>
-<li><p><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</p></li>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dataset</strong> (<a class="reference internal" href="Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData"><em>BaseData</em></a>) – dataset to save</li>
+<li><strong>h5file</strong> (<em>h5py.File</em>) – file object of hdf5</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – name of the group for the dataset (default: ‘dataset’)</li>
+<li><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SaveFunctions.save_property_h5">
 <code class="descclassname">SaveFunctions.</code><code class="descname">save_property_h5</code><span class="sig-paren">(</span><em>property</em>, <em>h5file</em>, <em>save_dataset=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SaveFunctions.html#save_property_h5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaveFunctions.save_property_h5" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save property to hdf5</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>property</strong> (<em>BaseProperty</em>) – the proeprty to save</p></li>
-<li><p><strong>h5file</strong> (<em>h5py.file</em>) – file object of hdf5</p></li>
-<li><p><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>property</strong> (<em>BaseProperty</em>) – the proeprty to save</li>
+<li><strong>h5file</strong> (<em>h5py.file</em>) – file object of hdf5</li>
+<li><strong>save_dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag whether to save the dataset that the property relates to or not. Default: False</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

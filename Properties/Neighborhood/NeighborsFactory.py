@@ -688,11 +688,11 @@ class NeighborsFactory:
         wind = Path([(az_min, el_max), (az_max, el_max), (az_max, el_min), (az_min, el_min)])
         wind.iter_segments()
         pntInCell = wind.contains_points(
-            hstack((expand_dims(points.Azimuths, 1), expand_dims(points.ElevationAngles, 1))))
+            hstack((expand_dims(points.azimuths, 1), expand_dims(points.ElevationAngles, 1))))
 
         indices = nonzero(pntInCell)
-        i1 = where(points.Ranges[indices[0]] >= pnt[2] - 0.10)
-        i2 = where(points.Ranges[indices[0][i1[0]]] <= pnt[2] + 0.10)
+        i1 = where(points.ranges[indices[0]] >= pnt[2] - 0.10)
+        i2 = where(points.ranges[indices[0][i1[0]]] <= pnt[2] + 0.10)
         neighbors = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(
             PointSubSet(points.XYZ, indices[0][i1[0][i2[0]]]))
         return neighbors

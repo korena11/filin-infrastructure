@@ -56,17 +56,17 @@ class SphericalCoordinatesProperty(BaseProperty):
         return self.Points.ToNumpy()
 
     @property
-    def Azimuths(self):
+    def azimuths(self):
         
         return self.__azimuthElevationRange[:, 0]
     
     @property
-    def ElevationAngles(self):
+    def elevations(self):
         
         return self.__azimuthElevationRange[:, 1]
     
     @property
-    def Ranges(self):
+    def ranges(self):
         
         return self.__azimuthElevationRange[:, 2]
     
