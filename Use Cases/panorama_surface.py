@@ -1,14 +1,40 @@
 import numpy as np
-import Properties.Panoramas.PanoramaUtils as pu
 import open3d as o3d
+from matplotlib import pyplot as plt
+
 from DataClasses.PointSet import PointSet
 from DataClasses.PointSetOpen3D import PointSetOpen3D
-from Properties.Panoramas.PanoramaFactory import PanoramaFactory, PanoramaProperty
+from Properties.Panoramas.PanoramaFactory import PanoramaFactory
 from Utils import MyTools as mt
-
-from IOmodules.IOFactory import IOFactory
 from VisualizationClasses.VisualizationO3D import VisualizationO3D
-from matplotlib import pyplot as plt
+
+
+def create_scanned_floor(radius, az_res, elev_res):
+    """
+    Create a floor that was scanned
+
+    :param az_res: the azimuth scanning resolution (degrees). default 1 deg
+    :param elev_res: the elevation scanning resolution (degrees). default 1 deg
+
+
+    :return:  the point cloud of a floor
+    """
+
+    theta = np.arange(0, np.pi / 4, np.deg2rad(az_res))
+    phi = np.arange(0, np.pi / 2, np.deg2rad(elev_res))
+
+    tt, pp = np.meshgrid(theta, phi)
+
+    # radius = radius_function(tt, pp)
+
+    x = (radius * np.cos(pp) * np.cos(tt)).flatten()
+    y = (radius * np.cos(pp) * np.sin(tt)).flatten()
+    z = np.ones(x.shape)
+
+    xyz = np.array([x, y, z])
+    return PointSet(xyz.T)
+
+
 
 def create_scanned_sphere(radius=1, az_res=1, elev_res=1):
     """
@@ -54,15 +80,16 @@ def radius_function(theta, phi):
 
 if __name__ == '__main__':
 
-
-    az_res = 1
-    elev_res =  1
-    pts = create_scanned_sphere(1, az_res, elev_res)
-    # pts = IOFactory.ReadPts('../test_data/bulbus_100k.pts',merge=True)
+    az_res = 0.15
+    elev_res =  .15
+    pts = create_scanned_floor(1, az_res, elev_res)
+    az_res += 0.001
+    elev_res += 0.001
+    # pts = IOFactory.ReadPts(r'D:\OwnCloud\Data\PCLs\agri_floor2.pts',merge=True)
     vis1 = VisualizationO3D()
     vis1.visualize_pointset(pts)
 
-    panorama = PanoramaFactory.CreatePanorama_byPoints(pts, azimuthSpacing=az_res+0.001, elevationSpacing=elev_res+0.001, voidData=25)
+    panorama = PanoramaFactory.CreatePanorama_byPoints(pts, azimuthSpacing=az_res, elevationSpacing=elev_res, voidData=250)
 
     plt.imshow(panorama.PanoramaImage)
     plt.show()
@@ -70,8 +97,6 @@ if __name__ == '__main__':
     # pano, mean_sigma, mean_kernel = pu.adaptive_smoothing(panorama, .1)
     # print('mean sigma {} mean kernel {}'.format(mean_sigma, mean_kernel))
     r_t, r_p, r_tt, r_pp, r_tp = mt.computeImageDerivatives_numeric(pano, 2, resolution=az_res, ksize=15, sigma=0)
-
-
 
     r_t = r_t[panorama.row_indexes, panorama.column_indexes]
     r_p = r_p[panorama.row_indexes, panorama.column_indexes]
@@ -88,9 +113,9 @@ if __name__ == '__main__':
 
     r = panorama.sphericalCoordinates.ranges
     # define the surface
-    s_theta = np.vstack((r_t * cos_phi * cos_theta - r * cos_phi * sin_theta,
-                        r_t * cos_phi * sin_theta + r * cos_phi * cos_theta,
-                        r_t * sin_phi))
+    s_theta = np.vstack((- r * cos_phi * sin_theta,
+                         r * cos_phi * cos_theta,
+                        np.zeros(r.shape)))
     s_phi= np.vstack((r_p * cos_phi * cos_theta - r * sin_phi * cos_theta,
                       r_p * cos_phi * sin_theta - r * sin_phi * sin_theta,
                       r_p * sin_phi + r * cos_phi))
@@ -99,8 +124,11 @@ if __name__ == '__main__':
     sp_sp = np.einsum('ji,ji->i', s_phi, s_phi)
     st_sp = np.einsum('ji,ji->i', s_theta, s_phi)
 
-    normals = np.cross(s_phi, s_theta, axis=0).T
+    normals = np.cross(s_theta, s_phi, axis=0).T
     normals /= np.linalg.norm(normals, axis=1)[:, np.newaxis]
+
+    from Properties.Normals.NormalsFactory import NormalsFactory
+    normals_pano_reem = NormalsFactory.normals_panorama_xyz(panorama, ksize=15, resolution=az_res)
 
     pts_o3d = PointSetOpen3D(pts)
     pts_o3d_1 = PointSetOpen3D(pts)

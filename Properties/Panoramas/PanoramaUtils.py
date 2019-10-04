@@ -1,5 +1,7 @@
 import numpy as np
 
+
+
 def adaptive_smoothing(panorama, phenomena_size, **kwargs):
     r"""
     Adaptive smoothing of range image according to another (self) panorama image

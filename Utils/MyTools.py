@@ -254,27 +254,26 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
     # Derivatives (eq. 3-37)
 
     # x direction
-    I1 = np.hstack((img[: , floord: ], img[:, - floord : ]))
+    I1 = np.hstack((img[: , floord: ], img[:, - floord:]))
     I2 = np.hstack((img[:, : floord], img[:, : - floord]))
     Zx = (I1 - I2) / (2 * params['resolution'] * ksize)
 
     # y direction
-    I3 = np.vstack((img[floord: , :], img[- floord : ,:]))
-    I4 = np.vstack((img[: floord, :], img[: - floord, : ]))
+    I3 = np.vstack((img[floord: , :], img[-floord:, :]))
+    I4 = np.vstack((img[: floord, :], img[: -floord, :]))
     Zy = (I3 - I4) / (2 * params['resolution'] * ksize)
 
     # second order derivatives
-    if order ==2:
+    if order == 2:
         I5a = np.hstack((img[: - floord, : floord], img[: - floord, : - floord]))
-        I5 = np.vstack((I5a[: floord, : ], I5a))
-        I6a = np.hstack((img[floord: , floord: ], img[floord: ,  - floord : ]))
-        I6 = np.vstack((I6a, I6a[- floord: , : ]))
+        I5 = np.vstack((I5a[: floord, :], I5a))
+        I6a = np.hstack((img[floord:, floord:], img[floord:, - floord:]))
+        I6 = np.vstack((I6a, I6a[- floord:, :]))
 
-
-        I7a = np.hstack((img[floord: , : floord], img[ floord: , :  - floord]))
-        I7 = np.vstack((I7a, I7a[- floord : , : ]))
-        I8a = np.hstack((img[floord : , floord :], img[floord : ,  - floord :]))
-        I8 = np.vstack((I8a,  I8a[ - floord : , : ]))
+        I7a = np.hstack((img[floord:, : floord], img[floord:, :-floord]))
+        I7 = np.vstack((I7a, I7a[- floord:, :]))
+        I8a = np.hstack((img[floord:, floord:], img[floord:, - floord:]))
+        I8 = np.vstack((I8a, I8a[- floord:, :]))
 
         Zxx = (-2 * img + I1 + I2) / (ksize * params['resolution']) ** 2
         Zyy = (-2 * img + I3 + I4) / (ksize * params['resolution']) ** 2
