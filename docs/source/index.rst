@@ -55,6 +55,8 @@ This project is implemented for Python 3.6. ** Always prefer installing through 
    Installation via `pip install pyspark`
 -  `tqdm <https://tqdm.github.io/>`_
    Installation via `pip install tqdm`
+-  `richdem <https://richdem.readthedocs.io/en/latest/>`_
+   Installation via `pip install richdem`
 
 
 

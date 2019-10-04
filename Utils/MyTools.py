@@ -163,11 +163,11 @@ def curveCentralDerivatives(c, repartition = 5):
 
 def computeImageDerivatives(img, order, **kwargs):
     """
-        Computes image derivatives up to order 2. Normalizes the derivatives.
+        Computes image derivatives up to order 2.
 
         :param img: the image to which the derivatives should be computed
         :param order: order needed (1 or 2)
-        :param ksize: filter kernel size (3,and up)
+        :param ksize: filter kernel size (1, 3, 5, or 7)
         :param resolution: kernel resolution
         :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
         :param window: tuple of window size for blurring
@@ -219,6 +219,70 @@ def computeImageDerivatives(img, order, **kwargs):
     else:
         return img_x, img_y
 
+def computeImageDerivatives_numeric(img, order, **kwargs):
+    """
+        Computes numeric image derivatives up to order 2.
+
+        :param img: the image to which the derivatives should be computed
+        :param order: order needed (1 or 2)
+        :param ksize: size of the differentiation window
+        :param resolution: kernel resolution
+        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
+        :param blur_window: tuple of window size for blurring
+
+
+        :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)
+
+        .. note::
+            Eq. numbers from Amit Baruch Dissertation
+    """
+    params = {'ksize': 3,
+              'resolution': 1,
+              'sigma': 1.,
+              'blur_window': (0, 0)}
+    params.update(kwargs)
+    ksize = np.int(params['ksize'])
+
+    img = np.float64(img)
+
+    # if blurring is required before differentiation
+    if params['sigma'] != 0:
+        img = cv2.GaussianBlur(img, params['window'], params['sigma'])
+
+    floord = np.int(ksize)
+
+    # Derivatives (eq. 3-37)
+
+    # x direction
+    I1 = np.hstack((img[: , floord: ], img[:, - floord : ]))
+    I2 = np.hstack((img[:, : floord], img[:, : - floord]))
+    Zx = (I1 - I2) / (2 * params['resolution'] * ksize)
+
+    # y direction
+    I3 = np.vstack((img[floord: , :], img[- floord : ,:]))
+    I4 = np.vstack((img[: floord, :], img[: - floord, : ]))
+    Zy = (I3 - I4) / (2 * params['resolution'] * ksize)
+
+    # second order derivatives
+    if order ==2:
+        I5a = np.hstack((img[: - floord, : floord], img[: - floord, : - floord]))
+        I5 = np.vstack((I5a[: floord, : ], I5a))
+        I6a = np.hstack((img[floord: , floord: ], img[floord: ,  - floord : ]))
+        I6 = np.vstack((I6a, I6a[- floord: , : ]))
+
+
+        I7a = np.hstack((img[floord: , : floord], img[ floord: , :  - floord]))
+        I7 = np.vstack((I7a, I7a[- floord : , : ]))
+        I8a = np.hstack((img[floord : , floord :], img[floord : ,  - floord :]))
+        I8 = np.vstack((I8a,  I8a[ - floord : , : ]))
+
+        Zxx = (-2 * img + I1 + I2) / (ksize * params['resolution']) ** 2
+        Zyy = (-2 * img + I3 + I4) / (ksize * params['resolution']) ** 2
+        Zxy = (I7 + I6 - I5 - I8) / (2 * ksize * params['resolution']) ** 2
+
+        return Zx, Zy, Zxx, Zyy, Zxy
+
+    return Zx, Zy
 
 
 def DoG_filter(image, **kwargs):
