@@ -198,13 +198,25 @@ class NormalsFactory:
         eigval, eigvec = np.linalg.eig(y.T.dot(y))
         return eigvec[:, np.argmin(eigval)]
 
-    @staticmethod
-    def normalsComputation_in_raster(x, y, z):
-        r"""
-        Computes the normal vectors according where each ordinate is ordered at its place as an ndarray (mxn)
-        Usually used for computing normals in panorama images or other rasters.
 
-        According to :cite:`Zeibak2008`, the normals are computed as
+    @classmethod
+    def normals_panorama_xyz(cls, panorama, ksize=3, resolution=1, sigma=0,**kwargs):
+        r"""
+        Compute normals in panorama, after adaptive smoothing according to :cite:`Arav2013` and  :cite:`Zeibak2008`.
+
+        :param panorama: the panorama via which the normals are computed
+        :param ksize: filter kernel size (1, 3, 5, or 7). Default: 3
+        :param resolution: kernel resolution. Default: 1
+        :param sigma: sigma for gaussian blurring. Default: 0. If sigma=0 no smoothing is carried out
+
+        :type panorama: Properties.Panoramas.PanoramaProperty.PanoramaProperty
+
+        :return: normals a holding  :math:`n\times m \times 3` ndarray of the normals in each direction (Nx, Ny, Nz)
+
+        :rtype: np.ndarray [:math:`n\times m \times 3`]
+
+
+        the normals are computed as
 
         .. math::
             \vec{v}_1 = \begin{bmatrix} dX_1\\ dY_1 \\dZ_1 \end{bmatrix} ; \qquad
@@ -213,22 +225,31 @@ class NormalsFactory:
         with :math:`dX_i` etc. the differentiation in each direction. Then,
 
         .. math::
-
             \vec{N} = \frac{\vec{v}_1\times \vec{v}_2}{||\vec{v}_1\times \vec{v}_2||}
 
-        :param x: x ordinates as organized in the raster
-        :param y: y ordinates as organized in the raster
-        :param z: z ordinates as organized in the raster
-
-        :return: normals matrices for each direction
-
-        :rtype: np.ndarray [:math:`n\times m \times 3`]
+        .. warning::
+           Implemented for gaussian filtering and adaptive filters. Other adaptations might be
+           needed when using different methods for smoothing.
 
         """
+        import MyTools as mt
+
+        img = panorama.PanoramaImage
+
+        xi, yi = panorama.pano2rad()
+
+        # Computing Normal vectors
+        #---------------------------
+
+        # finding the ray direction (Zeibak Thesis: eq. 20, p. 58)
+        x = img * np.cos(yi) * np.cos(xi)
+        y = img * np.cos(yi) * np.sin(xi)
+        z = img * np.sin(yi)
+
         # Local derivatives (according to Zeibak p. 56)
-        dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order=1)
-        dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order=1)
-        dfz_daz, dfz_delevation = mt.computeImageDerivatives(z, order=1)
+        dfx_daz, dfx_delevation = mt.computeImageDerivatives(x, order=1, ksize=ksize, resolution=resolution, sigma=sigma)
+        dfy_daz, dfy_delevation = mt.computeImageDerivatives(y, order=1, ksize=ksize, resolution=resolution, sigma=sigma)
+        dfz_daz, dfz_delevation = mt.computeImageDerivatives(z, order=1, ksize=ksize, resolution=resolution, sigma=sigma)
 
         v1 = np.zeros((x.shape[0], x.shape[1], 3))
         v2 = np.zeros((x.shape[0], x.shape[1], 3))

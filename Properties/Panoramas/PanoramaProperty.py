@@ -252,74 +252,8 @@ class PanoramaProperty(BaseProperty):
         ind = np.intersect1d(row_ind, col_ind)
         return PointSubSet(self.Points, ind)
 
-    def normals(self, phenomenaSize=0.2, ksize=(5, 5), gradientType='L1', **kwargs):
-        r"""
-        Computing gradients and normals in each direction, via adaptive smoothing according to :cite:`Arav2013`
 
-        :param phenomenaSize: phenomena size for adaptive smoothing (default: 0.12 m)
-        :param ksize: kernel size for gradient computation (default: (5,5))
-        :param gradientType: 'L1' L1 norm of grad(I); 'L2' L2-norm of grad(I); 'LoG' Laplacian of gaussian (default: 'L1')
 
-        **Optionals**
-
-        :param rangeThresh: scanner's maximum range
-        :param smoothing_function: if other smoothing than adaptive is required (e.g. 'guassianBlur'))
-
-        :type ksize: tuple of int
-        :type gradientType: str
-        :type rangeThresh: float
-        :type phenomenaSize: float
-
-        :return:
-            - normals: a holding  :math:`n\times m \times 3` ndarray of the normals in each direction (Nx, Ny, Nz)
-            - gradient: gradient in each pixel
-            - filtered: range image after adaptive smoothing
-            - xyz: points' list after smoothing, from range image
-
-        :rtype: tuple
-
-        .. warning::
-
-           Implemented for gaussian filtering and adaptive filters. Other adaptations might be
-           needed when using different methods for smoothing.
-
-        .. seealso:: method :py:meth:`NormalsFactory.NormalsFactory.normalsComputation_in_raster`
-        """
-        smoothed_flag = False  # flag to check if the image was smoothed already
-        filtered = 0
-
-        xi, yi = np.meshgrid(range(self.PanoramaImage.shape[1]), range(self.PanoramaImage.shape[0]))
-        xi = np.radians(xi * self.azimuth_spacing)
-        yi = np.pi / 2 - np.radians(yi * self.elevation_spacing)
-
-        # Smoothing the range image using adaptive smoothing
-        sigma = kwargs.get('sigma', 0)
-
-        if 'smoothing_function' in kwargs:
-            if kwargs['smoothin_function'] == 'gaussianBlur':
-                filtered = cv2.GaussianBlur(self.PanoramaImage, ksize, sigma)
-                smoothed_flag = True
-            elif kwargs['smoothing_function'] == None:
-                filtered = self.PanoramaImage
-                smoothed_flag = True
-        if smoothed_flag is False:
-            filtered, sigma, ksize = self.adaptive_smoothing(self.PanoramaImage, phenomenaSize)
-
-        # Computing gradient map in the scan after lowpass filter
-        import MyTools as mt
-        gradient = mt.computeImageGradient(filtered, ksize=ksize, sigma=sigma, gradientType=gradientType)
-
-        # Computing Normal vectors
-        # finding the ray direction (Zeibak Thesis: eq. 20, p. 58)
-        x = filtered * np.cos(yi) * np.cos(xi)
-        y = filtered * np.cos(yi) * np.sin(xi)
-        z = filtered * np.sin(yi)
-
-        xyz = PointSet(np.vstack([x.flatten(), y.flatten(), z.flatten()]).T)
-
-        n = NormalsFactory.normalsComputation_in_raster(x, y, z)
-
-        return n, gradient, xyz, filtered
 
     @property
     def Size(self):
@@ -329,141 +263,19 @@ class PanoramaProperty(BaseProperty):
         """
         return self.PanoramaImage.shape
 
-    def adaptive_smoothing(self, panoramaImage, phenomena_size, **kwargs):
-        r"""
-        Adaptive smoothing of range image according to another (self) panorama image
 
-        .. note::
-           The function is implemented similar to other smoothing functions (e.g., `cv2.GaussianBlur`; `cv2.Blur`), so
-           different kinds of smoothing functions will be applicable by sending (without `if`).
-           This means that the function will return computed `sigma` and `ksize` according to
-           the average - and they will be returned in the variable.
+    def pano2rad(self):
+        """
+        Converts the axes of the panorama to their value as degree (radians)
 
-         An adaptive smoothing is implemented as a family of convolution kernels characterized by
-         different :math:`\sigma` values where:
-
-        .. math::
-             d(\rho )=\frac{D}{\rho \Delta }
-
-        with :math: `D`, the object-space size of the window, and :math: `\Delta` the angular sampling resolution
-        and :math: `\rho` is the measured range.
-
-        :cite:`Arav2013`
-
-        .. todo::
-           Add optionality for adaptive smoothing for other properties panoramas, where adaptation is according to
-           range information
-
-        :param phenomena_size: the minimal size of the phenomena that we don't want to smooth (:math: `D` above)
-         default: 0.2 m
-
-        :param panoramaImage: the image to smooth
-
-        :return:
-           - smoothed image
-           - mean sigma size
-           - mean kernel size
+        :return: azimuth and elevation angles of the panorama
 
         :rtype: tuple
-
-        """
-        if phenomena_size == 0:
-            phenomena_size = 0.2  # in meters
-        filtered_image = np.zeros(self.Size)
-        sigmas = []
-        ksizes = []
-        scan_resolution = np.mean([self.azimuth_spacing, self.elevation_spacing])
-        for i in range(self.Size[0]):
-            for j in range(self.Size[1]):
-                rho = self.PanoramaImage[i, j]
-                if rho == self.void_data:
-                    filtered_image[i, j] = self.void_data
-                    continue
-                elif np.isnan(rho):
-                    filtered_image[i, j] = np.nan
-                    continue
-                else:
-                    # Create the filter and define the window size according to the changing resolution (sigma)
-                    # current_sigma = 2.5 * phenomena_size / (rho * scan_resolution)
-                    #
-                    #
-                    # ksize = np.ceil(2 * current_sigma + 1).astype(int)
-                    # if ksize % 2 == 0:
-                    #     ksize += 1
-                    ksize, current_sigma, patch = self.__create_patch_adaptive(i,j,phenomena_size,scan_resolution)
-
-                    ksizes.append(ksize)
-                    sigmas.append(current_sigma)
-
-                    gauss_kernel = cv2.getGaussianKernel(ksize, current_sigma)
-                    gauss_kernel = gauss_kernel.dot(gauss_kernel.T)
-
-                    # Define the window
-                    win_size = (ksize / 2).astype(int)
-                    i_start = max(0, i - win_size)
-                    i_start_win = max(0, win_size - i - i_start)
-                    i_end = min(self.Size[0], i + win_size + 1)
-                    i_end_win = min(gauss_kernel.shape[0], gauss_kernel.shape[0] - ((i + win_size) - i_end))
-
-                    j_start = max(0, j - win_size)
-                    j_start_win = max(0, win_size - j - j_start)
-                    j_end = min(self.Size[1], j + win_size + 1)
-                    j_end_win = min(gauss_kernel.shape[1], gauss_kernel.shape[1] - ((j + win_size) - j_end))
-
-                    # patch = panoramaImage[i_start:i_end, j_start: j_end]
-                    gauss_win = gauss_kernel[i_start_win:i_end_win, j_start_win: j_end_win]
-
-                    non_nan = np.where(patch != self.void_data)
-                    filtered_image[i, j] = sum(patch[non_nan] * gauss_win[non_nan]) / sum(gauss_win[non_nan])
-
-        sigma = np.mean(sigmas)
-        ksize = np.mean(ksizes)
-        return filtered_image, sigma, ksize
-
-    # def panorama_derivatives_adaptive_numeric(self, phenomena_size, order=1):
-    #     """
-    #     Compute numerical derivatives on the panorama, using adaptive kernel
-    #
-    #     :param phenomena_size: the minimal size of the phenomena that we don't want to smooth (:math: `D` above).  Default 0.2 meters
-    #     :param order: order of differentiation (1 or 2)
-    #     :return:
-    #     """
-    #
-    #     if phenomena_size == 0:
-    #         phenomena_size = 0.2  # in meters
-    #
-    #     for i in range(self.Size[0]):
-    #         for j in range(self.Size[0]):
-
-
-
-    def __create_patch_adaptive(self, i,j, phenomena_size, scan_resolution):
-        """
-        Create the patch window according to range and scan resolution
-        :param scan_resolution:
-        :param i: row start index
-        :param j: column start index
-
-        :return:
         """
 
-        rho = self.PanoramaImage[i, j]
+        xi, yi = np.meshgrid(range(self.PanoramaImage.shape[1]), range(self.PanoramaImage.shape[0]))
+        xi = np.radians(xi * self.azimuth_spacing)
+        yi = np.pi / 2 - np.radians(yi * self.elevation_spacing)
 
-        # Create the filter and define the window size according to the changing resolution (sigma)
-        current_sigma = 2.5 * phenomena_size / (rho * scan_resolution)
+        return xi, yi
 
-        ksize = np.ceil(2 * current_sigma + 1).astype(int)
-        if ksize % 2 == 0:
-            ksize += 1
-
-        # Define the window
-        win_size = (ksize / 2).astype(int)
-        i_start = max(0, i - win_size)
-        i_end = min(self.Size[0], i + win_size + 1)
-
-        j_start = max(0, j - win_size)
-        j_end = min(self.Size[1], j + win_size + 1)
-
-        patch = self.PanoramaImage[i_start:i_end, j_start: j_end]
-
-        return ksize, current_sigma, patch
