@@ -36,7 +36,7 @@ def create_scanned_floor(radius, az_res, elev_res):
 
 
 
-def create_scanned_sphere(radius=1, az_res=1, elev_res=1):
+def create_scanned_sphere(radius=None, az_res=1, elev_res=1):
     """
     Creates a point cloud of a sphere as if scanned from (0,0,0)
 
@@ -50,12 +50,13 @@ def create_scanned_sphere(radius=1, az_res=1, elev_res=1):
 
     :return: the point cloud
     """
+
     theta = np.arange(0, np.pi/4, np.deg2rad(az_res))
     phi = np.arange(0, np.pi/2,  np.deg2rad(elev_res))
 
     tt, pp = np.meshgrid(theta, phi)
-
-    radius = radius_function(tt, pp)
+    if radius is None:
+        radius = radius_function(tt, pp)
 
     x = (radius * np.cos(pp) * np.cos(tt)).flatten()
     y = (radius * np.cos(pp) * np.sin(tt)).flatten()
@@ -83,8 +84,8 @@ if __name__ == '__main__':
     az_res = 0.15
     elev_res =  .15
     pts = create_scanned_floor(1, az_res, elev_res)
-    az_res += 0.001
-    elev_res += 0.001
+    # az_res += 0.001
+    # elev_res += 0.001
     # pts = IOFactory.ReadPts(r'D:\OwnCloud\Data\PCLs\agri_floor2.pts',merge=True)
     vis1 = VisualizationO3D()
     vis1.visualize_pointset(pts)
@@ -113,9 +114,9 @@ if __name__ == '__main__':
 
     r = panorama.sphericalCoordinates.ranges
     # define the surface
-    s_theta = np.vstack((- r * cos_phi * sin_theta,
-                         r * cos_phi * cos_theta,
-                        np.zeros(r.shape)))
+    s_theta = np.vstack(( r_t * cos_phi * cos_theta - r * cos_phi * sin_theta,
+                         r_t * cos_phi * cos_theta + r * cos_phi * cos_theta,
+                        r_t * cos_phi * cos_theta ))
     s_phi= np.vstack((r_p * cos_phi * cos_theta - r * sin_phi * cos_theta,
                       r_p * cos_phi * sin_theta - r * sin_phi * sin_theta,
                       r_p * sin_phi + r * cos_phi))
