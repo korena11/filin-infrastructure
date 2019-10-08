@@ -256,7 +256,7 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
     # x direction
     I1 = np.hstack((img[: , floord: ], img[:, - floord:]))
     I2 = np.hstack((img[:, : floord], img[:, : - floord]))
-    Zx = (I1 - I2) / (2 * params['resolution'] * ksize)
+    Zx = (I1 - I2) / (2 * params['resolution'] * np.ceil(ksize))
 
     # y direction
     I3 = np.vstack((img[floord: , :], img[-floord:, :]))
@@ -275,6 +275,7 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
         I8a = np.hstack((img[floord:, floord:], img[floord:, - floord:]))
         I8 = np.vstack((I8a, I8a[- floord:, :]))
 
+        # eq. (3-40)
         Zxx = (-2 * img + I1 + I2) / (ksize * params['resolution']) ** 2
         Zyy = (-2 * img + I3 + I4) / (ksize * params['resolution']) ** 2
         Zxy = (I7 + I6 - I5 - I8) / (2 * ksize * params['resolution']) ** 2
