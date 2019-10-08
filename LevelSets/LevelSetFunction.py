@@ -157,18 +157,34 @@ class LevelSetFunction(object):
         :param processing_props: gradient type, sigma and ksize for derivatives and gradient computations
 
         """
+        gradientType = self.processing_props['gradientType']
+        sigma =  self.processing_props['sigma']
+        ksize = self.processing_props['ksize']
 
-        self.__norm_nabla = mt.computeImageGradient(self.value, gradientType=self.processing_props['gradientType'])
         self.__x, self.__y, self.__xx, self.__yy, self.__xy = \
-            mt.computeImageDerivatives(self.value, 2, ksize=self.processing_props['ksize'],
-                                       sigma=self.processing_props['sigma'])
+            mt.computeImageDerivatives_numeric(self.value, 2, ksize=ksize,
+                                       sigma=sigma, resolution=self.__processing_props['resolution'])
 
-        self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
+        if gradientType == 'L1':
+            # self.__norm_nabla = cv2.GaussianBlur((np.abs(self.__x) + np.abs(self.__y)), (ksize, ksize), sigma)
+            self.__norm_nabla = (np.abs(self.__x) + np.abs(self.__y))
+        elif gradientType == 'L2':
+            # self.__norm_nabla = cv2.GaussianBlur(np.sqrt(self.__x ** 2 + self.__y ** 2), (ksize, ksize), sigma)
+            self.__norm_nabla = np.sqrt(self.__x ** 2 + self.__y ** 2)
+        elif gradientType == 'LoG':
+            from scipy.ndimage import filters
+            # self.__norm_nabla = cv2.GaussianBlur(filters.gaussian_laplace(self.value, sigma), (ksize, ksize), sigma)
+            self.__norm_nabla = filters.gaussian_laplace(self.value, sigma)
+
+        # self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
+        #                                  self._yy * self._x ** 2 -
+        #                                  2 * self._xy * self._x * self._y) /
+        #                                 (self.norm_nabla + EPS),
+        #                                 (self.processing_props['ksize'], self.processing_props['ksize']),
+        #                                 self.processing_props['sigma'])
+        self.__kappa = (self._xx * self._y ** 2 +
                                          self._yy * self._x ** 2 -
-                                         2 * self._xy * self._x * self._y) /
-                                        (self.norm_nabla + EPS),
-                                        (self.processing_props['ksize'], self.processing_props['ksize']),
-                                        self.processing_props['sigma'])
+                                         2 * self._xy * self._x * self._y) / (self.norm_nabla + EPS)
 
     def update(self, new_function, **kwargs):
         """
@@ -389,3 +405,4 @@ class LevelSetFunction(object):
 
         self.__dirac_delta = d
         return d
+
