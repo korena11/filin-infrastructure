@@ -42,7 +42,7 @@ class LevelSetFunction(object):
         :rtype: LevelSetFunction
 
         """
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 1}
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 1, 'resolution': 0.5}
         self.__processing_props = processing_props
         self.__value = function
         self.__ls_derivatives_curvature()
@@ -194,7 +194,9 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
-        new_function = cv2.normalize(new_function, None, -1., 1, cv2.NORM_MINMAX)
+        new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 95)
+        new_function[new_function< np.percentile(new_function, 2)] = np.percentile(new_function, 5)
+
         self.__value = new_function
         self.__ls_derivatives_curvature()
         if 'regularization_note' in list(kwargs.keys()):
@@ -250,15 +252,29 @@ class LevelSetFunction(object):
         """
 
         phi_temp = LevelSetFunction(self.value + dphi)
+        # statistical normalization
+        value_temp = phi_temp.value
+
+        value_temp[phi_temp.value > np.percentile(phi_temp.value, 95)] = np.percentile(phi_temp.value, 95)
+        value_temp[phi_temp.value < np.percentile(phi_temp.value, 5)] = np.percentile(phi_temp.value, 5)
+        phi_temp.update(value_temp)
+
         S_phi = self.value / np.sqrt(self.value ** 2 + 1)
 
-        phi_t = S_phi * (1 - phi_temp.norm_nabla)
+        phi_t = S_phi * (1- phi_temp.norm_nabla)
 
         self.update(self.value + phi_t)
+        while np.any(self.norm_nabla) > 1e10:
+            new_value = self.value
+            new_value[self.norm_nabla > 1e10] = np.sign(new_value[self.norm_nabla > 1e10]) * 1
+            self.update(new_value)
+
+
+
         
         
     @staticmethod
-    def dist_from_circle(center_pt, radius, func_shape, **kwargs):
+    def dist_from_circle(center_pt,  radius, func_shape, resolution=.5):
         r"""
         Build a Lipshitz distance function from a circle, with a specific size
 
@@ -270,7 +286,7 @@ class LevelSetFunction(object):
         :param center_pt:  center of the circle
         :param radius:  radius of the circle
         :param func_shape: size of the function (height, width)
-        :param ksize: the kernel size for later processing. Default: 5
+        :param resolution: the kernel size for later processing. Default: 0.5
 
         :type center_pt: tuple
         :type radius: int
@@ -283,19 +299,118 @@ class LevelSetFunction(object):
         """
         height = func_shape[0]
         width = func_shape[1]
-        ksize = kwargs.get('ksize', 5)
         x = np.arange(width)
         y = np.arange(height)
-        xx, yy = np.meshgrid(ksize * x, ksize * y)
-        x_x0 = (xx - center_pt[1] * ksize) # (x-x0)
-        y_y0 =  (yy - center_pt[0] * ksize) #(y-y0)
+        xx, yy = np.meshgrid(resolution * x, resolution* y)
+        x_x0 = (xx - center_pt[1] * resolution) # (x-x0)
+        y_y0 =  (yy - center_pt[0] * resolution) #(y-y0)
 
         phi = radius - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
-        # gradient should equal 1
-        # norm_nabla = mt.computeImageGradient(phi, ksize=ksize, gradientType='L2')
-        # phi /= norm_nabla**2
-        phi = cv2.normalize(phi, None, -1, 1, cv2.NORM_MINMAX)
+
         return phi
+    @staticmethod
+    def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
+        """
+        Build a Lipshitz distance function with repetitive circles
+
+        .. math::
+
+           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
+
+        :param dx: distance between circles on x
+        :param dy: distance between circles on y
+        :param radius: radius of the circles
+        :param func_shape: size of the function (height, width)
+        :param resolution: grid size
+
+        :return: a level set function that its zero-set is the defined circles (approximately)
+        """
+        import skfmm
+        phi = -np.ones(func_shape)
+        center_x = np.arange(dx + radius, func_shape[1], dx + radius)
+        center_y = np.arange(dy + radius, func_shape[0], dy + radius)
+
+        for i in center_y:
+            for j in center_x:
+                phi_temp = LevelSetFunction.dist_from_circle((i,j), radius, func_shape, resolution=resolution)
+                phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
+
+
+        return skfmm.distance(phi)
+
+
+
+
+
+    @staticmethod
+    def dist_from_ellipse(center_pt, axes, func_shape, resolution=.5):
+        r"""
+        Build a Lipshitz distance function from an ellipse, with a specific size
+
+        .. math::
+
+           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
+
+
+        :param center_pt:  center of the ellipse
+        :param axes:  axes sizes of the ellipse
+        :param func_shape: size of the function (height, width)
+        :param resolution: the kernel size for later processing. Default: 5
+
+        :type center_pt: tuple
+        :type radius: int
+        :type func_shape: tuple
+
+        :return: a level set function that its zero-set is the defined ellipse (approximately)
+
+        :rtype: np.array
+
+        """
+        height = func_shape[0]
+        width = func_shape[1]
+        x = np.arange(width)
+        y = np.arange(height)
+        xx, yy = np.meshgrid(resolution * x, resolution * y)
+        x_x0 = (xx - center_pt[1] * resolution)  # (x-x0)
+        y_y0 = (yy - center_pt[0] * resolution)  # (y-y0)
+
+        phi = np.sqrt((x_x0 / axes[0])** 2 + (y_y0/axes[1]) ** 2) - 1
+
+        return phi
+    @staticmethod
+    def dist_from_eggcrate(amplitude, func_shape, resolution=.5):
+        r"""
+        Build a Lipshitz distance function with a sine function, with a specific size
+
+        .. math::
+
+           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
+
+
+        :param amplitude:  the amplitude of the egg grate
+        :param func_shape: size of the function (height, width)
+        :param resolution: the kernel size for later processing. Default: .5
+
+        :type center_pt: tuple
+        :type radius: int
+        :type func_shape: tuple
+
+        :return: a level set function that its zero-set is the defined circle (approximately)
+
+        :rtype: np.array
+        """
+        height = func_shape[0]
+        width = func_shape[1]
+        x = np.arange(-width/2, width/2, resolution)
+        y = np.arange(-height/2, height/2, resolution)
+        xx, yy = np.meshgrid(x, y)
+        sin_xx = np.sin(xx )
+        sin_yy = np.sin(yy )
+
+        return xx**2 + yy**2 - amplitude * (sin_xx**2 + sin_yy**2)
+
+
+
 
     def compute_heaviside(self, **kwargs):
         r"""

@@ -219,7 +219,45 @@ def computeImageDerivatives(img, order, **kwargs):
     else:
         return img_x, img_y
 
-def computeImageDerivatives_numeric(img, order, **kwargs):
+def computeImageGradient_numeric(img, gradientType='L1', ksize=3, sigma=1, resolution=1, blur_window=(0,0), **kwargs):
+    """
+
+        :param img: the image to which the derivatives should be computed
+        :param gradientType: 'L1' L1 norm of grad(I); 'L2' L2-norm of grad(I); 'LoG' Laplacian of gaussian
+        :param ksize: size of the differentiation window
+        :param resolution: kernel resolution
+        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
+        :param blur_window: tuple of window size for blurring
+
+        :type img: np.array
+        :type gradientType: str
+        :type ksize: int
+        :type resolution: float
+        :type sigma: float
+        :type blur_window: tuple
+
+        :return: an image of the gradient magnitude
+        :rtype: np.array
+    """
+
+    gradient = None
+
+    # img = cv2.GaussianBlur(I, (ksize, ksize), sigma)
+
+    # compute image gradient (numeric)
+    dx, dy = computeImageDerivatives_numeric(img, 1, ksize, sigma, resolution,blur_window)
+
+    if gradientType == 'L1':
+        gradient = cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (ksize, ksize), sigma)  # L1-norm of grad(I)
+    elif gradientType == 'L2':
+        gradient = cv2.GaussianBlur(np.sqrt(dx ** 2 + dy ** 2), (ksize, ksize), sigma)
+    elif gradientType == 'LoG':
+        gradient = filters.gaussian_laplace(img, sigma)
+
+    # return cv2.normalize((gradient).astype('float'), None, 0.0,1.0, cv2.NORM_MINMAX)
+    return gradient
+
+def computeImageDerivatives_numeric(img, order, ksize=3, sigma=1., resolution=1., blur_window=(0,0), **kwargs):
     """
         Computes numeric image derivatives up to order 2.
 
@@ -230,24 +268,25 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
         :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
         :param blur_window: tuple of window size for blurring
 
+        :type img: np.array
+        :type order: int
+        :type ksize: int
+        :type resolution: float
+        :type sigma: float
+        :type blur_window: tuple
+
 
         :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)
 
         .. note::
             Eq. numbers from Amit Baruch Dissertation
     """
-    params = {'ksize': 3,
-              'resolution': 1,
-              'sigma': 1.,
-              'blur_window': (0, 0)}
-    params.update(kwargs)
-    ksize = np.int(params['ksize'])
 
     img = np.float64(img)
 
     # if blurring is required before differentiation
-    if params['sigma'] != 0:
-        img = cv2.GaussianBlur(img, params['window'], params['sigma'])
+    if sigma != 0:
+        img = cv2.GaussianBlur(img, blur_window, sigma)
 
     floord = np.int(ksize)
 
@@ -256,12 +295,12 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
     # x direction
     I1 = np.hstack((img[: , floord: ], img[:, - floord:]))
     I2 = np.hstack((img[:, : floord], img[:, : - floord]))
-    Zx = (I1 - I2) / (2 * params['resolution'] * np.ceil(ksize))
+    Zx = (I1 - I2) / (2 * resolution * np.ceil(ksize))
 
     # y direction
     I3 = np.vstack((img[floord: , :], img[-floord:, :]))
     I4 = np.vstack((img[: floord, :], img[: -floord, :]))
-    Zy = (I3 - I4) / (2 * params['resolution'] * ksize)
+    Zy = (I3 - I4) / (2 * resolution * ksize)
 
     # second order derivatives
     if order == 2:
@@ -276,9 +315,9 @@ def computeImageDerivatives_numeric(img, order, **kwargs):
         I8 = np.vstack((I8a, I8a[- floord:, :]))
 
         # eq. (3-40)
-        Zxx = (-2 * img + I1 + I2) / (ksize * params['resolution']) ** 2
-        Zyy = (-2 * img + I3 + I4) / (ksize * params['resolution']) ** 2
-        Zxy = (I7 + I6 - I5 - I8) / (2 * ksize * params['resolution']) ** 2
+        Zxx = (-2 * img + I1 + I2) / (ksize * resolution) ** 2
+        Zyy = (-2 * img + I3 + I4) / (ksize * resolution) ** 2
+        Zxy = (I7 + I6 - I5 - I8) / (2 * ksize * resolution) ** 2
 
         return Zx, Zy, Zxx, Zyy, Zxy
 

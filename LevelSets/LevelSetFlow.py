@@ -385,7 +385,7 @@ class LevelSetFlow:
         :param radius: if the curve is a circle, the radius should be specified.
         :param center_pt: if the curve is a circle, the center point should be specified.
         :param reularization_note: regularization note for heaviside function
-        :param function_type: 'circle' (default); 'vertical' or 'horizontal' (for open contours)
+        :param function_type: 'circle' (default); 'vertical' or 'horizontal' (for open contours); 'ellipse'; 'sin'
 
         :type processing_props: dict
         :type radius: int
@@ -395,7 +395,7 @@ class LevelSetFlow:
         :type regularization_note: int 0,1,2
 
         """
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5}
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
         if 'processing_props' in kwargs:
             processing_props.update(kwargs['processing_props'])
         img_height, img_width = self.img().shape[:2]
@@ -403,11 +403,20 @@ class LevelSetFlow:
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
         func_type = kwargs.get('function_type', 'circle')
 
+
         regularization = kwargs.get('regularization_note', 0)
 
         if func_type == 'circle':
             phi = LevelSetFunction.dist_from_circle(center_pt, radius, (img_height, img_width),
-                                                    ksize=processing_props['ksize'])
+                                                    resolution=processing_props['resolution'])
+        elif func_type == 'ellipse':
+            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, (img_height, img_width),
+                                                    resolution=processing_props['resolution'])
+        elif func_type == 'egg_crate':
+            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=(img_height, img_width), resolution=kwargs['resolution'])
+
+        elif func_type == 'periodic_circles':
+            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=(img_height, img_width))
 
         if np.all(self.__Phi[0].value == 0):
             self.__Phi = []
@@ -457,17 +466,26 @@ class LevelSetFlow:
 
         """
         self.__g = g
-        self.__g_x, self.__g_y = mt.computeImageDerivatives(g, 1, **kwargs)
+        self.__g_x, self.__g_y = mt.computeImageDerivatives_numeric(g, 1, **kwargs)
 
-    def init_f(self, f, **kwargs):
+    def init_vector_field(self, f, mu=0.2, iterations=80, **kwargs):
         """
-        Initializes the g function (edge function)
-        :param g: the function
-        :param kwargs: gradient process dictionary
+        Initializes the vector field (gradient vector flow)
+
+        Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`
+
+        :param f: the edge map according to which the GVF is computed
+        :param mu: the GVF regularization coefficient. Default: 0.2 (according to the paper).
+        :param iterations: the number of iterations that will be computed. Default: 80
+        :param kwargs: gradient process dictionary (sigma, ksize, resolution)
 
         """
+
+        # normalize f to the range [0,1]
+        f = cv2.normalize(f.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+        
         self.__f = f
-        self.__f_x, self.__f_y = mt.computeImageDerivatives(f, 1, **kwargs)
+        self.__f_x, self.__f_y = mt.computeImageDerivatives_numeric(f, 1, **kwargs)
 
     def init_region(self, region):
         """
@@ -477,7 +495,7 @@ class LevelSetFlow:
 
         """
 
-        region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
+        # region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 
     def update_region(self, new_region):
@@ -572,12 +590,17 @@ class LevelSetFlow:
         if flow_type == 'geodesic':
             # !! pay attention, if self.g is constant - then this flow is actually curvature flow !!
 
+            while np.any(function.norm_nabla > 1e10):
+                new_value = function.value
+                new_value[function.norm_nabla > 1e10] = np.sign(new_value[function.norm_nabla > 1e10]) * 1
+                function.update(new_value)
+
             flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
                                                                     function._y)
-            if open_flag:
-                psi_t = self.g * self.function.kappa * self.psi.norm_nabla + (
-                        self.g_x * self.psi._x + self.g_y * self.psi._y)
-                self.psi.update(self.psi.value - psi_t, regularization_note=processing_props['regularization'])
+            # if open_flag:
+            #     psi_t = self.g * self.function.kappa * self.psi.norm_nabla + (
+            #             self.g_x * self.psi._x + self.g_y * self.psi._y)
+            #     self.psi.update(self.psi.value - psi_t, regularization_note=processing_props['regularization'])
 
         if flow_type == 'band':
             vb = self.__compute_vb(**processing_props)
@@ -744,7 +767,7 @@ class LevelSetFlow:
         #  vb[np.where(phi != 0)] = 0
         return vb * self.phi().kappa
 
-    def __compute_vt(self, vectorField, verbose=False, **kwargs):
+    def __compute_vt(self, vectorField, verbose=False, phi_index =0, mu=0.2, **kwargs):
         """
         Computes the vector field derivative in each direction
 
@@ -755,6 +778,8 @@ class LevelSetFlow:
         :param edge_map:
         :param kappa: curvature map
         :param verbose: show vector field
+        :param phi_index: the index of the level set function to which the vector field is computed
+        :param mu: weighting index for the GVF
 
         :type verbose: bool
 
@@ -770,18 +795,18 @@ class LevelSetFlow:
         """
 
         # compute the derivatives of the edge map at each direction
-        nabla_edge = mt.computeImageGradient(self.f, **kwargs)
+        nabla_edge = mt.computeImageGradient_numeric(self.f, **kwargs)
 
         # compute the Laplacian of the vector field
         laplacian_vx = cv2.Laplacian(vectorField[:, :, 0], cv2.CV_64F)
         laplacian_vy = cv2.Laplacian(vectorField[:, :, 1], cv2.CV_64F)
 
         # compute the functions that are part of the vt computation
-        g = np.exp(-nabla_edge / (self.phi().kappa + EPS) ** 2)
+        g = np.exp(-nabla_edge / (self.phi(phi_index).kappa + EPS) ** 2)
         h = 1 - g
 
-        vx_t = g * laplacian_vx - h * (vectorField[:, :, 0] - self.f)
-        vy_t = g * laplacian_vy - h * (vectorField[:, :, 1] - self.f)
+        vx_t = mu * laplacian_vx - (vectorField[:, :, 0] - self.f_x)*(self.f_x**2 + self.f_y**2)
+        vy_t = mu * laplacian_vy - (vectorField[:, :, 1] - self.f_y)*(self.f_x**2 + self.f_y**2)
 
         if verbose == True:
             # plt.quiver(vx_t, vy_t, scale=25)
@@ -791,7 +816,7 @@ class LevelSetFlow:
             plt.figure()
             plt.imshow(vectorField[:, :, 1])
 
-        return np.stack((-vx_t, -vy_t), axis=2)
+        return np.stack((vx_t, vy_t), axis=2)
 
     def __compute_vo(self, **kwargs):
         """
@@ -886,12 +911,11 @@ class LevelSetFlow:
         # with writer.saving(fig, "level_set.mp4", 100):
         for iteration in range(iterations):
             print(iteration)
-            if verbose:
-                print(iteration)
-                if iteration > 26:
-                    print('hello')
+
+
+            if iteration ==7 :
+                print('hello')
             intrinsic = np.zeros(self.img().shape[:2])
-            extrinsic = np.zeros(self.img().shape[:2])
 
             # ---------- intrinsic movement ----------
             if mumford_shah_flag:
@@ -902,7 +926,7 @@ class LevelSetFlow:
                 if flow_types[item] == 0:
                     continue
                 for i in range(self.num_ls):
-                    intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
+                  intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
 
                 if verbose:
                     if np.any(intrinsic > 20):
@@ -913,19 +937,19 @@ class LevelSetFlow:
                 intrinsic += region_w * self.region * self.phi(j).norm_nabla
 
             # ---------------extrinsic movement ----------
-            v = np.stack((self.f_x, self.f_y), axis=2)
-            vt = self.__compute_vt(v, verbose=verbose, **processing_props)
-            v += vt
             for k in range(self.num_ls):
+                v = np.stack((self.f_x, self.f_y), axis=2)
+                vt = self.__compute_vt(v, verbose=verbose, phi_index=k, **processing_props)
+                v += vt
                 extrinsic = (v[:, :, 0] * self.phi(k)._x + v[:, :, 1] * self.phi(k)._y) * gvf_w
 
                 # for constrained contours
                 extrinsic += self.__compute_vo() * vo_w
                 phi_t = self.step * (intrinsic - extrinsic)
                 # reinitializtion every 5 iterations:
-                if iteration % 10 == 0 and iteration != 0:
+                if iteration % 10== 0 and iteration != 0:
                     self.phi(k).reinitialization(phi_t)
-                    pass
+
                 else:
                     self.phi(k).move_function(phi_t)
 
@@ -962,6 +986,7 @@ class LevelSetFlow:
                         l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
                                                        color=colors[i], blob_size=blob_size)
             # writer.grab_frame()
+            plt.pause(.0001)
         plt.show()
         print('Done')
         return l_curve
