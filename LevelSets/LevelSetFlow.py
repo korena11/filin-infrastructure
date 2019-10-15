@@ -41,8 +41,8 @@ class LevelSetFlow:
 
     __region = None  # region constraint
 
-    __f = None  # external force (for GVF)
-    __f_x = __f_y = None
+    __GVF = None  # external force (for GVF)
+
     __psi = []  # internal force, for open contours;  LevelSetFunction
 
     def __init__(self, img, **kwargs):
@@ -311,31 +311,13 @@ class LevelSetFlow:
         return self.__g_y * self.scale_y
 
     @property
-    def f(self):
+    def GVF(self):
         """
         External force (for gradient vector flow)
 
         :rtype: np.array
         """
-        return self.__f
-
-    @property
-    def f_x(self):
-        """
-        First order derivative of the external force
-
-        :rtype: np.array
-        """
-        return self.__f_x
-
-    @property
-    def f_y(self):
-        """
-        First order derivative of the external force
-
-        :rtype: np.array
-        """
-        return self.__f_y
+        return self.__GVF
 
     def phi(self, index=0):
         """
@@ -468,24 +450,33 @@ class LevelSetFlow:
         self.__g = g
         self.__g_x, self.__g_y = mt.computeImageDerivatives_numeric(g, 1, **kwargs)
 
-    def init_vector_field(self, f, mu=0.2, iterations=80, **kwargs):
+    def init_GVF(self, f, mu, iterations, ksize=3, sigma=1.,
+                          resolution=1., blur_window=(0,0), **kwargs):
         """
         Initializes the vector field (gradient vector flow)
 
         Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`
 
         :param f: the edge map according to which the GVF is computed
-        :param mu: the GVF regularization coefficient. Default: 0.2 (according to the paper).
-        :param iterations: the number of iterations that will be computed. Default: 80
-        :param kwargs: gradient process dictionary (sigma, ksize, resolution)
+        :param mu: the GVF regularization coefficient. (according to the paper: 0.2).
+        :param iterations: the number of iterations that will be computed. (according to the example: 80).
+        :param ksize: size of the differentiation window
+        :param resolution: kernel resolution
+        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
+        :param blur_window: tuple of window size for blurring
+
+        :type f: np.array
+        :type mu: float
+        :type iterations: int
+        :type ksize: int
+        :type resolution: float
+        :type blur_window: tuple (2 elements)
 
         """
+        from GVF import GVF
+        self.__GVF = GVF(f, mu, iterations, ksize=ksize, sigma=sigma,
+                          resolution=resolution, blur_window=blur_window)
 
-        # normalize f to the range [0,1]
-        f = cv2.normalize(f.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
-        
-        self.__f = f
-        self.__f_x, self.__f_y = mt.computeImageDerivatives_numeric(f, 1, **kwargs)
 
     def init_region(self, region):
         """
@@ -911,8 +902,6 @@ class LevelSetFlow:
         # with writer.saving(fig, "level_set.mp4", 100):
         for iteration in range(iterations):
             print(iteration)
-
-
             if iteration ==7 :
                 print('hello')
             intrinsic = np.zeros(self.img().shape[:2])
@@ -938,10 +927,7 @@ class LevelSetFlow:
 
             # ---------------extrinsic movement ----------
             for k in range(self.num_ls):
-                v = np.stack((self.f_x, self.f_y), axis=2)
-                vt = self.__compute_vt(v, verbose=verbose, phi_index=k, **processing_props)
-                v += vt
-                extrinsic = (v[:, :, 0] * self.phi(k)._x + v[:, :, 1] * self.phi(k)._y) * gvf_w
+                extrinsic = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w
 
                 # for constrained contours
                 extrinsic += self.__compute_vo() * vo_w

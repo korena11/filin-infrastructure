@@ -194,8 +194,8 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
-        new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 95)
-        new_function[new_function< np.percentile(new_function, 2)] = np.percentile(new_function, 5)
+        new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
+        new_function[new_function< np.percentile(new_function, 2)] = np.percentile(new_function, 40)
 
         self.__value = new_function
         self.__ls_derivatives_curvature()
@@ -262,8 +262,9 @@ class LevelSetFunction(object):
         S_phi = self.value / np.sqrt(self.value ** 2 + 1)
 
         phi_t = S_phi * (1- phi_temp.norm_nabla)
+        new_value = self.value + phi_t
 
-        self.update(self.value + phi_t)
+        self.update(new_value)
         while np.any(self.norm_nabla) > 1e10:
             new_value = self.value
             new_value[self.norm_nabla > 1e10] = np.sign(new_value[self.norm_nabla > 1e10]) * 1
