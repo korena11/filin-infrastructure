@@ -57,6 +57,9 @@ This project is implemented for Python 3.6. ** Always prefer installing through 
    Installation via `pip install tqdm`
 -  `richdem <https://richdem.readthedocs.io/en/latest/>`_
    Installation via `pip install richdem`
+- `scikit-image <http://scikit-image.org>`_
+    Installation via `pip install scikit-image`
+
 
 
 

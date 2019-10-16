@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 
 
@@ -156,9 +155,9 @@ def GVF(f, mu, iterations, ksize=3, sigma=1.,
     import MyTools as mt
     from scipy.ndimage.filters import laplace as del2
     from tqdm import tqdm
-
+    from MyTools import scale_values
     # normalize f to the range [0,1]
-    f = cv2.normalize(f.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)
+    f = scale_values(f)
     m, n = f.shape[:2]
 
     f = boundMirrorExpand(f) # Take care of boundary condition

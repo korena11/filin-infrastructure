@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Working Level set method: region + GVF + geodesic  &#10;Wrong GVF computation&#10;Multichannel not checked">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="GVF is computed outside of the level set flow (fixed)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/GVF.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/GVF.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utils/MyTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/MyTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/index.rst" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +54,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LevelSets/check_GVF.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="242">
@@ -77,6 +79,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="952" column="40" lean-forward="true" selection-start-line="952" selection-start-column="40" selection-end-line="952" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
           <provider selected="true" editor-type-id="restructured-text-editor" />
         </entry>
@@ -88,6 +99,18 @@
               <caret line="273" column="31" selection-start-line="273" selection-start-column="31" selection-end-line="273" selection-end-column="31" />
               <folding>
                 <element signature="e#49#59#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="484">
+              <caret line="205" column="28" lean-forward="true" selection-start-line="205" selection-start-column="28" selection-end-line="205" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -151,8 +174,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rgb</find>
-      <find>numpy_support</find>
       <find>arange</find>
       <find>array</find>
       <find>Size</find>
@@ -181,6 +202,8 @@
       <find>open3</find>
       <find>e</find>
       <find>polygon</find>
+      <find>reini</find>
+      <find>update</find>
     </findStrings>
     <replaceStrings>
       <replace>color</replace>
@@ -215,7 +238,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst" />
         <option value="$PROJECT_DIR$/Properties/Tensors/tensor.py" />
         <option value="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" />
         <option value="$PROJECT_DIR$/Utils/test_ballTree_saliency.py" />
@@ -244,7 +266,6 @@
         <option value="$PROJECT_DIR$/Visualization Classes/VisualizationUtils.py" />
         <option value="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" />
         <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationUtils.py" />
-        <option value="$PROJECT_DIR$/docs/source/index.rst" />
         <option value="$PROJECT_DIR$/docs/source/zreferences.rst" />
         <option value="$PROJECT_DIR$/docs/source/conf.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" />
@@ -263,17 +284,19 @@
         <option value="$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py" />
         <option value="$PROJECT_DIR$/Utils/MyTools.py" />
         <option value="$PROJECT_DIR$/Use Cases/panorama_surface.py" />
-        <option value="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" />
         <option value="$PROJECT_DIR$/LevelSets/check_GVF.py" />
         <option value="$PROJECT_DIR$/LevelSets/GVF.py" />
+        <option value="$PROJECT_DIR$/docs/source/index.rst" />
+        <option value="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" />
+        <option value="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-3867" />
-    <option name="y" value="-381" />
-    <option name="width" value="3222" />
-    <option name="height" value="1764" />
+    <option name="x" value="-3182" />
+    <option name="y" value="-377" />
+    <option name="width" value="3218" />
+    <option name="height" value="1748" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -319,6 +342,23 @@
             <path>
               <item name="Filin-Infrastructure" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="C:\Users\reuma\Documents\Python Scripts\Filin-Infrastructure" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="docs" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="C:\Users\reuma\Documents\Python Scripts\Filin-Infrastructure" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="docs" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="build" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="C:\Users\reuma\Documents\Python Scripts\Filin-Infrastructure" type="442cc68d:ScopeViewTreeModel$RootNode" />
+              <item name="docs" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="source" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="C:\Users\reuma\Documents\Python Scripts\Filin-Infrastructure" type="442cc68d:ScopeViewTreeModel$RootNode" />
               <item name="LevelSets" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
@@ -339,7 +379,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="settings.editor.splitter.proportion" value="0.2560214" />
   </component>
   <component name="RecentsManager">
@@ -483,9 +523,9 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.check_GVF" />
       <item itemvalue="Python.curvature_types" />
       <item itemvalue="Python.panorama_surface" />
+      <item itemvalue="Python.check_GVF" />
       <item itemvalue="Python tests.Unittests for test_ballTree_saliency.TestBallTree_saliency.test_ballTree_saliency" />
       <item itemvalue="Python tests.Unittests in test_pickleProperty.py" />
     </list>
@@ -559,13 +599,6 @@
       <workItem from="1565356307820" duration="95000" />
       <workItem from="1565356425644" duration="5377000" />
       <workItem from="1569428834121" duration="3312000" />
-    </task>
-    <task id="LOCAL-00012" summary="Classification Facrtory and Property DONE and working. Need to accelerate">
-      <created>1514546884365</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1514546884365</updated>
     </task>
     <task id="LOCAL-00013" summary="New level set factory">
       <created>1515674157769</created>
@@ -903,7 +936,14 @@
       <option name="project" value="LOCAL" />
       <updated>1571055343881</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="GVF is computed outside of the level set flow (fixed)">
+      <created>1571141604982</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1571141604983</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -951,20 +991,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2148" height="1175" extended-state="6" />
+    <frame x="-3847" y="-373" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.59099615" visible="true" weight="0.12547348" />
-      <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.40900382" side_tool="true" visible="true" weight="0.12547348" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5911215" visible="true" weight="0.1043718" />
+      <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.4088785" side_tool="true" visible="true" weight="0.1043718" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.326062" />
-      <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49390918" weight="0.31852654" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49466383" visible="true" weight="0.5095785" />
+      <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49390918" weight="0.317757" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49466383" weight="0.5095785" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32672113" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35344827" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35280374" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" weight="0.32146958" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5060908" side_tool="true" weight="0.31917337" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.3029595" />
@@ -1060,7 +1100,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Saliency property and Facroty added.&#10;New Saliency method for point clouds added (based on PCA(" />
     <MESSAGE value="Saliency property and Factory added.&#10;New Saliency method for point clouds added (based on PCA)" />
     <MESSAGE value="New Saliency method for point clouds added based on range (not working) (not in the factory and not in Saliency module)&#10;Bug fixes in CurvatureFactory. @TODO efficiency degraded because of the creation of subset pointclouds. Should be checked&#10;PointSubSetOpen3D added override properties" />
     <MESSAGE value="- Added setter to data in BaseData&#10;- ToNumpy updated to answer PointSetOpen3D&#10;- read raster in IOFactory updated &#10;- test data added as a separate folder. Some of the tests were updated, some still need to&#10;- bug fixes in LevelSetFlow + added scale for each direction&#10;- CurvatureProperty + CurvatureFactory updated&#10;- SaliencyFactory + TensorFactory updated&#10;- RasterTools added + testing --&gt; to compute slope and aspect using richDEM. Possible clashes with Open3D" />
@@ -1085,7 +1124,8 @@
     <MESSAGE value="xml stash" />
     <MESSAGE value="changes to panorama_surface" />
     <MESSAGE value="Working Level set method: region + GVF + geodesic  &#10;Wrong GVF computation&#10;Multichannel not checked" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working Level set method: region + GVF + geodesic  &#10;Wrong GVF computation&#10;Multichannel not checked" />
+    <MESSAGE value="GVF is computed outside of the level set flow (fixed)" />
+    <option name="LAST_COMMIT_MESSAGE" value="GVF is computed outside of the level set flow (fixed)" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1476,9 +1516,6 @@
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$panorama_surface.coverage" NAME="panorama_surface Coverage Results" MODIFIED="1570206049899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Use Cases" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/Properties/Neighborhood/Neighborhood.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
@@ -1703,13 +1740,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="458" lean-forward="true" selection-start-line="458" selection-end-line="458" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utils/GeneralUtils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -1750,9 +1780,6 @@
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1798,6 +1825,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2112">
           <caret line="96" selection-start-line="96" selection-end-line="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="952" column="40" lean-forward="true" selection-start-line="952" selection-start-column="40" selection-end-line="952" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="484">
+          <caret line="205" column="28" lean-forward="true" selection-start-line="205" selection-start-column="28" selection-end-line="205" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

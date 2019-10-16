@@ -487,10 +487,10 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
     function_binary = np.uint8(function_binary)
 
     contours = measure.find_contours(func, 0.)
-    blob_labels = measure.label(function_binary, background=0)
+    blob_labels = measure.label(function_binary, background=1)
     label_props = measure.regionprops(blob_labels)
 
-    # contours = chooseLargestContours(contours, label_props, blob_size)
+    contours = chooseLargestContours(contours, label_props, blob_size)
     if not hold:
         imshow(img)
     l_curve = []
@@ -661,6 +661,46 @@ def chunking_dot(big_matrix, small_matrix, chunk_size=100):
         end = i + chunk_size
         R[i:end] = np.dot(big_matrix[i:end], small_matrix)
     return R
+
+
+def scale_values(array, min=0., max=1.):
+    r"""
+    Scale values between min and max range
+
+    .. math::
+        f_{new} = \frac{(max-min) (f-f_{min})}{f_{max}-f_{min}} + min
+
+    :param array: the array that will be re-scaled
+    :param min: the minimal value of the range (default: 0)
+    :param max: the maximal value of the range (default: 1)
+
+    :type array: np.array
+    :type min: float
+    :type max: float
+
+    :return: rescaled array
+
+    :rtype: np.array
+    """
+
+    return (max-min) * (array - array.min()) / (array.max() - array.min()) + min
+
+def make_zero(array, eps=1e-5):
+    """
+    Convert numerical zero to zero
+
+    :param array: an array with various parameters
+    :param eps: a thershold below which the number is zero (default: 1e-5
+
+    :type array: np.array
+    :type eps: float
+
+    :return: the same array with zeros instead of :math:`|x|<eps
+    :rtype: np.array
+
+    """
+    array[np.abs(array)< eps] = 0
+    return array
 
 
 if __name__ == '__main__':

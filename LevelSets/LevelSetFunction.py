@@ -165,26 +165,34 @@ class LevelSetFunction(object):
             mt.computeImageDerivatives_numeric(self.value, 2, ksize=ksize,
                                        sigma=sigma, resolution=self.__processing_props['resolution'])
 
+        self.__x = mt.make_zero(self._x)
+        self.__y = mt.make_zero(self._y)
+        self.__xx = mt.make_zero(self._xx)
+        self.__yy = mt.make_zero(self._yy)
+        self.__xy = mt.make_zero(self._xy)
+
         if gradientType == 'L1':
-            # self.__norm_nabla = cv2.GaussianBlur((np.abs(self.__x) + np.abs(self.__y)), (ksize, ksize), sigma)
-            self.__norm_nabla = (np.abs(self.__x) + np.abs(self.__y))
+            self.__norm_nabla = cv2.GaussianBlur((np.abs(self.__x) + np.abs(self.__y)), (ksize, ksize), sigma)
+            # self.__norm_nabla = (np.abs(self.__x) + np.abs(self.__y))
         elif gradientType == 'L2':
-            # self.__norm_nabla = cv2.GaussianBlur(np.sqrt(self.__x ** 2 + self.__y ** 2), (ksize, ksize), sigma)
-            self.__norm_nabla = np.sqrt(self.__x ** 2 + self.__y ** 2)
+            self.__norm_nabla = cv2.GaussianBlur(np.sqrt(self.__x ** 2 + self.__y ** 2), (ksize, ksize), sigma)
+            # self.__norm_nabla = np.sqrt(self.__x ** 2 + self.__y ** 2)
         elif gradientType == 'LoG':
             from scipy.ndimage import filters
             # self.__norm_nabla = cv2.GaussianBlur(filters.gaussian_laplace(self.value, sigma), (ksize, ksize), sigma)
             self.__norm_nabla = filters.gaussian_laplace(self.value, sigma)
 
-        # self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
-        #                                  self._yy * self._x ** 2 -
-        #                                  2 * self._xy * self._x * self._y) /
-        #                                 (self.norm_nabla + EPS),
-        #                                 (self.processing_props['ksize'], self.processing_props['ksize']),
-        #                                 self.processing_props['sigma'])
-        self.__kappa = (self._xx * self._y ** 2 +
+        self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
                                          self._yy * self._x ** 2 -
-                                         2 * self._xy * self._x * self._y) / (self.norm_nabla + EPS)
+                                         2 * self._xy * self._x * self._y) /
+                                        (self.norm_nabla + EPS),
+                                        (self.processing_props['ksize'], self.processing_props['ksize']),
+                                        self.processing_props['sigma'])
+        self.__kappa = mt.make_zero(self.kappa, 1e-4)
+
+        # self.__kappa = (self._xx * self._y ** 2 +
+        #                                  self._yy * self._x ** 2 -
+        #                                  2 * self._xy * self._x * self._y) / (self.norm_nabla + EPS)
 
     def update(self, new_function, **kwargs):
         """
@@ -194,10 +202,12 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
-        new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
-        new_function[new_function< np.percentile(new_function, 2)] = np.percentile(new_function, 40)
+        if np.any(np.abs(new_function) > 1e5):
+            new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
+            new_function[new_function< np.percentile(new_function, 3)] = np.percentile(new_function, 40)
 
-        self.__value = new_function
+        self.__value = mt.make_zero(cv2.GaussianBlur(new_function,  (self.processing_props['ksize'], self.processing_props['ksize'])
+                                        , sigmaX=self.processing_props['sigma']))
         self.__ls_derivatives_curvature()
         if 'regularization_note' in list(kwargs.keys()):
             self.__regularization_note = kwargs['regularization_note']
@@ -250,26 +260,32 @@ class LevelSetFunction(object):
         :type dphi: np.array
         
         """
+        from MyTools import scale_values
 
         phi_temp = LevelSetFunction(self.value + dphi)
-        # statistical normalization
-        value_temp = phi_temp.value
 
-        value_temp[phi_temp.value > np.percentile(phi_temp.value, 95)] = np.percentile(phi_temp.value, 95)
-        value_temp[phi_temp.value < np.percentile(phi_temp.value, 5)] = np.percentile(phi_temp.value, 5)
-        phi_temp.update(value_temp)
+        # statistical normalization
+        # value_temp = phi_temp.value
+        # value_temp[phi_temp.value > np.percentile(phi_temp.value, 95)] = np.percentile(phi_temp.value, 90)
+        # value_temp[phi_temp.value < np.percentile(phi_temp.value, 5)] = np.percentile(phi_temp.value, 10)
+        # phi_temp.update(value_temp)
 
         S_phi = self.value / np.sqrt(self.value ** 2 + 1)
 
         phi_t = S_phi * (1- phi_temp.norm_nabla)
         new_value = self.value + phi_t
+        # import skfmm
+        # new_value = skfmm.distance(self.value + dphi)
+        new_value[new_value<=0] = scale_values(new_value[new_value<=0], -1., 0.)
+        new_value[new_value>=0] = scale_values(new_value[new_value>=0], 0., 1.)
+
 
         self.update(new_value)
-        while np.any(self.norm_nabla) > 1e10:
-            new_value = self.value
-            new_value[self.norm_nabla > 1e10] = np.sign(new_value[self.norm_nabla > 1e10]) * 1
-            self.update(new_value)
-
+        # while np.any(self.norm_nabla) > 1e10:
+        #     new_value = self.value
+        #     new_value[self.norm_nabla > 1e10] = np.sign(new_value[self.norm_nabla > 1e10]) * 1
+        #     new_value = scale_values(self.value + phi_t, -1.0, 1.0)
+        #     self.update(new_value)
 
 
         
@@ -298,6 +314,7 @@ class LevelSetFunction(object):
         :rtype: np.array
 
         """
+
         height = func_shape[0]
         width = func_shape[1]
         x = np.arange(width)
@@ -309,6 +326,7 @@ class LevelSetFunction(object):
         phi = radius - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
 
         return phi
+
     @staticmethod
     def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
         """
@@ -326,10 +344,11 @@ class LevelSetFunction(object):
 
         :return: a level set function that its zero-set is the defined circles (approximately)
         """
+
         import skfmm
         phi = -np.ones(func_shape)
-        center_x = np.arange(dx + radius, func_shape[1], dx + radius)
-        center_y = np.arange(dy + radius, func_shape[0], dy + radius)
+        center_x = np.arange(dx/2 + radius, func_shape[1], dx + radius)
+        center_y = np.arange(dy/2 + radius, func_shape[0], dy + radius)
 
         for i in center_y:
             for j in center_x:
@@ -337,7 +356,7 @@ class LevelSetFunction(object):
                 phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
 
 
-        return skfmm.distance(phi)
+        return  skfmm.distance(phi)
 
 
 

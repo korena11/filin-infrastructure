@@ -367,7 +367,14 @@ class LevelSetFlow:
         :param radius: if the curve is a circle, the radius should be specified.
         :param center_pt: if the curve is a circle, the center point should be specified.
         :param reularization_note: regularization note for heaviside function
-        :param function_type: 'circle' (default); 'vertical' or 'horizontal' (for open contours); 'ellipse'; 'sin'
+        :param function_type:
+            - 'circle' (default);
+            - 'ellipse'
+            - 'egg_crate' - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)
+            - 'periodic_circles' - more like squares at dx and dy distances from one another
+            - 'checkerboard' - binary squares (from scikit-image)
+
+
 
         :type processing_props: dict
         :type radius: int
@@ -377,6 +384,8 @@ class LevelSetFlow:
         :type regularization_note: int 0,1,2
 
         """
+        from MyTools import scale_values
+
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
         if 'processing_props' in kwargs:
             processing_props.update(kwargs['processing_props'])
@@ -385,20 +394,34 @@ class LevelSetFlow:
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
         func_type = kwargs.get('function_type', 'circle')
 
+        func_shape = (img_height, img_width)
+        phi = np.zeros(func_shape)
 
         regularization = kwargs.get('regularization_note', 0)
 
         if func_type == 'circle':
-            phi = LevelSetFunction.dist_from_circle(center_pt, radius, (img_height, img_width),
+
+            phi = LevelSetFunction.dist_from_circle(center_pt, radius, func_shape,
                                                     resolution=processing_props['resolution'])
+
         elif func_type == 'ellipse':
-            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, (img_height, img_width),
+            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, func_shape,
                                                     resolution=processing_props['resolution'])
         elif func_type == 'egg_crate':
-            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=(img_height, img_width), resolution=kwargs['resolution'])
+            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=func_shape, resolution=kwargs['resolution'])
 
         elif func_type == 'periodic_circles':
-            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=(img_height, img_width))
+            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=func_shape)
+
+        elif func_type == 'checkerboard':
+            import skimage.segmentation as seg
+            phi = seg.checkerboard_level_set(func_shape, radius)
+
+
+        # scale between [-1, 1], while keeping the level set unmoved
+
+        phi[phi>= 0] = scale_values(phi[phi>=0], 0., 1.)
+        phi[phi<=0] = scale_values(phi[phi<=0], -1., 0.)
 
         if np.all(self.__Phi[0].value == 0):
             self.__Phi = []
@@ -887,6 +910,7 @@ class LevelSetFlow:
         processing_props = self.processing_props
 
         fig, ax = plt.subplots(num='img')
+
         if np.any(self.img_rgb) != 0:
             mt.imshow(self.img_rgb)
         else:
