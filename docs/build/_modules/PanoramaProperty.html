@@ -174,15 +174,16 @@
 
 <span class="sd">    .. note:: For the Scanstation C10 the measurements&#39; angular resolution for both elevation and azimuth directions:</span>
 
-<span class="sd">            * Low: 0.11 deg</span>
-<span class="sd">            * Medium: 0.057 deg</span>
-<span class="sd">            * High: 0.028 deg</span>
-<span class="sd">            * Highest: *TO ADD*</span>
+<span class="sd">            * Low: :math: 0.2^\circ</span>
+<span class="sd">            * Medium: :math: 0.11^\circ</span>
+<span class="sd">            * High: :math: 0.057^\circ</span>
+<span class="sd">            * Highest: :math: 0.028^\circ</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">__rowIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the row number to which each point belongs to</span>
     <span class="n">__columnIndexes</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># An array of indexes corresponding to the column number to which each point belongs to</span>
     <span class="n">__panoramaData</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the panorama is stored</span>
+    <span class="n">__sphericalCoordinates</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># the points coordinate in spheric coordinates</span>
     <span class="n">__panoramaIndex</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A m-by-n-by-p array in which the indices of the points are stored</span>
     <span class="n">__voidData</span> <span class="o">=</span> <span class="mi">250</span>  <span class="c1"># A number indicating missing data in the panorama</span>
     <span class="n">__minAzimuth</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># The minimal azimuth value</span>
@@ -191,6 +192,7 @@
     <span class="n">__maxElevation</span> <span class="o">=</span> <span class="mi">90</span>  <span class="c1"># The maximal elevation angle value</span>
     <span class="n">__azimuthSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the azimuth direction</span>
     <span class="n">__elevationSpacing</span> <span class="o">=</span> <span class="mf">0.057</span>  <span class="c1"># The spacing between points in the elevation angle direction</span>
+
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sphericalCoordinates</span><span class="p">,</span> <span class="n">rowIndexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columnIndexes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">panoramaData</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -214,9 +216,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__columnIndexes</span> <span class="o">=</span> <span class="n">columnIndexes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__rowIndexes</span> <span class="o">=</span> <span class="n">rowIndexes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__sphericalCoordinates</span> <span class="o">=</span> <span class="n">sphericalCoordinates</span>
 
-        <span class="n">numRows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_elevation</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_elevation</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation_spacing</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">numColumns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_azimuth</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_azimuth</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">numRows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_elevation</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_elevation</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation_spacing</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+        <span class="n">numColumns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">max_azimuth</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_azimuth</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaIndex</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="n">numRows</span><span class="p">,</span> <span class="n">numColumns</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">panoramaData</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -242,11 +245,18 @@
     <span class="c1">#</span>
     <span class="c1">#     self.__panoramaIndex = panoramaIndex</span>
     <span class="c1">#     return panoramaIndex</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sphericalCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Point in spherical coordinates</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sphericalCoordinates</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">PanoramaImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the panorama image</span>
+<span class="sd">        The data as panorama image</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__panoramaData</span>
 
@@ -401,74 +411,8 @@
         <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">row_ind</span><span class="p">,</span> <span class="n">col_ind</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">PointSubSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PanoramaProperty.normals"><a class="viewcode-back" href="../Properties/Panorama/Panorama.html#PanoramaProperty.PanoramaProperty.normals">[docs]</a>    <span class="k">def</span> <span class="nf">normals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phenomenaSize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">gradientType</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computing gradients and normals in each direction, via adaptive smoothing according to :cite:`Arav2013`</span>
 
-<span class="sd">        :param phenomenaSize: phenomena size for adaptive smoothing (default: 0.12 m)</span>
-<span class="sd">        :param ksize: kernel size for gradient computation (default: (5,5))</span>
-<span class="sd">        :param gradientType: &#39;L1&#39; L1 norm of grad(I); &#39;L2&#39; L2-norm of grad(I); &#39;LoG&#39; Laplacian of gaussian (default: &#39;L1&#39;)</span>
 
-<span class="sd">        **Optionals**</span>
-
-<span class="sd">        :param rangeThresh: scanner&#39;s maximum range</span>
-<span class="sd">        :param smoothing_function: if other smoothing than adaptive is required (e.g. &#39;guassianBlur&#39;))</span>
-
-<span class="sd">        :type ksize: tuple of int</span>
-<span class="sd">        :type gradientType: str</span>
-<span class="sd">        :type rangeThresh: float</span>
-<span class="sd">        :type phenomenaSize: float</span>
-
-<span class="sd">        :return:</span>
-<span class="sd">            - normals: a holding  :math:`n\times m \times 3` ndarray of the normals in each direction (Nx, Ny, Nz)</span>
-<span class="sd">            - gradient: gradient in each pixel</span>
-<span class="sd">            - filtered: range image after adaptive smoothing</span>
-<span class="sd">            - xyz: points&#39; list after smoothing, from range image</span>
-
-<span class="sd">        :rtype: tuple</span>
-
-<span class="sd">        .. warning::</span>
-
-<span class="sd">           Implemented for gaussian filtering and adaptive filters. Other adaptations might be</span>
-<span class="sd">           needed when using different methods for smoothing.</span>
-
-<span class="sd">        .. seealso:: method :py:meth:`NormalsFactory.NormalsFactory.normalsComputation_in_raster`</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">smoothed_flag</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># flag to check if the image was smoothed already</span>
-        <span class="n">filtered</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">xi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span>
-        <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">yi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation_spacing</span><span class="p">)</span>
-
-        <span class="c1"># Smoothing the range image using adaptive smoothing</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="s1">&#39;smoothing_function&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;smoothin_function&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;gaussianBlur&#39;</span><span class="p">:</span>
-                <span class="n">filtered</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="p">,</span> <span class="n">ksize</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
-                <span class="n">smoothed_flag</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;smoothing_function&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span>
-                <span class="n">smoothed_flag</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="n">smoothed_flag</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">filtered</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaptive_smoothing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="p">,</span> <span class="n">phenomenaSize</span><span class="p">)</span>
-
-        <span class="c1"># Computing gradient map in the scan after lowpass filter</span>
-        <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
-        <span class="n">gradient</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageGradient</span><span class="p">(</span><span class="n">filtered</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span> <span class="n">gradientType</span><span class="o">=</span><span class="n">gradientType</span><span class="p">)</span>
-
-        <span class="c1"># Computing Normal vectors</span>
-        <span class="c1"># finding the ray direction (Zeibak Thesis: eq. 20, p. 58)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">filtered</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">filtered</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">filtered</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span>
-
-        <span class="n">xyz</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">z</span><span class="o">.</span><span class="n">flatten</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-
-        <span class="n">n</span> <span class="o">=</span> <span class="n">NormalsFactory</span><span class="o">.</span><span class="n">normalsComputation_in_raster</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">n</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">filtered</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -478,93 +422,22 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span>
 
-<div class="viewcode-block" id="PanoramaProperty.adaptive_smoothing"><a class="viewcode-back" href="../Properties/Panorama/Panorama.html#PanoramaProperty.PanoramaProperty.adaptive_smoothing">[docs]</a>    <span class="k">def</span> <span class="nf">adaptive_smoothing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">panoramaImage</span><span class="p">,</span> <span class="n">phenomena_size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adaptive smoothing of range image according to another (self) panorama image</span>
 
-<span class="sd">        .. note::</span>
-<span class="sd">           The function is implemented similar to other smoothing functions (e.g., `cv2.GaussianBlur`; `cv2.Blur`), so</span>
-<span class="sd">           different kinds of smoothing functions will be applicable by sending (without `if`).</span>
-<span class="sd">           This means that the function will return computed `sigma` and `ksize` according to</span>
-<span class="sd">           the average - and they will be returned in the variable.</span>
+<div class="viewcode-block" id="PanoramaProperty.pano2rad"><a class="viewcode-back" href="../Properties/Panorama/Panorama.html#PanoramaProperty.PanoramaProperty.pano2rad">[docs]</a>    <span class="k">def</span> <span class="nf">pano2rad</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts the axes of the panorama to their value as degree (radians)</span>
 
-<span class="sd">         An adaptive smoothing is implemented as a family of convolution kernels characterized by</span>
-<span class="sd">         different :math:`\sigma` values where:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">             d(\rho )=\frac{D}{\rho \Delta }</span>
-
-<span class="sd">        with :math: `D`, the object-space size of the window, and :math: `\Delta` the angular sampling resolution</span>
-<span class="sd">        and :math: `\rho` is the measured range.</span>
-
-<span class="sd">        :cite:`Arav2013`</span>
-
-<span class="sd">        .. todo::</span>
-<span class="sd">           Add optionality for adaptive smoothing for other properties panoramas, where adaptation is according to</span>
-<span class="sd">           range information</span>
-
-<span class="sd">        :param phenomena_size: the minimal size of the phenomena that we don&#39;t want to smooth (:math: `D` above)</span>
-<span class="sd">         default: 0.12 m</span>
-
-<span class="sd">        :param panoramaImage: the image to smooth</span>
-
-<span class="sd">        :return:</span>
-<span class="sd">           - smoothed image</span>
-<span class="sd">           - mean sigma size</span>
-<span class="sd">           - mean kernel size</span>
+<span class="sd">        :return: azimuth and elevation angles of the panorama</span>
 
 <span class="sd">        :rtype: tuple</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">phenomena_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">phenomena_size</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># in meters</span>
-        <span class="n">filtered_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">)</span>
-        <span class="n">sigmas</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ksizes</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">scan_resolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation_spacing</span><span class="p">])</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="n">rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">rho</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">void_data</span><span class="p">:</span>
-                    <span class="n">filtered_image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">void_data</span>
-                    <span class="k">continue</span>
-                <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">rho</span><span class="p">):</span>
-                    <span class="n">filtered_image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-                    <span class="k">continue</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="c1"># Create the filter and define the window size according to the changing resolution (sigma)</span>
-                    <span class="n">current_sigma</span> <span class="o">=</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">phenomena_size</span> <span class="o">/</span> <span class="p">(</span><span class="n">rho</span> <span class="o">*</span> <span class="n">scan_resolution</span><span class="p">)</span>
-                    <span class="n">sigmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_sigma</span><span class="p">)</span>
-                    <span class="n">ksize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">current_sigma</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">ksize</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">ksize</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                    <span class="n">ksizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ksize</span><span class="p">)</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">xi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_spacing</span><span class="p">)</span>
+        <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">yi</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation_spacing</span><span class="p">)</span>
 
-                    <span class="n">gauss_kernel</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getGaussianKernel</span><span class="p">(</span><span class="n">ksize</span><span class="p">,</span> <span class="n">current_sigma</span><span class="p">)</span>
-                    <span class="n">gauss_kernel</span> <span class="o">=</span> <span class="n">gauss_kernel</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">gauss_kernel</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span></div></div>
 
-                    <span class="c1"># Define the window</span>
-                    <span class="n">win_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">ksize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-                    <span class="n">i_start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">win_size</span><span class="p">)</span>
-                    <span class="n">i_start_win</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">win_size</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="n">i_start</span><span class="p">)</span>
-                    <span class="n">i_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span> <span class="o">+</span> <span class="n">win_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="n">i_end_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gauss_kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">gauss_kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">i</span> <span class="o">+</span> <span class="n">win_size</span><span class="p">)</span> <span class="o">-</span> <span class="n">i_end</span><span class="p">))</span>
-
-                    <span class="n">j_start</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="n">win_size</span><span class="p">)</span>
-                    <span class="n">j_start_win</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">win_size</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="n">j_start</span><span class="p">)</span>
-                    <span class="n">j_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">j</span> <span class="o">+</span> <span class="n">win_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                    <span class="n">j_end_win</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gauss_kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">gauss_kernel</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="p">((</span><span class="n">j</span> <span class="o">+</span> <span class="n">win_size</span><span class="p">)</span> <span class="o">-</span> <span class="n">j_end</span><span class="p">))</span>
-
-                    <span class="n">patch</span> <span class="o">=</span> <span class="n">panoramaImage</span><span class="p">[</span><span class="n">i_start</span><span class="p">:</span><span class="n">i_end</span><span class="p">,</span> <span class="n">j_start</span><span class="p">:</span> <span class="n">j_end</span><span class="p">]</span>
-                    <span class="n">gauss_win</span> <span class="o">=</span> <span class="n">gauss_kernel</span><span class="p">[</span><span class="n">i_start_win</span><span class="p">:</span><span class="n">i_end_win</span><span class="p">,</span> <span class="n">j_start_win</span><span class="p">:</span> <span class="n">j_end_win</span><span class="p">]</span>
-
-                    <span class="n">non_nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">patch</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">void_data</span><span class="p">)</span>
-                    <span class="n">filtered_image</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">patch</span><span class="p">[</span><span class="n">non_nan</span><span class="p">]</span> <span class="o">*</span> <span class="n">gauss_win</span><span class="p">[</span><span class="n">non_nan</span><span class="p">])</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">gauss_win</span><span class="p">[</span><span class="n">non_nan</span><span class="p">])</span>
-
-        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sigmas</span><span class="p">)</span>
-        <span class="n">ksize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ksizes</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">filtered_image</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">ksize</span></div></div>
 </pre></div>
 
            </div>

@@ -357,13 +357,25 @@
         <span class="n">eigval</span><span class="p">,</span> <span class="n">eigvec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">eigvec</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">eigval</span><span class="p">)]</span>
 
-<div class="viewcode-block" id="NormalsFactory.normalsComputation_in_raster"><a class="viewcode-back" href="../Properties/Normals/Normals.html#NormalsFactory.NormalsFactory.normalsComputation_in_raster">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">normalsComputation_in_raster</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes the normal vectors according where each ordinate is ordered at its place as an ndarray (mxn)</span>
-<span class="sd">        Usually used for computing normals in panorama images or other rasters.</span>
 
-<span class="sd">        According to :cite:`Zeibak2008`, the normals are computed as</span>
+<div class="viewcode-block" id="NormalsFactory.normals_panorama_xyz"><a class="viewcode-back" href="../Properties/Normals/Normals.html#NormalsFactory.NormalsFactory.normals_panorama_xyz">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">normals_panorama_xyz</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">panorama</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute normals in panorama, after adaptive smoothing according to :cite:`Arav2013` and  :cite:`Zeibak2008`.</span>
+
+<span class="sd">        :param panorama: the panorama via which the normals are computed</span>
+<span class="sd">        :param ksize: filter kernel size (1, 3, 5, or 7). Default: 3</span>
+<span class="sd">        :param resolution: kernel resolution. Default: 1</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 0. If sigma=0 no smoothing is carried out</span>
+
+<span class="sd">        :type panorama: Properties.Panoramas.PanoramaProperty.PanoramaProperty</span>
+
+<span class="sd">        :return: normals a holding  :math:`n\times m \times 3` ndarray of the normals in each direction (Nx, Ny, Nz)</span>
+
+<span class="sd">        :rtype: np.ndarray [:math:`n\times m \times 3`]</span>
+
+
+<span class="sd">        the normals are computed as</span>
 
 <span class="sd">        .. math::</span>
 <span class="sd">            \vec{v}_1 = \begin{bmatrix} dX_1\\ dY_1 \\dZ_1 \end{bmatrix} ; \qquad</span>
@@ -372,22 +384,31 @@
 <span class="sd">        with :math:`dX_i` etc. the differentiation in each direction. Then,</span>
 
 <span class="sd">        .. math::</span>
-
 <span class="sd">            \vec{N} = \frac{\vec{v}_1\times \vec{v}_2}{||\vec{v}_1\times \vec{v}_2||}</span>
 
-<span class="sd">        :param x: x ordinates as organized in the raster</span>
-<span class="sd">        :param y: y ordinates as organized in the raster</span>
-<span class="sd">        :param z: z ordinates as organized in the raster</span>
-
-<span class="sd">        :return: normals matrices for each direction</span>
-
-<span class="sd">        :rtype: np.ndarray [:math:`n\times m \times 3`]</span>
+<span class="sd">        .. warning::</span>
+<span class="sd">           Implemented for gaussian filtering and adaptive filters. Other adaptations might be</span>
+<span class="sd">           needed when using different methods for smoothing.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
+
+        <span class="n">img</span> <span class="o">=</span> <span class="n">panorama</span><span class="o">.</span><span class="n">PanoramaImage</span>
+
+        <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span> <span class="o">=</span> <span class="n">panorama</span><span class="o">.</span><span class="n">pano2rad</span><span class="p">()</span>
+
+        <span class="c1"># Computing Normal vectors</span>
+        <span class="c1">#---------------------------</span>
+
+        <span class="c1"># finding the ray direction (Zeibak Thesis: eq. 20, p. 58)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">img</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">img</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">img</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">yi</span><span class="p">)</span>
+
         <span class="c1"># Local derivatives (according to Zeibak p. 56)</span>
-        <span class="n">dfx_daz</span><span class="p">,</span> <span class="n">dfx_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">dfy_daz</span><span class="p">,</span> <span class="n">dfy_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">dfz_daz</span><span class="p">,</span> <span class="n">dfz_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dfx_daz</span><span class="p">,</span> <span class="n">dfx_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">dfy_daz</span><span class="p">,</span> <span class="n">dfy_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+        <span class="n">dfz_daz</span><span class="p">,</span> <span class="n">dfz_delevation</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
 
         <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
         <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>

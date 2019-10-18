@@ -172,123 +172,96 @@
 <span id="filter-factory"></span><h1>Filter Factory<a class="headerlink" href="#module-FilterFactory" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="FilterFactory.FilterFactory">
-<em class="property">class </em><code class="descclassname">FilterFactory.</code><code class="descname">FilterFactory</code><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">FilterFactory.</code><code class="sig-name descname">FilterFactory</code><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filter PointSet using different methods</p>
 <blockquote>
 <div><p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#FilterFactory.FilterFactory.FilterByBoundingBox" title="FilterFactory.FilterFactory.FilterByBoundingBox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterByBoundingBox</span></code></a>(points[,&nbsp;xmin,&nbsp;xmax,&nbsp;…])</td>
-<td>Filtering based on a defined boundary box</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#FilterFactory.FilterFactory.FilterBySphericalCoordinates" title="FilterFactory.FilterFactory.FilterBySphericalCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FilterBySphericalCoordinates</span></code></a>(sphCoorProp[,&nbsp;…])</td>
-<td>Filtering based on spherical coordinates values</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#FilterFactory.FilterFactory.SlopeBasedMorphologicFilter" title="FilterFactory.FilterFactory.SlopeBasedMorphologicFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SlopeBasedMorphologicFilter</span></code></a>(points,&nbsp;…)</td>
-<td>Slope Based Morphological Filter</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#FilterFactory.FilterFactory.SmoothPointSet_MLS" title="FilterFactory.FilterFactory.SmoothPointSet_MLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SmoothPointSet_MLS</span></code></a>(pointset,&nbsp;radius,&nbsp;…)</td>
-<td>Smoothing with pcl’s Moving Least Squares (MLS) for data smoothing and imporved normal estimation</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_FilterFactory__CreateSegmentationProperty</span></code>(…)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#FilterFactory.FilterFactory.smooth_simple" title="FilterFactory.FilterFactory.smooth_simple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth_simple</span></code></a>(neighbors_property)</td>
-<td>Smoothing by replacement of each point with its neighbors average value</td>
-</tr>
+<tbody>
 </tbody>
 </table>
 </div></blockquote>
-<dl class="staticmethod">
+<dl class="method">
 <dt id="FilterFactory.FilterFactory.FilterByBoundingBox">
-<em class="property">static </em><code class="descname">FilterByBoundingBox</code><span class="sig-paren">(</span><em>points</em>, <em>xmin=None</em>, <em>xmax=None</em>, <em>ymin=None</em>, <em>ymax=None</em>, <em>zmin=None</em>, <em>zmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.FilterByBoundingBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.FilterByBoundingBox" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">FilterByBoundingBox</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">xmin=None</em>, <em class="sig-param">xmax=None</em>, <em class="sig-param">ymin=None</em>, <em class="sig-param">ymax=None</em>, <em class="sig-param">zmin=None</em>, <em class="sig-param">zmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.FilterByBoundingBox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.FilterByBoundingBox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filtering based on a defined boundary box</p>
 <p>:param points
 :param xmin, xmax: ymin, ymax, zmin, zmax:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">segmented data, segment 0 contains the non-filtered points</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>segmented data, segment 0 contains the non-filtered points</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="FilterFactory.FilterFactory.FilterBySphericalCoordinates">
-<em class="property">static </em><code class="descname">FilterBySphericalCoordinates</code><span class="sig-paren">(</span><em>sphCoorProp</em>, <em>minAzimuth=0</em>, <em>maxAzimuth=360</em>, <em>minElevationAngle=-90</em>, <em>maxElevationAngle=90</em>, <em>minRange=0</em>, <em>maxRange=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.FilterBySphericalCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.FilterBySphericalCoordinates" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">FilterBySphericalCoordinates</code><span class="sig-paren">(</span><em class="sig-param">sphCoorProp</em>, <em class="sig-param">minAzimuth=0</em>, <em class="sig-param">maxAzimuth=360</em>, <em class="sig-param">minElevationAngle=-90</em>, <em class="sig-param">maxElevationAngle=90</em>, <em class="sig-param">minRange=0</em>, <em class="sig-param">maxRange=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.FilterBySphericalCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.FilterBySphericalCoordinates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Filtering based on spherical coordinates values</p>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="FilterFactory.FilterFactory.SlopeBasedMorphologicFilter">
-<em class="property">static </em><code class="descname">SlopeBasedMorphologicFilter</code><span class="sig-paren">(</span><em>points</em>, <em>searchRadius</em>, <em>slopeThreshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.SlopeBasedMorphologicFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.SlopeBasedMorphologicFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">SlopeBasedMorphologicFilter</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">searchRadius</em>, <em class="sig-param">slopeThreshold</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.SlopeBasedMorphologicFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.SlopeBasedMorphologicFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Slope Based Morphological Filter</p>
 <p>:param points
 :param searchRadius: search radius in meters
 :param slopeThreshold: maximum slope angle allowed, given in degrees</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">segmented points, with segment 0 contains the terrain points</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>segmented points, with segment 0 contains the terrain points</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="../Properties/SegmentationProperty.html#SegmentationProperty.SegmentationProperty" title="SegmentationProperty.SegmentationProperty">SegmentationProperty</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="FilterFactory.FilterFactory.SmoothPointSet_MLS">
-<em class="property">static </em><code class="descname">SmoothPointSet_MLS</code><span class="sig-paren">(</span><em>pointset</em>, <em>radius</em>, <em>polynomial_order</em>, <em>polynomial_fit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.SmoothPointSet_MLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.SmoothPointSet_MLS" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">SmoothPointSet_MLS</code><span class="sig-paren">(</span><em class="sig-param">pointset</em>, <em class="sig-param">radius</em>, <em class="sig-param">polynomial_order</em>, <em class="sig-param">polynomial_fit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.SmoothPointSet_MLS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.SmoothPointSet_MLS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smoothing with pcl’s Moving Least Squares (MLS) for data smoothing and imporved normal estimation</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pointset</strong> (<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – PointSet  to smooth</li>
-<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a>) – radius that is to be used for determining the k-nearest neighbors used for fitting.</li>
-<li><strong>polynomial_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Set the order of the polynomial to be fit.</li>
-<li><strong>polynomial_fit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – Set the surface and normal are approximated using a polynomial, or only via tangent estimation.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pointset</strong> (<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – PointSet  to smooth</p></li>
+<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – radius that is to be used for determining the k-nearest neighbors used for fitting.</p></li>
+<li><p><strong>polynomial_order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Set the order of the polynomial to be fit.</p></li>
+<li><p><strong>polynomial_fit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – Set the surface and normal are approximated using a polynomial, or only via tangent estimation.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 <div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">NOT WORKING. PCL-PYTHON CANNOT BE IMPORTED. WAS NOT DEBUGGED</p>
+<p class="admonition-title">Warning</p>
+<p>NOT WORKING. PCL-PYTHON CANNOT BE IMPORTED. WAS NOT DEBUGGED</p>
 </div>
 </dd></dl>
 
-<dl class="staticmethod">
+<dl class="method">
 <dt id="FilterFactory.FilterFactory.smooth_simple">
-<em class="property">static </em><code class="descname">smooth_simple</code><span class="sig-paren">(</span><em>neighbors_property</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.smooth_simple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.smooth_simple" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">smooth_simple</code><span class="sig-paren">(</span><em class="sig-param">neighbors_property</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FilterFactory.html#FilterFactory.smooth_simple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FilterFactory.FilterFactory.smooth_simple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smoothing by replacement of each point with its neighbors average value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>neighbors_property</strong> (<a class="reference internal" href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty</em></a>) – the neighborhood property for averaging</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">new smoothed pointset and its neighborhood (not recomputed)</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a>)</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>neighbors_property</strong> (<a class="reference internal" href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty</em></a>) – the neighborhood property for averaging</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new smoothed pointset and its neighborhood (not recomputed)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="../Properties/Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

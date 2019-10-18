@@ -282,13 +282,13 @@ def computeImageDerivatives_numeric(img, order, ksize=3, sigma=1., resolution=1.
             Eq. numbers from Amit Baruch Dissertation
     """
 
-    img = np.float64(img)
+    img = (img).astype('float64')
 
     # if blurring is required before differentiation
     if sigma != 0:
         img = cv2.GaussianBlur(img, blur_window, sigma)
 
-    floord = np.int(ksize)
+    floord = (ksize).astype('int')
 
     # Derivatives (eq. 3-37)
 

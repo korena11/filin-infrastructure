@@ -184,11 +184,13 @@
 <span class="sd">        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)</span>
 <span class="sd">        :param elevationSpacing: The spacing between two points of the point set in the elevation direction</span>
 <span class="sd">        :param intensity: if the pixel&#39;s value should be the intensity value.</span>
+<span class="sd">        :param voidData: the value for NoData. Default: 250 (meters)</span>
 
 <span class="sd">        :type points: PointSet</span>
 <span class="sd">        :type azimuthSpacing: float</span>
 <span class="sd">        :type elevationSpacing: float</span>
 <span class="sd">        :type intensity: bool</span>
+<span class="sd">        :type voidData: float</span>
 
 <span class="sd">         **Optionals**</span>
 
@@ -217,7 +219,7 @@
         <span class="c1"># Create the panorama</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">intensity</span><span class="p">:</span>
             <span class="c1"># range as pixel value</span>
-            <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">sphCoords</span><span class="o">.</span><span class="n">Ranges</span><span class="p">,</span>
+            <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaProperty</span><span class="p">(</span><span class="n">sphCoords</span><span class="p">,</span> <span class="n">elevationIndexes</span><span class="p">,</span> <span class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">sphCoords</span><span class="o">.</span><span class="n">ranges</span><span class="p">,</span>
                                         <span class="n">minAzimuth</span><span class="o">=</span><span class="n">minAz</span><span class="p">,</span> <span class="n">maxAzimuth</span><span class="o">=</span><span class="n">maxAz</span><span class="p">,</span>
                                         <span class="n">minElevation</span><span class="o">=</span><span class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
                                         <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -228,7 +230,7 @@
                                         <span class="n">minElevation</span><span class="o">=</span><span class="n">minEl</span><span class="p">,</span> <span class="n">maxElevation</span><span class="o">=</span><span class="n">maxEl</span><span class="p">,</span> <span class="n">azimuthSpacing</span><span class="o">=</span><span class="n">azimuthSpacing</span><span class="p">,</span>
                                         <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">void_as_mean</span><span class="p">:</span>
-            <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">Ranges</span><span class="p">)</span>
+            <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">ranges</span><span class="p">)</span>
             <span class="n">panorama</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">voidData</span><span class="o">=</span><span class="n">void</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">panorama</span></div>
@@ -243,12 +245,6 @@
 <span class="sd">        :param azimuthSpacing: The spacing between two points of the point set in the azimuth direction (scan property)</span>
 <span class="sd">        :param elevationSpacing: The spacing between two points of the point set in the elevation direction</span>
 <span class="sd">        :param property_array: if the values of the property to present cannot be retrieved by a simple ``getValues()``</span>
-
-<span class="sd">        .. code-block:: python</span>
-
-<span class="sd">            PanoramaFactory.CreatePanorama_byProperty(curvatureProperty, azimuthSpacing=0.057, elevationSpacing=0.057,</span>
-<span class="sd">                                  intensity=False, property_array=curvatureProperty.k1)</span>
-
 <span class="sd">        :param intensity: if the pixel&#39;s value should be the intensity value.</span>
 <span class="sd">        :param voidData: the number to set where there is no data</span>
 <span class="sd">        :param void_as_mean: flag to determine the void value as the mean value of the ranges</span>
@@ -260,6 +256,12 @@
 <span class="sd">        :type property_array: numpy.array</span>
 <span class="sd">        :type void_as_mean: bool</span>
 <span class="sd">        :type voidData: float</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            PanoramaFactory.CreatePanorama_byProperty(curvatureProperty, azimuthSpacing=0.057, elevationSpacing=0.057,</span>
+<span class="sd">                                  intensity=False, property_array=curvatureProperty.k1)</span>
+
 
 <span class="sd">        :return: panorama_property</span>
 <span class="sd">        :rtype: PanoramaProperty</span>
@@ -299,7 +301,7 @@
                                         <span class="n">elevationSpacing</span><span class="o">=</span><span class="n">elevationSpacing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">void_as_mean</span><span class="p">:</span>
-            <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">Ranges</span><span class="p">)</span>
+            <span class="n">void</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__compute_void_as_mean</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">ranges</span><span class="p">)</span>
             <span class="n">panorama</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">voidData</span><span class="o">=</span><span class="n">void</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">panorama</span></div>
@@ -324,16 +326,17 @@
 <span class="sd">        :rtype: tuple</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
         <span class="c1"># Finding the boundaries of the panorama</span>
-        <span class="n">minAz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">Azimuths</span><span class="p">)</span>
-        <span class="n">maxAz</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">Azimuths</span><span class="p">)</span>
-        <span class="n">minEl</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">ElevationAngles</span><span class="p">)</span>
-        <span class="n">maxEl</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">ElevationAngles</span><span class="p">)</span>
+        <span class="n">minAz</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">azimuths</span><span class="p">)</span>
+        <span class="n">maxAz</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">azimuths</span><span class="p">)</span>
+        <span class="n">minEl</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">elevations</span><span class="p">)</span>
+        <span class="n">maxEl</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">elevations</span><span class="p">)</span>
 
         <span class="c1"># Calculating the location of each point in the panorama</span>
-        <span class="n">azimuthIndexes</span> <span class="o">=</span> <span class="p">((</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">Azimuths</span> <span class="o">-</span> <span class="n">minAz</span><span class="p">)</span> <span class="o">/</span> <span class="n">azimuthSpacing</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">elevationIndexes</span> <span class="o">=</span> <span class="p">((</span><span class="n">maxEl</span> <span class="o">-</span> <span class="n">sphCoords</span><span class="o">.</span><span class="n">ElevationAngles</span><span class="p">)</span> <span class="o">/</span> <span class="n">elevationSpacing</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">azimuthIndexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">sphCoords</span><span class="o">.</span><span class="n">azimuths</span> <span class="o">-</span> <span class="n">minAz</span><span class="p">)</span> <span class="o">/</span> <span class="n">azimuthSpacing</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">elevationIndexes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">maxEl</span> <span class="o">-</span> <span class="n">sphCoords</span><span class="o">.</span><span class="n">elevations</span><span class="p">)</span> <span class="o">/</span> <span class="n">elevationSpacing</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">minAz</span><span class="p">,</span> <span class="n">maxAz</span><span class="p">),</span> <span class="p">(</span><span class="n">minEl</span><span class="p">,</span> <span class="n">maxEl</span><span class="p">),</span> <span class="p">(</span><span class="n">azimuthIndexes</span><span class="p">,</span> <span class="n">elevationIndexes</span><span class="p">)</span></div>
 </pre></div>

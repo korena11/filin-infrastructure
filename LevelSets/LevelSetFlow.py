@@ -957,7 +957,7 @@ class LevelSetFlow:
                 extrinsic += self.__compute_vo() * vo_w
                 phi_t = self.step * (intrinsic - extrinsic)
                 # reinitializtion every 5 iterations:
-                if iteration % 10== 0 and iteration != 0:
+                if iteration % 20== 0 and iteration != 0:
                     self.phi(k).reinitialization(phi_t)
 
                 else:
@@ -968,8 +968,8 @@ class LevelSetFlow:
             # extrinsic += (1 - mult_phi)
             #  self.psi += extrinsic
 
-            plt.figure('kappa')
-            mt.imshow(self.phi().kappa)
+            plt.figure('norm nabla')
+            mt.imshow(self.phi().norm_nabla)
             plt.pause(.5e-10)
 
             # if np.max(np.abs(phi_t)) <= 5e-5:

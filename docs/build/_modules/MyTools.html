@@ -174,7 +174,7 @@
 <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">norm</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span>
 <span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="k">import</span> <span class="n">filters</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="k">import</span> <span class="n">Polygon</span>
+<span class="c1"># from shapely.geometry import Polygon</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">measure</span>
 
 
@@ -322,14 +322,15 @@
 
 <div class="viewcode-block" id="computeImageDerivatives"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.computeImageDerivatives">[docs]</a><span class="k">def</span> <span class="nf">computeImageDerivatives</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes image derivatives up to order 2. Normalizes the derivatives.</span>
+<span class="sd">        Computes image derivatives up to order 2.</span>
 
 <span class="sd">        :param img: the image to which the derivatives should be computed</span>
 <span class="sd">        :param order: order needed (1 or 2)</span>
-<span class="sd">        :param ksize: filter kernel size (3,and up)</span>
+<span class="sd">        :param ksize: filter kernel size (1, 3, 5, or 7)</span>
 <span class="sd">        :param resolution: kernel resolution</span>
-<span class="sd">        :param sigma: sigma for gaussian blurring</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</span>
 <span class="sd">        :param window: tuple of window size for blurring</span>
+
 
 <span class="sd">        :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -340,41 +341,146 @@
               <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
               <span class="s1">&#39;window&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)}</span>
     <span class="n">params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">ksize</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">]</span>
+    <span class="n">ksize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">])</span>
 
     <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 
-    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
-    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
+    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">)</span>
+    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">)</span>
 
-    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
-    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_y</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+        <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_y</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
 
-    <span class="n">img_x</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img_x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-                          <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
-    <span class="n">img_y</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img_y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-                          <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
+    <span class="c1"># img_x = cv2.normalize(img_x.astype(&#39;float&#39;), None, 0.0, 1.0,</span>
+    <span class="c1">#                       cv2.NORM_MINMAX)</span>
+    <span class="c1"># img_y = cv2.normalize(img_y.astype(&#39;float&#39;), None, 0.0, 1.0,</span>
+    <span class="c1">#                       cv2.NORM_MINMAX)</span>
 
     <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
         <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img_y</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
         <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Sobel</span><span class="p">(</span><span class="n">img_x</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span> <span class="o">=</span> <span class="n">ksize</span><span class="p">)</span>
 
-        <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xx</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
-        <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_yy</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
-        <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xy</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xx</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+            <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_yy</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+            <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img_xy</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;window&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
 
-        <span class="n">img_xx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img_xx</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
-        <span class="n">img_yy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img_yy</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
-        <span class="n">img_xy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img_xy</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
-                               <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>
+        <span class="c1"># img_xx = cv2.normalize(img_xx.astype(&#39;float&#39;), None, 0.0, 1.0,</span>
+        <span class="c1">#                        cv2.NORM_MINMAX)</span>
+        <span class="c1"># img_yy = cv2.normalize(img_yy.astype(&#39;float&#39;), None, 0.0, 1.0,</span>
+        <span class="c1">#                        cv2.NORM_MINMAX)</span>
+        <span class="c1"># img_xy = cv2.normalize(img_xy.astype(&#39;float&#39;), None, 0.0, 1.0,</span>
+        <span class="c1">#                        cv2.NORM_MINMAX)</span>
 
         <span class="k">return</span> <span class="n">img_x</span><span class="p">,</span> <span class="n">img_y</span><span class="p">,</span> <span class="n">img_xx</span><span class="p">,</span> <span class="n">img_yy</span><span class="p">,</span> <span class="n">img_xy</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">img_x</span><span class="p">,</span> <span class="n">img_y</span></div>
 
+<div class="viewcode-block" id="computeImageGradient_numeric"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.computeImageGradient_numeric">[docs]</a><span class="k">def</span> <span class="nf">computeImageGradient_numeric</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">gradientType</span><span class="o">=</span><span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param img: the image to which the derivatives should be computed</span>
+<span class="sd">        :param gradientType: &#39;L1&#39; L1 norm of grad(I); &#39;L2&#39; L2-norm of grad(I); &#39;LoG&#39; Laplacian of gaussian</span>
+<span class="sd">        :param ksize: size of the differentiation window</span>
+<span class="sd">        :param resolution: kernel resolution</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</span>
+<span class="sd">        :param blur_window: tuple of window size for blurring</span>
+
+<span class="sd">        :type img: np.array</span>
+<span class="sd">        :type gradientType: str</span>
+<span class="sd">        :type ksize: int</span>
+<span class="sd">        :type resolution: float</span>
+<span class="sd">        :type sigma: float</span>
+<span class="sd">        :type blur_window: tuple</span>
+
+<span class="sd">        :return: an image of the gradient magnitude</span>
+<span class="sd">        :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gradient</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># img = cv2.GaussianBlur(I, (ksize, ksize), sigma)</span>
+
+    <span class="c1"># compute image gradient (numeric)</span>
+    <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">computeImageDerivatives_numeric</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ksize</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span><span class="n">blur_window</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;L1&#39;</span><span class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dy</span><span class="p">)),</span> <span class="p">(</span><span class="n">ksize</span><span class="p">,</span> <span class="n">ksize</span><span class="p">),</span> <span class="n">sigma</span><span class="p">)</span>  <span class="c1"># L1-norm of grad(I)</span>
+    <span class="k">elif</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;L2&#39;</span><span class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="n">ksize</span><span class="p">,</span> <span class="n">ksize</span><span class="p">),</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">gradientType</span> <span class="o">==</span> <span class="s1">&#39;LoG&#39;</span><span class="p">:</span>
+        <span class="n">gradient</span> <span class="o">=</span> <span class="n">filters</span><span class="o">.</span><span class="n">gaussian_laplace</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="c1"># return cv2.normalize((gradient).astype(&#39;float&#39;), None, 0.0,1.0, cv2.NORM_MINMAX)</span>
+    <span class="k">return</span> <span class="n">gradient</span></div>
+
+<div class="viewcode-block" id="computeImageDerivatives_numeric"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.computeImageDerivatives_numeric">[docs]</a><span class="k">def</span> <span class="nf">computeImageDerivatives_numeric</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes numeric image derivatives up to order 2.</span>
+
+<span class="sd">        :param img: the image to which the derivatives should be computed</span>
+<span class="sd">        :param order: order needed (1 or 2)</span>
+<span class="sd">        :param ksize: size of the differentiation window</span>
+<span class="sd">        :param resolution: kernel resolution</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</span>
+<span class="sd">        :param blur_window: tuple of window size for blurring</span>
+
+<span class="sd">        :type img: np.array</span>
+<span class="sd">        :type order: int</span>
+<span class="sd">        :type ksize: int</span>
+<span class="sd">        :type resolution: float</span>
+<span class="sd">        :type sigma: float</span>
+<span class="sd">        :type blur_window: tuple</span>
+
+
+<span class="sd">        :return: tuple of the derivatives in the following order: (dx, dy, dxx, dyy, dxy)</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            Eq. numbers from Amit Baruch Dissertation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+    <span class="c1"># if blurring is required before differentiation</span>
+    <span class="k">if</span> <span class="n">sigma</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">blur_window</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="n">floord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">ksize</span><span class="p">)</span>
+
+    <span class="c1"># Derivatives (eq. 3-37)</span>
+
+    <span class="c1"># x direction</span>
+    <span class="n">I1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[:</span> <span class="p">,</span> <span class="n">floord</span><span class="p">:</span> <span class="p">],</span> <span class="n">img</span><span class="p">[:,</span> <span class="o">-</span> <span class="n">floord</span><span class="p">:]))</span>
+    <span class="n">I2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">floord</span><span class="p">],</span> <span class="n">img</span><span class="p">[:,</span> <span class="p">:</span> <span class="o">-</span> <span class="n">floord</span><span class="p">]))</span>
+    <span class="n">Zx</span> <span class="o">=</span> <span class="p">(</span><span class="n">I1</span> <span class="o">-</span> <span class="n">I2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">resolution</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">ksize</span><span class="p">))</span>
+
+    <span class="c1"># y direction</span>
+    <span class="n">I3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:</span> <span class="p">,</span> <span class="p">:],</span> <span class="n">img</span><span class="p">[</span><span class="o">-</span><span class="n">floord</span><span class="p">:,</span> <span class="p">:]))</span>
+    <span class="n">I4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">img</span><span class="p">[:</span> <span class="n">floord</span><span class="p">,</span> <span class="p">:],</span> <span class="n">img</span><span class="p">[:</span> <span class="o">-</span><span class="n">floord</span><span class="p">,</span> <span class="p">:]))</span>
+    <span class="n">Zy</span> <span class="o">=</span> <span class="p">(</span><span class="n">I3</span> <span class="o">-</span> <span class="n">I4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">resolution</span> <span class="o">*</span> <span class="n">ksize</span><span class="p">)</span>
+
+    <span class="c1"># second order derivatives</span>
+    <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">I5a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[:</span> <span class="o">-</span> <span class="n">floord</span><span class="p">,</span> <span class="p">:</span> <span class="n">floord</span><span class="p">],</span> <span class="n">img</span><span class="p">[:</span> <span class="o">-</span> <span class="n">floord</span><span class="p">,</span> <span class="p">:</span> <span class="o">-</span> <span class="n">floord</span><span class="p">]))</span>
+        <span class="n">I5</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">I5a</span><span class="p">[:</span> <span class="n">floord</span><span class="p">,</span> <span class="p">:],</span> <span class="n">I5a</span><span class="p">))</span>
+        <span class="n">I6a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="n">floord</span><span class="p">:],</span> <span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="o">-</span> <span class="n">floord</span><span class="p">:]))</span>
+        <span class="n">I6</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">I6a</span><span class="p">,</span> <span class="n">I6a</span><span class="p">[</span><span class="o">-</span> <span class="n">floord</span><span class="p">:,</span> <span class="p">:]))</span>
+
+        <span class="n">I7a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="p">:</span> <span class="n">floord</span><span class="p">],</span> <span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="p">:</span><span class="o">-</span><span class="n">floord</span><span class="p">]))</span>
+        <span class="n">I7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">I7a</span><span class="p">,</span> <span class="n">I7a</span><span class="p">[</span><span class="o">-</span> <span class="n">floord</span><span class="p">:,</span> <span class="p">:]))</span>
+        <span class="n">I8a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="n">floord</span><span class="p">:],</span> <span class="n">img</span><span class="p">[</span><span class="n">floord</span><span class="p">:,</span> <span class="o">-</span> <span class="n">floord</span><span class="p">:]))</span>
+        <span class="n">I8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">I8a</span><span class="p">,</span> <span class="n">I8a</span><span class="p">[</span><span class="o">-</span> <span class="n">floord</span><span class="p">:,</span> <span class="p">:]))</span>
+
+        <span class="c1"># eq. (3-40)</span>
+        <span class="n">Zxx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">img</span> <span class="o">+</span> <span class="n">I1</span> <span class="o">+</span> <span class="n">I2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ksize</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">Zyy</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">img</span> <span class="o">+</span> <span class="n">I3</span> <span class="o">+</span> <span class="n">I4</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">ksize</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">Zxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">I7</span> <span class="o">+</span> <span class="n">I6</span> <span class="o">-</span> <span class="n">I5</span> <span class="o">-</span> <span class="n">I8</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ksize</span> <span class="o">*</span> <span class="n">resolution</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="k">return</span> <span class="n">Zx</span><span class="p">,</span> <span class="n">Zy</span><span class="p">,</span> <span class="n">Zxx</span><span class="p">,</span> <span class="n">Zyy</span><span class="p">,</span> <span class="n">Zxy</span>
+
+    <span class="k">return</span> <span class="n">Zx</span><span class="p">,</span> <span class="n">Zy</span></div>
 
 
 <div class="viewcode-block" id="DoG_filter"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.DoG_filter">[docs]</a><span class="k">def</span> <span class="nf">DoG_filter</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -540,10 +646,10 @@
     <span class="n">function_binary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">function_binary</span><span class="p">)</span>
 
     <span class="n">contours</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">find_contours</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">blob_labels</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">function_binary</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">blob_labels</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">function_binary</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">label_props</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">blob_labels</span><span class="p">)</span>
 
-    <span class="c1"># contours = chooseLargestContours(contours, label_props, blob_size)</span>
+    <span class="n">contours</span> <span class="o">=</span> <span class="n">chooseLargestContours</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">label_props</span><span class="p">,</span> <span class="n">blob_size</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
         <span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
     <span class="n">l_curve</span> <span class="o">=</span> <span class="p">[]</span>
@@ -705,6 +811,55 @@
         <span class="n">pcl_normals</span><span class="o">.</span><span class="n">setPointNormal</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pcl_saliency</span><span class="p">,</span> <span class="n">pcl_curvature</span><span class="p">,</span> <span class="n">pcl_normals</span></div>
+
+<div class="viewcode-block" id="chunking_dot"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.chunking_dot">[docs]</a><span class="k">def</span> <span class="nf">chunking_dot</span><span class="p">(</span><span class="n">big_matrix</span><span class="p">,</span> <span class="n">small_matrix</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="c1"># Make a copy if the array is not already contiguous</span>
+    <span class="n">small_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">small_matrix</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">big_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">small_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">R</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chunk_size</span><span class="p">):</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">chunk_size</span>
+        <span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">big_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">end</span><span class="p">],</span> <span class="n">small_matrix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">R</span></div>
+
+
+<div class="viewcode-block" id="scale_values"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.scale_values">[docs]</a><span class="k">def</span> <span class="nf">scale_values</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scale values between min and max range</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        f_{new} = \frac{(max-min) (f-f_{min})}{f_{max}-f_{min}} + min</span>
+
+<span class="sd">    :param array: the array that will be re-scaled</span>
+<span class="sd">    :param min: the minimal value of the range (default: 0)</span>
+<span class="sd">    :param max: the maximal value of the range (default: 1)</span>
+
+<span class="sd">    :type array: np.array</span>
+<span class="sd">    :type min: float</span>
+<span class="sd">    :type max: float</span>
+
+<span class="sd">    :return: rescaled array</span>
+
+<span class="sd">    :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="nb">max</span><span class="o">-</span><span class="nb">min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="nb">min</span></div>
+
+<div class="viewcode-block" id="make_zero"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.make_zero">[docs]</a><span class="k">def</span> <span class="nf">make_zero</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert numerical zero to zero</span>
+
+<span class="sd">    :param array: an array with various parameters</span>
+<span class="sd">    :param eps: a thershold below which the number is zero (default: 1e-5</span>
+
+<span class="sd">    :type array: np.array</span>
+<span class="sd">    :type eps: float</span>
+
+<span class="sd">    :return: the same array with zeros instead of :math:`|x|&lt;eps</span>
+<span class="sd">    :rtype: np.array</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">&lt;</span> <span class="n">eps</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">array</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

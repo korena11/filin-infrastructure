@@ -213,7 +213,7 @@
 </div></blockquote>
 <dl class="class">
 <dt id="VisualizationVTK.VisualizationVTK">
-<em class="property">class </em><code class="descclassname">VisualizationVTK.</code><code class="descname">VisualizationVTK</code><span class="sig-paren">(</span><em>number_of_view_ports=1</em>, <em>two_viewports_vertical_horizontal='H'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">VisualizationVTK.</code><code class="sig-name descname">VisualizationVTK</code><span class="sig-paren">(</span><em class="sig-param">number_of_view_ports=1</em>, <em class="sig-param">two_viewports_vertical_horizontal='H'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK" title="Permalink to this definition">¶</a></dt>
 <dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">points1</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
    <span class="n">pointset1</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">points1</span><span class="p">)</span>
    <span class="n">pointsubset1</span> <span class="o">=</span> <span class="n">PointSubSet</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">pointset1</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">points1</span><span class="p">),</span> <span class="mi">3</span><span class="p">)))</span>
@@ -243,85 +243,81 @@
 </div>
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.Bind">
-<code class="descname">Bind</code><span class="sig-paren">(</span><em>input_data</em>, <em>render_flag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.Bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.Bind" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Bind</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">render_flag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.Bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.Bind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Populates the render view (when only one viewport is in use)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>input_data</strong> (<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><em>BaseProperty</em>) – points</li>
-<li><strong>render_flag</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – the property according to which the color will be shown
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_data</strong> (<a class="reference internal" href="../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><em>BaseProperty</em>) – points</p></li>
+<li><p><strong>render_flag</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the property according to which the color will be shown
 - ‘color’
 - ‘rgb’
 - ‘externrgb’
 - ‘intensity’
 - ‘height’
 - ‘segmentation’
-- ‘parametricColor’</li>
-<li><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a>) – if specific colors are in use. If ‘color’ was chosen in renderFlag then this color will be used</li>
-<li><strong>new_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – flag to overwrite what’s in the window. Default: False</li>
+- ‘parametricColor’</p></li>
+<li><p><strong>color</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – if specific colors are in use. If ‘color’ was chosen in renderFlag then this color will be used</p></li>
+<li><p><strong>new_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – flag to overwrite what’s in the window. Default: False</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindBottomLeftData">
-<code class="descname">BindBottomLeftData</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindBottomLeftData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindBottomLeftData" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindBottomLeftData</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindBottomLeftData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindBottomLeftData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindBottomRightData">
-<code class="descname">BindBottomRightData</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindBottomRightData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindBottomRightData" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindBottomRightData</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindBottomRightData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindBottomRightData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindFirstHalf">
-<code class="descname">BindFirstHalf</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindFirstHalf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindFirstHalf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindFirstHalf</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindFirstHalf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindFirstHalf" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindSecondHalf">
-<code class="descname">BindSecondHalf</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindSecondHalf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindSecondHalf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindSecondHalf</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindSecondHalf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindSecondHalf" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindTopLeftData">
-<code class="descname">BindTopLeftData</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindTopLeftData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindTopLeftData" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindTopLeftData</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindTopLeftData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindTopLeftData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.BindTopRightData">
-<code class="descname">BindTopRightData</code><span class="sig-paren">(</span><em>input_data</em>, <em>renderFlag='color'</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindTopRightData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindTopRightData" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BindTopRightData</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">renderFlag='color'</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.BindTopRightData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.BindTopRightData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.InitializeParametersVTK">
-<code class="descname">InitializeParametersVTK</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.InitializeParametersVTK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.InitializeParametersVTK" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">InitializeParametersVTK</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.InitializeParametersVTK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.InitializeParametersVTK" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize VTK parameters</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.InitializePointsArray">
-<code class="descname">InitializePointsArray</code><span class="sig-paren">(</span><em>region_index</em>, <em>input_data</em>, <em>renderFlag</em>, <em>color=(255</em>, <em>255</em>, <em>255)</em>, <em>new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.InitializePointsArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.InitializePointsArray" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">InitializePointsArray</code><span class="sig-paren">(</span><em class="sig-param">region_index</em>, <em class="sig-param">input_data</em>, <em class="sig-param">renderFlag</em>, <em class="sig-param">color=(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em>, <em class="sig-param">new_layer=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.InitializePointsArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.InitializePointsArray" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.SetRenderWindowName">
-<code class="descname">SetRenderWindowName</code><span class="sig-paren">(</span><em>nameOfRenderWindow</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.SetRenderWindowName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.SetRenderWindowName" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">SetRenderWindowName</code><span class="sig-paren">(</span><em class="sig-param">nameOfRenderWindow</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.SetRenderWindowName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.SetRenderWindowName" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.Show">
-<code class="descname">Show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.Show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.Show" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.Show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.Show" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="VisualizationVTK.VisualizationVTK.set_number_of_viewports">
-<code class="descname">set_number_of_viewports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.set_number_of_viewports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.set_number_of_viewports" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_number_of_viewports</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationVTK.html#VisualizationVTK.set_number_of_viewports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationVTK.VisualizationVTK.set_number_of_viewports" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sectioning the the rendering view according to the number_of_viewports</p>
 </dd></dl>
 

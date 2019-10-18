@@ -252,9 +252,6 @@ class PanoramaProperty(BaseProperty):
         ind = np.intersect1d(row_ind, col_ind)
         return PointSubSet(self.Points, ind)
 
-
-
-
     @property
     def Size(self):
         """
@@ -266,7 +263,7 @@ class PanoramaProperty(BaseProperty):
 
     def pano2rad(self):
         """
-        Converts the axes of the panorama to their value as degree (radians)
+        Convert the axes of the panorama to their value as radians
 
         :return: azimuth and elevation angles of the panorama
 
@@ -279,3 +276,35 @@ class PanoramaProperty(BaseProperty):
 
         return xi, yi
 
+    def computePanoramaDerivatives_adaptive(self, order, ksize=3, sigma=1., resolution=1., blur_window=(0,0), **kwargs):
+        r"""
+            Numerical and adaptive computation of central derivatives in x and y directions
+
+            :param img: the panorama image
+            :param order: the derivatives order (1 or 2)
+            :param ksize: window size in which the differentiation is carried
+            :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
+            :param blur_window: tuple of window size for blurring
+
+            :type img: np.array
+            :type order: int
+            :type ksize: int
+            :type resolution: float
+            :type sigma: float
+            :type blur_window: tuple
+
+
+            :return: tuple of the derivatives in the following order: :math:`(d_{\theta}, d_{\phi}, d__{\theta\theta}, d{\phi\phi}, d_{\theta\phi})`
+            :rtype: tuple
+            """
+        from PanoramaUtils import computePanoramaDerivatives_adaptive
+
+        dx, dy = computePanoramaDerivatives_adaptive(self.PanoramaImage, ksize=ksize, sigma=sigma, resolution=resolution, blur_window=blur_window, **kwargs)
+
+        if order == 2:
+            dxx, dxy = computePanoramaDerivatives_adaptive(dx,ksize=ksize, sigma=sigma, resolution=resolution, blur_window=blur_window, **kwargs)
+            dyy, dyx = computePanoramaDerivatives_adaptive(dy, ksize=ksize, sigma=sigma, resolution=resolution, blur_window=blur_window, **kwargs)
+
+            return dx, dy, dxx, dyy, dxy
+        else:
+            return dx, dy
