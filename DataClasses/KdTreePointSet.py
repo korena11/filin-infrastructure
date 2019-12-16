@@ -95,7 +95,8 @@ class KdTreePointSet(PointSet):
 
         :param pnts: The query points
         :param radius: The query radius
-        :param sort_results: if True, the distances and indices will be sorted before being returned. If False, the results will not be sorted. If return_distance == False, setting sort_results = True will result in an error.
+        :param sort_results: if True, the distances and indices will be sorted before being returned. If False, the results will not be sorted.
+
 
         :type pnts: np.array nx3
         :type radius: float
@@ -106,7 +107,7 @@ class KdTreePointSet(PointSet):
         :rtype: list of np.array
 
         .. note::
-            Return the query points themselves as the first index of each list
+            Return the query point itself as the first index of each list
 
         """
         if isinstance(pnts, list):
@@ -114,13 +115,13 @@ class KdTreePointSet(PointSet):
 
         if pnts.ndim == 1:
             indexes, _ = self.data.query_radius(pnts.reshape((1, -1)), radius, return_distance=sort_results,
-                                                sort_results=sort_results)
+                                                sort_results=sort_results) #If return_distance == False, setting sort_results = True will result in an error.
 
             if indexes.dtype == object:
                 indexes = indexes[0]
 
         else:
-            indexes = self.data.query_radius(pnts, radius, return_distance=sort_results, sort_results=sort_results)
+            indexes = self.data.query_radius(pnts, radius, return_distance=sort_results, sort_results=sort_results) # If return_distance == False, setting sort_results = True will result in an error.
             if sort_results:
                 indexes = indexes[0]
 

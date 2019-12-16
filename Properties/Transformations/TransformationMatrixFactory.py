@@ -1,7 +1,7 @@
 import numpy as np
 
-import RotationUtils
-import TransformationMatrixProperty
+from Properties.Transformations import RotationUtils
+from Properties.Transformations.TransformationMatrixProperty import TransformationMatrixProperty
 
 
 class TransformationMatrixFactory(object):
@@ -10,15 +10,15 @@ class TransformationMatrixFactory(object):
     '''
 
     @staticmethod
-    def Rotation_2Vectors(points, a1, a2):
+    def Rotation_2Vectors(points, fromVector, toVector):
         '''
-        compute rotation matrix from vector a1 to a2
+        Compute rotation matrix from vector a1 to a2
         rotation by angle between a1 and a2 around the unit vector
 
         :param points: points to rotate
-        :param a1: a2: row vectors
+        :param fromVector: a2: row vectors
 
-        :type points: PointSet
+        :type points: PointSet.PointSet
 
         :return: R rotation matrix
 
@@ -26,7 +26,7 @@ class TransformationMatrixFactory(object):
 
         '''
 
-        R = RotationUtils.Rotation_2Vectors(a1, a2)
+        R = RotationUtils.Rotation_2Vectors(fromVector, toVector)
         
         return TransformationMatrixProperty(points, rotationMatrix = R)
 
@@ -44,7 +44,7 @@ class TransformationMatrixFactory(object):
 
              Symbolic option should be checked
 
-         :type points: PointSet
+         :type points: PointSet.PointSet
          :type angles: tuple
          :type dtype: str
 

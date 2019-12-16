@@ -109,6 +109,18 @@ class CurvatureProperty(BaseProperty):
         """
         self.__normalize = bool
 
+    def enable_pickle(self):
+        """
+        Make the property pickable by transforming the point cloud to PointSet
+
+        .. note::
+            the object is not pickable when the points are Open3DPointSet
+
+        :return:
+        """
+        from DataClasses.PointSet import PointSet
+        self._BaseProperty__dataset = PointSet(self.Points)
+
     @property
     def k1(self):
         """

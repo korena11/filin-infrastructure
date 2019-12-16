@@ -2,6 +2,7 @@
 # General Imports
 import numpy as np
 import open3d as O3D
+from Properties.Color.ColorProperty import ColorProperty
 
 from DataClasses.PointSet import PointSet
 
@@ -50,6 +51,14 @@ class PointSetOpen3D(PointSet):
 
         elif isinstance(inputPoints, O3D.PointCloud):
             self.data = inputPoints
+
+        elif isinstance(inputPoints, ColorProperty):
+            self.data = O3D.PointCloud()
+            pts = inputPoints.Points.ToNumpy()[:, :3]
+            self.data.points = O3D.Vector3dVector(pts)
+            self.data.colors = O3D.Vector3dVector(inputPoints.rgb)
+            self.path = inputPoints.Points.path
+
         else:
             print("Given type: " + str(type(inputPoints)) + " as input. Not sure what to do with that...")
             raise ValueError("Wrong turn.")

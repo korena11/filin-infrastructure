@@ -206,12 +206,13 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_rnn(pointset_kdt, search_radius, parts_size=int(5e5), parts_num=None):
+    def kdtreePointSet_rnn(pointset_kdt, search_radius, kmax=None, parts_size=int(5e5), parts_num=None):
         r"""
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param search_radius: the neighborhood radius
+        :param kmax: maximum number or neighbors. If sent, only the farthest k-neighbors will be stored. When None, there will be no limit. Default: None.
         :param parts_size: number of points in section for more efficient computation. Default: None
         :param parts_num: number of parts to divide the computation. Default: 1
 
@@ -250,6 +251,7 @@ class NeighborsFactory:
                 if parts_num == 1:  # patch because the parts dont work. Delete when fixed
                     idx = (pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
                                                     sort_results=True))
+
                 else:
                     idx = np.hstack((idx,
                                      pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
@@ -267,9 +269,14 @@ class NeighborsFactory:
                              pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
                                                       sort_results=True)))
 
-        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
-        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
-        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
+        if kmax is not None:
+            start = kmax
+        else:
+            start = -0
+
+        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id[-start:]), tqdm(idx)))
+        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), tqdm(pointSubSets)))
+        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), tqdm(pointNeighborhoods)))
 
         return neighbors
 
@@ -627,44 +634,6 @@ class NeighborsFactory:
         neighbor = l[1][where(l[0] != inf)[0]]
         return PointSubSet(pntSet, neighbor), tree
 
-    # @staticmethod
-    # def GetNeighborsIn3dRange_BallTree(pnt, pntSet, radius, tree = None, num_neighbor = None):
-    #     '''
-    #     Find neighbors of a point using Ball tree
-    #
-    #
-    #     :param pnt: search point coordinates
-    #     :param pntSet: pointset - in cartesian coordinates
-    #     :param radius: search radius
-    #     :param tree: ball tree
-    #     :param num_neighbor: number of nearest neighbors
-    #             if num_neighbor!=None the result will be the exact number of neighbors
-    #             and not neighbors in radius
-    #
-    #     :type pnt: tuple?
-    #     :type pntSet: PointSet.PointSet
-    #     :type radius: float
-    #     :type tree: BallTree
-    #     :type num_neighbor: int
-    #
-    #     :return: neighbors
-    #
-    #     :rtype: PointSubSet
-    #
-    #     '''
-    #
-    #     if num_neighbor == None:
-    #         pSize = pntSet.Size
-    #     else:
-    #         pSize = num_neighbor
-    #
-    #     if tree == None:
-    #         tree = BallTree(pntSet.ToNumpy())
-    #
-    #     ind = tree.query_radius(pnt, r = radius)
-    #     neighbor = PointSubSet(pntSet, ind[0])
-    #     return neighbor
-
     @staticmethod
     def GetNeighborsIn3dRange_SphericCoord(pnt, points, radius):
         '''
@@ -696,6 +665,74 @@ class NeighborsFactory:
         neighbors = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(
             PointSubSet(points.XYZ, indices[0][i1[0][i2[0]]]))
         return neighbors
+
+
+    @staticmethod
+    def buildNeighbors_panorama(panorama, radius):
+        """
+        Build neighborhood property using panorama data structure and a radius (meters)
+
+        :param panorama: a point cloud as a panorama
+        :param radius: the physical world radius to search for neighbors (meters)
+
+        :type panorama: PanoramaProperty.PanoramaProperty
+        :type radius: float
+
+        :return: Neighbors property
+
+        :rtype: NeighborsProperty
+        """
+        from Properties.Panoramas.PanoramaUtils import boundPanoramaExpand
+        # construct window sizes according to range
+        # 1. window size at each cell
+        d_az = np.ceil(radius/ (panorama.rangeImage * np.radians(panorama.azimuth_spacing))).astype('int')
+        d_el = np.ceil(radius/ (panorama.rangeImage * np.radians(panorama.elevation_spacing))).astype('int')
+
+        # 2. pad panorama according to cell size
+        m, n = panorama.Size
+        cols_indx = np.arange(0, n)
+        rows_indx = np.arange(0, m)
+        nn, mm = np.meshgrid(cols_indx, rows_indx)  # indices of the panorama
+
+        column_L = np.abs((nn - d_az).min())  # leftmost column
+        column_R = (nn + d_az).max() - n + 1 # rightmost column
+        row_T = np.abs((mm - d_el).min())  # topmost row
+        row_B = (mm + d_el).max() - m + 1  # lowwermost row
+        nn += column_L
+        mm += row_T
+
+        img_extended = boundPanoramaExpand(panorama.panoramaIndex, row_T, column_L, row_B, column_R)
+        neighborhood = NeighborsProperty(panorama.Points)
+
+        for win_col in tqdm(np.unique(d_az), desc='finding neighbors', position=0, leave=False):
+            for win_row in tqdm(np.unique(d_el), position=1, leave=False):
+                indx = np.where(d_el == win_row) and np.where(d_az == win_col)
+
+                for id in zip(indx[0], indx[1]):
+                    if img_extended[id[0]+row_T, id[1] + column_L ] == -1:
+                        continue
+
+                    # neighbors_indx = np.array([img_extended[(row_T + id[0]) - win_row, (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]) - win_row, (column_L + id[1] )],
+                    #                   img_extended[(row_T + id[0]) - win_row, (column_L + id[1]) + win_col],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1])],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1]) + win_col ],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1])],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1]) + win_col]
+                    #                   ])
+
+                    neighbors_indx = img_extended[(row_T + id[0]) - win_row: (row_T + id[0])+ win_row + 1,
+                                     (column_L + id[1]) - win_col:(column_L + id[1]) + win_col + 1]
+                    n_idx = np.unique(neighbors_indx[neighbors_indx != -1])
+
+                    pointsub = PointSubSet(panorama.Points, np.hstack((panorama.panoramaIndex[id],n_idx)))
+                    neighborhood.setNeighborhood(panorama.panoramaIndex[id], PointNeighborhood( pointsub))
+                    # print(neighborhood.getNeighborhood(panorama.panoramaIndex[id]).distances)
+
+        return neighborhood
+
 
     # ---------------------OBSOLETE METHODS - TO BE REMOVED IN LATER VERSIONS - -------------------
 

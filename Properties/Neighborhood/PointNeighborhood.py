@@ -62,6 +62,7 @@ class PointNeighborhood:
     @property
     def Size(self):
         return self.numberOfNeighbors
+
     @property
     def neighbors(self):
         """
@@ -86,6 +87,7 @@ class PointNeighborhood:
 
         :rtype: np.ndarray
         """
+
         return self.neighbors.GetPoint(0)
 
     @property
@@ -97,6 +99,7 @@ class PointNeighborhood:
 
         :rtype: int
         """
+
         return self.neighbors.GetIndices[0]
 
     def computeDistances(self):
@@ -111,8 +114,16 @@ class PointNeighborhood:
         center_pt = self.center_point_coords
         pts = self.__neighbors.ToNumpy()
 
-        self.__distances = np.linalg.norm(pts - center_pt, axis=1)
+        distances = np.linalg.norm(pts - center_pt, axis=1)
 
+        if np.nonzero(distances == 0)[0].shape[0] > 1:
+            # print('Point set has two identical points at {}'.format(center_pt))
+            tmp_subset = PointSubSet(self.neighbors.data, np.hstack((self.center_point_idx, self.neighborhoodIndices[np.nonzero(distances != 0)])))
+            self.__init__(tmp_subset)
+            pts =  self.__neighbors.ToNumpy()
+            distances = np.linalg.norm(pts - center_pt, axis=1)
+
+        self.__distances = distances
         return self.__distances
 
     def color_neighborhood(self, point_color='red', neighbors_color='black'):
@@ -156,8 +167,7 @@ class PointNeighborhood:
 
         if self.__distances is None:
             self.__distances = np.linalg.norm(directions, axis=1)
-        if np.nonzero(self.__distances == 0)[0].shape[0] > 1:
-            print('Point set has two identical points at {}'.format(center_pt))
+
         return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
                                                                None]
 

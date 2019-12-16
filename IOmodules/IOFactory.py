@@ -1,23 +1,24 @@
 # Updated Last on 13/06/2014 14:07
 
+import h5py
 import re
 import warnings
+from numpy import array
 from sys import exc_info
 from traceback import print_tb
-
-import h5py
-from numpy import array
-# from osgeo import gdal
 
 import ReadFunctions
 import SaveFunctions
 from DataClasses.BaseData import BaseData
-from Properties.BaseProperty import BaseProperty
-from Properties.Color.ColorProperty import ColorProperty
-from IO_Tools import CreateFilename
 from DataClasses.PointSet import PointSet
 from DataClasses.PointSubSet import PointSubSet
 from DataClasses.RasterData import RasterData
+from IO_Tools import CreateFilename
+from Properties.BaseProperty import BaseProperty
+from Properties.Color.ColorProperty import ColorProperty
+
+
+# from osgeo import gdal
 # from shapefile import Reader
 
 
@@ -373,16 +374,42 @@ class IOFactory:
         return ReadFunctions.GetCurvatureFilePath(folderPath, dataName, currentFileIndex, localNeighborhoodParameters,
                                                   decimationRadius, testRun)
     @classmethod
-    def rasterFromGDAL(cls, path):
+    def rasterFromGDAL(cls, path, cellsize):
+        """
+        Read raster files (tif, GeoTIf, png etc.) and load to RasterData
+
+        :param path: path to raster
+        :param cellsize: raster cell size
+
+        :type path: str
+        :type cellsize: float
+
+        :return: raster data
+
+        :rtype: RasterData
+        """
+        import gdal
+
         try:
             ds = gdal.Open(path)
+            data = ds.ReadAsArray()
 
-            return RasterData(ds.ReadAsArray(), ds.GetGeoTransform(),
-                              spatial_reference = ds.GetProjection().split('\"')[-2])
-        except:
+        except IOError:
             print("Unexpected error: ", exc_info()[0])
             print_tb(exc_info()[2])
             return None
+
+        geoTransform = ds.GetGeoTransform()
+
+        try:
+            projection = ds.GetProjection().split('\"')[-2]
+        except:
+            projection = 'CS_local'
+
+        return RasterData(data, gridSpacing=cellsize,
+                          geoTransform=(geoTransform[0], geoTransform[3], geoTransform[1], geoTransform[-1]),
+                          spatial_reference=projection, path=path)
+
 
     @classmethod
     def rasterFromAscFile(cls, path, projection = None):

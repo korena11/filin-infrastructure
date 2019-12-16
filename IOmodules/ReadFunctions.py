@@ -51,6 +51,7 @@ def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
 
     """
     colorProp = None
+    from tqdm import tqdm
 
     # Opening file and reading all lines from it
     with open(filename, 'r') as fin:
@@ -115,12 +116,13 @@ def ReadPts(filename, pointsetlist=None, colorslist=None, merge=True):
         points = PointSet(np.concatenate(np.array(pts)), path = filename)
 
         if len(intensity) == len(pts):
-            points.AddData2Fields(np.array(intensity)[0], field = 'intensity')
+            points.AddData2Fields(np.concatenate(np.array(intensity)), field = 'intensity')
         else:
             warnings.warn('Some points don''t have intensity values. None was assigned to PointSet')
 
         if len(colors) == len(pts):
-            colorslist = ColorFactory.assignColor(points, np.array(colors)[0])
+            if colorslist is not None:
+                colorslist.append(ColorFactory.assignColor(points, np.concatenate(np.array(colors))))
         # else:
         #     warnings.warn('Some points don''t have color values. No color property created')
 

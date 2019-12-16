@@ -34,10 +34,9 @@ class TestNeighborsFactory(TestCase):
         pts = []
 
         # for neighbors and normal computations
-        # folderPath = '../../test_data/'
-        # dataName = 'test_pts'
-        folderPath = '/home/reuma/ownCloud/Data/ISPRSJ_paper/'
-        dataName = 'gesher_wall'
+        folderPath = '../../test_data/'
+        dataName = 'test_pts'
+
         knn = 15
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
         pcd = PointSetOpen3D(pcl[0])
@@ -104,3 +103,42 @@ class TestNeighborsFactory(TestCase):
         pcl = IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
         pcd = PointSetOpen3D(pcl[0])
         neighbors = NeighborsFactory.buildNeighbors_knn(pcl[0], knn, method=NeighborsFactory.pointSetOpen3D_knn_kdTree)
+
+
+
+    def test_buildNeighbors_panorama(self):
+        from Properties.Panoramas.PanoramaFactory import PanoramaFactory
+        from Properties.Curvature.CurvatureFactory import CurvatureFactory
+        from VisualizationO3D import VisualizationO3D
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        import numpy as np
+        from Properties.Normals.NormalsFactory import NormalsFactory, NormalsProperty
+        pr = cProfile.Profile()
+        pr.enable()
+        colors = []
+        pts = []
+
+        # for neighbors and normal computations
+        folderPath = '../../test_data/'
+        dataName = 'bulbus'
+
+        pcl= IOFactory.ReadPts(folderPath + dataName + '.pts', pts, colors, merge=False)
+        o3d = PointSetOpen3D(pcl[0])
+        o3d.CalculateNormals(0.03)
+
+        normals_tmp = np.asarray(o3d.data.normals)
+        # normals_tmp[normals_tmp[:,2]<0] = -normals_tmp[normals_tmp[:,2]<0]
+        normals = NormalsProperty(pcl[0], normals_tmp)
+        panorama = PanoramaFactory.CreatePanorama(colors[0], azimuthSpacing=0.02, elevationSpacing=0.02)
+
+        neighbors = NeighborsFactory.buildNeighbors_panorama(panorama, .5)
+
+        # for neighbor in neighbors:
+        #     if neighbor is not None:
+                # print('index {}, distances {}'.format(neighbor.center_point_idx, neighbor.distances))
+
+        curvature = CurvatureFactory.umbrella_curvature(neighbors, normals, min_points_in_neighborhood=0, min_points_in_sector=0, valid_sectors=4, num_sectors=8, invalid_value=0)
+        vis = VisualizationO3D()
+        vis.visualize_property(curvature)
+
+

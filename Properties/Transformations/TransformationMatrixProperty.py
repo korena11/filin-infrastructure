@@ -5,6 +5,7 @@ import numpy as np
 from Properties.BaseProperty import BaseProperty
 
 
+
 class TransformationMatrixProperty(BaseProperty):
     """
     This class represents a 4x4 3D transformation matrix
@@ -19,7 +20,7 @@ class TransformationMatrixProperty(BaseProperty):
         :param translationMatrix: 3x1 or 3x3 translation matrix 
         :param rotationMatrix:  3x3 rotation matrix
         
-        :type points: PointSet
+        :type points: PointSet.PointSet
         :type transformationMatrix: np.ndarray
         :type translationMatrix: np.ndarray
         :type rotationMatrix: np.ndarray
@@ -34,6 +35,28 @@ class TransformationMatrixProperty(BaseProperty):
 
         if translationMatrix is not None:
             self.load(translationMatrix)
+
+    def ToNumpy(self):
+        """
+        XYZ rotated
+        :return:  the rotated XYZ as numpy array
+
+        :rtype: np.array
+
+        """
+        pts = self.rotationMatrix.dot(self.Points.ToNumpy().T)
+        return pts.T
+
+    def ToPointSet(self):
+        """
+        Rotated point set
+
+        :return: a point set after rotation
+
+        :rtype: PointSet
+        """
+        from DataClasses.PointSet import PointSet
+        return PointSet(self.ToNumpy(), path=self.Points.path, intensity=self.Points.Intensity)
 
     def load(self, *args, **kwargs):
         """

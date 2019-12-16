@@ -150,7 +150,7 @@ class SaliencyFactory(object):
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
                                                               desc='Directional Saliency for each neighborhood',
                                                               position=0)):
-            if neighborhood.numberOfNeighbors < 3:
+            if neighborhood.numberOfNeighbors < 4:
                 tensor_saliency.append(0)
                 continue
 
@@ -173,9 +173,10 @@ class SaliencyFactory(object):
             dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size, verbose)
 
             if verbose:
-                pts = neighborhood.color_neighborhood()
-                vis = VisualizationO3D()
-                vis.visualize_property(pts)
+                # pts = neighborhood.color_neighborhood()
+                # vis = VisualizationO3D()
+                # vis.visualize_property(pts)
+                print('dn {}, dk {}'.format(dn, dk))
 
             normal_weight = 1 - curvature_weight
             tensor_saliency.append(normal_weight * dn + curvature_weight * dk)
@@ -207,11 +208,13 @@ class SaliencyFactory(object):
         :rtype: np.array
         """
         # normal influence
-        # dn = current_normals[1:, :].dot(current_normals[0, :])
-        dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
-                neighborhood.numberOfNeighbors - 1)
-
-        # distances influence - Laplacian (DoG)
+        dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
+        # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+        #         neighborhood.numberOfNeighbors - 1)
+        # if np.any(dn.std(axis=0) > noise_size):
+        #     dn = 0
+        # else:
+            # distances influence - Laplacian (DoG)
         dist_element = 1 / np.sqrt(2 * np.pi) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
                        1 / np.sqrt(2 * np.pi * win_size ** 2) * \
@@ -223,10 +226,6 @@ class SaliencyFactory(object):
         dist_element_normed = dist_element / np.linalg.norm(dist_element)
 
         dn = np.abs(np.sum(dn * dist_element_normed))
-
-        if dn.std() > noise_size:
-            dn = 0
-
         return dn
 
     @staticmethod
@@ -264,7 +263,7 @@ class SaliencyFactory(object):
         """
 
         # difference in curvature
-        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
+        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) 
         # dk[np.where(np.abs(dk) < epsilon)] = 0
         # dk_normed = dk
         # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
@@ -1104,7 +1103,6 @@ class SaliencyFactory(object):
             return saliency
 
         ind_list = np.arange(0, m * n, np.int(ksize / 2), dtype='float')
-
 
         if image_feature == 'pixel_val':
             averaged_image = cv2.normalize(averaged_image, averaged_image, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,

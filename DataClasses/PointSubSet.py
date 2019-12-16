@@ -20,7 +20,7 @@ class PointSubSet(PointSet):
             super(PointSubSet, self).__init__(points, path=path, intensity=intensity, range_accuracy=range_accuracy,
                                               angle_accuracy=angle_accuracy, measurement_accuracy=measurement_accuracy)
 
-        self.indices = indices
+        self.indices = indices.astype('int')
 
     @property
     def Size(self):

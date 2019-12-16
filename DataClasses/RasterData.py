@@ -63,7 +63,17 @@ class RasterData(BaseData):
         """
         super(RasterData, self).__init__()
         self.__cellSize = gridSpacing
-        self.data = data
+
+        if len(data.shape) > 2:
+            import cv2
+            if data.shape[0]==4:
+                self.data = cv2.cvtColor(data.T, cv2.COLOR_RGBA2GRAY).T
+            elif data.shape[0] == 3:
+                self.data = cv2.cvtColor(data, cv2.COLOR_RGB2GRAY)
+            else:
+                self.data = data[0,:,:]
+        else:
+            self.data = data
 
         self.setValues(**kwargs)
 
@@ -103,7 +113,7 @@ class RasterData(BaseData):
         params.update(kwargs)
         self.__geoTransform = params['geoTransform']
         self.__spatialReference = params['spatialReference']
-        self.setPath(params['path'])
+        self.__path = params['path']
 
         self.__voidData = params['voidData']
         self.__cellSize = params['cellSize'],

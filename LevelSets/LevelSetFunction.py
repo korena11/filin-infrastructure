@@ -155,11 +155,21 @@ class LevelSetFunction(object):
         Computes and updates the level set function derivatives and curvature
 
         :param processing_props: gradient type, sigma and ksize for derivatives and gradient computations
-
+        :param epsilon: when kappa is considered zero. Default 1e-4
         """
         gradientType = self.processing_props['gradientType']
         sigma =  self.processing_props['sigma']
         ksize = self.processing_props['ksize']
+        epsilon = kwargs.get('eps', 1e-4)
+
+        if np.all(self.value == 0):
+            self.__x = np.zeros(self.value.shape)
+            self.__y = np.zeros(self.value.shape)
+            self.__xx = np.zeros(self.value.shape)
+            self.__yy = np.zeros(self.value.shape)
+            self.__xy = np.zeros(self.value.shape)
+            self.__kappa = np.zeros(self.value.shape)
+            return
 
         self.__x, self.__y, self.__xx, self.__yy, self.__xy = \
             mt.computeImageDerivatives_numeric(self.value, 2, ksize=ksize,
@@ -188,7 +198,7 @@ class LevelSetFunction(object):
                                         (self.norm_nabla + EPS),
                                         (self.processing_props['ksize'], self.processing_props['ksize']),
                                         self.processing_props['sigma'])
-        self.__kappa = mt.make_zero(self.kappa, 1e-4)
+        self.__kappa = mt.make_zero(self.kappa, epsilon)
 
         # self.__kappa = (self._xx * self._y ** 2 +
         #                                  self._yy * self._x ** 2 -
@@ -232,9 +242,13 @@ class LevelSetFunction(object):
         self.update(new_phi)
 
     def reinitialization(self, dphi):
-        """
+        r"""
         Keeping phi close to a signed function.
         
+        :param dphi: the delta to add to the current function
+
+        :type dphi: np.array
+
         This should keep
         
         .. math::
@@ -250,14 +264,11 @@ class LevelSetFunction(object):
         where S is a smoothed signed function: 
         
         .. math::
-        
-            S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}, \qquad \epsilon = \min(\Delta x, \Delta y)
-        
+            S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}}, \qquad  \epsilon = \min(\Delta x, \Delta y)
+
         assuming a grid. 
         
-        :param dphi: the delta to add to the current function
-        
-        :type dphi: np.array
+
         
         """
         from MyTools import scale_values
@@ -288,8 +299,6 @@ class LevelSetFunction(object):
         #     self.update(new_value)
 
 
-        
-        
     @staticmethod
     def dist_from_circle(center_pt,  radius, func_shape, resolution=.5):
         r"""
@@ -346,21 +355,17 @@ class LevelSetFunction(object):
         """
 
         import skfmm
+        from tqdm import tqdm
         phi = -np.ones(func_shape)
         center_x = np.arange(dx/2 + radius, func_shape[1], dx + radius)
         center_y = np.arange(dy/2 + radius, func_shape[0], dy + radius)
 
-        for i in center_y:
-            for j in center_x:
+        for i in tqdm(center_y, position=0, leave=True):
+            for j in tqdm(center_x, position=1, leave=False):
                 phi_temp = LevelSetFunction.dist_from_circle((i,j), radius, func_shape, resolution=resolution)
                 phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
 
-
-        return  skfmm.distance(phi)
-
-
-
-
+        return skfmm.distance(phi)
 
     @staticmethod
     def dist_from_ellipse(center_pt, axes, func_shape, resolution=.5):
@@ -397,6 +402,7 @@ class LevelSetFunction(object):
         phi = np.sqrt((x_x0 / axes[0])** 2 + (y_y0/axes[1]) ** 2) - 1
 
         return phi
+
     @staticmethod
     def dist_from_eggcrate(amplitude, func_shape, resolution=.5):
         r"""
@@ -429,9 +435,6 @@ class LevelSetFunction(object):
 
         return xx**2 + yy**2 - amplitude * (sin_xx**2 + sin_yy**2)
 
-
-
-
     def compute_heaviside(self, **kwargs):
         r"""
         Computes the Heaviside function of phi: H(phi)
@@ -458,12 +461,12 @@ class LevelSetFunction(object):
 
 
 
-        :param kwargs: epsilon - for the regularizations
+        :param kwargs: epsilon - size to be considered as zero. Default 1e-4
 
         :return: the heaviside function. Also updates the class.
 
         """
-        epsilon = kwargs.get('epsilon', 1e-08)
+        epsilon = kwargs.get('epsilon', 1e-04)
         regularization_note = kwargs.get('regularization_note', self.regularization_note)
 
         H = np.zeros(self.value.shape)
@@ -512,25 +515,23 @@ class LevelSetFunction(object):
 
             - '3' - replace dirac-delta with :math:`|\nabla \phi|`
 
-        :param epsilon: for the 1st and 2nd regularizations
+        :param epsilon: threshold for a value to be considered zero. Default: 1e-4
 
         :return: the dirac delta function. Also updates the class
 
         """
-        epsilon = kwargs.get('epsilon', 1)
+        epsilon = kwargs.get('epsilon', 1e-04)
         regularization_note = kwargs.get('regularization_note', self.regularization_note)
 
         d = np.zeros(self.value.shape)
         x = self.value.copy()
 
         if regularization_note == 0:
-            d[x >= 0] = x[x >= 0]
+            d[np.abs(x) <= epsilon] = 1
 
         elif regularization_note == 1:
-            d[x >= -epsilon] = 1 / (2 * epsilon) * (
-                    1 + np.cos(np.pi * x[x >= -epsilon] / epsilon))
-            d[x <= epsilon] = 1 / (2 * epsilon) * (
-                    1 + np.cos(np.pi * x[x <= epsilon] / epsilon))
+            d[np.abs(x) <= epsilon] = 1 / (2 * epsilon) * (
+                    1 + np.cos(np.pi * x[np.abs(x) <= epsilon] / epsilon))
 
         elif regularization_note == 2:
             d = 1 / np.pi * epsilon / (epsilon ** 2 + x ** 2)

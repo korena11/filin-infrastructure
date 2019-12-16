@@ -174,8 +174,8 @@ def GVF(f, mu, iterations, ksize=3, sigma=1.,
     for i in tqdm(np.arange(0,iterations),desc='Creating GVF'):
         u = boundMirrorEnsure(u)
         v = boundMirrorEnsure(v)
-        u = u + mu  * del2(u) - SqrMagf * (u - fx)
-        v = v + mu  * del2(v) - SqrMagf * (v - fy)
+        u +=  mu  * del2(u) - SqrMagf * (u - fx)
+        v +=  mu  * del2(v) - SqrMagf * (v - fy)
 
     u = boundMirrorShrink(u)
     v = boundMirrorShrink(v)

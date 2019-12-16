@@ -36,7 +36,7 @@ class BaseProperty(object):
         Reset iterable
         :return:
         """
-        self.__current = 0
+        self.current = 0
 
     def __getPointProperty(self, idx):
         """

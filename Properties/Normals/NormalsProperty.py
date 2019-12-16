@@ -61,7 +61,8 @@ class NormalsProperty(BaseProperty):
         Return normals Z coordinates  
         """  
         return self.__normals[:, 2]
-
+    
+    
     def getPointNormal(self, idx):
         """
         Retrieve the normal value of a specific point

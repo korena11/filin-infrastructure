@@ -53,7 +53,7 @@ def create_scanned_floor(radius, az_res, elev_res):
     """
 
     theta = np.arange(0, np.pi , np.deg2rad(az_res))
-    phi = np.arange(0, np.pi / 2, np.deg2rad(elev_res))
+    phi = np.arange(-np.pi/2, 0, np.deg2rad(elev_res))
 
     tt, pp = np.meshgrid(theta, phi)
 
@@ -61,7 +61,7 @@ def create_scanned_floor(radius, az_res, elev_res):
 
     x = (radius * np.cos(pp) * np.cos(tt)).flatten()
     y = (radius * np.cos(pp) * np.sin(tt)).flatten()
-    z = np.ones(x.shape)
+    z = -np.ones(x.shape)
 
 
     xyz = np.array([x, y, z])
@@ -83,8 +83,8 @@ def create_scanned_sphere(radius=None, az_res=1, elev_res=1):
     """
 
 
-    theta = np.arange(0, np.pi/4, np.deg2rad(az_res))
-    phi = np.arange(0, np.pi/2,  np.deg2rad(elev_res))
+    theta = np.arange(0, np.pi, np.deg2rad(az_res))
+    phi = np.arange(-np.pi/2, np.pi/2,  np.deg2rad(elev_res))
 
     tt, pp = np.meshgrid(theta, phi)
     if radius is None:
@@ -95,7 +95,7 @@ def create_scanned_sphere(radius=None, az_res=1, elev_res=1):
     z = (radius * np.sin(pp)).flatten()
 
     xyz = np.array([x,y,z])
-    return PointSet(xyz.T)
+    return PointSet(np.unique(xyz, axis=1).T)
 
 def radius_function(theta, phi):
     """
@@ -113,11 +113,11 @@ def radius_function(theta, phi):
 
 if __name__ == '__main__':
 
-    az_res = 0.15
-    elev_res =  .15
-    pts = create_scanned_floor(1, az_res, elev_res)
-    az_res += 0.001
-    elev_res += 0.001
+    az_res = 0.5
+    elev_res =  .5
+    pts = create_scanned_wall(1, az_res, elev_res)
+    # az_res += 0.a0001
+    # elev_res += 0.0001
     # pts = IOFactory.ReadPts(r'C:\Users\reuma\Documents\ownCloud\Data\PCLs\agri_floor2.pts',merge=True)
     vis1 = VisualizationO3D()
     vis1.visualize_pointset(pts)
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     pano = panorama.PanoramaImage
     # pano, mean_sigma, mean_kernel = pu.adaptive_smoothing(panorama, .1)
     # print('mean sigma {} mean kernel {}'.format(mean_sigma, mean_kernel))
-    r_t, r_p, r_tt, r_pp, r_tp = panorama.computePanoramaDerivatives_adaptive( 2, resolution=az_res, ksize=3, sigma=0)
+    r_t, r_p, r_tt, r_pp, r_tp = panorama.computePanoramaDerivatives_adaptive( 2,  ksize=.05, sigma=0)
 
     r_t = r_t[panorama.row_indexes, panorama.column_indexes]
     r_p = r_p[panorama.row_indexes, panorama.column_indexes]

@@ -17,7 +17,7 @@ from scipy.interpolate import interp1d
 from scipy.ndimage import filters
 # from shapely.geometry import Polygon
 from skimage import measure
-
+import scipy.interpolate as interp
 
 def chi2_distance(histA, histB, eps=1e-10):
     """
@@ -288,7 +288,7 @@ def computeImageDerivatives_numeric(img, order, ksize=3, sigma=1., resolution=1.
     if sigma != 0:
         img = cv2.GaussianBlur(img, blur_window, sigma)
 
-    floord = (ksize).astype('int')
+    floord = int(ksize)
 
     # Derivatives (eq. 3-37)
 
@@ -448,7 +448,7 @@ def CreateFilename(filename, mode='w', **kwargs):
         return (open(filename, mode), extension)
 
 
-def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
+def draw_contours(func, ax, img, hold=False, blob_size=5, color_random=False,  **kwargs):
     """
     Draws the contours of a specific iteration
 
@@ -457,6 +457,7 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
     :param image: the image on which the contours will be drawn
     :param hold: erase image from previous drawings or not. Default: False
     :param color: the color which the contour will be drawn. Default: random for each curve (send True)
+    :param linewidth: the line width of the curves. Default: 1
     :param blob_size: the minimal area of a contour to draw
 
     :type func: np.ndarray
@@ -477,30 +478,41 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, **kwargs):
     ax.set_ylim([img.shape[0], 0])
     ax.set_xlim([0, img.shape[1]])
 
-    color = kwargs.get('color', True)
+    color = kwargs.get('color', 'b')
+    linewidth = kwargs.get('linewidth', 1)
 
-    function_binary = func.copy()
-
+    tmp_func = func.copy()
+    tmp_func[np.abs(tmp_func)<=1e-4] = 1e-4
     # segmenting and presenting the found areas
-    function_binary[np.where(func > 0.)] = 0
-    function_binary[np.where(func <= 0.)] = 1
-    function_binary = np.uint8(function_binary)
+    # function_binary[np.where(func > 0.)] = 0
+    # function_binary[np.where(func <= 0.)] = 1
+    # function_binary = np.uint8(function_binary)
 
-    contours = measure.find_contours(func, 0.)
-    blob_labels = measure.label(function_binary, background=1)
-    label_props = measure.regionprops(blob_labels)
-
-    contours = chooseLargestContours(contours, label_props, blob_size)
+    contours = measure.find_contours(np.flipud(tmp_func), 0.)
+    # blob_labels = measure.label(function_binary, background=1)
+    # label_props = measure.regionprops(blob_labels)`
+    # 
+    # contours = chooseLargestContours(contours, label_props, blob_size)
     if not hold:
-        imshow(img)
+        imshow(np.flipud(img))
     l_curve = []
 
     for c in contours:
+        # make sure area is not too small and not too big
+        x = c[:, 0]
+        y = c[:, 1]
+        area = 0.5 * np.sum(y[:-1] * np.diff(x) - x[:-1] * np.diff(y))
+        area = np.abs(area)
+        if area <= blob_size or area >= 10e6:
+            continue
+
         c[:, [0, 1]] = c[:, [1, 0]]  # swapping between columns: x will be at the first column and y on the second
-        if color:
+
+        if color_random:
             color = (random.random(), random.random(), random.random())
 
-        curve, = ax.plot(c[:, 0], c[:, 1], '-', color=color)
+        curve, = ax.plot(c[:, 0], c[:, 1], '-', color=color, linewidth=linewidth)
+
         l_curve.append(curve)
 
     return l_curve, ax
@@ -701,6 +713,27 @@ def make_zero(array, eps=1e-5):
     """
     array[np.abs(array)< eps] = 0
     return array
+
+def interpolate_data(data, attribute_data, resolution, func=interp.NearestNDInterpolator):
+    """
+    Interpolate data according to a specific attribute
+    :param data: the table to interpolate. Should have at least x,y and an attribute to interpolate (z or other)
+    :param attribute_data: values to interpolate
+    :param func: the function with which the data will be interpolated. Default: nearest neighbors
+
+    :type data: np.ndarray
+    :type attribute: int
+    :type func: function
+
+    :return: interpolated data
+    """
+    x = np.arange(data[:,0].min(), data[:,0].max(), resolution)
+    y = np.arange(data[:, 1].min(), data[:, 1].max(), resolution)
+    xx, yy = np.meshgrid(x,y)
+    interped = func(data[:,:2], attribute_data)
+    zz = interped((xx, yy)).reshape(xx.shape)
+
+    return zz
 
 
 if __name__ == '__main__':

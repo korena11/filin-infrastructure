@@ -40,10 +40,10 @@ class SphericalCoordinatesFactory:
 
         azimuth = ceval('arctan2(y,x)')
         elevation = ceval('arctan2(z, sqrt(x**2+y**2))')
-        range = eval('sqrt(x**2+y**2+z**2)')
+        range = ceval('sqrt(x**2+y**2+z**2)')
 
-        elevation *= 180. / pi
-        azimuth *= 180. / pi
+        elevation = np.rad2deg(elevation)
+        azimuth = np.rad2deg(azimuth)
         azimuth[azimuth < 0] = 360. + azimuth[azimuth < 0]
 
         return SphericalCoordinatesProperty(points, azimuth, elevation, range)

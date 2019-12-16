@@ -81,7 +81,7 @@ class CurvatureFactory:
         return CurvatureProperty(tensorProperty.Points, np.vstack((k1, k2)).T)
 
     @classmethod
-    def pointSetOpen3D_3parameters(cls, pointset3d, neighbors_property,
+    def pointSetOpen3D_3parameters(cls, pcl, neighbors_property,
                                    min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7, num_sectors=8,
                                    invalid_value=-999, verbose=False):
         """
@@ -92,7 +92,7 @@ class CurvatureFactory:
             If a pointset3D is sent without its normals computed in advance, the normals will be computed according to the first
             point neighborhood parameters
 
-        :param pointset3d: the point cloud
+        :param pcl: the point cloud
         :param neighbors_property: the neighbors property of the point cloud
         :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5
         :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
@@ -101,7 +101,7 @@ class CurvatureFactory:
         :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999
         :param verbose: print inter running messages. default: False
 
-        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D, DataClasses.BaseData.BaseData
         :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int
@@ -123,20 +123,27 @@ class CurvatureFactory:
         k1 = []
         k2 = []
         invalid_curvature = 0  # number of points that their curvature wasn't estimated
-        print('>>> Compute all points curvatures using the 3-parameters algorithm')
-        if not isinstance(pointset3d, PointSetOpen3D):
-            import warnings
-            warnings.warn('Pointset must be PointSetOpen3D')
-            return 1
+        print('\n >>> Estimate all points curvatures using the 3-parameters algorithm')
+        if not isinstance(pcl, PointSetOpen3D):
+            # import warnings
+            # warnings.warn('Pointset must be PointSetOpen3D')
+            # return 1
+            pointset3d = PointSetOpen3D(pcl)
+        else:
+            pointset3d = pcl
 
         # check if normals have been computed before for this point cloud:
         if np.asarray(pointset3d.data.normals).shape[0] == 0:
 
             for neighborhood1 in neighbors_property:
+                if neighborhood1 is None:
+                    continue
                 radius = neighborhood1.radius
                 maxNN = neighborhood1.numberOfNeighbors
+
                 if radius is not None and maxNN is not None:
                     pointset3d.CalculateNormals(search_radius=radius, maxNN=maxNN)
+
                     break
 
         normals = np.asarray(pointset3d.data.normals)
@@ -151,11 +158,13 @@ class CurvatureFactory:
                                                                                        num_sectors=num_sectors):
                 normal = normals[i, :]
                 k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal)
-                k1.append(k1_)
-                k2.append(k2_)
-
-                if verbose:
-                    print(k1_, k2_)
+                if np.abs(k1_ * k2_) > 1e3:
+                    invalid_curvature += 1
+                    k1.append(invalid_value)
+                    k2.append(invalid_value)
+                else:
+                    k1.append(k1_)
+                    k2.append(k2_)
 
             else:
                 invalid_curvature += 1
@@ -164,7 +173,7 @@ class CurvatureFactory:
         k1 = np.asarray(k1)
         k2 = np.asarray(k2)
 
-        curvatures = CurvatureProperty(pointset3d, np.vstack((k1, k2)).T)
+        curvatures = CurvatureProperty(pcl, np.vstack((k1, k2)).T)
         curvatures.set_invalid_value(invalid_value)
         print(invalid_curvature)
         return curvatures
@@ -223,13 +232,15 @@ class CurvatureFactory:
             warnings.warn('Curvature_3d_params: Unknown type of neighborhood')
             return 1
 
-        pnt = neighbors[0, :]
-        # remove reference point from neighbors array
-        neighbors = neighbors[1:, :]
+
+        # neighbors = neighbors[1:, :]
+
+        # move points to center point
+        neighbors -= neighbors[0, :]
 
         # if a normal of a neighborhood is in an opposite direction rotate it 180 degrees
-        if np.linalg.norm(pnt, 2) < np.linalg.norm(pnt + normal, 2):
-            normal = -normal
+        # if np.linalg.norm(pnt, 2) < np.linalg.norm(pnt + normal, 2):
+        #     normal = -normal
         n = np.array([0, 0, 1])
 
         # rotate the neighborhood to xy plane
@@ -239,14 +250,17 @@ class CurvatureFactory:
 
         # compute curvature by 3 parameters
         p = CurvatureFactory.__BiQuadratic_Surface(neighbors)
-        a = p[0]
-        b = p[1]
+        a = 2*p[0]
+        b = 2* p[1]
         c = p[2]
 
-        C = np.sqrt(c ** 2 + (0.5 * (a - b)) ** 2)
-        k1 = (a + b) / 2 + C
-        k2 = (a + b) / 2 - C
-
+        C = np.sqrt(4*c ** 2 + ( (a - b)) ** 2)
+        k1 = (a + b + C) / 2
+        k2 = (a + b - C) / 2
+        # print(neighbors.std(axis=0))
+        if np.abs(k1 * k2) > 1e3:
+            print('hello')
+            print(neighbors.std(axis=0))
         return k1[0], k2[0]
 
     @classmethod
@@ -302,6 +316,8 @@ class CurvatureFactory:
 
         """
         from scipy import stats
+        from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+
 
         epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
         umbrellaCurvature = []
@@ -309,9 +325,11 @@ class CurvatureFactory:
         for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
                                     desc='Compute umbrella curvature for all point cloud', position=0):
             # check if the neighborhood is valid
-            if cls.__checkNeighborhood(point_neighbors, min_points_in_neighborhood=min_points_in_neighborhood,
-                                       min_points_in_sector=min_points_in_sector, valid_sectors=valid_sectors,
-                                       num_sectors=num_sectors):
+            if isinstance(point_neighbors, PointNeighborhood) and cls.__checkNeighborhood(point_neighbors,
+                                                                                       min_points_in_neighborhood=min_points_in_neighborhood,
+                                                                                       min_points_in_sector=min_points_in_sector,
+                                                                                       valid_sectors=valid_sectors,
+                                                                                       num_sectors=num_sectors):
                 point_idx = point_neighbors.neighborhoodIndices[0]
                 n = normals.Normals[point_idx]
 
@@ -322,7 +340,7 @@ class CurvatureFactory:
                 projections = point_neighbors.neighbors_vectors().dot(n)
 
                 # check if the projections are statistically zero
-                # projections[np.where(projections > -epsilon) and np.where(projections < epsilon)] = 0
+                projections[np.where(np.abs(projections) < epsilon)] = 0
 
                 umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
@@ -419,7 +437,7 @@ class CurvatureFactory:
         img = cv2.normalize(img.astype('float'), None, 0.0, 1.0,
                             cv2.NORM_MINMAX)  # Convert to normalized floating point
 
-        dx, dy, Zxx, Zyy, Zxy = mt.computeImageDerivatives(img, 2, sigma=sigma,
+        dx, dy, Zxx, Zyy, Zxy = mt.computeImageDerivatives_numeric(img, 2, sigma=sigma,
                                                            gradientType=gradientType,
                                                            ksize=ksize)
 
@@ -598,7 +616,7 @@ class CurvatureFactory:
     @staticmethod
     def __BiQuadratic_Surface(neighbor_points):
         '''
-        BiQuadratic surface adjustment to discrete point cloud
+        BiQuadratic surface adjustment to discrete point cloud (when the surface is rotated to [0,0,1])
 
         :param neighbor_points: 3D points coordinates
 
@@ -609,7 +627,7 @@ class CurvatureFactory:
         :rtype: nd-array
 
         '''
-        # ==== initial guess ====
+
         x = np.expand_dims(neighbor_points[:, 0], 1)
         y = np.expand_dims(neighbor_points[:, 1], 1)
         z = np.expand_dims(neighbor_points[:, 2], 1)

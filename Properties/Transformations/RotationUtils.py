@@ -61,8 +61,8 @@ def Rotation_2Vectors(from_vector, to_vector):
         from_vector * to_vector)  # = Cos(AngleBetweenFromToVectors) # Slightly faster than np.dot in short vectors
 
     if cos_of_angle == 1:
-        if np.array_equal(from_vector, to_vector):
-            return np.eye(3)
+        # if np.array_equal(from_vector, to_vector):
+        return np.eye(3)
     elif cos_of_angle == -1:
         return -np.eye(3)
 

@@ -7,10 +7,10 @@ reuma\Reuma
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-
-import MyTools as mt
-from LevelSetFunction import LevelSetFunction
-from RasterData import RasterData
+from mpl_toolkits import mplot3d
+import Utils.MyTools as mt
+from LevelSets.LevelSetFunction import LevelSetFunction
+from DataClasses.RasterData import RasterData
 
 EPS = np.finfo(float).eps
 
@@ -24,10 +24,10 @@ class LevelSetFlow:
     __step = 1.  # step size
 
     # Weighting initializations
-    __gvf_w = 1.
+    __gvf_w = 0.
     __vo_w = 0.
-    __region_w = 1.
-
+    __region_w = 0.
+    __ms_w = 0.
     # Level set initializations
     __Phi = []  # LevelSetFunction
     __img = []  # the analyzed image (of the data)
@@ -131,7 +131,7 @@ class LevelSetFlow:
             set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})
 
         """
-        flow_types = {'geodesic': 1.,
+        flow_types = {'geodesic': 0.,
                       'curvature': 0.,
                       'equi_affine': 0.,
                       'band': 0.}
@@ -174,7 +174,7 @@ class LevelSetFlow:
         """
         Gradient vector flow weight
 
-        Default: 1.
+        Default: 0.
 
         :rtype: float
 
@@ -186,7 +186,7 @@ class LevelSetFlow:
         """
         Open velocity flow weight
 
-        Default: 1.
+        Default: 0.
 
         :rtype: float
 
@@ -198,16 +198,28 @@ class LevelSetFlow:
         """
         Region weight
 
-        Default: 1.
+        Default: 0.
 
         :rtype: float
 
         """
         return self.__region_w
 
+    @property
+    def ms_w(self):
+        """
+        Mumford-Shah (Chan Vese) weight
+
+        Default 0, if mumford_shah flag is True
+
+        :return: float
+
+        """
+        return self.__ms_w
+
     def set_weights(self, **kwargs):
         """
-        Set weights for constraints.
+        Set weights for constraints. All are set to zero as defualt
 
         :param gvf_w: gradient vector flow weight
         :param vo_w: open contour weight (Not working at the moment)
@@ -218,15 +230,16 @@ class LevelSetFlow:
         :type region_w: float
 
         """
-        inputs = {'gvf_w': 1.,
+        inputs = {'gvf_w': 0.,
                   'vo_w': 0.,
-                  'region_w': 1.,
-                  }
+                  'region_w': 0.,
+                  'ms_w': 0.}
 
         inputs.update(kwargs)
         self.__region_w = inputs['region_w']
         self.__gvf_w = inputs['gvf_w']
         self.__vo_w = inputs['vo_w']
+        self.__ms_w = inputs['ms_w']
 
     def img(self, index=0):
         """
@@ -368,13 +381,14 @@ class LevelSetFlow:
         :param center_pt: if the curve is a circle, the center point should be specified.
         :param reularization_note: regularization note for heaviside function
         :param function_type:
+
             - 'circle' (default);
             - 'ellipse'
             - 'egg_crate' - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)
             - 'periodic_circles' - more like squares at dx and dy distances from one another
             - 'checkerboard' - binary squares (from scikit-image)
 
-
+        :param epsilon: threshold to be considered zero. Default: 1e-4
 
         :type processing_props: dict
         :type radius: int
@@ -382,10 +396,11 @@ class LevelSetFlow:
         :type function_type: str
         :type start: tuple
         :type regularization_note: int 0,1,2
+        :type epsilon: float
 
         """
         from MyTools import scale_values
-
+        eps = kwargs.get('epsilon', 1e-4)
         processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
         if 'processing_props' in kwargs:
             processing_props.update(kwargs['processing_props'])
@@ -428,7 +443,7 @@ class LevelSetFlow:
 
         self.__Phi.append(
             LevelSetFunction(phi, regularization_note=regularization,
-                             epsilon=1e-8,
+                             epsilon=eps,
                              **processing_props))
 
     def init_img(self, img, **kwargs):
@@ -596,7 +611,7 @@ class LevelSetFlow:
             flow = np.abs(function.norm_nabla)
 
         if flow_type == 'curvature':
-            flow = function.kappa * function.norm_nabla
+            flow = self.g*function.kappa * function.norm_nabla
 
         if flow_type == 'equi_affine':
             flow = np.cbrt(function.kappa) * function.norm_nabla
@@ -608,6 +623,10 @@ class LevelSetFlow:
                 new_value = function.value
                 new_value[function.norm_nabla > 1e10] = np.sign(new_value[function.norm_nabla > 1e10]) * 1
                 function.update(new_value)
+
+            # function.norm_nabla[np.abs(function.norm_nabla)<1e-4] = 0
+            # function._x[np.abs(function.norm_nabla)<1e-4]=0
+            # function._y[np.abs(function.norm_nabla)<1e-4]=0
 
             flow = self.g * function.kappa * function.norm_nabla + (self.g_x * function._x + self.g_y *
                                                                     function._y)
@@ -644,7 +663,8 @@ class LevelSetFlow:
         else:
             images = img
 
-        Phi = self.__Phi
+        Phi = self.__Phi.copy()
+
 
         m_levelsets = self.num_ls
         n_phases = 2 ** m_levelsets
@@ -657,45 +677,51 @@ class LevelSetFlow:
         kappa_flag = True
 
         for img in images:
+            dphi_ = np.zeros((img.shape[0], img.shape[1], self.num_ls))
+
             if img.ndim == 3:
                 image = cv2.cvtColor(img.astype(np.float32), cv2.COLOR_RGB2LAB)
                 images.append(image[:, :, 0])
                 images.append(image[:, :, 1])
                 images.append(image[:, :, 2])
                 continue
+
             combinations = itertools.combinations(_combinations, m_levelsets)
             for combination in combinations:
-                dPhi = self.__ms_element(combination, img)
+                dphi_ += self.step * self.ms_w * self.__ms_element(combination, img)
 
-                for i in range(m_levelsets):
-                    i = int(i)
-                    Phi[i].move_function(dPhi[:, :, i])
-                    counter += 1
+            for i in range(m_levelsets):
+                i = int(i)
+                dphi_[:,:, i] += nu * self.phi(i).dirac_delta * self.phi(i).kappa
 
-                    if counter > m_levelsets:
-                        kappa_flag = False
-
-                    if kappa_flag:
-                        Phi[i].move_function(nu * self.phi(i).kappa)
+                Phi[i].move_function(dphi_[:, :, i])
+                # counter += 1
+                #
+                # if counter > m_levelsets:
+                #     kappa_flag = False
+                #
+                # if kappa_flag:
+                #
 
         self.__Phi = Phi
+        return Phi
 
         # mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = 'b')
         # mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = 'r')
         # plt.pause(.5e-10)
 
     def __ms_element(self, combination, img):
-        """
+        r"""
         An element for summation within the Mumford-Shah model.
 
         For example, for a 3-phase model, with a unison of the three level sets (all inside):
 
-        ..math::
+        .. math::
 
             \begin{eqnarray}
             \phi_{1t}\rightarrow(u_{0} - c_{000})^2 \delta(\phi_1)H(\phi_2)H(\phi_3) \\
             \phi_{2t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)\delta(\phi_2)H(\phi_3) \\
-            \phi_{3t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)H(\phi_2)\delta(\phi_3) \\
+            \phi_{3t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)H(\phi_2)\delta(\phi_3)
 
         This method comoputes the constant of the region, according to the image
 
@@ -719,10 +745,10 @@ class LevelSetFlow:
             i = int(combination[index])
             if i == 0:  # inside the level set
                 H.append(self.phi(index).heaviside)
-                diracs.append(self.phi(index).dirac_delta)
+                diracs.append(-self.phi(index).dirac_delta)
             else:
                 H.append(1 - self.phi(index).heaviside)
-                diracs.append(-self.phi(index).dirac_delta)
+                diracs.append(self.phi(index).dirac_delta)
 
         import functools
         mult = functools.reduce(lambda x, y: x * y, H)
@@ -730,6 +756,7 @@ class LevelSetFlow:
             c = 0
         else:
             c = np.sum(img * mult) / (np.sum(mult))
+            # print('\n segment type {}, \t pixels average {}'.format(i,c))
 
         for index in range(self.num_ls):
             i = int(index)
@@ -781,56 +808,6 @@ class LevelSetFlow:
         #  vb[np.where(phi != 0)] = 0
         return vb * self.phi().kappa
 
-    def __compute_vt(self, vectorField, verbose=False, phi_index =0, mu=0.2, **kwargs):
-        """
-        Computes the vector field derivative in each direction
-
-        According to
-        .. math:: v_t = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)
-
-        :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)
-        :param edge_map:
-        :param kappa: curvature map
-        :param verbose: show vector field
-        :param phi_index: the index of the level set function to which the vector field is computed
-        :param mu: weighting index for the GVF
-
-        :type verbose: bool
-
-        **Optionals**
-        gradient computation parameters
-
-        :param gradientType:
-        :param ksize:
-        :param sigma:
-
-        :return vt: velocity for x and y directions
-         :type vt: nd-array nxmx2
-        """
-
-        # compute the derivatives of the edge map at each direction
-        nabla_edge = mt.computeImageGradient_numeric(self.f, **kwargs)
-
-        # compute the Laplacian of the vector field
-        laplacian_vx = cv2.Laplacian(vectorField[:, :, 0], cv2.CV_64F)
-        laplacian_vy = cv2.Laplacian(vectorField[:, :, 1], cv2.CV_64F)
-
-        # compute the functions that are part of the vt computation
-        g = np.exp(-nabla_edge / (self.phi(phi_index).kappa + EPS) ** 2)
-        h = 1 - g
-
-        vx_t = mu * laplacian_vx - (vectorField[:, :, 0] - self.f_x)*(self.f_x**2 + self.f_y**2)
-        vy_t = mu * laplacian_vy - (vectorField[:, :, 1] - self.f_y)*(self.f_x**2 + self.f_y**2)
-
-        if verbose == True:
-            # plt.quiver(vx_t, vy_t, scale=25)
-            # plt.show()
-            plt.figure()
-            plt.imshow(vectorField[:, :, 0])
-            plt.figure()
-            plt.imshow(vectorField[:, :, 1])
-
-        return np.stack((vx_t, vy_t), axis=2)
 
     def __compute_vo(self, **kwargs):
         """
@@ -866,6 +843,8 @@ class LevelSetFlow:
         :param mumford_shah: flag for mumford_shah flow
         :param scaleX: enhance X direction
         :param scaleY: enhance Y direction
+        :param linewidth: line width for drawing. Default: 1.
+        :param color_random: randomize colors or use one. Default: randomize
 
         :type scaleX: float
         :type scaleY: float
@@ -874,16 +853,21 @@ class LevelSetFlow:
 
          """
         from matplotlib import animation
+
         # ================================ MOVIE INITIALIZATIONS ===========================
         # Movie initializations
+        movie_name = kwargs.get('movie_name', 'Level set example')
+        movie_folder = kwargs.get('movie_folder', '')
 
-        metadata = dict(title='Level set example', artist='Reuma',
+        metadata = dict(title=movie_name, artist='Reuma',
                         comment='Movie support!')
-        writer = animation.FFMpegFileWriter(fps=30, metadata=metadata)
+        writer = animation.FFMpegFileWriter(fps=10, metadata=metadata)
 
         # ------inputs--------
         verbose = kwargs.get('verbose', False)
         open_flag = kwargs.get('open_flag', False)
+        color_random = kwargs.get('color_random', True)
+        linewidth = kwargs.get('linewidth', 1)
         mumford_shah_flag = kwargs.get('mumford_shah', False)
         self.scale_x = kwargs.get('scaleX', 1.)
         self.scale_y = kwargs.get('scaleY', 1.)
@@ -909,94 +893,106 @@ class LevelSetFlow:
         region_w = self.region_w
         processing_props = self.processing_props
 
-        fig, ax = plt.subplots(num='img')
+        fig, ax = plt.subplots(num='img', figsize=(16,9))
 
         if np.any(self.img_rgb) != 0:
-            mt.imshow(self.img_rgb)
+            mt.imshow(self.img_rgb, origin='lower')
         else:
-            mt.imshow(self.img(0))
+            mt.imshow(self.img(0), origin='lower')
 
         _, ax2 = plt.subplots(num='phi')
-        mt.imshow(self.phi().value)
-        fig3, ax3 = plt.subplots(num='kappa')
-        mt.imshow(self.phi().kappa)
+        mt.imshow(self.phi().value, origin='lower')
+        # fig3, ax3 = plt.subplots(num='kappa')
+        # mt.imshow(self.phi().kappa)
         if open_flag:
             fig4, ax4 = plt.subplots(num='psi')
-            mt.imshow(self.psi.value)
-        # with writer.saving(fig, "level_set.mp4", 100):
-        for iteration in range(iterations):
-            print(iteration)
-            if iteration ==7 :
-                print('hello')
-            intrinsic = np.zeros(self.img().shape[:2])
+            mt.imshow(self.psi.value, origin='lower')
+        with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
+            from tqdm import trange
+            for iteration in trange(iterations, desc='Running level set'):
+                # print(iteration)
+                # if iteration ==100 :
+                #     print('hello')
+                intrinsic = np.zeros(self.img().shape[:2])
 
-            # ---------- intrinsic movement ----------
-            if mumford_shah_flag:
-                self.mumfordshah_flow(nu)
+                # ---------- intrinsic movement ----------
+                if mumford_shah_flag:
+                    phi = self.mumfordshah_flow(nu=nu)
 
-            # regular flows
-            for item in list(flow_types.keys()):
-                if flow_types[item] == 0:
-                    continue
-                for i in range(self.num_ls):
-                  intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
+                # regular flows
+                for item in list(flow_types.keys()):
+                    if flow_types[item] == 0:
+                        continue
+                    for i in range(self.num_ls):
+                      intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
 
-                if verbose:
-                    if np.any(intrinsic > 20):
-                        print(i)
+                    if verbose:
+                        if np.any(intrinsic > 20):
+                            print(i)
 
-            # region force
-            for j in range(self.num_ls):
-                intrinsic += region_w * self.region * self.phi(j).norm_nabla
+                # region force
+                for j in range(self.num_ls):
+                    intrinsic += region_w * self.region * self.phi(j).norm_nabla
 
-            # ---------------extrinsic movement ----------
-            for k in range(self.num_ls):
-                extrinsic = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w
+                # ---------------extrinsic movement ----------
+                for k in range(self.num_ls):
+                    extrinsic = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w
 
-                # for constrained contours
-                extrinsic += self.__compute_vo() * vo_w
-                phi_t = self.step * (intrinsic - extrinsic)
-                # reinitializtion every 5 iterations:
-                if iteration % 20== 0 and iteration != 0:
-                    self.phi(k).reinitialization(phi_t)
+                    # for constrained contours
+                    extrinsic += self.__compute_vo() * vo_w
+                    phi_t = self.step * (intrinsic - extrinsic)
+                    # reinitializtion every 10 iterations:
+                    if iteration % 10== 0 and iteration != 0:
+                        self.phi(k).reinitialization(phi_t)
+                        # plt.figure('3d')
+                        # ax4 = plt.axes(projection='3d')
+                        # ax4.view_init(45,65)
+                        # X, Y = np.meshgrid(np.arange(0, self.phi().value.shape[1]), np.arange(0, self.phi().value.shape[0]))
+                        # ax4.plot_surface(X, Y, self.phi().value, cmap='gray')
 
-                else:
-                    self.phi(k).move_function(phi_t)
-
-                # self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
-
-            # extrinsic += (1 - mult_phi)
-            #  self.psi += extrinsic
-
-            plt.figure('norm nabla')
-            mt.imshow(self.phi().norm_nabla)
-            plt.pause(.5e-10)
-
-            # if np.max(np.abs(phi_t)) <= 5e-5:
-            #     print('done')
-            #     return
-            plt.figure('phi')
-            mt.imshow(self.phi().value)
-
-            # if open_flag:
-            #     for curve in l_curve:
-            #         self.phi().value[curve._y.astype('int'), curve._x.astype('int')] = 0
-
-            plt.figure('img')
-            if open_flag:
-                l_curve, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
-                                               open=True)
-            else:
-                colors = 'rbgm'
-                for i in range(len(self.__Phi)):
-                    if i > 0:
-                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
-                                                       color=colors[i], blob_size=blob_size)
                     else:
-                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
-                                                       color=colors[i], blob_size=blob_size)
-            # writer.grab_frame()
-            plt.pause(.0001)
+                        self.phi(k).move_function(phi_t)
+
+                    # self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
+
+                # extrinsic += (1 - mult_phi)
+                #  self.psi += extrinsic
+
+                # plt.figure('norm nabla')
+                # mt.imshow(self.phi().norm_nabla)
+
+
+                # if np.max(np.abs(phi_t)) <= 5e-5:
+                #     print('done')
+                #     return
+                plt.figure('phi')
+                mt.imshow(np.flipud(self.phi().value))
+                # plt.pause(.5e-10)
+                
+                # if open_flag:
+                #     for curve in l_curve:
+                #         self.phi().value[curve._y.astype('int'), curve._x.astype('int')] = 0
+
+                plt.figure('img')
+                if open_flag:
+                    l_curve, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
+                                                   open=True)
+                else:
+
+                    colors = 'rbgm'
+                    for i in range(len(self.__Phi)):
+                        if i > 0:
+                            l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
+                                                           color='r', linewidth=linewidth, blob_size=blob_size)
+                        else:
+                            l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
+                                                           color_random=color_random, linewidth=linewidth, blob_size=blob_size)
+                title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
+                                transform=ax.transAxes, ha="center")
+                title.set_text('Iteration #: {}'.format(iteration))
+                            # title(')
+                writer.grab_frame()
+        plt.pause(.0001)
         plt.show()
         print('Done')
         return l_curve
