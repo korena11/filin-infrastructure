@@ -1,4 +1,4 @@
-General Utilities
+Raster Utilities
 =================
 
 General raster utilities are gathered in :py:class:`rasterTools.RasterTools`

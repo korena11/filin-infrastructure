@@ -2,9 +2,10 @@ PointSetOpen3D class
 ====================
 
 This class inherits from :class:`PointSet.PointSet` and adds functionality (such as normals computation) via
-:ref:`Open3D <open3d:tutorial>`.
+:ref:`Open3Ddocs <http://www.open3d.org/docs/release/>`_.
 
-The class computes a KD-tree with initialization. As used in :ref:`Open3D <open3d:KDTree>`, it uses `FLANN <https://www.cs.ubc.ca/research/flann/>`_ to build KDTrees for fast retrieval of nearest neighbors.
+The class computes a KD-tree with initialization. As used in :ref:`Open3D_kdtree <http://www.open3d.org/docs/release/tutorial/Basic/kdtree.html?highlight=kdtree>`_, it uses `FLANN <https://www.cs.ubc.ca/research/flann/>`_ to build KDTrees for fast
+retrieval of nearest neighbors.
 
 When a subset of the PointSet is required, a subclass is set use :ref:`PointSubSetOpen3D class`
 

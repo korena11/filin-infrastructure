@@ -2,26 +2,176 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="bug fixes IOFactory&#10;added colorProperty option to PoinSetOpen3D&#10;bug fixes RasterData&#10;bug fixes mumford shaw elements. Now flow accommodate Chan-Vese&#10;bug fixes LevelSetFunction&#10;drawContours now flips the image">
-      <change beforePath="$PROJECT_DIR$/.idea/infraGit.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/infraGit.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Utils/GeometryUtils.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Utils/test_curve2shapely.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source/Utils/geometryUtils.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataClasses/RasterData.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/RasterData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IOmodules/IOFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/IOmodules/IOFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IOmodules/ReadFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/IOmodules/ReadFunctions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/IOmodules/SaveFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/IOmodules/SaveFunctions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LevelSets/GVF.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/GVF.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsProperty.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Panoramas/PanoramaFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Panoramas/PanoramaFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Use Cases/panorama_surface.py" beforeDir="false" afterPath="$PROJECT_DIR$/Use Cases/panorama_surface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Use Cases/PlaneMatch.py" beforeDir="false" afterPath="$PROJECT_DIR$/Use Cases/SurfaceFitting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Utils/MyTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/Utils/MyTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.buildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.buildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BallTreePointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BallTreePointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BaseData.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BaseData.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/CurveData.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/CurveData.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/Datasets.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/Datasets.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/KdTreePointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/KdTreePointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/RasterData.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/RasterData.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/Factories.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/Factories.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/FilterFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/FilterFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/RasterFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/RasterFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/SegmentationFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/SegmentationFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/TriangulationFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/TriangulationFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/IOFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/IOFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFlow.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFlow.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFunction.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSetFunction.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSets.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/LevelSets.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/Saliency.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/LevelSets/Saliency.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/BaseProperty.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/BaseProperty.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Colors/Colors.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Colors/Colors.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/Curvature.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/Curvature.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/EigenProperty.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/EigenProperty.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Neighborhood/Neighborhood.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Neighborhood/Neighborhood.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Normals/Normals.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Normals/Normals.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Panorama/Panorama.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Panorama/Panorama.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Saliency/Saliency.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Saliency/Saliency.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/SegmentationProperty.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/SegmentationProperty.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/SphericalCoordinates/Spherical.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/SphericalCoordinates/Spherical.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Tensors/tensorClass.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Tensors/tensorClass.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Transformations/Transformation.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Transformations/Transformation.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/TriangulationProperty.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/TriangulationProperty.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Utils/EigenFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Utils/EigenFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Utils/Utils.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Utils/Utils.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Utils/cuda_API.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Utils/cuda_API.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Utils/rasterTools.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Utils/rasterTools.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/PointSetVisualization.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/PointSetVisualization.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/RasterVisualization.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/RasterVisualization.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/Visualization.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/Visualization.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/VisualizationO3D.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/VisualizationO3D.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/zreferences.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/zreferences.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/BallTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/BallTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/BaseData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/BaseData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/CurveData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/CurveData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/Datasets.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/Datasets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/KdTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/KdTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/Factories.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/Factories.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/FilterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/FilterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/RasterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/RasterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/SegmentationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/SegmentationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/TriangulationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/TriangulationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/IOFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/IOFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFlow.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFlow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFunction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/LevelSetFunction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/LevelSets.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/LevelSets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/LevelSets/Saliency.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/LevelSets/Saliency.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/BaseProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/BaseProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Colors/Colors.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Colors/Colors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/EigenProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/EigenProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Panorama/Panorama.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Panorama/Panorama.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Saliency/Saliency.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Saliency/Saliency.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/SegmentationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/SegmentationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/SphericalCoordinates/Spherical.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/SphericalCoordinates/Spherical.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Tensors/tensorClass.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Tensors/tensorClass.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Transformations/Transformation.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Transformations/Transformation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/TriangulationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/TriangulationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Utils/EigenFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Utils/EigenFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Utils/Utils.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Utils/Utils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Utils/cuda_API.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Utils/cuda_API.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Utils/rasterTools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Utils/rasterTools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/PointSetVisualization.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/PointSetVisualization.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/RasterVisualization.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/RasterVisualization.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/Visualization.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/Visualization.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/VisualizationO3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/VisualizationO3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/BallTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/BallTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/BaseData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/BaseData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurveData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurveData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/EigenFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/EigenFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/EigenProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/EigenProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/FilterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/FilterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/IOFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/IOFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/KdTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/KdTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/LevelSetFlow.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/LevelSetFlow.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/LevelSetFunction.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/LevelSetFunction.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/MyTools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/MyTools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PanoramaFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PanoramaFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PanoramaProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PanoramaProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSubSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSubSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterVisualizations.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterVisualizations.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/ReadFunctions.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/ReadFunctions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RotationUtils.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RotationUtils.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SaliencyFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SaliencyFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SaliencyProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SaliencyProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SaveFunctions.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SaveFunctions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SegmentationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SegmentationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SegmentationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SegmentationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SphericalCoordinatesProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TensorFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TensorFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TensorProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TensorProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TransformationMatrixProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TriangulationFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TriangulationFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/TriangulationProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/TriangulationProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Utils/RandomColors.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Utils/RandomColors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/VisualizationO3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/VisualizationO3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/VisualizationVTK.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/VisualizationVTK.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/cuda_API.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/cuda_API.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/rasterTools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/rasterTools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/Datasets/PointSetOpen3D.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/Datasets/PointSetOpen3D.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/Utils/Utils.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/Utils/Utils.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/Utils/rasterTools.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/Utils/rasterTools.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_sources/index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_sources/index.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/basic.css" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/basic.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/doctools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/doctools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/documentation_options.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/jquery.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/language_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/language_data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_static/searchtools.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_static/searchtools.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/py-modindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/py-modindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/zreferences.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/zreferences.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/Utils/Utils.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Utils/Utils.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/Utils/rasterTools.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Utils/rasterTools.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/zrefs1.bib" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/zrefs1.bib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/zrefs1.bib.bak" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/zrefs1.bib.bak" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/zrefs1.bib.sav" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -69,36 +219,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py">
+        <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6886">
-              <caret line="321" column="25" selection-start-line="321" selection-start-column="25" selection-end-line="321" selection-end-column="25" />
+            <state relative-caret-position="-215">
+              <caret line="450" column="4" selection-start-line="450" selection-start-column="4" selection-end-line="450" selection-end-column="4" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Utils/rasterTools.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2134">
-              <caret line="100" column="19" selection-start-line="100" selection-start-column="19" selection-end-line="100" selection-end-column="19" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaFactory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1496">
-              <caret line="76" selection-start-line="76" selection-end-line="76" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
+                <element signature="e#49#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -107,56 +233,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="43" selection-start-line="43" selection-end-line="43" />
+            <state relative-caret-position="866">
+              <caret line="79" column="52" selection-start-line="79" selection-start-column="52" selection-end-line="79" selection-end-column="52" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesProperty.py">
+        <entry file="file://$PROJECT_DIR$/Utils/GeometryUtils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1474">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="785">
+              <caret line="68" selection-start-line="68" selection-end-line="68" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Use Cases/panorama_surface.py">
+        <entry file="file://$PROJECT_DIR$/Utils/test_curve2shapely.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1166">
-              <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IOmodules/IOFactory.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8712">
-              <caret line="413" column="11" selection-start-line="413" selection-start-column="11" selection-end-line="413" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/IOmodules/test_readLAS.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="374">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -165,12 +261,55 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/VisualizationClasses/RasterVisualizations.py">
+        <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/numpy/core/_methods.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            <state relative-caret-position="506">
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="496">
+              <caret line="131" selection-start-line="131" selection-end-line="131" />
+              <folding>
+                <element signature="e#60#78#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/Utils/rasterTools.rst">
+          <provider selected="true" editor-type-id="restructured-text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="367">
+              <caret line="980" column="41" selection-start-line="980" selection-start-column="41" selection-end-line="980" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="117">
+              <caret line="423" column="62" selection-start-line="423" selection-start-column="62" selection-end-line="423" selection-end-column="62" />
+              <folding>
+                <element signature="e#1053#1062#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst">
+          <provider selected="true" editor-type-id="restructured-text-editor" />
         </entry>
       </file>
     </leaf>
@@ -250,12 +389,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Properties/Tensors/TensorFactory.py" />
-        <option value="$PROJECT_DIR$/Utils/test_ballTree_saliency.py" />
-        <option value="$PROJECT_DIR$/Visualization Classes/VisualizationO3D.py" />
-        <option value="$PROJECT_DIR$/IOmodules/IO_Tools.py" />
-        <option value="$PROJECT_DIR$/DataClasses/BallTreePointSet.py" />
-        <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py" />
         <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborsProperty.py" />
         <option value="$PROJECT_DIR$/Properties/Normals/NormalsProperty.py" />
         <option value="$PROJECT_DIR$/Properties/Tensors/TensorProperty.py" />
@@ -277,7 +410,6 @@
         <option value="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" />
         <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationUtils.py" />
         <option value="$PROJECT_DIR$/docs/source/zreferences.rst" />
-        <option value="$PROJECT_DIR$/docs/source/conf.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" />
         <option value="$PROJECT_DIR$/DataClasses/PointSet.py" />
         <option value="$PROJECT_DIR$/DataClasses/PointSubSet.py" />
@@ -286,28 +418,36 @@
         <option value="$PROJECT_DIR$/Properties/Curvature/curvature_types.py" />
         <option value="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" />
         <option value="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" />
-        <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" />
         <option value="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" />
         <option value="$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesProperty.py" />
         <option value="$PROJECT_DIR$/LevelSets/check_GVF.py" />
         <option value="$PROJECT_DIR$/LevelSets/GVF.py" />
-        <option value="$PROJECT_DIR$/docs/source/index.rst" />
         <option value="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" />
         <option value="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" />
-        <option value="$PROJECT_DIR$/Utils/MyTools.py" />
         <option value="$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py" />
         <option value="$PROJECT_DIR$/Properties/Panoramas/PanoramaFactory.py" />
         <option value="$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py" />
-        <option value="$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py" />
-        <option value="$PROJECT_DIR$/IOmodules/IOFactory.py" />
         <option value="$PROJECT_DIR$/Use Cases/panorama_surface.py" />
+        <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" />
+        <option value="$PROJECT_DIR$/IOmodules/IOFactory.py" />
+        <option value="$PROJECT_DIR$/docs/source/index.rst" />
+        <option value="$PROJECT_DIR$/docs/source/Utils/geometryUtils.rst" />
+        <option value="$PROJECT_DIR$/docs/source/conf.py" />
+        <option value="$PROJECT_DIR$/docs/source/Utils/rasterTools.rst" />
+        <option value="$PROJECT_DIR$/Utils/MyTools.py" />
+        <option value="$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py" />
+        <option value="$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst" />
+        <option value="$PROJECT_DIR$/docs/source/Utils/Utils.rst" />
+        <option value="$PROJECT_DIR$/Utils/test_curve2shapely.py" />
+        <option value="$PROJECT_DIR$/Utils/GeometryUtils.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-12" />
-    <option name="width" value="1941" />
-    <option name="height" value="2112" />
+    <option name="x" value="282" />
+    <option name="y" value="-36" />
+    <option name="width" value="2913" />
+    <option name="height" value="2187" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -343,7 +483,69 @@
             <path>
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="Datasets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+              <item name="source" type="462c0819:PsiDirectoryNode" />
+              <item name="Utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="IOmodules" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="LevelSets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Saliency" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Transformations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="test_data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="Use Cases" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -391,7 +593,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.panorama_surface">
+  <component name="RunManager" selected="Python tests.Unittests in test_curve2shapely.py">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -499,18 +701,18 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests in test_pickleProperty.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests in test_curve2shapely.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="infraGit" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/IOmodules" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Utils" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/IOmodules/test_pickleProperty.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/Utils/test_curve2shapely.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -519,15 +721,15 @@
       <item itemvalue="Python.check_GVF" />
       <item itemvalue="Python.curvature_types" />
       <item itemvalue="Python.panorama_surface" />
-      <item itemvalue="Python tests.Unittests in test_pickleProperty.py" />
+      <item itemvalue="Python tests.Unittests in test_curve2shapely.py" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests in test_curve2shapely.py" />
         <item itemvalue="Python.panorama_surface" />
         <item itemvalue="Python.PanoramaUtils" />
         <item itemvalue="Python.check_GVF" />
         <item itemvalue="Python.curvature_types" />
-        <item itemvalue="Python tests.Unittests in test_pickleProperty.py" />
       </list>
     </recent_temporary>
   </component>
@@ -603,13 +805,8 @@
       <workItem from="1574183383597" duration="160000" />
       <workItem from="1574712225655" duration="683000" />
       <workItem from="1574756204662" duration="22000" />
-    </task>
-    <task id="LOCAL-00015" summary="Added Chan-Vese flow -- working">
-      <created>1521054395137</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1521054395137</updated>
+      <workItem from="1576518538925" duration="5865000" />
+      <workItem from="1576950206230" duration="9868000" />
     </task>
     <task id="LOCAL-00016" summary="Added Chan-Vese flow -- working">
       <created>1521111868869</created>
@@ -947,43 +1144,50 @@
       <option name="project" value="LOCAL" />
       <updated>1571392557681</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="bug fixes IOFactory&#10;added colorProperty option to PoinSetOpen3D&#10;bug fixes RasterData&#10;bug fixes mumford shaw elements. Now flow accommodate Chan-Vese&#10;bug fixes LevelSetFunction&#10;drawContours now flips the image">
+      <created>1576518612424</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1576518612424</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 29m 07s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 13h 38m 51s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 29m 58s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 32m 48s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 30m 59s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 34m 15s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 32m 21s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 34m 29s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 32m 55s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 48m 56s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 34m 48s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 54m 32s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 43m 27s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 55m 54s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 44m 10s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 56m 29s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.02.19 at 17h 49m 57s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.23 at 14h 59m 31s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_in_test_pickleProperty_py - 2019.03.06 at 13h 15m 49s.xml">
-      <configuration name="Unittests in test_pickleProperty.py" configurationId="tests" />
+    <history-entry file="Unittests_in_test_curve2shapely_py - 2019.12.24 at 17h 10m 23s.xml">
+      <configuration name="Unittests in test_curve2shapely.py" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="295039000" />
+    <option name="totallyTimeSpent" value="310772000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -997,7 +1201,7 @@
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.10488677" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.106475964" />
       <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.40952381" side_tool="true" weight="0.1043718" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1010,7 +1214,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35280374" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" weight="0.32087228" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5060908" side_tool="true" weight="0.31917337" />
-      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" visible="true" weight="0.20950156" />
+      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.20950156" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32972974" />
@@ -1073,6 +1277,17 @@
               </option>
               <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
                 <collection />
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="text">
+                    <value>
+                      <list>
+                        <option value="reuma" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
               </option>
               <option name="COLUMN_ORDER">
                 <list>
@@ -1360,7 +1575,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
-          <line>454</line>
+          <line>456</line>
           <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1440,7 +1655,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
-          <line>392</line>
+          <line>394</line>
           <option name="timeStamp" value="556" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1478,6 +1693,16 @@
           <line>61</line>
           <option name="timeStamp" value="616" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Utils/test_curve2shapely.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="620" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Utils/test_curve2shapely.py</url>
+          <line>17</line>
+          <option name="timeStamp" value="621" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1490,42 +1715,10 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$curvature_types.coverage" NAME="curvature_types Coverage Results" MODIFIED="1569078425595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Curvature" />
-    <SUITE FILE_PATH="coverage/Filin_Infrastructure$panorama_surface.coverage" NAME="panorama_surface Coverage Results" MODIFIED="1570206049899" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Use Cases" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$panorama_surface.coverage" NAME="panorama_surface Coverage Results" MODIFIED="1576522060225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Use Cases" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_in_test_curve2shapely_py.coverage" NAME="Unittests in test_curve2shapely.py Coverage Results" MODIFIED="1577107479078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Utils" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/docs/source/LevelSets/LevelSets.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/BaseData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="60" column="18" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Utils/Utils.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/BallTreePointSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Visualization Classes/VisualizationUtils.py" />
-    <entry file="file://$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationVTK.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/vtkmodules/vtkRenderingFreeType.py" />
     <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationUtils.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1556,19 +1749,6 @@
     <entry file="file://$PROJECT_DIR$/docs/source/zreferences.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8690">
-          <caret line="401" column="109" selection-start-line="401" selection-start-column="109" selection-end-line="401" selection-end-column="109" />
-          <folding>
-            <element signature="e#1053#1062#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Use Cases/CurvatureGPUNUMPY_TESTING.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-71">
@@ -1581,20 +1761,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="1113" column="100" selection-start-line="1113" selection-start-column="100" selection-end-line="1113" selection-end-column="100" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Curvature/CurvatureProperty.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -1685,16 +1851,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="952" column="40" selection-start-line="952" selection-start-column="40" selection-end-line="952" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFunction.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="726">
@@ -1729,16 +1885,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="324" selection-start-line="324" selection-end-line="324" />
-          <folding>
-            <element signature="e#49#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/ProgramData/Anaconda3/Lib/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -1757,16 +1903,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
           <caret line="100" selection-start-line="100" selection-end-line="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6886">
-          <caret line="321" column="25" selection-start-line="321" selection-start-column="25" selection-end-line="321" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1790,13 +1926,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="836">
-          <caret line="43" selection-start-line="43" selection-end-line="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesProperty.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1474">
@@ -1804,17 +1933,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Use Cases/panorama_surface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1694">
+          <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1166">
           <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/IOmodules/IOFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8712">
-          <caret line="413" column="11" selection-start-line="413" selection-start-column="11" selection-end-line="413" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -1835,12 +1967,120 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Use Cases/panorama_surface.py">
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
+        <state relative-caret-position="626">
+          <caret line="274" column="48" selection-start-line="274" selection-start-column="48" selection-end-line="274" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IOmodules/IOFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="527" column="26" selection-start-line="527" selection-start-column="26" selection-end-line="527" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/IOmodules/SaveFunctions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1169">
+          <caret line="111" column="28" selection-start-line="111" selection-start-column="28" selection-end-line="111" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="470">
+          <caret line="372" column="16" selection-start-line="372" selection-start-column="16" selection-end-line="372" selection-end-column="16" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="866">
+          <caret line="79" column="52" selection-start-line="79" selection-start-column="52" selection-end-line="79" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Datasets/PointSetOpen3D.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="423" column="62" selection-start-line="423" selection-start-column="62" selection-end-line="423" selection-end-column="62" />
+          <folding>
+            <element signature="e#1053#1062#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Utils/Utils.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-215">
+          <caret line="450" column="4" selection-start-line="450" selection-start-column="4" selection-end-line="450" selection-end-column="4" />
+          <folding>
+            <element signature="e#49#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LevelSets/LevelSetFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="980" column="41" selection-start-line="980" selection-start-column="41" selection-end-line="980" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Utils/geometryUtils.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Utils/rasterTools.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="496">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+          <folding>
+            <element signature="e#60#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/numpy/core/_methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="506">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utils/GeometryUtils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="785">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utils/test_curve2shapely.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

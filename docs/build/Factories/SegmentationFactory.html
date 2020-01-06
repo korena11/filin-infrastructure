@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -170,6 +171,88 @@
             
   <div class="section" id="segmentation-factory">
 <h1>Segmentation Factory<a class="headerlink" href="#segmentation-factory" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="SegmentationFactory.SegmentationFactory">
+<em class="property">class </em><code class="descclassname">SegmentationFactory.</code><code class="descname">SegmentationFactory</code><a class="reference internal" href="../_modules/SegmentationFactory.html#SegmentationFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SegmentationFactory.SegmentationFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create different types of segmentations</p>
+<p>The results are saved to SegmentationProperty object</p>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#SegmentationFactory.SegmentationFactory.BallTreeSurfaceElementSegmentation" title="SegmentationFactory.SegmentationFactory.BallTreeSurfaceElementSegmentation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BallTreeSurfaceElementSegmentation</span></code></a>(points[,&nbsp;…])</td>
+<td>Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure :param points: point set object (PointSet) :param leafSize: smallest number of points allowed in the ball tree data-structure (int) :param smallestObjectSize: smallest object expected to be detected in the point set (float) :return: SegmentationFactory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SegmentationFactory.SegmentationFactory.ParabolicScanLineSegmentation" title="SegmentationFactory.SegmentationFactory.ParabolicScanLineSegmentation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ParabolicScanLineSegmentation</span></code></a>(pointSet,&nbsp;…)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SegmentationFactory.SegmentationFactory.SurfaceElementsTensorConnectedComponents" title="SegmentationFactory.SegmentationFactory.SurfaceElementsTensorConnectedComponents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceElementsTensorConnectedComponents</span></code></a>(points)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">point set object (PointSet)</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SegmentationFactory__ScanLineRansac</span></code>(…)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="classmethod">
+<dt id="SegmentationFactory.SegmentationFactory.BallTreeSurfaceElementSegmentation">
+<em class="property">classmethod </em><code class="descname">BallTreeSurfaceElementSegmentation</code><span class="sig-paren">(</span><em>points</em>, <em>leafSize=10</em>, <em>smallestObjectSize=0.1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/SegmentationFactory.html#SegmentationFactory.BallTreeSurfaceElementSegmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SegmentationFactory.SegmentationFactory.BallTreeSurfaceElementSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partitioning a given point set to surface elements of minimal object size using a ball-tree data-structure
+:param points: point set object (PointSet)
+:param leafSize: smallest number of points allowed in the ball tree data-structure (int)
+:param smallestObjectSize: smallest object expected to be detected in the point set (float)
+:return: SegmentationFactory</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="SegmentationFactory.SegmentationFactory.ParabolicScanLineSegmentation">
+<em class="property">classmethod </em><code class="descname">ParabolicScanLineSegmentation</code><span class="sig-paren">(</span><em>pointSet</em>, <em>scanResolutionAz</em>, <em>searchRatio=0.75</em>, <em>ransacRatio=0.025</em>, <em>minimalScanLineLength=500</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/SegmentationFactory.html#SegmentationFactory.ParabolicScanLineSegmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SegmentationFactory.SegmentationFactory.ParabolicScanLineSegmentation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="SegmentationFactory.SegmentationFactory.SurfaceElementsTensorConnectedComponents">
+<em class="property">classmethod </em><code class="descname">SurfaceElementsTensorConnectedComponents</code><span class="sig-paren">(</span><em>points</em>, <em>leafSize=10</em>, <em>smallestObjectSize=0.1</em>, <em>numNeighbors=10</em>, <em>varianceThreshold=0.01</em>, <em>linearityThreshold=5</em>, <em>normalSimilarityThreshold=0.01</em>, <em>distanceThreshold=0.01</em>, <em>mode='soft_clipping'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/SegmentationFactory.html#SegmentationFactory.SurfaceElementsTensorConnectedComponents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SegmentationFactory.SegmentationFactory.SurfaceElementsTensorConnectedComponents" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> – point set object (PointSet)</li>
+<li><strong>leafSize</strong> – smallest number of points allowed in the ball tree data-structure (int)</li>
+<li><strong>smallestObjectSize</strong> – smallest object expected to be detected in the point set (float)</li>
+<li><strong>numNeighbors</strong> – number of neighboring surface elements to find (int)</li>
+<li><strong>varianceThreshold</strong> – max allowed variance of a surface tensor (float)</li>
+<li><strong>linearityThreshold</strong> – the value between the two largest eigenvalues from which a tensor is considered as
+a linear one (float)</li>
+<li><strong>normalSimilarityThreshold</strong> – max difference allowed between the directions of the tensors,
+given in values of the angle sine (float)</li>
+<li><strong>distanceThreshold</strong> – max distance between two tensors (float)</li>
+<li><strong>mode</strong> – similarity function indicator. Valid values include: ‘binary’ (default), ‘soft_clipping’ and ‘exp’</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 

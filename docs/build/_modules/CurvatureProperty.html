@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -267,6 +268,18 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span> <span class="o">=</span> <span class="nb">bool</span></div>
+
+<div class="viewcode-block" id="CurvatureProperty.enable_pickle"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureProperty.CurvatureProperty.enable_pickle">[docs]</a>    <span class="k">def</span> <span class="nf">enable_pickle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make the property pickable by transforming the point cloud to PointSet</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            the object is not pickable when the points are Open3DPointSet</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_BaseProperty__dataset</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">k1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

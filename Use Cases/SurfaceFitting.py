@@ -17,34 +17,73 @@ from IOFactory import IOFactory
 from PointSet import PointSet
 # from VisualizationVTK import VisualizationVTK
 
+def fit_bi_quadratic_LS(pointset):
+    """
+    Fitting a bi-quadratic surface via least squares
 
-def fit_plane_LS(pointset, n, d, eps=1e-4, path_filename=None, path_metadata=None):
+    :param pointset:  points coordinates (x,y,z)
+
+    :type pointset: PointSet, BaseData.BaseData
+
+    :return:  x0: fitted coefficients, RMSE: sigma a-postriori squared, v
+
+    :rtype: tuple
+
+    Bi-quadratic surface is defined by:
+
+    .. math::
+        z = ax^2 + by^2 + cxy + dx + ey + f
+
+    """
+    # 1. model
+    n = pointset.Size
+
+    f = np.ones((n, ))
+
+    # 2. move to centroid
+    xyz_c = pointset.ToNumpy() - pointset.ToNumpy().mean(axis=0)
+    A = np.vstack((xyz_c[:,0]**2, xyz_c[:,1]**2, xyz_c[:,0]* xyz_c[:,1], xyz_c[:,0], xyz_c[:,1], f)).T
+
+    # 2. solution
+    N = A.T.dot(A)
+    u = A.T.dot(pointset.Z)
+    x0 = np.linalg.solve(N, u)
+
+    v = A.dot(x0) - pointset.Z
+    sig2 = v.T.dot(v) / (n-6)
+
+    return x0, np.sqrt(sig2), v
+
+
+def fit_plane_GH(pointset, n, d, eps=1e-4, max_it=10000, path_filename=None, path_metadata=None):
     '''
     Plane fitting using the Least Square adjustment via Gauss-Helmert Model (condition equation with parameters)
      
-
     :param pointset: points coordinates (x,y,z)
     :param n: normal
     :param d: parameter d of plane equation
     :param eps: epsilon for convergence
+    :param max_it: maximum iterations allowed. :TODO: make an option where the number of iterations is unlimited
     :param path_filename: output file. Default: None
-    :param path_metadata
+    :param path_metadata: output metadata file. Default: None
 
     :type pointset: PointSet, BaseData.BaseData
     :type n: np.array
     :type d: float
     :type eps: float
+    :type max_it: int
     :type path_filename: str
     :type path_metadata: str
 
-    :Returns:
-        - x,y,x0: corrected values and fitted coefficients
+    :return: x0: fitted coefficients, RMSE: sigma a-postriori squared, v
+
+    :rtype: tuple
      
     '''
     # 1. model
     m = pointset.Size
-    x0 = np.vstack((n[0], n[1], n[2], d))
-    A = np.hstack((pointset.X, pointset.Y, pointset.Z, -np.ones(m)))
+    x0 = np.hstack((n, d))
+    A = np.vstack((pointset.X, pointset.Y, pointset.Z, -np.ones(m))).T
 
     # 2. general initializations
     sigma2= 1
@@ -56,6 +95,8 @@ def fit_plane_LS(pointset, n, d, eps=1e-4, path_filename=None, path_metadata=Non
 
     while sigma2 > eps:
         it += 1
+        if it >= max_it:
+            break
         B = np.hstack((np.diag(x0[0] * np.ones((1, m))[0]),
                        np.diag(x0[1] * np.ones((1, m))[0]),
                        np.diag(x0[2] * np.ones((1, m))[0])))
@@ -77,10 +118,10 @@ def fit_plane_LS(pointset, n, d, eps=1e-4, path_filename=None, path_metadata=Non
                     lamb *= 10
         v1 = v
 
-    sigma2 = np.dot(v.T, v) / (m - 4)
+        sigma2 = np.dot(v.T, v) / (m - 4)
     acc = np.sqrt(np.diag(sigma2 * np.linalg.inv(N)))
     RMSE = np.sqrt(sigma2)
-    n = x0.T[0][0:3] / np.linalg.norm(x0[0:3], 2)
+    n = x0[:3] / np.linalg.norm(x0[0:3], 2)
     lenV = len(v)
     v_sort = np.sort(np.abs(v))
     five_per = np.int32(np.ceil(m * 0.05))
@@ -106,16 +147,19 @@ def fit_plane_LS(pointset, n, d, eps=1e-4, path_filename=None, path_metadata=Non
             file.write(str(np.mean(v_sort[lenV - five_per::])) + '\t')
             file.write(str(np.mean(v_sort[lenV - ten_per::])) + '\n')
 
-    return x0
+    return x0, RMSE, v
 
 
-def fit_plane_PCA(pointset):
+def fit_plane_PCA(pointset, rmse=False):
     r"""
     Initial guess for the parameters using PCA
 
     :param pointset: points coordinates
+    :param rmse: flag to return RMSE. Default: false
 
     :type pointset: PointSet, BaseData.BaseData
+
+    :type rmse: bool
 
     :return: norm, d: initial guess for the parameters
     :rtype: tuple
@@ -141,8 +185,10 @@ def fit_plane_PCA(pointset):
 
     lenV = len(v)
     RMSE = np.sqrt(np.dot(v.T, v) / (lenV))
-
-    return norm, d
+    if rmse:
+        return (norm, d), RMSE, v
+    else:
+        return norm, d
 
 
 if __name__ == '__main__':

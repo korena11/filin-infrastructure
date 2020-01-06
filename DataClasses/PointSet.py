@@ -170,7 +170,7 @@ class PointSet(BaseData):
         """
         from pandas import DataFrame
         from geopandas import GeoDataFrame
-        from shapely.geometry import Point
+        from shapely_polygon.geometry import Point
 
         # Transform to pandas DataFrame
         pts = DataFrame(self.ToNumpy())

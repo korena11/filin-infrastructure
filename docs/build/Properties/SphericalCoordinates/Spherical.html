@@ -112,6 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
@@ -188,112 +189,164 @@ multiple ways achieving this, either by direct computing over a numpy array or u
 <h2>Spherical Property<a class="headerlink" href="#spherical-property" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty">
-<em class="property">class </em><code class="sig-prename descclassname">SphericalCoordinatesProperty.</code><code class="sig-name descname">SphericalCoordinatesProperty</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">*args</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">SphericalCoordinatesProperty.</code><code class="descname">SphericalCoordinatesProperty</code><span class="sig-paren">(</span><em>points</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spherical coordinates property of a certain PointSet Object
 Angular coordinates are in decimal degrees</p>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
+<td>Return the size of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XYZ</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azimuths</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevations</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranges</span></code></a></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SphericalToCartesianCoordinates</span></code></a>()</td>
+<td>Spherical to Cartesian coordinates</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code></a>()</td>
+<td>Create and return PolyData object</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.load" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Sets the values to the spherical coordinates property</td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates">
-<code class="sig-name descname">SphericalToCartesianCoordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates" title="Permalink to this definition">¶</a></dt>
+<code class="descname">SphericalToCartesianCoordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spherical to Cartesian coordinates</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> – spherical coordinates (az,el,r)</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>points in cartesian coordinates</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> – spherical coordinates (az,el,r)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">points in cartesian coordinates</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy">
-<code class="sig-name descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData">
-<code class="sig-name descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return PolyData object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>tvtk.PolyData of the current PointSet
--</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tvtk.PolyData of the current PointSet
+-</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ">
-<em class="property">property </em><code class="sig-name descname">XYZ</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ" title="Permalink to this definition">¶</a></dt>
+<code class="descname">XYZ</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths">
-<em class="property">property </em><code class="sig-name descname">azimuths</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths" title="Permalink to this definition">¶</a></dt>
+<code class="descname">azimuths</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations">
-<em class="property">property </em><code class="sig-name descname">elevations</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations" title="Permalink to this definition">¶</a></dt>
+<code class="descname">elevations</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues">
-<code class="sig-name descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a specific characteristic value of the property</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>value for each point</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>np.array</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">value for each point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.load" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the values to the spherical coordinates property</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>azimuths</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
-<li><p><strong>elevationAngles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
-<li><p><strong>distances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>azimuths</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
+<li><strong>elevationAngles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
+<li><strong>distances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges">
-<em class="property">property </em><code class="sig-name descname">ranges</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ranges</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -303,78 +356,109 @@ Angular coordinates are in decimal degrees</p>
 <h2>SphericalCoordinates Factory<a class="headerlink" href="#sphericalcoordinates-factory" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory">
-<em class="property">class </em><code class="sig-prename descclassname">SphericalCoordinatesFactory.</code><code class="sig-name descname">SphericalCoordinatesFactory</code><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">SphericalCoordinatesFactory.</code><code class="descname">SphericalCoordinatesFactory</code><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Methods</p>
-<dl class="method">
+<dl class="staticmethod">
 <dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">
-<em class="property">static </em><code class="sig-name descname">CartesianToSphericalCoordinates</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">ceval=&lt;function evaluate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – a pointset containing the points to transform to spherical</p></li>
-<li><p><strong>ceval</strong> – backend to use:
+<em class="property">static </em><code class="descname">CartesianToSphericalCoordinates</code><span class="sig-paren">(</span><em>points</em>, <em>ceval=&lt;function evaluate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> – a pointset containing the points to transform to spherical</li>
+<li><strong>ceval</strong> – backend to use:
 - eval: pure Numpy
-- numexpr.evaluate (default): Numexpr (faster for large arrays)</p></li>
+- numexpr.evaluate (default): Numexpr (faster for large arrays)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>spherical coordinates property in degrees</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty">SphericalCoordinatesProperty</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">spherical coordinates property in degrees</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty">SphericalCoordinatesProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD">
-<code class="sig-name descname">cart2sph_RDD</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_RDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD" title="Permalink to this definition">¶</a></dt>
+<code class="descname">cart2sph_RDD</code><span class="sig-paren">(</span><em>points</em>, <em>sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_RDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cartesian to spherical transformation via RDD.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – a point set to be transformed</p></li>
-<li><p><strong>sc</strong> – a spark context object (driver) that will run the job</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – a point set to be transformed</li>
+<li><strong>sc</strong> – a spark context object (driver) that will run the job</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <p>:type SparkContext</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>RDD holding the spherical coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>pySpark RDD</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">RDD holding the spherical coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pySpark RDD</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise">
-<em class="property">static </em><code class="sig-name descname">cart2sph_elementwise</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">z</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_elementwise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">cart2sph_elementwise</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_elementwise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Cartesian to spherical transformation for RDD use.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – </p></li>
-<li><p><strong>y</strong> – </p></li>
-<li><p><strong>z</strong> – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – </li>
+<li><strong>y</strong> – </li>
+<li><strong>z</strong> – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>spherical coordinates</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">spherical coordinates</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CartesianToSphericalCoordinates</span></code></a>(points[,&nbsp;ceval])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">a pointset containing the points to transform to spherical</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart2sph_RDD</span></code></a>(points,&nbsp;sc)</td>
+<td>Cartesian to spherical transformation via RDD.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart2sph_elementwise</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<td>Cartesian to spherical transformation for RDD use.</td>
+</tr>
 </tbody>
 </table>
 </div>

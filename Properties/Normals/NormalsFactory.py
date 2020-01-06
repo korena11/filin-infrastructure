@@ -277,7 +277,7 @@ class NormalsFactory:
         :param maxNN: maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.
         :param orientation: "camera" orientation. The orientation towards which the normals are computed. Default: (0,0,0)
 
-        :type pointcloud: PointSetOpen3D
+        :type pointcloud: DataClasses.BaseData.BaseData
         :type search_radius: float
         :type maxNN: int
         :type orientation: tuple

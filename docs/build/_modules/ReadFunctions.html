@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -210,6 +211,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">colorProp</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
 
     <span class="c1"># Opening file and reading all lines from it</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
@@ -274,12 +276,13 @@
         <span class="n">points</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pts</span><span class="p">)),</span> <span class="n">path</span> <span class="o">=</span> <span class="n">filename</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">intensity</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">):</span>
-            <span class="n">points</span><span class="o">.</span><span class="n">AddData2Fields</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">intensity</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;intensity&#39;</span><span class="p">)</span>
+            <span class="n">points</span><span class="o">.</span><span class="n">AddData2Fields</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">intensity</span><span class="p">)),</span> <span class="n">field</span> <span class="o">=</span> <span class="s1">&#39;intensity&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Some points don&#39;&#39;t have intensity values. None was assigned to PointSet&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">):</span>
-            <span class="n">colorslist</span> <span class="o">=</span> <span class="n">ColorFactory</span><span class="o">.</span><span class="n">assignColor</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">colorslist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">colorslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ColorFactory</span><span class="o">.</span><span class="n">assignColor</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">))))</span>
         <span class="c1"># else:</span>
         <span class="c1">#     warnings.warn(&#39;Some points don&#39;&#39;t have color values. No color property created&#39;)</span>
 

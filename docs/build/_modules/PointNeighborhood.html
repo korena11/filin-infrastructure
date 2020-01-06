@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -221,6 +222,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -245,6 +247,7 @@
 
 <span class="sd">        :rtype: np.ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -256,6 +259,7 @@
 
 <span class="sd">        :rtype: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">GetIndices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <div class="viewcode-block" id="PointNeighborhood.computeDistances"><a class="viewcode-back" href="../Properties/Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood.computeDistances">[docs]</a>    <span class="k">def</span> <span class="nf">computeDistances</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -270,8 +274,16 @@
         <span class="n">center_pt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">center_point_coords</span>
         <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pts</span> <span class="o">-</span> <span class="n">center_pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pts</span> <span class="o">-</span> <span class="n">center_pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">distances</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># print(&#39;Point set has two identical points at {}&#39;.format(center_pt))</span>
+            <span class="n">tmp_subset</span> <span class="o">=</span> <span class="n">PointSubSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neighbors</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">center_point_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">distances</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">tmp_subset</span><span class="p">)</span>
+            <span class="n">pts</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">__neighbors</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
+            <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pts</span> <span class="o">-</span> <span class="n">center_pt</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">=</span> <span class="n">distances</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span></div>
 
 <div class="viewcode-block" id="PointNeighborhood.color_neighborhood"><a class="viewcode-back" href="../Properties/Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood.color_neighborhood">[docs]</a>    <span class="k">def</span> <span class="nf">color_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point_color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">neighbors_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">):</span>
@@ -315,8 +327,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">directions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Point set has two identical points at </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">center_pt</span><span class="p">))</span>
+
         <span class="k">return</span> <span class="n">directions</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">__distances</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__distances</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)][:,</span>
                                                                <span class="kc">None</span><span class="p">]</span></div></div>
 

@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -159,24 +160,25 @@
   <h1>Source code for IOFactory</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Updated Last on 13/06/2014 14:07</span>
 
+<span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
 <span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">exc_info</span>
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="k">import</span> <span class="n">print_tb</span>
-
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
-<span class="c1"># from osgeo import gdal</span>
 
 <span class="kn">import</span> <span class="nn">ReadFunctions</span>
 <span class="kn">import</span> <span class="nn">SaveFunctions</span>
 <span class="kn">from</span> <span class="nn">DataClasses.BaseData</span> <span class="k">import</span> <span class="n">BaseData</span>
-<span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
-<span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
-<span class="kn">from</span> <span class="nn">IO_Tools</span> <span class="k">import</span> <span class="n">CreateFilename</span>
 <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 <span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
 <span class="kn">from</span> <span class="nn">DataClasses.RasterData</span> <span class="k">import</span> <span class="n">RasterData</span>
+<span class="kn">from</span> <span class="nn">IO_Tools</span> <span class="k">import</span> <span class="n">CreateFilename</span>
+<span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
+
+
+<span class="c1"># from osgeo import gdal</span>
 <span class="c1"># from shapefile import Reader</span>
 
 
@@ -532,16 +534,42 @@
         <span class="k">return</span> <span class="n">ReadFunctions</span><span class="o">.</span><span class="n">GetCurvatureFilePath</span><span class="p">(</span><span class="n">folderPath</span><span class="p">,</span> <span class="n">dataName</span><span class="p">,</span> <span class="n">currentFileIndex</span><span class="p">,</span> <span class="n">localNeighborhoodParameters</span><span class="p">,</span>
                                                   <span class="n">decimationRadius</span><span class="p">,</span> <span class="n">testRun</span><span class="p">)</span></div>
 <div class="viewcode-block" id="IOFactory.rasterFromGDAL"><a class="viewcode-back" href="../IOFactory.html#IOFactory.IOFactory.rasterFromGDAL">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">rasterFromGDAL</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">rasterFromGDAL</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">cellsize</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read raster files (tif, GeoTIf, png etc.) and load to RasterData</span>
+
+<span class="sd">        :param path: path to raster</span>
+<span class="sd">        :param cellsize: raster cell size</span>
+
+<span class="sd">        :type path: str</span>
+<span class="sd">        :type cellsize: float</span>
+
+<span class="sd">        :return: raster data</span>
+
+<span class="sd">        :rtype: RasterData</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">gdal</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
 
-            <span class="k">return</span> <span class="n">RasterData</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(),</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">(),</span>
-                              <span class="n">spatial_reference</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unexpected error: &quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">print_tb</span><span class="p">(</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="k">return</span> <span class="kc">None</span></div>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">geoTransform</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1">&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;CS_local&#39;</span>
+
+        <span class="k">return</span> <span class="n">RasterData</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">gridSpacing</span><span class="o">=</span><span class="n">cellsize</span><span class="p">,</span>
+                          <span class="n">geoTransform</span><span class="o">=</span><span class="p">(</span><span class="n">geoTransform</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geoTransform</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">geoTransform</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">geoTransform</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                          <span class="n">spatial_reference</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="IOFactory.rasterFromAscFile"><a class="viewcode-back" href="../IOFactory.html#IOFactory.IOFactory.rasterFromAscFile">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">rasterFromAscFile</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
@@ -659,9 +687,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">SaveFunctions</span><span class="o">.</span><span class="n">WriteToShapeFile</span><span class="p">(</span><span class="n">pointSet</span><span class="p">,</span> <span class="n">fileName</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-
-
-<div class="viewcode-block" id="IOFactory.curve2shp"><a class="viewcode-back" href="../IOFactory.html#IOFactory.IOFactory.curve2shp">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="IOFactory.curve2shp"><a class="viewcode-back" href="../IOFactory.html#IOFactory.IOFactory.curve2shp">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">curve2shp</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        TODO: make function</span>

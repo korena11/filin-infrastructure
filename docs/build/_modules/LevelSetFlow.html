@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -166,10 +167,10 @@
 <span class="kn">import</span> <span class="nn">cv2</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-
-<span class="kn">import</span> <span class="nn">MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
-<span class="kn">from</span> <span class="nn">LevelSetFunction</span> <span class="k">import</span> <span class="n">LevelSetFunction</span>
-<span class="kn">from</span> <span class="nn">RasterData</span> <span class="k">import</span> <span class="n">RasterData</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits</span> <span class="k">import</span> <span class="n">mplot3d</span>
+<span class="kn">import</span> <span class="nn">Utils.MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
+<span class="kn">from</span> <span class="nn">LevelSets.LevelSetFunction</span> <span class="k">import</span> <span class="n">LevelSetFunction</span>
+<span class="kn">from</span> <span class="nn">DataClasses.RasterData</span> <span class="k">import</span> <span class="n">RasterData</span>
 
 <span class="n">EPS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span>
 
@@ -183,10 +184,10 @@
     <span class="n">__step</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1"># step size</span>
 
     <span class="c1"># Weighting initializations</span>
-    <span class="n">__gvf_w</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">__gvf_w</span> <span class="o">=</span> <span class="mf">0.</span>
     <span class="n">__vo_w</span> <span class="o">=</span> <span class="mf">0.</span>
-    <span class="n">__region_w</span> <span class="o">=</span> <span class="mf">1.</span>
-
+    <span class="n">__region_w</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">__ms_w</span> <span class="o">=</span> <span class="mf">0.</span>
     <span class="c1"># Level set initializations</span>
     <span class="n">__Phi</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># LevelSetFunction</span>
     <span class="n">__img</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># the analyzed image (of the data)</span>
@@ -290,7 +291,7 @@
 <span class="sd">            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">flow_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;geodesic&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
+        <span class="n">flow_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;geodesic&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
                       <span class="s1">&#39;curvature&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
                       <span class="s1">&#39;equi_affine&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
                       <span class="s1">&#39;band&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
@@ -333,7 +334,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gradient vector flow weight</span>
 
-<span class="sd">        Default: 1.</span>
+<span class="sd">        Default: 0.</span>
 
 <span class="sd">        :rtype: float</span>
 
@@ -345,7 +346,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Open velocity flow weight</span>
 
-<span class="sd">        Default: 1.</span>
+<span class="sd">        Default: 0.</span>
 
 <span class="sd">        :rtype: float</span>
 
@@ -357,16 +358,28 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Region weight</span>
 
-<span class="sd">        Default: 1.</span>
+<span class="sd">        Default: 0.</span>
 
 <span class="sd">        :rtype: float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__region_w</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">ms_w</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Mumford-Shah (Chan Vese) weight</span>
+
+<span class="sd">        Default 0, if mumford_shah flag is True</span>
+
+<span class="sd">        :return: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ms_w</span>
+
 <div class="viewcode-block" id="LevelSetFlow.set_weights"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set weights for constraints.</span>
+<span class="sd">        Set weights for constraints. All are set to zero as defualt</span>
 
 <span class="sd">        :param gvf_w: gradient vector flow weight</span>
 <span class="sd">        :param vo_w: open contour weight (Not working at the moment)</span>
@@ -377,15 +390,16 @@
 <span class="sd">        :type region_w: float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
                   <span class="s1">&#39;vo_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                  <span class="s1">&#39;region_w&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">,</span>
-                  <span class="p">}</span>
+                  <span class="s1">&#39;region_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                  <span class="s1">&#39;ms_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
 
         <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__region_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;region_w&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__gvf_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__vo_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;vo_w&#39;</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__vo_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;vo_w&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ms_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ms_w&#39;</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="LevelSetFlow.img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.img">[docs]</a>    <span class="k">def</span> <span class="nf">img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -527,13 +541,14 @@
 <span class="sd">        :param center_pt: if the curve is a circle, the center point should be specified.</span>
 <span class="sd">        :param reularization_note: regularization note for heaviside function</span>
 <span class="sd">        :param function_type:</span>
+
 <span class="sd">            - &#39;circle&#39; (default);</span>
 <span class="sd">            - &#39;ellipse&#39;</span>
 <span class="sd">            - &#39;egg_crate&#39; - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)</span>
 <span class="sd">            - &#39;periodic_circles&#39; - more like squares at dx and dy distances from one another</span>
 <span class="sd">            - &#39;checkerboard&#39; - binary squares (from scikit-image)</span>
 
-
+<span class="sd">        :param epsilon: threshold to be considered zero. Default: 1e-4</span>
 
 <span class="sd">        :type processing_props: dict</span>
 <span class="sd">        :type radius: int</span>
@@ -541,10 +556,11 @@
 <span class="sd">        :type function_type: str</span>
 <span class="sd">        :type start: tuple</span>
 <span class="sd">        :type regularization_note: int 0,1,2</span>
+<span class="sd">        :type epsilon: float</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">scale_values</span>
-
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
         <span class="n">processing_props</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gradientType&#39;</span><span class="p">:</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s1">&#39;ksize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
         <span class="k">if</span> <span class="s1">&#39;processing_props&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">processing_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;processing_props&#39;</span><span class="p">])</span>
@@ -587,7 +603,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">regularization_note</span><span class="o">=</span><span class="n">regularization</span><span class="p">,</span>
-                             <span class="n">epsilon</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
+                             <span class="n">epsilon</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
                              <span class="o">**</span><span class="n">processing_props</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="LevelSetFlow.init_img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_img">[docs]</a>    <span class="k">def</span> <span class="nf">init_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -755,7 +771,7 @@
             <span class="n">flow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">flow_type</span> <span class="o">==</span> <span class="s1">&#39;curvature&#39;</span><span class="p">:</span>
-            <span class="n">flow</span> <span class="o">=</span> <span class="n">function</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span>
+            <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span><span class="o">*</span><span class="n">function</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span>
 
         <span class="k">if</span> <span class="n">flow_type</span> <span class="o">==</span> <span class="s1">&#39;equi_affine&#39;</span><span class="p">:</span>
             <span class="n">flow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cbrt</span><span class="p">(</span><span class="n">function</span><span class="o">.</span><span class="n">kappa</span><span class="p">)</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span>
@@ -767,6 +783,10 @@
                 <span class="n">new_value</span> <span class="o">=</span> <span class="n">function</span><span class="o">.</span><span class="n">value</span>
                 <span class="n">new_value</span><span class="p">[</span><span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span> <span class="o">&gt;</span> <span class="mf">1e10</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">new_value</span><span class="p">[</span><span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span> <span class="o">&gt;</span> <span class="mf">1e10</span><span class="p">])</span> <span class="o">*</span> <span class="mi">1</span>
                 <span class="n">function</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+
+            <span class="c1"># function.norm_nabla[np.abs(function.norm_nabla)&lt;1e-4] = 0</span>
+            <span class="c1"># function._x[np.abs(function.norm_nabla)&lt;1e-4]=0</span>
+            <span class="c1"># function._y[np.abs(function.norm_nabla)&lt;1e-4]=0</span>
 
             <span class="n">flow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">kappa</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">norm_nabla</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">g_x</span> <span class="o">*</span> <span class="n">function</span><span class="o">.</span><span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">g_y</span> <span class="o">*</span>
                                                                     <span class="n">function</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span>
@@ -803,7 +823,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">images</span> <span class="o">=</span> <span class="n">img</span>
 
-        <span class="n">Phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span>
+        <span class="n">Phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
 
         <span class="n">m_levelsets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span>
         <span class="n">n_phases</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">m_levelsets</span>
@@ -816,45 +837,51 @@
         <span class="n">kappa_flag</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+            <span class="n">dphi_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">))</span>
+
             <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
                 <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2LAB</span><span class="p">)</span>
                 <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
                 <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
                 <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">])</span>
                 <span class="k">continue</span>
+
             <span class="n">combinations</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">_combinations</span><span class="p">,</span> <span class="n">m_levelsets</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">combination</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">:</span>
-                <span class="n">dPhi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ms_element</span><span class="p">(</span><span class="n">combination</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+                <span class="n">dphi_</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ms_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ms_element</span><span class="p">(</span><span class="n">combination</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_levelsets</span><span class="p">):</span>
-                    <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                    <span class="n">Phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">move_function</span><span class="p">(</span><span class="n">dPhi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">])</span>
-                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m_levelsets</span><span class="p">):</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">dphi_</span><span class="p">[:,:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">nu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">dirac_delta</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">kappa</span>
 
-                    <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;</span> <span class="n">m_levelsets</span><span class="p">:</span>
-                        <span class="n">kappa_flag</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">Phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">move_function</span><span class="p">(</span><span class="n">dphi_</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">])</span>
+                <span class="c1"># counter += 1</span>
+                <span class="c1">#</span>
+                <span class="c1"># if counter &gt; m_levelsets:</span>
+                <span class="c1">#     kappa_flag = False</span>
+                <span class="c1">#</span>
+                <span class="c1"># if kappa_flag:</span>
+                <span class="c1">#</span>
 
-                    <span class="k">if</span> <span class="n">kappa_flag</span><span class="p">:</span>
-                        <span class="n">Phi</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">move_function</span><span class="p">(</span><span class="n">nu</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">kappa</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="n">Phi</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="n">Phi</span>
+        <span class="k">return</span> <span class="n">Phi</span></div>
 
         <span class="c1"># mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = &#39;b&#39;)</span>
         <span class="c1"># mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = &#39;r&#39;)</span>
         <span class="c1"># plt.pause(.5e-10)</span>
 
     <span class="k">def</span> <span class="nf">__ms_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combination</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        An element for summation within the Mumford-Shah model.</span>
 
 <span class="sd">        For example, for a 3-phase model, with a unison of the three level sets (all inside):</span>
 
-<span class="sd">        ..math::</span>
+<span class="sd">        .. math::</span>
 
 <span class="sd">            \begin{eqnarray}</span>
 <span class="sd">            \phi_{1t}\rightarrow(u_{0} - c_{000})^2 \delta(\phi_1)H(\phi_2)H(\phi_3) \\</span>
 <span class="sd">            \phi_{2t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)\delta(\phi_2)H(\phi_3) \\</span>
-<span class="sd">            \phi_{3t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)H(\phi_2)\delta(\phi_3) \\</span>
+<span class="sd">            \phi_{3t}\rightarrow(u_{0} - c_{000})^2 H(\phi_1)H(\phi_2)\delta(\phi_3)</span>
 
 <span class="sd">        This method comoputes the constant of the region, according to the image</span>
 
@@ -878,10 +905,10 @@
             <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">combination</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># inside the level set</span>
                 <span class="n">H</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">heaviside</span><span class="p">)</span>
-                <span class="n">diracs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">dirac_delta</span><span class="p">)</span>
+                <span class="n">diracs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">dirac_delta</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">H</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">heaviside</span><span class="p">)</span>
-                <span class="n">diracs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">dirac_delta</span><span class="p">)</span>
+                <span class="n">diracs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">dirac_delta</span><span class="p">)</span>
 
         <span class="kn">import</span> <span class="nn">functools</span>
         <span class="n">mult</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
@@ -889,7 +916,9 @@
             <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">img</span> <span class="o">*</span> <span class="n">mult</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">mult</span><span class="p">))</span>
-
+            <span class="c1"># print(&#39;\n segment type {}, \t pixels average {}&#39;.format(i,c))</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
             <span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
             <span class="n">H_</span> <span class="o">=</span> <span class="n">H</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -904,7 +933,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">H_</span> <span class="o">=</span> <span class="n">H_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">mult_dirac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diracs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">H_</span><span class="p">)</span>
-            <span class="n">dPhi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">img</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mult_dirac</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">dPhi</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">mt</span><span class="o">.</span><span class="n">make_zero</span><span class="p">((</span><span class="n">img</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mult_dirac</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">dPhi</span>
 
@@ -940,56 +969,6 @@
         <span class="c1">#  vb[np.where(phi != 0)] = 0</span>
         <span class="k">return</span> <span class="n">vb</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">kappa</span>
 
-    <span class="k">def</span> <span class="nf">__compute_vt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vectorField</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">phi_index</span> <span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Computes the vector field derivative in each direction</span>
-
-<span class="sd">        According to</span>
-<span class="sd">        .. math:: v_t = g(|\nabla f|)\nabla^2 * v - h(|\nabla f|)*(v - \nabla f)</span>
-
-<span class="sd">        :param vectorField: usually created based on an edge map; nxmx2 (for x and y directions)</span>
-<span class="sd">        :param edge_map:</span>
-<span class="sd">        :param kappa: curvature map</span>
-<span class="sd">        :param verbose: show vector field</span>
-<span class="sd">        :param phi_index: the index of the level set function to which the vector field is computed</span>
-<span class="sd">        :param mu: weighting index for the GVF</span>
-
-<span class="sd">        :type verbose: bool</span>
-
-<span class="sd">        **Optionals**</span>
-<span class="sd">        gradient computation parameters</span>
-
-<span class="sd">        :param gradientType:</span>
-<span class="sd">        :param ksize:</span>
-<span class="sd">        :param sigma:</span>
-
-<span class="sd">        :return vt: velocity for x and y directions</span>
-<span class="sd">         :type vt: nd-array nxmx2</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># compute the derivatives of the edge map at each direction</span>
-        <span class="n">nabla_edge</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageGradient_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># compute the Laplacian of the vector field</span>
-        <span class="n">laplacian_vx</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Laplacian</span><span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">)</span>
-        <span class="n">laplacian_vy</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">Laplacian</span><span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CV_64F</span><span class="p">)</span>
-
-        <span class="c1"># compute the functions that are part of the vt computation</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">nabla_edge</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">phi_index</span><span class="p">)</span><span class="o">.</span><span class="n">kappa</span> <span class="o">+</span> <span class="n">EPS</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">g</span>
-
-        <span class="n">vx_t</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">laplacian_vx</span> <span class="o">-</span> <span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">vy_t</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">laplacian_vy</span> <span class="o">-</span> <span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_y</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">verbose</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="c1"># plt.quiver(vx_t, vy_t, scale=25)</span>
-            <span class="c1"># plt.show()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">vectorField</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">vx_t</span><span class="p">,</span> <span class="n">vy_t</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__compute_vo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -1025,6 +1004,8 @@
 <span class="sd">        :param mumford_shah: flag for mumford_shah flow</span>
 <span class="sd">        :param scaleX: enhance X direction</span>
 <span class="sd">        :param scaleY: enhance Y direction</span>
+<span class="sd">        :param linewidth: line width for drawing. Default: 1.</span>
+<span class="sd">        :param color_random: randomize colors or use one. Default: randomize</span>
 
 <span class="sd">        :type scaleX: float</span>
 <span class="sd">        :type scaleY: float</span>
@@ -1033,16 +1014,21 @@
 
 <span class="sd">         &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">animation</span>
+
         <span class="c1"># ================================ MOVIE INITIALIZATIONS ===========================</span>
         <span class="c1"># Movie initializations</span>
+        <span class="n">movie_name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;movie_name&#39;</span><span class="p">,</span> <span class="s1">&#39;Level set example&#39;</span><span class="p">)</span>
+        <span class="n">movie_folder</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;movie_folder&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
 
-        <span class="n">metadata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Level set example&#39;</span><span class="p">,</span> <span class="n">artist</span><span class="o">=</span><span class="s1">&#39;Reuma&#39;</span><span class="p">,</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">movie_name</span><span class="p">,</span> <span class="n">artist</span><span class="o">=</span><span class="s1">&#39;Reuma&#39;</span><span class="p">,</span>
                         <span class="n">comment</span><span class="o">=</span><span class="s1">&#39;Movie support!&#39;</span><span class="p">)</span>
-        <span class="n">writer</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FFMpegFileWriter</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">FFMpegFileWriter</span><span class="p">(</span><span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
 
         <span class="c1"># ------inputs--------</span>
         <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">open_flag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;open_flag&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">color_random</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;color_random&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">linewidth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">mumford_shah_flag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mumford_shah&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scaleX&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scaleY&#39;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
@@ -1068,94 +1054,109 @@
         <span class="n">region_w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region_w</span>
         <span class="n">processing_props</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span>
 
-        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rgb</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rgb</span><span class="p">)</span>
+            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rgb</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
 
         <span class="n">_</span><span class="p">,</span> <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
-        <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">fig3</span><span class="p">,</span> <span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;kappa&#39;</span><span class="p">)</span>
-        <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">kappa</span><span class="p">)</span>
+        <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+        <span class="c1"># fig3, ax3 = plt.subplots(num=&#39;kappa&#39;)</span>
+        <span class="c1"># mt.imshow(self.phi().kappa)</span>
         <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
             <span class="n">fig4</span><span class="p">,</span> <span class="n">ax4</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="s1">&#39;psi&#39;</span><span class="p">)</span>
-            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="c1"># with writer.saving(fig, &quot;level_set.mp4&quot;, 100):</span>
-        <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">iteration</span> <span class="o">==</span><span class="mi">7</span> <span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
-            <span class="n">intrinsic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">writer</span><span class="o">.</span><span class="n">saving</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">movie_folder</span> <span class="o">+</span> <span class="n">movie_name</span> <span class="o">+</span> <span class="s2">&quot;.mp4&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">trange</span>
+            <span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="n">iterations</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Running level set&#39;</span><span class="p">):</span>
+                <span class="c1"># print(iteration)</span>
+                <span class="c1"># if iteration ==100 :</span>
+                <span class="c1">#     print(&#39;hello&#39;)</span>
+                <span class="n">intrinsic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
 
-            <span class="c1"># ---------- intrinsic movement ----------</span>
-            <span class="k">if</span> <span class="n">mumford_shah_flag</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">mumfordshah_flow</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
+                <span class="c1"># ---------- intrinsic movement ----------</span>
+                <span class="k">if</span> <span class="n">mumford_shah_flag</span><span class="p">:</span>
+                    <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mumfordshah_flow</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
 
-            <span class="c1"># regular flows</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">flow_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-                <span class="k">if</span> <span class="n">flow_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
-                  <span class="n">intrinsic</span> <span class="o">+=</span> <span class="n">flow_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">open_flag</span><span class="p">,</span> <span class="n">processing_props</span><span class="p">)</span>
+                <span class="c1"># regular flows</span>
+                <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">flow_types</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="k">if</span> <span class="n">flow_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
+                      <span class="n">intrinsic</span> <span class="o">+=</span> <span class="n">flow_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">open_flag</span><span class="p">,</span> <span class="n">processing_props</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">intrinsic</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">):</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">intrinsic</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">):</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-            <span class="c1"># region force</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
-                <span class="n">intrinsic</span> <span class="o">+=</span> <span class="n">region_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">norm_nabla</span>
+                <span class="c1"># region force</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
+                    <span class="n">intrinsic</span> <span class="o">+=</span> <span class="n">region_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">norm_nabla</span>
 
-            <span class="c1"># ---------------extrinsic movement ----------</span>
-            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
-                <span class="n">extrinsic</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GVF</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">GVF</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">gvf_w</span>
+                <span class="c1"># ---------------extrinsic movement ----------</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_ls</span><span class="p">):</span>
+                    <span class="n">extrinsic</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GVF</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">GVF</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">_y</span><span class="p">)</span> <span class="o">*</span> <span class="n">gvf_w</span>
 
-                <span class="c1"># for constrained contours</span>
-                <span class="n">extrinsic</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_vo</span><span class="p">()</span> <span class="o">*</span> <span class="n">vo_w</span>
-                <span class="n">phi_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">intrinsic</span> <span class="o">-</span> <span class="n">extrinsic</span><span class="p">)</span>
-                <span class="c1"># reinitializtion every 5 iterations:</span>
-                <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">10</span><span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">reinitialization</span><span class="p">(</span><span class="n">phi_t</span><span class="p">)</span>
+                    <span class="c1"># for constrained contours</span>
+                    <span class="n">extrinsic</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_vo</span><span class="p">()</span> <span class="o">*</span> <span class="n">vo_w</span>
+                    <span class="n">phi_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">*</span> <span class="p">(</span><span class="n">intrinsic</span> <span class="o">-</span> <span class="n">extrinsic</span><span class="p">)</span>
+                    <span class="c1"># reinitializtion every 10 iterations:</span>
+                    <span class="k">if</span> <span class="n">iteration</span> <span class="o">%</span> <span class="mi">10</span><span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">iteration</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">reinitialization</span><span class="p">(</span><span class="n">phi_t</span><span class="p">)</span>
+                        <span class="c1"># plt.figure(&#39;3d&#39;)</span>
+                        <span class="c1"># ax4 = plt.axes(projection=&#39;3d&#39;)</span>
+                        <span class="c1"># ax4.view_init(45,65)</span>
+                        <span class="c1"># X, Y = np.meshgrid(np.arange(0, self.phi().value.shape[1]), np.arange(0, self.phi().value.shape[0]))</span>
+                        <span class="c1"># ax4.plot_surface(X, Y, self.phi().value, cmap=&#39;gray&#39;)</span>
 
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">move_function</span><span class="p">(</span><span class="n">phi_t</span><span class="p">)</span>
-
-                <span class="c1"># self.phi(i).update(cv2.normalize(self.phi(i).value.astype(&#39;float&#39;), None, -1.0, 1.0, cv2.NORM_MINMAX))</span>
-
-            <span class="c1"># extrinsic += (1 - mult_phi)</span>
-            <span class="c1">#  self.psi += extrinsic</span>
-
-            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;kappa&#39;</span><span class="p">)</span>
-            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">kappa</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="o">.</span><span class="mf">5e-10</span><span class="p">)</span>
-
-            <span class="c1"># if np.max(np.abs(phi_t)) &lt;= 5e-5:</span>
-            <span class="c1">#     print(&#39;done&#39;)</span>
-            <span class="c1">#     return</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
-            <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-            <span class="c1"># if open_flag:</span>
-            <span class="c1">#     for curve in l_curve:</span>
-            <span class="c1">#         self.phi().value[curve._y.astype(&#39;int&#39;), curve._x.astype(&#39;int&#39;)] = 0</span>
-
-            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
-                <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span>
-                                               <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">colors</span> <span class="o">=</span> <span class="s1">&#39;rbgm&#39;</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">)):</span>
-                    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                                       <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                                       <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
-            <span class="c1"># writer.grab_frame()</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="o">.</span><span class="mi">0001</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">move_function</span><span class="p">(</span><span class="n">phi_t</span><span class="p">)</span>
+
+                    <span class="c1"># self.phi(i).update(cv2.normalize(self.phi(i).value.astype(&#39;float&#39;), None, -1.0, 1.0, cv2.NORM_MINMAX))</span>
+
+                <span class="c1"># extrinsic += (1 - mult_phi)</span>
+                <span class="c1">#  self.psi += extrinsic</span>
+
+                <span class="c1"># plt.figure(&#39;norm nabla&#39;)</span>
+                <span class="c1"># mt.imshow(self.phi().norm_nabla)</span>
+
+
+                <span class="c1"># if np.max(np.abs(phi_t)) &lt;= 5e-5:</span>
+                <span class="c1">#     print(&#39;done&#39;)</span>
+                <span class="c1">#     return</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;phi&#39;</span><span class="p">)</span>
+                <span class="n">mt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                <span class="c1"># plt.pause(.5e-10)</span>
+                
+                <span class="c1"># if open_flag:</span>
+                <span class="c1">#     for curve in l_curve:</span>
+                <span class="c1">#         self.phi().value[curve._y.astype(&#39;int&#39;), curve._x.astype(&#39;int&#39;)] = 0</span>
+
+                <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">open_flag</span><span class="p">:</span>
+                    <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span>
+                                                   <span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">colors</span> <span class="o">=</span> <span class="s1">&#39;rbgm&#39;</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">)):</span>
+                        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                           <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">draw_contours</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="o">=</span><span class="n">img_showed</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                           <span class="n">color_random</span><span class="o">=</span><span class="n">color_random</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span> <span class="n">blob_size</span><span class="o">=</span><span class="n">blob_size</span><span class="p">)</span>
+                <span class="n">title</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.07</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;pad&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+                                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">)</span>
+                <span class="n">title</span><span class="o">.</span><span class="n">set_text</span><span class="p">(</span><span class="s1">&#39;Iteration #: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">iteration</span><span class="p">))</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+                            <span class="c1"># title(&#39;)</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">grab_frame</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="o">.</span><span class="mi">0001</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Done&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">l_curve</span></div></div>

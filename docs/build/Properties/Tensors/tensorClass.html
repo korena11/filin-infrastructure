@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
@@ -190,125 +191,172 @@
 <h2>Tensor Class<a class="headerlink" href="#tensor-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Tensor.Tensor">
-<em class="property">class </em><code class="sig-prename descclassname">Tensor.</code><code class="sig-name descname">Tensor</code><span class="sig-paren">(</span><em class="sig-param">covariance_matrix</em>, <em class="sig-param">ref_point</em>, <em class="sig-param">pts_number</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Tensor.</code><code class="descname">Tensor</code><span class="sig-paren">(</span><em>covariance_matrix</em>, <em>ref_point</em>, <em>pts_number</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for representing a segment as a Tensor</p>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.covariance_matrix" title="Tensor.Tensor.covariance_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">covariance_matrix</span></code></a></td>
+<td>The covariance matrix of the pointset, as computed about the reference point.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Tensor.Tensor.eigenvalues" title="Tensor.Tensor.eigenvalues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eigenvalues</span></code></a></td>
+<td>Eigenvalues of the covariance matrix</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.eigenvectors" title="Tensor.Tensor.eigenvectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">eigenvectors</span></code></a></td>
+<td>Eigenvectors of the covariance matrix</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Tensor.Tensor.plate_axis" title="Tensor.Tensor.plate_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plate_axis</span></code></a></td>
+<td>If the covariance relates to a plane (a plate), its normal is the plate_axis</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.points" title="Tensor.Tensor.points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points</span></code></a></td>
+<td>The points that were used to construct the tensor</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Tensor.Tensor.points_number" title="Tensor.Tensor.points_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">points_number</span></code></a></td>
+<td>Number of points used for tensor computation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.reference_point" title="Tensor.Tensor.reference_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reference_point</span></code></a></td>
+<td>The point according to which the tensor was computed</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Tensor.Tensor.stick_axis" title="Tensor.Tensor.stick_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stick_axis</span></code></a></td>
+<td>If the covariance relates to a stick, its normal is the stick_axis</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.distanceFromPoint" title="Tensor.Tensor.distanceFromPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distanceFromPoint</span></code></a>(point[,&nbsp;tensorType,&nbsp;sign])</td>
+<td>Computing the distance of a given point from the surface defined by the tensor object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Tensor.Tensor.normal" title="Tensor.Tensor.normal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal</span></code></a>()</td>
+<td>Return the normal of the tensor at reference point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Tensor.Tensor.setValues" title="Tensor.Tensor.setValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Sets values in the tensor object</td>
+</tr>
 </tbody>
 </table>
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.covariance_matrix">
-<em class="property">property </em><code class="sig-name descname">covariance_matrix</code><a class="headerlink" href="#Tensor.Tensor.covariance_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">covariance_matrix</code><a class="headerlink" href="#Tensor.Tensor.covariance_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>The covariance matrix of the pointset, as computed about the reference point.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Tensor.Tensor.distanceFromPoint">
-<code class="sig-name descname">distanceFromPoint</code><span class="sig-paren">(</span><em class="sig-param">point</em>, <em class="sig-param">tensorType='all'</em>, <em class="sig-param">sign=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.distanceFromPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.distanceFromPoint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">distanceFromPoint</code><span class="sig-paren">(</span><em>point</em>, <em>tensorType='all'</em>, <em>sign=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.distanceFromPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.distanceFromPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computing the distance of a given point from the surface defined by the tensor object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>point</strong> (<em>np.ndarray</em>) – A 3D point (ndarray, 1x3)</p></li>
-<li><p><strong>tensorType</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of tensor to use for the computation (‘stick’, ‘plate’, ‘ball’ or ‘all’)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<em>np.ndarray</em>) – A 3D point (ndarray, 1x3)</li>
+<li><strong>tensorType</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – The type of tensor to use for the computation (‘stick’, ‘plate’, ‘ball’ or ‘all’)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The distance of the point from the object</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The distance of the point from the object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.eigenvalues">
-<em class="property">property </em><code class="sig-name descname">eigenvalues</code><a class="headerlink" href="#Tensor.Tensor.eigenvalues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">eigenvalues</code><a class="headerlink" href="#Tensor.Tensor.eigenvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvalues of the covariance matrix</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.eigenvectors">
-<em class="property">property </em><code class="sig-name descname">eigenvectors</code><a class="headerlink" href="#Tensor.Tensor.eigenvectors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">eigenvectors</code><a class="headerlink" href="#Tensor.Tensor.eigenvectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Eigenvectors of the covariance matrix</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Tensor.Tensor.normal">
-<code class="sig-name descname">normal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.normal" title="Permalink to this definition">¶</a></dt>
+<code class="descname">normal</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.normal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the normal of the tensor at reference point</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the normal</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the normal</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.plate_axis">
-<em class="property">property </em><code class="sig-name descname">plate_axis</code><a class="headerlink" href="#Tensor.Tensor.plate_axis" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plate_axis</code><a class="headerlink" href="#Tensor.Tensor.plate_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the covariance relates to a plane (a plate), its normal is the plate_axis</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.points">
-<em class="property">property </em><code class="sig-name descname">points</code><a class="headerlink" href="#Tensor.Tensor.points" title="Permalink to this definition">¶</a></dt>
+<code class="descname">points</code><a class="headerlink" href="#Tensor.Tensor.points" title="Permalink to this definition">¶</a></dt>
 <dd><p>The points that were used to construct the tensor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet.PointSubSet</a>, <a class="reference internal" href="../../Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData">BaseData.BaseData</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a>, <a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet.PointSubSet</a>, <a class="reference internal" href="../../Datasets/BaseData.html#BaseData.BaseData" title="BaseData.BaseData">BaseData.BaseData</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.points_number">
-<em class="property">property </em><code class="sig-name descname">points_number</code><a class="headerlink" href="#Tensor.Tensor.points_number" title="Permalink to this definition">¶</a></dt>
+<code class="descname">points_number</code><a class="headerlink" href="#Tensor.Tensor.points_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of points used for tensor computation</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.reference_point">
-<em class="property">property </em><code class="sig-name descname">reference_point</code><a class="headerlink" href="#Tensor.Tensor.reference_point" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reference_point</code><a class="headerlink" href="#Tensor.Tensor.reference_point" title="Permalink to this definition">¶</a></dt>
 <dd><p>The point according to which the tensor was computed</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Tensor.Tensor.setValues">
-<code class="sig-name descname">setValues</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.setValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.setValues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setValues</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Tensor.html#Tensor.setValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Tensor.Tensor.setValues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets values in the tensor object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>covariance_matrix</strong> – </p></li>
-<li><p><strong>refPoint</strong> – the point about which the tensor is computed</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>covariance_matrix</strong> – </li>
+<li><strong>refPoint</strong> – the point about which the tensor is computed</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Usage</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setValues</span><span class="p">(</span><span class="n">covariance_matrix</span><span class="p">,</span> <span class="n">cog</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Tensor.Tensor.stick_axis">
-<em class="property">property </em><code class="sig-name descname">stick_axis</code><a class="headerlink" href="#Tensor.Tensor.stick_axis" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stick_axis</code><a class="headerlink" href="#Tensor.Tensor.stick_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the covariance relates to a stick, its normal is the stick_axis</p>
 </dd></dl>
 
@@ -319,76 +367,117 @@
 <h2>Tensor Property<a class="headerlink" href="#tensor-property" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TensorProperty.TensorProperty">
-<em class="property">class </em><code class="sig-prename descclassname">TensorProperty.</code><code class="sig-name descname">TensorProperty</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">tensors=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">TensorProperty.</code><code class="descname">TensorProperty</code><span class="sig-paren">(</span><em>points</em>, <em>tensors=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
+<td>Return the size of the property</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#TensorProperty.TensorProperty.GetAllPointsTensors" title="TensorProperty.TensorProperty.GetAllPointsTensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetAllPointsTensors</span></code></a>()</td>
+<td>Retrieve all points tensors</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#TensorProperty.TensorProperty.getPointTensor" title="TensorProperty.TensorProperty.getPointTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointTensor</span></code></a>(idx)</td>
+<td>Retrieve a tensor of point(s) with idx index</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code>()</td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#TensorProperty.TensorProperty.load" title="TensorProperty.TensorProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(tensors,&nbsp;**kwargs)</td>
+<td>Sets an entire tensor array to the object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#TensorProperty.TensorProperty.setPointTensor" title="TensorProperty.TensorProperty.setPointTensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointTensor</span></code></a>(idx,&nbsp;values)</td>
+<td>Sets the tensor for an index</td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="TensorProperty.TensorProperty.GetAllPointsTensors">
-<code class="sig-name descname">GetAllPointsTensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.GetAllPointsTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.GetAllPointsTensors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GetAllPointsTensors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.GetAllPointsTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.GetAllPointsTensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve all points tensors</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="TensorProperty.TensorProperty.getPointTensor">
-<code class="sig-name descname">getPointTensor</code><span class="sig-paren">(</span><em class="sig-param">idx</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.getPointTensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.getPointTensor" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getPointTensor</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.getPointTensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.getPointTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a tensor of point(s) with idx index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the index of the point</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the tensor of point idx</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the index of the point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the tensor of point idx</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="TensorProperty.TensorProperty.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">tensors</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.load" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load</code><span class="sig-paren">(</span><em>tensors</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets an entire tensor array to the object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tensors</strong> (<em>np.ndarray of Tensor.Tensor</em>) – an entire array to set</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tensors</strong> (<em>np.ndarray of Tensor.Tensor</em>) – an entire array to set</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="TensorProperty.TensorProperty.setPointTensor">
-<code class="sig-name descname">setPointTensor</code><span class="sig-paren">(</span><em class="sig-param">idx</em>, <em class="sig-param">values</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.setPointTensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.setPointTensor" title="Permalink to this definition">¶</a></dt>
+<code class="descname">setPointTensor</code><span class="sig-paren">(</span><em>idx</em>, <em>values</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorProperty.html#TensorProperty.setPointTensor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorProperty.TensorProperty.setPointTensor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the tensor for an index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the index to which the tensor should be updated</p></li>
-<li><p><strong>values</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – the computed tensor</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the index to which the tensor should be updated</li>
+<li><strong>values</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – the computed tensor</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -398,141 +487,183 @@
 <h2>Tensor Factory<a class="headerlink" href="#tensor-factory" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="TensorFactory.TensorFactory">
-<em class="property">class </em><code class="sig-prename descclassname">TensorFactory.</code><code class="sig-name descname">TensorFactory</code><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">TensorFactory.</code><code class="descname">TensorFactory</code><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood" title="TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeTensorsProperty_givenNeighborhood</span></code></a>(points)</td>
+<td>Compute tensors for a point cloud.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#TensorFactory.TensorFactory.joinTensors" title="TensorFactory.TensorFactory.joinTensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">joinTensors</span></code></a>(t1,&nbsp;t2)</td>
+<td>Create a new Tensor by joining two existing ones</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#TensorFactory.TensorFactory.tensorFromPoints" title="TensorFactory.TensorFactory.tensorFromPoints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensorFromPoints</span></code></a>(points[,&nbsp;point_index,&nbsp;…])</td>
+<td>Create a Tensor from 3D points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#TensorFactory.TensorFactory.tensorGeneral" title="TensorFactory.TensorFactory.tensorGeneral"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensorGeneral</span></code></a>(arrays[,&nbsp;ref_array,&nbsp;weights,&nbsp;…])</td>
+<td>Compute a general tensor (not necessarily 3D)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#TensorFactory.TensorFactory.unifyTensors" title="TensorFactory.TensorFactory.unifyTensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">unifyTensors</span></code></a>(tensorList)</td>
+<td>Create a new tensor by joining multiple ones :param tensorList: List of Tensor objects (list/ndarray) :return: A new tensor which is the result of merging the given list of tensors</td>
+</tr>
 </tbody>
 </table>
 </div></blockquote>
-<dl class="method">
+<dl class="staticmethod">
 <dt id="TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood">
-<em class="property">static </em><code class="sig-name descname">computeTensorsProperty_givenNeighborhood</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">neighborhoodProperty=None</em>, <em class="sig-param">neighborsFunc=None</em>, <em class="sig-param">equalWeights=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.computeTensorsProperty_givenNeighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">computeTensorsProperty_givenNeighborhood</code><span class="sig-paren">(</span><em>points</em>, <em>neighborhoodProperty=None</em>, <em>neighborsFunc=None</em>, <em>equalWeights=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.computeTensorsProperty_givenNeighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute tensors for a point cloud.</p>
 <p>For each point a tensor is computed, with the point itself the reference point. If the neighborhoodProperty is
 None, it is computed here, according to the sent function.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> – a point cloud (PointSet or sub-object)</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> – a point cloud (PointSet or sub-object)</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>neighborhoodProperty</strong> (<em>NeighborhoodProperty</em>) – a property that holds all neighbors for each point (can be empty)</p></li>
-<li><p><strong>neighborsFunc</strong> (<em>function</em>) – the function to be used for neighbors search.</p></li>
-<li><p><strong>kwargs</strong> – the arguments for the function to be used for neighbors search. These are usually:</p></li>
-<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – search radius for neighbors search</p></li>
-<li><p><strong>knn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – k nearest neighbors for neighbors search</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>neighborhoodProperty</strong> (<em>NeighborhoodProperty</em>) – a property that holds all neighbors for each point (can be empty)</li>
+<li><strong>neighborsFunc</strong> (<em>function</em>) – the function to be used for neighbors search.</li>
+<li><strong>kwargs</strong> – the arguments for the function to be used for neighbors search. These are usually:</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – search radius for neighbors search</li>
+<li><strong>knn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – k nearest neighbors for neighbors search</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a tensor property with all tensors computed for each point</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#TensorProperty.TensorProperty" title="TensorProperty.TensorProperty">TensorProperty</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a tensor property with all tensors computed for each point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#TensorProperty.TensorProperty" title="TensorProperty.TensorProperty">TensorProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Usage</strong></p>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Now works only for PointSet3D neighborhood search.</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">Now works only for PointSet3D neighborhood search.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
 <dt id="TensorFactory.TensorFactory.joinTensors">
-<em class="property">classmethod </em><code class="sig-name descname">joinTensors</code><span class="sig-paren">(</span><em class="sig-param">t1</em>, <em class="sig-param">t2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.joinTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.joinTensors" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">joinTensors</code><span class="sig-paren">(</span><em>t1</em>, <em>t2</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.joinTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.joinTensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new Tensor by joining two existing ones</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t1</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – First TensorSegment object</p></li>
-<li><p><strong>t2</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – Second TensorSegment object</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>t1</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – First TensorSegment object</li>
+<li><strong>t2</strong> (<a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor"><em>Tensor</em></a>) – Second TensorSegment object</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new Tensor object which is the result of merging the two given ones</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A new Tensor object which is the result of merging the two given ones</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
 <dt id="TensorFactory.TensorFactory.tensorFromPoints">
-<em class="property">classmethod </em><code class="sig-name descname">tensorFromPoints</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">point_index=-1</em>, <em class="sig-param">keepPoints=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.tensorFromPoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.tensorFromPoints" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">tensorFromPoints</code><span class="sig-paren">(</span><em>points</em>, <em>point_index=-1</em>, <em>keepPoints=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.tensorFromPoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.tensorFromPoints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Tensor from 3D points</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – PointSet</p></li>
-<li><p><strong>point_index</strong> – around which point index the tensor is computed.  If (-1) the tensor is computed around the
-center of gravity. Default (-1).</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> – PointSet</li>
+<li><strong>point_index</strong> – around which point index the tensor is computed.  If (-1) the tensor is computed around the
+center of gravity. Default (-1).</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>radius</strong> – the radius according to which weights are being computed (if not set, then unit weight is used)</p></li>
-<li><p><strong>keepPoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – indicator whether to keep the points as part of the tensor object</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>radius</strong> – the radius according to which weights are being computed (if not set, then unit weight is used)</li>
+<li><strong>keepPoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – indicator whether to keep the points as part of the tensor object</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tensor object</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tensor object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
 <dt id="TensorFactory.TensorFactory.tensorGeneral">
-<em class="property">classmethod </em><code class="sig-name descname">tensorGeneral</code><span class="sig-paren">(</span><em class="sig-param">arrays</em>, <em class="sig-param">ref_array=-1</em>, <em class="sig-param">weights=1</em>, <em class="sig-param">min_points=3</em>, <em class="sig-param">keepPoints=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.tensorGeneral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.tensorGeneral" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">tensorGeneral</code><span class="sig-paren">(</span><em>arrays</em>, <em>ref_array=-1</em>, <em>weights=1</em>, <em>min_points=3</em>, <em>keepPoints=True</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.tensorGeneral"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.tensorGeneral" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a general tensor (not necessarily 3D)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>arrays</strong> (<em>np.array</em>) – an nxm arrays (each <em>row</em> array is the set for the tensor)</p></li>
-<li><p><strong>ref_array</strong> (<em>np.array</em>) – the array around which the tensor is computed, if (-1) it is computed around the center of gravity</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>arrays</strong> (<em>np.array</em>) – an nxm arrays (each <em>row</em> array is the set for the tensor)</li>
+<li><strong>ref_array</strong> (<em>np.array</em>) – the array around which the tensor is computed, if (-1) it is computed around the center of gravity</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>weights</strong> – the weights for the tensor computation. Default 1 for all</p></li>
-<li><p><strong>min_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal number of points that can define a tensor (default: 3)</p></li>
-<li><p><strong>keepPoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – indicator whether to keep the points as part of the tensor object</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>weights</strong> – the weights for the tensor computation. Default 1 for all</li>
+<li><strong>min_points</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal number of points that can define a tensor (default: 3)</li>
+<li><strong>keepPoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – indicator whether to keep the points as part of the tensor object</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a tensor</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a tensor</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#Tensor.Tensor" title="Tensor.Tensor">Tensor</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If there are less than <cite>min_point</cite> the covariance matrix of the tensor will be defined as the Identity matrix (with the required shape)</p>
+<p class="first admonition-title">Note</p>
+<p class="last">If there are less than <cite>min_point</cite> the covariance matrix of the tensor will be defined as the Identity matrix (with the required shape)</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="classmethod">
 <dt id="TensorFactory.TensorFactory.unifyTensors">
-<em class="property">classmethod </em><code class="sig-name descname">unifyTensors</code><span class="sig-paren">(</span><em class="sig-param">tensorList</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.unifyTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.unifyTensors" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">unifyTensors</code><span class="sig-paren">(</span><em>tensorList</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/TensorFactory.html#TensorFactory.unifyTensors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#TensorFactory.TensorFactory.unifyTensors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new tensor by joining multiple ones
 :param tensorList: List of Tensor objects (list/ndarray)
 :return: A new tensor which is the result of merging the given list of tensors</p>

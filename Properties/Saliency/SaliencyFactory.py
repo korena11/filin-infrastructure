@@ -179,7 +179,7 @@ class SaliencyFactory(object):
                 print('dn {}, dk {}'.format(dn, dk))
 
             normal_weight = 1 - curvature_weight
-            tensor_saliency.append(normal_weight * dn + curvature_weight * dk)
+            tensor_saliency.append(dn + dk)
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
@@ -208,14 +208,14 @@ class SaliencyFactory(object):
         :rtype: np.array
         """
         # normal influence
-        dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
-        # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
-        #         neighborhood.numberOfNeighbors - 1)
-        # if np.any(dn.std(axis=0) > noise_size):
-        #     dn = 0
-        # else:
+        # dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
+        dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+                neighborhood.numberOfNeighbors - 1)
+        if np.any(dn.std(axis=0) > noise_size):
+            dn = 0
+        else:
             # distances influence - Laplacian (DoG)
-        dist_element = 1 / np.sqrt(2 * np.pi) * \
+            dist_element = 1 / np.sqrt(2 * np.pi) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
                        1 / np.sqrt(2 * np.pi * win_size ** 2) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
@@ -223,9 +223,11 @@ class SaliencyFactory(object):
         # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
         # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
         # dist_element[0] = neighborhood.Size
-        dist_element_normed = dist_element / np.linalg.norm(dist_element)
+        #     dist_element[dist_element < 0] = 0
 
-        dn = np.abs(np.sum(dn * dist_element_normed))
+            dist_element_normed = mt.scale_values(dist_element)
+
+            dn = np.abs(np.sum(dn * dist_element_normed))
         return dn
 
     @staticmethod
@@ -263,17 +265,17 @@ class SaliencyFactory(object):
         """
 
         # difference in curvature
-        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) 
+        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
         # dk[np.where(np.abs(dk) < epsilon)] = 0
         # dk_normed = dk
-        # dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+        dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
         # dk = current_curvatures[1:]
         #
         dist_element = 1 / np.sqrt(2 * np.pi) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
                        1 / np.sqrt(2 * np.pi * win_size ** 2) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
-        dist_element_normed = dist_element / np.linalg.norm(dist_element)
+        dist_element_normed = mt.scale_values(dist_element)
 
         # if dk.std() > noise_size:
         #     return 0
@@ -293,7 +295,7 @@ class SaliencyFactory(object):
         # dist_element_normed[neighborhood.distances > win_size] *= s
         # dist_element_normed = dist_element
 
-        return np.abs(np.sum(dk * dist_element_normed))
+        return np.abs(np.sum(dk_normed * dist_element_normed))
 
     @staticmethod
     def multiscale_saliency(saliencies, percentiles=75):

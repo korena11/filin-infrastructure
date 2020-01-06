@@ -56,6 +56,8 @@ def WriteToPts(points, path):
         savetxt(f_handle, data, fmt, delimiter='\t', newline='\n')
 
 
+
+
 def WriteToShapeFile(pointSet, fileName, colors=None, **kwargs):
     """
     Exporting points to shapefile

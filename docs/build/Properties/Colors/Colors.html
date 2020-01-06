@@ -113,6 +113,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
@@ -188,79 +189,112 @@
 <h2>Color Property<a class="headerlink" href="#color-property" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty.RGB" title="Properties.Color.ColorProperty.ColorProperty.RGB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RGB</span></code></a></td>
+<td>Points’ colors, ranging 0-255 (integers)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
+<td>Return the size of the property</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty.rgb" title="Properties.Color.ColorProperty.ColorProperty.rgb"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rgb</span></code></a></td>
+<td>Points’ colors, ranging 0-1 (floats)</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty.getValues" title="Properties.Color.ColorProperty.ColorProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty.load" title="Properties.Color.ColorProperty.ColorProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>([colors])</td>
+<td>Set :param colors: :param kwargs: :return:</td>
+</tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="Properties.Color.ColorProperty.ColorProperty">
-<em class="property">class </em><code class="sig-prename descclassname">Properties.Color.ColorProperty.</code><code class="sig-name descname">ColorProperty</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">rgb=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<em class="property">class </em><code class="descclassname">Properties.Color.ColorProperty.</code><code class="descname">ColorProperty</code><span class="sig-paren">(</span><em>points</em>, <em>rgb=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
 <dt id="Properties.Color.ColorProperty.ColorProperty.RGB">
-<em class="property">property </em><code class="sig-name descname">RGB</code><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.RGB" title="Permalink to this definition">¶</a></dt>
+<code class="descname">RGB</code><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.RGB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Points’ colors, ranging 0-255 (integers)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>rgb</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, nx3 numpy.array</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">rgb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, nx3 numpy.array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Properties.Color.ColorProperty.ColorProperty.getValues">
-<code class="sig-name descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.getValues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a specific characteristic value of the property</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>value for each point</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>np.array</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">value for each point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
+<p class="first admonition-title">Warning</p>
+<p class="last">This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="Properties.Color.ColorProperty.ColorProperty.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">colors=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.load" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load</code><span class="sig-paren">(</span><em>colors=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorProperty.html#ColorProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set
 :param colors:
 :param kwargs:
 :return:</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="Properties.Color.ColorProperty.ColorProperty.rgb">
-<em class="property">property </em><code class="sig-name descname">rgb</code><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.rgb" title="Permalink to this definition">¶</a></dt>
+<code class="descname">rgb</code><a class="headerlink" href="#Properties.Color.ColorProperty.ColorProperty.rgb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Points’ colors, ranging 0-1 (floats)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>rgb</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a>, nx3 numpy.array</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">rgb</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a>, nx3 numpy.array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -271,69 +305,84 @@
 <h2>Color Factory<a class="headerlink" href="#color-factory" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Properties.Color.ColorFactory.ColorFactory.ProjectImages" title="Properties.Color.ColorFactory.ColorFactory.ProjectImages"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProjectImages</span></code></a>(points,&nbsp;images,&nbsp;matrices)</td>
+<td>Project images onto a points set (giving each point a color)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#Properties.Color.ColorFactory.ColorFactory.assignColor" title="Properties.Color.ColorFactory.ColorFactory.assignColor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">assignColor</span></code></a>(points,&nbsp;colors)</td>
+<td>Assigns color to PointSet</td>
+</tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="Properties.Color.ColorFactory.ColorFactory">
-<em class="property">class </em><code class="sig-prename descclassname">Properties.Color.ColorFactory.</code><code class="sig-name descname">ColorFactory</code><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Properties.Color.ColorFactory.</code><code class="descname">ColorFactory</code><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Color a PointSet using different methods</p>
-<dl class="method">
+<dl class="staticmethod">
 <dt id="Properties.Color.ColorFactory.ColorFactory.ProjectImages">
-<em class="property">static </em><code class="sig-name descname">ProjectImages</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">images</em>, <em class="sig-param">matrices</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory.ProjectImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory.ProjectImages" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">ProjectImages</code><span class="sig-paren">(</span><em>points</em>, <em>images</em>, <em>matrices</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory.ProjectImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory.ProjectImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Project images onto a points set (giving each point a color)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> – The point cloud to color</p></li>
-<li><p><strong>images</strong> – The images to project</p></li>
-<li><p><strong>matrices</strong> – <p>Camera matrices</p>
-<dl class="field-list simple">
-<dt class="field-odd">type points</dt>
-<dd class="field-odd"><p>PointSet.PointSet</p>
-</dd>
-<dt class="field-even">type images</dt>
-<dd class="field-even"><p>list of nd-array</p>
-</dd>
-<dt class="field-odd">param matrices</dt>
-<dd class="field-odd"><p>list of 3x4 nd-array</p>
-</dd>
-</dl>
-</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> – The point cloud to color</li>
+<li><strong>images</strong> – The images to project</li>
+<li><strong>matrices</strong> – <p>Camera matrices</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type points:</th><td class="field-body">PointSet.PointSet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type images:</th><td class="field-body">list of nd-array</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param matrices:</th><td class="field-body">list of 3x4 nd-array</td>
+</tr>
+</tbody>
+</table>
+</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Each point’s color is taken from the appropriate image</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty">ColorProperty</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Each point’s color is taken from the appropriate image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty">ColorProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="Properties.Color.ColorFactory.ColorFactory.assignColor">
-<em class="property">static </em><code class="sig-name descname">assignColor</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">colors</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory.assignColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory.assignColor" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">assignColor</code><span class="sig-paren">(</span><em>points</em>, <em>colors</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Properties/Color/ColorFactory.html#ColorFactory.assignColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Properties.Color.ColorFactory.ColorFactory.assignColor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assigns color to PointSet</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – The PointSet to which the color is added</p></li>
-<li><p><strong>colors</strong> (<em>np.array</em>) – The colors added</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – The PointSet to which the color is added</li>
+<li><strong>colors</strong> (<em>np.array</em>) – The colors added</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the color property of the PointSet</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty">ColorProperty</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the color property of the PointSet</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty">ColorProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -345,20 +394,29 @@
 <p>RandomColors choose colors such that they are farthest from each other as possible.</p>
 <blockquote>
 <div><p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#Utils.RandomColors.LetThereBeRandomColors.GenerateNewColor" title="Utils.RandomColors.LetThereBeRandomColors.GenerateNewColor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GenerateNewColor</span></code></a>([pastel_factor,&nbsp;…])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LetThereBeRandomColors__color_distance</span></code>(c1,&nbsp;c2)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LetThereBeRandomColors__get_random_color</span></code>([…])</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="class">
 <dt id="Utils.RandomColors.LetThereBeRandomColors">
-<em class="property">class </em><code class="sig-prename descclassname">Utils.RandomColors.</code><code class="sig-name descname">LetThereBeRandomColors</code><a class="reference internal" href="../../_modules/Utils/RandomColors.html#LetThereBeRandomColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utils.RandomColors.LetThereBeRandomColors" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Utils.RandomColors.</code><code class="descname">LetThereBeRandomColors</code><a class="reference internal" href="../../_modules/Utils/RandomColors.html#LetThereBeRandomColors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utils.RandomColors.LetThereBeRandomColors" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="Utils.RandomColors.LetThereBeRandomColors.GenerateNewColor">
-<code class="sig-name descname">GenerateNewColor</code><span class="sig-paren">(</span><em class="sig-param">pastel_factor=0.5</em>, <em class="sig-param">numberOfColorsToGenerate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Utils/RandomColors.html#LetThereBeRandomColors.GenerateNewColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utils.RandomColors.LetThereBeRandomColors.GenerateNewColor" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GenerateNewColor</code><span class="sig-paren">(</span><em>pastel_factor=0.5</em>, <em>numberOfColorsToGenerate=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/Utils/RandomColors.html#LetThereBeRandomColors.GenerateNewColor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Utils.RandomColors.LetThereBeRandomColors.GenerateNewColor" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

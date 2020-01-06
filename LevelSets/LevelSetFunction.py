@@ -212,7 +212,7 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
-        if np.any(np.abs(new_function) > 1e5):
+        if np.any(new_function.mean()+ 2.5* new_function.std() > new_function.max()):
             new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
             new_function[new_function< np.percentile(new_function, 3)] = np.percentile(new_function, 40)
 
@@ -271,7 +271,7 @@ class LevelSetFunction(object):
 
         
         """
-        from MyTools import scale_values
+        from Utils.MyTools import scale_values, make_zero
 
         phi_temp = LevelSetFunction(self.value + dphi)
 
@@ -287,8 +287,9 @@ class LevelSetFunction(object):
         new_value = self.value + phi_t
         # import skfmm
         # new_value = skfmm.distance(self.value + dphi)
-        new_value[new_value<=0] = scale_values(new_value[new_value<=0], -1., 0.)
-        new_value[new_value>=0] = scale_values(new_value[new_value>=0], 0., 1.)
+        new_value[new_value<=0] = scale_values(new_value[new_value<=0], -1., -0)
+        new_value[new_value>0] = scale_values(new_value[new_value>0], 0, 1.)
+        # new_value = make_zero(new_value)
 
 
         self.update(new_value)

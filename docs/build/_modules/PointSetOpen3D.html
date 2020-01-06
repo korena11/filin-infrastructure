@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -161,6 +162,7 @@
 <span class="c1"># General Imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">O3D</span>
+<span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
 
 <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
 
@@ -209,6 +211,14 @@
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">inputPoints</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">ColorProperty</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span class="o">.</span><span class="n">rgb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">path</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Given type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; as input. Not sure what to do with that...&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong turn.&quot;</span><span class="p">)</span></div>

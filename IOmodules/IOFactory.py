@@ -527,9 +527,7 @@ class IOFactory:
         """
         SaveFunctions.WriteToShapeFile(pointSet, fileName, colors, **kwargs)
 
-
-
-    @staticmethod
+    @classmethod
     def curve2shp(curves, filename):
         """
         TODO: make function

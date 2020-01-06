@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -176,10 +177,10 @@
 <span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="k">import</span> <span class="n">filters</span>
 <span class="c1"># from shapely.geometry import Polygon</span>
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">measure</span>
-
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span> <span class="k">as</span> <span class="nn">interp</span>
 
 <div class="viewcode-block" id="chi2_distance"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.chi2_distance">[docs]</a><span class="k">def</span> <span class="nf">chi2_distance</span><span class="p">(</span><span class="n">histA</span><span class="p">,</span> <span class="n">histB</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the :math:`\chi^2` distance between two histograms</span>
 
 <span class="sd">    .. math::</span>
@@ -441,13 +442,13 @@
 <span class="sd">            Eq. numbers from Amit Baruch Dissertation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="p">(</span><span class="n">img</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
 
     <span class="c1"># if blurring is required before differentiation</span>
     <span class="k">if</span> <span class="n">sigma</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">blur_window</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
 
-    <span class="n">floord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">ksize</span><span class="p">)</span>
+    <span class="n">floord</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ksize</span><span class="p">)</span>
 
     <span class="c1"># Derivatives (eq. 3-37)</span>
 
@@ -607,7 +608,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">),</span> <span class="n">extension</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="draw_contours"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.draw_contours">[docs]</a><span class="k">def</span> <span class="nf">draw_contours</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blob_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="draw_contours"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.draw_contours">[docs]</a><span class="k">def</span> <span class="nf">draw_contours</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">blob_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">color_random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Draws the contours of a specific iteration</span>
 
@@ -616,6 +617,7 @@
 <span class="sd">    :param image: the image on which the contours will be drawn</span>
 <span class="sd">    :param hold: erase image from previous drawings or not. Default: False</span>
 <span class="sd">    :param color: the color which the contour will be drawn. Default: random for each curve (send True)</span>
+<span class="sd">    :param linewidth: the line width of the curves. Default: 1</span>
 <span class="sd">    :param blob_size: the minimal area of a contour to draw</span>
 
 <span class="sd">    :type func: np.ndarray</span>
@@ -636,34 +638,73 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 
-    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;color&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+    <span class="n">linewidth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;linewidth&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">function_binary</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
+    <span class="n">tmp_func</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">tmp_func</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">tmp_func</span><span class="p">)</span><span class="o">&lt;=</span><span class="mf">1e-4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-4</span>
     <span class="c1"># segmenting and presenting the found areas</span>
-    <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">function_binary</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">func</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">function_binary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">function_binary</span><span class="p">)</span>
+    <span class="c1"># function_binary[np.where(func &gt; 0.)] = 0</span>
+    <span class="c1"># function_binary[np.where(func &lt;= 0.)] = 1</span>
+    <span class="c1"># function_binary = np.uint8(function_binary)</span>
 
-    <span class="n">contours</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">find_contours</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-    <span class="n">blob_labels</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">function_binary</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">label_props</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">blob_labels</span><span class="p">)</span>
-
-    <span class="n">contours</span> <span class="o">=</span> <span class="n">chooseLargestContours</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">label_props</span><span class="p">,</span> <span class="n">blob_size</span><span class="p">)</span>
+    <span class="n">contours</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">find_contours</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">tmp_func</span><span class="p">),</span> <span class="mf">0.</span><span class="p">)</span>
+    <span class="c1"># blob_labels = measure.label(function_binary, background=1)</span>
+    <span class="c1"># label_props = measure.regionprops(blob_labels)`</span>
+    <span class="c1"># </span>
+    <span class="c1"># contours = chooseLargestContours(contours, label_props, blob_size)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
-        <span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
     <span class="n">l_curve</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contours</span><span class="p">:</span>
+        <span class="c1"># make sure area is not too small and not too big</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">area</span> <span class="o">&lt;=</span> <span class="n">blob_size</span> <span class="ow">or</span> <span class="n">area</span> <span class="o">&gt;=</span> <span class="mf">10e6</span><span class="p">:</span>
+            <span class="k">continue</span>
+
         <span class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>  <span class="c1"># swapping between columns: x will be at the first column and y on the second</span>
-        <span class="k">if</span> <span class="n">color</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">color_random</span><span class="p">:</span>
             <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(),</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
 
-        <span class="n">curve</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">curve</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">c</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
+
         <span class="n">l_curve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curve</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">l_curve</span><span class="p">,</span> <span class="n">ax</span></div>
 
+<div class="viewcode-block" id="connected_components_filtering"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.connected_components_filtering">[docs]</a><span class="k">def</span> <span class="nf">connected_components_filtering</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">min_area</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connectivity</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Filter an image using connected components according to maximal area size</span>
+
+<span class="sd">    :param image: the image ro filter</span>
+<span class="sd">    :param max_area: the minimum allowed area. If None, it will be the median area of the CC.</span>
+<span class="sd">    :param connectivity: the connectivity type (4/8). Default: 8</span>
+<span class="sd">    :type image: np.array</span>
+<span class="sd">    :type max_area: int</span>
+
+<span class="sd">    :return: filtered image</span>
+
+<span class="sd">    :rtype: np.array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">ndimage</span>
+
+    <span class="n">label_img</span><span class="p">,</span> <span class="n">cc_num</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="n">CC</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">find_objects</span><span class="p">(</span><span class="n">label_img</span><span class="p">)</span>
+    <span class="n">cc_areas</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">label_img</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">cc_num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">min_area</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">min_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">cc_areas</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+    <span class="n">area_mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">cc_areas</span> <span class="o">&lt;</span> <span class="n">min_area</span><span class="p">)</span>
+    <span class="n">label_img</span><span class="p">[</span><span class="n">area_mask</span><span class="p">[</span><span class="n">label_img</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">label_img</span><span class="p">,</span> <span class="n">CC</span></div>
 
 <div class="viewcode-block" id="curve2D_toGeoSeries"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.curve2D_toGeoSeries">[docs]</a><span class="k">def</span> <span class="nf">curve2D_toGeoSeries</span><span class="p">(</span><span class="n">curve</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -841,7 +882,8 @@
 
 <span class="sd">    :rtype: np.array</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">array</span>
     <span class="k">return</span> <span class="p">(</span><span class="nb">max</span><span class="o">-</span><span class="nb">min</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">array</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">+</span> <span class="nb">min</span></div>
 
 <div class="viewcode-block" id="make_zero"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.make_zero">[docs]</a><span class="k">def</span> <span class="nf">make_zero</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">):</span>
@@ -854,12 +896,36 @@
 <span class="sd">    :type array: np.array</span>
 <span class="sd">    :type eps: float</span>
 
-<span class="sd">    :return: the same array with zeros instead of :math:`|x|&lt;eps</span>
+<span class="sd">    :return: the same array with zeros instead of :math:`|x|&lt;eps`</span>
+
 <span class="sd">    :rtype: np.array</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">array</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">&lt;</span> <span class="n">eps</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">return</span> <span class="n">array</span></div>
+
+<div class="viewcode-block" id="interpolate_data"><a class="viewcode-back" href="../Utils/Utils.html#MyTools.interpolate_data">[docs]</a><span class="k">def</span> <span class="nf">interpolate_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">attribute_data</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">func</span><span class="o">=</span><span class="n">interp</span><span class="o">.</span><span class="n">NearestNDInterpolator</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Interpolate data according to a specific attribute</span>
+
+<span class="sd">    :param data: the table to interpolate. Should have at least x,y and an attribute to interpolate (z or other)</span>
+<span class="sd">    :param attribute_data: values to interpolate</span>
+<span class="sd">    :param func: the function with which the data will be interpolated. Default: nearest neighbors</span>
+<span class="sd">    :param kwargs: dictionary for function&#39;s arguments</span>
+
+<span class="sd">    :type data: np.ndarray</span>
+<span class="sd">    :type attribute: int</span>
+<span class="sd">    :type func: function</span>
+
+<span class="sd">    :return: interpolated data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">resolution</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">resolution</span><span class="p">)</span>
+    <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">interped</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">data</span><span class="p">[:,:</span><span class="mi">2</span><span class="p">],</span> <span class="n">attribute_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">zz</span> <span class="o">=</span> <span class="n">interped</span><span class="p">((</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">zz</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>

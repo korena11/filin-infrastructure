@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -159,8 +160,8 @@
   <h1>Source code for TransformationMatrixFactory</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">RotationUtils</span>
-<span class="kn">import</span> <span class="nn">TransformationMatrixProperty</span>
+<span class="kn">from</span> <span class="nn">Properties.Transformations</span> <span class="k">import</span> <span class="n">RotationUtils</span>
+<span class="kn">from</span> <span class="nn">Properties.Transformations.TransformationMatrixProperty</span> <span class="k">import</span> <span class="n">TransformationMatrixProperty</span>
 
 
 <div class="viewcode-block" id="TransformationMatrixFactory"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixFactory.TransformationMatrixFactory">[docs]</a><span class="k">class</span> <span class="nc">TransformationMatrixFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -169,15 +170,15 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
 <div class="viewcode-block" id="TransformationMatrixFactory.Rotation_2Vectors"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixFactory.TransformationMatrixFactory.Rotation_2Vectors">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">Rotation_2Vectors</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">Rotation_2Vectors</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">fromVector</span><span class="p">,</span> <span class="n">toVector</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        compute rotation matrix from vector a1 to a2</span>
+<span class="sd">        Compute rotation matrix from vector a1 to a2</span>
 <span class="sd">        rotation by angle between a1 and a2 around the unit vector</span>
 
 <span class="sd">        :param points: points to rotate</span>
-<span class="sd">        :param a1: a2: row vectors</span>
+<span class="sd">        :param fromVector: a2: row vectors</span>
 
-<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type points: PointSet.PointSet</span>
 
 <span class="sd">        :return: R rotation matrix</span>
 
@@ -185,7 +186,7 @@
 
 <span class="sd">        &#39;&#39;&#39;</span>
 
-        <span class="n">R</span> <span class="o">=</span> <span class="n">RotationUtils</span><span class="o">.</span><span class="n">Rotation_2Vectors</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">RotationUtils</span><span class="o">.</span><span class="n">Rotation_2Vectors</span><span class="p">(</span><span class="n">fromVector</span><span class="p">,</span> <span class="n">toVector</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">TransformationMatrixProperty</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">rotationMatrix</span> <span class="o">=</span> <span class="n">R</span><span class="p">)</span></div>
 
@@ -203,7 +204,7 @@
 
 <span class="sd">             Symbolic option should be checked</span>
 
-<span class="sd">         :type points: PointSet</span>
+<span class="sd">         :type points: PointSet.PointSet</span>
 <span class="sd">         :type angles: tuple</span>
 <span class="sd">         :type dtype: str</span>
 

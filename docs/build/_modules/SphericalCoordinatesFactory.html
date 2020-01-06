@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -199,10 +200,10 @@
 
         <span class="n">azimuth</span> <span class="o">=</span> <span class="n">ceval</span><span class="p">(</span><span class="s1">&#39;arctan2(y,x)&#39;</span><span class="p">)</span>
         <span class="n">elevation</span> <span class="o">=</span> <span class="n">ceval</span><span class="p">(</span><span class="s1">&#39;arctan2(z, sqrt(x**2+y**2))&#39;</span><span class="p">)</span>
-        <span class="nb">range</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;sqrt(x**2+y**2+z**2)&#39;</span><span class="p">)</span>
+        <span class="nb">range</span> <span class="o">=</span> <span class="n">ceval</span><span class="p">(</span><span class="s1">&#39;sqrt(x**2+y**2+z**2)&#39;</span><span class="p">)</span>
 
-        <span class="n">elevation</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">pi</span>
-        <span class="n">azimuth</span> <span class="o">*=</span> <span class="mf">180.</span> <span class="o">/</span> <span class="n">pi</span>
+        <span class="n">elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">elevation</span><span class="p">)</span>
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">azimuth</span><span class="p">)</span>
         <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.</span> <span class="o">+</span> <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">SphericalCoordinatesProperty</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="nb">range</span><span class="p">)</span></div>

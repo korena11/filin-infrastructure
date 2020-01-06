@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -164,6 +165,7 @@
 <span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 
 
+
 <div class="viewcode-block" id="TransformationMatrixProperty"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixProperty.TransformationMatrixProperty">[docs]</a><span class="k">class</span> <span class="nc">TransformationMatrixProperty</span><span class="p">(</span><span class="n">BaseProperty</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class represents a 4x4 3D transformation matrix</span>
@@ -178,7 +180,7 @@
 <span class="sd">        :param translationMatrix: 3x1 or 3x3 translation matrix </span>
 <span class="sd">        :param rotationMatrix:  3x3 rotation matrix</span>
 <span class="sd">        </span>
-<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type points: PointSet.PointSet</span>
 <span class="sd">        :type transformationMatrix: np.ndarray</span>
 <span class="sd">        :type translationMatrix: np.ndarray</span>
 <span class="sd">        :type rotationMatrix: np.ndarray</span>
@@ -193,6 +195,28 @@
 
         <span class="k">if</span> <span class="n">translationMatrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">translationMatrix</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TransformationMatrixProperty.ToNumpy"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixProperty.TransformationMatrixProperty.ToNumpy">[docs]</a>    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        XYZ rotated</span>
+<span class="sd">        :return:  the rotated XYZ as numpy array</span>
+
+<span class="sd">        :rtype: np.array</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotationMatrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pts</span><span class="o">.</span><span class="n">T</span></div>
+
+<div class="viewcode-block" id="TransformationMatrixProperty.ToPointSet"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixProperty.TransformationMatrixProperty.ToPointSet">[docs]</a>    <span class="k">def</span> <span class="nf">ToPointSet</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rotated point set</span>
+
+<span class="sd">        :return: a point set after rotation</span>
+
+<span class="sd">        :rtype: PointSet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+        <span class="k">return</span> <span class="n">PointSet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span class="n">path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">Intensity</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TransformationMatrixProperty.load"><a class="viewcode-back" href="../Properties/Transformations/Transformation.html#TransformationMatrixProperty.TransformationMatrixProperty.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>

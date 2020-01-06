@@ -757,7 +757,8 @@ class LevelSetFlow:
         else:
             c = np.sum(img * mult) / (np.sum(mult))
             # print('\n segment type {}, \t pixels average {}'.format(i,c))
-
+        if np.isnan(c):
+            c = 0
         for index in range(self.num_ls):
             i = int(index)
             H_ = H.copy()
@@ -772,7 +773,7 @@ class LevelSetFlow:
             else:
                 H_ = H_[0]
                 mult_dirac.append(diracs[i] * H_)
-            dPhi[:, :, i] += (img - c) ** 2 * mult_dirac[i]
+            dPhi[:, :, i] += mt.make_zero((img - c) ** 2 * mult_dirac[i])
 
         return dPhi
 
@@ -894,14 +895,16 @@ class LevelSetFlow:
         processing_props = self.processing_props
 
         fig, ax = plt.subplots(num='img', figsize=(16,9))
+        ax.axis('off')
 
         if np.any(self.img_rgb) != 0:
-            mt.imshow(self.img_rgb, origin='lower')
+            mt.imshow(self.img_rgb, origin='lower', )
         else:
             mt.imshow(self.img(0), origin='lower')
 
         _, ax2 = plt.subplots(num='phi')
         mt.imshow(self.phi().value, origin='lower')
+        ax2.axis('off')
         # fig3, ax3 = plt.subplots(num='kappa')
         # mt.imshow(self.phi().kappa)
         if open_flag:
@@ -916,8 +919,6 @@ class LevelSetFlow:
                 intrinsic = np.zeros(self.img().shape[:2])
 
                 # ---------- intrinsic movement ----------
-                if mumford_shah_flag:
-                    phi = self.mumfordshah_flow(nu=nu)
 
                 # regular flows
                 for item in list(flow_types.keys()):
@@ -952,6 +953,10 @@ class LevelSetFlow:
 
                     else:
                         self.phi(k).move_function(phi_t)
+
+                # ---------------- mumford_shah movement --------
+                if mumford_shah_flag:
+                    phi = self.mumfordshah_flow(nu=nu)
 
                     # self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
 
@@ -990,9 +995,11 @@ class LevelSetFlow:
                 title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
                                 transform=ax.transAxes, ha="center")
                 title.set_text('Iteration #: {}'.format(iteration))
+                ax.axis('off')
                             # title(')
                 writer.grab_frame()
         plt.pause(.0001)
-        plt.show()
-        print('Done')
+        # plt.show()
+        plt.savefig(movie_folder + movie_name + '_final.png', figsize=(16,9),  bbox_inches='tight', dpi=300 )
+        print('Done with level sets')
         return l_curve

@@ -99,6 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -171,7 +172,7 @@
 <h1>LevelSet Function<a class="headerlink" href="#levelset-function" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="LevelSetFunction.LevelSetFunction">
-<em class="property">class </em><code class="sig-prename descclassname">LevelSetFunction.</code><code class="sig-name descname">LevelSetFunction</code><span class="sig-paren">(</span><em class="sig-param">function</em>, <em class="sig-param">regularization_note=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">LevelSetFunction.</code><code class="descname">LevelSetFunction</code><span class="sig-paren">(</span><em>function</em>, <em>regularization_note=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Builds an initial smooth function (Lipsschitz continuous) that represents the interface as the set where</p>
 <div class="math notranslate nohighlight">
 \[\phi(x,y,t) = 0\]</div>
@@ -184,33 +185,87 @@
  \phi(x,y,t) = 0 &amp; \textrm{for} &amp; (x,y) \textrm{ on curve}
  \end{cases}\end{split}\]</div>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.dirac_delta" title="LevelSetFunction.LevelSetFunction.dirac_delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dirac_delta</span></code></a></td>
+<td>Function’s dirac-delta according to the regularization note</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.heaviside" title="LevelSetFunction.LevelSetFunction.heaviside"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heaviside</span></code></a></td>
+<td>Function’s heaviside according to the regularization note</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.kappa" title="LevelSetFunction.LevelSetFunction.kappa"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kappa</span></code></a></td>
+<td>Function’s curvature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.norm_nabla" title="LevelSetFunction.LevelSetFunction.norm_nabla"><code class="xref py py-obj docutils literal notranslate"><span class="pre">norm_nabla</span></code></a></td>
+<td>Function’s gradient size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.processing_props" title="LevelSetFunction.LevelSetFunction.processing_props"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processing_props</span></code></a></td>
+<td>Processing properties for gradient computation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.regularization_note" title="LevelSetFunction.LevelSetFunction.regularization_note"><code class="xref py py-obj docutils literal notranslate"><span class="pre">regularization_note</span></code></a></td>
+<td>Regularization note (0,1, or 2) for the Heaviside and the Dirac-Delta functions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.value" title="LevelSetFunction.LevelSetFunction.value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value</span></code></a></td>
+<td>Function’s value (nd-array)</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFunction__ls_derivatives_curvature</span></code>(…)</td>
+<td>Computes and updates the level set function derivatives and curvature</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.compute_dirac_delta" title="LevelSetFunction.LevelSetFunction.compute_dirac_delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_dirac_delta</span></code></a>(**kwargs)</td>
+<td>Computes the Dirac Delta function of phi: d(phi)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.compute_heaviside" title="LevelSetFunction.LevelSetFunction.compute_heaviside"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_heaviside</span></code></a>(**kwargs)</td>
+<td>Computes the Heaviside function of phi: H(phi)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.dist_from_circle" title="LevelSetFunction.LevelSetFunction.dist_from_circle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_from_circle</span></code></a>(center_pt,&nbsp;radius,&nbsp;func_shape)</td>
+<td>Build a Lipshitz distance function from a circle, with a specific size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.dist_from_circles" title="LevelSetFunction.LevelSetFunction.dist_from_circles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_from_circles</span></code></a>(dx,&nbsp;dy,&nbsp;radius,&nbsp;func_shape)</td>
+<td>Build a Lipshitz distance function with repetitive circles</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.dist_from_eggcrate" title="LevelSetFunction.LevelSetFunction.dist_from_eggcrate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_from_eggcrate</span></code></a>(amplitude,&nbsp;func_shape[,&nbsp;…])</td>
+<td>Build a Lipshitz distance function with a sine function, with a specific size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.dist_from_ellipse" title="LevelSetFunction.LevelSetFunction.dist_from_ellipse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dist_from_ellipse</span></code></a>(center_pt,&nbsp;axes,&nbsp;func_shape)</td>
+<td>Build a Lipshitz distance function from an ellipse, with a specific size</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.move_function" title="LevelSetFunction.LevelSetFunction.move_function"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_function</span></code></a>(dphi)</td>
+<td>Adds dphi to the level set function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.reinitialization" title="LevelSetFunction.LevelSetFunction.reinitialization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reinitialization</span></code></a>(dphi)</td>
+<td>Keeping phi close to a signed function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFunction.LevelSetFunction.update" title="LevelSetFunction.LevelSetFunction.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a>(new_function,&nbsp;**kwargs)</td>
+<td>Updates the function according to the new given function</td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="LevelSetFunction.LevelSetFunction.compute_dirac_delta">
-<code class="sig-name descname">compute_dirac_delta</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.compute_dirac_delta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.compute_dirac_delta" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_dirac_delta</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.compute_dirac_delta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.compute_dirac_delta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Dirac Delta function of phi: d(phi)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>regularization_note</strong> – <ul>
-<li><dl>
-<dt>‘0’ - no regularization:</dt><dd><div class="math notranslate nohighlight">
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regularization_note</strong> – <ul>
+<li><dl class="first docutils">
+<dt>‘0’ - no regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[\begin{split}\begin{cases}
 d(x) = \phi &amp; \textrm{if} &amp;  x &gt;=0\\
 d(x) = 0 &amp; \textrm{if} &amp; x &lt; 0
@@ -218,8 +273,9 @@ d(x) = 0 &amp; \textrm{if} &amp; x &lt; 0
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>‘1’ - 1st regularization:</dt><dd><div class="math notranslate nohighlight">
+<li><dl class="first docutils">
+<dt>‘1’ - 1st regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[\begin{split}\begin{cases}
 d(x) = 0 &amp; \textrm{if} &amp;  |x| &gt; \epsilon\\
 d(x) = \frac{1}{2\epsilon}\cdot\left[1+\cos\left(\frac{\pi\cdot x}{\epsilon}\right)\right] &amp; \textrm{if} &amp; |x|&lt;=\epsilon
@@ -227,34 +283,40 @@ d(x) = \frac{1}{2\epsilon}\cdot\left[1+\cos\left(\frac{\pi\cdot x}{\epsilon}\rig
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>‘2’ - 2nd regularization:</dt><dd><div class="math notranslate nohighlight">
+<li><dl class="first docutils">
+<dt>‘2’ - 2nd regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[d(x) = \frac{1}{\pi}\frac{\epsilon}{\epsilon^2 + x^2}\]</div>
 </dd>
 </dl>
 </li>
-<li><p>‘3’ - replace dirac-delta with <span class="math notranslate nohighlight">\(|\nabla \phi|\)</span></p></li>
+<li>‘3’ - replace dirac-delta with <span class="math notranslate nohighlight">\(|\nabla \phi|\)</span></li>
 </ul>
-</p></li>
-<li><p><strong>epsilon</strong> – for the 1st and 2nd regularizations</p></li>
+</li>
+<li><strong>epsilon</strong> – threshold for a value to be considered zero. Default: 1e-4</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the dirac delta function. Also updates the class</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the dirac delta function. Also updates the class</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="LevelSetFunction.LevelSetFunction.compute_heaviside">
-<code class="sig-name descname">compute_heaviside</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.compute_heaviside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.compute_heaviside" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_heaviside</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.compute_heaviside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.compute_heaviside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Heaviside function of phi: H(phi)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>regularization_note</strong> – <ul>
-<li><dl>
-<dt>‘0’ - no regularization:</dt><dd><div class="math notranslate nohighlight">
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>regularization_note</strong> – <ul>
+<li><dl class="first docutils">
+<dt>‘0’ - no regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[\begin{split}\begin{cases}
 H(x) = 1 &amp; \textrm{if} &amp;x &gt;= 0\\
 H(x) = 0 &amp; \textrm{if}&amp; x &lt; 0
@@ -262,8 +324,9 @@ H(x) = 0 &amp; \textrm{if}&amp; x &lt; 0
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>‘1’ - 1st regularization:</dt><dd><div class="math notranslate nohighlight">
+<li><dl class="first docutils">
+<dt>‘1’ - 1st regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[\begin{split}\begin{cases}
 H(x) = 1 &amp; \textrm{if} &amp; x &gt; \epsilon\\
 H(x)=0 &amp; \textrm{if} &amp; x&lt; -\epsilon\\
@@ -272,56 +335,63 @@ H(x)=0.5\cdot\left[1+\frac{x}{\epsilon} + \frac{1}{\pi}\cdot\sin\left(\frac{\pi\
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>‘2’ - 2nd regularization:</dt><dd><div class="math notranslate nohighlight">
+<li><dl class="first docutils">
+<dt>‘2’ - 2nd regularization:</dt>
+<dd><div class="first last math notranslate nohighlight">
 \[H(x) = 0.5\cdot\left[1+\frac{2}{\pi} \cdot \arctan\left(\frac{x}{\epsilon}\right)\right]\]</div>
 </dd>
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>kwargs</strong> – epsilon - for the regularizations</p></li>
+</li>
+<li><strong>kwargs</strong> – epsilon - size to be considered as zero. Default 1e-4</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the heaviside function. Also updates the class.</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the heaviside function. Also updates the class.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.dirac_delta">
-<em class="property">property </em><code class="sig-name descname">dirac_delta</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dirac_delta" title="Permalink to this definition">¶</a></dt>
+<code class="descname">dirac_delta</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dirac_delta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function’s dirac-delta according to the regularization note</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="LevelSetFunction.LevelSetFunction.dist_from_circle">
-<em class="property">static </em><code class="sig-name descname">dist_from_circle</code><span class="sig-paren">(</span><em class="sig-param">center_pt</em>, <em class="sig-param">radius</em>, <em class="sig-param">func_shape</em>, <em class="sig-param">resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_circle" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">dist_from_circle</code><span class="sig-paren">(</span><em>center_pt</em>, <em>radius</em>, <em>func_shape</em>, <em>resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_circle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a Lipshitz distance function from a circle, with a specific size</p>
 <div class="math notranslate nohighlight">
 \[\phi(x,y,t) &lt; 0 \quad \text{for } (x,y) \not\in \Omega\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – center of the circle</p></li>
-<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – radius of the circle</p></li>
-<li><p><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</p></li>
-<li><p><strong>resolution</strong> – the kernel size for later processing. Default: 0.5</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – center of the circle</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – radius of the circle</li>
+<li><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</li>
+<li><strong>resolution</strong> – the kernel size for later processing. Default: 0.5</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a level set function that its zero-set is the defined circle (approximately)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a level set function that its zero-set is the defined circle (approximately)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="LevelSetFunction.LevelSetFunction.dist_from_circles">
-<em class="property">static </em><code class="sig-name descname">dist_from_circles</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em>, <em class="sig-param">radius</em>, <em class="sig-param">func_shape</em>, <em class="sig-param">resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_circles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_circles" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">dist_from_circles</code><span class="sig-paren">(</span><em>dx</em>, <em>dy</em>, <em>radius</em>, <em>func_shape</em>, <em>resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_circles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_circles" title="Permalink to this definition">¶</a></dt>
 <dd><blockquote>
 <div><p>Build a Lipshitz distance function with repetitive circles</p>
 <div class="math notranslate nohighlight">
@@ -329,176 +399,183 @@ H(x)=0.5\cdot\left[1+\frac{x}{\epsilon} + \frac{1}{\pi}\cdot\sin\left(\frac{\pi\
 </div></blockquote>
 <p>otin Omega</p>
 <blockquote>
-<div><dl class="field-list simple">
-<dt class="field-odd">param dx</dt>
-<dd class="field-odd"><p>distance between circles on x</p>
-</dd>
-<dt class="field-even">param dy</dt>
-<dd class="field-even"><p>distance between circles on y</p>
-</dd>
-<dt class="field-odd">param radius</dt>
-<dd class="field-odd"><p>radius of the circles</p>
-</dd>
-<dt class="field-even">param func_shape</dt>
-<dd class="field-even"><p>size of the function (height, width)</p>
-</dd>
-<dt class="field-odd">param resolution</dt>
-<dd class="field-odd"><p>grid size</p>
-</dd>
-<dt class="field-even">return</dt>
-<dd class="field-even"><p>a level set function that its zero-set is the defined circles (approximately)</p>
-</dd>
-</dl>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param dx:</th><td class="field-body">distance between circles on x</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param dy:</th><td class="field-body">distance between circles on y</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param radius:</th><td class="field-body">radius of the circles</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">param func_shape:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body">size of the function (height, width)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">param resolution:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">grid size</td>
+</tr>
+<tr class="field-even field"><th class="field-name">return:</th><td class="field-body">a level set function that its zero-set is the defined circles (approximately)</td>
+</tr>
+</tbody>
+</table>
 </div></blockquote>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="LevelSetFunction.LevelSetFunction.dist_from_eggcrate">
-<em class="property">static </em><code class="sig-name descname">dist_from_eggcrate</code><span class="sig-paren">(</span><em class="sig-param">amplitude</em>, <em class="sig-param">func_shape</em>, <em class="sig-param">resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_eggcrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_eggcrate" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">dist_from_eggcrate</code><span class="sig-paren">(</span><em>amplitude</em>, <em>func_shape</em>, <em>resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_eggcrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_eggcrate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a Lipshitz distance function with a sine function, with a specific size</p>
 <div class="math notranslate nohighlight">
 \[\phi(x,y,t) &lt; 0 \quad \text{for } (x,y) \not\in \Omega\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>amplitude</strong> – the amplitude of the egg grate</p></li>
-<li><p><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</p></li>
-<li><p><strong>resolution</strong> – the kernel size for later processing. Default: .5</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>amplitude</strong> – the amplitude of the egg grate</li>
+<li><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</li>
+<li><strong>resolution</strong> – the kernel size for later processing. Default: .5</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a level set function that its zero-set is the defined circle (approximately)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a level set function that its zero-set is the defined circle (approximately)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="staticmethod">
 <dt id="LevelSetFunction.LevelSetFunction.dist_from_ellipse">
-<em class="property">static </em><code class="sig-name descname">dist_from_ellipse</code><span class="sig-paren">(</span><em class="sig-param">center_pt</em>, <em class="sig-param">axes</em>, <em class="sig-param">func_shape</em>, <em class="sig-param">resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_ellipse" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">dist_from_ellipse</code><span class="sig-paren">(</span><em>center_pt</em>, <em>axes</em>, <em>func_shape</em>, <em>resolution=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.dist_from_ellipse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.dist_from_ellipse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Build a Lipshitz distance function from an ellipse, with a specific size</p>
 <div class="math notranslate nohighlight">
 \[\phi(x,y,t) &lt; 0 \quad \text{for } (x,y) \not\in \Omega\]</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – center of the ellipse</p></li>
-<li><p><strong>axes</strong> – axes sizes of the ellipse</p></li>
-<li><p><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</p></li>
-<li><p><strong>resolution</strong> – the kernel size for later processing. Default: 5</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – center of the ellipse</li>
+<li><strong>axes</strong> – axes sizes of the ellipse</li>
+<li><strong>func_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – size of the function (height, width)</li>
+<li><strong>resolution</strong> – the kernel size for later processing. Default: 5</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>a level set function that its zero-set is the defined ellipse (approximately)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>np.array</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a level set function that its zero-set is the defined ellipse (approximately)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.heaviside">
-<em class="property">property </em><code class="sig-name descname">heaviside</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.heaviside" title="Permalink to this definition">¶</a></dt>
+<code class="descname">heaviside</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.heaviside" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function’s heaviside according to the regularization note</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.kappa">
-<em class="property">property </em><code class="sig-name descname">kappa</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.kappa" title="Permalink to this definition">¶</a></dt>
+<code class="descname">kappa</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.kappa" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function’s curvature</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="LevelSetFunction.LevelSetFunction.move_function">
-<code class="sig-name descname">move_function</code><span class="sig-paren">(</span><em class="sig-param">dphi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.move_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.move_function" title="Permalink to this definition">¶</a></dt>
+<code class="descname">move_function</code><span class="sig-paren">(</span><em>dphi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.move_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.move_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds dphi to the level set function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dphi</strong> (<em>np.array</em>) – the delta to add to the current function</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dphi</strong> (<em>np.array</em>) – the delta to add to the current function</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.norm_nabla">
-<em class="property">property </em><code class="sig-name descname">norm_nabla</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.norm_nabla" title="Permalink to this definition">¶</a></dt>
+<code class="descname">norm_nabla</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.norm_nabla" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function’s gradient size</p>
 <div class="math notranslate nohighlight">
 \[|\nabla \phi|\]</div>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.processing_props">
-<em class="property">property </em><code class="sig-name descname">processing_props</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.processing_props" title="Permalink to this definition">¶</a></dt>
+<code class="descname">processing_props</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.processing_props" title="Permalink to this definition">¶</a></dt>
 <dd><p>Processing properties for gradient computation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.regularization_note">
-<em class="property">property </em><code class="sig-name descname">regularization_note</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.regularization_note" title="Permalink to this definition">¶</a></dt>
+<code class="descname">regularization_note</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.regularization_note" title="Permalink to this definition">¶</a></dt>
 <dd><p>Regularization note (0,1, or 2) for the Heaviside and the Dirac-Delta functions</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="LevelSetFunction.LevelSetFunction.reinitialization">
-<code class="sig-name descname">reinitialization</code><span class="sig-paren">(</span><em class="sig-param">dphi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.reinitialization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.reinitialization" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Keeping phi close to a signed function.</p>
+<code class="descname">reinitialization</code><span class="sig-paren">(</span><em>dphi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.reinitialization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.reinitialization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keeping phi close to a signed function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dphi</strong> (<em>np.array</em>) – the delta to add to the current function</td>
+</tr>
+</tbody>
+</table>
 <p>This should keep</p>
 <div class="math notranslate nohighlight">
-\[|\]</div>
-</div></blockquote>
-<p>abla phi| pprox 1</p>
-<blockquote>
-<div><p>Here we use:</p>
+\[|\nabla \phi| \approx 1\]</div>
+<p>Here we use:</p>
 <div class="math notranslate nohighlight">
-\[\phi_t = S(\phi_0)\left(1- |\]</div>
-</div></blockquote>
-<p>abla phi| )</p>
-<blockquote>
-<div><p>where S is a smoothed signed function:</p>
+\[\phi_t = S(\phi_0)\left(1- |\nabla \phi| )\]</div>
+<p>where S is a smoothed signed function:</p>
 <div class="math notranslate nohighlight">
-\[S(\phi_0) = \]</div>
-</div></blockquote>
-<p>rac{phi_0}{sqrt{phi_0 + epsilon^2}, qquad epsilon = min(Delta x, Delta y)</p>
-<blockquote>
-<div><p>assuming a grid.</p>
-<dl class="field-list simple">
-<dt class="field-odd">param dphi</dt>
-<dd class="field-odd"><p>the delta to add to the current function</p>
-</dd>
-<dt class="field-even">type dphi</dt>
-<dd class="field-even"><p>np.array</p>
-</dd>
-</dl>
-</div></blockquote>
+\[S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}}, \qquad  \epsilon = \min(\Delta x, \Delta y)\]</div>
+<p>assuming a grid.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="LevelSetFunction.LevelSetFunction.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">new_function</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>new_function</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFunction.html#LevelSetFunction.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates the function according to the new given function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>new_function</strong> – to update within the self.value</p></li>
-<li><p><strong>regularization_note</strong> – the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>new_function</strong> – to update within the self.value</li>
+<li><strong>regularization_note</strong> – the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="LevelSetFunction.LevelSetFunction.value">
-<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.value" title="Permalink to this definition">¶</a></dt>
+<code class="descname">value</code><a class="headerlink" href="#LevelSetFunction.LevelSetFunction.value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function’s value (nd-array)</p>
 </dd></dl>
 

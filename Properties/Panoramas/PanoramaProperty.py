@@ -369,8 +369,8 @@ class PanoramaProperty(BaseProperty):
             :param img_to_compute: if sent, the derivatives will be computed on this image, according to the range image. Default: 'panoramaData'
             String possibilities:
 
-            - 'intensity'
-            - 'range'
+                - 'intensity'
+                - 'range'
 
             :param blur_window: tuple of window size for blurring
 

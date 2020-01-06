@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -240,7 +241,7 @@
         <span class="k">return</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span class="n">tensorProperty</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.pointSetOpen3D_3parameters"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">pointSetOpen3D_3parameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pointset3d</span><span class="p">,</span> <span class="n">neighbors_property</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">pointSetOpen3D_3parameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pcl</span><span class="p">,</span> <span class="n">neighbors_property</span><span class="p">,</span>
                                    <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_sectors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                                    <span class="n">invalid_value</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -251,7 +252,7 @@
 <span class="sd">            If a pointset3D is sent without its normals computed in advance, the normals will be computed according to the first</span>
 <span class="sd">            point neighborhood parameters</span>
 
-<span class="sd">        :param pointset3d: the point cloud</span>
+<span class="sd">        :param pcl: the point cloud</span>
 <span class="sd">        :param neighbors_property: the neighbors property of the point cloud</span>
 <span class="sd">        :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5</span>
 <span class="sd">        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2</span>
@@ -260,7 +261,7 @@
 <span class="sd">        :param invalid_value: value for invalid curvature (points that their curvature cannot be computed). Default: -999</span>
 <span class="sd">        :param verbose: print inter running messages. default: False</span>
 
-<span class="sd">        :type pointset3d: PointSetOpen3D.PointSetOpen3D</span>
+<span class="sd">        :type pointset3d: PointSetOpen3D.PointSetOpen3D, DataClasses.BaseData.BaseData</span>
 <span class="sd">        :type neighbors_property: NeighborsProperty.NeighborsProperty</span>
 <span class="sd">        :type min_points_in_neighborhood: int</span>
 <span class="sd">        :type min_points_in_sector: int</span>
@@ -282,20 +283,27 @@
         <span class="n">k1</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">invalid_curvature</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of points that their curvature wasn&#39;t estimated</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&gt;&gt;&gt; Compute all points curvatures using the 3-parameters algorithm&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pointset3d</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span class="p">):</span>
-            <span class="kn">import</span> <span class="nn">warnings</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Pointset must be PointSetOpen3D&#39;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="mi">1</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> &gt;&gt;&gt; Estimate all points curvatures using the 3-parameters algorithm&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pcl</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span class="p">):</span>
+            <span class="c1"># import warnings</span>
+            <span class="c1"># warnings.warn(&#39;Pointset must be PointSetOpen3D&#39;)</span>
+            <span class="c1"># return 1</span>
+            <span class="n">pointset3d</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">pcl</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pointset3d</span> <span class="o">=</span> <span class="n">pcl</span>
 
         <span class="c1"># check if normals have been computed before for this point cloud:</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 
             <span class="k">for</span> <span class="n">neighborhood1</span> <span class="ow">in</span> <span class="n">neighbors_property</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">neighborhood1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
                 <span class="n">radius</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">radius</span>
                 <span class="n">maxNN</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
+
                 <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">maxNN</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">pointset3d</span><span class="o">.</span><span class="n">CalculateNormals</span><span class="p">(</span><span class="n">search_radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">maxNN</span><span class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
+
                     <span class="k">break</span>
 
         <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span>
@@ -310,11 +318,13 @@
                                                                                        <span class="n">num_sectors</span><span class="o">=</span><span class="n">num_sectors</span><span class="p">):</span>
                 <span class="n">normal</span> <span class="o">=</span> <span class="n">normals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">k1_</span><span class="p">,</span> <span class="n">k2_</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">curvature_by_3parameters</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
-                <span class="n">k1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k1_</span><span class="p">)</span>
-                <span class="n">k2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k2_</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="n">k1_</span><span class="p">,</span> <span class="n">k2_</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">k1_</span> <span class="o">*</span> <span class="n">k2_</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e3</span><span class="p">:</span>
+                    <span class="n">invalid_curvature</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">k1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
+                    <span class="n">k2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">k1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k1_</span><span class="p">)</span>
+                    <span class="n">k2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k2_</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">invalid_curvature</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -323,7 +333,7 @@
         <span class="n">k1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">k1</span><span class="p">)</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">k2</span><span class="p">)</span>
 
-        <span class="n">curvatures</span> <span class="o">=</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span class="n">pointset3d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="n">curvatures</span> <span class="o">=</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span class="n">pcl</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="n">curvatures</span><span class="o">.</span><span class="n">set_invalid_value</span><span class="p">(</span><span class="n">invalid_value</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">invalid_curvature</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">curvatures</span></div>
@@ -382,13 +392,15 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Curvature_3d_params: Unknown type of neighborhood&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
-        <span class="n">pnt</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="c1"># remove reference point from neighbors array</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="c1"># neighbors = neighbors[1:, :]</span>
+
+        <span class="c1"># move points to center point</span>
+        <span class="n">neighbors</span> <span class="o">-=</span> <span class="n">neighbors</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="c1"># if a normal of a neighborhood is in an opposite direction rotate it 180 degrees</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pnt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">pnt</span> <span class="o">+</span> <span class="n">normal</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="n">normal</span> <span class="o">=</span> <span class="o">-</span><span class="n">normal</span>
+        <span class="c1"># if np.linalg.norm(pnt, 2) &lt; np.linalg.norm(pnt + normal, 2):</span>
+        <span class="c1">#     normal = -normal</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># rotate the neighborhood to xy plane</span>
@@ -398,14 +410,17 @@
 
         <span class="c1"># compute curvature by 3 parameters</span>
         <span class="n">p</span> <span class="o">=</span> <span class="n">CurvatureFactory</span><span class="o">.</span><span class="n">__BiQuadratic_Surface</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-        <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">k1</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">C</span>
-        <span class="n">k2</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">C</span>
-
+        <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">c</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">C</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">C</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1"># print(neighbors.std(axis=0))</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">k1</span> <span class="o">*</span> <span class="n">k2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e3</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">k1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.umbrella_curvature"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.umbrella_curvature">[docs]</a>    <span class="nd">@classmethod</span>
@@ -461,6 +476,8 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
+        <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+
 
         <span class="n">epsilon</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">min_obj_size</span>
         <span class="n">umbrellaCurvature</span> <span class="o">=</span> <span class="p">[]</span>
@@ -468,9 +485,11 @@
         <span class="k">for</span> <span class="n">point_neighbors</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">neighbrohood</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">neighbrohood</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Compute umbrella curvature for all point cloud&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
             <span class="c1"># check if the neighborhood is valid</span>
-            <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__checkNeighborhood</span><span class="p">(</span><span class="n">point_neighbors</span><span class="p">,</span> <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="n">min_points_in_neighborhood</span><span class="p">,</span>
-                                       <span class="n">min_points_in_sector</span><span class="o">=</span><span class="n">min_points_in_sector</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="n">valid_sectors</span><span class="p">,</span>
-                                       <span class="n">num_sectors</span><span class="o">=</span><span class="n">num_sectors</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_neighbors</span><span class="p">,</span> <span class="n">PointNeighborhood</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__checkNeighborhood</span><span class="p">(</span><span class="n">point_neighbors</span><span class="p">,</span>
+                                                                                       <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="n">min_points_in_neighborhood</span><span class="p">,</span>
+                                                                                       <span class="n">min_points_in_sector</span><span class="o">=</span><span class="n">min_points_in_sector</span><span class="p">,</span>
+                                                                                       <span class="n">valid_sectors</span><span class="o">=</span><span class="n">valid_sectors</span><span class="p">,</span>
+                                                                                       <span class="n">num_sectors</span><span class="o">=</span><span class="n">num_sectors</span><span class="p">):</span>
                 <span class="n">point_idx</span> <span class="o">=</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="n">normals</span><span class="o">.</span><span class="n">Normals</span><span class="p">[</span><span class="n">point_idx</span><span class="p">]</span>
 
@@ -481,7 +500,7 @@
                 <span class="n">projections</span> <span class="o">=</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">neighbors_vectors</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
                 <span class="c1"># check if the projections are statistically zero</span>
-                <span class="c1"># projections[np.where(projections &gt; -epsilon) and np.where(projections &lt; epsilon)] = 0</span>
+                <span class="n">projections</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
 
                 <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
@@ -578,7 +597,7 @@
         <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span>
                             <span class="n">cv2</span><span class="o">.</span><span class="n">NORM_MINMAX</span><span class="p">)</span>  <span class="c1"># Convert to normalized floating point</span>
 
-        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">Zxx</span><span class="p">,</span> <span class="n">Zyy</span><span class="p">,</span> <span class="n">Zxy</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">Zxx</span><span class="p">,</span> <span class="n">Zyy</span><span class="p">,</span> <span class="n">Zxy</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives_numeric</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
                                                            <span class="n">gradientType</span><span class="o">=</span><span class="n">gradientType</span><span class="p">,</span>
                                                            <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">)</span>
 
@@ -757,7 +776,7 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__BiQuadratic_Surface</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        BiQuadratic surface adjustment to discrete point cloud</span>
+<span class="sd">        BiQuadratic surface adjustment to discrete point cloud (when the surface is rotated to [0,0,1])</span>
 
 <span class="sd">        :param neighbor_points: 3D points coordinates</span>
 
@@ -768,7 +787,7 @@
 <span class="sd">        :rtype: nd-array</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="c1"># ==== initial guess ====</span>
+
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>

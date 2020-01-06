@@ -20,7 +20,7 @@ from skimage import measure
 import scipy.interpolate as interp
 
 def chi2_distance(histA, histB, eps=1e-10):
-    """
+    r"""
     Compute the :math:`\chi^2` distance between two histograms
 
     .. math::
@@ -517,6 +517,34 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, color_random=False,  *
 
     return l_curve, ax
 
+def connected_components_filtering(image, min_area=None, connectivity=8):
+    """
+    Filter an image using connected components according to maximal area size
+
+    :param image: the image ro filter
+    :param max_area: the minimum allowed area. If None, it will be the median area of the CC.
+    :param connectivity: the connectivity type (4/8). Default: 8
+    :type image: np.array
+    :type max_area: int
+
+    :return: filtered image
+
+    :rtype: np.array
+    """
+
+    from scipy import ndimage
+
+    label_img, cc_num = ndimage.label(image)
+    CC = ndimage.find_objects(label_img)
+    cc_areas = ndimage.sum(image, label_img, range(cc_num + 1))
+
+    if min_area is None:
+        min_area = np.percentile(cc_areas, 50)
+
+    area_mask = (cc_areas < min_area)
+    label_img[area_mask[label_img]] = 0
+
+    return label_img, CC
 
 def curve2D_toGeoSeries(curve):
     """
@@ -694,7 +722,8 @@ def scale_values(array, min=0., max=1.):
 
     :rtype: np.array
     """
-
+    if len(array) <1:
+        return array
     return (max-min) * (array - array.min()) / (array.max() - array.min()) + min
 
 def make_zero(array, eps=1e-5):
@@ -707,19 +736,22 @@ def make_zero(array, eps=1e-5):
     :type array: np.array
     :type eps: float
 
-    :return: the same array with zeros instead of :math:`|x|<eps
+    :return: the same array with zeros instead of :math:`|x|<eps`
+
     :rtype: np.array
 
     """
     array[np.abs(array)< eps] = 0
     return array
 
-def interpolate_data(data, attribute_data, resolution, func=interp.NearestNDInterpolator):
+def interpolate_data(data, attribute_data, resolution, func=interp.NearestNDInterpolator, **kwargs):
     """
     Interpolate data according to a specific attribute
+
     :param data: the table to interpolate. Should have at least x,y and an attribute to interpolate (z or other)
     :param attribute_data: values to interpolate
     :param func: the function with which the data will be interpolated. Default: nearest neighbors
+    :param kwargs: dictionary for function's arguments
 
     :type data: np.ndarray
     :type attribute: int
@@ -730,10 +762,12 @@ def interpolate_data(data, attribute_data, resolution, func=interp.NearestNDInte
     x = np.arange(data[:,0].min(), data[:,0].max(), resolution)
     y = np.arange(data[:, 1].min(), data[:, 1].max(), resolution)
     xx, yy = np.meshgrid(x,y)
-    interped = func(data[:,:2], attribute_data)
+    interped = func(data[:,:2], attribute_data, **kwargs)
     zz = interped((xx, yy)).reshape(xx.shape)
 
     return zz
+
+
 
 
 if __name__ == '__main__':

@@ -103,6 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -175,364 +176,551 @@
 <h1>BallTreePointSet class<a class="headerlink" href="#balltreepointset-class" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="BallTreePointSet.BallTreePointSet">
-<em class="property">class </em><code class="sig-prename descclassname">BallTreePointSet.</code><code class="sig-name descname">BallTreePointSet</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">path=None</em>, <em class="sig-param">intensity=None</em>, <em class="sig-param">range_accuracy=0.002</em>, <em class="sig-param">angle_accuracy=0.012</em>, <em class="sig-param">measurement_accuracy=0.002</em>, <em class="sig-param">leaf_size=40</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">BallTreePointSet.</code><code class="descname">BallTreePointSet</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">path=None</em>, <em class="sig-param">intensity=None</em>, <em class="sig-param">range_accuracy=0.002</em>, <em class="sig-param">angle_accuracy=0.012</em>, <em class="sig-param">measurement_accuracy=0.002</em>, <em class="sig-param">leaf_size=40</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>leaf_size=40</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>A ball tree representation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>points</strong> (<a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em>, </em><em>np.array</em>) – the points to represent as ball tree</p></li>
-<li><p><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal number of points in a leaf, with the maximal <span class="math notranslate nohighlight">\(2\cdot\)</span> leaf_size</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<a class="reference internal" href="PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em>, </em><em>np.array</em>) – the points to represent as ball tree</li>
+<li><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal number of points in a leaf, with the maximal <span class="math notranslate nohighlight">\(2\cdot\)</span> leaf_size</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></td>
+<td>Return number of columns (channels)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></td>
+<td>Return nX1 ndarray of intensity values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.Size" title="BallTreePointSet.BallTreePointSet.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.X" title="BallTreePointSet.BallTreePointSet.X"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">X coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.Y" title="BallTreePointSet.BallTreePointSet.Y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Y coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.Z" title="BallTreePointSet.BallTreePointSet.Z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Z coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.ballTreeLeaves" title="BallTreePointSet.BallTreePointSet.ballTreeLeaves"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ballTreeLeaves</span></code></a></td>
+<td>Retrieving the indexes of the nodes which are leaves :return: A list of indexes for all the nodes which are leaves</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
+<td>The data as stored in self.__data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.maxLevel" title="BallTreePointSet.BallTreePointSet.maxLevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">maxLevel</span></code></a></td>
+<td>Retrieve the maximum level of the tree</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.numberOfNodes" title="BallTreePointSet.BallTreePointSet.numberOfNodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numberOfNodes</span></code></a></td>
+<td>Retrieve the total number of nodes in the ball tree</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>Path to datafile, if exists</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])</td>
+<td>Add data to a field</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.GetPoint" title="BallTreePointSet.BallTreePointSet.GetPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code></a>(index)</td>
+<td>Retrieve specific point(s) by index</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code>([crs])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.ToNumpy" title="BallTreePointSet.BallTreePointSet.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td>Points as numpy</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.ToPolyData" title="BallTreePointSet.BallTreePointSet.ToPolyData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code></a>()</td>
+<td>Create and return vtkPolyData object</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code>()</td>
+<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code>(**kwargs)</td>
+<td>Update a field within the PointSet</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ComputeNodeLevel</span></code>(index)</td>
+<td>Compute the level of a node in the tree defined by its index.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ballTreeNodeHierarchy</span></code>()</td>
+<td>Reconstruct the tree hierarchy based on the internal indexes of the points in each node</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__findChildNodes</span></code>(i)</td>
+<td>Finds the child nodes of the i-th node in the tree</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__getFirstNodeOfSize</span></code>(index,&nbsp;…)</td>
+<td>Get the first node along one of the tree branches whose radius is larger than a given one</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__initializeBallTree</span></code>(…)</td>
+<td>Initialize the object according to the type of the input points</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__setParent</span></code>(i)</td>
+<td>Sets ths i-th node as the parent of its child nodes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getLeftChildOfNode" title="BallTreePointSet.BallTreePointSet.getLeftChildOfNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getLeftChildOfNode</span></code></a>(index)</td>
+<td>Retrieve the index of the left child node of a given node</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getNodeLevel" title="BallTreePointSet.BallTreePointSet.getNodeLevel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNodeLevel</span></code></a>(index)</td>
+<td>Retrieve the level of a node defined by its index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getNodeRadius" title="BallTreePointSet.BallTreePointSet.getNodeRadius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNodeRadius</span></code></a>(index)</td>
+<td>Retrieve the radius of a node given by its index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getParentOfNode" title="BallTreePointSet.BallTreePointSet.getParentOfNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getParentOfNode</span></code></a>(index)</td>
+<td>Retrieve the index of the parent node of a given node</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getPointsOfNode" title="BallTreePointSet.BallTreePointSet.getPointsOfNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointsOfNode</span></code></a>(index)</td>
+<td>Retrieve the indexes of the points in a given node</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getRightChildOfNode" title="BallTreePointSet.BallTreePointSet.getRightChildOfNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getRightChildOfNode</span></code></a>(index)</td>
+<td>Retrieve the index of the right child node of a given node</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getSiblingOfNode" title="BallTreePointSet.BallTreePointSet.getSiblingOfNode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSiblingOfNode</span></code></a>(index)</td>
+<td>Retrieve the index of the sibling node of a given node</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.getSmallestNodesOfSize" title="BallTreePointSet.BallTreePointSet.getSmallestNodesOfSize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getSmallestNodesOfSize</span></code></a>(radius[,&nbsp;startingNode])</td>
+<td>Get a list of the smallest nodes whose radii are larger than a given radius</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.query" title="BallTreePointSet.BallTreePointSet.query"><code class="xref py py-obj docutils literal notranslate"><span class="pre">query</span></code></a>(pnts,&nbsp;k)</td>
+<td>Query the ball tree for the k nearest neighbors of a given set of points</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.queryRadius" title="BallTreePointSet.BallTreePointSet.queryRadius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">queryRadius</span></code></a>(pnts,&nbsp;radius)</td>
+<td>Query the ball tree to find the neighbors of a given set of point inside a given radius</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#BallTreePointSet.BallTreePointSet.save" title="BallTreePointSet.BallTreePointSet.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>(path_or_buf,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Private Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ComputeNodeLevel</span></code>(index)</p></td>
-<td><p>Compute the level of a node in the tree defined by its index.</p></td>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ComputeNodeLevel</span></code>(index)</td>
+<td>Compute the level of a node in the tree defined by its index.</td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ballTreeNodeHierarchy</span></code>()</p></td>
-<td><p>Reconstruct the tree hierarchy based on the internal indexes of the points in each node</p></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__ballTreeNodeHierarchy</span></code>()</td>
+<td>Reconstruct the tree hierarchy based on the internal indexes of the points in each node</td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__findChildNodes</span></code>(i)</p></td>
-<td><p>Finds the child nodes of the i-th node in the tree</p></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__findChildNodes</span></code>(i)</td>
+<td>Finds the child nodes of the i-th node in the tree</td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__getFirstNodeOfSize</span></code>(index, …)</p></td>
-<td><p>Get the first node along one of the tree branches whose radius is larger than a given one</p></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__getFirstNodeOfSize</span></code>(index,&nbsp;…)</td>
+<td>Get the first node along one of the tree branches whose radius is larger than a given one</td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__initializeBallTree</span></code>(…)</p></td>
-<td><p>Initialize the object according to the type of the input points</p></td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__initializeBallTree</span></code>(…)</td>
+<td>Initialize the object according to the type of the input points</td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__setParent</span></code>(i)</p></td>
-<td><p>Sets ths i-th node as the parent of its child nodes</p></td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BallTreePointSet__setParent</span></code>(i)</td>
+<td>Sets ths i-th node as the parent of its child nodes</td>
 </tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.GetPoint">
-<code class="sig-name descname">GetPoint</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.GetPoint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.GetPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve specific point(s) by index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> – the index of the point to return</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – the index of the point to return</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">specific point/s as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.Size">
-<em class="property">property </em><code class="sig-name descname">Size</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Size" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of points</p>
-</dd>
-</dl>
+<code class="descname">Size</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Size" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.ToNumpy">
-<code class="sig-name descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Points as numpy</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.ToPolyData">
-<code class="sig-name descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return vtkPolyData object</p>
 <p>:return vtk.vtkPolyData of the current PointSet</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.X">
-<em class="property">property </em><code class="sig-name descname">X</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.X" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>X coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">X</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.X" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">X coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.Y">
-<em class="property">property </em><code class="sig-name descname">Y</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Y" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Y coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">Y</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Y" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Y coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.Z">
-<em class="property">property </em><code class="sig-name descname">Z</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Z" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Z coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">Z</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.Z" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Z coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.ballTreeLeaves">
-<em class="property">property </em><code class="sig-name descname">ballTreeLeaves</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ballTreeLeaves" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ballTreeLeaves</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.ballTreeLeaves" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieving the indexes of the nodes which are leaves
 :return: A list of indexes for all the nodes which are leaves</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getLeftChildOfNode">
-<code class="sig-name descname">getLeftChildOfNode</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getLeftChildOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getLeftChildOfNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getLeftChildOfNode</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getLeftChildOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getLeftChildOfNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the index of the left child node of a given node</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose left child is required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The index of the left child node or None, if the node does not have a left child</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose left child is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index of the left child node or None, if the node does not have a left child</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getNodeLevel">
-<code class="sig-name descname">getNodeLevel</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getNodeLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getNodeLevel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNodeLevel</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getNodeLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getNodeLevel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the level of a node defined by its index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose level is required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The level of the node</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose level is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The level of the node</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getNodeRadius">
-<code class="sig-name descname">getNodeRadius</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getNodeRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getNodeRadius" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getNodeRadius</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getNodeRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getNodeRadius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the radius of a node given by its index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose radius is requested</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The radius of the node</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose radius is requested</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The radius of the node</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getParentOfNode">
-<code class="sig-name descname">getParentOfNode</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getParentOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getParentOfNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getParentOfNode</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getParentOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getParentOfNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the index of the parent node of a given node</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose parent is required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The index of the parent node or None, if the node does not have a parent (node is the root)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose parent is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index of the parent node or None, if the node does not have a parent (node is the root)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getPointsOfNode">
-<code class="sig-name descname">getPointsOfNode</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getPointsOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getPointsOfNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getPointsOfNode</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getPointsOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getPointsOfNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the indexes of the points in a given node</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose points are required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of indexes of the points in the node</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose points are required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of indexes of the points in the node</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getRightChildOfNode">
-<code class="sig-name descname">getRightChildOfNode</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getRightChildOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getRightChildOfNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getRightChildOfNode</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getRightChildOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getRightChildOfNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the index of the right child node of a given node</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose right child is required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The index of the right child node or None, if the node does not have a right child</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose right child is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index of the right child node or None, if the node does not have a right child</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getSiblingOfNode">
-<code class="sig-name descname">getSiblingOfNode</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getSiblingOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getSiblingOfNode" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getSiblingOfNode</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getSiblingOfNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getSiblingOfNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the index of the sibling node of a given node</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose sibling is required</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The index of the sibling node or None, if the node does not have a sibling</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The index of the node whose sibling is required</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index of the sibling node or None, if the node does not have a sibling</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.getSmallestNodesOfSize">
-<code class="sig-name descname">getSmallestNodesOfSize</code><span class="sig-paren">(</span><em class="sig-param">radius</em>, <em class="sig-param">startingNode='root'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getSmallestNodesOfSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getSmallestNodesOfSize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">getSmallestNodesOfSize</code><span class="sig-paren">(</span><em>radius</em>, <em>startingNode='root'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.getSmallestNodesOfSize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.getSmallestNodesOfSize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a list of the smallest nodes whose radii are larger than a given radius</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The minimal required size of the nodes</p></li>
-<li><p><strong>startingNode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Starting node for the search of the smallest node. Can be ‘root’ (top-down) or ‘leaves’ (bottom-up). Default: ‘root’</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The minimal required size of the nodes</li>
+<li><strong>startingNode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Starting node for the search of the smallest node. Can be ‘root’ (top-down) or ‘leaves’ (bottom-up). Default: ‘root’</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of the smallest nodes indices (ints)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>), <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of the smallest nodes indices (ints)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a>), <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)">None</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.maxLevel">
-<em class="property">property </em><code class="sig-name descname">maxLevel</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.maxLevel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">maxLevel</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.maxLevel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the maximum level of the tree</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>maximum level of the tree</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">maximum level of the tree</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="BallTreePointSet.BallTreePointSet.numberOfNodes">
-<em class="property">property </em><code class="sig-name descname">numberOfNodes</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.numberOfNodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">numberOfNodes</code><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.numberOfNodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the total number of nodes in the ball tree</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The number of nodes in the ball tree</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of nodes in the ball tree</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.query">
-<code class="sig-name descname">query</code><span class="sig-paren">(</span><em class="sig-param">pnts</em>, <em class="sig-param">k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.query" title="Permalink to this definition">¶</a></dt>
+<code class="descname">query</code><span class="sig-paren">(</span><em>pnts</em>, <em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.query" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query the ball tree for the k nearest neighbors of a given set of points</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</p></li>
-<li><p><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of neighbors to find for the point</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</li>
+<li><strong>k</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – The number of neighbors to find for the point</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The indexes for the neighbors of the points</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of np.array</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The indexes for the neighbors of the points</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Return the query points themselves as the first index of each list</p>
+<p class="first admonition-title">Note</p>
+<p class="last">Return the query points themselves as the first index of each list</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.queryRadius">
-<code class="sig-name descname">queryRadius</code><span class="sig-paren">(</span><em class="sig-param">pnts</em>, <em class="sig-param">radius</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.queryRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.queryRadius" title="Permalink to this definition">¶</a></dt>
+<code class="descname">queryRadius</code><span class="sig-paren">(</span><em>pnts</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.queryRadius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.queryRadius" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query the ball tree to find the neighbors of a given set of point inside a given radius</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</p></li>
-<li><p><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The query radius</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pnts</strong> (<em>np.array nx3</em>) – The query points</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The query radius</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The indexes for the neighbors of the points</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of np.array</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The indexes for the neighbors of the points</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Return the query points themselves as the first index of each list</p>
+<p class="first admonition-title">Note</p>
+<p class="last">Return the query points themselves as the first index of each list</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="BallTreePointSet.BallTreePointSet.save">
-<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">path_or_buf</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.save" title="Permalink to this definition">¶</a></dt>
+<code class="descname">save</code><span class="sig-paren">(</span><em>path_or_buf</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/BallTreePointSet.html#BallTreePointSet.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#BallTreePointSet.BallTreePointSet.save" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

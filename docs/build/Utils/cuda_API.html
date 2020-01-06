@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Visualization Classes" href="../Visualizations/Visualization.html" />
+    <link rel="next" title="Geometry Utilities" href="geometryUtils.html" />
     <link rel="prev" title="General Utilities" href="Utils.html" /> 
 </head>
 
@@ -94,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Utils.html">General Utilities</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -163,43 +164,47 @@
   <div class="section" id="cuda-utilities">
 <h1>CUDA Utilities<a class="headerlink" href="#cuda-utilities" title="Permalink to this headline">¶</a></h1>
 <p>Functions that are implemented in CUDA in <a class="reference internal" href="#module-cuda_API" title="cuda_API"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cuda_API</span></code></a></p>
-<span class="target" id="module-cuda_API"></span><table class="longtable docutils align-default">
+<span class="target" id="module-cuda_API"></span><table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
 </tbody>
 </table>
 <dl class="function">
 <dt id="cuda_API.computeUmbrelaCurvatureCuda">
-<code class="sig-prename descclassname">cuda_API.</code><code class="sig-name descname">computeUmbrelaCurvatureCuda</code><span class="sig-paren">(</span><em class="sig-param">pntSet</em>, <em class="sig-param">neighborsNumber</em>, <em class="sig-param">neighbors</em>, <em class="sig-param">normals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cuda_API.html#computeUmbrelaCurvatureCuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cuda_API.computeUmbrelaCurvatureCuda" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">cuda_API.</code><code class="descname">computeUmbrelaCurvatureCuda</code><span class="sig-paren">(</span><em>pntSet</em>, <em>neighborsNumber</em>, <em>neighbors</em>, <em>normals</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cuda_API.html#computeUmbrelaCurvatureCuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cuda_API.computeUmbrelaCurvatureCuda" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="cuda_API.compute_normals_by_tensor_cuda">
-<code class="sig-prename descclassname">cuda_API.</code><code class="sig-name descname">compute_normals_by_tensor_cuda</code><span class="sig-paren">(</span><em class="sig-param">pntSet</em>, <em class="sig-param">neighborsNumber</em>, <em class="sig-param">neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cuda_API.html#compute_normals_by_tensor_cuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cuda_API.compute_normals_by_tensor_cuda" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>pntSet</strong> – the points set</p></li>
-<li><p><strong>neighborsNumber</strong> – neighbors number for each point at the points set</p></li>
-<li><p><strong>neighbors</strong> – neighbors for each point at the points set</p></li>
+<code class="descclassname">cuda_API.</code><code class="descname">compute_normals_by_tensor_cuda</code><span class="sig-paren">(</span><em>pntSet</em>, <em>neighborsNumber</em>, <em>neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/cuda_API.html#compute_normals_by_tensor_cuda"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cuda_API.compute_normals_by_tensor_cuda" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pntSet</strong> – the points set</li>
+<li><strong>neighborsNumber</strong> – neighbors number for each point at the points set</li>
+<li><strong>neighbors</strong> – neighbors for each point at the points set</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>normals for each point at the point set</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">normals for each point at the point set</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -212,7 +217,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Visualizations/Visualization.html" class="btn btn-neutral float-right" title="Visualization Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="geometryUtils.html" class="btn btn-neutral float-right" title="Geometry Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="Utils.html" class="btn btn-neutral float-left" title="General Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

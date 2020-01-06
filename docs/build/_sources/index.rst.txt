@@ -30,6 +30,7 @@ Contents:
     Utils/EigenFactory
     Utils/Utils
     Utils/cuda_API
+    Utils/geometryUtils
     Visualizations/Visualization
     zreferences
 

@@ -92,6 +92,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -314,11 +315,21 @@
 <span class="sd">        Computes and updates the level set function derivatives and curvature</span>
 
 <span class="sd">        :param processing_props: gradient type, sigma and ksize for derivatives and gradient computations</span>
-
+<span class="sd">        :param epsilon: when kappa is considered zero. Default 1e-4</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">gradientType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;gradientType&#39;</span><span class="p">]</span>
         <span class="n">sigma</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]</span>
         <span class="n">ksize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">]</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eps&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__xx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__kappa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__yy</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__xy</span> <span class="o">=</span> \
             <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives_numeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span>
@@ -347,7 +358,7 @@
                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_nabla</span> <span class="o">+</span> <span class="n">EPS</span><span class="p">),</span>
                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">]),</span>
                                         <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__kappa</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">make_zero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kappa</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__kappa</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">make_zero</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kappa</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
 
         <span class="c1"># self.__kappa = (self._xx * self._y ** 2 +</span>
         <span class="c1">#                                  self._yy * self._x ** 2 -</span>
@@ -361,7 +372,7 @@
 <span class="sd">        :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">new_function</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e5</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">new_function</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">+</span> <span class="mf">2.5</span><span class="o">*</span> <span class="n">new_function</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">new_function</span><span class="o">.</span><span class="n">max</span><span class="p">()):</span>
             <span class="n">new_function</span><span class="p">[</span><span class="n">new_function</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">new_function</span><span class="p">,</span> <span class="mi">97</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">new_function</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
             <span class="n">new_function</span><span class="p">[</span><span class="n">new_function</span><span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">new_function</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">new_function</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
 
@@ -391,9 +402,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_phi</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LevelSetFunction.reinitialization"><a class="viewcode-back" href="../LevelSets/LevelSetFunction.html#LevelSetFunction.LevelSetFunction.reinitialization">[docs]</a>    <span class="k">def</span> <span class="nf">reinitialization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dphi</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Keeping phi close to a signed function.</span>
 <span class="sd">        </span>
+<span class="sd">        :param dphi: the delta to add to the current function</span>
+
+<span class="sd">        :type dphi: np.array</span>
+
 <span class="sd">        This should keep</span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
@@ -409,17 +424,14 @@
 <span class="sd">        where S is a smoothed signed function: </span>
 <span class="sd">        </span>
 <span class="sd">        .. math::</span>
-<span class="sd">        </span>
-<span class="sd">            S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}, \qquad \epsilon = \min(\Delta x, \Delta y)</span>
-<span class="sd">        </span>
+<span class="sd">            S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}}, \qquad  \epsilon = \min(\Delta x, \Delta y)</span>
+
 <span class="sd">        assuming a grid. </span>
 <span class="sd">        </span>
-<span class="sd">        :param dphi: the delta to add to the current function</span>
-<span class="sd">        </span>
-<span class="sd">        :type dphi: np.array</span>
+
 <span class="sd">        </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">scale_values</span>
+        <span class="kn">from</span> <span class="nn">Utils.MyTools</span> <span class="k">import</span> <span class="n">scale_values</span><span class="p">,</span> <span class="n">make_zero</span>
 
         <span class="n">phi_temp</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">dphi</span><span class="p">)</span>
 
@@ -435,8 +447,9 @@
         <span class="n">new_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">phi_t</span>
         <span class="c1"># import skfmm</span>
         <span class="c1"># new_value = skfmm.distance(self.value + dphi)</span>
-        <span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-        <span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="o">-</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">new_value</span><span class="p">[</span><span class="n">new_value</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="c1"># new_value = make_zero(new_value)</span>
 
 
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span></div>
@@ -447,8 +460,6 @@
         <span class="c1">#     self.update(new_value)</span>
 
 
-        
-        
 <div class="viewcode-block" id="LevelSetFunction.dist_from_circle"><a class="viewcode-back" href="../LevelSets/LevelSetFunction.html#LevelSetFunction.LevelSetFunction.dist_from_circle">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dist_from_circle</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span>  <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=.</span><span class="mi">5</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -505,21 +516,17 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="kn">import</span> <span class="nn">skfmm</span>
+        <span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
         <span class="n">phi</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">func_shape</span><span class="p">)</span>
         <span class="n">center_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dx</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">radius</span><span class="p">)</span>
         <span class="n">center_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dy</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dy</span> <span class="o">+</span> <span class="n">radius</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">center_y</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">center_x</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">center_y</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
                 <span class="n">phi_temp</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_circle</span><span class="p">((</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">),</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
                 <span class="n">phi</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">radius</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">radius</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">radius</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">radius</span><span class="p">)]</span> <span class="o">=</span> <span class="n">phi_temp</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">radius</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">radius</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">radius</span><span class="p">):</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">radius</span><span class="p">)]</span>
 
-
-        <span class="k">return</span>  <span class="n">skfmm</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span></div>
-
-
-
-
+        <span class="k">return</span> <span class="n">skfmm</span><span class="o">.</span><span class="n">distance</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="LevelSetFunction.dist_from_ellipse"><a class="viewcode-back" href="../LevelSets/LevelSetFunction.html#LevelSetFunction.LevelSetFunction.dist_from_ellipse">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dist_from_ellipse</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=.</span><span class="mi">5</span><span class="p">):</span>
@@ -556,6 +563,7 @@
         <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x_x0</span> <span class="o">/</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y_y0</span><span class="o">/</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="n">phi</span></div>
+
 <div class="viewcode-block" id="LevelSetFunction.dist_from_eggcrate"><a class="viewcode-back" href="../LevelSets/LevelSetFunction.html#LevelSetFunction.LevelSetFunction.dist_from_eggcrate">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dist_from_eggcrate</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=.</span><span class="mi">5</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -588,9 +596,6 @@
 
         <span class="k">return</span> <span class="n">xx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">yy</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="p">(</span><span class="n">sin_xx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sin_yy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
 
-
-
-
 <div class="viewcode-block" id="LevelSetFunction.compute_heaviside"><a class="viewcode-back" href="../LevelSets/LevelSetFunction.html#LevelSetFunction.LevelSetFunction.compute_heaviside">[docs]</a>    <span class="k">def</span> <span class="nf">compute_heaviside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the Heaviside function of phi: H(phi)</span>
@@ -617,12 +622,12 @@
 
 
 
-<span class="sd">        :param kwargs: epsilon - for the regularizations</span>
+<span class="sd">        :param kwargs: epsilon - size to be considered as zero. Default 1e-4</span>
 
 <span class="sd">        :return: the heaviside function. Also updates the class.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-08</span><span class="p">)</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-04</span><span class="p">)</span>
         <span class="n">regularization_note</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regularization_note&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularization_note</span><span class="p">)</span>
 
         <span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -671,25 +676,23 @@
 
 <span class="sd">            - &#39;3&#39; - replace dirac-delta with :math:`|\nabla \phi|`</span>
 
-<span class="sd">        :param epsilon: for the 1st and 2nd regularizations</span>
+<span class="sd">        :param epsilon: threshold for a value to be considered zero. Default: 1e-4</span>
 
 <span class="sd">        :return: the dirac delta function. Also updates the class</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">epsilon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-04</span><span class="p">)</span>
         <span class="n">regularization_note</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regularization_note&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularization_note</span><span class="p">)</span>
 
         <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">regularization_note</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="k">elif</span> <span class="n">regularization_note</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
-                    <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">epsilon</span><span class="p">]</span> <span class="o">/</span> <span class="n">epsilon</span><span class="p">))</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
-                    <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">]</span> <span class="o">/</span> <span class="n">epsilon</span><span class="p">))</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epsilon</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
+                    <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">]</span> <span class="o">/</span> <span class="n">epsilon</span><span class="p">))</span>
 
         <span class="k">elif</span> <span class="n">regularization_note</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">epsilon</span> <span class="o">/</span> <span class="p">(</span><span class="n">epsilon</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>

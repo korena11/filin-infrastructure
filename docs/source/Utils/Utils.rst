@@ -4,14 +4,14 @@ General Utilities
 General utilities are gathered in :py:mod:`MyTools`
 
 
-.. automodule:: MyTools
+.. automodule:: Utils.MyTools
     :members:
     :undoc-members:
 
-    .. autoautosummary:: MyTools
+    .. autoautosummary:: Utils.MyTools
         :attributes:
 
     .. rubric:: Methods
 
-    .. autoautosummary:: MyTools
+    .. autoautosummary:: Utils.MyTools
         :methods:

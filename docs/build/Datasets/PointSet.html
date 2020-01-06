@@ -106,6 +106,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
@@ -179,195 +180,317 @@
 <p>When a subset of the PointSet is required, a subclass is set use <a class="reference internal" href="#pointsubset-class"><span class="std std-ref">PointSubSet class</span></a></p>
 <dl class="class">
 <dt id="PointSet.PointSet">
-<em class="property">class </em><code class="sig-prename descclassname">PointSet.</code><code class="sig-name descname">PointSet</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">path=None</em>, <em class="sig-param">intensity=None</em>, <em class="sig-param">range_accuracy=0.002</em>, <em class="sig-param">angle_accuracy=0.012</em>, <em class="sig-param">measurement_accuracy=0.002</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">PointSet.</code><code class="descname">PointSet</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic point cloud</p>
 <p>Mandatory Data (must be different from None):</p>
 <blockquote>
-<div><p>__xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D currently)</p>
-</div></blockquote>
-<dl class="simple">
-<dt>Optional Data (can be None or default value):</dt><dd><ul class="simple">
-<li><p>intensity - intensity of each point (ndarray)</p></li>
-<li><p>range_accuracy: range measurement accuracy (default 0.002 m)</p></li>
-<li><p>angle_accuracy: angle measurement accuracy (default  <span class="math notranslate nohighlight">\(0.012^\circ\)</span>)</p></li>
-<li><p>measurement_accuracy: noise of modeled surface (default 0.002 m)</p></li>
+<div>__xyz (nX3 ndarray, n-number of points) - xyz unstructured Data (only 3D currently)</div></blockquote>
+<dl class="docutils">
+<dt>Optional Data (can be None or default value):</dt>
+<dd><ul class="first last simple">
+<li>intensity - intensity of each point (ndarray)</li>
+<li>range_accuracy: range measurement accuracy (default 0.002 m)</li>
+<li>angle_accuracy: angle measurement accuracy (default  <span class="math notranslate nohighlight">\(0.012^\circ\)</span>)</li>
+<li>measurement_accuracy: noise of modeled surface (default 0.002 m)</li>
 </ul>
 </dd>
 </dl>
 <dl class="method">
 <dt id="PointSet.PointSet.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">path=None</em>, <em class="sig-param">intensity=None</em>, <em class="sig-param">range_accuracy=0.002</em>, <em class="sig-param">angle_accuracy=0.012</em>, <em class="sig-param">measurement_accuracy=0.002</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>points</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the PointSet object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>points</strong> – ndarray of xyz or xy</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> – ndarray of xyz or xy</td>
+</tr>
+</tbody>
+</table>
 <p><strong>Optionals</strong></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>intensity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – intensity values for each point(optional)</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – path to PointSet file</p></li>
-<li><p><strong>range_accuracy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – range measurement accuracy in m (default 0.002 m)</p></li>
-<li><p><strong>angle_accuracy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – angle measurement accuracy in degrees (default  <span class="math notranslate nohighlight">\(0.012^\circ\)</span>)</p></li>
-<li><p><strong>measurement_accuracy</strong> – noise of modeled surface (default 0.002 m)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>intensity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – intensity values for each point(optional)</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – path to PointSet file</li>
+<li><strong>range_accuracy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – range measurement accuracy in m (default 0.002 m)</li>
+<li><strong>angle_accuracy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – angle measurement accuracy in degrees (default  <span class="math notranslate nohighlight">\(0.012^\circ\)</span>)</li>
+<li><strong>measurement_accuracy</strong> – noise of modeled surface (default 0.002 m)</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.FieldsDimension" title="PointSet.PointSet.FieldsDimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></a></td>
+<td>Return number of columns (channels)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.Intensity" title="PointSet.PointSet.Intensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></a></td>
+<td>Return nX1 ndarray of intensity values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.Size" title="PointSet.PointSet.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.X" title="PointSet.PointSet.X"><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">X coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.Y" title="PointSet.PointSet.Y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Y coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.Z" title="PointSet.PointSet.Z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Z coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
+<td>The data as stored in self.__data</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>Path to datafile, if exists</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.AddData2Fields" title="PointSet.PointSet.AddData2Fields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code></a>(data[,&nbsp;field])</td>
+<td>Add data to a field</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.GetPoint" title="PointSet.PointSet.GetPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code></a>(index)</td>
+<td>Retrieve specific point(s) by index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.ToGeoPandas" title="PointSet.PointSet.ToGeoPandas"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code></a>([crs])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.ToNumpy" title="PointSet.PointSet.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">points as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.ToPolyData" title="PointSet.PointSet.ToPolyData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code></a>()</td>
+<td>Create and return vtkPolyData object</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSet.PointSet.ToRDD" title="PointSet.PointSet.ToRDD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code></a>()</td>
+<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSet.PointSet.UpdateFields" title="PointSet.PointSet.UpdateFields"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code></a>(**kwargs)</td>
+<td>Update a field within the PointSet</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
 <dt id="PointSet.PointSet.AddData2Fields">
-<code class="sig-name descname">AddData2Fields</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">field='XYZ'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.AddData2Fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.AddData2Fields" title="Permalink to this definition">¶</a></dt>
+<code class="descname">AddData2Fields</code><span class="sig-paren">(</span><em>data</em>, <em>field='XYZ'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.AddData2Fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.AddData2Fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add data to a field</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.FieldsDimension">
-<em class="property">property </em><code class="sig-name descname">FieldsDimension</code><a class="headerlink" href="#PointSet.PointSet.FieldsDimension" title="Permalink to this definition">¶</a></dt>
+<code class="descname">FieldsDimension</code><a class="headerlink" href="#PointSet.PointSet.FieldsDimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return number of columns (channels)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.GetPoint">
-<code class="sig-name descname">GetPoint</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.GetPoint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.GetPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve specific point(s) by index</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> – the index of the point to return</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – the index of the point to return</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">specific point/s as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.Intensity">
-<em class="property">property </em><code class="sig-name descname">Intensity</code><a class="headerlink" href="#PointSet.PointSet.Intensity" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Intensity</code><a class="headerlink" href="#PointSet.PointSet.Intensity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return nX1 ndarray of intensity values</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.Size">
-<em class="property">property </em><code class="sig-name descname">Size</code><a class="headerlink" href="#PointSet.PointSet.Size" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of points</p>
-</dd>
-</dl>
+<code class="descname">Size</code><a class="headerlink" href="#PointSet.PointSet.Size" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.ToGeoPandas">
-<code class="sig-name descname">ToGeoPandas</code><span class="sig-paren">(</span><em class="sig-param">crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToGeoPandas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToGeoPandas" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>crs</strong> – coordinate spatial reference, if exists</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>pointSet as GeoPandas (geoseries) object (Points)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>geopandas.geoseries</p>
-</dd>
-</dl>
+<code class="descname">ToGeoPandas</code><span class="sig-paren">(</span><em>crs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToGeoPandas"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToGeoPandas" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>crs</strong> – coordinate spatial reference, if exists</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pointSet as GeoPandas (geoseries) object (Points)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">geopandas.geoseries</td>
+</tr>
+</tbody>
+</table>
 <p>#TODO: there might be a smarter way to do it</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.ToNumpy">
-<code class="sig-name descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>points as numpy nX3 ndarray</p>
-</dd>
-</dl>
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">points as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.ToPolyData">
-<code class="sig-name descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and return vtkPolyData object</p>
 <p>:return vtk.vtkPolyData of the current PointSet</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.ToRDD">
-<code class="sig-name descname">ToRDD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToRDD" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToRDD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.ToRDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.ToRDD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSet.PointSet.UpdateFields">
-<code class="sig-name descname">UpdateFields</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.UpdateFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.UpdateFields" title="Permalink to this definition">¶</a></dt>
+<code class="descname">UpdateFields</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSet.html#PointSet.UpdateFields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSet.PointSet.UpdateFields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update a field within the PointSet</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>Y</strong><strong>, </strong><strong>Z</strong> (<em>X</em><em>,</em>) – which field to update</p></li>
-<li><p><strong>indices</strong> – which indices to update (optional)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>Y</strong><strong>, </strong><strong>Z</strong> (<em>X</em><em>,</em>) – which field to update</li>
+<li><strong>indices</strong> – which indices to update (optional)</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.X">
-<em class="property">property </em><code class="sig-name descname">X</code><a class="headerlink" href="#PointSet.PointSet.X" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>X coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">X</code><a class="headerlink" href="#PointSet.PointSet.X" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">X coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.Y">
-<em class="property">property </em><code class="sig-name descname">Y</code><a class="headerlink" href="#PointSet.PointSet.Y" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Y coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">Y</code><a class="headerlink" href="#PointSet.PointSet.Y" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Y coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSet.PointSet.Z">
-<em class="property">property </em><code class="sig-name descname">Z</code><a class="headerlink" href="#PointSet.PointSet.Z" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Z coordinates</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>nx1 nd-array</p>
-</dd>
-</dl>
+<code class="descname">Z</code><a class="headerlink" href="#PointSet.PointSet.Z" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Z coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">nx1 nd-array</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -376,77 +499,184 @@
 <h2>PointSubSet class<a class="headerlink" href="#pointsubset-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="PointSubSet.PointSubSet">
-<em class="property">class </em><code class="sig-prename descclassname">PointSubSet.</code><code class="sig-name descname">PointSubSet</code><span class="sig-paren">(</span><em class="sig-param">points</em>, <em class="sig-param">indices</em>, <em class="sig-param">path=None</em>, <em class="sig-param">intensity=None</em>, <em class="sig-param">range_accuracy=0.002</em>, <em class="sig-param">angle_accuracy=0.012</em>, <em class="sig-param">measurement_accuracy=0.002</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">PointSubSet.</code><code class="descname">PointSubSet</code><span class="sig-paren">(</span><em>points</em>, <em>indices</em>, <em>path=None</em>, <em>intensity=None</em>, <em>range_accuracy=0.002</em>, <em>angle_accuracy=0.012</em>, <em>measurement_accuracy=0.002</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Holds a subset of a PointSet</p>
 <p>Provides the same interface as PointSet</p>
 <p class="rubric">Attributes</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldsDimension</span></code></td>
+<td>Return number of columns (channels)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSet.PointSubSet.GetIndices" title="PointSubSet.PointSubSet.GetIndices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetIndices</span></code></a></td>
+<td>Return points’ indices</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSet.PointSubSet.Intensity" title="PointSubSet.PointSubSet.Intensity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Intensity</span></code></a></td>
+<td>Return nX1 ndarray of intensity values</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSet.PointSubSet.Size" title="PointSubSet.PointSubSet.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">X</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">X coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Y</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Y coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Z</span></code></td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">Z coordinates</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">data</span></code></td>
+<td>The data as stored in self.__data</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>Path to datafile, if exists</td>
+</tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table class="longtable docutils align-default">
+<table border="1" class="longtable docutils">
 <colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
-<tbody>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddData2Fields</span></code>(data[,&nbsp;field])</td>
+<td>Add data to a field</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSet.PointSubSet.GetPoint" title="PointSubSet.PointSubSet.GetPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPoint</span></code></a>(index)</td>
+<td>Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToGeoPandas</span></code>([crs])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param crs:</th><td class="field-body">coordinate spatial reference, if exists</td>
+</tr>
 </tbody>
 </table>
-<dl class="method">
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointSubSet.PointSubSet.ToNumpy" title="PointSubSet.PointSubSet.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td>Return the points as numpy nX3 ndarray</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointSubSet.PointSubSet.ToPolyData" title="PointSubSet.PointSubSet.ToPolyData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code></a>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">tvtk.PolyData of the current PointSet</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToRDD</span></code>()</td>
+<td>Convert PointSet into pySpark Resilient Destributed Dataset (RDD)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateFields</span></code>(**kwargs)</td>
+<td>Update a field within the PointSet</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">setValues</span></code>(**kwargs)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
 <dt id="PointSubSet.PointSubSet.GetIndices">
-<em class="property">property </em><code class="sig-name descname">GetIndices</code><a class="headerlink" href="#PointSubSet.PointSubSet.GetIndices" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GetIndices</code><a class="headerlink" href="#PointSubSet.PointSubSet.GetIndices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return points’ indices</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSubSet.PointSubSet.GetPoint">
-<code class="sig-name descname">GetPoint</code><span class="sig-paren">(</span><em class="sig-param">index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.GetPoint" title="Permalink to this definition">¶</a></dt>
+<code class="descname">GetPoint</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.GetPoint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.GetPoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>index</strong> – the index of the point to return</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>specific point/s as numpy nX3 ndarray</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> – the index of the point to return</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">specific point/s as numpy nX3 ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSubSet.PointSubSet.Intensity">
-<em class="property">property </em><code class="sig-name descname">Intensity</code><a class="headerlink" href="#PointSubSet.PointSubSet.Intensity" title="Permalink to this definition">¶</a></dt>
+<code class="descname">Intensity</code><a class="headerlink" href="#PointSubSet.PointSubSet.Intensity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return nX1 ndarray of intensity values</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="attribute">
 <dt id="PointSubSet.PointSubSet.Size">
-<em class="property">property </em><code class="sig-name descname">Size</code><a class="headerlink" href="#PointSubSet.PointSubSet.Size" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>number of points</p>
-</dd>
-</dl>
+<code class="descname">Size</code><a class="headerlink" href="#PointSubSet.PointSubSet.Size" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of points</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSubSet.PointSubSet.ToNumpy">
-<code class="sig-name descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.ToNumpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the points as numpy nX3 ndarray</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="PointSubSet.PointSubSet.ToPolyData">
-<code class="sig-name descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>tvtk.PolyData of the current PointSet</p>
-</dd>
-</dl>
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/PointSubSet.html#PointSubSet.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointSubSet.PointSubSet.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tvtk.PolyData of the current PointSet</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
