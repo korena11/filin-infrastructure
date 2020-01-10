@@ -643,17 +643,19 @@ class LevelSetFlow:
 
         return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
-    def mumfordshah_flow(self, img=True, nu=1):
+    def mumfordshah_flow(self,  mu=1, nu=0, img=True,):
         """
         Computes the Mumford-Shah flow for a multi-phase level set, according to :cite:`Vese.Chan2002`.
+        Return the flow to move the level set.
 
-        Updates the self.Phi variable for
 
-        :param img: the specific image upon which the level sets are computed
-        :param nu: the length weight
+        :param mu: the curvature weight. Default: 1
+        :param nu: the length weight. Default: 0.
+        :param img: the specific image upon which the level sets are computed. Uses the object images unless specified differently.
 
-        :type img: np.array
+        :type mu: float
         :type nu: float
+        :type img: np.array or bool
 
         :return: phi_t - the flows that move the level set
         """
@@ -670,7 +672,7 @@ class LevelSetFlow:
         n_phases = 2 ** m_levelsets
         _combinations = '01' * m_levelsets
         # fig, ax = plt.subplots(num = 'panorama')
-
+        dphi_ = np.zeros((images[0].shape[0],images[0].shape[1], m_levelsets))
         import itertools
         counter = 0
 
@@ -688,13 +690,14 @@ class LevelSetFlow:
 
             combinations = itertools.combinations(_combinations, m_levelsets)
             for combination in combinations:
-                dphi_ += self.step * self.ms_w * self.__ms_element(combination, img)
+                dphi_ +=  self.__ms_element(combination, img)
 
             for i in range(m_levelsets):
                 i = int(i)
-                dphi_[:,:, i] += nu * self.phi(i).dirac_delta * self.phi(i).kappa
+                dphi_[:,:, i] += mu * self.phi(i).dirac_delta * self.phi(i).kappa
+                dphi_[:,:, i] -= nu * self.phi(i).dirac_delta
 
-                Phi[i].move_function(dphi_[:, :, i])
+                # Phi[i].move_function(dphi_[:, :, i])
                 # counter += 1
                 #
                 # if counter > m_levelsets:
@@ -703,8 +706,8 @@ class LevelSetFlow:
                 # if kappa_flag:
                 #
 
-        self.__Phi = Phi
-        return Phi
+        # self.__Phi = Phi
+        return dphi_
 
         # mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = 'b')
         # mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = 'r')
@@ -746,7 +749,7 @@ class LevelSetFlow:
             if i == 0:  # inside the level set
                 H.append(self.phi(index).heaviside)
                 diracs.append(-self.phi(index).dirac_delta)
-            else:
+            else: #outside the level set
                 H.append(1 - self.phi(index).heaviside)
                 diracs.append(self.phi(index).dirac_delta)
 
@@ -831,24 +834,21 @@ class LevelSetFlow:
 
         :param flow_type -  flow types and their weight (string, weight):
 
-        'constant', 'curvature', 'equi-affine', 'geodesic', 'chan-vese', 'band'
+        'constant', 'curvature', 'equi-affine', 'geodesic', 'band'
 
-        .. note:: The 'chan-vese' flow requires weights (chanvese_w), for the four components of the model:
-
-        .. code-block:: python
-
-            {area_w, length_w, inside_w, outside_w}
-
-        :param gvf_flag: flag to add gradient vector flow
-        :param open_flag: flag for open contours
+        :param movie_name: the name of the generated movie. Defualt: "Level set example"
+        :param movie_folder: path to final generated movie. Default: project path
         :param mumford_shah: flag for mumford_shah flow
-        :param scaleX: enhance X direction
-        :param scaleY: enhance Y direction
+        :param nu: Chan-Vese (Mumford-Shah) weight for curve length. Default: 1
+        :param mu: Chan-Vese  (Mumford-Shah) weight for curve area. Default: 0
         :param linewidth: line width for drawing. Default: 1.
-        :param color_random: randomize colors or use one. Default: randomize
+        :param color_random: randomize colors or use one. Default: randomize (True)
+        :param color: the color in which the contours will be drawn
 
-        :type scaleX: float
-        :type scaleY: float
+
+        :type nu: float
+        :type mu: float
+
 
         :return the contours after level set
 
@@ -866,17 +866,16 @@ class LevelSetFlow:
 
         # ------inputs--------
         verbose = kwargs.get('verbose', False)
-        open_flag = kwargs.get('open_flag', False)
         color_random = kwargs.get('color_random', True)
         linewidth = kwargs.get('linewidth', 1)
         mumford_shah_flag = kwargs.get('mumford_shah', False)
-        self.scale_x = kwargs.get('scaleX', 1.)
-        self.scale_y = kwargs.get('scaleY', 1.)
-
-        nu = 1.
+        color = kwargs.get('color', 'b')
+        open_flag = False
+        mu = 1.
         blob_size = kwargs.get('blob_size', 0.1)
         if mumford_shah_flag:
-            nu = kwargs.get('nu', 1.)
+            mu = kwargs.get('mu', 1.)
+            nu = kwargs.get('nu', 0)
         if np.any(self.img_rgb) != 0:
             temp = self.img_rgb
         else:
@@ -907,16 +906,15 @@ class LevelSetFlow:
         ax2.axis('off')
         # fig3, ax3 = plt.subplots(num='kappa')
         # mt.imshow(self.phi().kappa)
-        if open_flag:
-            fig4, ax4 = plt.subplots(num='psi')
-            mt.imshow(self.psi.value, origin='lower')
+
         with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
             from tqdm import trange
             for iteration in trange(iterations, desc='Running level set'):
                 # print(iteration)
                 # if iteration ==100 :
                 #     print('hello')
-                intrinsic = np.zeros(self.img().shape[:2])
+                intrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
+                extrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
 
                 # ---------- intrinsic movement ----------
 
@@ -925,26 +923,29 @@ class LevelSetFlow:
                     if flow_types[item] == 0:
                         continue
                     for i in range(self.num_ls):
-                      intrinsic += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
+                      intrinsic[:,:,i] += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
 
                     if verbose:
                         if np.any(intrinsic > 20):
                             print(i)
-
+                # ---------------- mumford_shah movement --------
+                if mumford_shah_flag:
+                    dphi = self.mumfordshah_flow(mu=mu, nu=nu)
                 # region force
                 for j in range(self.num_ls):
-                    intrinsic += region_w * self.region * self.phi(j).norm_nabla
-
+                    intrinsic[:,:,j] += region_w * self.region * self.phi(j).norm_nabla
+                    if mumford_shah_flag:
+                        intrinsic[:,:,j] += self.ms_w * dphi[:,:,j] #* self.phi(j).norm_nabla
                 # ---------------extrinsic movement ----------
                 for k in range(self.num_ls):
-                    extrinsic = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w
+                    extrinsic[:,:,k] = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w
 
                     # for constrained contours
-                    extrinsic += self.__compute_vo() * vo_w
+                    # extrinsic += self.__compute_vo() * vo_w
                     phi_t = self.step * (intrinsic - extrinsic)
                     # reinitializtion every 10 iterations:
                     if iteration % 10== 0 and iteration != 0:
-                        self.phi(k).reinitialization(phi_t)
+                        self.phi(k).reinitialization(phi_t[:, :, k])
                         # plt.figure('3d')
                         # ax4 = plt.axes(projection='3d')
                         # ax4.view_init(45,65)
@@ -952,46 +953,21 @@ class LevelSetFlow:
                         # ax4.plot_surface(X, Y, self.phi().value, cmap='gray')
 
                     else:
-                        self.phi(k).move_function(phi_t)
+                        self.phi(k).move_function(phi_t[:, :, k])
 
-                # ---------------- mumford_shah movement --------
-                if mumford_shah_flag:
-                    phi = self.mumfordshah_flow(nu=nu)
-
-                    # self.phi(i).update(cv2.normalize(self.phi(i).value.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX))
-
-                # extrinsic += (1 - mult_phi)
-                #  self.psi += extrinsic
-
-                # plt.figure('norm nabla')
-                # mt.imshow(self.phi().norm_nabla)
-
-
-                # if np.max(np.abs(phi_t)) <= 5e-5:
-                #     print('done')
-                #     return
                 plt.figure('phi')
                 mt.imshow(np.flipud(self.phi().value))
                 # plt.pause(.5e-10)
-                
-                # if open_flag:
-                #     for curve in l_curve:
-                #         self.phi().value[curve._y.astype('int'), curve._x.astype('int')] = 0
 
                 plt.figure('img')
-                if open_flag:
-                    l_curve, ax = mt.draw_contours(self.phi().value, ax, color='r', img=img_showed,
-                                                   open=True)
-                else:
 
-                    colors = 'rbgm'
-                    for i in range(len(self.__Phi)):
-                        if i > 0:
-                            l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
-                                                           color='r', linewidth=linewidth, blob_size=blob_size)
-                        else:
-                            l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
-                                                           color_random=color_random, linewidth=linewidth, blob_size=blob_size)
+                for i in range(len(self.__Phi)):
+                    if i > 0:
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=True,
+                                                       color='r', linewidth=linewidth, blob_size=blob_size)
+                    else:
+                        l_curve, ax = mt.draw_contours(self.phi(i).value, ax, img=img_showed, hold=False,
+                                                       color_random=color_random, linewidth=linewidth, blob_size=blob_size, color=color)
                 title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
                                 transform=ax.transAxes, ha="center")
                 title.set_text('Iteration #: {}'.format(iteration))

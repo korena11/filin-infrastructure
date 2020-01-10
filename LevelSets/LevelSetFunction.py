@@ -333,7 +333,7 @@ class LevelSetFunction(object):
         x_x0 = (xx - center_pt[1] * resolution) # (x-x0)
         y_y0 =  (yy - center_pt[0] * resolution) #(y-y0)
 
-        phi = radius - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
+        phi = radius *resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
 
         return phi
 
@@ -358,11 +358,11 @@ class LevelSetFunction(object):
         import skfmm
         from tqdm import tqdm
         phi = -np.ones(func_shape)
-        center_x = np.arange(dx/2 + radius, func_shape[1], dx + radius)
-        center_y = np.arange(dy/2 + radius, func_shape[0], dy + radius)
+        center_x = np.arange(dx/2 + radius, func_shape[1] * resolution, dx + radius)
+        center_y = np.arange(dy/2 + radius, func_shape[0] * resolution, dy + radius)
 
-        for i in tqdm(center_y, position=0, leave=True):
-            for j in tqdm(center_x, position=1, leave=False):
+        for i in tqdm(center_y, position=0, leave=False):
+            for j in tqdm(center_x, position=1, leave=True):
                 phi_temp = LevelSetFunction.dist_from_circle((i,j), radius, func_shape, resolution=resolution)
                 phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
 
