@@ -96,11 +96,9 @@
 <li class="toctree-l2"><a class="reference internal" href="Saliency.html">Saliency computations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
@@ -251,58 +249,49 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__compute_vb</span></code>(**kwargs)</td>
-<td>Computes the band velocity, according to Li et al., 2006.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__compute_vo</span></code>(**kwargs)</td>
-<td>Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal to another function (psi)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_LevelSetFlow__ms_element</span></code>(combination,&nbsp;img)</td>
-<td>An element for summation within the Mumford-Shah model.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.flow" title="LevelSetFlow.LevelSetFlow.flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flow</span></code></a>(flow_type,&nbsp;function,&nbsp;*args,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.flow" title="LevelSetFlow.LevelSetFlow.flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flow</span></code></a>(flow_type,&nbsp;function,&nbsp;*args,&nbsp;**kwargs)</td>
 <td>Return the flow of the level set according to the type wanted</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.img" title="LevelSetFlow.LevelSetFlow.img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img</span></code></a>([index])</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.img" title="LevelSetFlow.LevelSetFlow.img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">img</span></code></a>([index])</td>
 <td>The analyzed image (of the data).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_GVF" title="LevelSetFlow.LevelSetFlow.init_GVF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_GVF</span></code></a>(f,&nbsp;mu,&nbsp;iterations[,&nbsp;ksize,&nbsp;sigma,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_GVF" title="LevelSetFlow.LevelSetFlow.init_GVF"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_GVF</span></code></a>(f,&nbsp;mu,&nbsp;iterations[,&nbsp;ksize,&nbsp;sigma,&nbsp;…])</td>
 <td>Initializes the vector field (gradient vector flow)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_g" title="LevelSetFlow.LevelSetFlow.init_g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_g</span></code></a>(g,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_g" title="LevelSetFlow.LevelSetFlow.init_g"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_g</span></code></a>(g,&nbsp;**kwargs)</td>
 <td>Initializes the g function (edge function) :param g: the function :param kwargs: gradient process dictionary</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_img" title="LevelSetFlow.LevelSetFlow.init_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_img</span></code></a>(img,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_img" title="LevelSetFlow.LevelSetFlow.init_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_img</span></code></a>(img,&nbsp;**kwargs)</td>
 <td>Set more images for the level set flow, according to which the flow will move (each of the Phi’s)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_phi" title="LevelSetFlow.LevelSetFlow.init_phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_phi</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_phi" title="LevelSetFlow.LevelSetFlow.init_phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_phi</span></code></a>(**kwargs)</td>
 <td>Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where phi(x,y,t) = 0 is the curve.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_psi" title="LevelSetFlow.LevelSetFlow.init_psi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_psi</span></code></a>(psi,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_psi" title="LevelSetFlow.LevelSetFlow.init_psi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_psi</span></code></a>(psi,&nbsp;**kwargs)</td>
 <td>Initializes the psi function (open edges)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_region" title="LevelSetFlow.LevelSetFlow.init_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_region</span></code></a>(region)</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.init_region" title="LevelSetFlow.LevelSetFlow.init_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_region</span></code></a>(region)</td>
 <td>Initializes region function.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.moveLS" title="LevelSetFlow.LevelSetFlow.moveLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moveLS</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.moveLS" title="LevelSetFlow.LevelSetFlow.moveLS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moveLS</span></code></a>(**kwargs)</td>
 <td>The function that moves the level set until the desired contour is reached</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="LevelSetFlow.LevelSetFlow.mumfordshah_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mumfordshah_flow</span></code></a>([img,&nbsp;nu])</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="LevelSetFlow.LevelSetFlow.mumfordshah_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mumfordshah_flow</span></code></a>([mu,&nbsp;nu,&nbsp;img])</td>
 <td>Computes the Mumford-Shah flow for a multi-phase level set, according to <a class="reference internal" href="../zreferences.html#vese-chan2002" id="id1">[VC02]</a>.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.phi" title="LevelSetFlow.LevelSetFlow.phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phi</span></code></a>([index])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.phi" title="LevelSetFlow.LevelSetFlow.phi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phi</span></code></a>([index])</td>
 <td>Returns the level set function phi according to the index</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_flow_types" title="LevelSetFlow.LevelSetFlow.set_flow_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_flow_types</span></code></a>(**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_flow_types" title="LevelSetFlow.LevelSetFlow.set_flow_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_flow_types</span></code></a>(**kwargs)</td>
 <td>Set the flow types and their weights according to which the level set will move</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_weights" title="LevelSetFlow.LevelSetFlow.set_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.set_weights" title="LevelSetFlow.LevelSetFlow.set_weights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_weights</span></code></a>(**kwargs)</td>
 <td>Set weights for constraints.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_img" title="LevelSetFlow.LevelSetFlow.update_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_img</span></code></a>(new_img)</td>
+<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_img" title="LevelSetFlow.LevelSetFlow.update_img"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_img</span></code></a>(new_img)</td>
 <td>Adds another image (of the data).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_region" title="LevelSetFlow.LevelSetFlow.update_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_region</span></code></a>(new_region)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#LevelSetFlow.LevelSetFlow.update_region" title="LevelSetFlow.LevelSetFlow.update_region"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_region</span></code></a>(new_region)</td>
 <td>Updates the region according to a given new_region</td>
 </tr>
 </tbody>
@@ -519,7 +508,7 @@
 <dt id="LevelSetFlow.LevelSetFlow.init_GVF">
 <code class="descname">init_GVF</code><span class="sig-paren">(</span><em>f</em>, <em>mu</em>, <em>iterations</em>, <em>ksize=3</em>, <em>sigma=1.0</em>, <em>resolution=1.0</em>, <em>blur_window=(0</em>, <em>0)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.init_GVF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.init_GVF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the vector field (gradient vector flow)</p>
-<p>Computes the GVF of an edge map f according the the paper of [Xu.Prince1998]</p>
+<p>Computes the GVF of an edge map f according the the paper of <a class="reference internal" href="../zreferences.html#xu-prince1998" id="id4">[XP98]</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -584,10 +573,13 @@ phi(x,y,t) = 0 is the curve.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>processing_props</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – properties for gradient and differentiation:
-- ‘gradientType’ - distance computation method
-- ‘sigma’ - for smoothing
-- ‘ksize’ - for smoothing</li>
+<li><strong>processing_props</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – <p>properties for gradient and differentiation:</p>
+<ul>
+<li>’gradientType’ - distance computation method</li>
+<li>’sigma’ - for smoothing</li>
+<li>’ksize’ - for smoothing</li>
+</ul>
+</li>
 <li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – if the curve is a circle, the radius should be specified.</li>
 <li><strong>center_pt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – if the curve is a circle, the center point should be specified.</li>
 <li><strong>reularization_note</strong> – regularization note for heaviside function</li>
@@ -667,26 +659,20 @@ phi(x,y,t) = 0 is the curve.</p>
 </tr>
 </tbody>
 </table>
-<p>‘constant’, ‘curvature’, ‘equi-affine’, ‘geodesic’, ‘chan-vese’, ‘band’</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The ‘chan-vese’ flow requires weights (chanvese_w), for the four components of the model:</p>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">area_w</span><span class="p">,</span> <span class="n">length_w</span><span class="p">,</span> <span class="n">inside_w</span><span class="p">,</span> <span class="n">outside_w</span><span class="p">}</span>
-</pre></div>
-</div>
+<p>‘constant’, ‘curvature’, ‘equi-affine’, ‘geodesic’, ‘band’</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>gvf_flag</strong> – flag to add gradient vector flow</li>
-<li><strong>open_flag</strong> – flag for open contours</li>
+<li><strong>movie_name</strong> – the name of the generated movie. Defualt: “Level set example”</li>
+<li><strong>movie_folder</strong> – path to final generated movie. Default: project path</li>
 <li><strong>mumford_shah</strong> – flag for mumford_shah flow</li>
-<li><strong>scaleX</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – enhance X direction</li>
-<li><strong>scaleY</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – enhance Y direction</li>
+<li><strong>nu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Chan-Vese (Mumford-Shah) weight for curve length. Default: 1</li>
+<li><strong>mu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – Chan-Vese  (Mumford-Shah) weight for curve area. Default: 0</li>
 <li><strong>linewidth</strong> – line width for drawing. Default: 1.</li>
-<li><strong>color_random</strong> – randomize colors or use one. Default: randomize</li>
+<li><strong>color_random</strong> – randomize colors or use one. Default: randomize (True)</li>
+<li><strong>color</strong> – the color in which the contours will be drawn</li>
 </ul>
 </td>
 </tr>
@@ -712,16 +698,17 @@ phi(x,y,t) = 0 is the curve.</p>
 
 <dl class="method">
 <dt id="LevelSetFlow.LevelSetFlow.mumfordshah_flow">
-<code class="descname">mumfordshah_flow</code><span class="sig-paren">(</span><em>img=True</em>, <em>nu=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.mumfordshah_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the Mumford-Shah flow for a multi-phase level set, according to <a class="reference internal" href="../zreferences.html#vese-chan2002" id="id7">[VC02]</a>.</p>
-<p>Updates the self.Phi variable for</p>
+<code class="descname">mumfordshah_flow</code><span class="sig-paren">(</span><em>mu=1</em>, <em>nu=0</em>, <em>img=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/LevelSetFlow.html#LevelSetFlow.mumfordshah_flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#LevelSetFlow.LevelSetFlow.mumfordshah_flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Mumford-Shah flow for a multi-phase level set, according to <a class="reference internal" href="../zreferences.html#vese-chan2002" id="id7">[VC02]</a>.
+Return the flow to move the level set.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>img</strong> (<em>np.array</em>) – the specific image upon which the level sets are computed</li>
-<li><strong>nu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the length weight</li>
+<li><strong>mu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the curvature weight. Default: 1</li>
+<li><strong>nu</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the length weight. Default: 0.</li>
+<li><strong>img</strong> (<em>np.array</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – the specific image upon which the level sets are computed. Uses the object images unless specified differently.</li>
 </ul>
 </td>
 </tr>

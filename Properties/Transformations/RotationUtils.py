@@ -31,11 +31,11 @@ def Rotation_2Vectors(from_vector, to_vector):
 
     Rotation by angle between 'fromVector' and 'toVector' around the unit vector
     - `Link to information
-    <https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d>_`
+    <https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d>`_
 
     .. math::
 
-        \bf{R} = \bf{I} + \sin(\alpha) \cdot [v]_\times + (1-\cos(\alpha))\cdot[v]_\times^2
+          \bf{R} = \bf{I} +  \cdot [v]_\times + \frac{1-\cos(\alpha)}{\sin^2(\alpha)} \cdot[v]_\times^2
 
     with :math:`[v]_\times` skewsymmetric inner product matrix
     (i.e., :math:`v=a_\text{from vector}\cdot b_\text{to vector}`; and :math:`\alpha` the

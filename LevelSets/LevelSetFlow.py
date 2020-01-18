@@ -43,8 +43,9 @@ class LevelSetFlow:
 
     __GVF = None  # external force (for GVF)
 
-    __psi = []  # internal force, for open contours;  LevelSetFunction
+    __psi = []  # internal force, for open contours;  LevelSetFunction *currently not in use*
 
+    # ------------------------- INITIALIZATIONS AND SETTINGS----------------------
     def __init__(self, img, **kwargs):
         """
         Initialize factory.
@@ -67,9 +68,30 @@ class LevelSetFlow:
 
         self.__step = kwargs.get('step', 0.05)
         self.__iterations = kwargs.get('iterations', 150)
+        if img is not None:
+            self.init_img(img)
+
         if 'img_rgb' in list(kwargs.keys()):
             self.__img_rgb = kwargs['img_rgb']
+        elif img is not None:
+            self.__img_rgb = img
 
+        if 'weights' in list(kwargs.keys()):
+            self.set_weights(**kwargs['weights'])
+
+        if 'flow_types' in list(kwargs.keys()):
+            self.set_flow_types(**kwargs['flow_types'])
+
+        self.scale_x = 1
+        self.scale_y = 1
+
+    def init_img(self, img):
+        """
+        Set an image for the level set flow, according to which the flow will move (each of the Phi's)
+
+        :param img: the image to set
+
+        """
         if isinstance(img, RasterData):
             self.__img.append(img.data)
             # self.data = img
@@ -78,21 +100,255 @@ class LevelSetFlow:
                 self.__img = img
             else:
                 self.__img.append(img)
+        if len(self.__Phi) ==0:
+            self.__GVF = np.zeros(self.img().shape)
+            self.__g = np.zeros(self.img().shape)
+            self.__Phi = [LevelSetFunction(np.zeros(self.img().shape))]
+            self.__psi = [LevelSetFunction(np.zeros(self.img().shape))]
+            self.__region = np.zeros(self.img().shape)
 
-        self.__Phi = [LevelSetFunction(np.zeros(self.img().shape))]
-        self.__psi = [LevelSetFunction(np.zeros(self.img().shape))]
-        self.__region = np.zeros(self.img().shape)
-        self.__f = np.zeros(self.img().shape)
-        self.__g = np.zeros(self.img().shape)
-        self.scale_x = 1
-        self.scale_y = 1
+    def set_flow_types(self, **kwargs):
+        """
+        Set the flow types and their weights according to which the level set will move
 
-        if 'weights' in list(kwargs.keys()):
-            self.set_weights(**kwargs['weights'])
+        Options are as in :py:meth:`~LevelSetFactory.LevelSetFactory.flow`
 
-        if 'flow_types' in list(kwargs.keys()):
-            self.set_flow_types(**kwargs['flow_types'])
+        For example:
 
+        .. code-block:: python
+
+            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})
+
+        """
+        flow_types = {'geodesic': 0.,
+                      'curvature': 0.,
+                      'equi_affine': 0.,
+                      'band': 0.}
+        flow_types.update(kwargs)
+        self.__flow_types = flow_types
+
+    def set_weights(self, **kwargs):
+        """
+        Set weights for constraints. All are set to zero as defualt
+
+        :param gvf_w: gradient vector flow weight
+        :param vo_w: open contour weight (Not working at the moment)
+        :param region_w: region constraint weight
+
+        :type gvf_w: float
+        :type vo_w: float
+        :type region_w: float
+
+        """
+        inputs = {'gvf_w': 0.,
+                  'vo_w': 0.,
+                  'region_w': 0.,
+                  'ms_w': 0.}
+
+        inputs.update(kwargs)
+        self.__region_w = inputs['region_w']
+        self.__gvf_w = inputs['gvf_w']
+        self.__vo_w = inputs['vo_w']
+        self.__ms_w = inputs['ms_w']
+
+    def init_psi(self, psi, **kwargs):
+        """
+         Initializes the psi function (open edges)
+
+        :param psi: the function
+        :param processing_props: gradient process dictionary
+
+        :type psi: nd-array mxn
+
+        """
+        x = np.arange(psi.shape[1])
+        y = np.arange(psi.shape[0])
+        xx, yy = np.meshgrid(x, y)
+        dists = np.sqrt(xx ** 2 + yy ** 2)
+        dists /= np.linalg.norm(dists)
+        if np.all(self.__psi[0].value == 0):
+            self.__psi = []
+
+        self.__psi.append(LevelSetFunction(psi * dists, self.processing_props))
+
+    def init_g(self, g, **kwargs):
+        """
+        Initializes the g function (edge function)
+        :param g: the function
+        :param kwargs: gradient process dictionary
+
+        """
+        self.__g = g
+        self.__g_x, self.__g_y = mt.computeImageDerivatives_numeric(g, 1, **kwargs)
+
+    def init_GVF(self, f, mu, iterations, ksize=3, sigma=1.,
+                 resolution=1., blur_window=(0, 0), **kwargs):
+        """
+        Initializes the vector field (gradient vector flow)
+
+        Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`
+
+        :param f: the edge map according to which the GVF is computed
+        :param mu: the GVF regularization coefficient. (according to the paper: 0.2).
+        :param iterations: the number of iterations that will be computed. (according to the example: 80).
+        :param ksize: size of the differentiation window
+        :param resolution: kernel resolution
+        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
+        :param blur_window: tuple of window size for blurring
+
+        :type f: np.array
+        :type mu: float
+        :type iterations: int
+        :type ksize: int
+        :type resolution: float
+        :type blur_window: tuple (2 elements)
+
+        """
+        from GVF import GVF
+        self.__GVF = GVF(f, mu, iterations, ksize=ksize, sigma=sigma,
+                         resolution=resolution, blur_window=blur_window)
+
+    def init_region(self, region):
+        """
+        Initializes region function. Normalizes between (-1,1)
+
+        :param region: region function initialize
+
+        """
+
+        # region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
+        self.__region = region
+
+    def init_phi(self, **kwargs):
+        r"""
+        Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
+        phi(x,y,t) = 0 is the curve.
+
+        The function has the following characteristics:
+
+        .. math::
+            \begin{cases}
+             \phi(x,y,t) > 0 & \forall (x,y) \in \Omega \\
+             \phi(x,y,t) < 0 & \forall (x,y) \not\in \Omega \\
+             \phi(x,y,t) = 0 & \forall (x,y) \textrm{ on curve} \\
+             \end{cases}
+
+        with :math:`\left| \nabla \phi \right| = 1`
+
+        **Characteristics of the function**
+
+        :param processing_props: properties for gradient and differentiation:
+
+            - 'gradientType' - distance computation method
+            - 'sigma' - for smoothing
+            - 'ksize' - for smoothing
+
+        :param radius: if the curve is a circle, the radius should be specified.
+        :param center_pt: if the curve is a circle, the center point should be specified.
+        :param reularization_note: regularization note for heaviside function
+        :param function_type:
+
+            - 'circle' (default);
+            - 'ellipse'
+            - 'egg_crate' - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)
+            - 'periodic_circles' - more like squares at dx and dy distances from one another
+            - 'checkerboard' - binary squares (from scikit-image)
+
+        :param epsilon: threshold to be considered zero. Default: 1e-4
+
+        :type processing_props: dict
+        :type radius: int
+        :type center_pt: tuple
+        :type function_type: str
+        :type start: tuple
+        :type regularization_note: int 0,1,2
+        :type epsilon: float
+
+        """
+        from MyTools import scale_values
+        eps = kwargs.get('epsilon', 1e-4)
+        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
+        if 'processing_props' in kwargs:
+            processing_props.update(kwargs['processing_props'])
+        img_height, img_width = self.img().shape[:2]
+        radius = kwargs.get('radius', np.int(img_width / 4))
+        center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
+        func_type = kwargs.get('function_type', 'circle')
+
+        func_shape = (img_height, img_width)
+        phi = np.zeros(func_shape)
+
+        regularization = kwargs.get('regularization_note', 0)
+
+        if func_type == 'circle':
+
+            phi = LevelSetFunction.dist_from_circle(center_pt, radius, func_shape,
+                                                    resolution=processing_props['resolution'])
+
+        elif func_type == 'ellipse':
+            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, func_shape,
+                                                     resolution=processing_props['resolution'])
+        elif func_type == 'egg_crate':
+            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=func_shape, resolution=kwargs['resolution'])
+
+        elif func_type == 'periodic_circles':
+            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=func_shape)
+
+        elif func_type == 'checkerboard':
+            import skimage.segmentation as seg
+            phi = seg.checkerboard_level_set(func_shape, radius)
+
+        # scale between [-1, 1], while keeping the level set unmoved
+
+        phi[phi >= 0] = scale_values(phi[phi >= 0], 0., 1.)
+        phi[phi <= 0] = scale_values(phi[phi <= 0], -1., 0.)
+
+        if np.all(self.__Phi[0].value == 0):
+            self.__Phi = []
+
+        self.__Phi.append(
+            LevelSetFunction(phi, regularization_note=regularization,
+                             epsilon=eps,
+                             **processing_props))
+    # --------------- SEMI-PROPERTIES ---------------------
+    def img(self, index=0):
+        """
+        The analyzed image (of the data). Multiple can exist.
+
+        :param index: the index of the analyzed images.
+
+        :type index: int
+
+        :rtype: np.ndarray
+
+        """
+        return self.__img[index]
+
+    def phi(self, index=0):
+        """
+        Returns the level set function phi according to the index
+
+        :param index: the number of the level set
+
+        :type index: int
+
+        :return: LevelSetFunction self.__Phi
+        """
+
+        return self.__Phi[index]
+
+    def psi(self, index=0):
+        """
+        Returns the level set function phi according to the index
+
+        :return: LevelSetFunction self.__psi
+
+        .. warning::
+            Not used anywhere
+        """
+
+        return self.__psi[index]
+    # ------------------------------- PROPERTIES -------------------------------------
     @property
     def num_ls(self):
         """
@@ -117,26 +373,6 @@ class LevelSetFlow:
         :rtype: dict
         """
         return self.__flow_types
-
-    def set_flow_types(self, **kwargs):
-        """
-        Set the flow types and their weights according to which the level set will move
-
-        Options are as in :py:meth:`~LevelSetFactory.LevelSetFactory.flow`
-
-        For example:
-
-        .. code-block:: python
-
-            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})
-
-        """
-        flow_types = {'geodesic': 0.,
-                      'curvature': 0.,
-                      'equi_affine': 0.,
-                      'band': 0.}
-        flow_types.update(kwargs)
-        self.__flow_types = flow_types
 
     @property
     def regularization_epsilon(self):
@@ -217,54 +453,6 @@ class LevelSetFlow:
         """
         return self.__ms_w
 
-    def set_weights(self, **kwargs):
-        """
-        Set weights for constraints. All are set to zero as defualt
-
-        :param gvf_w: gradient vector flow weight
-        :param vo_w: open contour weight (Not working at the moment)
-        :param region_w: region constraint weight
-
-        :type gvf_w: float
-        :type vo_w: float
-        :type region_w: float
-
-        """
-        inputs = {'gvf_w': 0.,
-                  'vo_w': 0.,
-                  'region_w': 0.,
-                  'ms_w': 0.}
-
-        inputs.update(kwargs)
-        self.__region_w = inputs['region_w']
-        self.__gvf_w = inputs['gvf_w']
-        self.__vo_w = inputs['vo_w']
-        self.__ms_w = inputs['ms_w']
-
-    def img(self, index=0):
-        """
-        The analyzed image (of the data). Multiple can exist.
-
-        :param index: the index of the analyzed images.
-
-        :type index: int
-
-        :rtype: np.ndarray
-
-        """
-        return self.__img[index]
-
-    def update_img(self, new_img):
-        """
-        Adds another image (of the data).
-
-        :param new_img: the new image to add
-
-        :type new_img: np.ndarray
-
-        """
-        self.__img.append(new_img)
-
     @property
     def img_rgb(self):
         """
@@ -332,213 +520,7 @@ class LevelSetFlow:
         """
         return self.__GVF
 
-    def phi(self, index=0):
-        """
-        Returns the level set function phi according to the index
-
-        :param index: the number of the level set
-
-        :type index: int
-
-        :return: LevelSetFunction self.__Phi
-        """
-
-        return self.__Phi[index]
-
-    @property
-    def psi(self, index=0):
-        """
-        Returns the level set function phi according to the index
-        :return: LevelSetFunction self.__psi
-        """
-
-        return self.__psi[index]
-
-    def init_phi(self, **kwargs):
-        r"""
-        Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
-        phi(x,y,t) = 0 is the curve.
-
-        The function has the following characteristics:
-
-        .. math::
-            \begin{cases}
-             \phi(x,y,t) > 0 & \forall (x,y) \in \Omega \\
-             \phi(x,y,t) < 0 & \forall (x,y) \not\in \Omega \\
-             \phi(x,y,t) = 0 & \forall (x,y) \textrm{ on curve} \\
-             \end{cases}
-
-        with :math:`\left| \nabla \phi \right| = 1`
-
-        **Characteristics of the function**
-
-        :param processing_props: properties for gradient and differentiation:
-            - 'gradientType' - distance computation method
-            - 'sigma' - for smoothing
-            - 'ksize' - for smoothing
-
-        :param radius: if the curve is a circle, the radius should be specified.
-        :param center_pt: if the curve is a circle, the center point should be specified.
-        :param reularization_note: regularization note for heaviside function
-        :param function_type:
-
-            - 'circle' (default);
-            - 'ellipse'
-            - 'egg_crate' - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)
-            - 'periodic_circles' - more like squares at dx and dy distances from one another
-            - 'checkerboard' - binary squares (from scikit-image)
-
-        :param epsilon: threshold to be considered zero. Default: 1e-4
-
-        :type processing_props: dict
-        :type radius: int
-        :type center_pt: tuple
-        :type function_type: str
-        :type start: tuple
-        :type regularization_note: int 0,1,2
-        :type epsilon: float
-
-        """
-        from MyTools import scale_values
-        eps = kwargs.get('epsilon', 1e-4)
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
-        if 'processing_props' in kwargs:
-            processing_props.update(kwargs['processing_props'])
-        img_height, img_width = self.img().shape[:2]
-        radius = kwargs.get('radius', np.int(img_width / 4))
-        center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
-        func_type = kwargs.get('function_type', 'circle')
-
-        func_shape = (img_height, img_width)
-        phi = np.zeros(func_shape)
-
-        regularization = kwargs.get('regularization_note', 0)
-
-        if func_type == 'circle':
-
-            phi = LevelSetFunction.dist_from_circle(center_pt, radius, func_shape,
-                                                    resolution=processing_props['resolution'])
-
-        elif func_type == 'ellipse':
-            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, func_shape,
-                                                    resolution=processing_props['resolution'])
-        elif func_type == 'egg_crate':
-            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=func_shape, resolution=kwargs['resolution'])
-
-        elif func_type == 'periodic_circles':
-            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=func_shape)
-
-        elif func_type == 'checkerboard':
-            import skimage.segmentation as seg
-            phi = seg.checkerboard_level_set(func_shape, radius)
-
-
-        # scale between [-1, 1], while keeping the level set unmoved
-
-        phi[phi>= 0] = scale_values(phi[phi>=0], 0., 1.)
-        phi[phi<=0] = scale_values(phi[phi<=0], -1., 0.)
-
-        if np.all(self.__Phi[0].value == 0):
-            self.__Phi = []
-
-        self.__Phi.append(
-            LevelSetFunction(phi, regularization_note=regularization,
-                             epsilon=eps,
-                             **processing_props))
-
-    def init_img(self, img, **kwargs):
-        """
-        Set more images for the level set flow, according to which the flow will move (each of the Phi's)
-
-        .. warning::
-            When initializing a second+ image, one should make sure that
-
-        :param img: the next image to set
-
-        """
-        self.__img.append(img)
-
-    def init_psi(self, psi, **kwargs):
-        """
-         Initializes the psi function (open edges)
-
-        :param psi: the function
-        :param processing_props: gradient process dictionary
-
-        :type psi: nd-array mxn
-
-        """
-        x = np.arange(psi.shape[1])
-        y = np.arange(psi.shape[0])
-        xx, yy = np.meshgrid(x, y)
-        dists = np.sqrt(xx ** 2 + yy ** 2)
-        dists /= np.linalg.norm(dists)
-        if np.all(self.__psi[0].value == 0):
-            self.__psi = []
-
-        self.__psi.append(LevelSetFunction(psi * dists, self.processing_props))
-
-    def init_g(self, g, **kwargs):
-        """
-        Initializes the g function (edge function)
-        :param g: the function
-        :param kwargs: gradient process dictionary
-
-        """
-        self.__g = g
-        self.__g_x, self.__g_y = mt.computeImageDerivatives_numeric(g, 1, **kwargs)
-
-    def init_GVF(self, f, mu, iterations, ksize=3, sigma=1.,
-                          resolution=1., blur_window=(0,0), **kwargs):
-        """
-        Initializes the vector field (gradient vector flow)
-
-        Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`
-
-        :param f: the edge map according to which the GVF is computed
-        :param mu: the GVF regularization coefficient. (according to the paper: 0.2).
-        :param iterations: the number of iterations that will be computed. (according to the example: 80).
-        :param ksize: size of the differentiation window
-        :param resolution: kernel resolution
-        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out
-        :param blur_window: tuple of window size for blurring
-
-        :type f: np.array
-        :type mu: float
-        :type iterations: int
-        :type ksize: int
-        :type resolution: float
-        :type blur_window: tuple (2 elements)
-
-        """
-        from GVF import GVF
-        self.__GVF = GVF(f, mu, iterations, ksize=ksize, sigma=sigma,
-                          resolution=resolution, blur_window=blur_window)
-
-
-    def init_region(self, region):
-        """
-        Initializes region function. Normalizes between (-1,1)
-
-        :param region: region function initialize
-
-        """
-
-        # region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
-        self.__region = region
-
-    def update_region(self, new_region):
-        """
-        Updates the region according to a given new_region
-
-        :param new_region: the new region according to which the level set should progress
-
-        :type new_region: np.array
-
-
-        """
-        self.__region = new_region
-
+    # ---------------------- FLOWS ------------------------------
     def flow(self, flow_type, function, *args, **kwargs):
         r"""
         Return the flow of the level set according to the type wanted
@@ -638,8 +620,8 @@ class LevelSetFlow:
         if flow_type == 'band':
             vb = self.__compute_vb(**processing_props)
             flow = vb * self.phi().norm_nabla
-            psi_t = vb * self.psi.norm_nabla
-            self.psi.update(self.psi.value + psi_t, **processing_props)
+            psi_t = vb * self.psi().norm_nabla
+            self.psi().update(self.psi().value + psi_t, **processing_props)
 
         return cv2.GaussianBlur(flow, (processing_props['ksize'], processing_props['ksize']), processing_props['sigma'])
 
@@ -667,16 +649,15 @@ class LevelSetFlow:
 
         Phi = self.__Phi.copy()
 
-
         m_levelsets = self.num_ls
         n_phases = 2 ** m_levelsets
         _combinations = '01' * m_levelsets
         # fig, ax = plt.subplots(num = 'panorama')
-        dphi_ = np.zeros((images[0].shape[0],images[0].shape[1], m_levelsets))
         import itertools
         counter = 0
 
         kappa_flag = True
+        dphi =  np.zeros((images[0].shape[0], images[0].shape[1], self.num_ls))
 
         for img in images:
             dphi_ = np.zeros((img.shape[0], img.shape[1], self.num_ls))
@@ -705,14 +686,15 @@ class LevelSetFlow:
                 #
                 # if kappa_flag:
                 #
-
+            dphi += dphi_
         # self.__Phi = Phi
-        return dphi_
+        return dphi
 
         # mt.draw_contours(self.phi(0).value, ax, self.img_rgb, color = 'b')
         # mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = 'r')
         # plt.pause(.5e-10)
 
+    # --------------------------- PRIVATE FUNCTIONS FOR FLOW PURPOSES -----------------------
     def __ms_element(self, combination, img):
         r"""
         An element for summation within the Mumford-Shah model.
@@ -812,7 +794,6 @@ class LevelSetFlow:
         #  vb[np.where(phi != 0)] = 0
         return vb * self.phi().kappa
 
-
     def __compute_vo(self, **kwargs):
         """
         Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal
@@ -827,6 +808,8 @@ class LevelSetFlow:
         grad_psi_grad_phi = psi._x * self.phi()._x + psi._y * self.phi()._y
 
         return grad_psi_grad_phi / (self.phi().norm_nabla + EPS)
+
+    # ------------------------------ MAIN FUNCTION FOR MOVEMENT ------------------------
 
     def moveLS(self, **kwargs):
         r"""
@@ -872,6 +855,8 @@ class LevelSetFlow:
         color = kwargs.get('color', 'b')
         open_flag = False
         mu = 1.
+        nu=0
+
         blob_size = kwargs.get('blob_size', 0.1)
         if mumford_shah_flag:
             mu = kwargs.get('mu', 1.)
@@ -913,8 +898,9 @@ class LevelSetFlow:
                 # print(iteration)
                 # if iteration ==100 :
                 #     print('hello')
-                intrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
+                dphi_intrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
                 extrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
+                dphi_r =  np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
 
                 # ---------- intrinsic movement ----------
 
@@ -923,19 +909,32 @@ class LevelSetFlow:
                     if flow_types[item] == 0:
                         continue
                     for i in range(self.num_ls):
-                      intrinsic[:,:,i] += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
+                      # intrinsic (GAC, curvature etc)
+                      dphi_intrinsic[:,:,i] += flow_types[item] * self.flow(item, self.phi(i), open_flag, processing_props)
+                      # region force
+                dphi_intrinsic[:,:,0] += region_w * self.region * self.phi(0).norm_nabla
 
-                    if verbose:
-                        if np.any(intrinsic > 20):
-                            print(i)
                 # ---------------- mumford_shah movement --------
                 if mumford_shah_flag:
-                    dphi = self.mumfordshah_flow(mu=mu, nu=nu)
-                # region force
-                for j in range(self.num_ls):
-                    intrinsic[:,:,j] += region_w * self.region * self.phi(j).norm_nabla
-                    if mumford_shah_flag:
-                        intrinsic[:,:,j] += self.ms_w * dphi[:,:,j] #* self.phi(j).norm_nabla
+                    dphi_ms = self.ms_w* self.mumfordshah_flow(mu=mu, nu=nu)
+                else:
+                    dphi_ms = np.zeros(dphi_intrinsic.shape)
+
+                intrinsic = np.zeros(dphi_intrinsic.shape)
+
+                # maximal/minimal forces between positive dphi_intrinsic and dphi_r:
+                if np.all(dphi_intrinsic == 0):
+                    intrinsic = dphi_r
+                else:
+                    intrinsic[(dphi_intrinsic - dphi_r) > 0] = np.maximum(dphi_intrinsic[(dphi_intrinsic - dphi_r) > 0], dphi_r[(dphi_intrinsic - dphi_r) > 0])
+                    intrinsic[(dphi_intrinsic - dphi_r) < 0] = np.minimum(dphi_intrinsic[(dphi_intrinsic - dphi_r) < 0], dphi_r[(dphi_intrinsic - dphi_r) < 0])
+                # maximal/minimal forces between positive from what was found and mumford shah
+                if np.all(intrinsic == 0):
+                    intrinsic = dphi_ms
+                else:
+                    intrinsic[(intrinsic - dphi_ms) > 0] = np.maximum(intrinsic[(intrinsic - dphi_ms) > 0], dphi_ms[(intrinsic - dphi_ms) > 0])
+                    intrinsic[(intrinsic - dphi_ms) < 0] = np.minimum(intrinsic[(intrinsic - dphi_ms) < 0], dphi_ms[(intrinsic - dphi_ms) < 0])
+
                 # ---------------extrinsic movement ----------
                 for k in range(self.num_ls):
                     extrinsic[:,:,k] = (self.GVF[:, :, 0] * self.phi(k)._x + self.GVF[:, :, 1] * self.phi(k)._y) * gvf_w

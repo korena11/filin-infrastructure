@@ -404,22 +404,20 @@ texinfo_documents = [
 
 
 class AutoAutoSummary(Autosummary):
+
     option_spec = {
         'methods': directives.unchanged,
-        'attributes': directives.unchanged,
-        'functions': directives.unchanged,
-        'private-members': directives.unchanged
+        'attributes': directives.unchanged
     }
 
     required_arguments = 1
 
     @staticmethod
-    def get_members(obj, typ, include_public = None):
+    def get_members(obj, typ, include_public=None):
         if not include_public:
             include_public = []
         items = []
         for name in dir(obj):
-
             try:
                 documenter = get_documenter(safe_getattr(obj, name), obj)
             except AttributeError:
@@ -431,49 +429,19 @@ class AutoAutoSummary(Autosummary):
 
     def run(self):
         clazz = str(self.arguments[0])
-        private = False
-
         try:
             (module_name, class_name) = clazz.rsplit('.', 1)
-
             m = __import__(module_name, globals(), locals(), [class_name])
             c = getattr(m, class_name)
-            if 'private-members' in self.options:
-                private = True
-
-            if 'methods' and private:
-                _, methods = self.get_members(c, 'method', ['__init__'])
-
-                self.content = ["~%s.%s" % (clazz, method) for method in methods if
-                                method.startswith('_%s' % class_name)]
-
             if 'methods' in self.options:
                 _, methods = self.get_members(c, 'method', ['__init__'])
 
-                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('__')]
-
-            if 'attributes' and private:
-                _, attribs = self.get_members(c, 'attribute')
-                self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if attrib.startswith('_') if
-                                not attrib.startswith('__')]
-
+                self.content = ["~%s.%s" % (clazz, method) for method in methods if not method.startswith('_')]
             if 'attributes' in self.options:
                 _, attribs = self.get_members(c, 'attribute')
-
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
-
-
-        except:
-            module_name = clazz
-            m = __import__(module_name, globals(), locals())
-            c = getattr(m, class_name)
-            if 'functions' in self.options:
-                _, functions = self.get_members(m, 'function')
-                self.content = ["~%s.%s" % (clazz, function) for function in functions if not function.startswith('_')]
-
         finally:
             return super(AutoAutoSummary, self).run()
-
 
 def setup(app):
     app.add_directive('autoautosummary', AutoAutoSummary)

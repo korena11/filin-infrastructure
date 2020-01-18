@@ -185,7 +185,7 @@ class SaliencyFactory(object):
 
     @staticmethod
     def __normal_saliency(neighborhood, current_normals, win_size=0.05, noise_size=0.01, verbose=False):
-        """
+        r"""
         Checks the saliency of a point based on  normals property
 
         .. math::
@@ -338,7 +338,7 @@ class SaliencyFactory(object):
 
     # -------------------------- Hierarchical Method for Saliency computation -------------------
     @classmethod
-    def hierarchical_saliency(cls, neighborhoods, normals, low_level_percentage=1, sigma=0.05,
+    def hierarchical_saliency(cls, normals, search_param, low_level_percentage=1, sigma=0.05,
                               association_percentage=20, high_level_percentage=10, verbose=True, chi_filename=None):
         r"""
         Compute saliency by hierarchical method.
@@ -353,7 +353,8 @@ class SaliencyFactory(object):
 
         #.  High-level saliency.
 
-        :param neighborhoods: the neighborhoods computed for the queried point set
+        :param search_param: search parameter from open3d. Can be  o3d.geometry.KDTreeSearchParamKNN(knn),
+        o3d.geometry.KDTreeSearchParamRadius(radius) or o3d.geometry.KDTreeSearchParamHybrid(radius, knn)
         :param normals: the computed normals of the point cloud
         :param num_bins: the number of bins for feature histogram construction
         :param low_level_percentage: threshold for minimal chi-square distance for the low-level distinctness computation (percentage). Default: 1\%
@@ -383,9 +384,9 @@ class SaliencyFactory(object):
         import itertools
         import open3d as o3d
 
-        pointset = neighborhoods.Points
-        search_param = o3d.KDTreeSearchParamHybrid(radius=neighborhoods.average_neighborhood_radius(),
-                                                   max_nn=neighborhoods.average_neighborhood_size())
+        pointset = normals.Points
+        # search_param = o3d.KDTreeSearchParamHybrid(radius=neighborhood_radius,
+        #                                            max_nn=neighbornood_maxnn)
         k = 0
         # 1. For each point compute the simplified point feature histogram
 
@@ -424,9 +425,10 @@ class SaliencyFactory(object):
 
         try:
             pointset_distances = pickle.load(open(chi_filename, 'rb'))
-        except IOError:
+        except:
             pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
-            pickle.dump(pointset_distances, open(chi_filename + '.p', 'wb'))
+            if chi_filename is not None:
+                pickle.dump(pointset_distances, open(chi_filename + '.p', 'wb'))
 
         # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
         pointset_distances = np.asarray(pointset_distances)
@@ -758,6 +760,81 @@ class SaliencyFactory(object):
 
     # ------------------- Saliency on Panorama Property or rasters ---------------------
     @classmethod
+    def directional_saliency_by_raster(cls, curvature_raster, normals_tuple, win_size=(3,3), width=1):
+        r"""
+        Compute the directional saliency with a moving window on raster. *Returns raster*
+
+        :param curvature_raster: computed curvature, as a (m,n) raster
+        :param normals_tuple: computed normals as a tuple of (nx, ny, nz) as rasters.
+        :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
+
+        :param width: the width of the band to compare. Must be odd number. For example:
+
+        window :math:`5\times 5` with width 1    | window :math:`5\times 5` with width 3
+        -----------------------------------------|--------------------------------------
+                0 0 1  0 0                        |  0 1   1 1 0
+                0 0 1  0 0                        |  0 1   1 1 0
+                0 0 -4 0 0                        |  0 0 -12 0 0
+                0 0 1  0 0                        |  0 1   1 1 0
+                0 0 1  0 0                        |  0 1   1 1 0
+        -----------------------------------------|----------------------------------------
+
+        :type curvature_raster: np.array
+        :type normals_tuple: tuple
+        :type win_size: tuple
+        :type width: int
+
+        :return: raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)
+
+        .. seealso::
+            :func:`SaliencyFactory.directional_saliency`
+
+        """
+        import warnings
+        from scipy.signal import convolve2d
+
+        if win_size[0] % 2 ==0 or win_size[1] %2 ==0 or width %2==0:
+            warnings.warn('Window must be odd number in both axes')
+            raise WindowsError
+
+        # 1. Construct windows
+        horizontal = np.zeros(win_size)
+        vertical = np.zeros(win_size)
+        diag_NW = np.zeros(win_size)
+
+        n = np.floor(win_size[0] /2).astype('int')
+        m = np.floor(win_size[1] /2).astype('int')
+
+        # horizontal and vertical
+        horizontal[(m-np.floor(width/2)).astype('int') : (m+np.ceil(width/2)).astype('int'), :] = 1
+        vertical[:, (n-np.floor(width/2)).astype('int') : (n+np.ceil(width/2)).astype('int')] = 1
+
+        # set  middle points as minus the sum of the filled pixels
+        horizontal[m, n] = -np.sum(horizontal) +1
+        vertical[m, n] = -np.sum(vertical) +1
+
+        # diagonal windows
+        for i in np.arange(-np.floor(width / 2).astype('int'), np.ceil(width / 2).astype('int')):
+            diag_NW += np.diagflat(np.ones((1, np.min((win_size[0], win_size[1]))) - np.abs(i)), i)
+
+        # set middle point as zero and flip to get the NE-SW diagonal
+        diag_NW[m,n] = -np.sum(diag_NW) + 1
+        diag_NE = np.fliplr(diag_NW) + 1
+
+        windows = [horizontal, vertical, diag_NW, diag_NE]
+        rasters = [curvature_raster]
+        normals = list(normals_tuple)
+        rasters = rasters + normals # combine lists
+        convolved = np.zeros(curvature_raster.shape)
+
+        # 3. convolve all windows with all rasters
+        for raster in rasters:
+            for kernel in windows:
+                convolved += (convolve2d(raster, kernel, mode='same'))
+        return mt.scale_values(convolved, 0 ,1)
+        #
+
+    @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):
         """
         Compute frequency saliency map for a panorama property (its image).
@@ -773,7 +850,7 @@ class SaliencyFactory(object):
             - 'pixel_val' - the value of the pixel itself
             - 'LAB' - a feature vector using CIElab color space
 
-        :type panorama_property: PanoramaProperty.PanoramaProperty
+        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array, DataClasses.RasterData.RasterData
         :type filters: list
         :type sigma_sent: bool
         :type feature: str
@@ -802,8 +879,14 @@ class SaliencyFactory(object):
          .. note::
            Other features can be added.
         """
-
-        image = panorama_property.PanoramaImage.astype(np.float32)
+        from Properties.Panoramas.PanoramaProperty import PanoramaProperty
+        from DataClasses.RasterData import RasterData
+        if isinstance(panorama_property, PanoramaProperty):
+            image = panorama_property.panoramaImage.astype(np.float32)
+        elif isinstance(panorama_property, RasterData):
+            image = panorama_property.data.astype(np.float32)
+        else:
+            image = panorama_property.astype(np.float32)
 
         # if the image feature is CIELAB, the image should be transformed to CIELab
         if feature == 'LAB':
@@ -853,7 +936,7 @@ class SaliencyFactory(object):
 
                 Other features can be added.
 
-        :type panorama_property: PanoramaProperty.PanoramaProperty
+        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array, DataClasses.RasterData.RasterData
         :type filters: int
         :type feature: str
 
@@ -868,8 +951,15 @@ class SaliencyFactory(object):
            :emphasize-lines: 4
            :linenos:
         """
+        from Properties.Panoramas.PanoramaProperty import PanoramaProperty
+        from DataClasses.RasterData import RasterData
 
-        image = panorama_property.PanoramaImage.astype(np.float32)
+        if isinstance(panorama_property, PanoramaProperty):
+            image = panorama_property.panoramaImage.astype(np.float32)
+        elif isinstance(panorama_property, RasterData):
+            image = panorama_property.data.astype(np.float32)
+        else:
+            image = panorama_property.astype(np.float32)
 
         # if the image feature is CIELAB, the image should be transformed to CIELab
         if feature == 'LAB':
@@ -935,7 +1025,7 @@ class SaliencyFactory(object):
         :param constant: a constant; default: 3 (paper implementation)
         :param verbose: print inter-running results
 
-        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array
+        :type panorama_property: PanoramaProperty.PanoramaProperty, np.array, DataClasses.RasterData.RasterData
         :type scale_r: float
         :type scales_number: int
         :type feature: str
@@ -959,8 +1049,12 @@ class SaliencyFactory(object):
           :linenos:
         """
         from Properties.Panoramas.PanoramaProperty import PanoramaProperty
+        from DataClasses.RasterData import RasterData
+
         if isinstance(panorama_property, PanoramaProperty):
-            image = panorama_property.PanoramaImage.astype(np.float32)
+            image = panorama_property.panoramaImage.astype(np.float32)
+        elif isinstance(panorama_property, RasterData):
+            image = panorama_property.data.astype(np.float32)
         else:
             image = panorama_property.astype(np.float32)
 

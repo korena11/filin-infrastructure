@@ -234,7 +234,7 @@ class NormalsFactory:
         """
         import MyTools as mt
 
-        img = panorama.PanoramaImage
+        img = panorama.panoramaImage
 
         xi, yi = panorama.pano2rad()
 
@@ -268,7 +268,7 @@ class NormalsFactory:
         return n
 
     @staticmethod
-    def normals_open3D(pointcloud, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.)):
+    def normals_open3D(pointcloud, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.), return_pcl = False):
         """
         Computes the normals using open 3D
 
@@ -276,11 +276,13 @@ class NormalsFactory:
         :param search_radius: neighbors radius for normal computation. Default: 0.05
         :param maxNN: maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.
         :param orientation: "camera" orientation. The orientation towards which the normals are computed. Default: (0,0,0)
+        :param return_pcl: a flag to return the computed point cloud with the normals (for o3d visualization). Default: False
 
         :type pointcloud: DataClasses.BaseData.BaseData
         :type search_radius: float
         :type maxNN: int
         :type orientation: tuple
+        :type return_pcl: bool
 
         :return: normals property and the pointcloud with normals
         """
@@ -292,8 +294,10 @@ class NormalsFactory:
 
         _pointcloud.CalculateNormals(search_radius, maxNN, orientation)  # computing the normals using open3D method
         normals = np.array(_pointcloud.data.normals)
-
-        return NormalsProperty(pointcloud, normals), _pointcloud
+        if return_pcl:
+            return NormalsProperty(pointcloud, normals), _pointcloud
+        else:
+            return NormalsProperty(pointcloud, normals)
 
         # TODO: obsolete code for computing normals using vtk, should probably be deleted
         # @staticmethod

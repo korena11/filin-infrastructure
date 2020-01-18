@@ -109,11 +109,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
 
@@ -218,22 +216,19 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
-<td>Retrieve the point property (object or value) of a specific point</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.getPointSaliency" title="SaliencyProperty.SaliencyProperty.getPointSaliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointSaliency</span></code></a>([idx])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.getPointSaliency" title="SaliencyProperty.SaliencyProperty.getPointSaliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointSaliency</span></code></a>([idx])</td>
 <td>Retrieve the saliency value of a specific point</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.getValues" title="SaliencyProperty.SaliencyProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.getValues" title="SaliencyProperty.SaliencyProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
 <td>Saliency values for all the point cloud</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(**kwargs)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(**kwargs)</td>
 <td>Loads all values of a property.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.normalize_values" title="SaliencyProperty.SaliencyProperty.normalize_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_values</span></code></a>(bool)</td>
+<tr class="row-even"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.normalize_values" title="SaliencyProperty.SaliencyProperty.normalize_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_values</span></code></a>(bool)</td>
 <td>A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.setPointSaliency" title="SaliencyProperty.SaliencyProperty.setPointSaliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointSaliency</span></code></a>(idx,&nbsp;values)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#SaliencyProperty.SaliencyProperty.setPointSaliency" title="SaliencyProperty.SaliencyProperty.setPointSaliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointSaliency</span></code></a>(idx,&nbsp;values)</td>
 <td>Sets a saliency values to specific points</td>
 </tr>
 </tbody>
@@ -313,40 +308,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.FPFH_open3d" title="SaliencyFactory.SaliencyFactory.FPFH_open3d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FPFH_open3d</span></code></a>(pointset_open3d,&nbsp;…)</td>
 <td>Compute the FPFH via open3d.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__FPFH" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__FPFH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__FPFH</span></code></a>(spfh_current,&nbsp;…)</td>
-<td>Compute Fast Point Feature Histogram (FPFH)</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__SPFH" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__SPFH"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__SPFH</span></code></a>(neighborhood,&nbsp;normals)</td>
-<td>Compute the Simplified Point Feature Histogram.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__commonPlane_approx" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__commonPlane_approx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__commonPlane_approx</span></code></a>(points)</td>
-<td>Compute the approximation for a common plane via least squares s.t.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__computeSigmaSet" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__computeSigmaSet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__computeSigmaSet</span></code></a>(tensor[,&nbsp;…])</td>
-<td>Compute the sigma set of a tensor</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__contextAware" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__contextAware"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__contextAware</span></code></a>(image,&nbsp;ksize,&nbsp;…)</td>
-<td>Saliency computed according to <a class="reference internal" href="../../zreferences.html#goferman-etal2012" id="id1">[GZMT12]</a> for one scale.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__curvature_saliency" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__curvature_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__curvature_saliency</span></code></a>(…[,&nbsp;…])</td>
-<td>Computes saliency in each point according to difference in curvature.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__dcolor" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__dcolor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__dcolor</span></code></a>(p_i,&nbsp;image,&nbsp;…[,&nbsp;…])</td>
-<td>computes the most similar patch to a patch i and their indices</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__high_level_distinctness" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__high_level_distinctness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__high_level_distinctness</span></code></a>(…)</td>
-<td>Compute the high-level distinctness of a point within a pointset</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__low_level_distinctness" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__low_level_distinctness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__low_level_distinctness</span></code></a>(…)</td>
-<td>Compute the lowlevel distinctness for a point.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__normal_saliency</span></code></a>(…[,&nbsp;…])</td>
-<td>Checks the saliency of a point based on  normals property</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__point_association" title="SaliencyFactory.SaliencyFactory._SaliencyFactory__point_association"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_SaliencyFactory__point_association</span></code></a>(point,&nbsp;…)</td>
-<td>Associate points that neighbor high-distinctness points with their distinction.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency" title="SaliencyFactory.SaliencyFactory.directional_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency</span></code></a>(neighbors_property,&nbsp;…)</td>
+<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency" title="SaliencyFactory.SaliencyFactory.directional_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency</span></code></a>(neighbors_property,&nbsp;…)</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -357,6 +319,9 @@
 </tbody>
 </table>
 </td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency_by_raster</span></code></a>(…[,&nbsp;…])</td>
+<td>Compute the directional saliency with a moving window on raster.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="SaliencyFactory.SaliencyFactory.hierarchical_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hierarchical_saliency</span></code></a>(neighborhoods,&nbsp;normals)</td>
 <td>Compute saliency by hierarchical method.</td>
@@ -388,7 +353,7 @@
 <dd><p>Compute the FPFH via open3d.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This is implemented as proposed in <a class="reference internal" href="../../zreferences.html#rusu-etal2009" id="id2">[RBB09]</a> and not modified to <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id3">[SLT13]</a>.
+<p class="last">This is implemented as proposed in <a class="reference internal" href="../../zreferences.html#rusu-etal2009" id="id1">[RBB09]</a> and not modified to <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id2">[SLT13]</a>.
 This means that the SPFH is not defined as absolute values of the angles, but as the angles themselves.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -486,7 +451,7 @@ This means that the SPFH is not defined as absolute values of the angles, but as
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>neighborhood</strong> (<a class="reference internal" href="../Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood.PointNeighborhood</em></a>) – the current neighborhood to which the SPFH is computed</li>
 <li><strong>normals</strong> (<a class="reference internal" href="../Normals/Normals.html#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty"><em>NormalsProperty.NormalsProperty</em></a>) – the normals of the point cloud</li>
-<li><strong>num_bins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of bins in the histogram. Default: 11 (according to <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id4">[SLT13]</a> – 11)</li>
+<li><strong>num_bins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of bins in the histogram. Default: 11 (according to <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id3">[SLT13]</a> – 11)</li>
 <li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print inter-running messages. Default: False</li>
 </ul>
 </td>
@@ -552,7 +517,7 @@ This means that the SPFH is not defined as absolute values of the angles, but as
 <dl class="classmethod">
 <dt id="SaliencyFactory.SaliencyFactory._SaliencyFactory__contextAware">
 <em class="property">classmethod </em><code class="descname">_SaliencyFactory__contextAware</code><span class="sig-paren">(</span><em>image</em>, <em>ksize</em>, <em>image_feature</em>, <em>kpatches=64</em>, <em>c=3</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__contextAware" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saliency computed according to <a class="reference internal" href="../../zreferences.html#goferman-etal2012" id="id5">[GZMT12]</a> for one scale.</p>
+<dd><p>Saliency computed according to <a class="reference internal" href="../../zreferences.html#goferman-etal2012" id="id4">[GZMT12]</a> for one scale.</p>
 <blockquote>
 <div><div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -751,7 +716,7 @@ of point <span class="math notranslate nohighlight">\(p_i\)</span> is computed b
 <em class="property">static </em><code class="descname">_SaliencyFactory__normal_saliency</code><span class="sig-paren">(</span><em>neighborhood</em>, <em>current_normals</em>, <em>win_size=0.05</em>, <em>noise_size=0.01</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the saliency of a point based on  normals property</p>
 <div class="math notranslate nohighlight">
-\[d{f N}_{ij} = {f N}_i \cdot {f N}_j\]</div>
+\[d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j\]</div>
 <p>The distances are weighted as Gaussians: the closest and farthest get low weights.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -839,10 +804,50 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster">
+<em class="property">classmethod </em><code class="descname">directional_saliency_by_raster</code><span class="sig-paren">(</span><em>curvature_property</em>, <em>normals_property</em>, <em>win_size=(3</em>, <em>3)</em>, <em>width=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency_by_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the directional saliency with a moving window on raster. <em>Returns raster</em></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>saliency_property</strong> – saliency property, computed in advance</li>
+<li><strong>win_size</strong> – the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)</li>
+<li><strong>width</strong> – the width of the band to compare. Must be odd number. For example:</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>window <span class="math notranslate nohighlight">\(5\times 5\)</span> with width 1    | window <span class="math notranslate nohighlight">\(5\times 5\)</span> with width 3
+—————————————–<a href="#id5"><span class="problematic" id="id6">|</span></a>————————————–</p>
+<blockquote>
+<div>0 0 1  0 0                        |  0 1   1 1 0
+0 0 1  0 0                        |  0 1   1 1 0
+0 0 -4 0 0                        |  0 0 -12 0 0
+0 0 1  0 0                        |  0 1   1 1 0
+0 0 1  0 0                        |  0 1   1 1 0</div></blockquote>
+<p>—————————————–<a href="#id7"><span class="problematic" id="id8">|</span></a>—————————————-</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">raster with enhanced saliency values according to their difference from specific directions</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency" title="SaliencyFactory.SaliencyFactory.directional_saliency"><code class="xref py py-func docutils literal notranslate"><span class="pre">SaliencyFactory.directional_saliency()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="SaliencyFactory.SaliencyFactory.hierarchical_saliency">
 <em class="property">classmethod </em><code class="descname">hierarchical_saliency</code><span class="sig-paren">(</span><em>neighborhoods</em>, <em>normals</em>, <em>low_level_percentage=1</em>, <em>sigma=0.05</em>, <em>association_percentage=20</em>, <em>high_level_percentage=10</em>, <em>verbose=True</em>, <em>chi_filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.hierarchical_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute saliency by hierarchical method.</p>
-<p>Based on <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id6">[SLT13]</a> paper.</p>
+<p>Based on <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id9">[SLT13]</a> paper.</p>
 <p>The procedure is divided into three main components:</p>
 <ol class="arabic simple">
 <li>Low-level saliency, which is composed by Fast Point Feature Histogram (FPFH) and the low-level distinctness accordingly.</li>
@@ -913,7 +918,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 <p class="first admonition-title">Warning</p>
 <p class="last">This saliency measure is not implemented correctly and should be reviewed and rewritten</p>
 </div>
-<p>Saliency is computed based on the distances between regions and their positions <a class="reference internal" href="../../zreferences.html#goferman-etal2012" id="id7">[GZMT12]</a>.</p>
+<p>Saliency is computed based on the distances between regions and their positions <a class="reference internal" href="../../zreferences.html#goferman-etal2012" id="id10">[GZMT12]</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1015,7 +1020,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 <em class="property">classmethod </em><code class="descname">panorama_contrast</code><span class="sig-paren">(</span><em>panorama_property</em>, <em>region_size</em>, <em>feature='pixel_val'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.panorama_contrast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.panorama_contrast" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute local saliency map (contrast based) for a panorama property (its image).</p>
 <p>The saliency is computed according to either the pixel value in the panorama, LAB. The saliency is based on
-distances between regions <a class="reference internal" href="../../zreferences.html#achanta-etal2008" id="id8">[AEWSusstrunk08]</a>.</p>
+distances between regions <a class="reference internal" href="../../zreferences.html#achanta-etal2008" id="id11">[AEWSusstrunk08]</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1067,7 +1072,7 @@ distances between regions <a class="reference internal" href="../../zreferences.
 <em class="property">classmethod </em><code class="descname">panorama_frequency</code><span class="sig-paren">(</span><em>panorama_property</em>, <em>filters</em>, <em>sigma_sent=True</em>, <em>feature='pixel_val'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.panorama_frequency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.panorama_frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute frequency saliency map for a panorama property (its image).</p>
 <p>The saliency is computed according to either the pixel value in the panorama, LAB or normals.
-Where the distance for saliency is computed between blurred and unblurred images <a class="reference internal" href="../../zreferences.html#achanta-etal2009" id="id9">[AHES09]</a>.</p>
+Where the distance for saliency is computed between blurred and unblurred images <a class="reference internal" href="../../zreferences.html#achanta-etal2009" id="id12">[AHES09]</a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1128,7 +1133,7 @@ Where the distance for saliency is computed between blurred and unblurred images
 <dt id="SaliencyFactory.SaliencyFactory.pointwise_pca_saliency">
 <em class="property">static </em><code class="descname">pointwise_pca_saliency</code><span class="sig-paren">(</span><em>tensor_property</em>, <em>principal_components_number=3</em>, <em>weights=1</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.pointwise_pca_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.pointwise_pca_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute saliency according to PCA (tensors) similarity.</p>
-<p>According to <a class="reference internal" href="../../zreferences.html#guo-etal2018" id="id10">[GWX18]</a>, with the following steps:</p>
+<p>According to <a class="reference internal" href="../../zreferences.html#guo-etal2018" id="id13">[GWX18]</a>, with the following steps:</p>
 <p>Given <span class="math notranslate nohighlight">\(d \times d\)</span> covariance matrix for each points (or patches).</p>
 <ol class="arabic">
 <li><p class="first">Perform Cholesky factorization for each covariance matrix:</p>

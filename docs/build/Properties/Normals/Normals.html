@@ -109,11 +109,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
 
@@ -229,19 +227,16 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
-<td>Retrieve the point property (object or value) of a specific point</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getPointNormal" title="NormalsProperty.NormalsProperty.getPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointNormal</span></code></a>(idx)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getPointNormal" title="NormalsProperty.NormalsProperty.getPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointNormal</span></code></a>(idx)</td>
 <td>Retrieve the normal value of a specific point</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getValues" title="NormalsProperty.NormalsProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getValues" title="NormalsProperty.NormalsProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
 <td>Get a specific characteristic value of the property</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.load" title="NormalsProperty.NormalsProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(normals,&nbsp;**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.load" title="NormalsProperty.NormalsProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(normals,&nbsp;**kwargs)</td>
 <td>Sets normals into the NormalsProperty object</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.setPointNormal" title="NormalsProperty.NormalsProperty.setPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointNormal</span></code></a>(idx,&nbsp;values)</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.setPointNormal" title="NormalsProperty.NormalsProperty.setPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointNormal</span></code></a>(idx,&nbsp;values)</td>
 <td>Sets a normal values to specific points</td>
 </tr>
 </tbody>
@@ -369,16 +364,13 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_NormalsFactory__normal_perPoint_PCA</span></code>(pt,&nbsp;…)</td>
-<td>Compute the normal at each point according to its neighbors, via PCA</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA" title="NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_from_tensors_with_CUDA</span></code></a>(neighborProperty)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA" title="NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_from_tensors_with_CUDA</span></code></a>(neighborProperty)</td>
 <td>Compute normals of each point using CUDA :param neighborProperty: neighborProperty to compute normal for each of its points :type neighborProperty: NeighborProperty :return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normalsPCA" title="NormalsFactory.NormalsFactory.normalsPCA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalsPCA</span></code></a>(pointset[,&nbsp;tree,&nbsp;radius,&nbsp;k_neighbors])</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normalsPCA" title="NormalsFactory.NormalsFactory.normalsPCA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalsPCA</span></code></a>(pointset[,&nbsp;tree,&nbsp;radius,&nbsp;k_neighbors])</td>
 <td>Computes the normals for each point in the pointset via PCA</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_file" title="NormalsFactory.NormalsFactory.normals_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_file</span></code></a>(points,&nbsp;normalsFileName)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_file" title="NormalsFactory.NormalsFactory.normals_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_file</span></code></a>(points,&nbsp;normalsFileName)</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -389,13 +381,13 @@
 </table>
 </td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_tensors" title="NormalsFactory.NormalsFactory.normals_from_tensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_tensors</span></code></a>(tensorProperty)</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_tensors" title="NormalsFactory.NormalsFactory.normals_from_tensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_tensors</span></code></a>(tensorProperty)</td>
 <td>Compute normals of each tensors reference point and create a property</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_open3D" title="NormalsFactory.NormalsFactory.normals_open3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_open3D</span></code></a>(pointcloud[,&nbsp;search_radius,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_open3D" title="NormalsFactory.NormalsFactory.normals_open3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_open3D</span></code></a>(pointcloud[,&nbsp;search_radius,&nbsp;…])</td>
 <td>Computes the normals using open 3D</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_panorama_xyz" title="NormalsFactory.NormalsFactory.normals_panorama_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_panorama_xyz</span></code></a>(panorama[,&nbsp;ksize,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_panorama_xyz" title="NormalsFactory.NormalsFactory.normals_panorama_xyz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_panorama_xyz</span></code></a>(panorama[,&nbsp;ksize,&nbsp;…])</td>
 <td>Compute normals in panorama, after adaptive smoothing according to <a class="reference internal" href="../../zreferences.html#arav2013" id="id1">[Ara13]</a> and  <a class="reference internal" href="../../zreferences.html#zeibak2008" id="id2">[Zei08]</a>.</td>
 </tr>
 </tbody>
@@ -507,7 +499,7 @@
 
 <dl class="staticmethod">
 <dt id="NormalsFactory.NormalsFactory.normals_open3D">
-<em class="property">static </em><code class="descname">normals_open3D</code><span class="sig-paren">(</span><em>pointcloud</em>, <em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>orientation=(0.0</em>, <em>0.0</em>, <em>0.0)</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normals_open3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normals_open3D" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">normals_open3D</code><span class="sig-paren">(</span><em>pointcloud</em>, <em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>orientation=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>return_pcl=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normals_open3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normals_open3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the normals using open 3D</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -518,6 +510,7 @@
 <li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – neighbors radius for normal computation. Default: 0.05</li>
 <li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum neighbors in a neighborhood. If set to (-1), there is no limitation. Default: 20.</li>
 <li><strong>orientation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – “camera” orientation. The orientation towards which the normals are computed. Default: (0,0,0)</li>
+<li><strong>return_pcl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – a flag to return the computed point cloud with the normals (for o3d visualization). Default: False</li>
 </ul>
 </td>
 </tr>

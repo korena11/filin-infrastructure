@@ -7,10 +7,6 @@ The neighborhood property holds all the neighbors for each point in the point cl
 Point Neighborhood
 -------------------
 
-.. autoclass:: PointNeighborhood.PointNeighborhood
-    :members:
-    :undoc-members:
-
 .. rubric:: Attributes
 
 .. autoautosummary:: PointNeighborhood.PointNeighborhood
@@ -20,6 +16,10 @@ Point Neighborhood
 
 .. autoautosummary:: PointNeighborhood.PointNeighborhood
     :methods:
+
+.. autoclass:: PointNeighborhood.PointNeighborhood
+    :members:
+    :undoc-members:
 
 Neighbors Property
 ------------------
@@ -43,15 +43,15 @@ Neighbors Property
 Neighbors Factory
 -----------------
 
-.. autoclass:: NeighborsFactory.NeighborsFactory
-   :members:
-   :undoc-members:
-
 .. rubric:: Methods
 
 .. autoautosummary::
     NeighborsFactory.NeighborsFactory
     :methods:
+
+.. autoclass:: NeighborsFactory.NeighborsFactory
+   :members:
+   :undoc-members:
 
 .. note::
 

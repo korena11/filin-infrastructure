@@ -280,13 +280,13 @@ class IOFactory:
 
     @classmethod
     def ReadPly(cls, filename, returnAdditionalAttributes=True):
-        """
+        r"""
         Reading ply file
         The method returns a PointSet object that contains the 3-D coordinates of all vertices in the ply file and
         their intensity values. If additional attributes exist they are returned as a dictionary with the attribute
         names as the keys
 
-        :param filename: path to *.ply file
+        :param filename: path to \*.ply file
         :param returnAdditionalAttributes: Indicator whether or not return the additional attributes that exist
 
         :type filename: str

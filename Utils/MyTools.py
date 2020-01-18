@@ -768,6 +768,72 @@ def interpolate_data(data, attribute_data, resolution, func=interp.NearestNDInte
     return zz
 
 
+def size_filter(binary_map, min_size=100):
+    """
+    Filters out small sized elements in a binary image (called size filter according to Sagi)
+
+    :param binary_map: the map to work on
+    :param min_size: the minimal size of an element to be left
+
+    :type binary_map: np.array
+    :type min_size: int
+    :return: the clean image
+
+    :rtype: np.array
+
+    *source* `https://stackoverflow.com/questions/57283802/remove-small-whits-dots-from-binary-image-using-opencv-python`_
+    """
+
+    # do connected components processing
+    nlabels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary_map, None, None, None, 8, cv2.CV_32S)
+
+    # get CC_STAT_AREA component as stats[label, COLUMN]
+    areas = stats[1:,cv2.CC_STAT_AREA]
+
+    result = np.zeros((labels.shape), np.uint8)
+
+    for i in range(0, nlabels - 1):
+        if areas[i] >= min_size:   #keep
+            result[labels == i + 1] = 255
+
+    return result
+
+
+def non_maxima_suppression(img):
+    """
+    Computes non-maxima suppression on an image  
+
+    :param img: the image for non-maxima suppression
+
+    :return: the image after non maxima suppression
+    """
+
+    dx, dy = computeImageDerivatives(img, 1)
+    phase = np.arctan2(dx, dy)
+
+    gmax = np.zeros(img.shape)
+
+    phase[phase < 0] += 360
+    for i in np.arange(1, gmax.shape[0]-1):
+        for j in np.arange(1, gmax.shape[1]-1):
+
+            # 0 degrees
+            if (phase[i][j] >= 337.5 or phase[i][j] < 22.5) or (phase[i][j] >= 157.5 and phase[i][j] < 202.5):
+              if img[i][j] >= img[i][j + 1] and img[i][j] >= img[i][j - 1]:
+                gmax[i][j] = img[i][j]
+            # 45 degrees
+            if (phase[i][j] >= 22.5 and phase[i][j] < 67.5) or (phase[i][j] >= 202.5 and phase[i][j] < 247.5):
+              if img[i][j] >= img[i - 1][j + 1] and img[i][j] >= img[i + 1][j - 1]:
+                gmax[i][j] = img[i][j]
+            # 90 degrees
+            if (phase[i][j] >= 67.5 and phase[i][j] < 112.5) or (phase[i][j] >= 247.5 and phase[i][j] < 292.5):
+              if img[i][j] >= img[i - 1][j] and img[i][j] >= img[i + 1][j]:
+                gmax[i][j] = img[i][j]
+            # 135 degrees
+            if (phase[i][j] >= 112.5 and phase[i][j] < 157.5) or (phase[i][j] >= 292.5 and phase[i][j] < 337.5):
+              if img[i][j] >= img[i - 1][j - 1] and img[i][j] >= img[i + 1][j + 1]:
+                gmax[i][j] = img[i][j]
+    return gmax
 
 
 if __name__ == '__main__':

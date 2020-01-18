@@ -89,11 +89,9 @@
 <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
@@ -345,7 +343,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__normal_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_normals</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks the saliency of a point based on  normals property</span>
 
 <span class="sd">        .. math::</span>
@@ -917,6 +915,78 @@
 
 
     <span class="c1"># ------------------- Saliency on Panorama Property or rasters ---------------------</span>
+<div class="viewcode-block" id="SaliencyFactory.directional_saliency_by_raster"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">directional_saliency_by_raster</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">curvature_property</span><span class="p">,</span> <span class="n">normals_property</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the directional saliency with a moving window on raster. *Returns raster*</span>
+
+<span class="sd">        :param saliency_property: saliency property, computed in advance</span>
+<span class="sd">        :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)</span>
+<span class="sd">        :param width: the width of the band to compare. Must be odd number. For example:</span>
+
+<span class="sd">        window :math:`5\times 5` with width 1    | window :math:`5\times 5` with width 3</span>
+<span class="sd">        -----------------------------------------|--------------------------------------</span>
+<span class="sd">                0 0 1  0 0                        |  0 1   1 1 0</span>
+<span class="sd">                0 0 1  0 0                        |  0 1   1 1 0</span>
+<span class="sd">                0 0 -4 0 0                        |  0 0 -12 0 0</span>
+<span class="sd">                0 0 1  0 0                        |  0 1   1 1 0</span>
+<span class="sd">                0 0 1  0 0                        |  0 1   1 1 0</span>
+<span class="sd">        -----------------------------------------|----------------------------------------</span>
+
+<span class="sd">        :type saliency_property: SaliencyProperty</span>
+<span class="sd">        :type win_size: tuple</span>
+
+<span class="sd">        :return: raster with enhanced saliency values according to their difference from specific directions</span>
+
+<span class="sd">        .. seealso::</span>
+<span class="sd">            :func:`SaliencyFactory.directional_saliency`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">warnings</span>
+        <span class="k">if</span> <span class="n">win_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">win_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span><span class="mi">2</span> <span class="o">!=</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">width</span> <span class="o">%</span><span class="mi">2</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Window must be odd number in both axes&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">WindowsError</span>
+
+        <span class="c1"># 1. Construct windows</span>
+        <span class="n">horizontal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">win_size</span><span class="p">)</span>
+        <span class="n">vertical</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">win_size</span><span class="p">)</span>
+        <span class="n">diag_NW</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">win_size</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">win_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">win_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># horizontal and vertical</span>
+        <span class="n">horizontal</span><span class="p">[</span><span class="n">m</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">:</span> <span class="n">m</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">vertical</span><span class="p">[:,</span> <span class="n">n</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">:</span> <span class="n">n</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># set  middle points as minus the sum of the filled pixels</span>
+        <span class="n">horizontal</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">horizontal</span><span class="p">)</span>
+        <span class="n">vertical</span><span class="p">[</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">vertical</span><span class="p">)</span>
+
+        <span class="c1"># diagonal windows</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int&#39;</span><span class="p">)):</span>
+            <span class="n">diag_NW</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">i</span><span class="p">))),</span> <span class="n">i</span><span class="p">)</span>
+
+        <span class="c1"># set middle point as zero and flip to get the NE-SW diagonal</span>
+        <span class="n">diag_NW</span><span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">diag_NW</span><span class="p">)</span>
+        <span class="n">diag_NE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="n">diag_NW</span><span class="p">)</span></div>
+
+        <span class="c1"># 2. Convolve with each window</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <div class="viewcode-block" id="SaliencyFactory.panorama_frequency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.panorama_frequency">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">panorama_frequency</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">panorama_property</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">sigma_sent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">feature</span><span class="o">=</span><span class="s1">&#39;pixel_val&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -963,7 +1033,7 @@
 <span class="sd">           Other features can be added.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">panoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="c1"># if the image feature is CIELAB, the image should be transformed to CIELab</span>
         <span class="k">if</span> <span class="n">feature</span> <span class="o">==</span> <span class="s1">&#39;LAB&#39;</span><span class="p">:</span>
@@ -1029,7 +1099,7 @@
 <span class="sd">           :linenos:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">panoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
         <span class="c1"># if the image feature is CIELAB, the image should be transformed to CIELab</span>
         <span class="k">if</span> <span class="n">feature</span> <span class="o">==</span> <span class="s1">&#39;LAB&#39;</span><span class="p">:</span>
@@ -1120,7 +1190,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">Properties.Panoramas.PanoramaProperty</span> <span class="k">import</span> <span class="n">PanoramaProperty</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">panorama_property</span><span class="p">,</span> <span class="n">PanoramaProperty</span><span class="p">):</span>
-            <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">panoramaImage</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">image</span> <span class="o">=</span> <span class="n">panorama_property</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 

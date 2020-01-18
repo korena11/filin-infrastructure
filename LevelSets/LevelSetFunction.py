@@ -339,7 +339,7 @@ class LevelSetFunction(object):
 
     @staticmethod
     def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
-        """
+        r"""
         Build a Lipshitz distance function with repetitive circles
 
         .. math::
@@ -478,12 +478,9 @@ class LevelSetFunction(object):
 
         elif regularization_note == 1:
             H[x > epsilon] = 1
-            H[x >= -epsilon] = 0.5 * (1 + x[x >= -epsilon] / epsilon +
+            H[np.abs(x) <= epsilon] = 0.5 * (1 + x[np.abs(x) <= epsilon] / epsilon +
                                       1 / np.pi * np.sin(
-                        np.pi * x[x >= -epsilon] / epsilon))
-            H[x <= epsilon] = 0.5 * (1 + x[x <= epsilon] / epsilon +
-                                     1 / np.pi * np.sin(
-                        np.pi * x[x <= epsilon] / epsilon))
+                        np.pi * x[np.abs(x) <= epsilon] / epsilon))
 
         elif regularization_note == 2:
             H = 0.5 * (1 + 2 / np.pi * np.arctan(x / epsilon))
@@ -531,8 +528,10 @@ class LevelSetFunction(object):
             d[np.abs(x) <= epsilon] = 1
 
         elif regularization_note == 1:
-            d[np.abs(x) <= epsilon] = 1 / (2 * epsilon) * (
-                    1 + np.cos(np.pi * x[np.abs(x) <= epsilon] / epsilon))
+            d[x==0] = 1
+            d[np.abs(x)<epsilon] = 0
+            d[np.abs(x) > epsilon] = 1 / (2 * epsilon) * (
+                    1 + np.cos(np.pi * x[np.abs(x) > epsilon] / epsilon))
 
         elif regularization_note == 2:
             d = 1 / np.pi * epsilon / (epsilon ** 2 + x ** 2)
