@@ -55,7 +55,7 @@ class TestSaliencyFactory(TestCase):
 
         from Properties.Normals.NormalsFactory import NormalsFactory
         vis = VisualizationO3D()
-        pcl = IOFactory.ReadPts('../../test_data/bunny_20 - Cloud.pts', merge=True)
+        pcl = IOFactory.ReadPts('../../test_data/test_pts2.pts', merge=True)
         p3d = PointSetOpen3D(pcl)
         k3d = KdTreePointSet(pcl)
         knn = o3d.geometry.KDTreeSearchParamKNN(100)
