@@ -358,8 +358,8 @@ class LevelSetFunction(object):
         import skfmm
         from tqdm import tqdm
         phi = -np.ones(func_shape)
-        center_x = np.arange(dx/2 + radius, func_shape[1] * resolution, dx + radius)
-        center_y = np.arange(dy/2 + radius, func_shape[0] * resolution, dy + radius)
+        center_x = np.arange(dx/2 + radius, func_shape[1] , dx + radius)
+        center_y = np.arange(dy/2 + radius, func_shape[0] , dy + radius)
 
         for i in tqdm(center_y, position=0, leave=False):
             for j in tqdm(center_x, position=1, leave=True):
@@ -467,6 +467,7 @@ class LevelSetFunction(object):
         :return: the heaviside function. Also updates the class.
 
         """
+
         epsilon = kwargs.get('epsilon', 1e-04)
         regularization_note = kwargs.get('regularization_note', self.regularization_note)
 

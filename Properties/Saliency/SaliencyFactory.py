@@ -219,7 +219,7 @@ class SaliencyFactory(object):
                        np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
                        1 / np.sqrt(2 * np.pi * win_size ** 2) * \
                        np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
-        # dist_element[dist_element < 0] = 0
+            # dist_element[dist_element < 0] = 0
         # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
         # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
         # dist_element[0] = neighborhood.Size
@@ -393,16 +393,33 @@ class SaliencyFactory(object):
         # 1 + 2. Compute FPFH open3d
         fpfh = SaliencyFactory.FPFH_open3d(pointset, normals, search_param).T
 
-        # 3 + 4. Compute low and high level distinctness
-        D_low, D_high = list(map(partial(cls.__point_hierarchical_saliency,
-                                         pointset=pointset, low_level_percentage=low_level_percentage, high_level_percentage=high_level_percentage),
-                                 tqdm(np.arange(pointset.Size), total=pointset.Size, desc='low and high level distinctness'), fpfh))
+        # # 3 + 4. Compute low and high level distinctness
+        # D_low, D_high = list(map(partial(cls.__point_hierarchical_saliency,
+        #                                  pointset=pointset, low_level_percentage=low_level_percentage, high_level_percentage=high_level_percentage),
+        #                          tqdm(np.arange(pointset.Size), total=pointset.Size, desc='low and high level distinctness'), fpfh))
 
-        D_high = np.asarray(D_high)
+        # 3.1 Compute the Chi-square distance of each histogram to each histogram
+        from functools import partial
+        import pickle
+
+        try:
+            pointset_distances = pickle.load(open(chi_filename, 'rb'))
+        except:
+            pointset_distances = list(map(partial(chi2_distance, histB=fpfh), tqdm(fpfh, desc='chi square')))
+            if chi_filename is not None:
+                pickle.dump(pointset_distances, open(chi_filename + '.p', 'wb'))
+
+        # 3.2 Compute low-level dissimilarity of only points that their histogram is close to the current point
+        pointset_distances = np.asarray(pointset_distances)
+        dmin = low_level_percentage / 100 * pointset_distances.max(axis=1)
+        D_low = list(
+            map(cls.__low_level_distinctness, tqdm(pointset, total=pointset.Size, desc='low level distinctness',
+                                                   position=0), itertools.repeat(pointset), pointset_distances, dmin))
         D_low = np.asarray(D_low)
         sorted_idx = np.argsort(D_low)  # Sort the low level distinctness according to magnitude
 
-        # 5. Point association
+        # 4. Point association
+        A_low = []
 
         # Use the only percentage of the highest low level distinctness to compute the high-level one
         num_points_assoc = int(association_percentage / 100 * pointset.Size)
@@ -413,53 +430,19 @@ class SaliencyFactory(object):
                          itertools.repeat(focus_points), itertools.repeat(focus_points_idx),
                          itertools.repeat(D_low), itertools.repeat(sigma)))
 
-        A_low = np.asarray(A_low)
-
-        return SaliencyProperty(pointset, 0.5 * (D_low + A_low) + 0.5 * D_high)
-
-    @classmethod
-    def __point_hierarchical_saliency(cls, pointset, low_level_percentage, high_level_percentage, index, fpfh):
-        """
-        Computes hierarchical saliency for a single point
-
-        :param pointset: the point to which the distinctness is computed
-        :param index:  its index
-        :param fpfh: fpfh histogram of all point cloud
-        :param low_level_percentage: threshold for minimal chi-square distance for the low-level distinctness computation (percentage).
-        :param high_level_percentage: percentage of points to use for high level distinctness (percentage).
-        :param sigma: for point association
-
-        :type pointset: PointSet
-        :type index: int
-        :type fpfh: np.array
-        :type low_level_percentage: float
-        :type association_percentage: float
-        :type high_level_percentage: float
-        :type sigma: float
-
-        :return: low level and high level distinctness values
-        """
-
-        fpfh_current = fpfh[index]
-        point = pointset.GetPoint(index)
-
-        # 1. compute chi-distance betwenn current fpfh and the cloud's
-        point_distances = mt.chi2_distance(fpfh_current, fpfh)
-
-        dmin = low_level_percentage / 100 * point_distances.max(axis=1)
-
-        # 2 Compute low-level dissimilarity only for points that their histogram is close to the current point
-        D_low = cls.__low_level_distinctness(point, pointset, point_distances, dmin)
-        sorted_idx = np.argsort(D_low)  # Sort the low level distinctness according to magnitude
-
-        # 3. High level distinctness
+        # 5. High level distinctness
         # Use the only percentage of the highest low level distinctness to compute the high-level one
         num_points = int(high_level_percentage / 100 * pointset.Size)
         valid_idx = sorted_idx[-num_points:]
         valid_pts = pointset.GetPoint(valid_idx)
-        D_high = cls.__high_level_distinctness(point, valid_pts, valid_idx, point_distances)
+        D_high = list(map(cls.__high_level_distinctness, tqdm(pointset, total=pointset.Size,
+                                                              desc='high-level distinctness', position=0),
+                          itertools.repeat(valid_pts), itertools.repeat(valid_idx), pointset_distances))
 
-        return D_low, D_high
+        A_low = np.asarray(A_low)
+        D_high = np.asarray(D_high)
+
+        return SaliencyProperty(pointset, 0.5 * (D_low + A_low) + 0.5 * D_high)
 
     @classmethod
     def __high_level_distinctness(cls, point, valid_pts, valid_idx, chi_dist):

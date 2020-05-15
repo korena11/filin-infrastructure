@@ -68,6 +68,7 @@ class LevelSetFlow:
 
         self.__step = kwargs.get('step', 0.05)
         self.__iterations = kwargs.get('iterations', 150)
+        self.__iterations += 2
         if img is not None:
             self.init_img(img)
 

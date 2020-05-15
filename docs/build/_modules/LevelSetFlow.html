@@ -201,8 +201,9 @@
 
     <span class="n">__GVF</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># external force (for GVF)</span>
 
-    <span class="n">__psi</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># internal force, for open contours;  LevelSetFunction</span>
+    <span class="n">__psi</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># internal force, for open contours;  LevelSetFunction *currently not in use*</span>
 
+    <span class="c1"># ------------------------- INITIALIZATIONS AND SETTINGS----------------------</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize factory.</span>
@@ -225,9 +226,31 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__step</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__iterations</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;iterations&#39;</span><span class="p">,</span> <span class="mi">150</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__iterations</span> <span class="o">+=</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">init_img</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="s1">&#39;img_rgb&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__img_rgb</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;img_rgb&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__img_rgb</span> <span class="o">=</span> <span class="n">img</span>
 
+        <span class="k">if</span> <span class="s1">&#39;weights&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s1">&#39;flow_types&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_types</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;flow_types&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_x</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale_y</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="LevelSetFlow.init_img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_img">[docs]</a>    <span class="k">def</span> <span class="nf">init_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set an image for the level set flow, according to which the flow will move (each of the Phi&#39;s)</span>
+
+<span class="sd">        :param img: the image to set</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">RasterData</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
             <span class="c1"># self.data = img</span>
@@ -236,21 +259,255 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">__img</span> <span class="o">=</span> <span class="n">img</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">)</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__GVF</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="p">[</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span> <span class="o">=</span> <span class="p">[</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="p">[</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span> <span class="o">=</span> <span class="p">[</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">))]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_x</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scale_y</span> <span class="o">=</span> <span class="mi">1</span>
+<div class="viewcode-block" id="LevelSetFlow.set_flow_types"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.set_flow_types">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the flow types and their weights according to which the level set will move</span>
 
-        <span class="k">if</span> <span class="s1">&#39;weights&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_weights</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;weights&#39;</span><span class="p">])</span>
+<span class="sd">        Options are as in :py:meth:`~LevelSetFactory.LevelSetFactory.flow`</span>
 
-        <span class="k">if</span> <span class="s1">&#39;flow_types&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_flow_types</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;flow_types&#39;</span><span class="p">])</span>
+<span class="sd">        For example:</span>
 
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flow_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;geodesic&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                      <span class="s1">&#39;curvature&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                      <span class="s1">&#39;equi_affine&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                      <span class="s1">&#39;band&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
+        <span class="n">flow_types</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__flow_types</span> <span class="o">=</span> <span class="n">flow_types</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.set_weights"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set weights for constraints. All are set to zero as defualt</span>
+
+<span class="sd">        :param gvf_w: gradient vector flow weight</span>
+<span class="sd">        :param vo_w: open contour weight (Not working at the moment)</span>
+<span class="sd">        :param region_w: region constraint weight</span>
+
+<span class="sd">        :type gvf_w: float</span>
+<span class="sd">        :type vo_w: float</span>
+<span class="sd">        :type region_w: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                  <span class="s1">&#39;vo_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                  <span class="s1">&#39;region_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
+                  <span class="s1">&#39;ms_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
+
+        <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__region_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;region_w&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__gvf_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__vo_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;vo_w&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__ms_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ms_w&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.init_psi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_psi">[docs]</a>    <span class="k">def</span> <span class="nf">init_psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         Initializes the psi function (open edges)</span>
+
+<span class="sd">        :param psi: the function</span>
+<span class="sd">        :param processing_props: gradient process dictionary</span>
+
+<span class="sd">        :type psi: nd-array mxn</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">yy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">dists</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">psi</span> <span class="o">*</span> <span class="n">dists</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.init_g"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_g">[docs]</a>    <span class="k">def</span> <span class="nf">init_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the g function (edge function)</span>
+<span class="sd">        :param g: the function</span>
+<span class="sd">        :param kwargs: gradient process dictionary</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__g</span> <span class="o">=</span> <span class="n">g</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__g_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_y</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives_numeric</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.init_GVF"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_GVF">[docs]</a>    <span class="k">def</span> <span class="nf">init_GVF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                 <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the vector field (gradient vector flow)</span>
+
+<span class="sd">        Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`</span>
+
+<span class="sd">        :param f: the edge map according to which the GVF is computed</span>
+<span class="sd">        :param mu: the GVF regularization coefficient. (according to the paper: 0.2).</span>
+<span class="sd">        :param iterations: the number of iterations that will be computed. (according to the example: 80).</span>
+<span class="sd">        :param ksize: size of the differentiation window</span>
+<span class="sd">        :param resolution: kernel resolution</span>
+<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</span>
+<span class="sd">        :param blur_window: tuple of window size for blurring</span>
+
+<span class="sd">        :type f: np.array</span>
+<span class="sd">        :type mu: float</span>
+<span class="sd">        :type iterations: int</span>
+<span class="sd">        :type ksize: int</span>
+<span class="sd">        :type resolution: float</span>
+<span class="sd">        :type blur_window: tuple (2 elements)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">GVF</span> <span class="k">import</span> <span class="n">GVF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__GVF</span> <span class="o">=</span> <span class="n">GVF</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
+                         <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="n">blur_window</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.init_region"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_region">[docs]</a>    <span class="k">def</span> <span class="nf">init_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes region function. Normalizes between (-1,1)</span>
+
+<span class="sd">        :param region: region function initialize</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># region = cv2.normalize(region.astype(&#39;float&#39;), None, -1.0, 1.0, cv2.NORM_MINMAX)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__region</span> <span class="o">=</span> <span class="n">region</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.init_phi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_phi">[docs]</a>    <span class="k">def</span> <span class="nf">init_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where</span>
+<span class="sd">        phi(x,y,t) = 0 is the curve.</span>
+
+<span class="sd">        The function has the following characteristics:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \begin{cases}</span>
+<span class="sd">             \phi(x,y,t) &gt; 0 &amp; \forall (x,y) \in \Omega \\</span>
+<span class="sd">             \phi(x,y,t) &lt; 0 &amp; \forall (x,y) \not\in \Omega \\</span>
+<span class="sd">             \phi(x,y,t) = 0 &amp; \forall (x,y) \textrm{ on curve} \\</span>
+<span class="sd">             \end{cases}</span>
+
+<span class="sd">        with :math:`\left| \nabla \phi \right| = 1`</span>
+
+<span class="sd">        **Characteristics of the function**</span>
+
+<span class="sd">        :param processing_props: properties for gradient and differentiation:</span>
+
+<span class="sd">            - &#39;gradientType&#39; - distance computation method</span>
+<span class="sd">            - &#39;sigma&#39; - for smoothing</span>
+<span class="sd">            - &#39;ksize&#39; - for smoothing</span>
+
+<span class="sd">        :param radius: if the curve is a circle, the radius should be specified.</span>
+<span class="sd">        :param center_pt: if the curve is a circle, the center point should be specified.</span>
+<span class="sd">        :param reularization_note: regularization note for heaviside function</span>
+<span class="sd">        :param function_type:</span>
+
+<span class="sd">            - &#39;circle&#39; (default);</span>
+<span class="sd">            - &#39;ellipse&#39;</span>
+<span class="sd">            - &#39;egg_crate&#39; - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)</span>
+<span class="sd">            - &#39;periodic_circles&#39; - more like squares at dx and dy distances from one another</span>
+<span class="sd">            - &#39;checkerboard&#39; - binary squares (from scikit-image)</span>
+
+<span class="sd">        :param epsilon: threshold to be considered zero. Default: 1e-4</span>
+
+<span class="sd">        :type processing_props: dict</span>
+<span class="sd">        :type radius: int</span>
+<span class="sd">        :type center_pt: tuple</span>
+<span class="sd">        :type function_type: str</span>
+<span class="sd">        :type start: tuple</span>
+<span class="sd">        :type regularization_note: int 0,1,2</span>
+<span class="sd">        :type epsilon: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">scale_values</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+        <span class="n">processing_props</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gradientType&#39;</span><span class="p">:</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s1">&#39;ksize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
+        <span class="k">if</span> <span class="s1">&#39;processing_props&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">processing_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;processing_props&#39;</span><span class="p">])</span>
+        <span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">center_pt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;center_pt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
+        <span class="n">func_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function_type&#39;</span><span class="p">,</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
+
+        <span class="n">func_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">func_shape</span><span class="p">)</span>
+
+        <span class="n">regularization</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regularization_note&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;circle&#39;</span><span class="p">:</span>
+
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_circle</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span>
+                                                    <span class="n">resolution</span><span class="o">=</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;ellipse&#39;</span><span class="p">:</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_ellipse</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span>
+                                                     <span class="n">resolution</span><span class="o">=</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;egg_crate&#39;</span><span class="p">:</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_eggcrate</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;amplitude&#39;</span><span class="p">],</span> <span class="n">func_shape</span><span class="o">=</span><span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
+
+        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;periodic_circles&#39;</span><span class="p">:</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_circles</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="o">=</span><span class="n">func_shape</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;checkerboard&#39;</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">skimage.segmentation</span> <span class="k">as</span> <span class="nn">seg</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">checkerboard_level_set</span><span class="p">(</span><span class="n">func_shape</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+
+        <span class="c1"># scale between [-1, 1], while keeping the level set unmoved</span>
+
+        <span class="n">phi</span><span class="p">[</span><span class="n">phi</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">phi</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">phi</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">regularization_note</span><span class="o">=</span><span class="n">regularization</span><span class="p">,</span>
+                             <span class="n">epsilon</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
+                             <span class="o">**</span><span class="n">processing_props</span><span class="p">))</span></div>
+    <span class="c1"># --------------- SEMI-PROPERTIES ---------------------</span>
+<div class="viewcode-block" id="LevelSetFlow.img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.img">[docs]</a>    <span class="k">def</span> <span class="nf">img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The analyzed image (of the data). Multiple can exist.</span>
+
+<span class="sd">        :param index: the index of the analyzed images.</span>
+
+<span class="sd">        :type index: int</span>
+
+<span class="sd">        :rtype: np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.phi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.phi">[docs]</a>    <span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the level set function phi according to the index</span>
+
+<span class="sd">        :param index: the number of the level set</span>
+
+<span class="sd">        :type index: int</span>
+
+<span class="sd">        :return: LevelSetFunction self.__Phi</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="LevelSetFlow.psi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.psi">[docs]</a>    <span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the level set function phi according to the index</span>
+
+<span class="sd">        :return: LevelSetFunction self.__psi</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            Not used anywhere</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+    <span class="c1"># ------------------------------- PROPERTIES -------------------------------------</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_ls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -275,26 +532,6 @@
 <span class="sd">        :rtype: dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__flow_types</span>
-
-<div class="viewcode-block" id="LevelSetFlow.set_flow_types"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.set_flow_types">[docs]</a>    <span class="k">def</span> <span class="nf">set_flow_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set the flow types and their weights according to which the level set will move</span>
-
-<span class="sd">        Options are as in :py:meth:`~LevelSetFactory.LevelSetFactory.flow`</span>
-
-<span class="sd">        For example:</span>
-
-<span class="sd">        .. code-block:: python</span>
-
-<span class="sd">            set_flow_types(geodesic=1., curvature=.2, equi_affine: 0.5})</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">flow_types</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;geodesic&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                      <span class="s1">&#39;curvature&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                      <span class="s1">&#39;equi_affine&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                      <span class="s1">&#39;band&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
-        <span class="n">flow_types</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__flow_types</span> <span class="o">=</span> <span class="n">flow_types</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">regularization_epsilon</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -375,54 +612,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ms_w</span>
 
-<div class="viewcode-block" id="LevelSetFlow.set_weights"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.set_weights">[docs]</a>    <span class="k">def</span> <span class="nf">set_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set weights for constraints. All are set to zero as defualt</span>
-
-<span class="sd">        :param gvf_w: gradient vector flow weight</span>
-<span class="sd">        :param vo_w: open contour weight (Not working at the moment)</span>
-<span class="sd">        :param region_w: region constraint weight</span>
-
-<span class="sd">        :type gvf_w: float</span>
-<span class="sd">        :type vo_w: float</span>
-<span class="sd">        :type region_w: float</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                  <span class="s1">&#39;vo_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                  <span class="s1">&#39;region_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">,</span>
-                  <span class="s1">&#39;ms_w&#39;</span><span class="p">:</span> <span class="mf">0.</span><span class="p">}</span>
-
-        <span class="n">inputs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__region_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;region_w&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__gvf_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;gvf_w&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__vo_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;vo_w&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__ms_w</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;ms_w&#39;</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.img">[docs]</a>    <span class="k">def</span> <span class="nf">img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The analyzed image (of the data). Multiple can exist.</span>
-
-<span class="sd">        :param index: the index of the analyzed images.</span>
-
-<span class="sd">        :type index: int</span>
-
-<span class="sd">        :rtype: np.ndarray</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.update_img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.update_img">[docs]</a>    <span class="k">def</span> <span class="nf">update_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_img</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Adds another image (of the data).</span>
-
-<span class="sd">        :param new_img: the new image to add</span>
-
-<span class="sd">        :type new_img: np.ndarray</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_img</span><span class="p">)</span></div>
-
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">img_rgb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -490,214 +679,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__GVF</span>
 
-<div class="viewcode-block" id="LevelSetFlow.phi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.phi">[docs]</a>    <span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the level set function phi according to the index</span>
-
-<span class="sd">        :param index: the number of the level set</span>
-
-<span class="sd">        :type index: int</span>
-
-<span class="sd">        :return: LevelSetFunction self.__Phi</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the level set function phi according to the index</span>
-<span class="sd">        :return: LevelSetFunction self.__psi</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
-
-<div class="viewcode-block" id="LevelSetFlow.init_phi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_phi">[docs]</a>    <span class="k">def</span> <span class="nf">init_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where</span>
-<span class="sd">        phi(x,y,t) = 0 is the curve.</span>
-
-<span class="sd">        The function has the following characteristics:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \begin{cases}</span>
-<span class="sd">             \phi(x,y,t) &gt; 0 &amp; \forall (x,y) \in \Omega \\</span>
-<span class="sd">             \phi(x,y,t) &lt; 0 &amp; \forall (x,y) \not\in \Omega \\</span>
-<span class="sd">             \phi(x,y,t) = 0 &amp; \forall (x,y) \textrm{ on curve} \\</span>
-<span class="sd">             \end{cases}</span>
-
-<span class="sd">        with :math:`\left| \nabla \phi \right| = 1`</span>
-
-<span class="sd">        **Characteristics of the function**</span>
-
-<span class="sd">        :param processing_props: properties for gradient and differentiation:</span>
-
-<span class="sd">            - &#39;gradientType&#39; - distance computation method</span>
-<span class="sd">            - &#39;sigma&#39; - for smoothing</span>
-<span class="sd">            - &#39;ksize&#39; - for smoothing</span>
-
-<span class="sd">        :param radius: if the curve is a circle, the radius should be specified.</span>
-<span class="sd">        :param center_pt: if the curve is a circle, the center point should be specified.</span>
-<span class="sd">        :param reularization_note: regularization note for heaviside function</span>
-<span class="sd">        :param function_type:</span>
-
-<span class="sd">            - &#39;circle&#39; (default);</span>
-<span class="sd">            - &#39;ellipse&#39;</span>
-<span class="sd">            - &#39;egg_crate&#39; - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)</span>
-<span class="sd">            - &#39;periodic_circles&#39; - more like squares at dx and dy distances from one another</span>
-<span class="sd">            - &#39;checkerboard&#39; - binary squares (from scikit-image)</span>
-
-<span class="sd">        :param epsilon: threshold to be considered zero. Default: 1e-4</span>
-
-<span class="sd">        :type processing_props: dict</span>
-<span class="sd">        :type radius: int</span>
-<span class="sd">        :type center_pt: tuple</span>
-<span class="sd">        :type function_type: str</span>
-<span class="sd">        :type start: tuple</span>
-<span class="sd">        :type regularization_note: int 0,1,2</span>
-<span class="sd">        :type epsilon: float</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">MyTools</span> <span class="k">import</span> <span class="n">scale_values</span>
-        <span class="n">eps</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;epsilon&#39;</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
-        <span class="n">processing_props</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;gradientType&#39;</span><span class="p">:</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="s1">&#39;sigma&#39;</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s1">&#39;ksize&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;resolution&#39;</span><span class="p">:</span> <span class="mf">1.</span><span class="p">}</span>
-        <span class="k">if</span> <span class="s1">&#39;processing_props&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">processing_props</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;processing_props&#39;</span><span class="p">])</span>
-        <span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-        <span class="n">radius</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_width</span> <span class="o">/</span> <span class="mi">4</span><span class="p">))</span>
-        <span class="n">center_pt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;center_pt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">(</span><span class="n">img_width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)])</span>
-        <span class="n">func_type</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;function_type&#39;</span><span class="p">,</span> <span class="s1">&#39;circle&#39;</span><span class="p">)</span>
-
-        <span class="n">func_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_height</span><span class="p">,</span> <span class="n">img_width</span><span class="p">)</span>
-        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">func_shape</span><span class="p">)</span>
-
-        <span class="n">regularization</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;regularization_note&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;circle&#39;</span><span class="p">:</span>
-
-            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_circle</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span>
-                                                    <span class="n">resolution</span><span class="o">=</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
-
-        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;ellipse&#39;</span><span class="p">:</span>
-            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_ellipse</span><span class="p">(</span><span class="n">center_pt</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="p">,</span>
-                                                    <span class="n">resolution</span><span class="o">=</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;egg_crate&#39;</span><span class="p">:</span>
-            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_eggcrate</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;amplitude&#39;</span><span class="p">],</span> <span class="n">func_shape</span><span class="o">=</span><span class="n">func_shape</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;resolution&#39;</span><span class="p">])</span>
-
-        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;periodic_circles&#39;</span><span class="p">:</span>
-            <span class="n">phi</span> <span class="o">=</span> <span class="n">LevelSetFunction</span><span class="o">.</span><span class="n">dist_from_circles</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">],</span> <span class="n">radius</span><span class="p">,</span> <span class="n">func_shape</span><span class="o">=</span><span class="n">func_shape</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">func_type</span> <span class="o">==</span> <span class="s1">&#39;checkerboard&#39;</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">skimage.segmentation</span> <span class="k">as</span> <span class="nn">seg</span>
-            <span class="n">phi</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">checkerboard_level_set</span><span class="p">(</span><span class="n">func_shape</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
-
-
-        <span class="c1"># scale between [-1, 1], while keeping the level set unmoved</span>
-
-        <span class="n">phi</span><span class="p">[</span><span class="n">phi</span><span class="o">&gt;=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">phi</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
-        <span class="n">phi</span><span class="p">[</span><span class="n">phi</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">scale_values</span><span class="p">(</span><span class="n">phi</span><span class="p">[</span><span class="n">phi</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__Phi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">regularization_note</span><span class="o">=</span><span class="n">regularization</span><span class="p">,</span>
-                             <span class="n">epsilon</span><span class="o">=</span><span class="n">eps</span><span class="p">,</span>
-                             <span class="o">**</span><span class="n">processing_props</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.init_img"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_img">[docs]</a>    <span class="k">def</span> <span class="nf">init_img</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set more images for the level set flow, according to which the flow will move (each of the Phi&#39;s)</span>
-
-<span class="sd">        .. warning::</span>
-<span class="sd">            When initializing a second+ image, one should make sure that</span>
-
-<span class="sd">        :param img: the next image to set</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__img</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.init_psi"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_psi">[docs]</a>    <span class="k">def</span> <span class="nf">init_psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">         Initializes the psi function (open edges)</span>
-
-<span class="sd">        :param psi: the function</span>
-<span class="sd">        :param processing_props: gradient process dictionary</span>
-
-<span class="sd">        :type psi: nd-array mxn</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">xx</span><span class="p">,</span> <span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">yy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">dists</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">__psi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">LevelSetFunction</span><span class="p">(</span><span class="n">psi</span> <span class="o">*</span> <span class="n">dists</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">processing_props</span><span class="p">))</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.init_g"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_g">[docs]</a>    <span class="k">def</span> <span class="nf">init_g</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initializes the g function (edge function)</span>
-<span class="sd">        :param g: the function</span>
-<span class="sd">        :param kwargs: gradient process dictionary</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__g</span> <span class="o">=</span> <span class="n">g</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__g_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">__g_y</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">computeImageDerivatives_numeric</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.init_GVF"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_GVF">[docs]</a>    <span class="k">def</span> <span class="nf">init_GVF</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                          <span class="n">resolution</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initializes the vector field (gradient vector flow)</span>
-
-<span class="sd">        Computes the GVF of an edge map f according the the paper of :cite:`Xu.Prince1998`</span>
-
-<span class="sd">        :param f: the edge map according to which the GVF is computed</span>
-<span class="sd">        :param mu: the GVF regularization coefficient. (according to the paper: 0.2).</span>
-<span class="sd">        :param iterations: the number of iterations that will be computed. (according to the example: 80).</span>
-<span class="sd">        :param ksize: size of the differentiation window</span>
-<span class="sd">        :param resolution: kernel resolution</span>
-<span class="sd">        :param sigma: sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</span>
-<span class="sd">        :param blur_window: tuple of window size for blurring</span>
-
-<span class="sd">        :type f: np.array</span>
-<span class="sd">        :type mu: float</span>
-<span class="sd">        :type iterations: int</span>
-<span class="sd">        :type ksize: int</span>
-<span class="sd">        :type resolution: float</span>
-<span class="sd">        :type blur_window: tuple (2 elements)</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">GVF</span> <span class="k">import</span> <span class="n">GVF</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__GVF</span> <span class="o">=</span> <span class="n">GVF</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">ksize</span><span class="o">=</span><span class="n">ksize</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">sigma</span><span class="p">,</span>
-                          <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">blur_window</span><span class="o">=</span><span class="n">blur_window</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="LevelSetFlow.init_region"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.init_region">[docs]</a>    <span class="k">def</span> <span class="nf">init_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initializes region function. Normalizes between (-1,1)</span>
-
-<span class="sd">        :param region: region function initialize</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c1"># region = cv2.normalize(region.astype(&#39;float&#39;), None, -1.0, 1.0, cv2.NORM_MINMAX)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__region</span> <span class="o">=</span> <span class="n">region</span></div>
-
-<div class="viewcode-block" id="LevelSetFlow.update_region"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.update_region">[docs]</a>    <span class="k">def</span> <span class="nf">update_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_region</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the region according to a given new_region</span>
-
-<span class="sd">        :param new_region: the new region according to which the level set should progress</span>
-
-<span class="sd">        :type new_region: np.array</span>
-
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__region</span> <span class="o">=</span> <span class="n">new_region</span></div>
-
+    <span class="c1"># ---------------------- FLOWS ------------------------------</span>
 <div class="viewcode-block" id="LevelSetFlow.flow"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.flow">[docs]</a>    <span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow_type</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the flow of the level set according to the type wanted</span>
@@ -797,8 +779,8 @@
         <span class="k">if</span> <span class="n">flow_type</span> <span class="o">==</span> <span class="s1">&#39;band&#39;</span><span class="p">:</span>
             <span class="n">vb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__compute_vb</span><span class="p">(</span><span class="o">**</span><span class="n">processing_props</span><span class="p">)</span>
             <span class="n">flow</span> <span class="o">=</span> <span class="n">vb</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">norm_nabla</span>
-            <span class="n">psi_t</span> <span class="o">=</span> <span class="n">vb</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">norm_nabla</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">psi_t</span><span class="p">,</span> <span class="o">**</span><span class="n">processing_props</span><span class="p">)</span>
+            <span class="n">psi_t</span> <span class="o">=</span> <span class="n">vb</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">()</span><span class="o">.</span><span class="n">norm_nabla</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">()</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">psi_t</span><span class="p">,</span> <span class="o">**</span><span class="n">processing_props</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">GaussianBlur</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="p">(</span><span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">],</span> <span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;ksize&#39;</span><span class="p">]),</span> <span class="n">processing_props</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span></div>
 
@@ -871,6 +853,7 @@
         <span class="c1"># mt.draw_contours(self.phi(1).value, ax, self.img_rgb, hold = True, color = &#39;r&#39;)</span>
         <span class="c1"># plt.pause(.5e-10)</span>
 
+    <span class="c1"># --------------------------- PRIVATE FUNCTIONS FOR FLOW PURPOSES -----------------------</span>
     <span class="k">def</span> <span class="nf">__ms_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combination</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        An element for summation within the Mumford-Shah model.</span>
@@ -970,7 +953,6 @@
         <span class="c1">#  vb[np.where(phi != 0)] = 0</span>
         <span class="k">return</span> <span class="n">vb</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">kappa</span>
 
-
     <span class="k">def</span> <span class="nf">__compute_vo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes velocity under orhogonality constraint (the force is computed so that the contours will be orthogonal</span>
@@ -985,6 +967,8 @@
         <span class="n">grad_psi_grad_phi</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">_x</span> <span class="o">+</span> <span class="n">psi</span><span class="o">.</span><span class="n">_y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">_y</span>
 
         <span class="k">return</span> <span class="n">grad_psi_grad_phi</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">()</span><span class="o">.</span><span class="n">norm_nabla</span> <span class="o">+</span> <span class="n">EPS</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------ MAIN FUNCTION FOR MOVEMENT ------------------------</span>
 
 <div class="viewcode-block" id="LevelSetFlow.moveLS"><a class="viewcode-back" href="../LevelSets/LevelSetFlow.html#LevelSetFlow.LevelSetFlow.moveLS">[docs]</a>    <span class="k">def</span> <span class="nf">moveLS</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
@@ -1087,14 +1071,11 @@
                       <span class="c1"># intrinsic (GAC, curvature etc)</span>
                       <span class="n">dphi_intrinsic</span><span class="p">[:,:,</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">flow_types</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">open_flag</span><span class="p">,</span> <span class="n">processing_props</span><span class="p">)</span>
                       <span class="c1"># region force</span>
-                      <span class="n">dphi_r</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">region_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">norm_nabla</span>
+                <span class="n">dphi_intrinsic</span><span class="p">[:,:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">region_w</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">norm_nabla</span>
 
-                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dphi_intrinsic</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">):</span>
-                            <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                 <span class="c1"># ---------------- mumford_shah movement --------</span>
                 <span class="k">if</span> <span class="n">mumford_shah_flag</span><span class="p">:</span>
-                    <span class="n">dphi_ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mumfordshah_flow</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
+                    <span class="n">dphi_ms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ms_w</span><span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">mumfordshah_flow</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">nu</span><span class="o">=</span><span class="n">nu</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dphi_ms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dphi_intrinsic</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 

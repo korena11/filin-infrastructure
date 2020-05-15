@@ -323,7 +323,7 @@
 <tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency_by_raster</span></code></a>(…[,&nbsp;…])</td>
 <td>Compute the directional saliency with a moving window on raster.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="SaliencyFactory.SaliencyFactory.hierarchical_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hierarchical_saliency</span></code></a>(neighborhoods,&nbsp;normals)</td>
+<tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="SaliencyFactory.SaliencyFactory.hierarchical_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hierarchical_saliency</span></code></a>(normals,&nbsp;search_param)</td>
 <td>Compute saliency by hierarchical method.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.multiscale_saliency" title="SaliencyFactory.SaliencyFactory.multiscale_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">multiscale_saliency</span></code></a>(saliencies[,&nbsp;percentiles])</td>
@@ -387,16 +387,16 @@ This means that the SPFH is not defined as absolute values of the angles, but as
  9
 10
 11</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_FPFH_open3d</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.KdTreePointSet</span> <span class="k">import</span> <span class="n">KdTreePointSet</span>
+        <span class="kn">from</span> <span class="nn">VisualizationClasses.VisualizationO3D</span> <span class="k">import</span> <span class="n">VisualizationO3D</span>
         <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">o3d</span>
 
+        <span class="kn">from</span> <span class="nn">Properties.Normals.NormalsFactory</span> <span class="k">import</span> <span class="n">NormalsFactory</span>
+        <span class="n">vis</span> <span class="o">=</span> <span class="n">VisualizationO3D</span><span class="p">()</span>
         <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">p3d</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">pcl</span><span class="p">)</span>
-        <span class="n">knn</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">KDTreeSearchParamKNN</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-        <span class="n">rad</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">KDTreeSearchParamRadius</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-        <span class="n">hyb</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">KDTreeSearchParamHybrid</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">max_nn</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-<span class="hll">
-</span>        <span class="n">fpfh</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">FPFH_open3d</span><span class="p">(</span><span class="n">p3d</span><span class="p">,</span> <span class="n">knn</span><span class="p">)</span>
+<span class="hll">        <span class="n">p3d</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">pcl</span><span class="p">)</span>
+</span>        <span class="n">k3d</span> <span class="o">=</span> <span class="n">KdTreePointSet</span><span class="p">(</span><span class="n">pcl</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 </dd></dl>
@@ -805,14 +805,15 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 
 <dl class="classmethod">
 <dt id="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster">
-<em class="property">classmethod </em><code class="descname">directional_saliency_by_raster</code><span class="sig-paren">(</span><em>curvature_property</em>, <em>normals_property</em>, <em>win_size=(3</em>, <em>3)</em>, <em>width=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency_by_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">directional_saliency_by_raster</code><span class="sig-paren">(</span><em>curvature_raster</em>, <em>normals_tuple</em>, <em>win_size=(3</em>, <em>3)</em>, <em>width=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency_by_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the directional saliency with a moving window on raster. <em>Returns raster</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>saliency_property</strong> – saliency property, computed in advance</li>
+<li><strong>curvature_raster</strong> – computed curvature, as a (m,n) raster</li>
+<li><strong>normals_tuple</strong> – computed normals as a tuple of (nx, ny, nz) as rasters.</li>
 <li><strong>win_size</strong> – the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)</li>
 <li><strong>width</strong> – the width of the band to compare. Must be odd number. For example:</li>
 </ul>
@@ -833,7 +834,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">raster with enhanced saliency values according to their difference from specific directions</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)</td>
 </tr>
 </tbody>
 </table>
@@ -845,7 +846,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 
 <dl class="classmethod">
 <dt id="SaliencyFactory.SaliencyFactory.hierarchical_saliency">
-<em class="property">classmethod </em><code class="descname">hierarchical_saliency</code><span class="sig-paren">(</span><em>neighborhoods</em>, <em>normals</em>, <em>low_level_percentage=1</em>, <em>sigma=0.05</em>, <em>association_percentage=20</em>, <em>high_level_percentage=10</em>, <em>verbose=True</em>, <em>chi_filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.hierarchical_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">hierarchical_saliency</code><span class="sig-paren">(</span><em>normals</em>, <em>search_param</em>, <em>low_level_percentage=1</em>, <em>sigma=0.05</em>, <em>association_percentage=20</em>, <em>high_level_percentage=10</em>, <em>verbose=True</em>, <em>chi_filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.hierarchical_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute saliency by hierarchical method.</p>
 <p>Based on <a class="reference internal" href="../../zreferences.html#shtrom-etal2013" id="id9">[SLT13]</a> paper.</p>
 <p>The procedure is divided into three main components:</p>
@@ -858,23 +859,25 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>neighborhoods</strong> (<a class="reference internal" href="../Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty.NeighborsProperty</em></a>) – the neighborhoods computed for the queried point set</li>
-<li><strong>normals</strong> (<a class="reference internal" href="../Normals/Normals.html#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty"><em>NormalsProperty.NormalsProperty</em></a>) – the computed normals of the point cloud</li>
-<li><strong>num_bins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the number of bins for feature histogram construction</li>
-<li><strong>low_level_percentage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – threshold for minimal chi-square distance for the low-level distinctness computation (percentage). Default: 1%</li>
-<li><strong>association_percentage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – percentage of focus points for point association (percentage). Default: 20%</li>
-<li><strong>high_level_percentage</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – percentage of points to use for high level distinctness (percentage). Default: 10%</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – for point association</li>
-<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print inter-running messages.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>search_param</strong> – search parameter from open3d. Can be  o3d.geometry.KDTreeSearchParamKNN(knn),</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">saliency property with the values of the saliency</p>
-</td>
+</tbody>
+</table>
+<p>o3d.geometry.KDTreeSearchParamRadius(radius) or o3d.geometry.KDTreeSearchParamHybrid(radius, knn)
+:param normals: the computed normals of the point cloud
+:param num_bins: the number of bins for feature histogram construction
+:param low_level_percentage: threshold for minimal chi-square distance for the low-level distinctness computation (percentage). Default: 1%
+:param association_percentage: percentage of focus points for point association (percentage). Default: 20%
+:param high_level_percentage: percentage of points to use for high level distinctness (percentage). Default: 10%
+:param sigma: for point association
+:param verbose: print inter-running messages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">saliency property with the values of the saliency</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#SaliencyProperty.SaliencyProperty" title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a></p>
-</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#SaliencyProperty.SaliencyProperty" title="SaliencyProperty.SaliencyProperty">SaliencyProperty</a></td>
 </tr>
 </tbody>
 </table>
@@ -962,7 +965,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">type panorama_property:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">PanoramaProperty.PanoramaProperty, np.array</p>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first">PanoramaProperty.PanoramaProperty, np.array, DataClasses.RasterData.RasterData</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">type scale_r:</th><td class="field-body"><p class="first">float</p>
@@ -1003,13 +1006,13 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 5
 6
 7
-8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_panorama_context</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span class="o">.</span><span class="n">CreatePanorama_byPoints</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
-                                                           <span class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="hll">        <span class="n">saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">panorama_context</span><span class="p">(</span><span class="n">panorama</span><span class="p">,</span> <span class="n">scale_r</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-</span>        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">saliency</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># def test_panorama_context(self):</span>
+    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../../test_data/test_pts2.pts&#39;, merge=False)</span>
+    <span class="c1">#     panorama = PanoramaFactory.CreatePanorama(pcl[0], elevationSpacing=0.12,</span>
+    <span class="c1">#                                                        azimuthSpacing=0.12, voidData=2, intensity=False)</span>
+<span class="hll">    <span class="c1">#     saliency = SaliencyFactory.panorama_context(panorama, scale_r=2)</span>
+</span>    <span class="c1">#     plt.imshow(saliency)</span>
+    <span class="c1">#     plt.show()</span>
 
 </pre></div>
 </td></tr></table></div>
@@ -1026,7 +1029,7 @@ distances between regions <a class="reference internal" href="../../zreferences.
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>panorama_property</strong> (<a class="reference internal" href="../Panorama/Panorama.html#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty"><em>PanoramaProperty.PanoramaProperty</em></a>) – the property according to which the saliency is computed</li>
+<li><strong>panorama_property</strong> (<a class="reference internal" href="../Panorama/Panorama.html#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty"><em>PanoramaProperty.PanoramaProperty</em></a><em>, </em><em>np.array</em><em>, </em><em>DataClasses.RasterData.RasterData</em>) – the property according to which the saliency is computed</li>
 <li><strong>region_size</strong> – the region (R1) size that does not change throughout</li>
 <li><strong>feature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>according to which property the saliency is computed, can be:</p>
 <ul>
@@ -1056,13 +1059,13 @@ distances between regions <a class="reference internal" href="../../zreferences.
 4
 5
 6
-7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_panorama_contrast</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span class="o">.</span><span class="n">CreatePanorama_byPoints</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
-<span class="hll">                                                           <span class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span>        <span class="n">saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">panorama_contrast</span><span class="p">(</span><span class="n">panorama</span><span class="p">,</span> <span class="n">region_size</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">saliency</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+7</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># def test_panorama_contrast(self):</span>
+    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../../test_data/test_pts2.pts&#39;, merge=False)</span>
+    <span class="c1">#     panorama = PanoramaFactory.CreatePanorama(pcl[0], elevationSpacing=0.12,</span>
+<span class="hll">    <span class="c1">#                                                        azimuthSpacing=0.12, voidData=2, intensity=False)</span>
+</span>    <span class="c1">#     saliency = SaliencyFactory.panorama_contrast(panorama, region_size=3)</span>
+    <span class="c1">#     plt.imshow(saliency)</span>
+    <span class="c1">#     plt.show()</span>
 </pre></div>
 </td></tr></table></div>
 </dd></dl>
@@ -1078,7 +1081,7 @@ Where the distance for saliency is computed between blurred and unblurred images
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>panorama_property</strong> (<a class="reference internal" href="../Panorama/Panorama.html#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty"><em>PanoramaProperty.PanoramaProperty</em></a>) – the property according to which the saliency is computed</li>
+<li><strong>panorama_property</strong> (<a class="reference internal" href="../Panorama/Panorama.html#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty"><em>PanoramaProperty.PanoramaProperty</em></a><em>, </em><em>np.array</em><em>, </em><em>DataClasses.RasterData.RasterData</em>) – the property according to which the saliency is computed</li>
 <li><strong>filters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – list of filters (either sigmas or kernel sizes) to run with the DoG filter.</li>
 <li><strong>sigma_sent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – sigma sizes are in ‘’filters’’ (true) as opposed to kernel sizes (false). (default: True)</li>
 <li><strong>feature</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – <p>according to which property the saliency is computed, can be:</p>
@@ -1106,14 +1109,14 @@ Where the distance for saliency is computed between blurred and unblurred images
 5
 6
 7
-8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">panorama</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span class="o">.</span><span class="n">CreatePanorama_byPoints</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
-                                                           <span class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">sigma</span> <span class="o">=</span> <span class="mf">2.5</span>
-<span class="hll">        <span class="n">list_sigmas</span> <span class="o">=</span> <span class="p">[</span><span class="n">sigma</span><span class="p">,</span> <span class="mf">1.6</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">,</span> <span class="mf">1.6</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">,</span> <span class="mf">1.6</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">]</span>
-</span>        <span class="n">saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">panorama_frequency</span><span class="p">(</span><span class="n">panorama</span><span class="p">,</span> <span class="n">list_sigmas</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">saliency</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+8</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../../test_data/test_pts2.pts&#39;, merge=False)</span>
+    <span class="c1">#     panorama = PanoramaFactory.CreatePanorama(pcl[0], elevationSpacing=0.12,</span>
+    <span class="c1">#                                                        azimuthSpacing=0.12, voidData=2, intensity=False)</span>
+    <span class="c1">#     sigma = 2.5</span>
+<span class="hll">    <span class="c1">#     list_sigmas = [sigma, 1.6 * sigma, 1.6 * 2 * sigma, 1.6 * 3 * sigma]</span>
+</span>    <span class="c1">#     saliency = SaliencyFactory.panorama_frequency(panorama, list_sigmas)</span>
+    <span class="c1">#     plt.imshow(saliency)</span>
+    <span class="c1">#     plt.show()</span>
 </pre></div>
 </td></tr></table></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="n">sigma</span> <span class="o">=</span> <span class="mf">2.5</span>
@@ -1196,15 +1199,15 @@ Where the distance for saliency is computed between blurred and unblurred images
 6
 7
 8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_pointwise_tensor_saliency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">CalculateAllPointsNeighbors</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">search_radius</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="hll">        <span class="n">tensorProp</span> <span class="o">=</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">computeTensorsProperty_givenNeighborhood</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">neighbors</span><span class="p">)</span>
-</span>        <span class="n">saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">pointwise_pca_saliency</span><span class="p">(</span><span class="n">tensorProp</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">saliencyPanorama</span> <span class="o">=</span> <span class="n">PanoramaFactory</span><span class="o">.</span><span class="n">CreatePanorama_byProperty</span><span class="p">(</span><span class="n">saliency</span><span class="p">,</span> <span class="n">elevationSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span>
-                                                                     <span class="n">azimuthSpacing</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">voidData</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">saliencyPanorama</span><span class="o">.</span><span class="n">PanoramaImage</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1"># def test_pointwise_tensor_saliency(self):</span>
+    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../../test_data/test_pts2.pts&#39;, merge=False)</span>
+    <span class="c1">#     neighbors = NeighborsFactory.CalculateAllPointsNeighbors(pcl[0], search_radius=0.1)</span>
+<span class="hll">    <span class="c1">#     tensorProp = TensorFactory.computeTensorsProperty_givenNeighborhood(pcl[0], neighbors)</span>
+</span>    <span class="c1">#     saliency = SaliencyFactory.pointwise_pca_saliency(tensorProp, verbose=True)</span>
+    <span class="c1">#     saliencyPanorama = PanoramaFactory.CreatePanorama(saliency, elevationSpacing=0.12,</span>
+    <span class="c1">#                                                                  azimuthSpacing=0.12, voidData=2)</span>
+    <span class="c1">#     plt.imshow(saliencyPanorama.panoramaImage)</span>
+    <span class="c1">#     plt.show()</span>
 </pre></div>
 </td></tr></table></div>
 </dd></dl>
