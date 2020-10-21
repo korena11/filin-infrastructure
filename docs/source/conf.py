@@ -38,25 +38,29 @@ from sphinx.ext.autosummary import Autosummary
 from sphinx.ext.autosummary import get_documenter
 from sphinx.util.inspect import safe_getattr
 
-sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../../Properties/Curvature'))
-sys.path.insert(0, os.path.abspath('../../Data Classes'))
+sys.path.insert(0, os.path.abspath('../'))
+sys.path.insert(1, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../../DataClasses'))
 sys.path.insert(0, os.path.abspath('../../Factory Classes'))
-sys.path.insert(0, os.path.abspath('../../IO modules'))
+sys.path.insert(0, os.path.abspath('../../IOmodules'))
 sys.path.insert(0, os.path.abspath('../../LevelSets'))
 sys.path.insert(0, os.path.abspath('../../Properties/Neighborhood'))
 sys.path.insert(0, os.path.abspath('../../Properties/Normals'))
 sys.path.insert(0, os.path.abspath('../../Properties/Panoramas'))
-sys.path.insert(0, os.path.abspath('../../Properties'))
-sys.path.insert(0, os.path.abspath('../../Third Party'))
+sys.path.insert(0, os.path.abspath('../../Properties/Curvature'))
+sys.path.insert(0, os.path.abspath('../../Properties/Saliency'))
 sys.path.insert(0, os.path.abspath('../../Properties/Transformations'))
 sys.path.insert(0, os.path.abspath('../../Properties/Tensors'))
+sys.path.insert(0, os.path.abspath('../../Properties'))
+sys.path.insert(0, os.path.abspath('../../Third Party'))
+
 sys.path.insert(0, os.path.abspath('../../Utils'))
-sys.path.insert(0, os.path.abspath('../../Visualization Classes'))
+sys.path.insert(0, os.path.abspath('../../VisualizationClasses'))
+sys.path.insert(0, os.path.abspath('../../Cuda'))
 
-sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
+# sys.path.insert(0, os.path.abspath('../../ReumaPhD'))
 
-
+sys.path.append('/home/workspace/myproj/myproj')
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -68,7 +72,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'sphinxcontrib.bibtex'
+    'sphinxcontrib.bibtex',
+    'sphinx.ext.autosectionlabel',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -151,7 +156,7 @@ pygments_style = 'sphinx'
 # keep_warnings = False
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
-todo_include_todos = False
+todo_include_todos = True
 
 # -- Options for HTML output ----------------------------------------------
 
@@ -203,6 +208,9 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+# html_logo = '_static/Eilat4.png'
+# html_favicon = '_static/logo_geo.ico'
+
 
 # Add any extra paths that contain custom files (such as robots.txt or
 # .htaccess) here, relative to this directory. These files are copied
@@ -369,7 +377,7 @@ texinfo_documents = [
      author, 'infragit', 'One line description of project.',
      'Miscellaneous'),
 ]
-
+# autodoc_member_order = 'bysource'
 # Documents to append as an appendix to all manuals.
 #
 # texinfo_appendices = []
@@ -392,25 +400,24 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None), 'Open3D': ('http://www.open3d.org/docs/', None)}
+# intersphinx_mapping = {'python': ('https://docs.python.org/3', None), 'open3d': ('http://www.open3d.org/docs/', None)}
 
 
 class AutoAutoSummary(Autosummary):
+
     option_spec = {
         'methods': directives.unchanged,
-        'attributes': directives.unchanged,
-        'functions': directives.unchanged
+        'attributes': directives.unchanged
     }
 
     required_arguments = 1
 
     @staticmethod
-    def get_members(obj, typ, include_public = None):
+    def get_members(obj, typ, include_public=None):
         if not include_public:
             include_public = []
         items = []
         for name in dir(obj):
-
             try:
                 documenter = get_documenter(safe_getattr(obj, name), obj)
             except AttributeError:
@@ -422,10 +429,8 @@ class AutoAutoSummary(Autosummary):
 
     def run(self):
         clazz = str(self.arguments[0])
-
         try:
             (module_name, class_name) = clazz.rsplit('.', 1)
-
             m = __import__(module_name, globals(), locals(), [class_name])
             c = getattr(m, class_name)
             if 'methods' in self.options:
@@ -435,17 +440,8 @@ class AutoAutoSummary(Autosummary):
             if 'attributes' in self.options:
                 _, attribs = self.get_members(c, 'attribute')
                 self.content = ["~%s.%s" % (clazz, attrib) for attrib in attribs if not attrib.startswith('_')]
-        except:
-            module_name = clazz
-            m = __import__(module_name, globals(), locals())
-            c = getattr(m, class_name)
-            if 'functions' in self.options:
-                _, functions = self.get_members(m, 'function')
-                self.content = ["~%s.%s" % (clazz, function) for function in functions if not function.startswith('_')]
-
         finally:
             return super(AutoAutoSummary, self).run()
-
 
 def setup(app):
     app.add_directive('autoautosummary', AutoAutoSummary)

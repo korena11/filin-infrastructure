@@ -1,248 +1,516 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Spherical Coordinates &mdash; infragit 1a documentation</title>
+  
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  
 
-    <title>Spherical Coordinates &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
+    
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Spherical Property" href="SphericalProperty.html"/>
-    <link rel="prev" title="Segmentation Property" href="../SegmentationProperty.html"/>
-
-
-    <script src="../../_static/js/modernizr.min.js"></script>
-
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Transformations" href="../Transformations/Transformation.html" />
+    <link rel="prev" title="Segmentation Property" href="../SegmentationProperty.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
-
-<div class="wy-grid-for-nav">
-
-
+   
+  <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> infragit
+          
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                </a>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1 current"><a class="reference internal"
-                                                      href="../BaseProperty.html">Properties</a>
-                        <ul class="current">
-                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
-                                Property</a></li>
-                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Spherical
-                                Coordinates</a>
-                                <ul>
-                                    <li class="toctree-l3"><a class="reference internal" href="SphericalProperty.html">Spherical
-                                        Property</a></li>
-                                    <li class="toctree-l3"><a class="reference internal"
-                                                              href="SphericalCoordinatesFactory.html">SphericalCoordinates
-                                        Factory</a></li>
-                                </ul>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Transformations/Transformation.html">Transformations</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
-                                Property</a></li>
-                        </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
-                        functions and factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
-                        Factory Documentation</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
-                        Utilities</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../BaseProperty.html">Properties</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Normals/Normals.html">Normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation Property</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Spherical Coordinates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spherical-property">Spherical Property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sphericalcoordinates-factory">SphericalCoordinates Factory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Transformations/Transformation.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
-        <nav class="wy-nav-top" aria-label="top navigation">
-
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-            <a href="../../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">infragit</a>
+        
+      </nav>
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../../index.html">Docs</a> &raquo;</li>
-
-                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
-
-                        <li>Spherical Coordinates</li>
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
 
 
-                        <li class="wy-breadcrumbs-aside">
 
 
-                            <a href="../../_sources/Properties/SphericalCoordinates/Spherical.rst.txt" rel="nofollow">
-                                View page source</a>
 
 
-                        </li>
-
-                    </ul>
 
 
-                    <hr/>
-                </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="spherical-coordinates">
-                            <h1>Spherical Coordinates<a class="headerlink" href="#spherical-coordinates"
-                                                        title="Permalink to this headline">¶</a></h1>
-                            <p>The Spherical coordinates property holds the point cloud in (azimuth, elevation, range)
-                                coordinate frame. There are
-                                multiple ways achieving this, either by direct computing over a numpy array or using
-                                spark.</p>
-                            <div class="toctree-wrapper compound">
-                                <ul>
-                                    <li class="toctree-l1"><a class="reference internal" href="SphericalProperty.html">Spherical
-                                        Property</a></li>
-                                    <li class="toctree-l1"><a class="reference internal"
-                                                              href="SphericalCoordinatesFactory.html">SphericalCoordinates
-                                        Factory</a></li>
-                                </ul>
-                            </div>
-                        </div>
 
 
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-
-                        <a href="SphericalProperty.html" class="btn btn-neutral float-right" title="Spherical Property"
-                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="../SegmentationProperty.html" class="btn btn-neutral" title="Segmentation Property"
-                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-
-                    </div>
 
 
-                    <hr/>
 
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students.
+<div role="navigation" aria-label="breadcrumbs navigation">
 
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+        
+      <li>Spherical Coordinates</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Properties/SphericalCoordinates/Spherical.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
 
-                </footer>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="spherical-coordinates">
+<h1>Spherical Coordinates<a class="headerlink" href="#spherical-coordinates" title="Permalink to this headline">¶</a></h1>
+<p>The Spherical coordinates property holds the point cloud in (azimuth, elevation, range) coordinate frame. There are
+multiple ways achieving this, either by direct computing over a numpy array or using spark.</p>
+<div class="section" id="spherical-property">
+<h2>Spherical Property<a class="headerlink" href="#spherical-property" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty">
+<em class="property">class </em><code class="descclassname">SphericalCoordinatesProperty.</code><code class="descname">SphericalCoordinatesProperty</code><span class="sig-paren">(</span><em>points</em>, <em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spherical coordinates property of a certain PointSet Object
+Angular coordinates are in decimal degrees</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
+<td>Return the size of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XYZ</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azimuths</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevations</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ranges</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SphericalToCartesianCoordinates</span></code></a>()</td>
+<td>Spherical to Cartesian coordinates</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToNumpy</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToPolyData</span></code></a>()</td>
+<td>Create and return PolyData object</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.load" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Sets the values to the spherical coordinates property</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates">
+<code class="descname">SphericalToCartesianCoordinates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.SphericalToCartesianCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.SphericalToCartesianCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spherical to Cartesian coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> – spherical coordinates (az,el,r)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">points in cartesian coordinates</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet">PointSet</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-            </div>
-        </div>
+<dl class="method">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy">
+<code class="descname">ToNumpy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToNumpy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToNumpy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-    </section>
+<dl class="method">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData">
+<code class="descname">ToPolyData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.ToPolyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ToPolyData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return PolyData object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tvtk.PolyData of the current PointSet
+-</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
+<dl class="attribute">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ">
+<code class="descname">XYZ</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.XYZ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths">
+<code class="descname">azimuths</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.azimuths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations">
+<code class="descname">elevations</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.elevations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific characteristic value of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">value for each point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.load">
+<code class="descname">load</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesProperty.html#SphericalCoordinatesProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the values to the spherical coordinates property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>azimuths</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
+<li><strong>elevationAngles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
+<li><strong>distances</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges">
+<code class="descname">ranges</code><a class="headerlink" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty.ranges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="sphericalcoordinates-factory">
+<h2>SphericalCoordinates Factory<a class="headerlink" href="#sphericalcoordinates-factory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory">
+<em class="property">class </em><code class="descclassname">SphericalCoordinatesFactory.</code><code class="descname">SphericalCoordinatesFactory</code><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p class="rubric">Methods</p>
+<dl class="staticmethod">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates">
+<em class="property">static </em><code class="descname">CartesianToSphericalCoordinates</code><span class="sig-paren">(</span><em>points</em>, <em>ceval=&lt;function evaluate&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> – a pointset containing the points to transform to spherical</li>
+<li><strong>ceval</strong> – backend to use:
+- eval: pure Numpy
+- numexpr.evaluate (default): Numexpr (faster for large arrays)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">spherical coordinates property in degrees</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#SphericalCoordinatesProperty.SphericalCoordinatesProperty" title="SphericalCoordinatesProperty.SphericalCoordinatesProperty">SphericalCoordinatesProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD">
+<code class="descname">cart2sph_RDD</code><span class="sig-paren">(</span><em>points</em>, <em>sc</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_RDD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cartesian to spherical transformation via RDD.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – a point set to be transformed</li>
+<li><strong>sc</strong> – a spark context object (driver) that will run the job</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:type SparkContext</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">RDD holding the spherical coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">pySpark RDD</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise">
+<em class="property">static </em><code class="descname">cart2sph_elementwise</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SphericalCoordinatesFactory.html#SphericalCoordinatesFactory.cart2sph_elementwise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cartesian to spherical transformation for RDD use.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – </li>
+<li><strong>y</strong> – </li>
+<li><strong>z</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">spherical coordinates</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.CartesianToSphericalCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CartesianToSphericalCoordinates</span></code></a>(points[,&nbsp;ceval])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">a pointset containing the points to transform to spherical</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_RDD"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart2sph_RDD</span></code></a>(points,&nbsp;sc)</td>
+<td>Cartesian to spherical transformation via RDD.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise" title="SphericalCoordinatesFactory.SphericalCoordinatesFactory.cart2sph_elementwise"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cart2sph_elementwise</span></code></a>(x,&nbsp;y,&nbsp;z)</td>
+<td>Cartesian to spherical transformation for RDD use.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
-<script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Transformations/Transformation.html" class="btn btn-neutral float-right" title="Transformations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../SegmentationProperty.html" class="btn btn-neutral float-left" title="Segmentation Property" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-</script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-<script type="text/javascript">
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
+  </script>
 
-</script>
+  
+  
+    
+   
 
 </body>
 </html>

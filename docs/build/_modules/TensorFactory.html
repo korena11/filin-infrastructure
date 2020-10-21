@@ -1,0 +1,492 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>TensorFactory &mdash; infragit 1a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>TensorFactory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for TensorFactory</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">infragit</span>
+<span class="sd">reuma\Reuma</span>
+<span class="sd">|today|</span>
+
+<span class="sd">.. note::</span>
+<span class="sd">     Base on Zachi&#39;s implementation</span>
+
+<span class="sd">The factory either creates a TensorProperty or a tensor for each point in a point cloud.  </span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">Properties.Neighborhood.NeighborsProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">Properties.Tensors.TensorProperty</span> <span class="k">import</span> <span class="n">TensorProperty</span>
+<span class="kn">from</span> <span class="nn">Properties.Tensors.Tensor</span> <span class="k">import</span> <span class="n">Tensor</span>
+
+
+<div class="viewcode-block" id="TensorFactory"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory">[docs]</a><span class="k">class</span> <span class="nc">TensorFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TensorFactory.tensorFromPoints"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory.tensorFromPoints">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tensorFromPoints</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">point_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepPoints</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a Tensor from 3D points</span>
+
+<span class="sd">        :param points: PointSet</span>
+<span class="sd">        :param point_index: around which point index the tensor is computed.  If (-1) the tensor is computed around the</span>
+<span class="sd">           center of gravity. Default (-1).</span>
+
+<span class="sd">        **Optionals**</span>
+
+<span class="sd">        :param radius: the radius according to which weights are being computed (if not set, then unit weight is used)</span>
+<span class="sd">        :param keepPoints: indicator whether to keep the points as part of the tensor object</span>
+
+<span class="sd">        :type points: PointSet or np.ndarray</span>
+<span class="sd">        :type point_index: int</span>
+<span class="sd">        :type keepPoints: bool</span>
+
+<span class="sd">        :return: Tensor object</span>
+
+<span class="sd">        :rtype: Tensor</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">point_index</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
+                <span class="n">points_array</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="n">points_array</span> <span class="o">=</span> <span class="n">points</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unexpected type of </span><span class="se">\&#39;</span><span class="s1">points</span><span class="se">\&#39;</span><span class="s1"> object&#39;</span><span class="p">)</span>
+            <span class="n">ref_point</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">points_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of points should be at least one&#39;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
+                <span class="n">ref_point</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">GetPoint</span><span class="p">(</span><span class="n">point_index</span><span class="p">)</span>
+                <span class="n">points_array</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="n">ref_point</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">point_index</span><span class="p">]</span>
+                <span class="n">points_array</span> <span class="o">=</span> <span class="n">points</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unexpected type of </span><span class="se">\&#39;</span><span class="s1">points</span><span class="se">\&#39;</span><span class="s1"> object&#39;</span><span class="p">)</span>
+
+            <span class="c1"># TODO: check validity and remove redundant code</span>
+            <span class="n">local_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">ref_point</span> <span class="ow">in</span> <span class="n">points_array</span><span class="p">)</span>
+            <span class="n">points_array1</span> <span class="o">=</span> <span class="n">points_array</span><span class="p">[</span><span class="n">local_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
+            <span class="n">points_array2</span> <span class="o">=</span> <span class="n">points_array</span><span class="p">[:</span><span class="n">local_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span>
+            <span class="n">points_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">points_array1</span><span class="p">,</span> <span class="n">points_array2</span><span class="p">))</span>
+
+        <span class="c1"># Set weights, if needed:</span>
+        <span class="k">if</span> <span class="s1">&#39;radius&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="c1"># points_array = points.ToNumpy()</span>
+            <span class="n">deltas</span> <span class="o">=</span> <span class="n">points_array</span> <span class="o">-</span> <span class="n">ref_point</span>
+
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                <span class="o">-</span><span class="p">(</span><span class="n">deltas</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">deltas</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">deltas</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">points_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">t</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">tensorGeneral</span><span class="p">(</span><span class="n">points_array</span><span class="p">,</span> <span class="n">ref_point</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">w</span><span class="p">,</span> <span class="n">keepPoints</span><span class="o">=</span><span class="n">keepPoints</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">t</span></div>
+
+<div class="viewcode-block" id="TensorFactory.tensorGeneral"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory.tensorGeneral">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tensorGeneral</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">arrays</span><span class="p">,</span> <span class="n">ref_array</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">min_points</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">keepPoints</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute a general tensor (not necessarily 3D)</span>
+
+<span class="sd">        :param arrays: an nxm arrays (each *row* array is the set for the tensor)</span>
+<span class="sd">        :param ref_array: the array around which the tensor is computed, if (-1) it is computed around the center of gravity</span>
+
+<span class="sd">        :type arrays: np.array</span>
+<span class="sd">        :type ref_array: np.array</span>
+
+<span class="sd">        **Optionals**</span>
+
+<span class="sd">        :param weights: the weights for the tensor computation. Default 1 for all</span>
+<span class="sd">        :param min_points: minimal number of points that can define a tensor (default: 3)</span>
+<span class="sd">        :param keepPoints: indicator whether to keep the points as part of the tensor object</span>
+
+<span class="sd">        :type min_points: int</span>
+<span class="sd">        :type keepPoints: bool</span>
+
+<span class="sd">        :return: a tensor</span>
+
+<span class="sd">        :rtype: Tensor</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">            If there are less than `min_point` the covariance matrix of the tensor will be defined as the Identity matrix (with the required shape)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">weights_axis</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># flag for weights axes size</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref_array</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ref_array</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">arrays</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">ref_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ref_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">deltas</span> <span class="o">=</span> <span class="n">arrays</span> <span class="o">-</span> <span class="n">ref_array</span>
+
+        <span class="c1"># Set weights, if needed:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">weights</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">arrays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">while</span> <span class="n">weights_axis</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">deltas</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+                <span class="n">weights_axis</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Compute the covariance matrix of the arrays around the ref_array</span>
+        <span class="n">covMat</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights</span> <span class="o">*</span> <span class="n">deltas</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">deltas</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">arrays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min_points</span><span class="p">:</span>
+            <span class="n">covMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">covMat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">keepPoints</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">covMat</span><span class="p">,</span> <span class="n">ref_array</span><span class="p">,</span> <span class="n">arrays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="o">=</span><span class="n">arrays</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">covMat</span><span class="p">,</span> <span class="n">ref_array</span><span class="p">,</span> <span class="n">arrays</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">ref_array</span></div>
+
+
+<div class="viewcode-block" id="TensorFactory.joinTensors"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory.joinTensors">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">joinTensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new Tensor by joining two existing ones</span>
+
+<span class="sd">        :param t1: First TensorSegment object</span>
+<span class="sd">        :param t2: Second TensorSegment object</span>
+
+<span class="sd">        :type t1: Tensor</span>
+<span class="sd">        :type t2: Tensor</span>
+
+<span class="sd">        :return: A new Tensor object which is the result of merging the two given ones</span>
+
+<span class="sd">        :rtype: Tensor</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Argument must be a Tensor object&#39;</span><span class="p">)</span>
+
+        <span class="n">n1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">t1</span><span class="o">.</span><span class="n">points_number</span><span class="p">)</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">t2</span><span class="o">.</span><span class="n">points_number</span><span class="p">)</span>
+
+        <span class="n">covMat</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">*</span> <span class="n">t1</span><span class="o">.</span><span class="n">covariance_matrix</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span> <span class="o">+</span> <span class="n">n2</span> <span class="o">*</span> <span class="n">t2</span><span class="o">.</span><span class="n">covariance_matrix</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span> <span class="o">+</span> \
+                 <span class="n">n1</span> <span class="o">*</span> <span class="n">n2</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">t2</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">-</span> <span class="n">t1</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                                       <span class="p">(</span><span class="n">t2</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">-</span> <span class="n">t1</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> \
+                 <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">+</span> \
+                 <span class="n">n1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">((</span><span class="n">t2</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">-</span> <span class="n">t1</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                                       <span class="p">(</span><span class="n">t2</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">-</span> <span class="n">t1</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)))</span> <span class="o">/</span> \
+                 <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span>
+
+        <span class="k">return</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">covMat</span><span class="p">,</span> <span class="p">(</span><span class="n">n1</span> <span class="o">*</span> <span class="n">t1</span><span class="o">.</span><span class="n">reference_point</span> <span class="o">+</span> <span class="n">n2</span> <span class="o">*</span> <span class="n">t2</span><span class="o">.</span><span class="n">reference_point</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">),</span> <span class="n">n1</span> <span class="o">+</span> <span class="n">n2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TensorFactory.unifyTensors"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory.unifyTensors">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">unifyTensors</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tensorList</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new tensor by joining multiple ones</span>
+<span class="sd">        :param tensorList: List of Tensor objects (list/ndarray)</span>
+<span class="sd">        :return: A new tensor which is the result of merging the given list of tensors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">),</span> <span class="n">tensorList</span><span class="p">))):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;All arguments in list must be a Tensor object&#39;</span><span class="p">)</span>
+
+        <span class="c1"># getting the number of points that each tensor consist</span>
+        <span class="n">nPnts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">points_number</span><span class="p">,</span> <span class="n">tensorList</span><span class="p">)))</span>
+        <span class="n">totalNumPnts</span> <span class="o">=</span> <span class="n">nPnts</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># computing the total number of points</span>
+
+        <span class="c1"># getting the reference points and the covariance matrices of each tensor</span>
+        <span class="n">refPnts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">reference_point</span><span class="p">,</span> <span class="n">tensorList</span><span class="p">)))</span>
+        <span class="n">covMats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">,</span> <span class="n">tensorList</span><span class="p">)))</span>
+
+        <span class="c1"># computing the reference point of the unified tensor, set is the weighted average of the individual ones</span>
+        <span class="n">unifiedRefPnt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">nPnts</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="n">refPnts</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">))</span> <span class="o">/</span> <span class="n">totalNumPnts</span>
+
+        <span class="c1"># computing the covariance matrix of the unified tensor</span>
+        <span class="n">deltas</span> <span class="o">=</span> <span class="n">refPnts</span> <span class="o">-</span> <span class="n">unifiedRefPnt</span>
+        <span class="n">translateTensors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">d</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))),</span> <span class="n">deltas</span><span class="p">)))</span>
+        <span class="n">unifiedCovMat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">n</span> <span class="o">*</span> <span class="n">dt</span><span class="p">,</span> <span class="n">covMats</span><span class="p">,</span> <span class="n">translateTensors</span><span class="p">,</span> <span class="n">nPnts</span><span class="p">)))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">totalNumPnts</span>
+
+        <span class="k">return</span> <span class="n">Tensor</span><span class="p">(</span><span class="n">unifiedCovMat</span><span class="p">,</span> <span class="n">unifiedRefPnt</span><span class="p">,</span> <span class="n">totalNumPnts</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TensorFactory.computeTensorsProperty_givenNeighborhood"><a class="viewcode-back" href="../Properties/Tensors/tensorClass.html#TensorFactory.TensorFactory.computeTensorsProperty_givenNeighborhood">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">computeTensorsProperty_givenNeighborhood</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">neighborhoodProperty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">neighborsFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                                 <span class="n">equalWeights</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute tensors for a point cloud.</span>
+
+<span class="sd">        For each point a tensor is computed, with the point itself the reference point. If the neighborhoodProperty is</span>
+<span class="sd">        None, it is computed here, according to the sent function.</span>
+
+<span class="sd">        :param points: a point cloud (PointSet or sub-object)</span>
+
+<span class="sd">        **Optionals**</span>
+
+<span class="sd">        :param neighborhoodProperty: a property that holds all neighbors for each point (can be empty)</span>
+<span class="sd">        :param neighborsFunc: the function to be used for neighbors search.</span>
+<span class="sd">        :param kwargs: the arguments for the function to be used for neighbors search. These are usually:</span>
+
+<span class="sd">        :param radius: search radius for neighbors search</span>
+<span class="sd">        :param knn: k nearest neighbors for neighbors search</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        :type neighborhoodProperty: NeighborhoodProperty</span>
+<span class="sd">        :type knn: int</span>
+<span class="sd">        :type radius: float</span>
+<span class="sd">        :type neighborsFunc: function</span>
+
+<span class="sd">        :return: a tensor property with all tensors computed for each point</span>
+
+<span class="sd">        :rtype: TensorProperty</span>
+
+<span class="sd">        **Usage**</span>
+
+<span class="sd">        .. warning::</span>
+
+<span class="sd">            Now works only for PointSet3D neighborhood search.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;&gt;&gt;&gt; Computing tensors for all points&quot;&quot;&quot;</span><span class="p">)</span>
+
+        <span class="n">tensors</span> <span class="o">=</span> <span class="n">TensorProperty</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">neighborhoodProperty</span><span class="p">,</span> <span class="n">NeighborsProperty</span><span class="p">):</span>
+            <span class="c1"># in case the neighborhood was already defined</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">):</span>
+
+                <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighborhoodProperty</span><span class="o">.</span><span class="n">getNeighborhood</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">neighbors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">equalWeights</span><span class="p">:</span>
+                    <span class="n">tensors</span><span class="o">.</span><span class="n">setPointTensor</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">tensorFromPoints</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">neighbors</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">radius</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">radius</span>
+                    <span class="n">tensors</span><span class="o">.</span><span class="n">setPointTensor</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">tensorFromPoints</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">neighbors</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># compute neighbors and tensor at the same time</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">Size</span><span class="p">):</span>
+                <span class="n">neighborhoodProperty</span> <span class="o">=</span> <span class="n">NeighborsProperty</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span class="p">):</span>
+                    <span class="n">points</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+
+                <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighborsFunc</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">neighborsProperty</span><span class="o">=</span><span class="n">neighborhoodProperty</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">equalWeights</span><span class="p">:</span>
+                    <span class="n">tensors</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">tensorFromPoints</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">radius</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">radius</span>
+                    <span class="c1"># always around the first points, as the point around which the tensor is looked is the first on the</span>
+                    <span class="c1"># neighbors list (the closest to itself)</span>
+                    <span class="n">tensors</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">TensorFactory</span><span class="o">.</span><span class="n">tensorFromPoints</span><span class="p">(</span><span class="n">neighbors</span><span class="o">.</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tensors</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

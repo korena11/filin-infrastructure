@@ -6,17 +6,17 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Neighbors Property &mdash; infragit 1a documentation</title>
 
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Neighbors Factory" href="NeighborsFactory.html"/>
-    <link rel="prev" title="Neighborhood" href="Neighborhood.html"/>
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="NeighborsFactory.html" rel="next" title="Neighbors Factory"/>
+    <link href="Neighborhood.html" rel="prev" title="Neighborhood"/>
 
 
     <script src="../../_static/js/modernizr.min.js"></script>
@@ -29,12 +29,12 @@
 <div class="wy-grid-for-nav">
 
 
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
             <div class="wy-side-nav-search">
 
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+                <a class="icon icon-home" href="../../index.html"> infragit
 
 
                 </a>
@@ -46,17 +46,17 @@
 
 
                 <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
                     </form>
                 </div>
 
 
             </div>
 
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
 
 
                 <ul class="current">
@@ -74,8 +74,6 @@
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
                                                       href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
-                            </li>
                             <li class="toctree-l2 current"><a class="reference internal" href="Neighborhood.html">Neighborhood</a>
                                 <ul class="current">
                                     <li class="toctree-l3 current"><a class="current reference internal" href="#">Neighbors
@@ -87,6 +85,10 @@
                                         Neighborhood</a></li>
                                 </ul>
                             </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
                             <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
@@ -97,6 +99,8 @@
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
                                 Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal"
@@ -116,12 +120,12 @@
         </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
 
-        <nav class="wy-nav-top" aria-label="top navigation">
+        <nav aria-label="top navigation" class="wy-nav-top">
 
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
             <a href="../../index.html">infragit</a>
 
         </nav>
@@ -132,7 +136,7 @@
             <div class="rst-content">
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
+                <div aria-label="breadcrumbs navigation" role="navigation">
 
                     <ul class="wy-breadcrumbs">
 
@@ -159,7 +163,7 @@
 
                     <hr/>
                 </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
                     <div itemprop="articleBody">
 
                         <div class="section" id="neighbors-property">
@@ -218,21 +222,64 @@
                                         </tr>
                                         <tr class="row-even">
                                             <td><a class="reference internal"
-                                                   href="#NeighborProperty.NeighborsProperty.GetPointNeighborsByCoordinates"
-                                                   title="NeighborProperty.NeighborsProperty.GetPointNeighborsByCoordinates"><code
+                                                   href="#NeighborProperty.NeighborsProperty.RotatePointNeighborhood"
+                                                   title="NeighborProperty.NeighborsProperty.RotatePointNeighborhood"><code
                                                     class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">GetPointNeighborsByCoordinates</span></code></a>(…[,&nbsp;…])
+                                                    class="pre">RotatePointNeighborhood</span></code></a>(pointIndex[,&nbsp;…])
                                             </td>
-                                            <td></td>
+                                            <td>
+                                                <table class="docutils field-list" frame="void" rules="none">
+                                                    <col class="field-name"/>
+                                                    <col class="field-body"/>
+                                                    <tbody valign="top">
+                                                    <tr class="field-odd field">
+                                                        <th class="field-name" colspan="2">param pointIndex:</th>
+                                                    </tr>
+                                                    <tr class="field-odd field">
+                                                        <td>&#160;</td>
+                                                        <td class="field-body">
+                                                            <table class="first last docutils field-list" frame="void"
+                                                                   rules="none">
+                                                                <col class="field-name"/>
+                                                                <col class="field-body"/>
+                                                                <tbody valign="top">
+                                                                <tr class="field-odd field">
+                                                                    <th class="field-name">param smoothen:</th>
+                                                                    <td class="field-body">
+                                                                        <table class="first last docutils field-list"
+                                                                               frame="void" rules="none">
+                                                                            <col class="field-name"/>
+                                                                            <col class="field-body"/>
+                                                                            <tbody valign="top">
+                                                                            <tr class="field-odd field">
+                                                                                <th class="field-name" colspan="2">param
+                                                                                    useOriginal:
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr class="field-odd field">
+                                                                                <td>&#160;</td>
+                                                                                <td class="field-body"></td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
                                         </tr>
                                         <tr class="row-odd">
                                             <td><a class="reference internal"
-                                                   href="#NeighborProperty.NeighborsProperty.GetPointsNeighborsByID"
-                                                   title="NeighborProperty.NeighborsProperty.GetPointsNeighborsByID"><code
+                                                   href="#NeighborProperty.NeighborsProperty.getNeighbors"
+                                                   title="NeighborProperty.NeighborsProperty.getNeighbors"><code
                                                     class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">GetPointsNeighborsByID</span></code></a>(pointset_open3d,&nbsp;idx,&nbsp;…)
+                                                    class="pre">getNeighbors</span></code></a>(idx)
                                             </td>
-                                            <td>Get the neighbors of a point within a point cloud by its index.</td>
+                                            <td>Retrieve a neighborhood of point(s) with idx index</td>
                                         </tr>
                                         <tr class="row-even">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
@@ -247,6 +294,16 @@
                                             <td>Save the property in either json or hdf5.</td>
                                         </tr>
                                         <tr class="row-even">
+                                            <td><a class="reference internal"
+                                                   href="#NeighborProperty.NeighborsProperty.setNeighbor"
+                                                   title="NeighborProperty.NeighborsProperty.setNeighbor"><code
+                                                    class="xref py py-obj docutils literal notranslate"><span
+                                                    class="pre">setNeighbor</span></code></a>(idx,&nbsp;point_neighbor)
+                                            </td>
+                                            <td>Set a PointNeighborhood into the property according to the point index
+                                            </td>
+                                        </tr>
+                                        <tr class="row-odd">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">setValues</span></code>(*args,&nbsp;**kwargs)
                                             </td>
@@ -270,32 +327,17 @@
                                     </dl>
 
                                     <dl class="method">
-                                        <dt id="NeighborProperty.NeighborsProperty.GetPointNeighborsByCoordinates">
-                                            <code class="descname">GetPointNeighborsByCoordinates</code><span
-                                                class="sig-paren">(</span><em>pointset_open3d</em>, <em>point</em>, <em>searchRadius</em>,
-                                            <em>maxNN</em>, <em>useOriginal=False</em><span class="sig-paren">)</span><a
-                                                class="reference internal"
-                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.GetPointNeighborsByCoordinates"><span
-                                                class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#NeighborProperty.NeighborsProperty.GetPointNeighborsByCoordinates"
-                                                                                            title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd></dd>
-                                    </dl>
-
-                                    <dl class="method">
-                                        <dt id="NeighborProperty.NeighborsProperty.GetPointsNeighborsByID">
-                                            <code class="descname">GetPointsNeighborsByID</code><span class="sig-paren">(</span><em>pointset_open3d</em>,
-                                            <em>idx</em>, <em>searchRadius</em>, <em>maxNN</em>,
-                                            <em>returnValues=True</em>, <em>override=False</em>,
+                                        <dt id="NeighborProperty.NeighborsProperty.RotatePointNeighborhood">
+                                            <code class="descname">RotatePointNeighborhood</code><span
+                                                class="sig-paren">(</span><em>pointIndex</em>, <em>smoothen=False</em>,
                                             <em>useOriginal=False</em><span class="sig-paren">)</span><a
                                                 class="reference internal"
-                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.GetPointsNeighborsByID"><span
+                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.RotatePointNeighborhood"><span
                                                 class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                            href="#NeighborProperty.NeighborsProperty.GetPointsNeighborsByID"
+                                                                                            href="#NeighborProperty.NeighborsProperty.RotatePointNeighborhood"
                                                                                             title="Permalink to this definition">¶</a>
                                         </dt>
-                                        <dd><p>Get the neighbors of a point within a point cloud by its index.</p>
+                                        <dd>
                                             <table class="docutils field-list" frame="void" rules="none">
                                                 <col class="field-name"/>
                                                 <col class="field-body"/>
@@ -304,61 +346,100 @@
                                                     <th class="field-name">Parameters:</th>
                                                     <td class="field-body">
                                                         <ul class="first simple">
-                                                            <li><strong>pointset_open3d</strong> (<a
-                                                                    class="reference internal"
-                                                                    href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D"
-                                                                    title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D</em></a>)
-                                                                – the point set on which the neighbors are looked for
-                                                            </li>
-                                                            <li><strong>idx</strong> (<a class="reference external"
-                                                                                         href="https://docs.python.org/3/library/functions.html#int"
-                                                                                         title="(in Python v3.7)"><em>int</em></a>)
-                                                                – point index
-                                                            </li>
-                                                            <li><strong>searchRadius</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – the
-                                                                search radius for neighbors
-                                                            </li>
-                                                            <li><strong>maxNN</strong> (<a class="reference external"
-                                                                                           href="https://docs.python.org/3/library/functions.html#int"
-                                                                                           title="(in Python v3.7)"><em>int</em></a>)
-                                                                – maximum number of neighbors
-                                                            </li>
-                                                            <li><strong>returnValues</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#bool"
-                                                                    title="(in Python v3.7)"><em>bool</em></a>) –
-                                                                default: True
-                                                            </li>
-                                                            <li><strong>override</strong> (<a class="reference external"
-                                                                                              href="https://docs.python.org/3/library/functions.html#bool"
-                                                                                              title="(in Python v3.7)"><em>bool</em></a>)
-                                                                – default: False
-                                                            </li>
-                                                            <li><strong>useOriginal</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#bool"
-                                                                    title="(in Python v3.7)"><em>bool</em></a>) –
-                                                                default: False
-                                                            </li>
+                                                            <li><strong>pointIndex</strong> –</li>
+                                                            <li><strong>smoothen</strong> –</li>
+                                                            <li><strong>useOriginal</strong> –</li>
                                                         </ul>
                                                     </td>
                                                 </tr>
                                                 <tr class="field-even field">
                                                     <th class="field-name">Returns:</th>
-                                                    <td class="field-body"><p class="first">the neighborhood
-                                                        property</p>
+                                                    <td class="field-body"><p class="first last"></p>
                                                     </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.getNeighbors">
+                                            <code class="descname">getNeighbors</code><span
+                                                class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/NeighborProperty.html#NeighborsProperty.getNeighbors"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.getNeighbors"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Retrieve a neighborhood of point(s) with idx index</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body"><strong>idx</strong> (<a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/functions.html#int"
+                                                            title="(in Python v3.7)"><em>int</em></a><em>, </em><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#tuple"
+                                                            title="(in Python v3.7)"><em>tuple</em></a><em>, </em><a
+                                                            class="reference external"
+                                                            href="https://docs.python.org/3/library/stdtypes.html#list"
+                                                            title="(in Python v3.7)"><em>list</em></a>) – the index of
+                                                        the point
+                                                    </td>
+                                                </tr>
+                                                <tr class="field-even field">
+                                                    <th class="field-name">Returns:</th>
+                                                    <td class="field-body">the tensor of point idx</td>
                                                 </tr>
                                                 <tr class="field-odd field">
                                                     <th class="field-name">Return type:</th>
-                                                    <td class="field-body"><p class="first last"><a
-                                                            class="reference internal"
-                                                            href="#NeighborProperty.NeighborsProperty"
-                                                            title="NeighborProperty.NeighborsProperty">NeighborsProperty</a>
-                                                    </p>
+                                                    <td class="field-body"><a class="reference internal"
+                                                                              href="Neighborhood.html#PointNeighborhood.PointNeighborhood"
+                                                                              title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </dd>
+                                    </dl>
+
+                                    <dl class="method">
+                                        <dt id="NeighborProperty.NeighborsProperty.setNeighbor">
+                                            <code class="descname">setNeighbor</code><span
+                                                class="sig-paren">(</span><em>idx</em>, <em>point_neighbor</em><span
+                                                class="sig-paren">)</span><a class="reference internal"
+                                                                             href="../../_modules/NeighborProperty.html#NeighborsProperty.setNeighbor"><span
+                                                class="viewcode-link">[source]</span></a><a class="headerlink"
+                                                                                            href="#NeighborProperty.NeighborsProperty.setNeighbor"
+                                                                                            title="Permalink to this definition">¶</a>
+                                        </dt>
+                                        <dd><p>Set a PointNeighborhood into the property according to the point
+                                            index</p>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>idx</strong> (<a class="reference external"
+                                                                                         href="https://docs.python.org/3/library/functions.html#int"
+                                                                                         title="(in Python v3.7)"><em>int</em></a>)
+                                                                – the index (or indices) of the point(s) to set
+                                                            </li>
+                                                            <li><strong>point_neighbor</strong> (<a
+                                                                    class="reference internal"
+                                                                    href="Neighborhood.html#PointNeighborhood.PointNeighborhood"
+                                                                    title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood</em></a>)
+                                                                – the PointeNeighborhood object to set
+                                                            </li>
+                                                        </ul>
                                                     </td>
                                                 </tr>
                                                 </tbody>
@@ -377,14 +458,14 @@
                 </div>
                 <footer>
 
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-                        <a href="NeighborsFactory.html" class="btn btn-neutral float-right" title="Neighbors Factory"
-                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+                        <a accesskey="n" class="btn btn-neutral float-right" href="NeighborsFactory.html" rel="next"
+                           title="Neighbors Factory">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="Neighborhood.html" class="btn btn-neutral" title="Neighborhood" accesskey="p"
-                           rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral" href="Neighborhood.html" rel="prev"
+                           title="Neighborhood"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -412,31 +493,29 @@
 
 
 <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
 </script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
 </script>
 
 </body>

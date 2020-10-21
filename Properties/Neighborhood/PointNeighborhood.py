@@ -1,62 +1,173 @@
 import numpy as np
-from scipy.spatial import Delaunay
+
+from DataClasses.PointSubSet import PointSubSet
 
 
 class PointNeighborhood:
-    def __init__(self, radius, max_neighbor_num, num_pts, idx, dist):
+    def __init__(self, points_subset, distances=None):
         """
-        :param radius: Radius of neighborhood
-        :param max_neighbor_num: Max number of neighborhood points set
-        :param num_pts: Number of points in neighborhood
-        :param idx: Neighborhood points indices
-        :param dist: Distance of neighborhood points from center point
+
+        :param points_subset: the neighborhood as point subset
+        :param distances: Distances of each point from center point
+
+        :type points_subset: PointSubSet, PointSubSetOpen3D
+        :type distances: np.array
+
         """
-        # self.pointSet = super(PointNeighborhood, self).__init__(points, idx)
-
-        self.r = radius
-        self.nn = max_neighbor_num
-        self.num = num_pts
-        self.idx = idx
-        self.dist = dist
-
-        self.localRotatedNeighbors = None
+        self.__distances = distances
+        self.__neighbors = points_subset
 
     @property
     def radius(self):
-        return self.r
+        """
+        Mean radius of the neighbors
+
+        :return: mean radius
+        :rtype: float
+        """
+        if self.__distances is None:
+            self.computeDistances()
+
+        return np.mean(self.__distances)
 
     @property
-    def maxNN(self):
-        return self.nn
+    def distances(self):
+        """
+        Array of the distances between each point and the center point
+
+        :return: array of distances
+
+        :rtype: np.array
+        """
+        if self.__distances is None:
+            self.computeDistances()
+
+        return self.__distances
 
     @property
     def numberOfNeighbors(self):
-        return self.num
+        """
+        The number of points within the neighborhood (including the point itself)
+
+        :return: the number of points within the neighborhood
+
+        :rtype: int
+        """
+        return self.__neighbors.Size
 
     @property
     def neighborhoodIndices(self):
-        return self.idx
+        return self.__neighbors.GetIndices
 
     @property
-    def localRotatedNeighborhood(self):
-        return self.localRotatedNeighbors
+    def Size(self):
+        return self.numberOfNeighbors
 
-    @localRotatedNeighborhood.setter
-    def localRotatedNeighborhood(self, neighborsArray):
-        self.localRotatedNeighbors = neighborsArray.copy()
-
-    def VisualizeNeighborhoodTriangulation(self):
+    @property
+    def neighbors(self):
         """
-        .. warning::
+        Return a point set of the neighborhood
 
-            Not working
+        :return: points that compose the neighborhood (including the point itself at index 0)
 
-        :return:
+        :rtype: PointSubSet
         """
-        flag = 0
-        idx = np.arange(len(self.localRotatedNeighbors))
+        return self.__neighbors
 
-        # simplices returns points IDs for each triangle
-        triangulation = (Delaunay(self.localRotatedNeighbors[:, 0:2])).simplices
+    @neighbors.setter
+    def neighbors(self, pointsubset):
+        self.__neighbors = pointsubset
 
-        tri = np.where(triangulation == 0)[0]  # Keep triangles that have the first point in them
+    @property
+    def center_point_coords(self):
+        """
+        The point to which the neighbors relate
+
+        :return: coordinates of the center point
+
+        :rtype: np.ndarray
+        """
+
+        return self.neighbors.GetPoint(0)
+
+    @property
+    def center_point_idx(self):
+        """
+        The index of the point to which the neighbors relate
+
+        :return: index of the center point
+
+        :rtype: int
+        """
+
+        return self.neighbors.GetIndices[0]
+
+    def computeDistances(self):
+        """
+        Compute the distances between each point and the center point
+
+        :return: array of distances
+
+        :rtype: np.array
+        """
+
+        center_pt = self.center_point_coords
+        pts = self.__neighbors.ToNumpy()
+
+        distances = np.linalg.norm(pts - center_pt, axis=1)
+
+        if np.nonzero(distances == 0)[0].shape[0] > 1:
+            # print('Point set has two identical points at {}'.format(center_pt))
+            tmp_subset = PointSubSet(self.neighbors.data, np.hstack((self.center_point_idx, self.neighborhoodIndices[np.nonzero(distances != 0)])))
+            self.__init__(tmp_subset)
+            pts =  self.__neighbors.ToNumpy()
+            distances = np.linalg.norm(pts - center_pt, axis=1)
+
+        self.__distances = distances
+        return self.__distances
+
+    def color_neighborhood(self, point_color='red', neighbors_color='black'):
+        """
+        Assign red color to the center point and black to the rest
+
+        :param point_color: name or rgb of the center point. Default: 'red'
+        :param neighbors_color: name or rgb of neighbor points. Default: 'black'
+
+        :type point_color: (str, tuple)
+        :type neighbors_color: (str, tuple)
+        :return: array with colors
+
+        :rtype: ColorProperty.ColorProperty
+        """
+        import webcolors
+        from Properties.Color.ColorProperty import ColorProperty
+        if type(neighbors_color) is str:
+            neighbors_color = webcolors.name_to_rgb(neighbors_color)
+
+        if type(point_color) is str:
+            point_color = webcolors.name_to_rgb(point_color)
+
+        colors = np.ones((self.Size, 3)) * neighbors_color
+        colors[0, :] = point_color
+
+        return ColorProperty(self.__neighbors, colors)
+
+    def neighbors_vectors(self):
+        """
+        Find the direction of each point to the center point
+
+        :return: array of directions
+
+        :rtype: np.array nx3
+        """
+        center_pt = self.center_point_coords
+        pts = self.__neighbors.ToNumpy()
+
+        directions = pts - center_pt
+
+        if self.__distances is None:
+            self.__distances = np.linalg.norm(directions, axis=1)
+
+        return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
+                                                               None]
+

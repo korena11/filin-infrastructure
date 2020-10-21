@@ -1,7 +1,7 @@
 from numpy import zeros, arange, array, cos, pi, sin
 
-from BaseProperty import BaseProperty
-from PointSet import PointSet
+from Properties.BaseProperty import BaseProperty
+from DataClasses.PointSet import PointSet
 
 
 # from tvtk.api import tvtk
@@ -24,9 +24,9 @@ class SphericalCoordinatesProperty(BaseProperty):
         """
 
         super(SphericalCoordinatesProperty, self).__init__(points)
-        self.setValues(*args)
+        self.load(*args)
 
-    def setValues(self, *args, **kwargs):
+    def load(self, *args, **kwargs):
         """
         Sets the values to the spherical coordinates property
 
@@ -56,17 +56,17 @@ class SphericalCoordinatesProperty(BaseProperty):
         return self.Points.ToNumpy()
 
     @property
-    def Azimuths(self):
+    def azimuths(self):
         
         return self.__azimuthElevationRange[:, 0]
     
     @property
-    def ElevationAngles(self):
+    def elevations(self):
         
         return self.__azimuthElevationRange[:, 1]
     
     @property
-    def Ranges(self):
+    def ranges(self):
         
         return self.__azimuthElevationRange[:, 2]
     

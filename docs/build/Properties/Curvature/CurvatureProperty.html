@@ -6,17 +6,17 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Curvature Property &mdash; infragit 1a documentation</title>
 
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Curvature Factory" href="CurvatureFactory.html"/>
-    <link rel="prev" title="Curvature" href="Curvature.html"/>
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="CurvatureFactory.html" rel="next" title="Curvature Factory"/>
+    <link href="Curvature.html" rel="prev" title="Curvature"/>
 
 
     <script src="../../_static/js/modernizr.min.js"></script>
@@ -29,12 +29,12 @@
 <div class="wy-grid-for-nav">
 
 
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
             <div class="wy-side-nav-search">
 
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+                <a class="icon icon-home" href="../../index.html"> infragit
 
 
                 </a>
@@ -46,17 +46,17 @@
 
 
                 <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
                     </form>
                 </div>
 
 
             </div>
 
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
 
 
                 <ul class="current">
@@ -81,10 +81,12 @@
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
                                                       href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
-                            </li>
                             <li class="toctree-l2"><a class="reference internal"
                                                       href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
+                            </li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
                             <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
@@ -95,6 +97,8 @@
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
                                 Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal"
@@ -114,12 +118,12 @@
         </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
 
-        <nav class="wy-nav-top" aria-label="top navigation">
+        <nav aria-label="top navigation" class="wy-nav-top">
 
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
             <a href="../../index.html">infragit</a>
 
         </nav>
@@ -130,7 +134,7 @@
             <div class="rst-content">
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
+                <div aria-label="breadcrumbs navigation" role="navigation">
 
                     <ul class="wy-breadcrumbs">
 
@@ -157,7 +161,7 @@
 
                     <hr/>
                 </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
                     <div itemprop="articleBody">
 
                         <div class="section" id="curvature-property">
@@ -183,24 +187,16 @@
                                         </colgroup>
                                         <tbody valign="top">
                                         <tr class="row-odd">
-                                            <td><a class="reference internal"
-                                                   href="#CurvatureProperty.CurvatureProperty.Curvature"
-                                                   title="CurvatureProperty.CurvatureProperty.Curvature"><code
-                                                    class="xref py py-obj docutils literal notranslate"><span
-                                                    class="pre">Curvature</span></code></a></td>
-                                            <td>Points’ curvature values</td>
-                                        </tr>
-                                        <tr class="row-even">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">Points</span></code></td>
                                             <td>Holds the points dataset</td>
                                         </tr>
-                                        <tr class="row-odd">
+                                        <tr class="row-even">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">Raster</span></code></td>
                                             <td>Holds raster dataset</td>
                                         </tr>
-                                        <tr class="row-even">
+                                        <tr class="row-odd">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.Shape_Index"
                                                    title="CurvatureProperty.CurvatureProperty.Shape_Index"><code
@@ -208,12 +204,12 @@
                                                     class="pre">Shape_Index</span></code></a></td>
                                             <td></td>
                                         </tr>
-                                        <tr class="row-odd">
+                                        <tr class="row-even">
                                             <td><code class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">Size</span></code></td>
                                             <td>Return the size of the property</td>
                                         </tr>
-                                        <tr class="row-even">
+                                        <tr class="row-odd">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.curvadness"
                                                    title="CurvatureProperty.CurvatureProperty.curvadness"><code
@@ -221,7 +217,7 @@
                                                     class="pre">curvadness</span></code></a></td>
                                             <td>Curvadness property defined by</td>
                                         </tr>
-                                        <tr class="row-odd">
+                                        <tr class="row-even">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.gaussian_curvature"
                                                    title="CurvatureProperty.CurvatureProperty.gaussian_curvature"><code
@@ -229,7 +225,7 @@
                                                     class="pre">gaussian_curvature</span></code></a></td>
                                             <td>Gaussian curvature</td>
                                         </tr>
-                                        <tr class="row-even">
+                                        <tr class="row-odd">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.k1"
                                                    title="CurvatureProperty.CurvatureProperty.k1"><code
@@ -237,7 +233,7 @@
                                                     class="pre">k1</span></code></a></td>
                                             <td>Maximal principal curvature value</td>
                                         </tr>
-                                        <tr class="row-odd">
+                                        <tr class="row-even">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.k2"
                                                    title="CurvatureProperty.CurvatureProperty.k2"><code
@@ -245,13 +241,13 @@
                                                     class="pre">k2</span></code></a></td>
                                             <td>Minimal principal curvature value</td>
                                         </tr>
-                                        <tr class="row-even">
+                                        <tr class="row-odd">
                                             <td><a class="reference internal"
                                                    href="#CurvatureProperty.CurvatureProperty.mean_curvature"
                                                    title="CurvatureProperty.CurvatureProperty.mean_curvature"><code
                                                     class="xref py py-obj docutils literal notranslate"><span
                                                     class="pre">mean_curvature</span></code></a></td>
-                                            <td></td>
+                                            <td>Mean curvature values</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -276,7 +272,7 @@
                                                     <tbody valign="top">
                                                     <tr class="field-odd field">
                                                         <th class="field-name">return:</th>
-                                                        <td class="field-body">mean curvature (temoprary)</td>
+                                                        <td class="field-body">min and max curvature</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -308,16 +304,6 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <dl class="attribute">
-                                        <dt id="CurvatureProperty.CurvatureProperty.Curvature">
-                                            <code class="descname">Curvature</code><a class="headerlink"
-                                                                                      href="#CurvatureProperty.CurvatureProperty.Curvature"
-                                                                                      title="Permalink to this definition">¶</a>
-                                        </dt>
-                                        <dd><p>Points’ curvature values</p>
-                                        </dd>
-                                    </dl>
-
                                     <dl class="attribute">
                                         <dt id="CurvatureProperty.CurvatureProperty.Shape_Index">
                                             <code class="descname">Shape_Index</code><a class="headerlink"
@@ -371,7 +357,7 @@
                                                 <tbody valign="top">
                                                 <tr class="field-odd field">
                                                     <th class="field-name">Returns:</th>
-                                                    <td class="field-body">mean curvature (temoprary)</td>
+                                                    <td class="field-body">min and max curvature</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -404,7 +390,8 @@
                                                                                            href="#CurvatureProperty.CurvatureProperty.mean_curvature"
                                                                                            title="Permalink to this definition">¶</a>
                                         </dt>
-                                        <dd></dd>
+                                        <dd><p>Mean curvature values</p>
+                                        </dd>
                                     </dl>
 
                                     <dl class="method">
@@ -479,14 +466,14 @@
                 </div>
                 <footer>
 
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-                        <a href="CurvatureFactory.html" class="btn btn-neutral float-right" title="Curvature Factory"
-                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+                        <a accesskey="n" class="btn btn-neutral float-right" href="CurvatureFactory.html" rel="next"
+                           title="Curvature Factory">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="Curvature.html" class="btn btn-neutral" title="Curvature" accesskey="p"
-                           rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral" href="Curvature.html" rel="prev"
+                           title="Curvature"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -514,31 +501,29 @@
 
 
 <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
 </script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
 </script>
 
 </body>

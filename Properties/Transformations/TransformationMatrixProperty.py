@@ -2,7 +2,8 @@ from warnings import warn
 
 import numpy as np
 
-from BaseProperty import BaseProperty
+from Properties.BaseProperty import BaseProperty
+
 
 
 class TransformationMatrixProperty(BaseProperty):
@@ -19,7 +20,7 @@ class TransformationMatrixProperty(BaseProperty):
         :param translationMatrix: 3x1 or 3x3 translation matrix 
         :param rotationMatrix:  3x3 rotation matrix
         
-        :type points: PointSet
+        :type points: PointSet.PointSet
         :type transformationMatrix: np.ndarray
         :type translationMatrix: np.ndarray
         :type rotationMatrix: np.ndarray
@@ -27,15 +28,37 @@ class TransformationMatrixProperty(BaseProperty):
         """
         super(TransformationMatrixProperty, self).__init__(points)
         if transformationMatrix is not None:
-            self.setValues(transformationMatrix)
+            self.load(transformationMatrix)
 
         if rotationMatrix is not None:
-            self.setValues(rotationMatrix)
+            self.load(rotationMatrix)
 
         if translationMatrix is not None:
-            self.setValues(translationMatrix)
+            self.load(translationMatrix)
 
-    def setValues(self, *args, **kwargs):
+    def ToNumpy(self):
+        """
+        XYZ rotated
+        :return:  the rotated XYZ as numpy array
+
+        :rtype: np.array
+
+        """
+        pts = self.rotationMatrix.dot(self.Points.ToNumpy().T)
+        return pts.T
+
+    def ToPointSet(self):
+        """
+        Rotated point set
+
+        :return: a point set after rotation
+
+        :rtype: PointSet
+        """
+        from DataClasses.PointSet import PointSet
+        return PointSet(self.ToNumpy(), path=self.Points.path, intensity=self.Points.Intensity)
+
+    def load(self, *args, **kwargs):
         """
         Sets the rotation and translation matrices
 

@@ -1,259 +1,688 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Panorama &mdash; infragit 1a documentation</title>
+  
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  
 
-    <title>Panorama &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
+    
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Panorama Property" href="PanoramaProperty.html"/>
-    <link rel="prev" title="Normals Factory" href="../Normals/NormalsFactory.html"/>
-
-
-    <script src="../../_static/js/modernizr.min.js"></script>
-
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Saliency" href="../Saliency/Saliency.html" />
+    <link rel="prev" title="Neighborhood" href="../Neighborhood/Neighborhood.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
-
-<div class="wy-grid-for-nav">
-
-
+   
+  <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> infragit
+          
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                </a>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1 current"><a class="reference internal"
-                                                      href="../BaseProperty.html">Properties</a>
-                        <ul class="current">
-                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2 current"><a class="current reference internal" href="#">Panorama</a>
-                                <ul>
-                                    <li class="toctree-l3"><a class="reference internal" href="PanoramaProperty.html">Panorama
-                                        Property</a></li>
-                                    <li class="toctree-l3"><a class="reference internal" href="PanoramaFactory.html">Panorama
-                                        Factory</a></li>
-                                </ul>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../SphericalCoordinates/Spherical.html">Spherical
-                                Coordinates</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Transformations/Transformation.html">Transformations</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
-                                Property</a></li>
-                        </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
-                        functions and factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
-                        Factory Documentation</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
-                        Utilities</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../BaseProperty.html">Properties</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Normals/Normals.html">Normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Panorama</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#panorama-property">Panorama Property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#panorama-factory">Panorama Factory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SphericalCoordinates/Spherical.html">Spherical Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Transformations/Transformation.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
-        <nav class="wy-nav-top" aria-label="top navigation">
-
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-            <a href="../../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">infragit</a>
+        
+      </nav>
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../../index.html">Docs</a> &raquo;</li>
-
-                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
-
-                        <li>Panorama</li>
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
 
 
-                        <li class="wy-breadcrumbs-aside">
 
 
-                            <a href="../../_sources/Properties/Panorama/Panorama.rst.txt" rel="nofollow"> View page
-                                source</a>
 
 
-                        </li>
-
-                    </ul>
 
 
-                    <hr/>
-                </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="panorama">
-                            <h1>Panorama<a class="headerlink" href="#panorama" title="Permalink to this headline">¶</a>
-                            </h1>
-                            <p>The Panorama property holds the panorama created from the point cloud, depending on a
-                                property
-                                (<a class="reference internal"
-                                    href="../Colors/ColorProperty.html#ColorProperty.ColorProperty"
-                                    title="ColorProperty.ColorProperty"><code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">ColorProperty.ColorProperty</span></code></a>,
-                                <a class="reference internal"
-                                   href="../Curvature/CurvatureProperty.html#CurvatureProperty.CurvatureProperty"
-                                   title="CurvatureProperty.CurvatureProperty"><code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">CurvatureProperty.CurvatureProperty</span></code></a>,
-                                etc.).</p>
-                            <blockquote>
-                                <div>These are created based on <code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">SphericalCoordinates.SphericalCoordinates</span></code>
-                                    class).
-                                </div>
-                            </blockquote>
-                            <div class="toctree-wrapper compound">
-                                <ul>
-                                    <li class="toctree-l1"><a class="reference internal" href="PanoramaProperty.html">Panorama
-                                        Property</a></li>
-                                    <li class="toctree-l1"><a class="reference internal" href="PanoramaFactory.html">Panorama
-                                        Factory</a></li>
-                                </ul>
-                            </div>
-                        </div>
 
 
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-
-                        <a href="PanoramaProperty.html" class="btn btn-neutral float-right" title="Panorama Property"
-                           accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="../Normals/NormalsFactory.html" class="btn btn-neutral" title="Normals Factory"
-                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-
-                    </div>
 
 
-                    <hr/>
 
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students.
+<div role="navigation" aria-label="breadcrumbs navigation">
 
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+        
+      <li>Panorama</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Properties/Panorama/Panorama.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
 
-                </footer>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="panorama">
+<h1>Panorama<a class="headerlink" href="#panorama" title="Permalink to this headline">¶</a></h1>
+<p>The Panorama property holds the panorama created from the point cloud, depending on a property
+(<code class="xref py py-class docutils literal notranslate"><span class="pre">ColorProperty.ColorProperty</span></code>, <a class="reference internal" href="../Curvature/Curvature.html#CurvatureProperty.CurvatureProperty" title="CurvatureProperty.CurvatureProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">CurvatureProperty.CurvatureProperty</span></code></a>, etc.).
+These are created based on <code class="xref py py-class docutils literal notranslate"><span class="pre">SphericalCoordinates.SphericalCoordinates</span></code> class).</p>
+<div class="section" id="panorama-property">
+<h2>Panorama Property<a class="headerlink" href="#panorama-property" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PanoramaProperty.PanoramaProperty">
+<em class="property">class </em><code class="descclassname">PanoramaProperty.</code><code class="descname">PanoramaProperty</code><span class="sig-paren">(</span><em>sphericalCoordinates</em>, <em>rowIndexes=None</em>, <em>columnIndexes=None</em>, <em>panoramaData=None</em>, <em>intensityData=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>A panoramic representation of the point set.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>For the Scanstation C10 the measurements’ angular resolution for both elevation and azimuth directions:</p>
+<ul class="last simple">
+<li>Low: :math: 0.2^circ</li>
+<li>Medium: :math: 0.11^circ</li>
+<li>High: :math: 0.057^circ</li>
+<li>Highest: :math: 0.028^circ</li>
+</ul>
+</div>
+<p>The panorama will always include a range image and will include intensity image data if available, and other properties arranges as panorama, if available.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.Size" title="PanoramaProperty.PanoramaProperty.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td>The image panorama shape</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.azimuth_spacing" title="PanoramaProperty.PanoramaProperty.azimuth_spacing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">azimuth_spacing</span></code></a></td>
+<td>Azimuth angle resolution size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.column_indexes" title="PanoramaProperty.PanoramaProperty.column_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_indexes</span></code></a></td>
+<td>The column index of each point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.elevation_spacing" title="PanoramaProperty.PanoramaProperty.elevation_spacing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">elevation_spacing</span></code></a></td>
+<td>Elevation angle resolution size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.getValues" title="PanoramaProperty.PanoramaProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a></td>
+<td>Get a specific characteristic value of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.intensityImage" title="PanoramaProperty.PanoramaProperty.intensityImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">intensityImage</span></code></a></td>
+<td>The intensity data as panorama image.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.max_azimuth" title="PanoramaProperty.PanoramaProperty.max_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_azimuth</span></code></a></td>
+<td>Maximal azimuth value in data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.max_elevation" title="PanoramaProperty.PanoramaProperty.max_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_elevation</span></code></a></td>
+<td>Maximal elevation value in data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.min_azimuth" title="PanoramaProperty.PanoramaProperty.min_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_azimuth</span></code></a></td>
+<td>Minimal azimuth value in data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.min_elevation" title="PanoramaProperty.PanoramaProperty.min_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">min_elevation</span></code></a></td>
+<td>Minimal elevation value in data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.panoramaImage" title="PanoramaProperty.PanoramaProperty.panoramaImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">panoramaImage</span></code></a></td>
+<td>The data as panorama image.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.panoramaIndex" title="PanoramaProperty.PanoramaProperty.panoramaIndex"><code class="xref py py-obj docutils literal notranslate"><span class="pre">panoramaIndex</span></code></a></td>
+<td>The point indices in a panorama.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.rangeImage" title="PanoramaProperty.PanoramaProperty.rangeImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rangeImage</span></code></a></td>
+<td>The range as panorama</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.row_indexes" title="PanoramaProperty.PanoramaProperty.row_indexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">row_indexes</span></code></a></td>
+<td>The row index of each point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.sphericalCoordinates" title="PanoramaProperty.PanoramaProperty.sphericalCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphericalCoordinates</span></code></a></td>
+<td>Point in spherical coordinates</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.void_data" title="PanoramaProperty.PanoramaProperty.void_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">void_data</span></code></a></td>
+<td>Value set for void areas</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_BaseProperty__getPointProperty</span></code>(idx)</td>
+<td>Retrieve the point property (object or value) of a specific point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.adaptive_smoothing" title="PanoramaProperty.PanoramaProperty.adaptive_smoothing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adaptive_smoothing</span></code></a>(phenomena_size[,&nbsp;…])</td>
+<td>Adaptive smoothing of the panorama image according to the range image.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.computePanoramaDerivatives_adaptive" title="PanoramaProperty.PanoramaProperty.computePanoramaDerivatives_adaptive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computePanoramaDerivatives_adaptive</span></code></a>(order[,&nbsp;…])</td>
+<td>Numerical and adaptive computation of central derivatives in x and y directions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.computePanoramaGradient_adaptive" title="PanoramaProperty.PanoramaProperty.computePanoramaGradient_adaptive"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computePanoramaGradient_adaptive</span></code></a>([…])</td>
+<td>Compute panorama gradient adaptively and numerically</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.extract_area" title="PanoramaProperty.PanoramaProperty.extract_area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_area</span></code></a>(left_top_corner,&nbsp;…)</td>
+<td>Create a new panorama according to a bounding box</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(**kwargs)</td>
+<td>Loads all values of a property.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaProperty.PanoramaProperty.pano2rad" title="PanoramaProperty.PanoramaProperty.pano2rad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pano2rad</span></code></a>()</td>
+<td>Convert the axes of the panorama to their value as radians</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.Size">
+<code class="descname">Size</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.Size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image panorama shape</p>
+</dd></dl>
 
-            </div>
-        </div>
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.adaptive_smoothing">
+<code class="descname">adaptive_smoothing</code><span class="sig-paren">(</span><em>phenomena_size</em>, <em>img_to_smooth=None</em>, <em>verbose=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.adaptive_smoothing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.adaptive_smoothing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adaptive smoothing of the panorama image according to the range image.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<blockquote>
+<div>The function is implemented similar to other smoothing functions (e.g., <cite>cv2.GaussianBlur</cite>; <cite>cv2.Blur</cite>), so
+different kinds of smoothing functions will be applicable by sending (without <cite>if</cite>).
+This means that the function will return computed <cite>sigma</cite> and <cite>ksize</cite> according to
+the average - and they will be returned in the variable.</div></blockquote>
+<p class="last">An adaptive smoothing is implemented as a family of convolution kernels characterized by
+different <span class="math notranslate nohighlight">\(\sigma\)</span> values where:</p>
+</div>
+<div class="math notranslate nohighlight">
+\[d(\rho )=\frac{D}{\rho \Delta }\]</div>
+<p>with <span class="math notranslate nohighlight">\(D\)</span>, the object-space size of the window, and <span class="math notranslate nohighlight">\(\Delta\)</span> the angular sampling resolution
+and <span class="math notranslate nohighlight">\(\rho\)</span> is the measured range.</p>
+<p><a class="reference internal" href="../../zreferences.html#arav2013" id="id1">[Ara13]</a></p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add optionality for adaptive smoothing for other properties panoramas, where adaptation is according to
+range information</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>phenomena_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the minimal size of the phenomena that we don’t want to smooth (:math: <cite>D</cite> above)
+default: 0.2 m (and in cases that it is sent 0)</li>
+<li><strong>img_to_smooth</strong> (<em>np.ndarray</em>) – the image that should be smoothed.</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print kmean and sigma mean</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">smoothed image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-    </section>
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.azimuth_spacing">
+<code class="descname">azimuth_spacing</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.azimuth_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Azimuth angle resolution size</p>
+</dd></dl>
 
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.column_indexes">
+<code class="descname">column_indexes</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.column_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column index of each point</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.computePanoramaDerivatives_adaptive">
+<code class="descname">computePanoramaDerivatives_adaptive</code><span class="sig-paren">(</span><em>order</em>, <em>ksize=0.2</em>, <em>sigma=1.0</em>, <em>img_to_compute='panoramaData'</em>, <em>blur_window=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.computePanoramaDerivatives_adaptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.computePanoramaDerivatives_adaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerical and adaptive computation of central derivatives in x and y directions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>order</strong> – the derivatives order (1 or 2)</li>
+<li><strong>ksize</strong> – world window size (meters). Default: 0.2 m</li>
+<li><strong>sigma</strong> – sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</li>
+<li><strong>img_to_compute</strong> – if sent, the derivatives will be computed on this image, according to the range image. Default: ‘panoramaData’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>String possibilities:</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘intensity’</li>
+<li>‘range’</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blur_window</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – tuple of window size for blurring</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">tuple of the derivatives in the following order: <span class="math notranslate nohighlight">\((d_{\theta}, d_{\phi}, d__{\theta\theta}, d{\phi\phi}, d_{\theta\phi})\)</span></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.computePanoramaGradient_adaptive">
+<code class="descname">computePanoramaGradient_adaptive</code><span class="sig-paren">(</span><em>gradientType='L1'</em>, <em>ksize=0.2</em>, <em>sigma=1</em>, <em>img_to_compute='panoramaData'</em>, <em>blur_window=(0</em>, <em>0)</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.computePanoramaGradient_adaptive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.computePanoramaGradient_adaptive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute panorama gradient adaptively and numerically</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>gradientType</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – ‘L1’ L1 norm of grad(I); ‘L2’ L2-norm of grad(I); ‘LoG’ Laplacian of gaussian</li>
+<li><strong>ksize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – world window size (meters). Default: 0.2 m</li>
+<li><strong>resolution</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – kernel resolution</li>
+<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – sigma for gaussian blurring. Default: 1. If sigma=0 no smoothing is carried out</li>
+<li><strong>img_to_compute</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>np.ndarray</em>) – if sent, the derivatives will be computed on this image, according to the range image. Default: ‘panoramaData’</li>
+<li><strong>blur_window</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – tuple of window size for blurring</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an image of the gradient magnitude</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.elevation_spacing">
+<code class="descname">elevation_spacing</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.elevation_spacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Elevation angle resolution size</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.extract_area">
+<code class="descname">extract_area</code><span class="sig-paren">(</span><em>left_top_corner</em>, <em>right_bottom_corner</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.extract_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.extract_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new panorama according to a bounding box</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>left_top_corner</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – (row, column) of the left top corner of the extracted area</li>
+<li><strong>right_bottom_corner</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – (row, column) of the right bottom corner of the extracted area</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a pointsubset according to the bounding box</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">TODO:</th><td class="field-body"><p class="first last">Return panorama property of the subset and not the subset</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.getValues">
+<code class="descname">getValues</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific characteristic value of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">value for each point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This function needs to be overwritten for each inheriting property. It is empty at the BaseProperty</p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.intensityImage">
+<code class="descname">intensityImage</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.intensityImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>The intensity data as panorama image. If no data stored, it will return None.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.max_azimuth">
+<code class="descname">max_azimuth</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.max_azimuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximal azimuth value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.max_elevation">
+<code class="descname">max_elevation</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.max_elevation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximal elevation value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.min_azimuth">
+<code class="descname">min_azimuth</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.min_azimuth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimal azimuth value in data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.min_elevation">
+<code class="descname">min_elevation</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.min_elevation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimal elevation value in data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="PanoramaProperty.PanoramaProperty.pano2rad">
+<code class="descname">pano2rad</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaProperty.html#PanoramaProperty.pano2rad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.pano2rad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the axes of the panorama to their value as radians</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">azimuth and elevation angles of the panorama</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.panoramaImage">
+<code class="descname">panoramaImage</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.panoramaImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data as panorama image. If no data stored, the range image is returned</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.panoramaIndex">
+<code class="descname">panoramaIndex</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.panoramaIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>The point indices in a panorama. If no point exist the value is NaN</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.rangeImage">
+<code class="descname">rangeImage</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.rangeImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>The range as panorama</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.row_indexes">
+<code class="descname">row_indexes</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.row_indexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>The row index of each point</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.sphericalCoordinates">
+<code class="descname">sphericalCoordinates</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.sphericalCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Point in spherical coordinates</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PanoramaProperty.PanoramaProperty.void_data">
+<code class="descname">void_data</code><a class="headerlink" href="#PanoramaProperty.PanoramaProperty.void_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value set for void areas</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="panorama-factory">
+<h2>Panorama Factory<a class="headerlink" href="#panorama-factory" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="PanoramaFactory.PanoramaFactory">
+<em class="property">class </em><code class="descclassname">PanoramaFactory.</code><code class="descname">PanoramaFactory</code><a class="reference internal" href="../../_modules/PanoramaFactory.html#PanoramaFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaFactory.PanoramaFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a panoramic view from point set based on a certain property (e.g. range, intesity, etc.)
+The panoramic view is stored as a PanoramaProperty object</p>
+<blockquote>
+<div><p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PanoramaFactory.PanoramaFactory.CreatePanorama" title="PanoramaFactory.PanoramaFactory.CreatePanorama"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CreatePanorama</span></code></a>(points[,&nbsp;azimuthSpacing,&nbsp;…])</td>
+<td>Create a PanoramaProperty object from a point set.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_PanoramaFactory__computePanoramaIndices</span></code>(…)</td>
+<td>Find the boundaries and the indices of the panorama</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_PanoramaFactory__compute_void_as_mean</span></code>(ranges)</td>
+<td>Sets the void value as the mean value of the ranges</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="classmethod">
+<dt id="PanoramaFactory.PanoramaFactory.CreatePanorama">
+<em class="property">classmethod </em><code class="descname">CreatePanorama</code><span class="sig-paren">(</span><em>points</em>, <em>azimuthSpacing=0.057</em>, <em>elevationSpacing=0.057</em>, <em>property_array=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PanoramaFactory.PanoramaFactory.CreatePanorama" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a PanoramaProperty object from a point set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a><em> or </em><em>BaseProperty</em>) – The point set to create the panorama from can be either a PointSet, PointSubSet or
+BaseProperty-derived objects</li>
+<li><strong>azimuthSpacing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The spacing between two points of the point set in the azimuth direction (scan property)</li>
+<li><strong>elevationSpacing</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – The spacing between two points of the point set in the elevation direction</li>
+<li><strong>property_array</strong> (<em>numpy.array</em>) – if the values of the property to present cannot be retrieved by a simple <code class="docutils literal notranslate"><span class="pre">getValues()</span></code></li>
+<li><strong>voidData</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the value for NoData. Default: 250 (meters)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">panorama_property</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty">PanoramaProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
-<script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Saliency/Saliency.html" class="btn btn-neutral float-right" title="Saliency" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../Neighborhood/Neighborhood.html" class="btn btn-neutral float-left" title="Neighborhood" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-</script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-<script type="text/javascript">
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
+  </script>
 
-</script>
+  
+  
+    
+   
 
 </body>
 </html>

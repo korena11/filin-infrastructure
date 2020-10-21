@@ -6,17 +6,17 @@
 <head>
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Panorama Factory &mdash; infragit 1a documentation</title>
 
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Neighborhood" href="../Neighborhood/Neighborhood.html"/>
-    <link rel="prev" title="Panorama Property" href="PanoramaProperty.html"/>
+    <link href="../../_static/css/theme.css" rel="stylesheet" type="text/css"/>
+    <link href="../../_static/pygments.css" rel="stylesheet" type="text/css"/>
+    <link href="../../genindex.html" rel="index" title="Index"/>
+    <link href="../../search.html" rel="search" title="Search"/>
+    <link href="../Saliency/Saliency.html" rel="next" title="Saliency"/>
+    <link href="PanoramaProperty.html" rel="prev" title="Panorama Property"/>
 
 
     <script src="../../_static/js/modernizr.min.js"></script>
@@ -29,12 +29,12 @@
 <div class="wy-grid-for-nav">
 
 
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+    <nav class="wy-nav-side" data-toggle="wy-nav-shift">
         <div class="wy-side-scroll">
             <div class="wy-side-nav-search">
 
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+                <a class="icon icon-home" href="../../index.html"> infragit
 
 
                 </a>
@@ -46,17 +46,17 @@
 
 
                 <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
+                    <form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+                        <input name="q" placeholder="Search docs" type="text"/>
+                        <input name="check_keywords" type="hidden" value="yes"/>
+                        <input name="area" type="hidden" value="default"/>
                     </form>
                 </div>
 
 
             </div>
 
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+            <div aria-label="main navigation" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
 
 
                 <ul class="current">
@@ -74,6 +74,8 @@
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
                                                       href="../Normals/Normals.html">Normals</a></li>
+                            <li class="toctree-l2"><a class="reference internal"
+                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
                             <li class="toctree-l2 current"><a class="reference internal"
                                                               href="Panorama.html">Panorama</a>
                                 <ul class="current">
@@ -83,8 +85,8 @@
                                         Factory</a></li>
                                 </ul>
                             </li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Neighborhood/Neighborhood.html">Neighborhood</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a>
+                            </li>
                             <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
                                 Property</a></li>
                             <li class="toctree-l2"><a class="reference internal"
@@ -95,6 +97,8 @@
                             </li>
                             <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
                                 Property</a></li>
+                            <li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal"
@@ -114,12 +118,12 @@
         </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+    <section class="wy-nav-content-wrap" data-toggle="wy-nav-shift">
 
 
-        <nav class="wy-nav-top" aria-label="top navigation">
+        <nav aria-label="top navigation" class="wy-nav-top">
 
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+            <i class="fa fa-bars" data-toggle="wy-nav-top"></i>
             <a href="../../index.html">infragit</a>
 
         </nav>
@@ -130,7 +134,7 @@
             <div class="rst-content">
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
+                <div aria-label="breadcrumbs navigation" role="navigation">
 
                     <ul class="wy-breadcrumbs">
 
@@ -157,7 +161,7 @@
 
                     <hr/>
                 </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+                <div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
                     <div itemprop="articleBody">
 
                         <div class="section" id="panorama-factory">
@@ -205,6 +209,18 @@
                                                     <td>Creates panorama with the property as the values of the
                                                         pixels.
                                                     </td>
+                                                </tr>
+                                                <tr class="row-odd">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_PanoramaFactory__computePanoramaIndices</span></code>(…)
+                                                    </td>
+                                                    <td>Find the boundaries and the indices of the panorama</td>
+                                                </tr>
+                                                <tr class="row-even">
+                                                    <td><code class="xref py py-obj docutils literal notranslate"><span
+                                                            class="pre">_PanoramaFactory__compute_void_as_mean</span></code>(ranges)
+                                                    </td>
+                                                    <td>Sets the void value as the mean value of the ranges</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -288,9 +304,10 @@
                                         <dt id="PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty">
                                             <em class="property">classmethod </em><code class="descname">CreatePanorama_byProperty</code><span
                                                 class="sig-paren">(</span><em>pointSet_property</em>, <em>azimuthSpacing=0.057</em>,
-                                            <em>elevationSpacing=0.057</em>, <em>intensity=False</em>, <em>**kwargs</em><span
-                                                class="sig-paren">)</span><a class="reference internal"
-                                                                             href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byProperty"><span
+                                            <em>elevationSpacing=0.057</em>, <em>intensity=False</em>, <em>property_array=None</em>,
+                                            <em>**kwargs</em><span class="sig-paren">)</span><a
+                                                class="reference internal"
+                                                href="../../_modules/PanoramaFactory.html#PanoramaFactory.CreatePanorama_byProperty"><span
                                                 class="viewcode-link">[source]</span></a><a class="headerlink"
                                                                                             href="#PanoramaFactory.PanoramaFactory.CreatePanorama_byProperty"
                                                                                             title="Permalink to this definition">¶</a>
@@ -303,25 +320,53 @@
                                                 <tr class="field-odd field">
                                                     <th class="field-name">Parameters:</th>
                                                     <td class="field-body">
+                                                        <ul class="first last simple">
+                                                            <li><strong>pointSet_property</strong> – any PointSet
+                                                                property according to which the pixel’s value should be
+                                                            </li>
+                                                            <li><strong>azimuthSpacing</strong> – The spacing between
+                                                                two points of the point set in the azimuth direction
+                                                                (scan property)
+                                                            </li>
+                                                            <li><strong>elevationSpacing</strong> – The spacing between
+                                                                two points of the point set in the elevation direction
+                                                            </li>
+                                                            <li><strong>property_array</strong> – if the values of the
+                                                                property to present cannot be retrieved by a simple
+                                                                <code class="docutils literal notranslate"><span
+                                                                        class="pre">getValues()</span></code></li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="highlight-python notranslate">
+                                                <div class="highlight"><pre><span></span><span
+                                                        class="n">PanoramaFactory</span><span class="o">.</span><span
+                                                        class="n">CreatePanorama_byProperty</span><span
+                                                        class="p">(</span><span class="n">curvatureProperty</span><span
+                                                        class="p">,</span> <span class="n">azimuthSpacing</span><span
+                                                        class="o">=</span><span class="mf">0.057</span><span
+                                                        class="p">,</span> <span class="n">elevationSpacing</span><span
+                                                        class="o">=</span><span class="mf">0.057</span><span
+                                                        class="p">,</span>
+                      <span class="n">intensity</span><span class="o">=</span><span class="bp">False</span><span
+                                                            class="p">,</span> <span
+                                                            class="n">property_array</span><span class="o">=</span><span
+                                                            class="n">curvatureProperty</span><span
+                                                            class="o">.</span><span class="n">k1</span><span
+                                                            class="p">)</span>
+</pre>
+                                                </div>
+                                            </div>
+                                            <table class="docutils field-list" frame="void" rules="none">
+                                                <col class="field-name"/>
+                                                <col class="field-body"/>
+                                                <tbody valign="top">
+                                                <tr class="field-odd field">
+                                                    <th class="field-name">Parameters:</th>
+                                                    <td class="field-body">
                                                         <ul class="first simple">
-                                                            <li><strong>pointSet_property</strong>
-                                                                (<em>BaseProperty</em>) – any PointSet property
-                                                                according to which the pixel’s value should be
-                                                            </li>
-                                                            <li><strong>azimuthSpacing</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – The
-                                                                spacing between two points of the point set in the
-                                                                azimuth direction (scan property)
-                                                            </li>
-                                                            <li><strong>elevationSpacing</strong> (<a
-                                                                    class="reference external"
-                                                                    href="https://docs.python.org/3/library/functions.html#float"
-                                                                    title="(in Python v3.7)"><em>float</em></a>) – The
-                                                                spacing between two points of the point set in the
-                                                                elevation direction
-                                                            </li>
                                                             <li><strong>intensity</strong> – if the pixel’s value should
                                                                 be the intensity value.
                                                             </li>
@@ -370,15 +415,14 @@
                 </div>
                 <footer>
 
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+                    <div aria-label="footer navigation" class="rst-footer-buttons" role="navigation">
 
-                        <a href="../Neighborhood/Neighborhood.html" class="btn btn-neutral float-right"
-                           title="Neighborhood" accesskey="n" rel="next">Next <span
-                                class="fa fa-arrow-circle-right"></span></a>
+                        <a accesskey="n" class="btn btn-neutral float-right" href="../Saliency/Saliency.html" rel="next"
+                           title="Saliency">Next <span class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="PanoramaProperty.html" class="btn btn-neutral" title="Panorama Property" accesskey="p"
-                           rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+                        <a accesskey="p" class="btn btn-neutral" href="PanoramaProperty.html" rel="prev"
+                           title="Panorama Property"><span class="fa fa-arrow-circle-left"></span> Previous</a>
 
                     </div>
 
@@ -406,31 +450,29 @@
 
 
 <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT: '../../',
+        VERSION: '1a',
+        LANGUAGE: 'None',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE: true,
+        SOURCELINK_SUFFIX: '.txt'
+    };
 </script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="../../_static/jquery.js" type="text/javascript"></script>
+<script src="../../_static/underscore.js" type="text/javascript"></script>
+<script src="../../_static/doctools.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+        type="text/javascript"></script>
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
+<script src="../../_static/js/theme.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-
+    jQuery(function () {
+        SphinxRtdTheme.Navigation.enable(true);
+    });
 </script>
 
 </body>

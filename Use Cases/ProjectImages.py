@@ -3,7 +3,7 @@ from string import split  # Used in matrix file reading
 import numpy as np  # Numpy arrays
 from matplotlib.image import imread  # Read image
 
-from ColorFactory import ColorFactory
+from Color.ColorFactory import ColorFactory
 from IOFactory import IOFactory
 from VisualizationVTK import VisualizationVTK
 

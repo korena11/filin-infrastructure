@@ -1,413 +1,1220 @@
+
+
 <!DOCTYPE html>
-<!--[if IE 8]>
-<html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="en"> <!--<![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Neighborhood &mdash; infragit 1a documentation</title>
+  
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  
 
-    <title>Neighborhood &mdash; infragit 1a documentation</title>
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
+    
 
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css"/>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
-    <link rel="index" title="Index" href="../../genindex.html"/>
-    <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="next" title="Neighbors Property" href="NeighborhoodProperty.html"/>
-    <link rel="prev" title="Panorama Factory" href="../Panorama/PanoramaFactory.html"/>
-
-
-    <script src="../../_static/js/modernizr.min.js"></script>
-
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Panorama" href="../Panorama/Panorama.html" />
+    <link rel="prev" title="Normals" href="../Normals/Normals.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
-
-<div class="wy-grid-for-nav">
-
-
+   
+  <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-        <div class="wy-side-scroll">
-            <div class="wy-side-nav-search">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
+          
+            <a href="../../index.html" class="icon icon-home"> infragit
+          
 
-                <a href="../../index.html" class="icon icon-home"> infragit
+          
+          </a>
 
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
 
-                </a>
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
 
-
-                <div class="version">
-                    0.1.0
-                </div>
-
-
-                <div role="search">
-                    <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-                        <input type="text" name="q" placeholder="Search docs"/>
-                        <input type="hidden" name="check_keywords" value="yes"/>
-                        <input type="hidden" name="area" value="default"/>
-                    </form>
-                </div>
-
-
-            </div>
-
-            <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-
-
-                <ul class="current">
-                    <li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set
-                        classes</a></li>
-                    <li class="toctree-l1 current"><a class="reference internal"
-                                                      href="../BaseProperty.html">Properties</a>
-                        <ul class="current">
-                            <li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Normals/Normals.html">Normals</a></li>
-                            <li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a>
-                            </li>
-                            <li class="toctree-l2 current"><a class="current reference internal"
-                                                              href="#">Neighborhood</a>
-                                <ul>
-                                    <li class="toctree-l3"><a class="reference internal"
-                                                              href="NeighborhoodProperty.html">Neighbors Property</a>
-                                    </li>
-                                    <li class="toctree-l3"><a class="reference internal" href="NeighborsFactory.html">Neighbors
-                                        Factory</a></li>
-                                    <li class="toctree-l3"><a class="reference internal" href="#point-neighborhood">Point
-                                        Neighborhood</a></li>
-                                </ul>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation
-                                Property</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../SphericalCoordinates/Spherical.html">Spherical
-                                Coordinates</a></li>
-                            <li class="toctree-l2"><a class="reference internal"
-                                                      href="../Transformations/Transformation.html">Transformations</a>
-                            </li>
-                            <li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation
-                                Property</a></li>
-                        </ul>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal"
-                                              href="../../Factories/Factories.html">Factories</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set
-                        functions and factory</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen
-                        Factory Documentation</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">General
-                        Utilities</a></li>
-                    <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization
-                        Classes</a></li>
-                </ul>
-
-
-            </div>
+          
         </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../BaseProperty.html">Properties</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../Colors/Colors.html">Colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Curvature/Curvature.html">Curvature</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../EigenProperty.html">Eigen Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Normals/Normals.html">Normals</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Neighborhood</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#point-neighborhood">Point Neighborhood</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neighbors-property">Neighbors Property</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#neighbors-factory">Neighbors Factory</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Panorama/Panorama.html">Panorama</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Saliency/Saliency.html">Saliency</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SegmentationProperty.html">Segmentation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../SphericalCoordinates/Spherical.html">Spherical Coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Transformations/Transformation.html">Transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../TriangulationProperty.html">Triangulation Property</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Tensors/tensorClass.html">Tensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">Different utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
-
-        <nav class="wy-nav-top" aria-label="top navigation">
-
-            <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-            <a href="../../index.html">infragit</a>
-
-        </nav>
-
-
-        <div class="wy-nav-content">
-
-            <div class="rst-content">
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">infragit</a>
+        
+      </nav>
 
 
-                <div role="navigation" aria-label="breadcrumbs navigation">
-
-                    <ul class="wy-breadcrumbs">
-
-                        <li><a href="../../index.html">Docs</a> &raquo;</li>
-
-                        <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
-
-                        <li>Neighborhood</li>
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
 
 
-                        <li class="wy-breadcrumbs-aside">
 
 
-                            <a href="../../_sources/Properties/Neighborhood/Neighborhood.rst.txt" rel="nofollow"> View
-                                page source</a>
 
 
-                        </li>
-
-                    </ul>
 
 
-                    <hr/>
-                </div>
-                <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-                    <div itemprop="articleBody">
-
-                        <div class="section" id="neighborhood">
-                            <h1>Neighborhood<a class="headerlink" href="#neighborhood"
-                                               title="Permalink to this headline">¶</a></h1>
-                            <p>The neighborhood property holds all the neighbors for each point in the point cloud. Each
-                                neighborhood is defined by a
-                                <a class="reference internal" href="#PointNeighborhood.PointNeighborhood"
-                                   title="PointNeighborhood.PointNeighborhood"><code
-                                        class="xref py py-class docutils literal notranslate"><span class="pre">PointNeighborhood.PointNeighborhood</span></code></a>.
-                            </p>
-                            <div class="toctree-wrapper compound">
-                                <ul>
-                                    <li class="toctree-l1"><a class="reference internal"
-                                                              href="NeighborhoodProperty.html">Neighbors Property</a>
-                                    </li>
-                                    <li class="toctree-l1"><a class="reference internal" href="NeighborsFactory.html">Neighbors
-                                        Factory</a></li>
-                                </ul>
-                            </div>
-                            <div class="section" id="point-neighborhood">
-                                <h2>Point Neighborhood<a class="headerlink" href="#point-neighborhood"
-                                                         title="Permalink to this headline">¶</a></h2>
-                                <dl class="class">
-                                    <dt id="PointNeighborhood.PointNeighborhood">
-                                        <em class="property">class </em><code
-                                            class="descclassname">PointNeighborhood.</code><code class="descname">PointNeighborhood</code><span
-                                            class="sig-paren">(</span><em>radius</em>, <em>max_neighbor_num</em>, <em>num_pts</em>,
-                                        <em>idx</em>, <em>dist</em><span class="sig-paren">)</span><a
-                                            class="reference internal"
-                                            href="../../_modules/PointNeighborhood.html#PointNeighborhood"><span
-                                            class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                        href="#PointNeighborhood.PointNeighborhood"
-                                                                                        title="Permalink to this definition">¶</a>
-                                    </dt>
-                                    <dd><p class="rubric">Attributes</p>
-                                        <table border="1" class="longtable docutils">
-                                            <colgroup>
-                                                <col width="10%"/>
-                                                <col width="90%"/>
-                                            </colgroup>
-                                            <tbody valign="top">
-                                            <tr class="row-odd">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"
-                                                       title="PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">localRotatedNeighborhood</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.maxNN"
-                                                       title="PointNeighborhood.PointNeighborhood.maxNN"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">maxNN</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr class="row-odd">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices"
-                                                       title="PointNeighborhood.PointNeighborhood.neighborhoodIndices"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">neighborhoodIndices</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr class="row-even">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.numberOfNeighbors"
-                                                       title="PointNeighborhood.PointNeighborhood.numberOfNeighbors"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">numberOfNeighbors</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr class="row-odd">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.radius"
-                                                       title="PointNeighborhood.PointNeighborhood.radius"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">radius</span></code></a></td>
-                                                <td></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <p class="rubric">Methods</p>
-                                        <table border="1" class="longtable docutils">
-                                            <colgroup>
-                                                <col width="10%"/>
-                                                <col width="90%"/>
-                                            </colgroup>
-                                            <tbody valign="top">
-                                            <tr class="row-odd">
-                                                <td><a class="reference internal"
-                                                       href="#PointNeighborhood.PointNeighborhood.VisualizeNeighborhoodTriangulation"
-                                                       title="PointNeighborhood.PointNeighborhood.VisualizeNeighborhoodTriangulation"><code
-                                                        class="xref py py-obj docutils literal notranslate"><span
-                                                        class="pre">VisualizeNeighborhoodTriangulation</span></code></a>()
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <dl class="method">
-                                            <dt id="PointNeighborhood.PointNeighborhood.VisualizeNeighborhoodTriangulation">
-                                                <code class="descname">VisualizeNeighborhoodTriangulation</code><span
-                                                    class="sig-paren">(</span><span class="sig-paren">)</span><a
-                                                    class="reference internal"
-                                                    href="../../_modules/PointNeighborhood.html#PointNeighborhood.VisualizeNeighborhoodTriangulation"><span
-                                                    class="viewcode-link">[source]</span></a><a class="headerlink"
-                                                                                                href="#PointNeighborhood.PointNeighborhood.VisualizeNeighborhoodTriangulation"
-                                                                                                title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd>
-                                                <div class="admonition warning">
-                                                    <p class="first admonition-title">Warning</p>
-                                                    <p class="last">Not working</p>
-                                                </div>
-                                                <table class="docutils field-list" frame="void" rules="none">
-                                                    <col class="field-name"/>
-                                                    <col class="field-body"/>
-                                                    <tbody valign="top">
-                                                    <tr class="field-odd field">
-                                                        <th class="field-name">Returns:</th>
-                                                        <td class="field-body"></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.localRotatedNeighborhood">
-                                                <code class="descname">localRotatedNeighborhood</code><a
-                                                    class="headerlink"
-                                                    href="#PointNeighborhood.PointNeighborhood.localRotatedNeighborhood"
-                                                    title="Permalink to this definition">¶</a></dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.maxNN">
-                                                <code class="descname">maxNN</code><a class="headerlink"
-                                                                                      href="#PointNeighborhood.PointNeighborhood.maxNN"
-                                                                                      title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.neighborhoodIndices">
-                                                <code class="descname">neighborhoodIndices</code><a class="headerlink"
-                                                                                                    href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices"
-                                                                                                    title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.numberOfNeighbors">
-                                                <code class="descname">numberOfNeighbors</code><a class="headerlink"
-                                                                                                  href="#PointNeighborhood.PointNeighborhood.numberOfNeighbors"
-                                                                                                  title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                        <dl class="attribute">
-                                            <dt id="PointNeighborhood.PointNeighborhood.radius">
-                                                <code class="descname">radius</code><a class="headerlink"
-                                                                                       href="#PointNeighborhood.PointNeighborhood.radius"
-                                                                                       title="Permalink to this definition">¶</a>
-                                            </dt>
-                                            <dd></dd>
-                                        </dl>
-
-                                    </dd>
-                                </dl>
-
-                            </div>
-                        </div>
 
 
-                    </div>
-
-                </div>
-                <footer>
-
-                    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-
-                        <a href="NeighborhoodProperty.html" class="btn btn-neutral float-right"
-                           title="Neighbors Property" accesskey="n" rel="next">Next <span
-                                class="fa fa-arrow-circle-right"></span></a>
 
 
-                        <a href="../Panorama/PanoramaFactory.html" class="btn btn-neutral" title="Panorama Factory"
-                           accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-
-                    </div>
 
 
-                    <hr/>
 
-                    <div role="contentinfo">
-                        <p>
-                            &copy; Copyright 2018, Sagi Students.
+<div role="navigation" aria-label="breadcrumbs navigation">
 
-                        </p>
-                    </div>
-                    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
-                        href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a
-                        href="https://readthedocs.org">Read the Docs</a>.
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../BaseProperty.html">Properties</a> &raquo;</li>
+        
+      <li>Neighborhood</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/Properties/Neighborhood/Neighborhood.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
 
-                </footer>
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="neighborhood">
+<h1>Neighborhood<a class="headerlink" href="#neighborhood" title="Permalink to this headline">¶</a></h1>
+<p>The neighborhood property holds all the neighbors for each point in the point cloud. Each neighborhood is defined by a
+<a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood"><code class="xref py py-class docutils literal notranslate"><span class="pre">PointNeighborhood.PointNeighborhood</span></code></a>.</p>
+<div class="section" id="point-neighborhood">
+<h2>Point Neighborhood<a class="headerlink" href="#point-neighborhood" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.Size" title="PointNeighborhood.PointNeighborhood.Size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.center_point_coords" title="PointNeighborhood.PointNeighborhood.center_point_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">center_point_coords</span></code></a></td>
+<td>The point to which the neighbors relate</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.center_point_idx" title="PointNeighborhood.PointNeighborhood.center_point_idx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">center_point_idx</span></code></a></td>
+<td>The index of the point to which the neighbors relate</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.distances" title="PointNeighborhood.PointNeighborhood.distances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distances</span></code></a></td>
+<td>Array of the distances between each point and the center point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices" title="PointNeighborhood.PointNeighborhood.neighborhoodIndices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighborhoodIndices</span></code></a></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.neighbors" title="PointNeighborhood.PointNeighborhood.neighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors</span></code></a></td>
+<td>Return a point set of the neighborhood</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.numberOfNeighbors" title="PointNeighborhood.PointNeighborhood.numberOfNeighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numberOfNeighbors</span></code></a></td>
+<td>The number of points within the neighborhood (including the point itself)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.radius" title="PointNeighborhood.PointNeighborhood.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a></td>
+<td>Mean radius of the neighbors</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.color_neighborhood" title="PointNeighborhood.PointNeighborhood.color_neighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">color_neighborhood</span></code></a>([point_color,&nbsp;…])</td>
+<td>Assign red color to the center point and black to the rest</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.computeDistances" title="PointNeighborhood.PointNeighborhood.computeDistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeDistances</span></code></a>()</td>
+<td>Compute the distances between each point and the center point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.neighbors_vectors" title="PointNeighborhood.PointNeighborhood.neighbors_vectors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">neighbors_vectors</span></code></a>()</td>
+<td>Find the direction of each point to the center point</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="PointNeighborhood.PointNeighborhood">
+<em class="property">class </em><code class="descclassname">PointNeighborhood.</code><code class="descname">PointNeighborhood</code><span class="sig-paren">(</span><em>points_subset</em>, <em>distances=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PointNeighborhood.html#PointNeighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointNeighborhood.PointNeighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.Size">
+<code class="descname">Size</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.Size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-            </div>
-        </div>
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.center_point_coords">
+<code class="descname">center_point_coords</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.center_point_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>The point to which the neighbors relate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">coordinates of the center point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-    </section>
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.center_point_idx">
+<code class="descname">center_point_idx</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.center_point_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the point to which the neighbors relate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">index of the center point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
+<dl class="method">
+<dt id="PointNeighborhood.PointNeighborhood.color_neighborhood">
+<code class="descname">color_neighborhood</code><span class="sig-paren">(</span><em>point_color='red'</em>, <em>neighbors_color='black'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PointNeighborhood.html#PointNeighborhood.color_neighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.color_neighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign red color to the center point and black to the rest</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point_color</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>)</em>) – name or rgb of the center point. Default: ‘red’</li>
+<li><strong>neighbors_color</strong> (<em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>)</em>) – name or rgb of neighbor points. Default: ‘black’</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">array with colors</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../Colors/Colors.html#Properties.Color.ColorProperty.ColorProperty" title="Properties.Color.ColorProperty.ColorProperty">ColorProperty.ColorProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PointNeighborhood.PointNeighborhood.computeDistances">
+<code class="descname">computeDistances</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PointNeighborhood.html#PointNeighborhood.computeDistances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.computeDistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the distances between each point and the center point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">array of distances</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.distances">
+<code class="descname">distances</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.distances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of the distances between each point and the center point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">array of distances</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.neighborhoodIndices">
+<code class="descname">neighborhoodIndices</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.neighborhoodIndices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.neighbors">
+<code class="descname">neighbors</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a point set of the neighborhood</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">points that compose the neighborhood (including the point itself at index 0)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="PointNeighborhood.PointNeighborhood.neighbors_vectors">
+<code class="descname">neighbors_vectors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PointNeighborhood.html#PointNeighborhood.neighbors_vectors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.neighbors_vectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the direction of each point to the center point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">array of directions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">np.array nx3</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.numberOfNeighbors">
+<code class="descname">numberOfNeighbors</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.numberOfNeighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of points within the neighborhood (including the point itself)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number of points within the neighborhood</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="PointNeighborhood.PointNeighborhood.radius">
+<code class="descname">radius</code><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mean radius of the neighbors</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">mean radius</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="neighbors-property">
+<h2>Neighbors Property<a class="headerlink" href="#neighbors-property" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Points</span></code></td>
+<td>Holds the points dataset</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raster</span></code></td>
+<td>Holds raster dataset</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">Size</span></code></td>
+<td>Return the size of the property</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.ToCUDA" title="NeighborsProperty.NeighborsProperty.ToCUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToCUDA</span></code></a></td>
+<td>changing NeighborProperty format for using with CUDA functionality :return:</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
+<td>The path of the dataset</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="NeighborsProperty.NeighborsProperty">
+<em class="property">class </em><code class="descclassname">NeighborsProperty.</code><code class="descname">NeighborsProperty</code><span class="sig-paren">(</span><em>points</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Property that holds the neighbors of each point</p>
+<dl class="attribute">
+<dt id="NeighborsProperty.NeighborsProperty.ToCUDA">
+<code class="descname">ToCUDA</code><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.ToCUDA" title="Permalink to this definition">¶</a></dt>
+<dd><p>changing NeighborProperty format for using with CUDA functionality
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.average_neighborhood_radius">
+<code class="descname">average_neighborhood_radius</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.average_neighborhood_radius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.average_neighborhood_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the average radius of all the point neighborhood in the class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the average radius</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.average_neighborhood_size">
+<code class="descname">average_neighborhood_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.average_neighborhood_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.average_neighborhood_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>compute the average number of neighbors of all the point neighborhood in the class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the average radius</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.getNeighborhood">
+<code class="descname">getNeighborhood</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.getNeighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.getNeighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the point neighborhood</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.getNeighbors">
+<code class="descname">getNeighbors</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.getNeighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.getNeighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the neighbors of point(s) with index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – the index of the point</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the tensor of point idx</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a> or <a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSubSetOpen3D.PointSubSetOpen3D" title="PointSubSetOpen3D.PointSubSetOpen3D">PointSubSetOpen3D</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.getValues">
+<code class="descname">getValues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.getValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.getValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>All neighbors of all computed points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="NeighborsProperty.NeighborsProperty.setNeighborhood">
+<code class="descname">setNeighborhood</code><span class="sig-paren">(</span><em>idx</em>, <em>point_neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsProperty.html#NeighborsProperty.setNeighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsProperty.NeighborsProperty.setNeighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a PointNeighborhood into the property according to the point index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>np.array</em>) – the index (or indices) of the point(s) to set</li>
+<li><strong>point_neighbors</strong> (<a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood</em></a>) – the PointeNeighborhood object to set</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.average_neighborhood_radius" title="NeighborsProperty.NeighborsProperty.average_neighborhood_radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">average_neighborhood_radius</span></code></a>()</td>
+<td>compute the average radius of all the point neighborhood in the class</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.average_neighborhood_size" title="NeighborsProperty.NeighborsProperty.average_neighborhood_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">average_neighborhood_size</span></code></a>()</td>
+<td>compute the average number of neighbors of all the point neighborhood in the class</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.getNeighborhood" title="NeighborsProperty.NeighborsProperty.getNeighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNeighborhood</span></code></a>(idx)</td>
+<td>Retrieve the point neighborhood</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.getNeighbors" title="NeighborsProperty.NeighborsProperty.getNeighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getNeighbors</span></code></a>(idx)</td>
+<td>Retrieve the neighbors of point(s) with index</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.getValues" title="NeighborsProperty.NeighborsProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<td>All neighbors of all computed points</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code>(**kwargs)</td>
+<td>Loads all values of a property.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsProperty.NeighborsProperty.setNeighborhood" title="NeighborsProperty.NeighborsProperty.setNeighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setNeighborhood</span></code></a>(idx,&nbsp;point_neighbors)</td>
+<td>Set a PointNeighborhood into the property according to the point index</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="neighbors-factory">
+<h2>Neighbors Factory<a class="headerlink" href="#neighbors-factory" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors" title="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalculateAllPointsNeighbors</span></code></a>(pointset[,&nbsp;…])</td>
+<td>Compute all points neighbors within search radius with maximal number of neighbors.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange" title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNeighborsIn3dRange</span></code></a>(points,&nbsp;x,&nbsp;y,&nbsp;z,&nbsp;radius)</td>
+<td>Find all tokens (points) in radius range</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_KDtree" title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_KDtree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNeighborsIn3dRange_KDtree</span></code></a>(ind,&nbsp;pntSet,&nbsp;radius)</td>
+<td>Find neighbors of a point using KDtree</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord" title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNeighborsIn3dRange_SphericCoord</span></code></a>(pnt,&nbsp;…)</td>
+<td>Find points in defined window - neighbors of a point</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates" title="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPointNeighborsByCoordinates</span></code></a>(…[,&nbsp;…])</td>
+<td>Define a point’s neighborhood according to its coordinates</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByID" title="NeighborsFactory.NeighborsFactory.GetPointNeighborsByID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPointNeighborsByID</span></code></a>(pointset3d,&nbsp;idx,&nbsp;…)</td>
+<td>Get the neighbors of a point within a point cloud by its index.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_knn" title="NeighborsFactory.NeighborsFactory.balltreePointSet_knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">balltreePointSet_knn</span></code></a>(pointset_bt,&nbsp;…)</td>
+<td>Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_rnn" title="NeighborsFactory.NeighborsFactory.balltreePointSet_rnn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">balltreePointSet_rnn</span></code></a>(pointset_bt,&nbsp;search_radius)</td>
+<td>Create NeighborsProperty of BallTreePointSet (whole cloud) based on search radius (RNN)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_knn" title="NeighborsFactory.NeighborsFactory.buildNeighbors_knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildNeighbors_knn</span></code></a>(pointset,&nbsp;k_nearest_neighbors)</td>
+<td>A generic method to build NeighborsProperty based on k-nearest-neighbors (KNN)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_panorama" title="NeighborsFactory.NeighborsFactory.buildNeighbors_panorama"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildNeighbors_panorama</span></code></a>(panorama,&nbsp;radius)</td>
+<td>Build neighborhood property using panorama data structure and a radius (meters)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_rnn" title="NeighborsFactory.NeighborsFactory.buildNeighbors_rnn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">buildNeighbors_rnn</span></code></a>(pointset,&nbsp;search_radius)</td>
+<td>A generic method to build NeighborsProperty based on search radius (RNN)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.kdtreePointSet_knn" title="NeighborsFactory.NeighborsFactory.kdtreePointSet_knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdtreePointSet_knn</span></code></a>(pointset_kdt,&nbsp;…[,&nbsp;…])</td>
+<td>Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (KNN)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn" title="NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdtreePointSet_rnn</span></code></a>(pointset_kdt,&nbsp;search_radius)</td>
+<td>Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree" title="NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">point3d_neighbors_kdtree</span></code></a>(pt,&nbsp;pointset3d[,&nbsp;…])</td>
+<td>Find neighbors to a single point based kd-tree.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_knn_kdTree</span></code></a>(pointset3d,&nbsp;…)</td>
+<td>Create NeighborsProperty of PointSetOpen3D (whole cloud) based on k-nearest neighbors (KNN)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_rknn_kdTree</span></code></a>(pointset3d,&nbsp;…)</td>
+<td>Create NeighborsProperty of PointSetOpen3D (whole cloud) using KRNN.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_rnn_kdTree</span></code></a>(pointset3d,&nbsp;…[,&nbsp;…])</td>
+<td>Create NeighborsProperty of PointSetOpen3D (whole cloud) based on search radius (RNN)</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="NeighborsFactory.NeighborsFactory">
+<em class="property">class </em><code class="descclassname">NeighborsFactory.</code><code class="descname">NeighborsFactory</code><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find neighbors of a given points using different methods. Use this factory to create either PointNeighbors or
+NeighborProperty for a whole point cloud.</p>
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">
+<em class="property">static </em><code class="descname">CalculateAllPointsNeighbors</code><span class="sig-paren">(</span><em>pointset</em>, <em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>maxProcesses=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.CalculateAllPointsNeighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute all points neighbors within search radius with maximal number of neighbors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset</strong> (<em>np.array</em><em>, </em><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – a point cloud</li>
+<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the radius in which the neighbors are collected. Default: 0.05m</li>
+<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum points per neighborhood. Default: 20</li>
+<li><strong>maxProcesses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – ** for later use **</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">neighbors property where each point has a PointNeighborhood defined.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Currently, the number of processes does not work</p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange">
+<em class="property">static </em><code class="descname">GetNeighborsIn3dRange</code><span class="sig-paren">(</span><em>points</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetNeighborsIn3dRange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all tokens (points) in radius range</p>
+<p>Find all points in range of the ball field with radius ‘radius’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet</em></a>) – <ul>
+<li>PointSet</li>
+</ul>
+</li>
+<li><strong>y z</strong> (<em>x</em>) – search point coordinates</li>
+<li><strong>radius</strong> – Radius of ball field</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">points in ranges</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_KDtree">
+<em class="property">static </em><code class="descname">GetNeighborsIn3dRange_KDtree</code><span class="sig-paren">(</span><em>ind</em>, <em>pntSet</em>, <em>radius</em>, <em>tree=None</em>, <em>num_neighbor=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetNeighborsIn3dRange_KDtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_KDtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find neighbors of a point using KDtree</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ind</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – search point coordinates</li>
+<li><strong>pntSet</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a>) – the points in which the neighbors are required - in cartesian coordinates</li>
+<li><strong>radius</strong> – search radius</li>
+<li><strong>tree</strong> (<em>cKDTree</em>) – KD tree</li>
+<li><strong>num_neighbor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of nearest neighbors
+if num_neighbor!=None the result will be the exact number of neighbors 
+and not neighbors in radius</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">subset of neighbors from original pointset</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord">
+<em class="property">static </em><code class="descname">GetNeighborsIn3dRange_SphericCoord</code><span class="sig-paren">(</span><em>pnt</em>, <em>points</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetNeighborsIn3dRange_SphericCoord"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points in defined window - neighbors of a point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pnt</strong> (<em>tuple?</em>) – search point coordinates</li>
+<li><strong>points</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a>) – pointset - in spherical coordinates</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – search radius in radian</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">neighbors from original pointset</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates">
+<em class="property">static </em><code class="descname">GetPointNeighborsByCoordinates</code><span class="sig-paren">(</span><em>pointset_open3d</em>, <em>point</em>, <em>searchRadius</em>, <em>maxNN</em>, <em>useOriginal=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointNeighborsByCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a point’s neighborhood according to its coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset_open3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the point cloud in which the neighbors should be searched</li>
+<li><strong>point</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – x, y, z of the point</li>
+<li><strong>searchRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the radius in which the neighbors should be searched</li>
+<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the maximum number of neighbors</li>
+<li><strong>useOriginal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – <p>???</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the neighborhood of a point</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.GetPointNeighborsByID">
+<em class="property">static </em><code class="descname">GetPointNeighborsByID</code><span class="sig-paren">(</span><em>pointset3d</em>, <em>idx</em>, <em>searchRadius</em>, <em>maxNN</em>, <em>returnValues=True</em>, <em>neighborsProperty=None</em>, <em>override=False</em>, <em>useOriginal=False</em>, <em>rotate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointNeighborsByID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the neighbors of a point within a point cloud by its index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud in which the point is searched for</li>
+<li><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><em>np.ndarray</em>) – point index</li>
+<li><strong>searchRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the search radius for neighbors</li>
+<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum number of neighbors</li>
+<li><strong>returnValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: True</li>
+<li><strong>neighborsProperty</strong> (<a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty</em></a>) – Existing neighborhood property which should be override</li>
+<li><strong>override</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: False</li>
+<li><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – flag whether to rotate the neighborhood or not. Default: False</li>
+<li><strong>useOriginal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the point neighborhood</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.balltreePointSet_knn">
+<em class="property">static </em><code class="descname">balltreePointSet_knn</code><span class="sig-paren">(</span><em>pointset_bt</em>, <em>k_nearest_neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.balltreePointSet_knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_knn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset_bt</strong> (<a class="reference internal" href="../../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet" title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>k_nearest_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the number of neighbors</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NeighborsProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_rnn" title="NeighborsFactory.NeighborsFactory.balltreePointSet_rnn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">balltreePointSet_rnn()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.balltreePointSet_rnn">
+<em class="property">static </em><code class="descname">balltreePointSet_rnn</code><span class="sig-paren">(</span><em>pointset_bt</em>, <em>search_radius</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.balltreePointSet_rnn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_rnn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of BallTreePointSet (whole cloud) based on search radius (RNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset_bt</strong> (<a class="reference internal" href="../../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet" title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the neighborhood radius</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print running messages</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NeighborsProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="NeighborsFactory.NeighborsFactory.buildNeighbors_knn">
+<em class="property">classmethod </em><code class="descname">buildNeighbors_knn</code><span class="sig-paren">(</span><em>pointset</em>, <em>k_nearest_neighbors</em>, <em>method=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.buildNeighbors_knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_knn" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic method to build NeighborsProperty based on k-nearest-neighbors (KNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet" title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>k_nearest_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the number of neighbors</li>
+<li><strong>method</strong> (<em>ufunc</em>) – the method that should be used for computation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Neighbors Property for the whole cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Usage Example</strong></p>
+<div class="highlight-default notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="n">pr</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+        <span class="n">pr</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># for neighbors and normal computations</span>
+        <span class="n">folderPath</span> <span class="o">=</span> <span class="s1">&#39;../../test_data/&#39;</span>
+        <span class="n">dataName</span> <span class="o">=</span> <span class="s1">&#39;test_pts&#39;</span>
+
+        <span class="n">knn</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="hll">        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="n">folderPath</span> <span class="o">+</span> <span class="n">dataName</span> <span class="o">+</span> <span class="s1">&#39;.pts&#39;</span><span class="p">,</span> <span class="n">pts</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span>        <span class="n">pcd</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">buildNeighbors_knn</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">knn</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">pointSetOpen3D_knn_kdTree</span><span class="p">)</span>
+
+</pre></div>
+</td></tr></table></div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.buildNeighbors_panorama">
+<em class="property">static </em><code class="descname">buildNeighbors_panorama</code><span class="sig-paren">(</span><em>panorama</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.buildNeighbors_panorama"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_panorama" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build neighborhood property using panorama data structure and a radius (meters)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>panorama</strong> (<a class="reference internal" href="../Panorama/Panorama.html#PanoramaProperty.PanoramaProperty" title="PanoramaProperty.PanoramaProperty"><em>PanoramaProperty.PanoramaProperty</em></a>) – a point cloud as a panorama</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the physical world radius to search for neighbors (meters)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Neighbors property</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="NeighborsFactory.NeighborsFactory.buildNeighbors_rnn">
+<em class="property">classmethod </em><code class="descname">buildNeighbors_rnn</code><span class="sig-paren">(</span><em>pointset</em>, <em>search_radius</em>, <em>method=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.buildNeighbors_rnn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.buildNeighbors_rnn" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic method to build NeighborsProperty based on search radius (RNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset</strong> (<a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/BallTreePointSet.html#BallTreePointSet.BallTreePointSet" title="BallTreePointSet.BallTreePointSet"><em>BallTreePointSet.BallTreePointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the neighborhood radius</li>
+<li><strong>method</strong> (<em>ufunc</em>) – the method that should be used for computation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Neighbors Property for the whole cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Usage Example</strong></p>
+<div class="highlight-default notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="highlight"><pre><span></span>                                                        <span class="n">method</span><span class="o">=</span><span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">pointSetOpen3D_rnn_kdTree</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="hll">
+</span></pre></div>
+</td></tr></table></div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.kdtreePointSet_knn">
+<em class="property">static </em><code class="descname">kdtreePointSet_knn</code><span class="sig-paren">(</span><em>pointset_kdt</em>, <em>k_nearest_neighbors</em>, <em>parts_size=500000</em>, <em>parts_num=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.kdtreePointSet_knn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.kdtreePointSet_knn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (KNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset_kdt</strong> (<a class="reference internal" href="../../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet" title="KdTreePointSet.KdTreePointSet"><em>KdTreePointSet.KdTreePointSet</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>k_nearest_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the number of neighbors</li>
+<li><strong>parts_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of points in section for more efficient computation. Defauls: 5e5</li>
+<li><strong>parts_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of parts to divide the computation. Defualt: None</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NeighborsProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn" title="NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">kdtreePointSet_rnn()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn">
+<em class="property">static </em><code class="descname">kdtreePointSet_rnn</code><span class="sig-paren">(</span><em>pointset_kdt</em>, <em>search_radius</em>, <em>kmax=None</em>, <em>parts_size=500000</em>, <em>parts_num=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.kdtreePointSet_rnn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.kdtreePointSet_rnn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset_kdt</strong> (<a class="reference internal" href="../../Datasets/KdTreePointSet.html#KdTreePointSet.KdTreePointSet" title="KdTreePointSet.KdTreePointSet"><em>KdTreePointSet.KdTreePointSet</em></a>) – the cloud to which the NeighborhoodProperty should be computed</li>
+<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the neighborhood radius</li>
+<li><strong>kmax</strong> – maximum number or neighbors. If sent, only the farthest k-neighbors will be stored. When None, there will be no limit. Default: None.</li>
+<li><strong>parts_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of points in section for more efficient computation. Default: None</li>
+<li><strong>parts_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of parts to divide the computation. Default: 1</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NeighborsProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Division to parts doesn’t work</p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree">
+<em class="property">static </em><code class="descname">point3d_neighbors_kdtree</code><span class="sig-paren">(</span><em>pt</em>, <em>pointset3d</em>, <em>radius=None</em>, <em>knn=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.point3d_neighbors_kdtree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find neighbors to a single point based kd-tree.</p>
+<p>This method can be used either for RNN, KNN or RKNN, depends on the parameters sent. Used only with PointSetOpen3D</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pt</strong> (<em>np.array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the point to look for (index or 3x1)</li>
+<li><strong>pointset3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the point cloud in which the neighbors are serached in</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – maximal radius for neighbors</li>
+<li><strong>knn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of neighbors to look for</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If both radius and knn are sent, then the RNN is used, which means: it returns at most k nearest neighbors that have distances to the anchor point less than a given radius</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">point neighborhood</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://www.cs.ubc.ca/research/flann/">FLANN</a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rnn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_knn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rknn_kdTree()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree">
+<em class="property">static </em><code class="descname">pointSetOpen3D_knn_kdTree</code><span class="sig-paren">(</span><em>pointset3d</em>, <em>k_nearest_neighbors</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.pointSetOpen3D_knn_kdTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of PointSetOpen3D (whole cloud) based on k-nearest neighbors (KNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud to which the NeighborProperty should be computed</li>
+<li><strong>k_nearest_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of neighbors to search</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a property consisting of the PointNeighborhood for each point in the cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://www.cs.ubc.ca/research/flann/">FLANN</a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rnn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree" title="NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">point3d_neighbors_kdtree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rknn_kdTree()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree">
+<em class="property">static </em><code class="descname">pointSetOpen3D_rknn_kdTree</code><span class="sig-paren">(</span><em>pointset3d</em>, <em>k_nearest_neighbors</em>, <em>max_radius</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.pointSetOpen3D_rknn_kdTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of PointSetOpen3D (whole cloud) using KRNN.</p>
+<p>Return a neighborhood with at most k nearest neighbors that have distances to the anchor point less than a given radius.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pointset3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud to which the NeighborProperty should be computed</li>
+<li><strong>k_nearest_neighbors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – number of neighbors to search</li>
+<li><strong>max_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – maximal radius of neighbors</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a property consisting of the PointNeighborhood for each point in the cloud</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://www.cs.ubc.ca/research/flann/">FLANN</a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rnn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_knn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree" title="NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">point3d_neighbors_kdtree()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree">
+<em class="property">static </em><code class="descname">pointSetOpen3D_rnn_kdTree</code><span class="sig-paren">(</span><em>pointset3d</em>, <em>search_radius</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.pointSetOpen3D_rnn_kdTree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create NeighborsProperty of PointSetOpen3D (whole cloud) based on search radius (RNN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pointset3d</strong> – the cloud to which the NeighborProperty should be computed</li>
+<li><strong>search_radius</strong> – the neighborhood radius</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Optionals</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print inter-running</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a property consisting of the PointNeighborhood for each point in the cloud</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="https://www.cs.ubc.ca/research/flann/">FLANN</a> , <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_knn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree" title="NeighborsFactory.NeighborsFactory.point3d_neighbors_kdtree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">point3d_neighbors_kdtree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rknn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pointSetOpen3D_rknn_kdTree()</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The three methods: <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NeighborsFactory.NeighborsFactory.pointSetOpen3D_rnn_kdTree()</span></code></a>, <a class="reference internal" href="#NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree" title="NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree"><code class="xref py py-meth docutils literal notranslate"><span class="pre">NeighborsFactory.NeighborsFactory.pointSetOpen3D_knn_kdTree()</span></code></a> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">NeighborsFactory.NeighborsFactory.pointSetOpen3D_krnn_kdTree()</span></code>
+can be rewritten, without repetition. Only I couldn’t be bothered… (RA)</p>
+</div>
+</div>
 </div>
 
 
-<script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'1a',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Panorama/Panorama.html" class="btn btn-neutral float-right" title="Panorama" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../Normals/Normals.html" class="btn btn-neutral float-left" title="Normals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
 
-</script>
-<script type="text/javascript" src="../../_static/jquery.js"></script>
-<script type="text/javascript" src="../../_static/underscore.js"></script>
-<script type="text/javascript" src="../../_static/doctools.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
 
 
-<script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-<script type="text/javascript">
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
+  </script>
 
-</script>
+  
+  
+    
+   
 
 </body>
 </html>

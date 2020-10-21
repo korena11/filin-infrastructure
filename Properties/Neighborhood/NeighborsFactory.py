@@ -1,38 +1,543 @@
 import numpy as np
 from matplotlib.path import Path
 from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
-from scipy.spatial import cKDTree
-from sklearn.neighbors import BallTree
+from scipy.spatial import kdtree as cKDTree
+from tqdm import tqdm
 
-from PointNeighborhood import PointNeighborhood
-# Infrastructure imports
-from PointSet import PointSet
-from PointSubSet import PointSubSet
-from SphericalCoordinatesFactory import SphericalCoordinatesFactory
+from DataClasses.PointSet import PointSet
+from DataClasses.PointSubSet import PointSubSet
+from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
+from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+from Properties.Transformations.SphericalCoordinatesFactory import SphericalCoordinatesFactory
 
 
 class NeighborsFactory:
     """
-    Find neighbors of a given points using different methods  
+    Find neighbors of a given points using different methods. Use this factory to create either PointNeighbors or
+    NeighborProperty for a whole point cloud.
     """
 
+    @classmethod
+    def buildNeighbors_rnn(cls, pointset, search_radius, method=None):
+        """
+        A generic method to build NeighborsProperty based on search radius (RNN)
+
+        :param pointset: the cloud to which the NeighborhoodProperty should be computed
+        :param search_radius: the neighborhood radius
+        :param method: the method that should be used for computation
+
+        :type pointset: PointSet.PointSet, BallTreePointSet.BallTreePointSet, PointSetOpen3D.PointSetOpen3D
+        :type search_radius: float
+        :type method: ufunc
+
+        :return:  Neighbors Property for the whole cloud
+
+        :rtype: NeighborsProperty
+
+        **Usage Example**
+
+        .. literalinclude:: ../../../../Properties/Neighborhood/test_neighborsFactory.py
+            :lines: 87-90
+            :emphasize-lines: 4
+            :linenos:
+
+        """
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
+        from warnings import warn
+
+        neighbors = -1
+
+        if method is None:
+            try:
+                neighbors = NeighborsFactory.balltreePointSet_rnn(pointset, search_radius)
+
+            except:
+                warn('Could not compute with ball tree, trying open3d')
+                neighbors = NeighborsFactory.pointSetOpen3D_rnn_kdTree(pointset, search_radius)
+        else:
+            try:
+                neighbors = method(pointset, search_radius)
+            except:
+                if method.__name__ == 'balltreePointSet_rnn':
+                    print('Build Ball Tree with default leaf size ')
+                    pointset = BallTreePointSet(pointset)
+                    neighbors = method(pointset, search_radius)
+
+                elif method.__name__ == 'pointSetOpen3D_rnn_kdTree':
+                    print('Build PointSetOpen3D object')
+                    pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, search_radius)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
+                    neighbors = method(pointset, search_radius)
+
+        if neighbors == -1:
+            neighbors = -1
+            warn(RuntimeError, 'Cannot compute neighbors ')
+        return neighbors
+
+    @classmethod
+    def buildNeighbors_knn(cls, pointset, k_nearest_neighbors, method=None):
+        """
+        A generic method to build NeighborsProperty based on k-nearest-neighbors (KNN)
+
+        :param pointset: the cloud to which the NeighborhoodProperty should be computed
+        :param k_nearest_neighbors: the number of neighbors
+        :param method: the method that should be used for computation
+
+        :type pointset: PointSet.PointSet, BallTreePointSet.BallTreePointSet, PointSetOpen3D.PointSetOpen3D
+        :type k_nearest_neighbors: int
+        :type method: ufunc
+
+        :return:  Neighbors Property for the whole cloud
+
+        :rtype: NeighborsProperty
+
+        **Usage Example**
+
+        .. literalinclude:: ../../../../Properties/Neighborhood/test_neighborsFactory.py
+            :lines: 93-106
+            :emphasize-lines: 11
+            :linenos:
+
+        """
+        from DataClasses.BallTreePointSet import BallTreePointSet
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        from DataClasses.KdTreePointSet import KdTreePointSet
+        from warnings import warn
+
+        neighbors = -1
+
+        if method is None:
+            try:
+                neighbors = NeighborsFactory.balltreePointSet_knn(pointset, k_nearest_neighbors)
+
+            except:
+                warn('Could not compute with ball tree, trying open3d')
+                neighbors = NeighborsFactory.pointSetOpen3D_rnn_kdTree(pointset, k_nearest_neighbors)
+
+        else:
+            try:
+                neighbors = method(pointset, k_nearest_neighbors)
+            except:
+                if method.__name__ == 'balltreePointSet_knn':
+                    print('Build Ball Tree with default leaf size ')
+                    pointset = BallTreePointSet(pointset)
+                    neighbors = method(pointset, k_nearest_neighbors)
+
+                elif method.__name__ == 'pointSetOpen3D_knn_kdTree':
+                    print('Build PointSetOpen3D object')
+                    pointset = PointSetOpen3D(pointset)
+                    neighbors = method(pointset, k_nearest_neighbors)
+
+                elif method.__name__ == 'kdtreePointSet_rnn':
+                    print('Build KDTreePointSet object')
+                    pointset = KdTreePointSet(pointset)
+                    neighbors = method(pointset, k_nearest_neighbors)
+
+        if neighbors == -1:
+            neighbors = -1
+            warn(RuntimeError, 'Cannot compute neighbors ')
+        return neighbors
+
     @staticmethod
-    def CalculateAllPointsNeighbors(pointSetOpen3D, searchRadius=0.05, maxNN=20, maxProcesses=8):
-        # threadsList = []
-        # pointsIndices = np.arange(self.numberOfPoints)
-        # splitIndices = np.array_split(pointsIndices, maxProcesses)
-        # p = Pool(maxProcesses)
-        # filledFunction = partial(self.GetPointsNeighborsByID, searchRadius=searchRadius, maxNN=maxNN,
-        #                          returnValues=False)
-        # p.map(filledFunction, splitIndices)
-        # p.map(self.GetPointsNeighborsByID, splitIndices, [searchRadius] * maxProcesses, [maxNN] * maxProcesses,
-        # [False] * maxProcesses)
-        # print("Done??????")
+    def balltreePointSet_rnn(pointset_bt, search_radius, verbose=False):
+        """
+        Create NeighborsProperty of BallTreePointSet (whole cloud) based on search radius (RNN)
 
-        # Function will be used with multiprocessing, not relevant to run it without.
-        pointsIndices = np.arange(pointSetOpen3D.numberOfPoints)
-        pointSetOpen3D.GetPointsNeighborsByID(pointsIndices, searchRadius, maxNN, False)
+        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed
+        :param search_radius: the neighborhood radius
+        :param verbose: print running messages
 
+        :type pointset_bt: BallTreePointSet.BallTreePointSet
+        :type search_radius: float
+        :type verbose: bool
+
+        :return: NeighborsProperty
+        """
+
+        print('>>> Find all points neighbors using Ball Tree')
+
+        neighbors = NeighborsProperty(pointset_bt)  # initialization of the neighborhood property
+
+        idx = pointset_bt.queryRadius(pointset_bt.ToNumpy(), search_radius)
+
+        for id in tqdm(range(len(idx)), total=len(idx), desc='rnn neighbors by ball tree', position=0):
+            current_id = np.asarray(idx[id])
+            tmp_subset = PointSubSet(pointset_bt, current_id)
+            tmp_point_neighborhood = PointNeighborhood(tmp_subset)
+            neighbors.setNeighborhood(id, tmp_point_neighborhood)
+
+        return neighbors
+
+    @staticmethod
+    def balltreePointSet_knn(pointset_bt, k_nearest_neighbors):
+        """
+        Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)
+
+        :param pointset_bt: the cloud to which the NeighborhoodProperty should be computed
+        :param k_nearest_neighbors: the number of neighbors
+
+        :type pointset_bt: BallTreePointSet.BallTreePointSet
+        :type k_nearest_neighbors: int
+
+        :return: NeighborsProperty
+
+        .. seealso::
+           :meth:`balltreePointSet_rnn`
+
+        """
+        print('>>> Find all points neighbors using ball tree')
+
+        neighbors = NeighborsProperty(pointset_bt)  # initialization of the neighborhood property
+
+        idx = pointset_bt.query(pointset_bt.ToNumpy(), k_nearest_neighbors)
+
+        for id in tqdm(range(len(idx)), total=len(idx), desc='knn neighbors by ball tree', position=0):
+            current_id = np.asarray(idx[id])
+            tmp_subset = PointSubSet(pointset_bt, current_id)
+            tmp_point_neighborhood = PointNeighborhood(tmp_subset)
+            neighbors.setNeighborhood(id, tmp_point_neighborhood)
+
+        return neighbors
+
+    @staticmethod
+    def kdtreePointSet_rnn(pointset_kdt, search_radius, kmax=None, parts_size=int(5e5), parts_num=None):
+        r"""
+        Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
+
+        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
+        :param search_radius: the neighborhood radius
+        :param kmax: maximum number or neighbors. If sent, only the farthest k-neighbors will be stored. When None, there will be no limit. Default: None.
+        :param parts_size: number of points in section for more efficient computation. Default: None
+        :param parts_num: number of parts to divide the computation. Default: 1
+
+        :type pointset_kdt: KdTreePointSet.KdTreePointSet
+        :type search_radius: float
+        :type parts_size: int
+        :type parts_num: int
+
+        :return: NeighborsProperty
+        :rtype: NeighborsProperty
+
+        .. warning::
+            Division to parts doesn't work
+        """
+        # TODO: division to parts doesn't work. Need to solve the mapping at the end
+
+        from tqdm import trange
+        print('>>> Find all points neighbors in radius %f using kd-Tree' % search_radius)
+
+        neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+        if parts_num is None and parts_size is None:
+            parts_num = 1
+            modulu = 0
+        elif parts_num is None:
+            parts_num = int(pointset_kdt.Size / parts_size)
+            modulu = pointset_kdt.Size % parts_size
+        else:
+            modulu = pointset_kdt.Size % parts_num
+            parts_size = int(pointset_kdt.Size / parts_num)
+
+        start = 0
+        idx = []
+        for part in trange(parts_num):
+            start = int(part * parts_size)
+
+            if part == 0:
+                if parts_num == 1:  # patch because the parts dont work. Delete when fixed
+                    idx = (pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size], search_radius,
+                                                    sort_results=True))
+
+                else:
+                    idx = np.hstack((idx,
+                                     pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
+                                                              search_radius,
+                                                              sort_results=True)))
+            else:
+                idx = np.hstack((idx,
+                                 pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[start:start + parts_size],
+                                                          search_radius,
+                                                          sort_results=True)))
+        # for the remaining part
+        # if parts_num != 1:
+        if modulu > 0:
+            idx = np.hstack((idx,
+                             pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
+                                                      sort_results=True)))
+
+        if kmax is not None:
+            start = kmax
+        else:
+            start = -0
+
+        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id[-start:]), tqdm(idx)))
+        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), tqdm(pointSubSets)))
+        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), tqdm(pointNeighborhoods)))
+
+        return neighbors
+
+    @staticmethod
+    def kdtreePointSet_knn(pointset_kdt, k_nearest_neighbors, parts_size=int(5e5), parts_num=None):
+        """
+        Create NeighborsProperty of KdTreePointSet (whole cloud) based on k-nearest-neighbors (KNN)
+
+        :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
+        :param k_nearest_neighbors: the number of neighbors
+        :param parts_size: number of points in section for more efficient computation. Defauls: 5e5
+        :param parts_num: number of parts to divide the computation. Defualt: None
+
+        :type pointset_kdt: KdTreePointSet.KdTreePointSet
+        :type k_nearest_neighbors: int
+        :type parts_size: int
+        :type parts_num: int
+
+        :return: NeighborsProperty
+
+        .. seealso::
+           :meth:`kdtreePointSet_rnn`
+
+        """
+        from tqdm import trange
+        print('>>> Find all {k} points neighbors using kd-tree'.format(k=k_nearest_neighbors))
+
+        neighbors = NeighborsProperty(pointset_kdt)  # initialization of the neighborhood property
+        if parts_size > pointset_kdt.Size:
+            parts_num = 1
+            parts_size = pointset_kdt.Size
+            modulu = 0
+        else:
+            if parts_num is None:
+                parts_num = int(pointset_kdt.Size / parts_size)
+                modulu = pointset_kdt.Size % parts_size
+            else:
+                modulu = pointset_kdt.Size % parts_num
+                parts_size = int(pointset_kdt.Size / parts_num)
+
+        start = 0
+        idx = None
+
+        for part in trange(parts_num, position=0):
+            start = int(part * parts_size)
+
+            if part == 0:
+                idx = pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)
+            else:
+                idx = np.vstack(
+                    (idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start:start + parts_size], k_nearest_neighbors)))
+
+        # for the remaining part
+        if modulu > 0:
+            idx = np.vstack((idx, pointset_kdt.query(pointset_kdt.ToNumpy()[start + parts_size:], k_nearest_neighbors)))
+
+        pointSubSets = list(map(lambda id: PointSubSet(pointset_kdt, id), idx))
+        pointNeighborhoods = list(map(lambda pntSubSet: PointNeighborhood(pntSubSet), pointSubSets))
+        list(map(neighbors.setNeighborhood, range(pointset_kdt.Size), pointNeighborhoods))
+
+        return neighbors
+
+    @staticmethod
+    def pointSetOpen3D_rnn_kdTree(pointset3d, search_radius, verbose=False):
+        """
+        Create NeighborsProperty of PointSetOpen3D (whole cloud) based on search radius (RNN)
+
+        :param pointset3d:  the cloud to which the NeighborProperty should be computed
+        :param search_radius: the neighborhood radius
+
+        **Optionals**
+
+        :param verbose: print inter-running
+
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type search_radius: float
+        :type verbose: bool
+
+        :return: a property consisting of the PointNeighborhood for each point in the cloud
+
+        :rtype: NeighborsProperty
+
+        .. seealso::
+
+            `FLANN <https://www.cs.ubc.ca/research/flann/>`_ , :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
+
+        """
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
+        print('>>> Find all points neighbors using open3d')
+
+        neighbors = NeighborsProperty(pointset3d)
+
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute rnn neighbors for all point cloud', position=0):
+            k, idx, distances = pointset3d.kdTreeOpen3D.search_radius_vector_3d(point,
+                                                                                search_radius)
+            distances = np.asarray(distances)
+            idx = np.asarray(idx)
+
+            # create a temporary neighborhood
+            tmp_subset = PointSubSetOpen3D(pointset3d, idx)
+            tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
+            neighbors.setNeighborhood(i, tmp_point_neighborhood)
+
+        return neighbors
+
+    @staticmethod
+    def pointSetOpen3D_knn_kdTree(pointset3d, k_nearest_neighbors):
+        """
+        Create NeighborsProperty of PointSetOpen3D (whole cloud) based on k-nearest neighbors (KNN)
+
+        :param pointset3d:  the cloud to which the NeighborProperty should be computed
+        :param k_nearest_neighbors: number of neighbors to search
+
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type k_nearest_neighbors: int
+
+        :return: a property consisting of the PointNeighborhood for each point in the cloud
+
+        :rtype: NeighborsProperty
+
+        .. seealso::
+
+            `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`point3d_neighbors_kdtree`, :meth:`pointSetOpen3D_rknn_kdTree`
+
+        """
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
+        print('>>> Find all points neighbors using open3d')
+
+        neighbors = NeighborsProperty(pointset3d)
+
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute knn neighbors for all point cloud', position=0):
+            k, idx, distances = pointset3d.kdTreeOpen3D.search_knn_vector_3d(point, k_nearest_neighbors + 1)
+            distances = np.asarray(distances)
+            if np.all(np.round(distances) == 0):
+                distances = None
+            idx = np.asarray(idx)
+
+            # create a temporary neighborhood
+            tmp_subset = PointSubSetOpen3D(pointset3d, idx)
+            neighbors.setNeighborhood(i, PointNeighborhood(tmp_subset, distances))
+
+        return neighbors
+
+    @staticmethod
+    def pointSetOpen3D_rknn_kdTree(pointset3d, k_nearest_neighbors, max_radius):
+        """
+        Create NeighborsProperty of PointSetOpen3D (whole cloud) using KRNN.
+
+        Return a neighborhood with at most k nearest neighbors that have distances to the anchor point less than a given radius.
+
+        :param pointset3d:  the cloud to which the NeighborProperty should be computed
+        :param k_nearest_neighbors: number of neighbors to search
+        :param max_radius: maximal radius of neighbors
+
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type k_nearest_neighbors: int
+        :type max_radius: float
+
+        :return: a property consisting of the PointNeighborhood for each point in the cloud
+
+        :rtype: NeighborsProperty
+
+        .. seealso::
+
+            `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`point3d_neighbors_kdtree`
+
+        """
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
+        print('>>> Find all points neighbors using open3d')
+
+        neighbors = NeighborsProperty(pointset3d)
+
+        for point, i in tqdm(zip(pointset3d, range(pointset3d.Size)), total=pointset3d.Size,
+                             desc='Compute rknn neighbors for all point cloud', position=0):
+            k, idx, distances = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=max_radius,
+                                                                                max_nn=k_nearest_neighbors + 1)
+
+            distances = np.asarray(distances)
+            idx = np.asarray(idx)
+
+            # create a temporary neighborhood
+            tmp_subset = PointSubSetOpen3D(pointset3d, idx)
+            tmp_point_neighborhood = PointNeighborhood(tmp_subset, distances)
+
+            # set in neighbors property
+            neighbors.setNeighborhood(i, tmp_point_neighborhood)
+
+        return neighbors
+
+    @staticmethod
+    def point3d_neighbors_kdtree(pt, pointset3d, radius=None, knn=None):
+        """
+        Find neighbors to a single point based kd-tree.
+
+        This method can be used either for RNN, KNN or RKNN, depends on the parameters sent. Used only with PointSetOpen3D
+
+        :param pt: the point to look for (index or 3x1)
+        :param pointset3d: the point cloud in which the neighbors are serached in
+        :param radius: maximal radius for neighbors
+        :param knn: number of neighbors to look for
+
+        :type pt: np.array, int
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type radius: float
+        :type knn: int
+
+        .. note::
+
+           If both radius and knn are sent, then the RNN is used, which means: it returns at most k nearest neighbors that have distances to the anchor point less than a given radius
+
+        :return: point neighborhood
+
+        :rtype: PointNeighborhood
+
+        .. seealso::
+
+            `FLANN <https://www.cs.ubc.ca/research/flann/>`_, :meth:`pointSetOpen3D_rnn_kdTree`, :meth:`pointSetOpen3D_knn_kdTree`, :meth:`pointSetOpen3D_rknn_kdTree`
+        """
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
+
+        # check which parameters were received
+        if radius is not None:
+            radius_flag = True
+        else:
+            radius_flag = False
+
+        if knn is not None:
+            knn_flag = True
+        else:
+            knn_flag = False
+
+        # decide which method to use according to the parameters received
+        if knn_flag and radius_flag:
+            # check if the point is an array or an index
+            if isinstance(pt, np.ndarray):
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(pt, radius=radius, knn=knn + 1)
+            else:
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_hybrid_vector_3d(pointset3d.data.points[pt],
+                                                                               radius=radius, knn=knn + 1)
+
+        elif knn_flag:
+            # check if the point is an array or an index
+            if isinstance(pt, np.ndarray):
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pt, knn + 1)
+            else:
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_knn_vector_3d(pointset3d.data.points[pt], knn + 1)
+
+        elif radius_flag:
+            # check if the point is an array or an index
+            if isinstance(pt, np.ndarray):
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_radius_vector_3d(pt, radius)
+            else:
+                k, idx, dist = pointset3d.kdTreeOpen3D.search_radius_vector_3d(pointset3d.data.points[pt], radius)
+        else:
+            raise IOError
+
+        point_subset = PointSubSetOpen3D(pointset3d, idx)
+        return PointNeighborhood(point_subset, dist)
 
     @staticmethod
     def GetNeighborsIn3dRange(points, x, y, z, radius):
@@ -89,7 +594,7 @@ class NeighborsFactory:
 
         indices = indices[indices > 0]
 
-        pointsInRange = PointNeighborhood(radius, None, None, indices, dists)
+        pointsInRange = PointNeighborhood(PointSubSet(points, indices), dists)
 
         return pointsInRange
 
@@ -125,48 +630,10 @@ class NeighborsFactory:
         if tree == None:
             tree = cKDTree(pntSet.ToNumpy())
         pnt = pntSet.GetPoint(ind)
-        l = tree.query(pnt, pSize, p = 2, distance_upper_bound = radius)
+        l = tree.query(pnt, pSize, p=2, distance_upper_bound=radius)
         #         neighbor = PointSubSet(pntSet, l[1][where(l[0] != inf)[0]])
         neighbor = l[1][where(l[0] != inf)[0]]
         return PointSubSet(pntSet, neighbor), tree
-
-    @staticmethod
-    def GetNeighborsIn3dRange_BallTree(pnt, pntSet, radius, tree = None, num_neighbor = None):
-        '''
-        Find neighbors of a point using KDtree
-        
-
-        :param pnt: search point coordinates
-        :param pntSet: pointset - in cartesian coordinates
-        :param radius: search radius
-        :param tree: ball tree
-        :param num_neighbor: number of nearest neighbors
-                if num_neighbor!=None the result will be the exact number of neighbors 
-                and not neighbors in radius
-
-        :type pnt: tuple?
-        :type pntSet: PointSet.PointSet
-        :type radius: float
-        :type tree: BallTree
-        :type num_neighbor: int
-
-        :return: neighbors
-
-        :rtype: PointSubSet
-
-        '''
-
-        if num_neighbor == None:
-            pSize = pntSet.Size
-        else:
-            pSize = num_neighbor
-
-        if tree == None:
-            tree = BallTree(pntSet.ToNumpy())
-
-        ind = tree.query_radius(pnt, r = radius)
-        neighbor = PointSubSet(pntSet, ind[0])
-        return neighbor
 
     @staticmethod
     def GetNeighborsIn3dRange_SphericCoord(pnt, points, radius):
@@ -191,11 +658,264 @@ class NeighborsFactory:
         wind = Path([(az_min, el_max), (az_max, el_max), (az_max, el_min), (az_min, el_min)])
         wind.iter_segments()
         pntInCell = wind.contains_points(
-            hstack((expand_dims(points.Azimuths, 1), expand_dims(points.ElevationAngles, 1))))
+            hstack((expand_dims(points.azimuths, 1), expand_dims(points.ElevationAngles, 1))))
 
         indices = nonzero(pntInCell)
-        i1 = where(points.Ranges[indices[0]] >= pnt[2] - 0.10)
-        i2 = where(points.Ranges[indices[0][i1[0]]] <= pnt[2] + 0.10)
+        i1 = where(points.ranges[indices[0]] >= pnt[2] - 0.10)
+        i2 = where(points.ranges[indices[0][i1[0]]] <= pnt[2] + 0.10)
         neighbors = SphericalCoordinatesFactory.CartesianToSphericalCoordinates(
             PointSubSet(points.XYZ, indices[0][i1[0][i2[0]]]))
         return neighbors
+
+
+    @staticmethod
+    def buildNeighbors_panorama(panorama, radius):
+        """
+        Build neighborhood property using panorama data structure and a radius (meters)
+
+        :param panorama: a point cloud as a panorama
+        :param radius: the physical world radius to search for neighbors (meters)
+
+        :type panorama: PanoramaProperty.PanoramaProperty
+        :type radius: float
+
+        :return: Neighbors property
+
+        :rtype: NeighborsProperty
+        """
+        from Properties.Panoramas.PanoramaUtils import boundPanoramaExpand
+        # construct window sizes according to range
+        # 1. window size at each cell
+        d_az = np.ceil(radius/ (panorama.rangeImage * np.radians(panorama.azimuth_spacing))).astype('int')
+        d_el = np.ceil(radius/ (panorama.rangeImage * np.radians(panorama.elevation_spacing))).astype('int')
+
+        # 2. pad panorama according to cell size
+        m, n = panorama.Size
+        cols_indx = np.arange(0, n)
+        rows_indx = np.arange(0, m)
+        nn, mm = np.meshgrid(cols_indx, rows_indx)  # indices of the panorama
+
+        column_L = np.abs((nn - d_az).min())  # leftmost column
+        column_R = (nn + d_az).max() - n + 1 # rightmost column
+        row_T = np.abs((mm - d_el).min())  # topmost row
+        row_B = (mm + d_el).max() - m + 1  # lowwermost row
+        nn += column_L
+        mm += row_T
+
+        img_extended = boundPanoramaExpand(panorama.panoramaIndex, row_T, column_L, row_B, column_R)
+        neighborhood = NeighborsProperty(panorama.Points)
+
+        for win_col in tqdm(np.unique(d_az), desc='finding neighbors', position=0, leave=False):
+            for win_row in tqdm(np.unique(d_el), position=1, leave=False):
+                indx = np.where(d_el == win_row) and np.where(d_az == win_col)
+
+                for id in zip(indx[0], indx[1]):
+                    if img_extended[id[0]+row_T, id[1] + column_L ] == -1:
+                        continue
+
+                    # neighbors_indx = np.array([img_extended[(row_T + id[0]) - win_row, (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]) - win_row, (column_L + id[1] )],
+                    #                   img_extended[(row_T + id[0]) - win_row, (column_L + id[1]) + win_col],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1])],
+                    #                   img_extended[(row_T + id[0]), (column_L + id[1]) + win_col ],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1]) - win_col],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1])],
+                    #                   img_extended[(row_T + id[0]) + win_row, (column_L + id[1]) + win_col]
+                    #                   ])
+
+                    neighbors_indx = img_extended[(row_T + id[0]) - win_row: (row_T + id[0])+ win_row + 1,
+                                     (column_L + id[1]) - win_col:(column_L + id[1]) + win_col + 1]
+                    n_idx = np.unique(neighbors_indx[neighbors_indx != -1])
+
+                    pointsub = PointSubSet(panorama.Points, np.hstack((panorama.panoramaIndex[id],n_idx)))
+                    neighborhood.setNeighborhood(panorama.panoramaIndex[id], PointNeighborhood( pointsub))
+                    # print(neighborhood.getNeighborhood(panorama.panoramaIndex[id]).distances)
+
+        return neighborhood
+
+
+    # ---------------------OBSOLETE METHODS - TO BE REMOVED IN LATER VERSIONS - -------------------
+
+    @staticmethod
+    def GetPointNeighborsByID(pointset3d, idx, searchRadius, maxNN, returnValues=True, neighborsProperty=None,
+                              override=False, useOriginal=False, rotate=False):
+        """
+        Get the neighbors of a point within a point cloud by its index.
+
+        :param pointset3d: the cloud in which the point is searched for
+        :param idx: point index
+        :param searchRadius: the search radius for neighbors
+        :param maxNN: maximum number of neighbors
+        :param returnValues: default: True
+        :param neighborsProperty: Existing neighborhood property which should be override
+        :param override: default: False
+        :param rotate: flag whether to rotate the neighborhood or not. Default: False
+        :param useOriginal: default: False
+
+        :type pointset3d: PointSetOpen3D.PointSetOpen3D
+        :type idx: int or np.ndarray
+        :type searchRadius: float
+        :type maxNN: int
+        :type returnValues: bool
+        :type neighborsProperty: NeighborsProperty
+        :type override: bool
+        :type useOriginal: bool
+        :type rotate: bool
+
+        :return: the point neighborhood
+
+        :rtype: PointNeighborhood
+        """
+
+        if neighborsProperty is None:
+            neighborsProperty = NeighborsProperty(pointset3d)
+
+        pointNeighborhoodObject = 1
+        if isinstance(idx, int):
+            idx = [idx]
+
+        if override:
+            NeighborsFactory.__PrintOverrideNeighborhoodCalculations(neighborsProperty, idx[0], searchRadius, maxNN)
+
+        for currentPointIndex in idx:
+            if not override:
+                if neighborsProperty.getNeighborhood(currentPointIndex):
+                    r = neighborsProperty.getNeighborhood(currentPointIndex).radius
+                    nn = neighborsProperty.getNeighborhood(currentPointIndex).numberOfNeighbors
+                    if r == searchRadius and nn == maxNN:
+                        continue
+
+            currentPoint = pointset3d.GetPoint(currentPointIndex)
+
+            # currentPoint = self.pointsOpen3D.points[currentPointIndex]
+            pointNeighborhoodObject = NeighborsFactory.GetPointNeighborsByCoordinates(pointset3d, point=currentPoint,
+                                                                                      searchRadius=searchRadius,
+                                                                                      maxNN=maxNN,
+                                                                                      useOriginal=useOriginal)
+            neighborsProperty.setNeighborhood(currentPointIndex, pointNeighborhoodObject)
+            if rotate:
+                neighborsProperty.RotatePointNeighborhood(currentPointIndex, smoothen=False, useOriginal=useOriginal)
+
+        # TODO: Elia is there need for this?
+        if returnValues:
+            if len(idx) == 1:
+                return pointNeighborhoodObject
+            return pointNeighborhoodObject
+
+    @staticmethod
+    def GetPointNeighborsByCoordinates(pointset_open3d, point, searchRadius, maxNN, useOriginal=False):
+        """
+        Define a point's neighborhood according to its coordinates
+
+        :param pointset_open3d: the point cloud in which the neighbors should be searched
+        :param point: x, y, z of the point
+        :param searchRadius: the radius in which the neighbors should be searched
+        :param maxNN: the maximum number of neighbors
+        :param useOriginal: ???
+
+        :type pointset_open3d: PointSetOpen3D.PointSetOpen3D
+        :type point: np.ndarray or tuple
+        :type searchRadius: float
+        :type maxNN: int
+        :type useOriginal: bool
+
+        :return: the neighborhood of a point
+
+        :rtype: PointNeighborhood
+        """
+
+        if maxNN <= 0:
+            if not useOriginal:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
+            else:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_radius_vector_3d(point, radius=searchRadius)
+        elif searchRadius <= 0:
+            if not useOriginal:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
+            else:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_knn_vector_3d(point, knn=maxNN)
+
+        else:
+            if not useOriginal:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_hybrid_vector_3d(point, radius=searchRadius,
+                                                                                      max_nn=maxNN)
+            else:
+                num, idx, dist = pointset_open3d.kdTreeOpen3D.search_hybrid_vector_3d(point,
+                                                                                      radius=searchRadius,
+                                                                                      max_nn=maxNN)
+        pointsubset = PointSubSet(pointset_open3d.ToNumpy(), np.asarray(idx))
+        pointNeighborhood = PointNeighborhood(pointsubset, dist)
+        return pointNeighborhood
+
+    @staticmethod
+    def CalculateAllPointsNeighbors(pointset, search_radius=0.05, maxNN=20, maxProcesses=8):
+        """
+        Compute all points neighbors within search radius with maximal number of neighbors.
+
+        :param pointset: a point cloud
+        :param search_radius: the radius in which the neighbors are collected. Default: 0.05m
+        :param maxNN: maximum points per neighborhood. Default: 20
+        :param maxProcesses: ** for later use **
+
+        :type pointset: np.array, PointSet.PointSet, PointSetOpen3D.PointSetOpen3D
+        :type search_radius: float
+        :type maxNN: int
+        :type maxProcesses: int
+
+        :return: neighbors property where each point has a PointNeighborhood defined.
+
+        :rtype: NeighborsProperty
+
+        .. warning::
+
+            Currently, the number of processes does not work
+        """
+        # threadsList = []
+        # pointsIndices = np.arange(self.numberOfPoints)
+        # splitIndices = np.array_split(pointsIndices, maxProcesses)
+        # p = Pool(maxProcesses)
+        # filledFunction = partial(self.GetPointsNeighborsByID, searchRadius=searchRadius, maxNN=maxNN,
+        #                          returnValues=False)
+        # p.map(filledFunction, splitIndices)
+        # p.map(self.GetPointsNeighborsByID, splitIndices, [searchRadius] * maxProcesses, [maxNN] * maxProcesses,
+        # [False] * maxProcesses)
+        # print("Done??????")
+
+        from DataClasses.PointSetOpen3D import PointSetOpen3D
+        print('>>> Find all points neighbors')
+        # Function will be used with multiprocessing.
+        # To run it without:
+        if not isinstance(pointset, PointSetOpen3D):
+            pointset = PointSetOpen3D(pointset)
+
+        pointsIndices = np.arange(pointset.Size)
+        neighbors = NeighborsProperty(pointset)
+        NeighborsFactory.GetPointNeighborsByID(pointset, pointsIndices, search_radius, maxNN, False,
+                                               neighbors)
+        return neighbors
+
+    @staticmethod
+    def __PrintOverrideNeighborhoodCalculations(neighborProperty, exampleIndex, newRadius, newMaxNN):
+        """
+
+        :param neighborProperty: an existing NeighborsProperty which will be override
+        :param exampleIndex:
+        :param newRadius:
+        :param newMaxNN:
+
+        :type neighborProperty: NeighborsProperty
+        :type exampleIndex:
+        :type newRadius: float
+        :type newMaxNN: int
+        """
+        previousRadius = neighborProperty.getNeighbors(exampleIndex).radius
+        previousMaxNN = neighborProperty.getNeighbors(exampleIndex).numberOfNeighbors
+
+        if previousRadius != newRadius or previousMaxNN != newMaxNN:
+            print("Function: PointSetOpen3D.PointSetOpen3D.GetPointsNeighborsByID")
+            print("Overriding Previous Calculations")
+
+            print("Previous Radius/maxNN: " + str(previousRadius) + "/" + str(previousMaxNN))
+            print("New Radius/maxNN:\t" + str(newRadius) + "/" + str(newMaxNN))
+            print()

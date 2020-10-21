@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SaliencyProperty &mdash; infragit 1a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>SaliencyProperty</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for SaliencyProperty</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
+<span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+
+
+<div class="viewcode-block" id="SaliencyProperty"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty">[docs]</a><span class="k">class</span> <span class="nc">SaliencyProperty</span><span class="p">(</span><span class="n">BaseProperty</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">saliencyValues</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param points: the point cloud</span>
+<span class="sd">        :param saliencyValues: value for each point</span>
+
+<span class="sd">        :type points: PointSet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">SaliencyProperty</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">saliencyValues</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">saliencyValues</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPointSaliency</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+<div class="viewcode-block" id="SaliencyProperty.normalize_values"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.normalize_values">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value</span>
+
+<span class="sd">        :param bool: boolean flag for normalization of the values</span>
+
+<span class="sd">        :type bool: bool</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span> <span class="o">=</span> <span class="nb">bool</span></div>
+
+<div class="viewcode-block" id="SaliencyProperty.getValues"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.getValues">[docs]</a>    <span class="k">def</span> <span class="nf">getValues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saliency values for all the point cloud</span>
+
+<span class="sd">        .. warning::</span>
+<span class="sd">            If normalized is True, the normalization is with log</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">saliency</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+            <span class="c1"># set values larger or smaller than 3sigma the average to invalid value</span>
+            <span class="n">s_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">s_tmp</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">saliency</span> <span class="o">&lt;</span> <span class="n">saliency</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">saliency</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">saliency</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">saliency</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            <span class="n">s_tmp</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">saliency</span> <span class="o">&gt;</span> <span class="n">saliency</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">saliency</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)]</span> <span class="o">=</span> <span class="n">saliency</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">saliency</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+            <span class="n">saliency</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">s_tmp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">saliency</span></div>
+
+<div class="viewcode-block" id="SaliencyProperty.getPointSaliency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.getPointSaliency">[docs]</a>    <span class="k">def</span> <span class="nf">getPointSaliency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the saliency value of a specific point</span>
+
+<span class="sd">        :param idx: the point index</span>
+
+<span class="sd">        :return: saliency value</span>
+
+<span class="sd">        :rtype: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SaliencyProperty.setPointSaliency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.setPointSaliency">[docs]</a>    <span class="k">def</span> <span class="nf">setPointSaliency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets a saliency values to specific points</span>
+
+<span class="sd">        :param idx: a list or array of indices (can be only one) for which the saliency values refer</span>
+<span class="sd">        :param values: the saliency values to assign</span>
+
+<span class="sd">        :type idx: list, np.ndarray, int</span>
+<span class="sd">        :type values: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

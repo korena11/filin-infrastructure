@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Geometry Utilities &mdash; infragit 1a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Visualization Classes" href="../Visualizations/Visualization.html" />
+    <link rel="prev" title="CUDA Utilities" href="cuda_API.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Utils.html">General Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cuda_API.html">CUDA Utilities</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Geometry Utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/Utils/geometryUtils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="geometry-utilities">
+<h1>Geometry Utilities<a class="headerlink" href="#geometry-utilities" title="Permalink to this headline">¶</a></h1>
+<p>Utilities that relate to simple 2D geometry analysis <a class="reference internal" href="#module-GeometryUtils" title="GeometryUtils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">GeometryUtils</span></code></a></p>
+<span class="target" id="module-GeometryUtils"></span><table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+<dl class="function">
+<dt id="GeometryUtils.circularity_measure">
+<code class="descclassname">GeometryUtils.</code><code class="descname">circularity_measure</code><span class="sig-paren">(</span><em>poly</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#circularity_measure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.circularity_measure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Measure the circularity of a polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>polygon</strong> (<em>shapely_polygon.geometry.polygon</em>) – shapely polygon</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the circularity measure</td>
+</tr>
+</tbody>
+</table>
+<p>The circularity is measured by:</p>
+<div class="math notranslate nohighlight">
+\[C = \frac{\ell^2}{4\pi A}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\ell\)</span> is the perimeter and <span class="math notranslate nohighlight">\(A\)</span> is the area of the polygon</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.curve2shapely">
+<code class="descclassname">GeometryUtils.</code><code class="descname">curve2shapely</code><span class="sig-paren">(</span><em>contour</em>, <em>crs=(0</em>, <em>0)</em>, <em>eps=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#curve2shapely"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.curve2shapely" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert matplotlib curves to shapely geometry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>contour</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a>) – a list of contours generated by matplotlib</li>
+<li><strong>crs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – coordinate system to move the curves to the original system (min_x, min_y)</li>
+<li><strong>eps</strong> – threshold for closed polygon. If smaller – the curve is a polygon. Default: 0.2</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">polygons that enable easier work (vectoric)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of shapely_polygon.geometry.polygon.Polygon</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.fit_circle_GH">
+<code class="descclassname">GeometryUtils.</code><code class="descname">fit_circle_GH</code><span class="sig-paren">(</span><em>xy</em>, <em>r_approx</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#fit_circle_GH"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.fit_circle_GH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a circle using Gauss-Helmert model
+:param xy:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.fit_line_LS">
+<code class="descclassname">GeometryUtils.</code><code class="descname">fit_line_LS</code><span class="sig-paren">(</span><em>xy</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#fit_line_LS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.fit_line_LS" title="Permalink to this definition">¶</a></dt>
+<dd><p>fit a line to xy points by linear least squares</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xy</strong> (<em>np.array</em><em> (</em><em>nx2</em><em>)</em>) – points coordinates</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">x0: fitted coefficients, RMSE: root mean squared error, v</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+<p>The model:</p>
+<div class="math notranslate nohighlight">
+\[y = ax + b\]</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.point_on_polygon">
+<code class="descclassname">GeometryUtils.</code><code class="descname">point_on_polygon</code><span class="sig-paren">(</span><em>poly</em>, <em>pointset</em>, <em>leafsize=40</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#point_on_polygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.point_on_polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the point along the polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>poly</strong> (<em>shapely_polygon.geometry.polygon.Polygon</em>) – the bounding polygon within which the points should be found</li>
+<li><strong>pointset</strong> (<em>DataClasses.PointSet.PointSet</em><em>,</em>) – the point cloud in which points are searched</li>
+<li><strong>leafsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – size of a leaf for the KDtree. Default: 40.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">closest points from the point cloud to the polygon</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataClasses.PointSubSet.PointSubSet</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.points_in_polygon">
+<code class="descclassname">GeometryUtils.</code><code class="descname">points_in_polygon</code><span class="sig-paren">(</span><em>multi_p</em>, <em>poly</em>, <em>pointset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#points_in_polygon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.points_in_polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all points that are within a polygon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>multi_p</strong> (<em>shapely_polygon.geometry.point</em>) – the point cloud as a shapely MultiPoint</li>
+<li><strong>pointset</strong> (<em>DataClasses.PointSet.PointSet</em><em>,</em>) – the point cloud in which points are searched</li>
+<li><strong>poly</strong> (<em>shapely_polygon.geometry.polygon</em>) – the bounding polygon within which the points should be found</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">all points within the polygon</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">DataClasses.PointSubSet.PointSubSet</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.polygon_to_linestring">
+<code class="descclassname">GeometryUtils.</code><code class="descname">polygon_to_linestring</code><span class="sig-paren">(</span><em>pols</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#polygon_to_linestring"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.polygon_to_linestring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts shapely polygons to shapely linestrings</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pols</strong> (<em>list of shapely_polygon.geometry.polygon.Polygon</em>) – polygons to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of lines</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="GeometryUtils.reclassify_shapely">
+<code class="descclassname">GeometryUtils.</code><code class="descname">reclassify_shapely</code><span class="sig-paren">(</span><em>shapes</em>, <em>eps=0.2</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/GeometryUtils.html#reclassify_shapely"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GeometryUtils.reclassify_shapely" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reclassifies shapely shapes into Polygons and LineString according to a new threshold</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shapes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)"><em>list</em></a><em>, </em><em>shapely.geometry.LineString.LineString</em><em>, </em><em>shapely.geometry.polygon.Polygon</em>) – shapes to be reclassified</li>
+<li><strong>eps</strong> – the new threshold according to which the shape is classified as a Polygon of LineString</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">reclasiffied shapes</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a> or shapely.geometry.LineString.LineString, shapely.geometry.polygon.Polygon</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Visualizations/Visualization.html" class="btn btn-neutral float-right" title="Visualization Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cuda_API.html" class="btn btn-neutral float-left" title="CUDA Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

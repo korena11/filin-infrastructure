@@ -1,11 +1,11 @@
-import numpy as np
-from NeighborsFactory import NeighborsFactory
-from PCL_registration import *
 import time
+
+import numpy as np
+from PCL_registration import *
 from scipy.spatial import cKDTree
 
-
 from IOFactory import IOFactory
+from NeighborsFactory import NeighborsFactory
 
 
 def Curvature_FundamentalForm_GPU(pnt, points, rad):
@@ -169,21 +169,21 @@ IOFactory.ReadPts(fileName, pointSet)
 pointSet = pointSet[0]
 pp = pointSet.ToNumpy()
 tree = cKDTree(pp)
-print pointSet.Size
+print (pointSet.Size)
 
  
 begin = time.time()
 # [Curvature_FundamentalForm_NUMPY(pp[2 * i, :], pointSet, 0.6) for i in xrange(10)]
 
-for i in xrange(100):
+for i in range(100):
     Curvature_FundamentalForm_NUMPY(pp[ i, :], pointSet, 0.6)
 
 end = time.time()
-print "%.6f" % ((end - begin))
+print ("%.6f" % ((end - begin)))
 
 begin = time.time()
 # [Curvature_FundamentalForm(pp[2 * i, :], pointSet, 0.6) for i in xrange(10)]
-for i in xrange(100):
+for i in range(100):
     Curvature_FundamentalForm(pp[i, :], pointSet, 0.6)
 end = time.time()
 print "%.6f" % ((end - begin))

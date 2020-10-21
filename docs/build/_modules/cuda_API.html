@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cuda_API &mdash; infragit 1a documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> infragit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../IOFactory.html">IO Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Datasets/Datasets.html">Data set classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">infragit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>cuda_API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for cuda_API</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">Cuda.cuda_functions</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="compute_normals_by_tensor_cuda"><a class="viewcode-back" href="../Utils/Utils.html#cuda_API.compute_normals_by_tensor_cuda">[docs]</a><span class="k">def</span> <span class="nf">compute_normals_by_tensor_cuda</span><span class="p">(</span><span class="n">pntSet</span><span class="p">,</span> <span class="n">neighborsNumber</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param pntSet: the points set</span>
+<span class="sd">    :param neighborsNumber: neighbors number for each point at the points set</span>
+<span class="sd">    :param neighbors: neighbors for each point at the points set</span>
+<span class="sd">    :return: normals for each point at the point set</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pntSet</span> <span class="o">=</span> <span class="n">pntSet</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">numPnts</span> <span class="o">=</span> <span class="n">pntSet</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nebNum</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="mi">100000000</span>
+    <span class="n">partsNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numPnts</span> <span class="o">*</span> <span class="n">nebNum</span> <span class="o">/</span> <span class="n">limit</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">numPnts</span> <span class="o">*</span> <span class="n">nebNum</span> <span class="o">%</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+    <span class="n">stride</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span> <span class="o">/</span> <span class="p">(</span><span class="n">nebNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stride=&quot;</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">threads_per_block</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="c1"># tensors_cpu = np.empty((3, 3 * numPnts))</span>
+    <span class="n">eigsVals_cpu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span><span class="p">))</span>
+    <span class="n">eigVectors_cpu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;partsNum=&quot;</span><span class="p">,</span> <span class="n">partsNum</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">partsNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">numPnts</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">&gt;</span> <span class="n">numPnts</span><span class="p">:</span>
+            <span class="c1"># print(1)</span>
+            <span class="n">pntSet_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">pntSet</span><span class="p">[:,</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="n">numPnts</span><span class="p">])</span>
+            <span class="n">neighborsNumber_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighborsNumber</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span><span class="n">numPnts</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">neighbors_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="n">numPnts</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">out2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">tensors</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">eigsVals</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+            <span class="n">eigVectors</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numPnts</span> <span class="o">-</span> <span class="n">stride</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pntSet_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">pntSet</span><span class="p">[:,</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)]))</span>
+            <span class="n">neighborsNumber_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighborsNumber</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">),</span> <span class="p">:])</span>
+            <span class="n">neighbors_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">),</span> <span class="p">:])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">stride</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">out2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">3</span> <span class="o">*</span> <span class="n">stride</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">tensors</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">eigsVals</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+            <span class="n">eigVectors</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">device_array_like</span><span class="p">(</span><span class="n">out2</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stride</span><span class="p">)</span>
+
+        <span class="n">blocks_per_grid</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="n">computeNormalByTensorGPU</span><span class="p">[</span><span class="n">blocks_per_grid</span><span class="p">,</span> <span class="n">threads_per_block</span><span class="p">](</span><span class="n">pntSet_device</span><span class="p">,</span> <span class="n">neighborsNumber_device</span><span class="p">,</span>
+                                                                     <span class="n">neighbors_device</span><span class="p">,</span> <span class="n">tensors</span><span class="p">)</span>
+
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+
+        <span class="c1"># ********************************************************************************************************************</span>
+        <span class="c1"># start = timer()</span>
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="n">computeEigenValuesGPU</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="n">threads_per_block</span><span class="p">](</span><span class="n">tensors</span><span class="p">,</span> <span class="n">eigsVals</span><span class="p">)</span>
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="c1"># duration = timer() - start</span>
+        <span class="c1"># print(&quot;gpu eigVals: &quot;, duration)</span>
+        <span class="c1"># ********************************************************************************************************************</span>
+        <span class="c1"># start = timer()</span>
+
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="n">computeEigenVectorGPU</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="n">threads_per_block</span><span class="p">](</span><span class="n">tensors</span><span class="p">,</span> <span class="n">eigsVals</span><span class="p">,</span> <span class="n">eigVectors</span><span class="p">)</span>
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+
+        <span class="c1"># duration = timer() - start</span>
+        <span class="c1"># print(&quot;gpu eigVecors: &quot;, duration)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">&gt;</span> <span class="n">numPnts</span><span class="p">:</span>
+            <span class="c1"># tensors_cpu[3, 3 * numPnts - 3 * ((i - 1) * stride)] = tensors.copy_to_host()</span>
+            <span class="n">eigVectors_cpu</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span><span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">eigVectors</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># tensors_cpu[3, 3 * numPnts - 3 * ((i - 1) * stride)] = tensors.copy_to_host()</span>
+            <span class="n">eigVectors_cpu</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)]</span> <span class="o">=</span> <span class="n">eigVectors</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">eigVectors_cpu</span></div>
+
+
+<div class="viewcode-block" id="computeUmbrelaCurvatureCuda"><a class="viewcode-back" href="../Utils/Utils.html#cuda_API.computeUmbrelaCurvatureCuda">[docs]</a><span class="k">def</span> <span class="nf">computeUmbrelaCurvatureCuda</span><span class="p">(</span><span class="n">pntSet</span><span class="p">,</span> <span class="n">neighborsNumber</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">normals</span><span class="p">):</span>
+    <span class="n">pntSet</span> <span class="o">=</span> <span class="n">pntSet</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">numPnts</span> <span class="o">=</span> <span class="n">pntSet</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nebNum</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="mi">100000000</span>
+    <span class="n">partsNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numPnts</span> <span class="o">*</span> <span class="n">nebNum</span> <span class="o">/</span> <span class="n">limit</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">numPnts</span> <span class="o">*</span> <span class="n">nebNum</span> <span class="o">%</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">)</span>
+    <span class="n">stride</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span> <span class="o">/</span> <span class="p">(</span><span class="n">nebNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stride=&quot;</span><span class="p">,</span> <span class="n">stride</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">timer</span><span class="p">()</span>
+    <span class="n">threads_per_block</span> <span class="o">=</span> <span class="mi">128</span>
+    <span class="n">umbrelaCurvature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">numPnts</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;partsNum=&quot;</span><span class="p">,</span> <span class="n">partsNum</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">partsNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">numPnts</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">&gt;</span> <span class="n">numPnts</span><span class="p">:</span>
+            <span class="c1"># print(1)</span>
+            <span class="n">pntSet_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">pntSet</span><span class="p">[:,</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="n">numPnts</span><span class="p">])</span>
+            <span class="n">neighborsNumber_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighborsNumber</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span><span class="n">numPnts</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">neighbors_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="n">numPnts</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">normals_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">normals</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">numPnts</span><span class="p">])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">numPnts</span> <span class="o">-</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">out_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">numPnts</span> <span class="o">-</span> <span class="n">stride</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pntSet_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">pntSet</span><span class="p">[:,</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)]))</span>
+            <span class="n">neighborsNumber_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighborsNumber</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">),</span> <span class="p">:])</span>
+            <span class="n">neighbors_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">neighbors</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">),</span> <span class="p">:])</span>
+            <span class="n">normals_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">normals</span><span class="p">[</span><span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">:</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)</span> <span class="o">-</span> <span class="p">((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="n">out_device</span> <span class="o">=</span> <span class="n">cuda</span><span class="o">.</span><span class="n">to_device</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stride</span><span class="p">)</span>
+
+        <span class="n">blocks_per_grid</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="n">umbrelaCurvatureGPU</span><span class="p">[</span><span class="n">blocks_per_grid</span><span class="p">,</span> <span class="n">threads_per_block</span><span class="p">](</span><span class="n">pntSet_device</span><span class="p">,</span> <span class="n">normals_device</span><span class="p">,</span> <span class="n">neighborsNumber_device</span><span class="p">,</span>
+                                                                <span class="n">neighbors_device</span><span class="p">,</span> <span class="n">out_device</span><span class="p">)</span>
+
+        <span class="n">cuda</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">*</span> <span class="n">stride</span> <span class="o">&gt;</span> <span class="n">numPnts</span><span class="p">:</span>
+            <span class="n">umbrelaCurvature</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span><span class="n">numPnts</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_device</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">umbrelaCurvature</span><span class="p">[((</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">stride</span><span class="p">):</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">stride</span><span class="p">)]</span> <span class="o">=</span> <span class="n">out_device</span><span class="o">.</span><span class="n">copy_to_host</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">umbrelaCurvature</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Sagi Students
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

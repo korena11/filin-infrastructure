@@ -4,13 +4,6 @@ photo-lab-3\Reuma
 23, Nov, 2017
 '''
 
-import platform
-
-if platform.system() == 'Linux':
-    import matplotlib
-
-    matplotlib.use('TkAgg')
-
 from BaseProperty import BaseProperty
 
 
@@ -32,9 +25,9 @@ class EigenProperty(BaseProperty):
 
         """
         super(EigenProperty, self).__init__(dataset)
-        self.setValues(**kwargs)
+        self.load(**kwargs)
 
-    def setValues(self, **kwargs):
+    def load(self, **kwargs):
         """
         Sets eigen values and eigen vectors into the EigenProperty object
 

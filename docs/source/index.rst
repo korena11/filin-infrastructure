@@ -14,6 +14,7 @@ with different data-class.
 Visualization is applicable through Visualization Classes. 
 
 Other general utilities are in :py:mod:`~MyTools`.
+Functions that are implemented in CUDA can be found in :py:mod:`~cuda_API`, though they are integrated within the relevant factories.
 
 Contents:
 =========
@@ -26,35 +27,31 @@ Contents:
     Properties/BaseProperty
     Factories/Factories
     LevelSets/LevelSets
-    Utils/EigenFactory
     Utils/Utils
     Visualizations/Visualization
+    Utils/EigenFactory
+    zreferences
+
 	   
 Dependencies
 ============
-This project is implemented for Python 3.6 
+This project is implemented for Python 3.6.
 
-- `pyProj <https://jswhit.github.io/pyproj/>`_.
-   Installation via `pip install pyproj`
-- `vtk <https://www.vtk.org/>`_
-   Installation via `pip install vtk`
-- `opencv <https://opencv.org/>`_
-   Installation via `pip install opencv-python`
-- `geopandas <http://geopandas.org/>`_
-   Installation via `conda install -c conda-forge geopandas`
-- `gdal <https://www.gdal.org/>`_
-   Installation via `pip install GDAL`
-- `pyspark <https://spark.apache.org/docs/0.9.0/python-programming-guide.html>`_
-   Make sure you have Java 8 or higher installed on your computer.
+*Always prefer installing through either pip install or conda install. Try not to mix.*
 
-   Installation via `pip install pyspark`
+- `pyProj <https://jswhit.github.io/pyproj/>`_:   Installation via `pip install pyproj`
+- `vtk <https://www.vtk.org/>`_ :   Installation via `pip install vtk`
+- `opencv <https://opencv.org/>`_ :    Installation via `pip install opencv-contrib-python`
+- `open3d <http://www.open3d.org/>`_ :   Installation via `pip install open3d-python`
+- `geopandas <http://geopandas.org/>`_ :   Installation via `pip install geopandas`
+- `gdal <https://www.gdal.org/>`_ :   Installation via `pip install GDAL`
+- `pyspark <https://spark.apache.org/docs/0.9.0/python-programming-guide.html>`_ :   Make sure you have Java 8 or higher installed on your computer.    Installation via `pip install pyspark`
+-  `tqdm <https://tqdm.github.io/>`_ :   Installation via `pip install tqdm`
+-  `richdem <https://richdem.readthedocs.io/en/latest/>`_ :   Installation via `pip install richdem`
+- `scikit-image <http://scikit-image.org>`_ :    Installation via `pip install scikit-image`
 
-References
-----------
 
-.. bibliography:: refs1.bib
-   :style: plain
-   :cited:
+
 
 
 

@@ -31,11 +31,11 @@ def Rotation_2Vectors(from_vector, to_vector):
 
     Rotation by angle between 'fromVector' and 'toVector' around the unit vector
     - `Link to information
-    <https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d>_`
+    <https://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d>`_
 
     .. math::
 
-        \bf{R} = \bf{I} + \sin(\alpha) \cdot [v]_\times + (1-\cos(\alpha))\cdot[v]_\times^2
+          \bf{R} = \bf{I} +  \cdot [v]_\times + \frac{1-\cos(\alpha)}{\sin^2(\alpha)} \cdot[v]_\times^2
 
     with :math:`[v]_\times` skewsymmetric inner product matrix
     (i.e., :math:`v=a_\text{from vector}\cdot b_\text{to vector}`; and :math:`\alpha` the
@@ -61,8 +61,8 @@ def Rotation_2Vectors(from_vector, to_vector):
         from_vector * to_vector)  # = Cos(AngleBetweenFromToVectors) # Slightly faster than np.dot in short vectors
 
     if cos_of_angle == 1:
-        if np.array_equal(from_vector, to_vector):
-            return np.eye(3)
+        # if np.array_equal(from_vector, to_vector):
+        return np.eye(3)
     elif cos_of_angle == -1:
         return -np.eye(3)
 
