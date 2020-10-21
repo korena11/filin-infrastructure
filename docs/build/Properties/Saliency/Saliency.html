@@ -320,7 +320,7 @@
 </table>
 </td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency_by_raster</span></code></a>(…[,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">directional_saliency_by_raster</span></code></a>(raster,&nbsp;…)</td>
 <td>Compute the directional saliency with a moving window on raster.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#SaliencyFactory.SaliencyFactory.hierarchical_saliency" title="SaliencyFactory.SaliencyFactory.hierarchical_saliency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hierarchical_saliency</span></code></a>(normals,&nbsp;search_param)</td>
@@ -805,13 +805,14 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 
 <dl class="classmethod">
 <dt id="SaliencyFactory.SaliencyFactory.directional_saliency_by_raster">
-<em class="property">classmethod </em><code class="descname">directional_saliency_by_raster</code><span class="sig-paren">(</span><em>curvature_raster</em>, <em>normals_tuple</em>, <em>win_size=(3</em>, <em>3)</em>, <em>width=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency_by_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">directional_saliency_by_raster</code><span class="sig-paren">(</span><em>raster</em>, <em>curvature_raster</em>, <em>normals_tuple</em>, <em>win_size=(3</em>, <em>3)</em>, <em>width=1</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency_by_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the directional saliency with a moving window on raster. <em>Returns raster</em></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>raster</strong> – the raster data on which the saliency is computed</li>
 <li><strong>curvature_raster</strong> – computed curvature, as a (m,n) raster</li>
 <li><strong>normals_tuple</strong> – computed normals as a tuple of (nx, ny, nz) as rasters.</li>
 <li><strong>win_size</strong> – the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)</li>

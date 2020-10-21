@@ -162,6 +162,7 @@
 
 <span class="kn">import</span> <span class="nn">Utils.MyTools</span> <span class="k">as</span> <span class="nn">mt</span>
 <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+<span class="kn">from</span> <span class="nn">DataClasses.RasterData</span> <span class="k">import</span> <span class="n">RasterData</span>
 <span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">Properties.Saliency.SaliencyProperty</span> <span class="k">import</span> <span class="n">SaliencyProperty</span>
 <span class="kn">from</span> <span class="nn">Properties.Tensors.TensorFactory</span> <span class="k">import</span> <span class="n">TensorFactory</span>
@@ -295,6 +296,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="kn">from</span> <span class="nn">warnings</span> <span class="k">import</span> <span class="n">warn</span>
+        <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
         <span class="kn">from</span> <span class="nn">VisualizationClasses.VisualizationO3D</span> <span class="k">import</span> <span class="n">VisualizationO3D</span>
 
         <span class="c1"># epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size</span>
@@ -308,6 +311,9 @@
         <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">neighbors_property</span><span class="p">,</span> <span class="n">trange</span><span class="p">(</span><span class="n">neighbors_property</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
                                                               <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Directional Saliency for each neighborhood&#39;</span><span class="p">,</span>
                                                               <span class="n">position</span><span class="o">=</span><span class="mi">0</span><span class="p">)):</span>
+            <span class="c1"># print(i)</span>
+            <span class="c1"># if i==12912 or i==12913:</span>
+            <span class="c1">#     print(&#39;!&#39;)</span>
             <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
                 <span class="n">tensor_saliency</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">continue</span>
@@ -897,10 +903,11 @@
 
     <span class="c1"># ------------------- Saliency on Panorama Property or rasters ---------------------</span>
 <div class="viewcode-block" id="SaliencyFactory.directional_saliency_by_raster"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.directional_saliency_by_raster">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">directional_saliency_by_raster</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">curvature_raster</span><span class="p">,</span> <span class="n">normals_tuple</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">directional_saliency_by_raster</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">raster</span><span class="p">,</span> <span class="n">curvature_raster</span><span class="p">,</span> <span class="n">normals_tuple</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the directional saliency with a moving window on raster. *Returns raster*</span>
 
+<span class="sd">        :param raster: the raster data on which the saliency is computed</span>
 <span class="sd">        :param curvature_raster: computed curvature, as a (m,n) raster</span>
 <span class="sd">        :param normals_tuple: computed normals as a tuple of (nx, ny, nz) as rasters.</span>
 <span class="sd">        :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)</span>
@@ -916,6 +923,7 @@
 <span class="sd">                0 0 1  0 0                        |  0 1   1 1 0</span>
 <span class="sd">        -----------------------------------------|----------------------------------------</span>
 
+<span class="sd">        :type raster: RasterData</span>
 <span class="sd">        :type curvature_raster: np.array</span>
 <span class="sd">        :type normals_tuple: tuple</span>
 <span class="sd">        :type win_size: tuple</span>
@@ -968,7 +976,7 @@
         <span class="k">for</span> <span class="n">raster</span> <span class="ow">in</span> <span class="n">rasters</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">kernel</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">:</span>
                 <span class="n">convolved</span> <span class="o">+=</span> <span class="p">(</span><span class="n">convolve2d</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;same&#39;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">mt</span><span class="o">.</span><span class="n">scale_values</span><span class="p">(</span><span class="n">convolved</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">SaliencyProperty</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">mt</span><span class="o">.</span><span class="n">scale_values</span><span class="p">(</span><span class="n">convolved</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">1</span><span class="p">))</span></div>
         <span class="c1">#</span>
 
 <div class="viewcode-block" id="SaliencyFactory.panorama_frequency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.panorama_frequency">[docs]</a>    <span class="nd">@classmethod</span>

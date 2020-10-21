@@ -452,17 +452,17 @@ is transferred in “kwargs” it will be assigned, with its name (as sent by kw
 <tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.curvature_by_3parameters" title="CurvatureFactory.CurvatureFactory.curvature_by_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curvature_by_3parameters</span></code></a>(neighborhood,&nbsp;normal)</td>
 <td>Curvature computation based on fundamental form when fitting bi-quadratic surface.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.curvature_with_CUDA" title="CurvatureFactory.CurvatureFactory.curvature_with_CUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curvature_with_CUDA</span></code></a>(neighborProperty,&nbsp;normals)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.curvature_numeric" title="CurvatureFactory.CurvatureFactory.curvature_numeric"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curvature_numeric</span></code></a>(raster[,&nbsp;ksize,&nbsp;sigma,&nbsp;…])</td>
+<td>Compute raster curvature based on first fundamental form</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.curvature_with_CUDA" title="CurvatureFactory.CurvatureFactory.curvature_with_CUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">curvature_with_CUDA</span></code></a>(neighborProperty,&nbsp;normals)</td>
 <td>Compute normals of each point using CUDA</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.filter_curvature_roughness" title="CurvatureFactory.CurvatureFactory.filter_curvature_roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_curvature_roughness</span></code></a>(…[,&nbsp;mean,&nbsp;std,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.filter_curvature_roughness" title="CurvatureFactory.CurvatureFactory.filter_curvature_roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_curvature_roughness</span></code></a>(…[,&nbsp;mean,&nbsp;std,&nbsp;…])</td>
 <td>Turns curvature values to zero if they are part of a normal distribution N~(mean, std)</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_3parameters</span></code></a>(pcl,&nbsp;…[,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_3parameters</span></code></a>(pcl,&nbsp;…[,&nbsp;…])</td>
 <td>Curvature of a PointSetOpen3D with its normals and neighborhood via the <em>three-parameters</em> algorithm.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.raster_fundamentalForm" title="CurvatureFactory.CurvatureFactory.raster_fundamentalForm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raster_fundamentalForm</span></code></a>(raster[,&nbsp;ksize,&nbsp;…])</td>
-<td>Compute raster curvature based on first fundamental form</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.tensorProperty_3parameters" title="CurvatureFactory.CurvatureFactory.tensorProperty_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensorProperty_3parameters</span></code></a>(tensorProperty[,&nbsp;…])</td>
 <td>Compute curvature for tensors, via the <em>three-parameters</em> algorithm.</td>
@@ -551,6 +551,32 @@ The second condition is defined by the number of sectors with a minimum number o
 </div></blockquote>
 </li>
 </ol>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="CurvatureFactory.CurvatureFactory.curvature_numeric">
+<em class="property">classmethod </em><code class="descname">curvature_numeric</code><span class="sig-paren">(</span><em>raster</em>, <em>ksize=3</em>, <em>sigma=2.5</em>, <em>gradientType='L1'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.curvature_numeric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.curvature_numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute raster curvature based on first fundamental form</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raster</strong> (<em>np.array</em><em> or </em><a class="reference internal" href="../../Datasets/RasterData.html#RasterData.RasterData" title="RasterData.RasterData"><em>RasterData</em></a>) – the raster image</li>
+<li><strong>ksize</strong> – window/kernel size (equivalent to neighborhood size)</li>
+<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – for Gaussian blurring</li>
+<li><strong>gradientType</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – ‘L1’ or ‘L2’ for derivatives computation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">curvature map</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">curvatureProperty</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="classmethod">
@@ -662,32 +688,6 @@ point neighborhood parameters</p>
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.curvature_by_3parameters" title="CurvatureFactory.CurvatureFactory.curvature_by_3parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">curvature_by_3parameters()</span></code></a></p>
 </div>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="CurvatureFactory.CurvatureFactory.raster_fundamentalForm">
-<em class="property">classmethod </em><code class="descname">raster_fundamentalForm</code><span class="sig-paren">(</span><em>raster</em>, <em>ksize=3</em>, <em>sigma=2.5</em>, <em>gradientType='L1'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.raster_fundamentalForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.raster_fundamentalForm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute raster curvature based on first fundamental form</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>raster</strong> (<em>np.array</em><em> or </em><a class="reference internal" href="../../Datasets/RasterData.html#RasterData.RasterData" title="RasterData.RasterData"><em>RasterData</em></a>) – the raster image</li>
-<li><strong>ksize</strong> – window/kernel size (equivalent to neighborhood size)</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – for Gaussian blurring</li>
-<li><strong>gradientType</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – ‘L1’ or ‘L2’ for derivatives computation</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">curvature map</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">curvatureProperty</p>
-</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <dl class="classmethod">

@@ -5,6 +5,7 @@ import numpy as np
 
 
 def azimuth(dx, dy):
+    theta = 0
     if (dx >= 0 and dy >= 0) or (dx == 0 and dy < 0):
         theta = np.arctan2(dx, dy)
     elif dx < 0 and dy == 0:
@@ -13,7 +14,10 @@ def azimuth(dx, dy):
         theta = 2.0 * np.pi + np.arctan2(dx, dy)
     elif dy < 0 < dx:
         theta = 3.0 * np.pi / 2.0 - np.arctan2(dx, dy)
+
     return theta
+
+
 
 
 # ----------- TODO: sit with Elia. Shouldn't this be in the curve class? ---------

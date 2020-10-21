@@ -222,6 +222,7 @@ class NeighborsFactory:
         :type parts_num: int
 
         :return: NeighborsProperty
+        :rtype: NeighborsProperty
 
         .. warning::
             Division to parts doesn't work

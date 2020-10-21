@@ -75,6 +75,7 @@ class PointSubSet(PointSet):
             return self.data[self.indices, :]
 
 
+
     def ToPolyData(self):
         """
         :return: tvtk.PolyData of the current PointSet

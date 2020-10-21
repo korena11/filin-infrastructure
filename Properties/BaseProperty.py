@@ -44,7 +44,7 @@ class BaseProperty(object):
 
         :param idx: the point index
 
-        :return: principal curvature values (k1, k2)
+        :return: point property value or object of a specific point
 
         :rtype: float
 
@@ -94,8 +94,7 @@ class BaseProperty(object):
 
         :param kwargs: according to the property
 
-        In general, sets every attribute if it exists within the property, and throws a warning if it is not
-        within the property
+        In general, sets every attribute if it exists within the property, and throws a warning  not
 
         """
         for key in kwargs:
@@ -148,8 +147,6 @@ class BaseProperty(object):
 
         """
         pass
-
-
 
 
     if __name__ == '__main__':

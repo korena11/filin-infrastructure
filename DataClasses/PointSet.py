@@ -191,6 +191,18 @@ class PointSet(BaseData):
         """
         return self.data[index, :]
 
+    def MakeGeometryUnique(self):
+        """
+        Makes sure that every (x,y,z) appears exactly once.
+
+        :return: a PointSubSet of the unique points
+        """
+        from DataClasses.PointSubSet import PointSubSet
+
+        unique_points, idx = np.unique(self.ToNumpy(), axis=0, return_index=True)
+
+        return PointSubSet(self, idx)
+
     def UpdateFields(self, **kwargs):
         '''
         Update a field within the PointSet

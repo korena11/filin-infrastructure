@@ -79,5 +79,5 @@ class ColorProperty(BaseProperty):
             self.__rgb = rgb_normed
 
     def getValues(self):
-        return self.__rgb
+        return self.rgb
 

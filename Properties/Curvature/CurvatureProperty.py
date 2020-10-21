@@ -37,9 +37,11 @@ class CurvatureProperty(BaseProperty):
 
         :return:
         """
+        current_value = self.__invalid_value
+        self.__principal_curvatures[self.__principal_curvatures == current_value] = value
         self.__invalid_value = value
 
-    def load(self, principal_curvatures, **kwargs):
+    def load(self, principal_curvatures=None, **kwargs):
         """
         Sets curvature into Curvature Property object
 

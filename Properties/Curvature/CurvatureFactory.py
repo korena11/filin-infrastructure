@@ -403,7 +403,7 @@ class CurvatureFactory:
         return new_curvature
 
     @classmethod
-    def raster_fundamentalForm(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
+    def curvature_numeric(cls, raster, ksize=3, sigma=2.5, gradientType='L1'):
         """
         Compute raster curvature based on first fundamental form
 

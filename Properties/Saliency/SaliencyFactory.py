@@ -4,6 +4,7 @@ from tqdm import tqdm, trange
 
 import Utils.MyTools as mt
 from DataClasses.PointSet import PointSet
+from DataClasses.RasterData import RasterData
 from Properties.BaseProperty import BaseProperty
 from Properties.Saliency.SaliencyProperty import SaliencyProperty
 from Properties.Tensors.TensorFactory import TensorFactory
@@ -137,6 +138,8 @@ class SaliencyFactory(object):
         """
 
         from warnings import warn
+        from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+        from DataClasses.PointSubSet import PointSubSet
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
         # epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size
@@ -150,6 +153,9 @@ class SaliencyFactory(object):
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
                                                               desc='Directional Saliency for each neighborhood',
                                                               position=0)):
+            # print(i)
+            # if i==12912 or i==12913:
+            #     print('!')
             if neighborhood.numberOfNeighbors < 4:
                 tensor_saliency.append(0)
                 continue
@@ -739,10 +745,11 @@ class SaliencyFactory(object):
 
     # ------------------- Saliency on Panorama Property or rasters ---------------------
     @classmethod
-    def directional_saliency_by_raster(cls, curvature_raster, normals_tuple, win_size=(3,3), width=1):
+    def directional_saliency_by_raster(cls, raster, curvature_raster, normals_tuple, win_size=(3,3), width=1):
         r"""
         Compute the directional saliency with a moving window on raster. *Returns raster*
 
+        :param raster: the raster data on which the saliency is computed
         :param curvature_raster: computed curvature, as a (m,n) raster
         :param normals_tuple: computed normals as a tuple of (nx, ny, nz) as rasters.
         :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
@@ -758,6 +765,7 @@ class SaliencyFactory(object):
                 0 0 1  0 0                        |  0 1   1 1 0
         -----------------------------------------|----------------------------------------
 
+        :type raster: RasterData
         :type curvature_raster: np.array
         :type normals_tuple: tuple
         :type win_size: tuple
@@ -810,7 +818,7 @@ class SaliencyFactory(object):
         for raster in rasters:
             for kernel in windows:
                 convolved += (convolve2d(raster, kernel, mode='same'))
-        return mt.scale_values(convolved, 0 ,1)
+        return SaliencyProperty(raster, mt.scale_values(convolved, 0 ,1))
         #
 
     @classmethod

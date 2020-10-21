@@ -112,8 +112,10 @@ def computeImageGradient(I, **kwargs):
 def repartitionCurve(c, dh):
     '''
     Re-partitions the curve according to dh
+
     :param c: curve
     :param dh: length between points
+
     :return: the re-partitioned curve
     '''
     dc = np.diff(c, axis = 0)
@@ -677,7 +679,7 @@ def ballTree_saliency(pointset, scale, neighborhood_properties, curvature_attrib
     tensor_normals = NormalsFactory.normals_from_tensors(tensors_property)
 
     # 6.  Saliency for each tensor
-    tensor_saliency = SaliencyFactory.curvature_saliency(neighbors, tensor_normals, tensor_curvature,
+    tensor_saliency = SaliencyFactory.directional_saliency(neighbors, tensor_normals, tensor_curvature,
                                                          curvature_attribute=curvature_attribute, verbose=verbose)
 
     # 7. Assign saliency value for each point in the tensor

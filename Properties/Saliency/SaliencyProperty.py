@@ -30,6 +30,22 @@ class SaliencyProperty(BaseProperty):
             self.current = 0
             raise StopIteration
 
+    @property
+    def saliency(self):
+        """
+        Retrieve saliency values of all point cloud
+
+        :param idx: the point index
+
+        :return: saliency value
+
+        :rtype: float
+
+        """
+
+        return self.__saliency
+
+
     def normalize_values(self, bool):
         """
         A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value
@@ -62,7 +78,7 @@ class SaliencyProperty(BaseProperty):
 
         return saliency
 
-    def getPointSaliency(self, idx=None):
+    def getPointSaliency(self, idx):
         """
         Retrieve the saliency value of a specific point
 
@@ -73,10 +89,8 @@ class SaliencyProperty(BaseProperty):
         :rtype: float
 
         """
-        if idx is None:
-            return self.__saliency
-        else:
-            return self.__saliency[idx]
+
+        return self.__saliency[idx]
 
     def setPointSaliency(self, idx, values):
         """

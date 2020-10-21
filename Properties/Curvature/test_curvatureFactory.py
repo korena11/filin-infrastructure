@@ -52,8 +52,8 @@ class TestCurvatureFactory(TestCase):
         dataName = 'gully7_05'
 
         raster = IOFactory.rasterFromAscFile(folderPath + dataName + '.txt')
-        curvature = CurvatureFactory.raster_fundamentalForm(raster, ksize=3, gradientType='L2',
-                                                            sigma=9)
+        curvature = CurvatureFactory.curvature_numeric(raster, ksize=3, gradientType='L2',
+                                                       sigma=9)
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots(4, 1)
         ax[0].imshow(curvature.k1)
