@@ -176,6 +176,8 @@ class SaliencyFactory(object):
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
             dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, win_size, noise_size, verbose)
+            if dn > 10:
+                print('hello')
             dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size, verbose)
 
             if verbose:
@@ -185,7 +187,7 @@ class SaliencyFactory(object):
                 print('dn {}, dk {}'.format(dn, dk))
 
             normal_weight = 1 - curvature_weight
-            tensor_saliency.append(dn + dk)
+            tensor_saliency.append(dn * normal_weight + dk * curvature_weight)
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
@@ -274,7 +276,7 @@ class SaliencyFactory(object):
         dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
         # dk[np.where(np.abs(dk) < epsilon)] = 0
         # dk_normed = dk
-        dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+        dk_normed = mt.scale_values(dk)
         # dk = current_curvatures[1:]
         #
         dist_element = 1 / np.sqrt(2 * np.pi) * \
@@ -745,7 +747,7 @@ class SaliencyFactory(object):
 
     # ------------------- Saliency on Panorama Property or rasters ---------------------
     @classmethod
-    def directional_saliency_by_raster(cls, raster, curvature_raster, normals_tuple, win_size=(3,3), width=1):
+    def directional_saliency_by_raster(cls, raster, curvature_raster, normals_tuple, win_size=(3,3), width=1, curvature_weight=.5):
         r"""
         Compute the directional saliency with a moving window on raster. *Returns raster*
 
@@ -753,7 +755,6 @@ class SaliencyFactory(object):
         :param curvature_raster: computed curvature, as a (m,n) raster
         :param normals_tuple: computed normals as a tuple of (nx, ny, nz) as rasters.
         :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
-
         :param width: the width of the band to compare. Must be odd number. For example:
 
         window :math:`5\times 5` with width 1    | window :math:`5\times 5` with width 3
@@ -765,11 +766,14 @@ class SaliencyFactory(object):
                 0 0 1  0 0                        |  0 1   1 1 0
         -----------------------------------------|----------------------------------------
 
+        :param curvature_weight: weighting parameter for saliency computation
+
         :type raster: RasterData
         :type curvature_raster: np.array
         :type normals_tuple: tuple
         :type win_size: tuple
         :type width: int
+        :type curvature_weight: float
 
         :return: raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)
 
@@ -809,9 +813,13 @@ class SaliencyFactory(object):
         diag_NE = np.fliplr(diag_NW) + 1
 
         windows = [horizontal, vertical, diag_NW, diag_NE]
-        rasters = [curvature_raster]
-        normals = list(normals_tuple)
-        rasters = rasters + normals # combine lists
+        rasters = [curvature_raster * curvature_weight]
+        normals = []
+        for normal in normals_tuple:
+            n = normal * (1-curvature_weight)
+        rasters.append(n)
+
+        # rasters = rasters + normals # combine lists
         convolved = np.zeros(curvature_raster.shape)
 
         # 3. convolve all windows with all rasters

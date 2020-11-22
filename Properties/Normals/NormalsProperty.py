@@ -23,7 +23,7 @@ class NormalsProperty(BaseProperty):
     def Normals(self):
         """
         Return points' normals 
-        """  
+        """
         return self.__normals
 
     def load(self, normals, **kwargs):
@@ -37,32 +37,30 @@ class NormalsProperty(BaseProperty):
         if normals is not None:
             self.__normals = normals
 
-
     def getValues(self):
         return self.__normals
 
-    @property  
+    @property
     def dX(self):
         """
         Return normals X coordinates 
-        """  
+        """
         return self.__normals[:, 0]
-    
-    @property  
+
+    @property
     def dY(self):
         """
         Return normals Y coordinates  
-        """  
+        """
         return self.__normals[:, 1]
-    
-    @property  
+
+    @property
     def dZ(self):
         """
         Return normals Z coordinates  
-        """  
+        """
         return self.__normals[:, 2]
-    
-    
+
     def getPointNormal(self, idx):
         """
         Retrieve the normal value of a specific point
@@ -87,3 +85,29 @@ class NormalsProperty(BaseProperty):
 
         """
         self.__normals[idx, :] = values
+
+    def dip_direction(self):
+        """
+        Compute the dip direction
+
+        The dip gives the steepest angle of descent of a tilted bed or feature relative to a horizontal plane,
+        and is given by the number (0°-90°) as well as a letter (N,S,E,W) with rough direction in which the bed is dipping downwards.
+        The dip direction is the azimuth of the direction the dip as projected to the horizontal (like the trend of a linear
+        feature in trend and plunge measurements), which is 90° off the strike angle.
+
+        The dip is computed by
+
+        .. math::
+            \theta = \arcsin \left(\frac{\sqrt{n_x^2 + n_y^2}}{\sqrt{n_x^2 + n_y^2+n_z^2}}\right)
+
+        :return: the dip direction (decimal angels)
+        :rtype: np.array nx1
+        """
+        import numpy as np
+
+        numerator = np.sqrt(self.dX**2 + self.dY**2)
+        denominator = np.sqrt(self.dX**2 + self.dY**2 + self.dZ**2)
+
+        return np.arcsin(numerator / denominator)
+
+

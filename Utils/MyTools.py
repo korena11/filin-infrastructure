@@ -19,6 +19,9 @@ from scipy.ndimage import filters
 from skimage import measure
 import scipy.interpolate as interp
 
+
+
+
 def chi2_distance(histA, histB, eps=1e-10):
     r"""
     Compute the :math:`\chi^2` distance between two histograms

@@ -187,7 +187,7 @@ class CurvatureProperty(BaseProperty):
         return k2
 
     @property
-    def mean_curvature(self):
+    def mean(self):
         '''
         Mean curvature values
         '''
