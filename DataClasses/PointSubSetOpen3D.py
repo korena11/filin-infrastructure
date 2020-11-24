@@ -1,5 +1,5 @@
 import numpy as np
-import open3d as O3D
+
 
 # Framework Imports
 from DataClasses.PointSetOpen3D import PointSetOpen3D
@@ -78,31 +78,3 @@ class PointSubSetOpen3D(PointSetOpen3D):
         """
         return np.asarray(self.data.points)[self.GetIndices, 2]
 
-    def Visualize(self, original=False, both=False):
-        # TODO: Elia please redo - so it will show only the subset
-
-        def toggle_black_white_background(vis):
-            opt = vis.get_render_option()
-            if np.array_equal(opt.background_color, np.ones(3)):
-                opt.background_color = np.zeros(3)
-            else:
-                opt.background_color = np.ones(3)
-            return False
-
-        key_to_callback = {}
-        key_to_callback[ord("K")] = toggle_black_white_background
-
-        if both:
-            originalColors = np.zeros((self.Size, 3), dtype=np.float)
-            originalColors[self.indices, 0] = 0.5
-            # subsetColors = np.zeros((self.numberOfPoints, 3), dtype=np.float)
-            # subsetColors[:, 0] = 1.
-            # self.pointsOpen3D.colors = O3D.Vector3dVector(subsetColors)
-            self.originalPointsOpen3D.colors = O3D.Vector3dVector(originalColors)
-            drawData = [self.pointsOpen3D, self.originalPointsOpen3D]
-        elif original:
-            drawData = [self.originalPointsOpen3D]
-        else:
-            drawData = [self.pointsOpen3D]
-
-        O3D.draw_geometries_with_key_callbacks(drawData, key_to_callback)
