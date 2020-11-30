@@ -318,7 +318,6 @@ class CurvatureFactory:
         from scipy import stats
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 
-
         epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
         umbrellaCurvature = []
 
@@ -341,8 +340,10 @@ class CurvatureFactory:
 
                 # check if the projections are statistically zero
                 projections[np.where(np.abs(projections) < epsilon)] = 0
-
-                umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
+                if np.sum(projections) / projections.shape < epsilon:
+                    umbrellaCurvature.append(0)
+                else:
+                    umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)

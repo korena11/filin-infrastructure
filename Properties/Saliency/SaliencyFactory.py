@@ -112,7 +112,7 @@ class SaliencyFactory(object):
     # ----------------- DIRECTIONAL SALIENCY -----------------------
     @staticmethod
     def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute,
-                             min_obj_size=0.05, noise_size=0.01, curvature_weight=.5, verbose=False):
+                             min_obj_size=0.05, noise_size_normal=0.01, noise_size_curvature = 0.1, curvature_weight=.5, verbose=False):
         """
 
         :param neighbors_property: the neighborhood property of the point cloud.
@@ -120,7 +120,8 @@ class SaliencyFactory(object):
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
         :param min_obj_size: the minimal object size to look for. Dictates the window size
-        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param noise_size_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param noise_size_curvature: std of the curvature deviations for a surface texture. Default: 0.1
         :param curvature_weight: the weight of the curvature in the saliency computation
         :param verbose: print running messages. Default: False
 
@@ -129,7 +130,7 @@ class SaliencyFactory(object):
         :type curvature_attribute: str
         :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type min_obj_size: float
-        :type noise_size: float
+        :type noise_size_normal: float
         :type verbose: bool
 
         :return: saliency values for each point
@@ -175,8 +176,12 @@ class SaliencyFactory(object):
 
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
-            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, win_size, noise_size, verbose)
-            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size, verbose)
+            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, win_size, noise_size_normal, verbose)
+            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, win_size, noise_size_curvature, verbose)
+
+            # values normalization
+            dn = 1- np.exp(-1 / neighborhood.numberOfNeighbors * dn)
+            dk = 1- np.exp(-1 / neighborhood.numberOfNeighbors * dk)
 
             if verbose:
                 # pts = neighborhood.color_neighborhood()
@@ -193,7 +198,7 @@ class SaliencyFactory(object):
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 
     @staticmethod
-    def __normal_saliency(neighborhood, current_normals, win_size=0.05, noise_size=0.01, verbose=False):
+    def __normal_saliency(neighborhood, current_normals, win_size=0.05, noise_size=0.01, sigma=1, verbose=False):
         r"""
         Checks the saliency of a point based on  normals property
 
@@ -220,14 +225,18 @@ class SaliencyFactory(object):
         # dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
         dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
                 neighborhood.numberOfNeighbors - 1)
+        dn = mt.scale_values(dn)
         if np.any(dn.std(axis=0) > noise_size):
             dn = 0
         else:
             # distances influence - Laplacian (DoG)
-            dist_element = 1 / np.sqrt(2 * np.pi) * \
-                       np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
-                       1 / np.sqrt(2 * np.pi * win_size ** 2) * \
-                       np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+            # dist_element = 1 / np.sqrt(2 * np.pi) * \
+            #            np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+            #            1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+            #            np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+
+            dist_element = 1 / np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-0.5 * (neighborhood.distances[1:] - win_size) / (2 * sigma ** 2))
+
             # dist_element[dist_element < 0] = 0
         # dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)
         # dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]
@@ -240,7 +249,7 @@ class SaliencyFactory(object):
         return dn
 
     @staticmethod
-    def __curvature_saliency(neighborhood, current_curvatures, win_size=0.05, noise_size=0.01, verbose=False):
+    def __curvature_saliency(neighborhood, current_curvatures, win_size=0.05, noise_size=0.01, sigma = 1, verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature.
 
@@ -275,34 +284,17 @@ class SaliencyFactory(object):
 
         # difference in curvature
         dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
-        # dk[np.where(np.abs(dk) < epsilon)] = 0
+        dk[np.where(np.abs(dk) < noise_size)] = 0
         # dk_normed = dk
-        dk_normed = (dk - dk.min()) / (dk.max() - dk.min() + EPS)
+        dk_normed = mt.scale_values(dk)
         # dk = current_curvatures[1:]
         #
-        dist_element = 1 / np.sqrt(2 * np.pi) * \
-                       np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
-                       1 / np.sqrt(2 * np.pi * win_size ** 2) * \
-                       np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        # dist_element = 1 / np.sqrt(2 * np.pi) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \
+        #                1 / np.sqrt(2 * np.pi * win_size ** 2) * \
+        #                np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))
+        dist_element = 1/ np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-0.5 * (neighborhood.distances[1:] - win_size) / (2 * sigma ** 2))
         dist_element_normed = mt.scale_values(dist_element)
-
-        # if dk.std() > noise_size:
-        #     return 0
-        # define window
-        # dist_element = np.ones((neighborhood.Size, 1))
-        # min_dist = neighborhood.distances < win_size
-        # s2 = np.sum(min_dist)
-        # s1 = neighborhood.Size - s2
-        #
-        # dist_element[min_dist == 0] = -1 / s1
-        # dist_element[min_dist] /= s2
-        # dist_element[neighborhood.distances > win_size + .5 * win_size] = 0
-        # normalize to equal area (inside and out)
-
-        # s = win_size ** 2 / (neighborhood.distances[-1] ** 2 - win_size ** 2)
-        # dist_element_normed = dist_element.copy()
-        # dist_element_normed[neighborhood.distances > win_size] *= s
-        # dist_element_normed = dist_element
 
         return np.abs(np.sum(dk_normed * dist_element_normed))
 
@@ -748,7 +740,7 @@ class SaliencyFactory(object):
 
     # ------------------- Saliency on Panorama Property or rasters ---------------------
     @classmethod
-    def directional_saliency_by_raster(cls, raster, curvature_raster, normals_tuple, win_size=(3,3), width=1):
+    def directional_saliency_by_raster(cls, raster, curvature_raster, normals_tuple, win_size=(3,3), width=1, curvature_weight=.5):
         r"""
         Compute the directional saliency with a moving window on raster. *Returns raster*
 
@@ -756,7 +748,6 @@ class SaliencyFactory(object):
         :param curvature_raster: computed curvature, as a (m,n) raster
         :param normals_tuple: computed normals as a tuple of (nx, ny, nz) as rasters.
         :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
-
         :param width: the width of the band to compare. Must be odd number. For example:
 
         window :math:`5\times 5` with width 1    | window :math:`5\times 5` with width 3
@@ -768,11 +759,14 @@ class SaliencyFactory(object):
                 0 0 1  0 0                        |  0 1   1 1 0
         -----------------------------------------|----------------------------------------
 
+        :param curvature_weight: weighting parameter for saliency computation
+
         :type raster: RasterData
         :type curvature_raster: np.array
         :type normals_tuple: tuple
         :type win_size: tuple
         :type width: int
+        :type curvature_weight: float
 
         :return: raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)
 
@@ -812,9 +806,13 @@ class SaliencyFactory(object):
         diag_NE = np.fliplr(diag_NW) + 1
 
         windows = [horizontal, vertical, diag_NW, diag_NE]
-        rasters = [curvature_raster]
-        normals = list(normals_tuple)
-        rasters = rasters + normals # combine lists
+        rasters = [curvature_raster * curvature_weight]
+        normals = []
+        for normal in normals_tuple:
+            n = normal * (1-curvature_weight)
+        rasters.append(n)
+
+        # rasters = rasters + normals # combine lists
         convolved = np.zeros(curvature_raster.shape)
 
         # 3. convolve all windows with all rasters

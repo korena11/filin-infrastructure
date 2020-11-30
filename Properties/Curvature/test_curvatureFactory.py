@@ -58,7 +58,7 @@ class TestCurvatureFactory(TestCase):
         fig, ax = plt.subplots(4, 1)
         ax[0].imshow(curvature.k1)
         ax[1].imshow(curvature.k2)
-        ax[2].imshow(curvature.mean_curvature)
+        ax[2].imshow(curvature.mean)
         ax[3].imshow(curvature.curvadness)
 
         plt.show()
