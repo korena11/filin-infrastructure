@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="infrastructure that works for Reuma PhD">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="added type for PointSet.ToNumpy() (column's titles)&#10;added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency">
+      <change beforePath="$PROJECT_DIR$/DataClasses/BallTreePointSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/BallTreePointSet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataClasses/PointSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/PointSubSet.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSubSet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataClasses/RasterData.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataClasses/RasterData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsProperty.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsProperty.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,15 +70,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataClasses/RasterData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7176" />
+            <state relative-caret-position="701">
+              <caret line="396" lean-forward="true" selection-start-line="396" selection-end-line="396" />
+            </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="152" column="73" lean-forward="true" selection-start-line="152" selection-start-column="73" selection-end-line="152" selection-end-column="73" />
+            <state relative-caret-position="390">
+              <caret line="148" column="43" selection-start-line="148" selection-start-column="43" selection-end-line="148" selection-end-column="43" />
               <folding>
                 <element signature="e#60#78#0" expanded="true" />
               </folding>
@@ -83,20 +88,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Color/ColorProperty.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2106">
-              <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+            <state relative-caret-position="134">
+              <caret line="18" column="37" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Curvature/CurvatureProperty.py">
+        <entry file="file://$PROJECT_DIR$/DataClasses/KdTreePointSet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1118">
-              <caret line="45" column="44" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
+            <state relative-caret-position="95">
+              <caret line="130" column="8" selection-start-line="130" selection-start-column="8" selection-end-line="130" selection-end-column="8" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -105,22 +110,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Utils/MyTools.py">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17628">
-              <caret line="691" column="37" selection-start-line="691" selection-start-column="21" selection-end-line="691" selection-end-column="37" />
+            <state relative-caret-position="376">
+              <caret line="84" column="11" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
               <folding>
-                <element signature="e#49#59#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Utils/PropoertyUtils.py">
+        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1846">
-              <caret line="76" column="69" selection-start-line="76" selection-start-column="69" selection-end-line="76" selection-end-column="69" />
+            <state relative-caret-position="251">
+              <caret line="63" column="39" lean-forward="true" selection-start-line="55" selection-start-column="2" selection-end-line="63" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -128,7 +133,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2730">
+            <state relative-caret-position="728">
               <caret line="106" selection-start-line="106" selection-end-line="106" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
@@ -137,11 +142,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="771" column="31" selection-start-line="771" selection-start-column="31" selection-end-line="771" selection-end-column="31" />
+            <state relative-caret-position="479">
+              <caret line="760" selection-start-line="760" selection-end-line="760" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -167,9 +172,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>intersphinx_</find>
-      <find>General</find>
-      <find>getC</find>
       <find>PointSetOpen3D.rst</find>
       <find>tensorType</find>
       <find>Points</find>
@@ -197,6 +199,9 @@
       <find>update(</find>
       <find>rotation</find>
       <find>det</find>
+      <find>ToN</find>
+      <find>To</find>
+      <find>GetPoint</find>
     </findStrings>
     <replaceStrings>
       <replace>color</replace>
@@ -233,10 +238,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/IOmodules/SaveFunctions.py" />
         <option value="$PROJECT_DIR$/Properties/Neighborhood/test_neighborsFactory.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Curvature/Curvature.rst" />
-        <option value="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/Spherical.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Panorama/Panorama.rst" />
         <option value="$PROJECT_DIR$/Visualization Classes/VisualizationUtils.py" />
@@ -244,13 +247,11 @@
         <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationUtils.py" />
         <option value="$PROJECT_DIR$/docs/source/zreferences.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" />
-        <option value="$PROJECT_DIR$/DataClasses/PointSubSet.py" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Colors/Colors.rst" />
         <option value="$PROJECT_DIR$/Use Cases/CurvatureGPUNUMPY_TESTING.py" />
         <option value="$PROJECT_DIR$/Properties/Curvature/curvature_types.py" />
         <option value="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" />
         <option value="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" />
-        <option value="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" />
         <option value="$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesProperty.py" />
         <option value="$PROJECT_DIR$/LevelSets/check_GVF.py" />
         <option value="$PROJECT_DIR$/LevelSets/GVF.py" />
@@ -282,13 +283,18 @@
         <option value="$PROJECT_DIR$/Utils/MyTools.py" />
         <option value="$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py" />
         <option value="$PROJECT_DIR$/Properties/BaseProperty.py" />
+        <option value="$PROJECT_DIR$/DataClasses/PointSetOpen3D.py" />
+        <option value="$PROJECT_DIR$/DataClasses/RasterData.py" />
         <option value="$PROJECT_DIR$/DataClasses/PointSet.py" />
+        <option value="$PROJECT_DIR$/DataClasses/PointSubSet.py" />
         <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" />
+        <option value="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-12" />
+    <option name="x" value="156" />
+    <option name="y" value="4" />
     <option name="width" value="1941" />
     <option name="height" value="2112" />
   </component>
@@ -652,14 +658,7 @@
       <workItem from="1594882806030" duration="1786000" />
       <workItem from="1603278694090" duration="679000" />
       <workItem from="1606603394977" duration="420000" />
-      <workItem from="1606603858225" duration="4096000" />
-    </task>
-    <task id="LOCAL-00022" summary="MOVED TO PYTHON 3.6&#10;&#10;Also, started organizing IOFactory: &#10;Removed ReadPts from the file, and built a new folder: IO modules for &#10;all Read/Write functions&#10;&#10;Started ReadFunctions module and wrote a new implementation for ReadPts">
-      <created>1527888037387</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1527888037387</updated>
+      <workItem from="1606603858225" duration="8481000" />
     </task>
     <task id="LOCAL-00023" summary="MOVED TO PYTHON 3.6&#10;&#10;Also, started organizing IOFactory: &#10;Removed ReadPts from the file, and built a new folder: IO modules for &#10;all Read/Write functions&#10;&#10;Started ReadFunctions module and wrote a new implementation for ReadPts">
       <created>1528119188647</created>
@@ -997,16 +996,17 @@
       <option name="project" value="LOCAL" />
       <updated>1589556804994</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="added type for PointSet.ToNumpy() (column's titles)&#10;added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency">
+      <created>1606722845324</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1606722845325</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 32m 32s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 32m 47s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 34m 07s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
     </history-entry>
@@ -1031,9 +1031,15 @@
     <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.07.15 at 14h 08m 29s.xml">
       <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.11.30 at 11h 13m 06s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.11.30 at 17h 05m 16s.xml">
+      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="361374000" />
+    <option name="totallyTimeSpent" value="365759000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -1046,9 +1052,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.117600314" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.117600314" />
       <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.40952381" side_tool="true" weight="0.1043718" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1058,7 +1063,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32672113" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" visible="true" weight="0.35280374" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35280374" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" weight="0.32087228" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5060908" side_tool="true" weight="0.31917337" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.20950156" />
@@ -1166,7 +1171,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="restructured PointSetOpen3D to fit infrastructure idea&#10;made PointSet iterable&#10;rewrote NeighborhoodFactory to accommodate different ways to find neighbors&#10;restructured the docs so that there won't be so many files&#10;changed PointNeighborhood" />
     <MESSAGE value="bug fixes for CurvatureFactory; deleted all obsolete functions (Elia's) &#10;bug fixes for Neighborhood related classes and added test" />
     <MESSAGE value="added umbrella curvature; added direction computation between neighbors in a point neighborhood to the center point" />
     <MESSAGE value="added use of getValues() for colorization of a property." />
@@ -1191,7 +1195,8 @@
     <MESSAGE value="Hierarchical saliency interface changed. Compute high and low level distinctness per point" />
     <MESSAGE value="Hierarchical saliency interface changed. works slower" />
     <MESSAGE value="infrastructure that works for Reuma PhD" />
-    <option name="LAST_COMMIT_MESSAGE" value="infrastructure that works for Reuma PhD" />
+    <MESSAGE value="added type for PointSet.ToNumpy() (column's titles)&#10;added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency" />
+    <option name="LAST_COMMIT_MESSAGE" value="added type for PointSet.ToNumpy() (column's titles)&#10;added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1438,7 +1443,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DataClasses/BallTreePointSet.py</url>
-          <line>446</line>
+          <line>447</line>
           <option name="timeStamp" value="502" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1536,6 +1541,11 @@
           <line>63</line>
           <option name="timeStamp" value="630" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py</url>
+          <line>758</line>
+          <option name="timeStamp" value="631" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1548,36 +1558,12 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_in_test_saliencyFactory_py.coverage" NAME="Unittests in test_saliencyFactory.py Coverage Results" MODIFIED="1579379443571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
-    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d.coverage" NAME="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d Coverage Results" MODIFIED="1594811261646" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d.coverage" NAME="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d Coverage Results" MODIFIED="1606748712618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$curvature_types.coverage" NAME="curvature_types Coverage Results" MODIFIED="1569078425595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Curvature" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$panorama_surface.coverage" NAME="panorama_surface Coverage Results" MODIFIED="1576522060225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Use Cases" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_in_test_curve2shapely_py.coverage" NAME="Unittests in test_curve2shapely.py Coverage Results" MODIFIED="1577107479078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Utils" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="308" column="31" selection-start-line="308" selection-start-column="31" selection-end-line="308" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Normals/NormalsFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5280">
-          <caret line="251" column="120" selection-start-line="251" selection-start-column="120" selection-end-line="251" selection-end-column="120" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LevelSets/check_GVF.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/LevelSets/GVF.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -1758,13 +1744,6 @@
     <entry file="file://$PROJECT_DIR$/docs/source/index.rst">
       <provider selected="true" editor-type-id="restructured-text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2132">
-          <caret line="86" selection-start-line="86" selection-end-line="86" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Transformations/TransformationMatrixFactory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="650">
@@ -1859,16 +1838,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2730">
-          <caret line="106" selection-start-line="106" selection-end-line="106" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utils/GeneralUtils.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1881,26 +1850,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/RasterData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7176" />
+        <state relative-caret-position="701">
+          <caret line="396" lean-forward="true" selection-start-line="396" selection-end-line="396" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="152" column="73" lean-forward="true" selection-start-line="152" selection-start-column="73" selection-end-line="152" selection-end-column="73" />
+        <state relative-caret-position="390">
+          <caret line="148" column="43" selection-start-line="148" selection-start-column="43" selection-end-line="148" selection-end-column="43" />
           <folding>
             <element signature="e#60#78#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
+    <entry file="file://$PROJECT_DIR$/DataClasses/KdTreePointSet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="771" column="31" selection-start-line="771" selection-start-column="31" selection-end-line="771" selection-end-column="31" />
+        <state relative-caret-position="95">
+          <caret line="130" column="8" selection-start-line="130" selection-start-column="8" selection-end-line="130" selection-end-column="8" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="728">
+          <caret line="106" selection-start-line="106" selection-end-line="106" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="760" selection-start-line="760" selection-end-line="760" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="63" column="39" lean-forward="true" selection-start-line="55" selection-start-column="2" selection-end-line="63" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="84" column="11" lean-forward="true" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="18" column="37" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
         </state>
       </provider>
     </entry>
