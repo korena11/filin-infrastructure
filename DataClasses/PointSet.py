@@ -118,7 +118,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 0]
+        return np.asarray(self.data)[:, 0]
 
     @property
     def Y(self):
@@ -129,7 +129,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 1]
+        return np.asarray(self.data)[:, 1]
 
     @property
     def Z(self):
@@ -139,14 +139,14 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 2]
+        return np.asarray(self.data)[:, 2]
 
     def ToNumpy(self):
         """
         :return: points as numpy nX3 ndarray
         """
 
-        return np.array(self.data, dtype=[('x', 'f32'), ('y', 'f32'), ('z', 'f32')])[:, :3]
+        return np.asarray(self.data)[:, :3]
 
     def ToRDD(self):
         """

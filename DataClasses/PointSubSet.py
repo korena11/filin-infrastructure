@@ -55,7 +55,7 @@ class PointSubSet(PointSet):
 
     def GetPoint(self, index):
         """
-           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)
+           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set). The type of the array is float32, with a "name" for each column (easier sorting)
 
            :param index: the index of the point to return
 
@@ -68,12 +68,17 @@ class PointSubSet(PointSet):
         """
         Return the points as numpy nX3 ndarray
         """
-        from numpy import ndarray
+        from numpy import ndarray, asarray
+
+
         if isinstance(self.data, PointSet):
             return self.data.ToNumpy()[self.indices, :]
-        elif isinstance(self.data, ndarray):
-            return self.data[self.indices, :]
 
+        elif isinstance(self.data, ndarray):
+            return asarray(self.data[self.indices, :])
+
+        else: #assuming that else is
+            return asarray(self.data.points)[self.indices, :]
 
 
     def ToPolyData(self):

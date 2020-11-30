@@ -379,7 +379,21 @@ class RasterData(BaseData):
         :rtype: PointSet
 
         """
-        # pts = PointSet()
+        from DataClasses.PointSet import PointSet
+        import numpy as np
+        pts = np.vstack((self.data[:,0], self.data[:,1], self.data[:,2]))
+        return PointSet(pts, self.path, range_accuracy=0.15)
+
+    def ToNumpy(self):
+        """
+        Returns raster as np.array
+
+        :return: numpy array of the points
+
+        :rtype: numpy.ndarray
+        """
+        return self.ToPointSet().ToNumpy()
+
 
 
 

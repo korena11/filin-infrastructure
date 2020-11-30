@@ -13,6 +13,14 @@ class PointSubSetOpen3D(PointSetOpen3D):
     """
 
     def __init__(self, points, indices):
+        """
+
+        :param points: point cloud
+        :param indices: indices of the subset from the whole point cloud
+
+        :type points: DataClasses.PointSetOpen3D.PointSetOpen3D, DataClasses.PointSubSetOpen3D.PointSubSetOpen3D
+        :type indices: int, numpy.array
+        """
 
         if isinstance(points, PointSetOpen3D):
             self.data = points.data
@@ -27,8 +35,7 @@ class PointSubSetOpen3D(PointSetOpen3D):
         Return the points as numpy nX3 ndarray (in case we change the type of __xyz in the future)
         """
 
-        pointsArray = np.asarray(self.data.points)[self.indices, :]
-        return pointsArray
+        return np.asarray(self.data.points)[self.indices, :]
 
     @property
     def Size(self):
@@ -77,6 +84,16 @@ class PointSubSetOpen3D(PointSetOpen3D):
         Return nX1 ndarray of Z coordinate
         """
         return np.asarray(self.data.points)[self.GetIndices, 2]
+
+    def GetPoint(self, index):
+        """
+           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set). The type of the array is float32, with a "name" for each column (easier sorting)
+
+           :param index: the index of the point to return
+
+           :return: specific point/s as numpy nX3 ndarray
+        """
+        return self.ToNumpy()[index, :]
 
     def Visualize(self, original=False, both=False):
         # TODO: Elia please redo - so it will show only the subset

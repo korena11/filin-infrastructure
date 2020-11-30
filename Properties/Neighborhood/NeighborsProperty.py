@@ -98,9 +98,6 @@ class NeighborsProperty(BaseProperty):
                 subset = point_neighbors.neighbors
                 self.__pointsNeighborsArray[idx] = PointNeighborhood(subset)
 
-
-
-
     def average_neighborhood_radius(self):
         """
         compute the average radius of all the point neighborhood in the class

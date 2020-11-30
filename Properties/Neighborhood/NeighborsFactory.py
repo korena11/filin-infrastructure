@@ -4,8 +4,8 @@ from numpy import mean, round, nonzero, where, hstack, inf, rad2deg, expand_dims
 from scipy.spatial import kdtree as cKDTree
 from tqdm import tqdm
 
-from DataClasses.PointSet import PointSet
-from DataClasses.PointSubSet import PointSubSet
+from DataClasses.PointSubSet import PointSubSet, PointSet
+from DataClasses.PointSubSetOpen3D import PointSetOpen3D, PointSubSetOpen3D
 from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
 from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 from Properties.Transformations.SphericalCoordinatesFactory import SphericalCoordinatesFactory
@@ -733,41 +733,64 @@ class NeighborsFactory:
                     # print(neighborhood.getNeighborhood(panorama.panoramaIndex[id]).distances)
 
         return neighborhood
-
-    def ComputeNeighbors_raster(self, points, res, radius, connectivity=8):
+    @staticmethod
+    def ComputeNeighbors_raster(points, res, radius):
         """
         Find neighbors for all dataset in raster or gridded point cloud
+
+        :TODO: complete for RasterData.
 
         :param points: raster or gridded point cloud
         :param res: grid cell size
         :param radius: search radius
-        :param connectivity: type of neighborhood connectivity
 
         :type points: DataClasses.BaseData.BaseData, DataClasses.PointSet.PointSet, DataClasses.PointSetOpen3D.PointSetOpen3D
         :type radius: int
-        :type connectivity: int, 4 or 8
 
         :return: neighborhood property
 
         :rtype: Properties.NeighborhoodProperty.NeighborhoodProperty
 
         ..warning::
-          Connectivity 4 and RasterData are not implemented
+           - RasterData are not implemented
+
         """
+
         pts_numpy = points.ToNumpy()
-        sort_ind = pts_numpy.argsort(order=['x', 'y'])
+        ind_sorted = np.argsort(pts_numpy.view((str(pts_numpy.dtype) + ',' + str(pts_numpy.dtype) + ',' + str( pts_numpy.dtype))), order=['f0', 'f1'], axis=0).view('int')
 
-        num_cols = (points.X.max() - points.X.min()) / res
-        num_rows = (points.Y.max() - points.Y.min()) / res
+        num_cols = int((points.X.max() - points.X.min()) / res + 1)
+        num_rows = int((points.Y.max() - points.Y.min()) / res + 1)
 
-        sort_ind = sort_ind.reshape((num_rows, num_cols))
+        ind_raster = ind_sorted[:,0].reshape((num_rows, num_cols))
         pcl_neighborhood = NeighborsProperty(points)
 
-        for i in tqdm(np.arange(points.X.min(), points.X.max(), res), desc='Raster-based neighbors '):
-            for j in np.arange(points.Y.min(), points.Y.max(), res):
-                neighbors = PointSubSet(points, sort_ind[i-radius:i+radius, j-radius:j+radius].flatten())
+        for i in tqdm(np.arange(0, num_cols), desc='Raster-based neighbors '):
+            for j in np.arange(0, num_rows):
+                # define the window
+                start_i = i-radius
+                start_j = j-radius
+                end_i = i+radius + 1
+                end_j = j+radius + 1
+
+                if start_i < 0:
+                    start_i = 0
+                if start_j <0:
+                    start_j = 0
+                if end_i > num_rows:
+                    end_i = num_rows
+                if end_j > num_cols:
+                    end_j = num_cols
+
+                # find the points
+                current_pts = np.hstack((ind_raster[i,j], ind_raster[start_i:end_i, start_j:end_j].flatten()))
+                if isinstance(points, PointSetOpen3D):
+                    neighbors = PointSubSetOpen3D(points, current_pts)
+                else:
+                    neighbors = PointSubSet(points, current_pts)
                 point_neighborhood = PointNeighborhood(neighbors)
-                pcl_neighborhood.setNeighborhood(sort_ind[i,j], point_neighborhood)
+                pcl_neighborhood.setNeighborhood(ind_raster[i,j], point_neighborhood)
+                # pcl_neighborhood.average_neighborhood_radius()
 
         return pcl_neighborhood
 
