@@ -184,8 +184,11 @@ class SaliencyFactory(object):
                 # vis.visualize_property(pts)
                 print('dn {}, dk {}'.format(dn, dk))
 
+            dn = 1- np.exp(-dn)
+            dk = 1 - np.exp(-dk)
+
             normal_weight = 1 - curvature_weight
-            tensor_saliency.append(dn + dk)
+            tensor_saliency.append(dn * normal_weight + dk * curvature_weight)
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency)
 

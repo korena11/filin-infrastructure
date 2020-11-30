@@ -268,7 +268,7 @@ class NormalsFactory:
         return n
 
     @staticmethod
-    def normals_open3D(pointcloud, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.), return_pcl = False):
+    def normals_open3D(pointcloud, search_radius=0.05, maxNN=200, orientation=(0., 0., 0.), return_pcl = False):
         """
         Computes the normals using open 3D
 
