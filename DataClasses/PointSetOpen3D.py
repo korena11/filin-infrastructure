@@ -82,8 +82,39 @@ class PointSetOpen3D(PointSet):
         Convert data to numpy array
         :return:
         """
-        pointsArray = np.asarray(self.data.points)
-        return pointsArray
+
+        return np.asarray(self.data.points)
+
+    @property
+    def X(self):
+        """
+        :return: X coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return np.asarray(self.data.points)[:, 0]
+
+    @property
+    def Y(self):
+        """
+
+        :return: Y coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return np.asarray(self.data.points)[:, 1]
+
+    @property
+    def Z(self):
+        """
+        :return: Z coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return np.asarray(self.data.points)[:, 2]
 
     @property
     def Size(self):

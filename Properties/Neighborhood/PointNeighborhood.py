@@ -110,6 +110,7 @@ class PointNeighborhood:
 
         :rtype: np.array
         """
+        from DataClasses.PointSubSetOpen3D import PointSubSetOpen3D
 
         center_pt = self.center_point_coords
         pts = self.__neighbors.ToNumpy()
@@ -117,10 +118,11 @@ class PointNeighborhood:
         distances = np.linalg.norm(pts - center_pt, axis=1)
 
         if np.nonzero(distances == 0)[0].shape[0] > 1:
+
             # print('Point set has two identical points at {}'.format(center_pt))
             tmp_subset = PointSubSet(self.neighbors.data, np.hstack((self.center_point_idx, self.neighborhoodIndices[np.nonzero(distances != 0)])))
             self.__init__(tmp_subset)
-            pts =  self.__neighbors.ToNumpy()
+            pts = self.__neighbors.ToNumpy()
             distances = np.linalg.norm(pts - center_pt, axis=1)
 
         self.__distances = distances

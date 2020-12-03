@@ -426,7 +426,8 @@ class BallTreePointSet(PointSet):
         Points as numpy
 
         """
-        return self.data.get_arrays()[0]
+        np.asarray(self.data.get_arrays()[0])
+        return
 
     def GetPoint(self, index):
         return self.ToNumpy()[index, :]

@@ -118,7 +118,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 0]
+        return np.asarray(self.data)[:, 0]
 
     @property
     def Y(self):
@@ -129,7 +129,7 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 1]
+        return np.asarray(self.data)[:, 1]
 
     @property
     def Z(self):
@@ -139,14 +139,14 @@ class PointSet(BaseData):
         :rtype: nx1 nd-array
 
         """
-        return self.ToNumpy()[:, 2]
+        return np.asarray(self.data)[:, 2]
 
     def ToNumpy(self):
         """
         :return: points as numpy nX3 ndarray
         """
 
-        return np.array(self.data)[:, :3]
+        return np.asarray(self.data)[:, :3]
 
     def ToRDD(self):
         """
@@ -190,18 +190,6 @@ class PointSet(BaseData):
 
         """
         return self.data[index, :]
-
-    def MakeGeometryUnique(self):
-        """
-        Makes sure that every (x,y,z) appears exactly once.
-
-        :return: a PointSubSet of the unique points
-        """
-        from DataClasses.PointSubSet import PointSubSet
-
-        unique_points, idx = np.unique(self.ToNumpy(), axis=0, return_index=True)
-
-        return PointSubSet(self, idx)
 
     def UpdateFields(self, **kwargs):
         '''
