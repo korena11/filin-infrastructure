@@ -105,7 +105,7 @@ class NormalsFactory:
         **Optionals**
 
         :param leaf_size: for ball-tree construction. Default: 40
-        :param metric: for ball-tree construction. Deafault: 'minkowski'
+        :param metric: for ball-tree construction. Default: 'minkowski'
 
         :type pointset: PointSet
         :type tree: BallTree or KDTree

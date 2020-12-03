@@ -768,10 +768,10 @@ class NeighborsFactory:
         for i in tqdm(np.arange(0, num_cols), desc='Raster-based neighbors '):
             for j in np.arange(0, num_rows):
                 # define the window
-                start_i = i-radius
-                start_j = j-radius
-                end_i = i+radius + 1
-                end_j = j+radius + 1
+                start_i = int(i-radius)
+                start_j = int(j-radius)
+                end_i = int(i+radius + 1)
+                end_j = int(j+radius + 1)
 
                 if start_i < 0:
                     start_i = 0
