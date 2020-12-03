@@ -81,7 +81,7 @@ class CurvatureFactory:
         return CurvatureProperty(tensorProperty.Points, np.vstack((k1, k2)).T)
 
     @classmethod
-    def pointSetOpen3D_3parameters(cls, neighbors_property,
+    def pointSetOpen3D_3parameters(cls, neighbors_property, normals_property=None,
                                    min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7, num_sectors=8,
                                    invalid_value=-999, verbose=False):
         """
@@ -93,6 +93,7 @@ class CurvatureFactory:
             point neighborhood parameters
 
         :param neighbors_property: the neighbors property of the point cloud
+        :param normals_property: normals computed for the point cloud in advance
         :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5
         :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2
         :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7
@@ -102,6 +103,7 @@ class CurvatureFactory:
 
         :type pointset3d: PointSetOpen3D.PointSetOpen3D, DataClasses.BaseData.BaseData
         :type neighbors_property: NeighborsProperty.NeighborsProperty
+        :type normals_property: NormalsProperty.NormalsProperty
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int
         :type valid_sectors: int
@@ -133,20 +135,23 @@ class CurvatureFactory:
             pointset3d = pcl
 
         # check if normals have been computed before for this point cloud:
-        if np.asarray(pointset3d.data.normals).shape[0] == 0:
+        if normals_property is None:
+            if np.asarray(pointset3d.data.normals).shape[0] == 0:
 
-            for neighborhood1 in neighbors_property:
-                if neighborhood1 is None:
-                    continue
-                radius = neighborhood1.radius
-                maxNN = neighborhood1.numberOfNeighbors
+                for neighborhood1 in neighbors_property:
+                    if neighborhood1 is None:
+                        continue
+                    radius = neighborhood1.radius
+                    maxNN = neighborhood1.numberOfNeighbors
 
-                if radius is not None and maxNN is not None:
-                    pointset3d.CalculateNormals(search_radius=radius, maxNN=maxNN)
+                    if radius is not None and maxNN is not None:
+                        pointset3d.CalculateNormals(search_radius=radius, maxNN=maxNN)
 
-                    break
+                        break
 
-        normals = np.asarray(pointset3d.data.normals)
+            normals = np.asarray(pointset3d.data.normals)
+        else:
+            normals = normals_property.Normals
         neighbors_property.__reset__()  # reset iterable
 
         for neighborhood, i in zip(neighbors_property, tqdm(range(pointset3d.Size), total=pointset3d.Size,

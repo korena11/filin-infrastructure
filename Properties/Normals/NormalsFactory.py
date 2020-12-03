@@ -198,7 +198,6 @@ class NormalsFactory:
         eigval, eigvec = np.linalg.eig(y.T.dot(y))
         return eigvec[:, np.argmin(eigval)]
 
-
     @classmethod
     def normals_panorama_xyz(cls, panorama, ksize=3, resolution=1, sigma=0,**kwargs):
         r"""
@@ -285,6 +284,11 @@ class NormalsFactory:
         :type return_pcl: bool
 
         :return: normals property and the pointcloud with normals
+        
+        :rtype: NormalsProperty
+        
+        .. warning::
+            The computed normals act weird on edges. Pay attention.
         """
         # checking if the set point set is an object of PointSetOpen3D
         if not isinstance(pointcloud, PointSetOpen3D):
