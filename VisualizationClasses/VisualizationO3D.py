@@ -133,11 +133,11 @@ class VisualizationO3D:
         """
         current_neighborhood = self.neighborhood.__next__()
 
-        color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255
-        color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
+        color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255 # paint all point cloud in green
+        # color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
+        color_by_neighborhood[current_neighborhood.neighborhoodIndices] = self.__make_color_array(current_neighborhood.weighted_distances)
         color_by_neighborhood[current_neighborhood.center_point_idx] = np.array([1, 0, 0])
 
-        # self.pointset = tmp_subset
         self.pointset.data.colors = o3d.Vector3dVector(color_by_neighborhood)
         vis.update_geometry()
 
@@ -158,6 +158,8 @@ class VisualizationO3D:
 
         # to present normals
         if isinstance(propertyclass, NormalsProperty):
+            if not self.pointset.data.has_normals:
+                self.pointset.data.CalculateNormals()
             self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
         elif isinstance(propertyclass.Points, PointSetOpen3D):
             self.pointset.data.normals = propertyclass.Points.data.normals

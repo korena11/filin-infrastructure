@@ -4,6 +4,8 @@ from DataClasses.PointSubSet import PointSubSet
 
 
 class PointNeighborhood(object):
+
+
     def __init__(self, points_subset, distances=None):
         """
         Removes duplicate points, if exist (keeps the first)
@@ -20,6 +22,18 @@ class PointNeighborhood(object):
             self.computeDistances()
         else:
             self.__distances = distances
+        self.__weights = np.ones((self.Size, ))
+
+    @property
+    def weights(self):
+        """
+        Neighborhood weighting.
+
+        :return: the weight of each point (according to distances)
+
+        :rtype: float, np.array
+        """
+        return self.__weights
 
     @property
     def radius(self):
@@ -47,6 +61,17 @@ class PointNeighborhood(object):
             self.computeDistances()
 
         return self.__distances
+
+    @property
+    def weighted_distances(self):
+        """
+        Weighted distances according to the neighborhood weights
+
+        :return: distances multiplied by their weight
+
+        :rtype: np.array, float
+        """
+        return self.distances * self.weights
 
     @property
     def numberOfNeighbors(self):
@@ -150,6 +175,24 @@ class PointNeighborhood(object):
 
         return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
                                                                None]
+
+    def weightNeighborhood(self, weightingFunc, *args):
+        """
+        Compute weights to a neighborhood according to a weightingFunc that is sent.
+
+        :param weightingFunc: weighting function (can be taken from WeightingFunctions module.
+        :param kwargs: according to the sent function:
+            - WeightingFunctions.triangleWeights(self, effectiveDistance)
+
+
+        .. seealso::
+           `Properties.Neighborhood.WeightingFunctions.triangleWeights`
+
+        """
+        import Properties.Neighborhood.WeightingFunctions as wf
+
+        weights = weightingFunc(self, *args)
+        self.__weights = weights
 
     # --------------- I THINK THIS IS REDUNDANT. CONSIDER REMOVING ----------------------------
     def color_neighborhood(self, point_color='red', neighbors_color='black'):

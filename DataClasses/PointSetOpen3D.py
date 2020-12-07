@@ -117,6 +117,7 @@ class PointSetOpen3D(PointSet):
     def Size(self):
         return len(self.data.points)
 
+
     def CalculateNormals(self, search_radius=0.05, maxNN=20, orientation=(0., 0., 0.), verbose=True):
         """
         Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.
