@@ -188,6 +188,22 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">raise</span> <span class="ne">StopIteration</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">saliency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve saliency values of all point cloud</span>
+
+<span class="sd">        :param idx: the point index</span>
+
+<span class="sd">        :return: saliency value</span>
+
+<span class="sd">        :rtype: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__saliency</span>
+
+
 <div class="viewcode-block" id="SaliencyProperty.normalize_values"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyProperty.SaliencyProperty.normalize_values">[docs]</a>    <span class="k">def</span> <span class="nf">normalize_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A flag whether to normalize values of principal curvature (k1, k2) to [0,1] with 2 being the invalid value</span>

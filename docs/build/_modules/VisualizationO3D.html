@@ -186,7 +186,7 @@
 <span class="sd">        :rtype: dict</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">key_to_callback</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">toggle_black_white_background</span>
+        <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">toggle_black_white_background</span>
 
         <span class="k">return</span> <span class="n">key_to_callback</span></div>
 
@@ -200,7 +200,6 @@
 <span class="sd">        :type vis: open3d.Visualizer</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">opt</span> <span class="o">=</span> <span class="n">vis</span><span class="o">.</span><span class="n">get_render_option</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">background_color</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">)):</span>
             <span class="n">opt</span><span class="o">.</span><span class="n">background_color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -261,6 +260,45 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">o3d</span><span class="o">.</span><span class="n">draw_geometries_with_key_callbacks</span><span class="p">([</span><span class="n">pcd</span><span class="o">.</span><span class="n">data</span><span class="p">],</span> <span class="n">key_to_callback</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="VisualizationO3D.visualize_neighborhoods"><a class="viewcode-back" href="../Visualizations/VisualizationO3D.html#VisualizationO3D.VisualizationO3D.visualize_neighborhoods">[docs]</a>    <span class="k">def</span> <span class="nf">visualize_neighborhoods</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neighborhoodProperty</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Visualize points neighborhoods in white. Center point in red, other points in green</span>
+
+<span class="sd">        Going through the points according to their order in the property by pressing &#39;X&#39;</span>
+
+<span class="sd">        :param neighborhoodProperty: the neighborhood property which will be shown</span>
+
+<span class="sd">        :type neighborhoodProperty: Properties.Neighborhood.NeighborsProperty.NeighborsProperty</span>
+
+<span class="sd">        ..note::</span>
+<span class="sd">            To view the neighborhood, make sure the background is black by pressing &#39;B&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">Properties.Neighborhood.NeighborsProperty</span> <span class="k">import</span> <span class="n">NeighborsProperty</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_neighborhood</span> <span class="o">=</span> <span class="n">neighborhoodProperty</span><span class="o">.</span><span class="n">getNeighborhood</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">neighbors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">neighborhoodProperty</span><span class="o">.</span><span class="n">Points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighborhood</span> <span class="o">=</span> <span class="n">neighborhoodProperty</span>
+        <span class="n">key_to_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_key_to_callback</span><span class="p">()</span>
+        <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_neighborhood</span>
+
+        <span class="n">o3d</span><span class="o">.</span><span class="n">draw_geometries_with_key_callbacks</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">data</span><span class="p">],</span> <span class="n">key_to_callback</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VisualizationO3D.next_neighborhood"><a class="viewcode-back" href="../Visualizations/VisualizationO3D.html#VisualizationO3D.VisualizationO3D.next_neighborhood">[docs]</a>    <span class="k">def</span> <span class="nf">next_neighborhood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Light the next neighborhood in the list</span>
+
+<span class="sd">        two new point clouds: one holds only the point (colored in red) and another holds the neighborhood colored in gray levels (can be changed)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">current_neighborhood</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neighborhood</span><span class="o">.</span><span class="fm">__next__</span><span class="p">()</span>
+
+        <span class="n">color_by_neighborhood</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">255</span>
+        <span class="n">color_by_neighborhood</span><span class="p">[</span><span class="n">current_neighborhood</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">current_neighborhood</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">color_by_neighborhood</span><span class="p">[</span><span class="n">current_neighborhood</span><span class="o">.</span><span class="n">center_point_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># self.pointset = tmp_subset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">color_by_neighborhood</span><span class="p">)</span>
+        <span class="n">vis</span><span class="o">.</span><span class="n">update_geometry</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="VisualizationO3D.visualize_property"><a class="viewcode-back" href="../Visualizations/VisualizationO3D.html#VisualizationO3D.VisualizationO3D.visualize_property">[docs]</a>    <span class="k">def</span> <span class="nf">visualize_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">propertyclass</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Visualize property classes</span>
@@ -270,14 +308,18 @@
 <span class="sd">        :type propertyclass: BaseProperty</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
+        <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
+
         <span class="c1"># initialize custom keys for visualization window</span>
         <span class="n">key_to_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_key_to_callback</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">propertyclass</span><span class="o">.</span><span class="n">Points</span><span class="p">)</span>
+
+        <span class="c1"># to present normals</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propertyclass</span><span class="p">,</span> <span class="n">NormalsProperty</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">propertyclass</span><span class="o">.</span><span class="n">Normals</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propertyclass</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">PointSetOpen3D</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span> <span class="o">=</span> <span class="n">propertyclass</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span>
+
         <span class="n">colors_new</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">attribute_name</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">propertyclass</span><span class="p">):</span>
@@ -296,9 +338,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">colors_new</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="n">attribute_name</span>
-
-        <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">cycle</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colormap_list</span> <span class="o">=</span> <span class="n">cycle</span><span class="p">([</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="s1">&#39;summer&#39;</span><span class="p">,</span> <span class="s1">&#39;winter&#39;</span><span class="p">,</span> <span class="s1">&#39;hot&#39;</span><span class="p">,</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="s1">&#39;PiYG&#39;</span><span class="p">,</span> <span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="s1">&#39;RdYlBu&#39;</span><span class="p">])</span>
+
         <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toggle_attributes_colors</span>
         <span class="n">key_to_callback</span><span class="p">[</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toggle_colormaps</span>
 
@@ -337,6 +378,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">pointset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">new_colors</span>
         <span class="n">vis</span><span class="o">.</span><span class="n">update_geometry</span><span class="p">()</span></div>
 
+
     <span class="k">def</span> <span class="nf">__change_colormap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colormap</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        changes the array to a given colormap</span>
@@ -349,7 +391,7 @@
 
 <span class="sd">        :return: the array in the new colormap</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">])</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
         <span class="n">colored</span> <span class="o">=</span> <span class="n">colormap</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
         <span class="n">R</span> <span class="o">=</span> <span class="n">colored</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">colored</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>

@@ -1,10 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="changes to saliency for research&#10;added possibility to send normals property for curvature estimation">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="**Changes to normalsPCA** -- it now receives NeighborhoodProperty and not a point cloud. No computation of the neighbors is needed when computed the normals">
+      <change afterPath="$PROJECT_DIR$/Properties/Neighborhood/WeightedPointNeighborhood.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Color/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Curvature/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Normals/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Saliency/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Tensors/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Transformations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BallTreePointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/BallTreePointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSet.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/PointSetOpen3D.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/RasterData.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Datasets/RasterData.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Factories/FilterFactory.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Factories/FilterFactory.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Colors/Colors.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Colors/Colors.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/Curvature.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Curvature/Curvature.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Neighborhood/Neighborhood.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Neighborhood/Neighborhood.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Normals/Normals.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Normals/Normals.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Saliency/Saliency.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Properties/Saliency/Saliency.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/VisualizationO3D.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/Visualizations/VisualizationO3D.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/.doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/BallTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/BallTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Datasets/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/Factories.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/Factories.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Factories/FilterFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Factories/FilterFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Colors/Colors.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Colors/Colors.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Curvature/Curvature.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Neighborhood/Neighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Normals/Normals.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Properties/Saliency/Saliency.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Properties/Saliency/Saliency.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/Visualization.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/Visualization.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/Visualizations/VisualizationO3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/Visualizations/VisualizationO3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/BallTreePointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/BallTreePointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/CurvatureProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NeighborsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NeighborsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/NormalsProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointNeighborhood.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSubSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/PointSubSetOpen3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/PointSubSetOpen3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Properties/Color/ColorProperty.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/RasterData.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SaliencyFactory.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SaliencyFactory.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/SaliencyProperty.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/SaliencyProperty.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Tensor.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/Utils/MyTools.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/Utils/MyTools.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/_modules/VisualizationO3D.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/_modules/VisualizationO3D.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/objects.inv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/objects.inv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,28 +111,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/BaseProperty.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="46" column="42" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/RasterData.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="701">
-              <caret line="396" selection-start-line="396" selection-end-line="396" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Properties/Normals/NormalsFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="728">
-              <caret line="119" selection-start-line="119" selection-end-line="119" />
+            <state relative-caret-position="2392">
+              <caret line="104" column="11" selection-start-line="104" selection-start-column="11" selection-end-line="104" selection-end-column="11" />
               <folding>
                 <element signature="e#29#39#0" expanded="true" />
               </folding>
@@ -82,67 +123,74 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/PointSet.py">
+        <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="148" column="43" selection-start-line="148" selection-start-column="43" selection-end-line="148" selection-end-column="43" />
+            <state relative-caret-position="2938">
+              <caret line="119" selection-start-line="119" selection-end-line="119" />
               <folding>
-                <element signature="e#60#78#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst">
+          <provider selected="true" editor-type-id="restructured-text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/WeightedPointNeighborhood.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="104">
+              <caret line="4" column="96" selection-start-line="4" selection-start-column="96" selection-end-line="4" selection-end-column="96" />
+              <folding>
+                <element signature="e#207#254#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1378">
+              <caret line="59" column="44" selection-start-line="59" selection-start-column="44" selection-end-line="59" selection-end-column="44" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://C:/ProgramData/Anaconda3/Lib/unittest/case.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15626">
+              <caret line="614" selection-start-line="614" selection-end-line="614" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
+          <provider selected="true" editor-type-id="restructured-text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="316">
-              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="312">
+              <caret line="16" column="66" selection-start-line="12" selection-start-column="1" selection-end-line="16" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/KdTreePointSet.py">
+        <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="130" column="8" selection-start-line="130" selection-start-column="8" selection-end-line="130" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="84" column="11" selection-start-line="84" selection-start-column="11" selection-end-line="84" selection-end-column="11" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="63" column="39" selection-start-line="55" selection-start-column="2" selection-end-line="63" selection-end-column="39" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Properties/Saliency/SaliencyProperty.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="728">
-              <caret line="108" selection-start-line="108" selection-end-line="108" />
-              <folding>
-                <element signature="e#0#48#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="3848">
+              <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -150,8 +198,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="760" selection-start-line="760" selection-end-line="760" />
+            <state relative-caret-position="19448">
+              <caret line="758" selection-start-line="758" selection-end-line="758" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -172,7 +220,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tensorType</find>
       <find>Points</find>
       <find>tensorcen</find>
       <find>tensorParame</find>
@@ -201,6 +248,7 @@
       <find>ToN</find>
       <find>To</find>
       <find>GetPoint</find>
+      <find>vis</find>
       <find>getP</find>
     </findStrings>
     <replaceStrings>
@@ -238,13 +286,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Properties/Neighborhood/test_neighborsFactory.py" />
-        <option value="$PROJECT_DIR$/docs/source/Properties/Curvature/Curvature.rst" />
-        <option value="$PROJECT_DIR$/docs/source/Properties/SphericalCoordinates/Spherical.rst" />
-        <option value="$PROJECT_DIR$/docs/source/Properties/Panorama/Panorama.rst" />
-        <option value="$PROJECT_DIR$/Visualization Classes/VisualizationUtils.py" />
-        <option value="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" />
-        <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationUtils.py" />
         <option value="$PROJECT_DIR$/docs/source/zreferences.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Saliency/Saliency.rst" />
         <option value="$PROJECT_DIR$/docs/source/Properties/Colors/Colors.rst" />
@@ -289,12 +330,19 @@
         <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" />
         <option value="$PROJECT_DIR$/DataClasses/PointSubSetOpen3D.py" />
         <option value="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" />
+        <option value="$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py" />
+        <option value="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" />
+        <option value="$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst" />
+        <option value="$PROJECT_DIR$/Utils/WeightingFunctions.py" />
+        <option value="$PROJECT_DIR$/Properties/Neighborhood/NeighborhoodWeights.py" />
+        <option value="$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py" />
+        <option value="$PROJECT_DIR$/Properties/Neighborhood/WeightedPointNeighborhood.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="156" />
-    <option name="y" value="4" />
+    <option name="y" value="3" />
     <option name="width" value="1941" />
     <option name="height" value="2112" />
   </component>
@@ -336,17 +384,6 @@
             <path>
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
-              <item name="docs" type="462c0819:PsiDirectoryNode" />
-              <item name="build" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="IOmodules" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -375,6 +412,12 @@
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Neighborhood" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
               <item name="Normals" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -382,6 +425,18 @@
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="Properties" type="462c0819:PsiDirectoryNode" />
               <item name="Saliency" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Segmentation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="Properties" type="462c0819:PsiDirectoryNode" />
+              <item name="Tensors" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
@@ -403,6 +458,11 @@
               <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
               <item name="Utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Filin-Infrastructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Filin-Infrastructure" type="462c0819:PsiDirectoryNode" />
+              <item name="VisualizationClasses" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -427,16 +487,16 @@
     <property name="settings.editor.splitter.proportion" value="0.2560214" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Utils" />
-      <recent name="$PROJECT_DIR$/Visualization Classes/Elia-Temp" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\Python Scripts\Filin-Infrastructure\Properties/Neighborhood" />
       <recent name="$PROJECT_DIR$/Properties/Saliency" />
       <recent name="$PROJECT_DIR$/Data Classes" />
       <recent name="$PROJECT_DIR$/Property Classes" />
       <recent name="$PROJECT_DIR$/Property Classes/Tensors" />
-      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Utils" />
+      <recent name="$PROJECT_DIR$/Visualization Classes/Elia-Temp" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -451,7 +511,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d">
+  <component name="RunManager" selected="Python tests.Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood">
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -470,28 +530,6 @@
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
       <method />
-    </configuration>
-    <configuration name="PanoramaUtils" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="infraGit" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Properties/Panoramas" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
     </configuration>
     <configuration name="panorama_surface" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="infraGit" />
@@ -530,6 +568,21 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="infraGit" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/VisualizationClasses" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Unittests in test_curve2shapely.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="infraGit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -561,19 +614,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.PanoramaUtils" />
       <item itemvalue="Python.panorama_surface" />
       <item itemvalue="Python tests.Unittests in test_curve2shapely.py" />
       <item itemvalue="Python tests.Unittests in test_saliencyFactory.py" />
       <item itemvalue="Python tests.Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" />
+      <item itemvalue="Python tests.Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" />
         <item itemvalue="Python tests.Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" />
         <item itemvalue="Python tests.Unittests in test_saliencyFactory.py" />
         <item itemvalue="Python tests.Unittests in test_curve2shapely.py" />
         <item itemvalue="Python.panorama_surface" />
-        <item itemvalue="Python.PanoramaUtils" />
       </list>
     </recent_temporary>
   </component>
@@ -664,14 +717,8 @@
       <workItem from="1594882806030" duration="1786000" />
       <workItem from="1603278694090" duration="679000" />
       <workItem from="1606603394977" duration="420000" />
-      <workItem from="1606603858225" duration="11960000" />
-    </task>
-    <task id="LOCAL-00026" summary="first commit in Linux Reuma">
-      <created>1538133046498</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1538133046498</updated>
+      <workItem from="1606603858225" duration="29848000" />
+      <workItem from="1607336305510" duration="994000" />
     </task>
     <task id="LOCAL-00027" summary="Moved to linux">
       <created>1538395143085</created>
@@ -1009,43 +1056,50 @@
       <option name="project" value="LOCAL" />
       <updated>1607005093784</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="**Changes to normalsPCA** -- it now receives NeighborhoodProperty and not a point cloud. No computation of the neighbors is needed when computed the normals">
+      <created>1607035497698</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1607035497698</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 34m 07s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 13h 52m 19s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 34m 44s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 04m 17s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 35m 23s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 06m 17s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 37m 14s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 09m 48s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 37m 46s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 11m 52s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 38m 14s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 14m 39s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.01.19 at 11h 55m 32s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 15m 21s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.07.15 at 14h 08m 29s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 23m 15s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.11.30 at 11h 13m 06s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 24m 41s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d - 2020.11.30 at 17h 05m 16s.xml">
-      <configuration name="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d" configurationId="tests" />
+    <history-entry file="Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood - 2020.12.04 at 14h 25m 38s.xml">
+      <configuration name="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="369238000" />
+    <option name="totallyTimeSpent" value="388120000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -1060,7 +1114,7 @@
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.117600314" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5904762" weight="0.117600314" />
       <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.40952381" side_tool="true" weight="0.1043718" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -1070,7 +1124,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32672113" />
-      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" visible="true" weight="0.35280374" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35280374" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" weight="0.32087228" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5060908" side_tool="true" weight="0.31917337" />
       <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.20950156" />
@@ -1087,27 +1141,28 @@
       <window_info anchor="right" id="Coverage" order="6" side_tool="true" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5904762" weight="0.1043718" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5904762" visible="true" weight="0.117600314" />
       <window_info x="480" y="199" width="813" height="881" id="Structure" order="1" sideWeight="0.40952381" side_tool="true" weight="0.1043718" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.326062" />
-      <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49390918" weight="0.42523363" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32554516" />
+      <window_info anchor="bottom" auto_hide="true" x="1990" y="399" width="1827" height="278" id="Run" order="2" sideWeight="0.49390918" weight="0.3504673" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49466383" weight="0.38317758" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32672113" />
       <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.4989071" weight="0.35280374" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" weight="0.32087228" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4944629" visible="true" weight="0.32087228" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5060908" side_tool="true" weight="0.31917337" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" visible="true" weight="0.2082397" />
+      <window_info anchor="bottom" id="Python Console" order="10" sideWeight="0.49508196" weight="0.20950156" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32972974" />
+      <window_info anchor="bottom" id="Messages" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24958949" />
-      <window_info anchor="right" x="1155" y="97" width="423" height="855" id="Documentation" order="3" side_tool="true" visible="true" weight="0.20088544" />
+      <window_info anchor="right" x="1155" y="97" width="423" height="855" id="Documentation" order="3" side_tool="true" visible="true" weight="0.0981327" />
       <window_info anchor="right" id="Database" order="4" weight="0.32977587" />
       <window_info anchor="right" id="SciView" order="5" weight="0.31109926" />
       <window_info anchor="right" id="Coverage" order="6" side_tool="true" />
@@ -1178,7 +1233,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added use of getValues() for colorization of a property." />
     <MESSAGE value="Added @Zachi BallTreePointSet data class. Starting to integrate" />
     <MESSAGE value="Added new saliency measure. &#10;Added GetPoint for BallTreePointSet&#10;Renamed NeighborsProperty to match the class name&#10;Added normals from tensors in NormalsFactory&#10;Added normal attribute to tensor class&#10;Added a method for computing saliency based on ball tree and curvature (MyTools)" />
     <MESSAGE value="Save pickle for most properties and datasets&#10;Load pickle for most properties and dataset (still at work)&#10;TODO: add pickles for properties that hold other types of objects" />
@@ -1203,7 +1257,8 @@
     <MESSAGE value="added type for PointSet.ToNumpy() (column's titles)&#10;added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency" />
     <MESSAGE value="added function to compute neighbors in a raster-like point cloud (still missing the implementation for RasterData)&#10;&#10;Updated weighting for directional saliency" />
     <MESSAGE value="changes to saliency for research&#10;added possibility to send normals property for curvature estimation" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes to saliency for research&#10;added possibility to send normals property for curvature estimation" />
+    <MESSAGE value="**Changes to normalsPCA** -- it now receives NeighborhoodProperty and not a point cloud. No computation of the neighbors is needed when computed the normals" />
+    <option name="LAST_COMMIT_MESSAGE" value="**Changes to normalsPCA** -- it now receives NeighborhoodProperty and not a point cloud. No computation of the neighbors is needed when computed the normals" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1549,9 +1604,9 @@
           <option name="timeStamp" value="630" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py</url>
-          <line>758</line>
-          <option name="timeStamp" value="631" />
+          <url>file://$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="633" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1564,64 +1619,14 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_visualizationO3D_TestVisualizationO3D_test_visualize_neighborhood.coverage" NAME="Unittests for test_visualizationO3D.TestVisualizationO3D.test_visualize_neighborhood Coverage Results" MODIFIED="1607084692085" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/VisualizationClasses" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_in_test_saliencyFactory_py.coverage" NAME="Unittests in test_saliencyFactory.py Coverage Results" MODIFIED="1579379443571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
-    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d.coverage" NAME="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d Coverage Results" MODIFIED="1606748712618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
+    <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_for_test_saliencyFactory_TestSaliencyFactory_test_FPFH_open3d.coverage" NAME="Unittests for test_saliencyFactory.TestSaliencyFactory.test_FPFH_open3d Coverage Results" MODIFIED="1607080962846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Saliency" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$curvature_types.coverage" NAME="curvature_types Coverage Results" MODIFIED="1569078425595" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Properties/Curvature" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$panorama_surface.coverage" NAME="panorama_surface Coverage Results" MODIFIED="1576522060225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Use Cases" />
     <SUITE FILE_PATH="coverage/Filin_Infrastructure$Unittests_in_test_curve2shapely_py.coverage" NAME="Unittests in test_curve2shapely.py Coverage Results" MODIFIED="1577107479078" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Utils" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/ProgramData/Anaconda3/Lib/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="310" selection-start-line="310" selection-end-line="310" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/colorama/ansitowin32.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Utils/rasterTools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2134">
-          <caret line="100" column="19" selection-start-line="100" selection-start-column="19" selection-end-line="100" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1496">
-          <caret line="76" selection-start-line="76" selection-end-line="76" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Transformations/SphericalCoordinatesProperty.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1474">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Use Cases/panorama_surface.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1694">
-          <caret line="86" column="30" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Properties/Panoramas/PanoramaUtils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1166">
@@ -1783,9 +1788,6 @@
     <entry file="file://$PROJECT_DIR$/docs/build/Properties/EigenProperty.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
-      <provider selected="true" editor-type-id="restructured-text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utils/GeometryUtils.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1885,16 +1887,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="760" selection-start-line="760" selection-end-line="760" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataClasses/PointSubSet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="251">
@@ -1912,19 +1904,79 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
+    <entry file="file://$PROJECT_DIR$/Properties/Normals/NormalsFactory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+        <state relative-caret-position="2392">
+          <caret line="104" column="11" selection-start-line="104" selection-start-column="11" selection-end-line="104" selection-end-column="11" />
+          <folding>
+            <element signature="e#29#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Properties/Normals/NormalsFactory.py">
+    <entry file="file://$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="728">
+        <state relative-caret-position="2938">
           <caret line="119" selection-start-line="119" selection-end-line="119" />
           <folding>
-            <element signature="e#29#39#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Visualizations/VisualizationO3D.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1378">
+          <caret line="59" column="44" selection-start-line="59" selection-start-column="44" selection-end-line="59" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15626">
+          <caret line="614" selection-start-line="614" selection-end-line="614" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/source/Properties/BaseProperty.rst">
+      <provider selected="true" editor-type-id="restructured-text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataClasses/PointSetOpen3D.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="16" column="66" selection-start-line="12" selection-start-column="1" selection-end-line="16" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/PointNeighborhood.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3848">
+          <caret line="150" column="35" selection-start-line="150" selection-start-column="35" selection-end-line="150" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19448">
+          <caret line="758" selection-start-line="758" selection-end-line="758" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/WeightedPointNeighborhood.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="4" column="96" selection-start-line="4" selection-start-column="96" selection-end-line="4" selection-end-column="96" />
+          <folding>
+            <element signature="e#207#254#0" expanded="true" />
           </folding>
         </state>
       </provider>

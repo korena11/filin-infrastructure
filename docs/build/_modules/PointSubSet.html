@@ -213,7 +213,7 @@
 
 <div class="viewcode-block" id="PointSubSet.GetPoint"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSubSet.PointSubSet.GetPoint">[docs]</a>    <span class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set)</span>
+<span class="sd">           Retrieve specific point(s) by index (when the index is according to the subset and not to the original set). The type of the array is float32, with a &quot;name&quot; for each column (easier sorting)</span>
 
 <span class="sd">           :param index: the index of the point to return</span>
 
@@ -226,12 +226,17 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the points as numpy nX3 ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span>
+        <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">asarray</span>
+
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span></div>
 
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="p">:])</span>
+
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#assuming that else is</span>
+            <span class="k">return</span> <span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span> <span class="p">:]</span></div>
 
 
 <div class="viewcode-block" id="PointSubSet.ToPolyData"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSubSet.PointSubSet.ToPolyData">[docs]</a>    <span class="k">def</span> <span class="nf">ToPolyData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

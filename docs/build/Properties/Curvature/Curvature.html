@@ -216,7 +216,7 @@
 <tr class="row-even"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.k2" title="CurvatureProperty.CurvatureProperty.k2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">k2</span></code></a></td>
 <td>Minimal principal curvature value</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.mean_curvature" title="CurvatureProperty.CurvatureProperty.mean_curvature"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_curvature</span></code></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.mean" title="CurvatureProperty.CurvatureProperty.mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean</span></code></a></td>
 <td>Mean curvature values</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">path</span></code></td>
@@ -248,7 +248,7 @@
 </table>
 </td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.load" title="CurvatureProperty.CurvatureProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(principal_curvatures,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.load" title="CurvatureProperty.CurvatureProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>([principal_curvatures])</td>
 <td>Sets curvature into Curvature Property object</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#CurvatureProperty.CurvatureProperty.normalize_values" title="CurvatureProperty.CurvatureProperty.normalize_values"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalize_values</span></code></a>(bool)</td>
@@ -356,14 +356,14 @@ is transferred in “kwargs” it will be assigned, with its name (as sent by kw
 
 <dl class="method">
 <dt id="CurvatureProperty.CurvatureProperty.load">
-<code class="descname">load</code><span class="sig-paren">(</span><em>principal_curvatures</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureProperty.html#CurvatureProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureProperty.CurvatureProperty.load" title="Permalink to this definition">¶</a></dt>
+<code class="descname">load</code><span class="sig-paren">(</span><em>principal_curvatures=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureProperty.html#CurvatureProperty.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureProperty.CurvatureProperty.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets curvature into Curvature Property object</p>
 <p>If a new attribute is sent within kwargs, it will be set as a new attribute to the property</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="CurvatureProperty.CurvatureProperty.mean_curvature">
-<code class="descname">mean_curvature</code><a class="headerlink" href="#CurvatureProperty.CurvatureProperty.mean_curvature" title="Permalink to this definition">¶</a></dt>
+<dt id="CurvatureProperty.CurvatureProperty.mean">
+<code class="descname">mean</code><a class="headerlink" href="#CurvatureProperty.CurvatureProperty.mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mean curvature values</p>
 </dd></dl>
 
@@ -461,7 +461,7 @@ is transferred in “kwargs” it will be assigned, with its name (as sent by kw
 <tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.filter_curvature_roughness" title="CurvatureFactory.CurvatureFactory.filter_curvature_roughness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_curvature_roughness</span></code></a>(…[,&nbsp;mean,&nbsp;std,&nbsp;…])</td>
 <td>Turns curvature values to zero if they are part of a normal distribution N~(mean, std)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_3parameters</span></code></a>(pcl,&nbsp;…[,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pointSetOpen3D_3parameters</span></code></a>(neighbors_property)</td>
 <td>Curvature of a PointSetOpen3D with its normals and neighborhood via the <em>three-parameters</em> algorithm.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#CurvatureFactory.CurvatureFactory.tensorProperty_3parameters" title="CurvatureFactory.CurvatureFactory.tensorProperty_3parameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tensorProperty_3parameters</span></code></a>(tensorProperty[,&nbsp;…])</td>
@@ -608,15 +608,15 @@ The second condition is defined by the number of sectors with a minimum number o
 6
 7
 8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">timeit</span> <span class="k">import</span> <span class="n">default_timer</span> <span class="k">as</span> <span class="n">timer</span>
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="n">search_radius</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">max_nn</span> <span class="o">=</span> <span class="mi">20</span>
 
-    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;/home/user/PycharmProjects/Filin-Infrastructure/test_data/tigers1M.txt&quot;</span><span class="p">)</span>
-    <span class="n">pnts</span> <span class="o">=</span> <span class="n">points</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-    <span class="n">pntSet</span> <span class="o">=</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">pnts</span><span class="p">)</span>
-    <span class="c1"># pntSet = IOFactory.ReadFunctions.ReadPts(&quot;/home/user/PycharmProjects/Filin-Infrastructure/test_data/test_pts.pts&quot;)</span>
-    <span class="n">neiProp</span> <span class="o">=</span> <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">kdtreePointSet_knn</span><span class="p">(</span><span class="n">KdTreePointSet</span><span class="p">(</span><span class="n">pntSet</span><span class="p">),</span> <span class="mi">500</span><span class="p">)</span>
-    <span class="c1"># normals = np.array(list(map(lambda i: computeNormalByTensor(pntSet[ind[i, 1:], :], pntSet[i]), range(numPnts))))</span>
-    <span class="c1"># neiProp2Bool = np.array(list(map(lambda i: CurvatureFactory.checkNeighborhood(neiProp), range(pntSet.Size))))</span>
+    <span class="n">normals0</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">p3d</span><span class="p">,</span> <span class="n">normals</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
+    <span class="n">normals1</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">p3d</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">p3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">))</span>
+
+    <span class="c1"># neighborsProperty = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, max_nn)</span>
+    <span class="n">curvatures</span> <span class="o">=</span> <span class="n">CurvatureFactory</span><span class="o">.</span><span class="n">umbrella_curvature</span><span class="p">(</span><span class="n">neiProp</span><span class="p">,</span> <span class="n">normals1</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">invalid_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 </dd></dl>
@@ -653,7 +653,7 @@ The second condition is defined by the number of sectors with a minimum number o
 
 <dl class="classmethod">
 <dt id="CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters">
-<em class="property">classmethod </em><code class="descname">pointSetOpen3D_3parameters</code><span class="sig-paren">(</span><em>pcl</em>, <em>neighbors_property</em>, <em>min_points_in_neighborhood=5</em>, <em>min_points_in_sector=2</em>, <em>valid_sectors=7</em>, <em>num_sectors=8</em>, <em>invalid_value=-999</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.pointSetOpen3D_3parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">pointSetOpen3D_3parameters</code><span class="sig-paren">(</span><em>neighbors_property</em>, <em>normals_property=None</em>, <em>min_points_in_neighborhood=5</em>, <em>min_points_in_sector=2</em>, <em>valid_sectors=7</em>, <em>num_sectors=8</em>, <em>invalid_value=-999</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.pointSetOpen3D_3parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Curvature of a PointSetOpen3D with its normals and neighborhood via the <em>three-parameters</em> algorithm.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -665,8 +665,8 @@ point neighborhood parameters</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pcl</strong> – the point cloud</li>
 <li><strong>neighbors_property</strong> (<a class="reference internal" href="../Neighborhood/Neighborhood.html#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty.NeighborsProperty</em></a>) – the neighbors property of the point cloud</li>
+<li><strong>normals_property</strong> (<a class="reference internal" href="../Normals/Normals.html#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty"><em>NormalsProperty.NormalsProperty</em></a>) – normals computed for the point cloud in advance</li>
 <li><strong>min_points_in_neighborhood</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5</li>
 <li><strong>min_points_in_sector</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal points in a sector to be considered valid. Default: 2</li>
 <li><strong>valid_sectors</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – minimal sectors needed for a point to be considered good. Default: 7</li>
@@ -721,7 +721,7 @@ point neighborhood parameters</p>
 
 <dl class="classmethod">
 <dt id="CurvatureFactory.CurvatureFactory.umbrella_curvature">
-<em class="property">classmethod </em><code class="descname">umbrella_curvature</code><span class="sig-paren">(</span><em>neighbrohood</em>, <em>normals</em>, <em>min_obj_size=0.01</em>, <em>alpha=0.05</em>, <em>min_points_in_neighborhood=8</em>, <em>min_points_in_sector=1</em>, <em>valid_sectors=7</em>, <em>num_sectors=8</em>, <em>invalid_value=-999</em>, <em>curvatureProperty=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.umbrella_curvature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.umbrella_curvature" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">umbrella_curvature</code><span class="sig-paren">(</span><em>neighbrohood</em>, <em>normals</em>, <em>min_obj_size=0.01</em>, <em>alpha=0.05</em>, <em>min_points_in_neighborhood=5</em>, <em>min_points_in_sector=2</em>, <em>valid_sectors=7</em>, <em>num_sectors=8</em>, <em>invalid_value=-999</em>, <em>curvatureProperty=None</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/CurvatureFactory.html#CurvatureFactory.umbrella_curvature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#CurvatureFactory.CurvatureFactory.umbrella_curvature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute an umbrella curvature,</p>
 <p>Defined in <a class="reference internal" href="../../zreferences.html#foorginejad-khalili2014" id="id2">[FK14]</a></p>
 <p>Based on the idea that the size of the curvature (openness) is influenced by the projection of the neighboring points on the normal vector.</p>

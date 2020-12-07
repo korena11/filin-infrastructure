@@ -276,7 +276,7 @@
 <span class="sd">        :rtype: nx1 nd-array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -287,7 +287,7 @@
 <span class="sd">        :rtype: nx1 nd-array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">Z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -297,14 +297,14 @@
 <span class="sd">        :rtype: nx1 nd-array</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">]</span>
 
 <div class="viewcode-block" id="PointSet.ToNumpy"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet.ToNumpy">[docs]</a>    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :return: points as numpy nX3 ndarray</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="PointSet.ToRDD"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet.ToRDD">[docs]</a>    <span class="k">def</span> <span class="nf">ToRDD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -348,18 +348,6 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span></div>
-
-<div class="viewcode-block" id="PointSet.MakeGeometryUnique"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet.MakeGeometryUnique">[docs]</a>    <span class="k">def</span> <span class="nf">MakeGeometryUnique</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Makes sure that every (x,y,z) appears exactly once.</span>
-
-<span class="sd">        :return: a PointSubSet of the unique points</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
-
-        <span class="n">unique_points</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">PointSubSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PointSet.UpdateFields"><a class="viewcode-back" href="../Datasets/PointSet.html#PointSet.PointSet.UpdateFields">[docs]</a>    <span class="k">def</span> <span class="nf">UpdateFields</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>

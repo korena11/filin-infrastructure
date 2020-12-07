@@ -239,7 +239,7 @@
         <span class="k">return</span> <span class="n">CurvatureProperty</span><span class="p">(</span><span class="n">tensorProperty</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">k1</span><span class="p">,</span> <span class="n">k2</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CurvatureFactory.pointSetOpen3D_3parameters"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.pointSetOpen3D_3parameters">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">pointSetOpen3D_3parameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">pcl</span><span class="p">,</span> <span class="n">neighbors_property</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">pointSetOpen3D_3parameters</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">neighbors_property</span><span class="p">,</span> <span class="n">normals_property</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                    <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_sectors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                                    <span class="n">invalid_value</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -250,8 +250,8 @@
 <span class="sd">            If a pointset3D is sent without its normals computed in advance, the normals will be computed according to the first</span>
 <span class="sd">            point neighborhood parameters</span>
 
-<span class="sd">        :param pcl: the point cloud</span>
 <span class="sd">        :param neighbors_property: the neighbors property of the point cloud</span>
+<span class="sd">        :param normals_property: normals computed for the point cloud in advance</span>
 <span class="sd">        :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 5</span>
 <span class="sd">        :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 2</span>
 <span class="sd">        :param valid_sectors: minimal sectors needed for a point to be considered good. Default: 7</span>
@@ -261,6 +261,7 @@
 
 <span class="sd">        :type pointset3d: PointSetOpen3D.PointSetOpen3D, DataClasses.BaseData.BaseData</span>
 <span class="sd">        :type neighbors_property: NeighborsProperty.NeighborsProperty</span>
+<span class="sd">        :type normals_property: NormalsProperty.NormalsProperty</span>
 <span class="sd">        :type min_points_in_neighborhood: int</span>
 <span class="sd">        :type min_points_in_sector: int</span>
 <span class="sd">        :type valid_sectors: int</span>
@@ -278,6 +279,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span> <span class="nn">DataClasses.PointSetOpen3D</span> <span class="k">import</span> <span class="n">PointSetOpen3D</span>
         <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
+        <span class="n">pcl</span> <span class="o">=</span> <span class="n">neighbors_property</span><span class="o">.</span><span class="n">Points</span>
         <span class="n">k1</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">k2</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">invalid_curvature</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># number of points that their curvature wasn&#39;t estimated</span>
@@ -291,20 +293,23 @@
             <span class="n">pointset3d</span> <span class="o">=</span> <span class="n">pcl</span>
 
         <span class="c1"># check if normals have been computed before for this point cloud:</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">normals_property</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 
-            <span class="k">for</span> <span class="n">neighborhood1</span> <span class="ow">in</span> <span class="n">neighbors_property</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">neighborhood1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="n">radius</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">radius</span>
-                <span class="n">maxNN</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
+                <span class="k">for</span> <span class="n">neighborhood1</span> <span class="ow">in</span> <span class="n">neighbors_property</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">neighborhood1</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">radius</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">radius</span>
+                    <span class="n">maxNN</span> <span class="o">=</span> <span class="n">neighborhood1</span><span class="o">.</span><span class="n">numberOfNeighbors</span>
 
-                <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">maxNN</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">pointset3d</span><span class="o">.</span><span class="n">CalculateNormals</span><span class="p">(</span><span class="n">search_radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">maxNN</span><span class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">maxNN</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">pointset3d</span><span class="o">.</span><span class="n">CalculateNormals</span><span class="p">(</span><span class="n">search_radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">maxNN</span><span class="o">=</span><span class="n">maxNN</span><span class="p">)</span>
 
-                    <span class="k">break</span>
+                        <span class="k">break</span>
 
-        <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span>
+            <span class="n">normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">normals</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">normals</span> <span class="o">=</span> <span class="n">normals_property</span><span class="o">.</span><span class="n">Normals</span>
         <span class="n">neighbors_property</span><span class="o">.</span><span class="n">__reset__</span><span class="p">()</span>  <span class="c1"># reset iterable</span>
 
         <span class="k">for</span> <span class="n">neighborhood</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">neighbors_property</span><span class="p">,</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span class="p">),</span> <span class="n">total</span><span class="o">=</span><span class="n">pointset3d</span><span class="o">.</span><span class="n">Size</span><span class="p">,</span>
@@ -423,7 +428,7 @@
 
 <div class="viewcode-block" id="CurvatureFactory.umbrella_curvature"><a class="viewcode-back" href="../Properties/Curvature/Curvature.html#CurvatureFactory.CurvatureFactory.umbrella_curvature">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">umbrella_curvature</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">neighbrohood</span><span class="p">,</span> <span class="n">normals</span><span class="p">,</span> <span class="n">min_obj_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-                           <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_sectors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+                           <span class="n">min_points_in_neighborhood</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_points_in_sector</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">num_sectors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
                            <span class="n">invalid_value</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span> <span class="n">curvatureProperty</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute an umbrella curvature,</span>
@@ -476,7 +481,6 @@
         <span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span>
         <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
 
-
         <span class="n">epsilon</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">min_obj_size</span>
         <span class="n">umbrellaCurvature</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -499,8 +503,10 @@
 
                 <span class="c1"># check if the projections are statistically zero</span>
                 <span class="n">projections</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
-
-                <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span class="n">projections</span><span class="o">.</span><span class="n">shape</span> <span class="o">&lt;</span> <span class="n">epsilon</span><span class="p">:</span>
+                    <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">umbrellaCurvature</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">projections</span><span class="p">)</span> <span class="o">/</span> <span class="n">projections</span><span class="o">.</span><span class="n">shape</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invalid point:&#39;</span><span class="p">,</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">center_point_idx</span><span class="p">)</span>
@@ -785,6 +791,7 @@
 <span class="sd">        :rtype: nd-array</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">LinAlgError</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">neighbor_points</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
@@ -793,7 +800,17 @@
         <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">y</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">))</span>
         <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
         <span class="n">u</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># try to fit a bi-quadratic surface</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">LinAlgError</span><span class="p">:</span> <span class="c1"># if the surface is a plane, fit a plane through homogeneous solution</span>
+            <span class="kn">from</span> <span class="nn">Utils.MyTools</span> <span class="k">import</span> <span class="n">eig</span>
+            <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">,</span><span class="n">z</span><span class="p">))</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+            <span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">][:,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">p</span></div>
 </pre></div>

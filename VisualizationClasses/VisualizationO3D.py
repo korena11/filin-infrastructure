@@ -28,7 +28,7 @@ class VisualizationO3D:
         :rtype: dict
         """
         key_to_callback = {}
-        key_to_callback[ord("K")] = cls.toggle_black_white_background
+        key_to_callback[ord("B")] = cls.toggle_black_white_background
 
         return key_to_callback
 
@@ -42,7 +42,6 @@ class VisualizationO3D:
         :type vis: open3d.Visualizer
 
         """
-
         opt = vis.get_render_option()
         if np.array_equal(opt.background_color, np.ones(3)):
             opt.background_color = np.zeros(3)
@@ -103,6 +102,45 @@ class VisualizationO3D:
         else:
             o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
+    def visualize_neighborhoods(self, neighborhoodProperty):
+        """
+        Visualize points neighborhoods in white. Center point in red, other points in green
+
+        Going through the points according to their order in the property by pressing 'X'
+
+        :param neighborhoodProperty: the neighborhood property which will be shown
+
+        :type neighborhoodProperty: Properties.Neighborhood.NeighborsProperty.NeighborsProperty
+
+        ..note::
+            To view the neighborhood, make sure the background is black by pressing 'B'
+
+        """
+        from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
+        self.current_neighborhood = neighborhoodProperty.getNeighborhood(0).neighbors
+        self.pointset = PointSetOpen3D(neighborhoodProperty.Points)
+        self.neighborhood = neighborhoodProperty
+        key_to_callback = self.initialize_key_to_callback()
+        key_to_callback[ord('X')] = self.next_neighborhood
+
+        o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
+
+    def next_neighborhood(self, vis):
+        """
+        Light the next neighborhood in the list
+
+        two new point clouds: one holds only the point (colored in red) and another holds the neighborhood colored in gray levels (can be changed)
+        """
+        current_neighborhood = self.neighborhood.__next__()
+
+        color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255
+        color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
+        color_by_neighborhood[current_neighborhood.center_point_idx] = np.array([1, 0, 0])
+
+        # self.pointset = tmp_subset
+        self.pointset.data.colors = o3d.Vector3dVector(color_by_neighborhood)
+        vis.update_geometry()
+
     def visualize_property(self, propertyclass):
         """
         Visualize property classes
@@ -112,14 +150,18 @@ class VisualizationO3D:
         :type propertyclass: BaseProperty
         """
         from numpy import ndarray
+        from itertools import cycle
+
         # initialize custom keys for visualization window
         key_to_callback = self.initialize_key_to_callback()
-
         self.pointset = PointSetOpen3D(propertyclass.Points)
+
+        # to present normals
         if isinstance(propertyclass, NormalsProperty):
             self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
         elif isinstance(propertyclass.Points, PointSetOpen3D):
             self.pointset.data.normals = propertyclass.Points.data.normals
+
         colors_new = []
         attribute_name = []
         for att in dir(propertyclass):
@@ -138,9 +180,8 @@ class VisualizationO3D:
 
         self.colors = colors_new
         self.attribute_name = attribute_name
-
-        from itertools import cycle
         self.colormap_list = cycle(['jet', 'summer', 'winter', 'hot', 'gray', 'PiYG', 'coolwarm', 'RdYlBu'])
+
         key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
@@ -179,6 +220,7 @@ class VisualizationO3D:
         self.pointset.data.colors = new_colors
         vis.update_geometry()
 
+
     def __change_colormap(self, colormap):
         """
         changes the array to a given colormap
@@ -191,7 +233,7 @@ class VisualizationO3D:
 
         :return: the array in the new colormap
         """
-        array = np.asarray(self.colors[self.index])
+        array = np.asarray(self.colors)[self.index]
         colored = colormap(array)
         R = colored[:, 0, 0].flatten()
         G = colored[:, 0, 1].flatten()

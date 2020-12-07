@@ -177,6 +177,9 @@
 <span class="kn">from</span> <span class="nn">skimage</span> <span class="k">import</span> <span class="n">measure</span>
 <span class="kn">import</span> <span class="nn">scipy.interpolate</span> <span class="k">as</span> <span class="nn">interp</span>
 
+
+
+
 <div class="viewcode-block" id="chi2_distance"><a class="viewcode-back" href="../../Utils/Utils.html#Utils.MyTools.chi2_distance">[docs]</a><span class="k">def</span> <span class="nf">chi2_distance</span><span class="p">(</span><span class="n">histA</span><span class="p">,</span> <span class="n">histB</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the :math:`\chi^2` distance between two histograms</span>
@@ -837,7 +840,7 @@
     <span class="n">tensor_normals</span> <span class="o">=</span> <span class="n">NormalsFactory</span><span class="o">.</span><span class="n">normals_from_tensors</span><span class="p">(</span><span class="n">tensors_property</span><span class="p">)</span>
 
     <span class="c1"># 6.  Saliency for each tensor</span>
-    <span class="n">tensor_saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">curvature_saliency</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">tensor_normals</span><span class="p">,</span> <span class="n">tensor_curvature</span><span class="p">,</span>
+    <span class="n">tensor_saliency</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">directional_saliency</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="n">tensor_normals</span><span class="p">,</span> <span class="n">tensor_curvature</span><span class="p">,</span>
                                                          <span class="n">curvature_attribute</span><span class="o">=</span><span class="n">curvature_attribute</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
     <span class="c1"># 7. Assign saliency value for each point in the tensor</span>

@@ -536,8 +536,22 @@
 
 <span class="sd">        :rtype: PointSet</span>
 
-<span class="sd">        &quot;&quot;&quot;</span></div></div>
-        <span class="c1"># pts = PointSet()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+        <span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">PointSet</span><span class="p">(</span><span class="n">pts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">range_accuracy</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RasterData.ToNumpy"><a class="viewcode-back" href="../Datasets/RasterData.html#RasterData.RasterData.ToNumpy">[docs]</a>    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns raster as np.array</span>
+
+<span class="sd">        :return: numpy array of the points</span>
+
+<span class="sd">        :rtype: numpy.ndarray</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ToPointSet</span><span class="p">()</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()</span></div></div>
+
 
 
 

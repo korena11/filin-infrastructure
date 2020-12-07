@@ -227,16 +227,19 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getPointNormal" title="NormalsProperty.NormalsProperty.getPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointNormal</span></code></a>(idx)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.dip_direction" title="NormalsProperty.NormalsProperty.dip_direction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dip_direction</span></code></a>()</td>
+<td>Compute the dip direction</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getPointNormal" title="NormalsProperty.NormalsProperty.getPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getPointNormal</span></code></a>(idx)</td>
 <td>Retrieve the normal value of a specific point</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getValues" title="NormalsProperty.NormalsProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.getValues" title="NormalsProperty.NormalsProperty.getValues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getValues</span></code></a>()</td>
 <td>Get a specific characteristic value of the property</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.load" title="NormalsProperty.NormalsProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(normals,&nbsp;**kwargs)</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.load" title="NormalsProperty.NormalsProperty.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>(normals,&nbsp;**kwargs)</td>
 <td>Sets normals into the NormalsProperty object</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.setPointNormal" title="NormalsProperty.NormalsProperty.setPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointNormal</span></code></a>(idx,&nbsp;values)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NormalsProperty.NormalsProperty.setPointNormal" title="NormalsProperty.NormalsProperty.setPointNormal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setPointNormal</span></code></a>(idx,&nbsp;values)</td>
 <td>Sets a normal values to specific points</td>
 </tr>
 </tbody>
@@ -263,6 +266,35 @@
 <dt id="NormalsProperty.NormalsProperty.dZ">
 <code class="descname">dZ</code><a class="headerlink" href="#NormalsProperty.NormalsProperty.dZ" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return normals Z coordinates</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="NormalsProperty.NormalsProperty.dip_direction">
+<code class="descname">dip_direction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsProperty.html#NormalsProperty.dip_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsProperty.NormalsProperty.dip_direction" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Compute the dip direction</p>
+<p>The dip gives the steepest angle of descent of a tilted bed or feature relative to a horizontal plane,
+and is given by the number (0°-90°) as well as a letter (N,S,E,W) with rough direction in which the bed is dipping downwards.
+The dip direction is the azimuth of the direction the dip as projected to the horizontal (like the trend of a linear
+feature in trend and plunge measurements), which is 90° off the strike angle.</p>
+<p>The dip is computed by</p>
+<div class="math notranslate nohighlight">
+\[heta = rcsin \left(\]</div>
+</div></blockquote>
+<p>rac{sqrt{n_x^2 + n_y^2}}{sqrt{n_x^2 + n_y^2+n_z^2}}
+ight)</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">the dip direction (decimal angels)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">np.array nx1</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -365,21 +397,13 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA" title="NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normal_from_tensors_with_CUDA</span></code></a>(neighborProperty)</td>
-<td>Compute normals of each point using CUDA :param neighborProperty: neighborProperty to compute normal for each of its points :type neighborProperty: NeighborProperty :return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals</td>
+<td>Compute normals of each point using CUDA :param neighborProperty: neighborProperty to compute normal for each of its points</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normalsPCA" title="NormalsFactory.NormalsFactory.normalsPCA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalsPCA</span></code></a>(pointset[,&nbsp;tree,&nbsp;radius,&nbsp;k_neighbors])</td>
+<tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normalsPCA" title="NormalsFactory.NormalsFactory.normalsPCA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalsPCA</span></code></a>(neighborsProperty)</td>
 <td>Computes the normals for each point in the pointset via PCA</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_file" title="NormalsFactory.NormalsFactory.normals_from_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_file</span></code></a>(points,&nbsp;normalsFileName)</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">param points:</th><td class="field-body">PointSet to which the normals belong to</td>
-</tr>
-</tbody>
-</table>
-</td>
+<td>Loads normals from file</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#NormalsFactory.NormalsFactory.normals_from_tensors" title="NormalsFactory.NormalsFactory.normals_from_tensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normals_from_tensors</span></code></a>(tensorProperty)</td>
 <td>Compute normals of each tensors reference point and create a property</td>
@@ -397,57 +421,38 @@
 <dt id="NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA">
 <em class="property">classmethod </em><code class="descname">normal_from_tensors_with_CUDA</code><span class="sig-paren">(</span><em>neighborProperty</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normal_from_tensors_with_CUDA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normal_from_tensors_with_CUDA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute normals of each point using CUDA
-:param neighborProperty: neighborProperty to compute normal for each of its points
-:type neighborProperty: NeighborProperty
-:return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals</p>
+:param neighborProperty: neighborProperty to compute normal for each of its points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+<p>:return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Usage example</strong></p>
 </dd></dl>
 
 <dl class="staticmethod">
 <dt id="NormalsFactory.NormalsFactory.normalsPCA">
-<em class="property">static </em><code class="descname">normalsPCA</code><span class="sig-paren">(</span><em>pointset</em>, <em>tree=None</em>, <em>radius=None</em>, <em>k_neighbors=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normalsPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normalsPCA" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">normalsPCA</code><span class="sig-paren">(</span><em>neighborsProperty</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normalsPCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normalsPCA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the normals for each point in the pointset via PCA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>pointset</strong> – points to compute their normals</li>
-<li><strong>tree</strong> – a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be build here.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>neighborsProperty</strong> (<em>Properties.Neighborhood.NeighborsProperty.NeighborsProperty</em>) – a neighborhood property from which the PCA is computed</td>
 </tr>
-</tbody>
-</table>
-<p><em>One of these should be passed</em></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>radius</strong> – the radius in which the neighbors should be found</li>
-<li><strong>k_neighbors</strong> – number of neighbors</li>
-</ul>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">normals for each point</td>
 </tr>
-</tbody>
-</table>
-<p><strong>Optionals</strong></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>leaf_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – for ball-tree construction. Default: 40</li>
-<li><strong>metric</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – for ball-tree construction. Deafault: ‘minkowski’</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">normals for each point</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a></p>
-</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a></td>
 </tr>
 </tbody>
 </table>
@@ -456,7 +461,8 @@
 <dl class="staticmethod">
 <dt id="NormalsFactory.NormalsFactory.normals_from_file">
 <em class="property">static </em><code class="descname">normals_from_file</code><span class="sig-paren">(</span><em>points</em>, <em>normalsFileName</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normals_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normals_from_file" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Loads normals from file</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -490,7 +496,10 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">normals property for the tensors</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">normals property for the tensors</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a></p>
 </td>
 </tr>
 </tbody>
@@ -499,7 +508,7 @@
 
 <dl class="staticmethod">
 <dt id="NormalsFactory.NormalsFactory.normals_open3D">
-<em class="property">static </em><code class="descname">normals_open3D</code><span class="sig-paren">(</span><em>pointcloud</em>, <em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>orientation=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>return_pcl=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normals_open3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normals_open3D" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">normals_open3D</code><span class="sig-paren">(</span><em>pointcloud</em>, <em>search_radius=0.05</em>, <em>maxNN=200</em>, <em>orientation=(0.0</em>, <em>0.0</em>, <em>0.0)</em>, <em>return_pcl=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NormalsFactory.html#NormalsFactory.normals_open3D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NormalsFactory.NormalsFactory.normals_open3D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the normals using open 3D</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -514,11 +523,18 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">normals property and the pointcloud with normals</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">normals property and the pointcloud with normals</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NormalsProperty.NormalsProperty" title="NormalsProperty.NormalsProperty">NormalsProperty</a></p>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The computed normals act weird on edges. Pay attention.</p>
+</div>
 </dd></dl>
 
 <dl class="classmethod">
