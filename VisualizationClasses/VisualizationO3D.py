@@ -90,17 +90,17 @@ class VisualizationO3D:
                 colors_ = colors
             if colors_.max() > 1:
                 colors_ /= 255
-            pcd.data.colors = o3d.utility.Vector3dVector(colors_)
+            pcd.data.colors = o3d.Vector3dVector(colors_)
 
         if drawCoordianteFrame:
             if coordinateFrameOrigin == 'min':
-                cf = o3d.geometry.TriangleMesh.create_coordinate_frame(size=coordinateFrameSize,
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize,
                                                                origin=pcd.ToNumpy().min(axis=0) - originOffset)
             else:
-                cf = o3d.geometry.TriangleMesh.create_coordinate_frame(size=coordinateFrameSize)
-            o3d.visualization.draw_geometries_with_key_callbacks([pcd.data, cf], key_to_callback)
+                cf = o3d.geometry.create_mesh_coordinate_frame(size=coordinateFrameSize)
+            o3d.draw_geometries_with_key_callbacks([pcd.data, cf], key_to_callback)
         else:
-            o3d.visualization.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
+            o3d.draw_geometries_with_key_callbacks([pcd.data], key_to_callback)
 
     def visualize_neighborhoods(self, neighborhoodProperty):
         """
@@ -133,11 +133,11 @@ class VisualizationO3D:
         """
         current_neighborhood = self.neighborhood.__next__()
 
-        color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255
-        color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
+        color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255 # paint all point cloud in green
+        # color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
+        color_by_neighborhood[current_neighborhood.neighborhoodIndices] = self.__make_color_array(current_neighborhood.weighted_distances)
         color_by_neighborhood[current_neighborhood.center_point_idx] = np.array([1, 0, 0])
 
-        # self.pointset = tmp_subset
         self.pointset.data.colors = o3d.Vector3dVector(color_by_neighborhood)
         vis.update_geometry()
 
@@ -158,7 +158,9 @@ class VisualizationO3D:
 
         # to present normals
         if isinstance(propertyclass, NormalsProperty):
-            self.pointset.data.normals = o3d.utility.Vector3dVector(propertyclass.Normals)
+            if not self.pointset.data.has_normals:
+                self.pointset.data.CalculateNormals()
+            self.pointset.data.normals = o3d.Vector3dVector(propertyclass.Normals)
         elif isinstance(propertyclass.Points, PointSetOpen3D):
             self.pointset.data.normals = propertyclass.Points.data.normals
 
@@ -185,7 +187,7 @@ class VisualizationO3D:
         key_to_callback[ord('A')] = self.toggle_attributes_colors
         key_to_callback[ord('C')] = self.toggle_colormaps
 
-        o3d.visualization.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
+        o3d.draw_geometries_with_key_callbacks([self.pointset.data], key_to_callback)
 
     def toggle_attributes_colors(self, vis):
         """
@@ -225,8 +227,10 @@ class VisualizationO3D:
         """
         changes the array to a given colormap
 
+        :param array: the array of colors to transform
         :param colormap: a colormap object
 
+        :type array: np.array
         :type colormap: plt.colormap
 
         :return: the array in the new colormap
@@ -237,7 +241,7 @@ class VisualizationO3D:
         G = colored[:, 0, 1].flatten()
         B = colored[:, 0, 2].flatten()
 
-        return o3d.utility.Vector3dVector(np.vstack((R, G, B)).T)
+        return o3d.Vector3dVector(np.vstack((R, G, B)).T)
 
     @classmethod
     def __make_color_array(cls, array):
@@ -270,4 +274,4 @@ class VisualizationO3D:
         # normalize to range [0...1]
         rgb_normed = (rgb - rgb.min()) / (rgb.max() - rgb.min() + 1e-12)
 
-        return o3d.utility.Vector3dVector(rgb_normed)
+        return o3d.Vector3dVector(rgb_normed)

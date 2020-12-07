@@ -3,7 +3,7 @@ from unittest import TestCase
 from DataClasses.PointSetOpen3D import PointSetOpen3D
 from IOmodules.IOFactory import IOFactory
 from Properties.Curvature.CurvatureFactory import CurvatureFactory
-from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
+from Properties.Neighborhood.NeighborsFactory import NeighborsFactory, NeighborsProperty
 from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
 
@@ -34,6 +34,7 @@ class TestVisualizationO3D(TestCase):
 
     def test_visualize_neighborhood(self):
         import numpy as np
+        import Properties.Neighborhood.WeightingFunctions as wf
         vis = VisualizationO3D()
         r = 3
         nn_max = 200
@@ -69,4 +70,7 @@ class TestVisualizationO3D(TestCase):
         # plt.plot(np.arange(1, 20), np.asarray(radi))
 
         neighborhood = NeighborsFactory.ComputeNeighbors_raster(pts, 1, r)
+        weighted_neighborhood = NeighborsProperty(pts)
+        for neighbors in neighborhood:
+            neighbors.weightNeighborhood(wf.laplacianWeights,  3.)
         vis.visualize_neighborhoods(neighborhood)
