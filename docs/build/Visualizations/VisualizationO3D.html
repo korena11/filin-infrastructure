@@ -91,10 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../Properties/BaseProperty.html">Properties</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Factories/Factories.html">Factories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">General Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/cuda_API.html">CUDA Utilities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Utils/geometryUtils.html">Geometry Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="Visualization.html">Visualization Classes</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="PointSetVisualization.html">Visualization Documentation</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">VisualizationO3D Documentation</a><ul>
@@ -105,6 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="RasterVisualization.html">Raster Visualization Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../zreferences.html">References</a></li>
 </ul>
 
@@ -187,13 +185,13 @@
 16
 17
 18
-19</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="c1"># create an empty list for the colors to be loaded into</span>
-        <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># load the point cloud for visualization</span>
-        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">colorslist</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-
-        <span class="c1"># visualize the PointSet with a color property</span>
-        <span class="n">VisualizationO3D</span><span class="o">.</span><span class="n">visualize_pointset</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+19</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1">#     # create an empty list for the colors to be loaded into</span>
+    <span class="c1">#     colors = []</span>
+    <span class="c1">#     # load the point cloud for visualization</span>
+    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../test_data/test_pts2.pts&#39;, colorslist=colors, merge=False)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # visualize the PointSet with a color property</span>
+    <span class="c1">#     VisualizationO3D.visualize_pointset(pcl[0], colors[0])</span>
 </pre></div>
 </td></tr></table></div>
 <p>This function gets a PointSet and a ColorProperty, if exists, and shows the point cloud with the original colors.</p>
@@ -211,18 +209,18 @@
 30
 31
 32
-33</pre></div></td><td class="code"><div class="highlight"><pre><span></span>        <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="c1"># load the point cloud for visualization</span>
-        <span class="n">pcl</span> <span class="o">=</span> <span class="n">IOFactory</span><span class="o">.</span><span class="n">ReadPts</span><span class="p">(</span><span class="s1">&#39;../test_data/test_pts2.pts&#39;</span><span class="p">,</span> <span class="n">colorslist</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">merge</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-        <span class="n">pcd</span> <span class="o">=</span> <span class="n">PointSetOpen3D</span><span class="p">(</span><span class="n">pcl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># convert to PointSetOpen3D</span>
-
-        <span class="c1"># Prepare the property to show</span>
-        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">NeighborsFactory</span><span class="o">.</span><span class="n">CalculateAllPointsNeighbors</span><span class="p">(</span><span class="n">pcd</span><span class="p">,</span> <span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">curvature</span> <span class="o">=</span> <span class="n">CurvatureFactory</span><span class="o">.</span><span class="n">pointSetOpen3D_3parameters</span><span class="p">(</span><span class="n">pcd</span><span class="p">,</span> <span class="n">neighbors</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-
-        <span class="c1"># Create a VisualizationO3D object</span>
-        <span class="n">visualization</span> <span class="o">=</span> <span class="n">VisualizationO3D</span><span class="p">()</span>
-        <span class="n">visualization</span><span class="o">.</span><span class="n">visualize_property</span><span class="p">(</span><span class="n">curvature</span><span class="p">)</span>  <span class="c1"># send property for visualization</span>
+33</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="c1">#     colors = []</span>
+    <span class="c1">#     # load the point cloud for visualization</span>
+    <span class="c1">#     pcl = IOFactory.ReadPts(&#39;../test_data/test_pts2.pts&#39;, colorslist=colors, merge=False)</span>
+    <span class="c1">#     pcd = PointSetOpen3D(pcl[0])  # convert to PointSetOpen3D</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # Prepare the property to show</span>
+    <span class="c1">#     neighbors = NeighborsFactory.CalculateAllPointsNeighbors(pcd, .1, -1)</span>
+    <span class="c1">#     curvature = CurvatureFactory.pointSetOpen3D_3parameters(pcd, neighbors, valid_sectors=4)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     # Create a VisualizationO3D object</span>
+    <span class="c1">#     visualization = VisualizationO3D()</span>
+    <span class="c1">#     visualization.visualize_property(curvature)  # send property for visualization</span>
 </pre></div>
 </td></tr></table></div>
 <p>Here two new keyboard functions added:</p>
@@ -255,23 +253,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_VisualizationO3D__change_colormap</span></code>(colormap)</td>
-<td>changes the array to a given colormap</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">_VisualizationO3D__make_color_array</span></code>(array)</td>
-<td>Prepare an array to be used as a color array for visualization</td>
-</tr>
 <tr class="row-odd"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.initialize_key_to_callback" title="VisualizationO3D.VisualizationO3D.initialize_key_to_callback"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_key_to_callback</span></code></a>()</td>
 <td>Sets extra keys to callback, to be available for all VisualizeO3D</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_attributes_colors" title="VisualizationO3D.VisualizationO3D.toggle_attributes_colors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_attributes_colors</span></code></a>(vis)</td>
+<tr class="row-even"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.next_neighborhood" title="VisualizationO3D.VisualizationO3D.next_neighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_neighborhood</span></code></a>(vis)</td>
+<td>Light the next neighborhood in the list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_attributes_colors" title="VisualizationO3D.VisualizationO3D.toggle_attributes_colors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_attributes_colors</span></code></a>(vis)</td>
 <td>Change visualization colors according to attributes of the property</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_black_white_background" title="VisualizationO3D.VisualizationO3D.toggle_black_white_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_black_white_background</span></code></a>(vis)</td>
+<tr class="row-even"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_black_white_background" title="VisualizationO3D.VisualizationO3D.toggle_black_white_background"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_black_white_background</span></code></a>(vis)</td>
 <td>Change background from white to black and vise versa</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_colormaps" title="VisualizationO3D.VisualizationO3D.toggle_colormaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_colormaps</span></code></a>(vis)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.toggle_colormaps" title="VisualizationO3D.VisualizationO3D.toggle_colormaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_colormaps</span></code></a>(vis)</td>
 <td>changes between colormaps :param vis: :return:</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.visualize_neighborhoods" title="VisualizationO3D.VisualizationO3D.visualize_neighborhoods"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize_neighborhoods</span></code></a>(neighborhoodProperty)</td>
+<td>Visualize points neighborhoods in white.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#VisualizationO3D.VisualizationO3D.visualize_pointset" title="VisualizationO3D.VisualizationO3D.visualize_pointset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">visualize_pointset</span></code></a>(pointset[,&nbsp;colors,&nbsp;…])</td>
 <td>Visualize PointSet with color property, if exists</td>
@@ -296,6 +294,13 @@
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="method">
+<dt id="VisualizationO3D.VisualizationO3D.next_neighborhood">
+<code class="descname">next_neighborhood</code><span class="sig-paren">(</span><em>vis</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationO3D.html#VisualizationO3D.next_neighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationO3D.VisualizationO3D.next_neighborhood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Light the next neighborhood in the list</p>
+<p>two new point clouds: one holds only the point (colored in red) and another holds the neighborhood colored in gray levels (can be changed)</p>
 </dd></dl>
 
 <dl class="method">
@@ -332,6 +337,25 @@
 <dd><p>changes between colormaps
 :param vis:
 :return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="VisualizationO3D.VisualizationO3D.visualize_neighborhoods">
+<code class="descname">visualize_neighborhoods</code><span class="sig-paren">(</span><em>neighborhoodProperty</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/VisualizationO3D.html#VisualizationO3D.visualize_neighborhoods"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#VisualizationO3D.VisualizationO3D.visualize_neighborhoods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Visualize points neighborhoods in white. Center point in red, other points in green</p>
+<p>Going through the points according to their order in the property by pressing ‘X’</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>neighborhoodProperty</strong> (<em>Properties.Neighborhood.NeighborsProperty.NeighborsProperty</em>) – the neighborhood property which will be shown</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>..note::</dt>
+<dd>To view the neighborhood, make sure the background is black by pressing ‘B’</dd>
+</dl>
 </dd></dl>
 
 <dl class="classmethod">

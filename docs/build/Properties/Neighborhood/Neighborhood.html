@@ -110,9 +110,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../Factories/Factories.html">Factories</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../LevelSets/LevelSets.html">Level Set functions and factory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Utils/Utils.html">Different utilities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../Visualizations/Visualization.html">Visualization Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Utils/EigenFactory.html">Eigen Factory Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../zreferences.html">References</a></li>
 </ul>
 
@@ -227,7 +227,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.color_neighborhood" title="PointNeighborhood.PointNeighborhood.color_neighborhood"><code class="xref py py-obj docutils literal notranslate"><span class="pre">color_neighborhood</span></code></a>([point_color,&nbsp;…])</td>
-<td>Assign red color to the center point and black to the rest</td>
+<td>Assign point_color color to the center point and neighbor_color to the rest</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#PointNeighborhood.PointNeighborhood.computeDistances" title="PointNeighborhood.PointNeighborhood.computeDistances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">computeDistances</span></code></a>()</td>
 <td>Compute the distances between each point and the center point</td>
@@ -280,7 +280,7 @@
 <dl class="method">
 <dt id="PointNeighborhood.PointNeighborhood.color_neighborhood">
 <code class="descname">color_neighborhood</code><span class="sig-paren">(</span><em>point_color='red'</em>, <em>neighbors_color='black'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/PointNeighborhood.html#PointNeighborhood.color_neighborhood"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#PointNeighborhood.PointNeighborhood.color_neighborhood" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign red color to the center point and black to the rest</p>
+<dd><p>Assign point_color color to the center point and neighbor_color to the rest</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -580,8 +580,8 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors" title="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CalculateAllPointsNeighbors</span></code></a>(pointset[,&nbsp;…])</td>
-<td>Compute all points neighbors within search radius with maximal number of neighbors.</td>
+<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.ComputeNeighbors_raster" title="NeighborsFactory.NeighborsFactory.ComputeNeighbors_raster"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComputeNeighbors_raster</span></code></a>(points,&nbsp;res,&nbsp;radius)</td>
+<td>Find neighbors for all dataset in raster or gridded point cloud</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange" title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNeighborsIn3dRange</span></code></a>(points,&nbsp;x,&nbsp;y,&nbsp;z,&nbsp;radius)</td>
 <td>Find all tokens (points) in radius range</td>
@@ -591,12 +591,6 @@
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord" title="NeighborsFactory.NeighborsFactory.GetNeighborsIn3dRange_SphericCoord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetNeighborsIn3dRange_SphericCoord</span></code></a>(pnt,&nbsp;…)</td>
 <td>Find points in defined window - neighbors of a point</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates" title="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPointNeighborsByCoordinates</span></code></a>(…[,&nbsp;…])</td>
-<td>Define a point’s neighborhood according to its coordinates</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByID" title="NeighborsFactory.NeighborsFactory.GetPointNeighborsByID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GetPointNeighborsByID</span></code></a>(pointset3d,&nbsp;idx,&nbsp;…)</td>
-<td>Get the neighbors of a point within a point cloud by its index.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#NeighborsFactory.NeighborsFactory.balltreePointSet_knn" title="NeighborsFactory.NeighborsFactory.balltreePointSet_knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">balltreePointSet_knn</span></code></a>(pointset_bt,&nbsp;…)</td>
 <td>Create NeighborsProperty of BallTreePointSet (whole cloud) based on k-nearest-neighbors (RNN)</td>
@@ -639,33 +633,38 @@
 <dd><p>Find neighbors of a given points using different methods. Use this factory to create either PointNeighbors or
 NeighborProperty for a whole point cloud.</p>
 <dl class="staticmethod">
-<dt id="NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors">
-<em class="property">static </em><code class="descname">CalculateAllPointsNeighbors</code><span class="sig-paren">(</span><em>pointset</em>, <em>search_radius=0.05</em>, <em>maxNN=20</em>, <em>maxProcesses=8</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.CalculateAllPointsNeighbors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.CalculateAllPointsNeighbors" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute all points neighbors within search radius with maximal number of neighbors.</p>
+<dt id="NeighborsFactory.NeighborsFactory.ComputeNeighbors_raster">
+<em class="property">static </em><code class="descname">ComputeNeighbors_raster</code><span class="sig-paren">(</span><em>points</em>, <em>res</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.ComputeNeighbors_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.ComputeNeighbors_raster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find neighbors for all dataset in raster or gridded point cloud</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pointset</strong> (<em>np.array</em><em>, </em><a class="reference internal" href="../../Datasets/PointSet.html#PointSet.PointSet" title="PointSet.PointSet"><em>PointSet.PointSet</em></a><em>, </em><a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – a point cloud</li>
-<li><strong>search_radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the radius in which the neighbors are collected. Default: 0.05m</li>
-<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum points per neighborhood. Default: 20</li>
-<li><strong>maxProcesses</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – ** for later use **</li>
+<tr class="field-odd field"><th class="field-name">TODO:</th><td class="field-body"><p class="first">complete for RasterData.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<em>DataClasses.BaseData.BaseData</em><em>, </em><em>DataClasses.PointSet.PointSet</em><em>, </em><em>DataClasses.PointSetOpen3D.PointSetOpen3D</em>) – raster or gridded point cloud</li>
+<li><strong>res</strong> – grid cell size</li>
+<li><strong>radius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – search radius</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">neighbors property where each point has a PointNeighborhood defined.</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">neighborhood property</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Properties.NeighborhoodProperty.NeighborhoodProperty</p>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last">Currently, the number of processes does not work</p>
-</div>
+<dl class="docutils">
+<dt>..warning::</dt>
+<dd><ul class="first last simple">
+<li>RasterData are not implemented</li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -745,65 +744,6 @@ and not neighbors in radius</li>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="../../Datasets/PointSet.html#PointSubSet.PointSubSet" title="PointSubSet.PointSubSet">PointSubSet</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates">
-<em class="property">static </em><code class="descname">GetPointNeighborsByCoordinates</code><span class="sig-paren">(</span><em>pointset_open3d</em>, <em>point</em>, <em>searchRadius</em>, <em>maxNN</em>, <em>useOriginal=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointNeighborsByCoordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByCoordinates" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define a point’s neighborhood according to its coordinates</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pointset_open3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the point cloud in which the neighbors should be searched</li>
-<li><strong>point</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a>) – x, y, z of the point</li>
-<li><strong>searchRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the radius in which the neighbors should be searched</li>
-<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – the maximum number of neighbors</li>
-<li><strong>useOriginal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – <p>???</p>
-</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the neighborhood of a point</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="NeighborsFactory.NeighborsFactory.GetPointNeighborsByID">
-<em class="property">static </em><code class="descname">GetPointNeighborsByID</code><span class="sig-paren">(</span><em>pointset3d</em>, <em>idx</em>, <em>searchRadius</em>, <em>maxNN</em>, <em>returnValues=True</em>, <em>neighborsProperty=None</em>, <em>override=False</em>, <em>useOriginal=False</em>, <em>rotate=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/NeighborsFactory.html#NeighborsFactory.GetPointNeighborsByID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#NeighborsFactory.NeighborsFactory.GetPointNeighborsByID" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the neighbors of a point within a point cloud by its index.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pointset3d</strong> (<a class="reference internal" href="../../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D" title="PointSetOpen3D.PointSetOpen3D"><em>PointSetOpen3D.PointSetOpen3D</em></a>) – the cloud in which the point is searched for</li>
-<li><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><em>np.ndarray</em>) – point index</li>
-<li><strong>searchRadius</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the search radius for neighbors</li>
-<li><strong>maxNN</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – maximum number of neighbors</li>
-<li><strong>returnValues</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: True</li>
-<li><strong>neighborsProperty</strong> (<a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty"><em>NeighborsProperty</em></a>) – Existing neighborhood property which should be override</li>
-<li><strong>override</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: False</li>
-<li><strong>rotate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – flag whether to rotate the neighborhood or not. Default: False</li>
-<li><strong>useOriginal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – default: False</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the point neighborhood</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood">PointNeighborhood</a></p>
 </td>
 </tr>
 </tbody>
@@ -1015,7 +955,10 @@ and not neighbors in radius</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">NeighborsProperty</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">NeighborsProperty</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#NeighborsProperty.NeighborsProperty" title="NeighborsProperty.NeighborsProperty">NeighborsProperty</a></p>
 </td>
 </tr>
 </tbody>

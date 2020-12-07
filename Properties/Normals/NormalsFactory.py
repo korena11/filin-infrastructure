@@ -11,6 +11,7 @@ from Utils import MyTools as mt
 from DataClasses.PointSet import PointSet
 from DataClasses.PointSetOpen3D import PointSetOpen3D
 from Properties.Normals.NormalsProperty import NormalsProperty
+from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
 
 if sys.platform == 'linux':
     pass
@@ -27,6 +28,8 @@ class NormalsFactory:
         :param min_points: minimum points required to compute normal for a point
 
         :return: normals property for the tensors
+
+        :rtype: NormalsProperty
         """
         normals = list(map(lambda t: t.plate_axis, tensorProperty))
         return NormalsProperty(tensorProperty.Points, np.asarray(normals))
@@ -36,19 +39,18 @@ class NormalsFactory:
         """
         Compute normals of each point using CUDA
         :param neighborProperty: neighborProperty to compute normal for each of its points
+
         :type neighborProperty: NeighborProperty
+
         :return:NeighborProperty ,normals (GPU use) shape (3*n,) while n is the number of normals
+
+        :rtype: NormalsProperty
 
         **Usage example**
 
-
-
         .. literalinclude:: ../../NormalsFactory.py
-
             :lines: 358-365
-
             :linenos:
-
 
         """
         pnts = neighborProperty.Points.ToNumpy()
@@ -64,6 +66,7 @@ class NormalsFactory:
     @staticmethod
     def normals_from_file(points, normalsFileName):
         """
+        Loads normals from file
 
         :param points: PointSet to which the normals belong to
         :param normalsFileName: name of file containing normal for each points
@@ -74,7 +77,6 @@ class NormalsFactory:
         :return: NormalsProperty of the points
 
         :rtype: NormalsProperty
-
         """
 
         # Read normals from file                 
@@ -82,71 +84,34 @@ class NormalsFactory:
                                     , 'formats': ['float', 'float', 'float']})
 
         imported_array = genfromtxt(normalsFileName, dtype=parametersTypes, filling_values=(0, 0, 0))
-
         dxdydz = imported_array[['x', 'y', 'z']].view(float).reshape(len(imported_array), -1)
-
         normals = NormalsProperty(points, dxdydz)
 
         return normals
 
     @staticmethod
-    def normalsPCA(pointset, tree=None, radius=None, k_neighbors=None, **kwargs):
+    def normalsPCA(neighborsProperty):
         """
         Computes the normals for each point in the pointset via PCA
 
-        :param pointset: points to compute their normals
-        :param tree: a KD-tree or Ball-tree to extract neighbors from. If no tree is passed, a ball-tree will be build here.
-        
-        *One of these should be passed*
+        :param neighborsProperty: a neighborhood property from which the PCA is computed
 
-        :param radius: the radius in which the neighbors should be found
-        :param k_neighbors: number of neighbors
-
-        **Optionals**
-
-        :param leaf_size: for ball-tree construction. Default: 40
-        :param metric: for ball-tree construction. Default: 'minkowski'
-
-        :type pointset: PointSet
-        :type tree: BallTree or KDTree
-        :type radius: float
-        :type k_neighbors: int
-        :type leaf_size: int
-        :type metric: str
+        :type neighborsProperty: Properties.Neighborhood.NeighborsProperty.NeighborsProperty
 
         :return: normals for each point
         
         :rtype: NormalsProperty
 
         """
-        leaf_size = kwargs.get('leaf_size', 40)
-        metric = kwargs.get('metric', 'minkowski')
         normals = []
+        for neighborhood in neighborsProperty:
 
-        # Build tree if no tree was passed
-        if tree is None:
-            tree = BallTree(pointset.ToNumpy(), leaf_size=leaf_size, metric=metric)
-        points = pointset.ToNumpy()
-        for pt in points:
+            normals.append(NormalsFactory.__normal_perPoint_PCA(neighborhood))
 
-            # first try by radius
-            try:
-                neighbors_ind = tree.query_radius([pt], r=radius)
-
-            # if no radius given, try by number of neighbors
-            except TypeError:
-                try:
-                    dist, neighbors_ind = tree.query([pt], k=k_neighbors)
-                except TypeError:
-                    warn('Size of radius or number of neighbors are required')
-                    return -1
-
-            normals.append(NormalsFactory.__normal_perPoint_PCA(pt, points[neighbors_ind[0].astype(int), :]))
-
-        return NormalsProperty(pointset, np.array(normals))
+        return NormalsProperty(neighborsProperty.Points, np.array(normals))
 
     @staticmethod
-    def __normal_perPoint_PCA(pt, neighbors):
+    def __normal_perPoint_PCA(point_neighbors):
         r"""
         Compute the normal at each point according to its neighbors, via PCA
 
@@ -178,18 +143,16 @@ class NormalsFactory:
 
         which means that :math:`{\bf n}` is the eigenvector of :math:`{\bf S}` with the smallest eigenvalue
 
-        :param pt: x,y,z point
-        :param neighbors: [x,y,z] points that were selected as neighbors
+        :param point_neighbors: the point neighborhood
 
-        :type pt: np.ndarray
-        :type neighbors: np.ndarray
+        :type point_neighbors: Properties.Neighborhood.PointNeighborhood.PointNeighborhood
 
         :return: normal to the point
 
         :rtype: np.ndarray
         """
 
-        y = neighbors - pt
+        y = point_neighbors.neighbors_vectors()
 
         # try:
         #     u, s, vh = np.linalg.svd(y.T)

@@ -5,7 +5,7 @@ Visualization class that uses Open3D for showing point clouds and their properti
 
 The VisualizationO3D can work both with PointSet and BaseProperty.
 
-- **'K'**: pressing this button the background will change to black
+- **'B'**: pressing this button the background will change to black
 
 PointSet visualization
 ''''''''''''''''''''''
@@ -29,8 +29,8 @@ BaseProperty visualization
 
 Here two new keyboard functions added:
 
-- **'P'**: changes the attribute shown from the property (every attribute that is not private and that is described by a numpy array.
-- **'.'**: changes the colormap of the attribute shown.
+- **'A'**: changes the attribute shown from the property (every attribute that is not private and that is described by a numpy array.
+- **'C'**: changes the colormap of the attribute shown.
 
 Both keys are cyclic, so every press will change the colormap or the attribute.
 
