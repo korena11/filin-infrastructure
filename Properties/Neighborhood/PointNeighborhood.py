@@ -76,13 +76,13 @@ class PointNeighborhood(object):
     @property
     def numberOfNeighbors(self):
         """
-        The number of points within the neighborhood (including the point itself)
+        The number of  neighbors (without the point itself)
 
-        :return: the number of points within the neighborhood
+        :return: the number of neighbors
 
         :rtype: int
         """
-        return self.__neighbors.Size
+        return self.__neighbors.Size - 1
 
     @property
     def neighborhoodIndices(self):
@@ -90,6 +90,9 @@ class PointNeighborhood(object):
 
     @property
     def Size(self):
+        """
+        Return the size of the subset (with the center point)
+        """
         return self.numberOfNeighbors
 
     @property

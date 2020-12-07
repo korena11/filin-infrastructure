@@ -57,7 +57,7 @@ def guassianWeights(pointNeighborhood, sigma, rho):
     :return:
     """
 
-    weights = 1 / np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-0.5 * (pointNeighborhood.distances - rho) / (2 * sigma ** 2))
+    weights = 1 / np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-(pointNeighborhood.distances - rho)**2 / (2 * sigma ** 2))
     return weights
 
 def laplacianWeights(pointNeighborhood, effectiveDistance):

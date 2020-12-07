@@ -111,14 +111,15 @@ class SaliencyFactory(object):
 
     # ----------------- DIRECTIONAL SALIENCY -----------------------
     @staticmethod
-    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute,
-                             noise_size_normal=0.01, noise_size_curvature = 0.1, curvature_weight=.5, verbose=False):
+    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func,
+                             noise_size_normal=0.01, noise_size_curvature = 0.1, curvature_weight=.5, verbose=False, **kwargs):
         """
 
         :param neighbors_property: the neighborhood property of the point cloud.
         :param normals_property: normals at the neighborhood
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
+        :param weighting_func: the weighting function (from WeightingFuncions module, as an example)
         :param noise_size_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
         :param noise_size_curvature: std of the curvature deviations for a surface texture. Default: 0.1
         :param curvature_weight: the weight of the curvature in the saliency computation
@@ -127,6 +128,7 @@ class SaliencyFactory(object):
         :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
         :type normals_property: np.array
         :type curvature_attribute: str
+        :type weighting_func: func
         :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type noise_size_normal: float
         :type verbose: bool
@@ -154,6 +156,7 @@ class SaliencyFactory(object):
             # print(i)
             # if i==12912 or i==12913:
             #     print('!')
+            neighborhood.weightNeighborhood(weighting_func, kwargs)
             if neighborhood.numberOfNeighbors < 4:
                 tensor_saliency.append(0)
                 dn_.append(0)
@@ -219,14 +222,14 @@ class SaliencyFactory(object):
         :rtype: np.array
         """
         # normal influence
-        # dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
-        dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
-                neighborhood.numberOfNeighbors )
+        dn = 1 - current_normals[1:, :].dot(current_normals[0, :]) / (neighborhood.numberOfNeighbors)
+        # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
+        #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)
         if np.any(dn.std(axis=0) > noise_size):
             dn = np.zeros(current_normals.shape[0]-1)
         else:
-            dn = np.abs(np.sum(dn * neighborhood.weights))
+            dn = np.abs(np.sum(dn * neighborhood.weights[1:]))
         return dn
 
     @staticmethod
@@ -259,7 +262,7 @@ class SaliencyFactory(object):
         if np.any(dk.std(axis=0) > noise_size):
             dk = np.zeros(current_curvatures.shape[0] - 1)
 
-        return np.abs(np.sum(dk * neighborhood.weights))
+        return np.abs(np.sum(dk * neighborhood.weights[1:]))
 
     @staticmethod
     def multiscale_saliency(saliencies, percentiles=75):

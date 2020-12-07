@@ -90,7 +90,7 @@ class NormalsFactory:
         return normals
 
     @staticmethod
-    def normalsPCA(neighborsProperty):
+    def normalsPCA(neighborsProperty, viewpoint = np.array([0,0,30])):
         """
         Computes the normals for each point in the pointset via PCA
 
@@ -105,8 +105,11 @@ class NormalsFactory:
         """
         normals = []
         for neighborhood in neighborsProperty:
+            current_normal = NormalsFactory.__normal_perPoint_PCA(neighborhood)
+            if current_normal.dot(viewpoint - neighborhood.center_point_coords) < 0:
+                current_normal = -current_normal
+            normals.append(current_normal)
 
-            normals.append(NormalsFactory.__normal_perPoint_PCA(neighborhood))
 
         return NormalsProperty(neighborsProperty.Points, np.array(normals))
 
