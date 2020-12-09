@@ -926,10 +926,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Raster-based neighbors &#39;</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">):</span>
                 <span class="c1"># define the window</span>
-                <span class="n">start_i</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="n">radius</span>
-                <span class="n">start_j</span> <span class="o">=</span> <span class="n">j</span><span class="o">-</span><span class="n">radius</span>
-                <span class="n">end_i</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span>
-                <span class="n">end_j</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">start_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span>
+                <span class="n">start_j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="n">radius</span><span class="p">)</span>
+                <span class="n">end_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">end_j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">start_i</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">start_i</span> <span class="o">=</span> <span class="mi">0</span>

@@ -108,8 +108,10 @@ class NormalsFactory:
             current_normal = NormalsFactory.__normal_perPoint_PCA(neighborhood)
             if current_normal.dot(viewpoint - neighborhood.center_point_coords) < 0:
                 current_normal = -current_normal
+            if current_normal[2] < 0:
+                print(neighborhood.center_point_idx)
+                current_normal = -current_normal #TODO: this is not correct for all situations, but a temporary patch
             normals.append(current_normal)
-
 
         return NormalsProperty(neighborsProperty.Points, np.array(normals))
 
@@ -156,7 +158,6 @@ class NormalsFactory:
         """
 
         y = point_neighbors.neighbors_vectors()
-
         # try:
         #     u, s, vh = np.linalg.svd(y.T)
         #     return u[:, -1]

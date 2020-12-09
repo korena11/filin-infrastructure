@@ -159,7 +159,9 @@
 <span></span><span class="c1"># Utils Imports</span>
 <span class="c1"># General Imports</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">O3D</span>
+<span class="c1"># import open3d  as O3D</span>
+<span class="kn">from</span> <span class="nn">open3d</span> <span class="k">import</span> <span class="n">geometry</span> <span class="k">as</span> <span class="n">o3d</span>
+<span class="kn">from</span> <span class="nn">open3d</span> <span class="k">import</span> <span class="n">utility</span> <span class="k">as</span> <span class="n">uo3d</span>
 <span class="kn">from</span> <span class="nn">Properties.Color.ColorProperty</span> <span class="k">import</span> <span class="n">ColorProperty</span>
 
 <span class="kn">from</span> <span class="nn">DataClasses.PointSet</span> <span class="k">import</span> <span class="n">PointSet</span>
@@ -176,7 +178,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">InitializeOpen3dObject</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>  <span class="c1"># sets the data to be open3d object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voxelSize</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kdTreeOpen3D</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">KDTreeFlann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kdTreeOpen3D</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">KDTreeFlann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PointSetOpen3D.GetPoint"><a class="viewcode-back" href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D.GetPoint">[docs]</a>    <span class="k">def</span> <span class="nf">GetPoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -199,22 +201,23 @@
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">uo3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">PointSet</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
             <span class="n">pts</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">uo3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">path</span>
 
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">inputPoints</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPoints</span><span class="p">,</span> <span class="n">ColorProperty</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">()</span>
             <span class="n">pts</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">ToNumpy</span><span class="p">()[:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span class="o">.</span><span class="n">rgb</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">uo3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">uo3d</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">inputPoints</span><span class="o">.</span><span class="n">rgb</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">inputPoints</span><span class="o">.</span><span class="n">Points</span><span class="o">.</span><span class="n">path</span>
 
         <span class="k">else</span><span class="p">:</span>
@@ -230,7 +233,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rebuilding KDTree...&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">kdTreeOpen3D</span> <span class="o">=</span> <span class="n">O3D</span><span class="o">.</span><span class="n">KDTreeFlann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kdTreeOpen3D</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">KDTreeFlann</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PointSetOpen3D.ToNumpy"><a class="viewcode-back" href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D.ToNumpy">[docs]</a>    <span class="k">def</span> <span class="nf">ToNumpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -275,6 +278,7 @@
     <span class="k">def</span> <span class="nf">Size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
 
+
 <div class="viewcode-block" id="PointSetOpen3D.CalculateNormals"><a class="viewcode-back" href="../Datasets/PointSetOpen3D.html#PointSetOpen3D.PointSetOpen3D.CalculateNormals">[docs]</a>    <span class="k">def</span> <span class="nf">CalculateNormals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">search_radius</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">maxNN</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute normals for PointSetOpen3D according to radius and maximum neighbors, if an orientation is given, the normals are computed towards the orientation.</span>
@@ -296,21 +300,21 @@
             <span class="n">search_radius</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">nn:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">maxNN</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">maxNN</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">O3D</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                                 <span class="n">search_param</span><span class="o">=</span><span class="n">O3D</span><span class="o">.</span><span class="n">KDTreeSearchParamRadius</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">))</span>
+            <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                 <span class="n">search_param</span><span class="o">=</span><span class="n">o3d</span><span class="o">.</span><span class="n">KDTreeSearchParamRadius</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">search_radius</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">O3D</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                                 <span class="n">search_param</span><span class="o">=</span><span class="n">O3D</span><span class="o">.</span><span class="n">KDTreeSearchParamKNN</span><span class="p">(</span><span class="n">knn</span><span class="o">=</span><span class="n">maxNN</span><span class="p">))</span>
+            <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                 <span class="n">search_param</span><span class="o">=</span><span class="n">o3d</span><span class="o">.</span><span class="n">KDTreeSearchParamKNN</span><span class="p">(</span><span class="n">knn</span><span class="o">=</span><span class="n">maxNN</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">O3D</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
-                                 <span class="n">search_param</span><span class="o">=</span><span class="n">O3D</span><span class="o">.</span><span class="n">KDTreeSearchParamHybrid</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">,</span> <span class="n">max_nn</span><span class="o">=</span><span class="n">maxNN</span><span class="p">))</span>
+            <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">estimate_normals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                                 <span class="n">search_param</span><span class="o">=</span><span class="n">o3d</span><span class="o">.</span><span class="n">KDTreeSearchParamHybrid</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="n">search_radius</span><span class="p">,</span> <span class="n">max_nn</span><span class="o">=</span><span class="n">maxNN</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">orientation</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">orientation</span> <span class="o">==</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">):</span>
-                <span class="n">O3D</span><span class="o">.</span><span class="n">orient_normals_towards_camera_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Default Camera Location is (0, 0, 0).</span>
+                <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">orient_normals_towards_camera_location</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Default Camera Location is (0, 0, 0).</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Need to modify...&quot;</span><span class="p">)</span>
-                <span class="n">O3D</span><span class="o">.</span><span class="n">orient_normals_to_align_with_direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Default Direction is (0, 0, 1).</span>
+                <span class="n">o3d</span><span class="o">.</span><span class="n">PointCloud</span><span class="o">.</span><span class="n">orient_normals_to_align_with_direction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Default Direction is (0, 0, 1).</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Orientation should be a tuple representing a location (X, Y, Z).</span><span class="se">\n</span><span class="s2">&quot;</span>
                              <span class="s2">&quot;Default Location: Camera (0., 0., 0.).&quot;</span><span class="p">)</span></div></div>

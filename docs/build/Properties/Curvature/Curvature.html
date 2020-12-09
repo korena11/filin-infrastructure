@@ -608,7 +608,8 @@ The second condition is defined by the number of sectors with a minimum number o
 6
 7
 8
-9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>    <span class="n">search_radius</span> <span class="o">=</span> <span class="mf">0.25</span>
+9</pre></div></td><td class="code"><div class="highlight"><pre><span></span>
+    <span class="n">search_radius</span> <span class="o">=</span> <span class="mf">0.25</span>
     <span class="n">max_nn</span> <span class="o">=</span> <span class="mi">20</span>
 
     <span class="n">normals0</span> <span class="o">=</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">p3d</span><span class="p">,</span> <span class="n">normals</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>
@@ -616,7 +617,6 @@ The second condition is defined by the number of sectors with a minimum number o
 
     <span class="c1"># neighborsProperty = NeighborsFactory.pointSetOpen3D_knn_kdTree(p3d, max_nn)</span>
     <span class="n">curvatures</span> <span class="o">=</span> <span class="n">CurvatureFactory</span><span class="o">.</span><span class="n">umbrella_curvature</span><span class="p">(</span><span class="n">neiProp</span><span class="p">,</span> <span class="n">normals1</span><span class="p">,</span> <span class="n">valid_sectors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">invalid_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 </dd></dl>

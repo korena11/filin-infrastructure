@@ -93,7 +93,7 @@ class PointNeighborhood(object):
         """
         Return the size of the subset (with the center point)
         """
-        return self.numberOfNeighbors
+        return self.__neighbors.Size
 
     @property
     def neighbors(self):
@@ -179,7 +179,7 @@ class PointNeighborhood(object):
         return directions[np.nonzero(self.__distances != 0)] / self.__distances[np.nonzero(self.__distances != 0)][:,
                                                                None]
 
-    def weightNeighborhood(self, weightingFunc, *args):
+    def weightNeighborhood(self, weightingFunc, **kwargs):
         """
         Compute weights to a neighborhood according to a weightingFunc that is sent.
 
@@ -194,7 +194,7 @@ class PointNeighborhood(object):
         """
         import Properties.Neighborhood.WeightingFunctions as wf
 
-        weights = weightingFunc(self, *args)
+        weights = weightingFunc(self, **kwargs)
         self.__weights = weights
 
     # --------------- I THINK THIS IS REDUNDANT. CONSIDER REMOVING ----------------------------

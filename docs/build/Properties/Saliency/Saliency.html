@@ -580,26 +580,20 @@ This means that the SPFH is not defined as absolute values of the angles, but as
 
 <dl class="staticmethod">
 <dt id="SaliencyFactory.SaliencyFactory._SaliencyFactory__curvature_saliency">
-<em class="property">static </em><code class="descname">_SaliencyFactory__curvature_saliency</code><span class="sig-paren">(</span><em>neighborhood</em>, <em>current_curvatures</em>, <em>win_size=0.05</em>, <em>noise_size=0.01</em>, <em>sigma=1.0</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__curvature_saliency" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">_SaliencyFactory__curvature_saliency</code><span class="sig-paren">(</span><em>neighborhood</em>, <em>current_curvatures</em>, <em>noise_size=0.01</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__curvature_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes saliency in each point according to difference in curvature.</p>
 <p>For each point, the difference in curvature between a close point’s surrounding  and its farther area are tested</p>
 <div class="math notranslate nohighlight">
 \[d\kappa_{ij} = |\kappa_i - \kappa_j|\]</div>
-<p>The distances are weighted as Gaussians: the closest and farthest get low weights.</p>
-<p>The saliency of the point is the sum:</p>
-<div class="math notranslate nohighlight">
-\[s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>current_curvatures</strong> (<em>np.ndarray</em>) – curvatures of the points in neighborhood</li>
 <li><strong>neighborhood</strong> (<a class="reference internal" href="../Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood.PointNeighborhood</em></a>) – the point neighborhood.</li>
-<li><strong>win_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – search window size.</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – width of the weighthing function</li>
-<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print running messages. Default: False</li>
+<li><strong>current_curvatures</strong> (<em>np.ndarray</em>) – curvatures of the points in neighborhood</li>
 <li><strong>noise_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print running messages. Default: False</li>
 </ul>
 </td>
 </tr>
@@ -735,7 +729,7 @@ of point <span class="math notranslate nohighlight">\(p_i\)</span> is computed b
 
 <dl class="staticmethod">
 <dt id="SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency">
-<em class="property">static </em><code class="descname">_SaliencyFactory__normal_saliency</code><span class="sig-paren">(</span><em>neighborhood</em>, <em>current_normals</em>, <em>win_size=0.05</em>, <em>noise_size=0.01</em>, <em>sigma=1.0</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">_SaliencyFactory__normal_saliency</code><span class="sig-paren">(</span><em>neighborhood</em>, <em>current_normals</em>, <em>noise_size=0.01</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="headerlink" href="#SaliencyFactory.SaliencyFactory._SaliencyFactory__normal_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the saliency of a point based on  normals property</p>
 <div class="math notranslate nohighlight">
 \[d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j\]</div>
@@ -747,9 +741,7 @@ of point <span class="math notranslate nohighlight">\(p_i\)</span> is computed b
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>neighborhood</strong> (<a class="reference internal" href="../Neighborhood/Neighborhood.html#PointNeighborhood.PointNeighborhood" title="PointNeighborhood.PointNeighborhood"><em>PointNeighborhood.PointNeighborhood</em></a>) – the neighborhood of a point</li>
 <li><strong>current_normals</strong> (<em>np.array</em>) – normals array of the current point</li>
-<li><strong>win_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – search window size.</li>
 <li><strong>noise_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – width of the weighthing function</li>
 <li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a>) – print running messages. Default: False</li>
 </ul>
 </td>
@@ -799,7 +791,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 
 <dl class="staticmethod">
 <dt id="SaliencyFactory.SaliencyFactory.directional_saliency">
-<em class="property">static </em><code class="descname">directional_saliency</code><span class="sig-paren">(</span><em>neighbors_property</em>, <em>normals_property</em>, <em>curvature_property</em>, <em>curvature_attribute</em>, <em>sigma=1.0</em>, <em>min_obj_size=0.05</em>, <em>noise_size_normal=0.01</em>, <em>noise_size_curvature=0.1</em>, <em>curvature_weight=0.5</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">directional_saliency</code><span class="sig-paren">(</span><em>neighbors_property</em>, <em>normals_property</em>, <em>curvature_property</em>, <em>curvature_attribute</em>, <em>weighting_func</em>, <em>noise_size_normal=0.01</em>, <em>noise_size_curvature=0.1</em>, <em>curvature_weight=0.5</em>, <em>verbose=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/SaliencyFactory.html#SaliencyFactory.directional_saliency"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SaliencyFactory.SaliencyFactory.directional_saliency" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -809,8 +801,7 @@ distinctness of <span class="math notranslate nohighlight">\(p_{f_i}\)</span>, t
 <li><strong>normals_property</strong> (<em>np.array</em>) – normals at the neighborhood</li>
 <li><strong>curvature_property</strong> (<a class="reference internal" href="../Curvature/Curvature.html#CurvatureProperty.CurvatureProperty" title="CurvatureProperty.CurvatureProperty"><em>CurvatureProperty.CurvatureProperty</em></a><em> or </em><em>np.ndarray</em>) – curvature property computed in advance</li>
 <li><strong>curvature_attribute</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – the attribute according to which the curvature is measured.</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the width of the weighting function</li>
-<li><strong>min_obj_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – the minimal object size to look for. Dictates the window size</li>
+<li><strong>weighting_func</strong> (<em>func</em>) – the weighting function (from WeightingFuncions module, as an example)</li>
 <li><strong>noise_size_normal</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a>) – maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</li>
 <li><strong>noise_size_curvature</strong> – std of the curvature deviations for a surface texture. Default: 0.1</li>
 <li><strong>curvature_weight</strong> – the weight of the curvature in the saliency computation</li>

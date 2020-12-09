@@ -248,7 +248,7 @@
         <span class="k">return</span> <span class="n">normals</span></div>
 
 <div class="viewcode-block" id="NormalsFactory.normalsPCA"><a class="viewcode-back" href="../Properties/Normals/Normals.html#NormalsFactory.NormalsFactory.normalsPCA">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">normalsPCA</span><span class="p">(</span><span class="n">neighborsProperty</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">normalsPCA</span><span class="p">(</span><span class="n">neighborsProperty</span><span class="p">,</span> <span class="n">viewpoint</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">])):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the normals for each point in the pointset via PCA</span>
 
@@ -263,8 +263,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">normals</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">neighborhood</span> <span class="ow">in</span> <span class="n">neighborsProperty</span><span class="p">:</span>
-
-            <span class="n">normals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NormalsFactory</span><span class="o">.</span><span class="n">__normal_perPoint_PCA</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">))</span>
+            <span class="n">current_normal</span> <span class="o">=</span> <span class="n">NormalsFactory</span><span class="o">.</span><span class="n">__normal_perPoint_PCA</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">current_normal</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">viewpoint</span> <span class="o">-</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">center_point_coords</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">current_normal</span> <span class="o">=</span> <span class="o">-</span><span class="n">current_normal</span>
+            <span class="n">normals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_normal</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">NormalsProperty</span><span class="p">(</span><span class="n">neighborsProperty</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">normals</span><span class="p">))</span></div>
 
@@ -311,7 +313,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">y</span> <span class="o">=</span> <span class="n">point_neighbors</span><span class="o">.</span><span class="n">neighbors_vectors</span><span class="p">()</span>
-
         <span class="c1"># try:</span>
         <span class="c1">#     u, s, vh = np.linalg.svd(y.T)</span>
         <span class="c1">#     return u[:, -1]</span>

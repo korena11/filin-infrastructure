@@ -8,7 +8,7 @@ from DataClasses.RasterData import RasterData
 from Properties.BaseProperty import BaseProperty
 from Properties.Saliency.SaliencyProperty import SaliencyProperty
 from Properties.Tensors.TensorFactory import TensorFactory
-from Properties.Tensors.TensorProperty import TensorProperty
+from Properties.Tensors.TensorProperty import TensorProperty, Tensor
 
 EPS = 1e-10
 
@@ -156,7 +156,7 @@ class SaliencyFactory(object):
             # print(i)
             # if i==12912 or i==12913:
             #     print('!')
-            neighborhood.weightNeighborhood(weighting_func, kwargs)
+            neighborhood.weightNeighborhood(weighting_func, **kwargs)
             if neighborhood.numberOfNeighbors < 4:
                 tensor_saliency.append(0)
                 dn_.append(0)

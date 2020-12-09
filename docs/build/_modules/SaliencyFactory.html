@@ -166,7 +166,7 @@
 <span class="kn">from</span> <span class="nn">Properties.BaseProperty</span> <span class="k">import</span> <span class="n">BaseProperty</span>
 <span class="kn">from</span> <span class="nn">Properties.Saliency.SaliencyProperty</span> <span class="k">import</span> <span class="n">SaliencyProperty</span>
 <span class="kn">from</span> <span class="nn">Properties.Tensors.TensorFactory</span> <span class="k">import</span> <span class="n">TensorFactory</span>
-<span class="kn">from</span> <span class="nn">Properties.Tensors.TensorProperty</span> <span class="k">import</span> <span class="n">TensorProperty</span>
+<span class="kn">from</span> <span class="nn">Properties.Tensors.TensorProperty</span> <span class="k">import</span> <span class="n">TensorProperty</span><span class="p">,</span> <span class="n">Tensor</span>
 
 <span class="n">EPS</span> <span class="o">=</span> <span class="mf">1e-10</span>
 
@@ -269,16 +269,15 @@
 
     <span class="c1"># ----------------- DIRECTIONAL SALIENCY -----------------------</span>
 <div class="viewcode-block" id="SaliencyFactory.directional_saliency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.directional_saliency">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">directional_saliency</span><span class="p">(</span><span class="n">neighbors_property</span><span class="p">,</span> <span class="n">normals_property</span><span class="p">,</span> <span class="n">curvature_property</span><span class="p">,</span> <span class="n">curvature_attribute</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span>
-                             <span class="n">min_obj_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_size_normal</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">noise_size_curvature</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">curvature_weight</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">directional_saliency</span><span class="p">(</span><span class="n">neighbors_property</span><span class="p">,</span> <span class="n">normals_property</span><span class="p">,</span> <span class="n">curvature_property</span><span class="p">,</span> <span class="n">curvature_attribute</span><span class="p">,</span> <span class="n">weighting_func</span><span class="p">,</span>
+                             <span class="n">noise_size_normal</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">noise_size_curvature</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">curvature_weight</span><span class="o">=.</span><span class="mi">5</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        :param neighbors_property: the neighborhood property of the point cloud.</span>
 <span class="sd">        :param normals_property: normals at the neighborhood</span>
 <span class="sd">        :param curvature_property: curvature property computed in advance</span>
 <span class="sd">        :param curvature_attribute: the attribute according to which the curvature is measured.</span>
-<span class="sd">        :param sigma: the width of the weighting function</span>
-<span class="sd">        :param min_obj_size: the minimal object size to look for. Dictates the window size</span>
+<span class="sd">        :param weighting_func: the weighting function (from WeightingFuncions module, as an example)</span>
 <span class="sd">        :param noise_size_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</span>
 <span class="sd">        :param noise_size_curvature: std of the curvature deviations for a surface texture. Default: 0.1</span>
 <span class="sd">        :param curvature_weight: the weight of the curvature in the saliency computation</span>
@@ -287,9 +286,8 @@
 <span class="sd">        :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray</span>
 <span class="sd">        :type normals_property: np.array</span>
 <span class="sd">        :type curvature_attribute: str</span>
-<span class="sd">        :type sigma: float</span>
+<span class="sd">        :type weighting_func: func</span>
 <span class="sd">        :type neighbors_property: NeighborsProperty.NeighborsProperty</span>
-<span class="sd">        :type min_obj_size: float</span>
 <span class="sd">        :type noise_size_normal: float</span>
 <span class="sd">        :type verbose: bool</span>
 
@@ -302,9 +300,6 @@
         <span class="kn">from</span> <span class="nn">Properties.Neighborhood.PointNeighborhood</span> <span class="k">import</span> <span class="n">PointNeighborhood</span>
         <span class="kn">from</span> <span class="nn">DataClasses.PointSubSet</span> <span class="k">import</span> <span class="n">PointSubSet</span>
         <span class="kn">from</span> <span class="nn">VisualizationClasses.VisualizationO3D</span> <span class="k">import</span> <span class="n">VisualizationO3D</span>
-
-        <span class="c1"># epsilon = stats.norm.ppf(1 - alpha / 2) * noise_size</span>
-        <span class="n">win_size</span> <span class="o">=</span> <span class="n">min_obj_size</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># window size is half the minimal object size</span>
 
         <span class="n">tensor_saliency</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
@@ -319,6 +314,7 @@
             <span class="c1"># print(i)</span>
             <span class="c1"># if i==12912 or i==12913:</span>
             <span class="c1">#     print(&#39;!&#39;)</span>
+            <span class="n">neighborhood</span><span class="o">.</span><span class="n">weightNeighborhood</span><span class="p">(</span><span class="n">weighting_func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
                 <span class="n">tensor_saliency</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">dn_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -340,8 +336,8 @@
 
             <span class="n">current_normals</span> <span class="o">=</span> <span class="n">normals_property</span><span class="o">.</span><span class="n">getPointNormal</span><span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">neighborhoodIndices</span><span class="p">)</span>
 
-            <span class="n">dn</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">__normal_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_normals</span><span class="p">,</span> <span class="n">win_size</span><span class="p">,</span> <span class="n">noise_size_normal</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-            <span class="n">dk</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">__curvature_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_curvatures</span><span class="p">,</span> <span class="n">win_size</span><span class="p">,</span> <span class="n">noise_size_curvature</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+            <span class="n">dn</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">__normal_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_normals</span><span class="p">,</span>  <span class="n">noise_size_normal</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+            <span class="n">dk</span> <span class="o">=</span> <span class="n">SaliencyFactory</span><span class="o">.</span><span class="n">__curvature_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_curvatures</span><span class="p">,</span> <span class="n">noise_size_curvature</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
             <span class="n">dn_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dn</span><span class="p">)</span>
             <span class="n">dk_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dk</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -360,7 +356,7 @@
         <span class="k">return</span> <span class="n">SaliencyProperty</span><span class="p">(</span><span class="n">neighbors_property</span><span class="o">.</span><span class="n">Points</span><span class="p">,</span> <span class="n">tensor_saliency</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dn_</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">dk_</span><span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__normal_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_normals</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__normal_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_normals</span><span class="p">,</span> <span class="n">noise_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Checks the saliency of a point based on  normals property</span>
 
@@ -371,16 +367,12 @@
 
 <span class="sd">        :param neighborhood: the neighborhood of a point</span>
 <span class="sd">        :param current_normals: normals array of the current point</span>
-<span class="sd">        :param win_size: search window size.</span>
 <span class="sd">        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</span>
-<span class="sd">        :param sigma: width of the weighthing function</span>
 <span class="sd">        :param verbose: print running messages. Default: False</span>
 
 <span class="sd">        :type current_normals: np.array</span>
 <span class="sd">        :type neighborhood: PointNeighborhood.PointNeighborhood</span>
-<span class="sd">        :type win_size: float</span>
 <span class="sd">        :type noise_size: float</span>
-<span class="sd">        :type sigma: float</span>
 <span class="sd">        :type verbose: bool</span>
 
 <span class="sd">        :return: array of saliency value of a point in a neighborhood according to normals</span>
@@ -388,33 +380,18 @@
 <span class="sd">        :rtype: np.array</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># normal influence</span>
-        <span class="c1"># dn = 1 - current_normals[1:, :].dot(current_normals[0, :])</span>
-        <span class="n">dn</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">current_normals</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">current_normals</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
-                <span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span> <span class="p">)</span>
+        <span class="n">dn</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">current_normals</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">current_normals</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span> <span class="o">/</span> <span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">numberOfNeighbors</span><span class="p">)</span>
+        <span class="c1"># dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (</span>
+        <span class="c1">#         neighborhood.numberOfNeighbors)</span>
         <span class="c1"># dn = mt.scale_values(dn)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dn</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">noise_size</span><span class="p">):</span>
             <span class="n">dn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">current_normals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># distances influence - Laplacian (DoG)</span>
-            <span class="c1"># dist_element = 1 / np.sqrt(2 * np.pi) * \</span>
-            <span class="c1">#            np.exp(-neighborhood.distances[1:] ** 2 / 2) - \</span>
-            <span class="c1">#            1 / np.sqrt(2 * np.pi * win_size ** 2) * \</span>
-            <span class="c1">#            np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))</span>
-
-            <span class="n">dist_element</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">distances</span> <span class="o">-</span> <span class="n">win_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
-            <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">scale_values</span><span class="p">(</span><span class="n">dist_element</span><span class="p">)</span>
-
-            <span class="c1"># dist_element[dist_element &lt; 0] = 0</span>
-        <span class="c1"># dist_element_normed = (dist_element - dist_element.min()) / (dist_element.max() - dist_element.min() + EPS)</span>
-        <span class="c1"># dist_element = np.ones((neighborhood.Size, 1)) * neighborhood.distances[:, None]</span>
-        <span class="c1"># dist_element[0] = neighborhood.Size</span>
-        <span class="c1">#     dist_element[dist_element &lt; 0] = 0</span>
-            <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">current_normals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">dn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dn</span> <span class="o">*</span> <span class="n">dist_element_normed</span><span class="p">))</span>
+            <span class="n">dn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dn</span> <span class="o">*</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
         <span class="k">return</span> <span class="n">dn</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__curvature_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_curvatures</span><span class="p">,</span> <span class="n">win_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">noise_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__curvature_saliency</span><span class="p">(</span><span class="n">neighborhood</span><span class="p">,</span> <span class="n">current_curvatures</span><span class="p">,</span>  <span class="n">noise_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes saliency in each point according to difference in curvature.</span>
 
@@ -423,25 +400,14 @@
 <span class="sd">        .. math::</span>
 <span class="sd">            d\kappa_{ij} = |\kappa_i - \kappa_j|</span>
 
-<span class="sd">        The distances are weighted as Gaussians: the closest and farthest get low weights.</span>
-
-<span class="sd">        The saliency of the point is the sum:</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            s = \sum{ w_d e^{-d} + d\kappa \cdot w_{dN} e^{-(d{\bf N} + 1)}}</span>
-
-<span class="sd">        :param current_curvatures: curvatures of the points in neighborhood</span>
 <span class="sd">        :param neighborhood: the point neighborhood.</span>
-<span class="sd">        :param win_size: search window size.</span>
-<span class="sd">        :param sigma: width of the weighthing function</span>
-<span class="sd">        :param verbose: print running messages. Default: False</span>
+<span class="sd">        :param current_curvatures: curvatures of the points in neighborhood</span>
 <span class="sd">        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01</span>
+<span class="sd">        :param verbose: print running messages. Default: False</span>
 
-<span class="sd">        :type current_curvatures: np.ndarray</span>
 <span class="sd">        :type neighborhood: PointNeighborhood.PointNeighborhood</span>
-<span class="sd">        :type win_size: float</span>
+<span class="sd">        :type current_curvatures: np.ndarray</span>
 <span class="sd">        :type noise_size: float</span>
-<span class="sd">        :type sigma: float</span>
 <span class="sd">        :type verbose: bool</span>
 
 <span class="sd">        :return: array of saliency value of a point in a neighborhood according to curvature variations</span>
@@ -454,20 +420,7 @@
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dk</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">noise_size</span><span class="p">):</span>
             <span class="n">dk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">current_curvatures</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># dk[np.where(np.abs(dk) &lt; noise_size)] = 0</span>
-        <span class="c1">#     dk_normed = dk</span>
-        <span class="c1"># dk_normed = mt.scale_values(dk)</span>
-        <span class="c1"># dk = current_curvatures[1:]</span>
-        <span class="c1">#</span>
-        <span class="c1"># dist_element = 1 / np.sqrt(2 * np.pi) * \</span>
-        <span class="c1">#                np.exp(-neighborhood.distances[1:] ** 2 / 2) - \</span>
-        <span class="c1">#                1 / np.sqrt(2 * np.pi * win_size ** 2) * \</span>
-        <span class="c1">#                np.exp(-neighborhood.distances[1:] ** 2 / (2 * win_size ** 2))</span>
-        <span class="n">dist_element</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">neighborhood</span><span class="o">.</span><span class="n">distances</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">win_size</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">scale_values</span><span class="p">(</span><span class="n">dist_element</span><span class="p">)</span>
-        <span class="n">dist_element_normed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">current_curvatures</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dk</span> <span class="o">*</span> <span class="n">dist_element_normed</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dk</span> <span class="o">*</span> <span class="n">neighborhood</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
 
 <div class="viewcode-block" id="SaliencyFactory.multiscale_saliency"><a class="viewcode-back" href="../Properties/Saliency/Saliency.html#SaliencyFactory.SaliencyFactory.multiscale_saliency">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">multiscale_saliency</span><span class="p">(</span><span class="n">saliencies</span><span class="p">,</span> <span class="n">percentiles</span><span class="o">=</span><span class="mi">75</span><span class="p">):</span>
