@@ -142,7 +142,7 @@ class SaliencyFactory(object):
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
         from DataClasses.PointSubSet import PointSubSet
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
-
+        normal_weight = 1 - curvature_weight
         tensor_saliency = []
         j = 0
         kstd = []
@@ -156,12 +156,12 @@ class SaliencyFactory(object):
             # print(i)
             # if i==12912 or i==12913:
             #     print('!')
-            neighborhood.weightNeighborhood(weighting_func, **kwargs)
             if neighborhood.numberOfNeighbors < 4:
                 tensor_saliency.append(0)
                 dn_.append(0)
                 dk_.append(0)
                 continue
+            neighborhood.weightNeighborhood(weighting_func, **kwargs)
 
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
@@ -183,17 +183,27 @@ class SaliencyFactory(object):
             dn_.append(dn)
             dk_.append(dk)
             if verbose:
+                if i%10 == 0:
                 # pts = neighborhood.color_neighborhood()
                 # vis = VisualizationO3D()
                 # vis.visualize_property(pts)
+                    import matplotlib.pyplot as plt
+                    print(neighborhood.numberOfNeighbors, neighborhood.weights)
+
+                    # plt.figure()
+                    # plt.scatter(neighborhood.distances, neighborhood.weights)
+                    # plt.show()
+                    # plt.waitforbuttonpress(3)
+                    # plt.close()
                 print('dn {}, dk {}'.format(dn, dk))
 
             # values normalization
-            dn = 1- np.exp(-dn)
-            dk = 1 - np.exp(-dk)
+            # dn = 1- np.exp(-dn)
+            # dk = 1 - np.exp(-dk)
+        dn = mt.scale_values(np.asarray(dn_))
+        dk = mt.scale_values(np.asarray(dk_))
 
-            normal_weight = 1 - curvature_weight
-            tensor_saliency.append(dn * normal_weight + dk * curvature_weight)
+        tensor_saliency = dn * normal_weight + dk * curvature_weight
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency), np.asarray(dn_), np.asarray(dk_)
 

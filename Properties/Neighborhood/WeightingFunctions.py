@@ -51,14 +51,17 @@ def gaussianWeights(pointNeighborhood, sigma, rho):
     :param sigma: the width of the gaussian
     :param rho: the effective distance
 
-    :type pointNeighborhood: Properties.Neighborhood.PointNeighborhood.PointNeighborhood
+    :type pointNeighborhood: Properties.Neighborhood.PointNeighborhood.PointNeighborhood, np.ndarray
     :type sigma: float
     :type rho: float
 
     :return:
     """
-
-    weights = 1 / np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-(pointNeighborhood.distances - rho)**2 / (2 * sigma ** 2))
+    from Utils.MyTools import scale_values
+    if isinstance(pointNeighborhood, np.ndarray):
+        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(pointNeighborhood - rho) ** 2 / (2 * sigma ** 2))
+    else:
+        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(pointNeighborhood.distances - rho)**2 / (2 * sigma ** 2))
     return weights
 
 
