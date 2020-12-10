@@ -337,6 +337,11 @@ class CurvatureFactory:
                 point_idx = point_neighbors.neighborhoodIndices[0]
                 n = normals.Normals[point_idx]
 
+                # if point_neighbors.center_point_coords[2] >= 5:
+                #     from VisualizationO3D import VisualizationO3D
+                #     vis = VisualizationO3D()
+                #     vis.visualize_pointset(point_neighbors.neighbors)
+
                 if verbose:
                     print(point_idx, n)
 
@@ -345,7 +350,7 @@ class CurvatureFactory:
 
                 # check if the projections are statistically zero
                 projections[np.where(np.abs(projections) < epsilon)] = 0
-                if np.sum(projections) / projections.shape < epsilon:
+                if (np.sum(np.abs(projections)) / projections.shape)[0] < epsilon:
                     umbrellaCurvature.append(0)
                 else:
                     umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])

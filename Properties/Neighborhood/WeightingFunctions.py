@@ -39,7 +39,8 @@ def triangleWeights(point_neighborhood, effectiveDistance):
 
     return weights
 
-def guassianWeights(pointNeighborhood, sigma, rho):
+
+def gaussianWeights(pointNeighborhood, sigma, rho):
     r"""
     A weighting function around rho, with width sigma (a Gaussian variant)
 
@@ -59,6 +60,7 @@ def guassianWeights(pointNeighborhood, sigma, rho):
 
     weights = 1 / np.sqrt(2 * np.pi * sigma ** 2) * np.exp(-(pointNeighborhood.distances - rho)**2 / (2 * sigma ** 2))
     return weights
+
 
 def laplacianWeights(pointNeighborhood, effectiveDistance):
     r"""
