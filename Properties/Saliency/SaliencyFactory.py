@@ -139,6 +139,7 @@ class SaliencyFactory(object):
         """
 
         from warnings import warn
+        from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
         from DataClasses.PointSubSet import PointSubSet
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
@@ -149,20 +150,21 @@ class SaliencyFactory(object):
         kmean = []
         dn_ = []
         dk_ = []
-
+        w_neighborhood = NeighborsProperty(neighbors_property.Points)
         for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
                                                               desc='Directional Saliency for each neighborhood',
                                                               position=0)):
             # print(i)
-            # if i==12912 or i==12913:
-            #     print('!')
+            if i==1928 or i==1929:
+                print('!')
             if neighborhood.numberOfNeighbors < 4:
+                w_neighborhood.setNeighborhood(i, neighborhood)
                 tensor_saliency.append(0)
                 dn_.append(0)
                 dk_.append(0)
                 continue
             neighborhood.weightNeighborhood(weighting_func, **kwargs)
-
+            w_neighborhood.setNeighborhood(i, neighborhood)
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
             try:
@@ -185,8 +187,7 @@ class SaliencyFactory(object):
             if verbose:
                 if i%10 == 0:
                 # pts = neighborhood.color_neighborhood()
-                # vis = VisualizationO3D()
-                # vis.visualize_property(pts)
+
                     import matplotlib.pyplot as plt
                     print(neighborhood.numberOfNeighbors, neighborhood.weights)
 
@@ -200,8 +201,13 @@ class SaliencyFactory(object):
             # values normalization
             # dn = 1- np.exp(-dn)
             # dk = 1 - np.exp(-dk)
-        dn = mt.scale_values(np.asarray(dn_))
-        dk = mt.scale_values(np.asarray(dk_))
+        # dn = mt.scale_values(np.asarray(dn_))
+        # dk = mt.scale_values(np.asarray(dk_))
+        dn = np.asarray(dn_)
+        dk = np.asarray(dk_)
+
+        vis = VisualizationO3D()
+        vis.visualize_neighborhoods(w_neighborhood)
 
         tensor_saliency = dn * normal_weight + dk * curvature_weight
 
@@ -232,7 +238,7 @@ class SaliencyFactory(object):
         :rtype: np.array
         """
         # normal influence
-        dn = 1 - current_normals[1:, :].dot(current_normals[0, :]) / (neighborhood.numberOfNeighbors)
+        dn = (1 - current_normals[1:, :].dot(current_normals[0, :]))/ neighborhood.numberOfNeighbors
         # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
         #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)

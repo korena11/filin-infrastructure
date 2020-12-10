@@ -349,11 +349,11 @@ class CurvatureFactory:
                 projections = point_neighbors.neighbors_vectors().dot(n)
 
                 # check if the projections are statistically zero
-                projections[np.where(np.abs(projections) < epsilon)] = 0
-                if (np.sum(np.abs(projections)) / projections.shape)[0] < epsilon:
-                    umbrellaCurvature.append(0)
-                else:
-                    umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
+                # projections[np.where(np.abs(projections) < epsilon)] = 0
+                # if (np.sum(np.abs(projections)) / projections.shape)[0] < epsilon:
+                #     umbrellaCurvature.append(0)
+                # else:
+                umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)

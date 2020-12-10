@@ -136,6 +136,17 @@ class VisualizationO3D:
         color_by_neighborhood = np.ones((self.pointset.Size, 3)) * np.array([128,255,0]) / 255 # paint all point cloud in green
         # color_by_neighborhood[current_neighborhood.neighborhoodIndices] = np.ones((current_neighborhood.Size, 3))
         color_by_neighborhood[current_neighborhood.neighborhoodIndices] = self.__make_color_array(current_neighborhood.weighted_distances)
+
+        # print neighborhood  weights according to their order
+        size = int(np.sqrt(current_neighborhood.Size))
+        idx_weights = np.vstack((current_neighborhood.neighborhoodIndices, current_neighborhood.weights)).T.copy()
+        idx_weights_sorted = np.sort(idx_weights.view('f8,f8'), order=['f0'], axis=0)   # sort by index
+        try:
+            print(np.reshape(idx_weights_sorted['f1'], (size, size)))
+            print('-'*20)
+        except:
+            pass
+
         color_by_neighborhood[current_neighborhood.center_point_idx] = np.array([1, 0, 0])
 
         self.pointset.data.colors = o3d.Vector3dVector(color_by_neighborhood)
