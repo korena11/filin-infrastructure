@@ -112,7 +112,8 @@ class SaliencyFactory(object):
     # ----------------- DIRECTIONAL SALIENCY -----------------------
     @staticmethod
     def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func,
-                             noise_size_normal=0.01, noise_size_curvature = 0.1, curvature_weight=.5, verbose=False, **kwargs):
+                             sigma_normal=0.01, sigma_curvature= 0.1, curvature_weight=.5, alpha=0.05,
+                             verbose=False, **kwargs):
         """
 
         :param neighbors_property: the neighborhood property of the point cloud.
@@ -120,8 +121,9 @@ class SaliencyFactory(object):
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
         :param weighting_func: the weighting function (from WeightingFuncions module, as an example)
-        :param noise_size_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
-        :param noise_size_curvature: std of the curvature deviations for a surface texture. Default: 0.1
+        :param sigma_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param sigma_curvature: std of the curvature deviations for a surface texture. Default: 0.1
+        :param alpha: for the hypothesis testing. Default: 0.05
         :param curvature_weight: the weight of the curvature in the saliency computation
         :param verbose: print running messages. Default: False
 
@@ -130,7 +132,8 @@ class SaliencyFactory(object):
         :type curvature_attribute: str
         :type weighting_func: func
         :type neighbors_property: NeighborsProperty.NeighborsProperty
-        :type noise_size_normal: float
+        :type sigma_normal: float
+        :type sigma_curvature: float
         :type verbose: bool
 
         :return: saliency values for each point
@@ -139,13 +142,17 @@ class SaliencyFactory(object):
         """
 
         from warnings import warn
+        from scipy import stats
         from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
         from DataClasses.PointSubSet import PointSubSet
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
+
         normal_weight = 1 - curvature_weight
         tensor_saliency = []
+
         j = 0
+        sign_dk = []
         kstd = []
         kmean = []
         dn_ = []
@@ -155,7 +162,7 @@ class SaliencyFactory(object):
                                                               desc='Directional Saliency for each neighborhood',
                                                               position=0)):
             # print(i)
-            if i==1928 or i==1929:
+            if i==239:
                 print('!')
             if neighborhood.numberOfNeighbors < 4:
                 w_neighborhood.setNeighborhood(i, neighborhood)
@@ -163,6 +170,9 @@ class SaliencyFactory(object):
                 dn_.append(0)
                 dk_.append(0)
                 continue
+
+            chi_statistic = stats.chi2.ppf(alpha, neighborhood.numberOfNeighbors - 1) # X^2-distribution
+
             neighborhood.weightNeighborhood(weighting_func, **kwargs)
             w_neighborhood.setNeighborhood(i, neighborhood)
             # get all the current values of curvature and normals. The first is the point to which the
@@ -180,16 +190,22 @@ class SaliencyFactory(object):
 
             current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
-            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals,  noise_size_normal, verbose=verbose)
-            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures, noise_size_curvature, verbose)
+            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals,  chi_statistic, sigma_normal, verbose=verbose)
+            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
+
             dn_.append(dn)
             dk_.append(dk)
-            if verbose:
-                if i%10 == 0:
-                # pts = neighborhood.color_neighborhood()
 
-                    import matplotlib.pyplot as plt
-                    print(neighborhood.numberOfNeighbors, neighborhood.weights)
+            if np.all(dk == 0):
+                sign_dk.append(0)
+            else:
+                sign_dk.append(np.sign(current_curvatures[0]))
+            if verbose:
+                # if i%10 == 0:
+                    # pts = neighborhood.color_neighborhood()
+
+                    # import matplotlib.pyplot as plt
+                    # print(neighborhood.numberOfNeighbors, neighborhood.weights)
 
                     # plt.figure()
                     # plt.scatter(neighborhood.distances, neighborhood.weights)
@@ -201,36 +217,52 @@ class SaliencyFactory(object):
             # values normalization
             # dn = 1- np.exp(-dn)
             # dk = 1 - np.exp(-dk)
-        # dn = mt.scale_values(np.asarray(dn_))
-        # dk = mt.scale_values(np.asarray(dk_))
-        dn = np.asarray(dn_)
-        dk = np.asarray(dk_)
+        dn = mt.scale_values(np.asarray(dn_))
+        dk = mt.scale_values(np.asarray(dk_))
+        # dn = np.asarray(dn_)
+        # dk = np.asarray(dk_)
+        sign_dk = np.asarray(sign_dk)
 
         vis = VisualizationO3D()
         vis.visualize_neighborhoods(w_neighborhood)
 
-        tensor_saliency = dn * normal_weight + dk * curvature_weight
+        tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
 
-        return SaliencyProperty(neighbors_property.Points, tensor_saliency), np.asarray(dn_), np.asarray(dk_)
+        return SaliencyProperty(neighbors_property.Points, tensor_saliency), dn, dk * sign_dk
 
     @staticmethod
-    def __normal_saliency(neighborhood, current_normals, noise_size=0.01, verbose=False):
+    def __normal_saliency(neighborhood, current_normals, chi2, sigma_expected=0.01,  verbose=False):
         r"""
         Checks the saliency of a point based on  normals property
 
         .. math::
                 d{\bf N}_{ij} = {\bf N}_i \cdot {\bf N}_j
 
-        The distances are weighted as Gaussians: the closest and farthest get low weights.
-
+        The distances are weighted as Gaussians (with shift rho): the closest and farthest get low weights.
+        
+        The significance of the normal saliency is checked using the :math:`chi^2`-test, i.e.,
+        
+        .. math::
+            H_0: \sigma_{\bf N}^2 \leq \hat{\sigma}_0^2 
+            H_1: \sigma_{\bf N}^2 > \hat{\sigma}_0^2
+        
+        So that if 
+        
+        .. math::
+            \frac{\nu \cdot \sigma_{\bf N}^2}{\hat{\sigma}_0^2} < \chi^2_{\nu, \alpha}
+        
+        We reject the hypothesis. 
+               
         :param neighborhood: the neighborhood of a point
         :param current_normals: normals array of the current point
-        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param chi2: :math:`\chi^2` from the table (i.e., :math:`\chi^2_{\nu, \alpha}`)
+        :param sigma_expected: maximal std of the normals deviations (i.e., :math:`\hat{\sigma}_0^2). Default: 0.01
         :param verbose: print running messages. Default: False
 
         :type current_normals: np.array
         :type neighborhood: PointNeighborhood.PointNeighborhood
-        :type noise_size: float
+        :type chi2: float
+        :type sigma_expected: float
         :type verbose: bool
 
         :return: array of saliency value of a point in a neighborhood according to normals
@@ -238,18 +270,19 @@ class SaliencyFactory(object):
         :rtype: np.array
         """
         # normal influence
-        dn = (1 - current_normals[1:, :].dot(current_normals[0, :]))/ neighborhood.numberOfNeighbors
+        dn = 1 - current_normals[1:, :].dot(current_normals[0, :])
         # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
         #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)
-        if np.any(dn.std(axis=0) > noise_size):
-            dn = np.zeros(current_normals.shape[0]-1)
+        chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std()/sigma_expected
+        if chi2_statistic < chi2:
+            dn = 0
         else:
-            dn = np.abs(np.sum(dn * neighborhood.weights[1:]))
+            dn = np.sum(dn * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:])
         return dn
 
     @staticmethod
-    def __curvature_saliency(neighborhood, current_curvatures,  noise_size=0.01, verbose=False):
+    def __curvature_saliency(neighborhood, current_curvatures,  chi2, sigma_expected=0.01, verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature.
 
@@ -257,10 +290,24 @@ class SaliencyFactory(object):
 
         .. math::
             d\kappa_{ij} = |\kappa_i - \kappa_j|
+            
+          The significance of the curvature saliency is checked using the :math:`chi^2`-test, i.e.,
+        
+        .. math::
+            H_0: \sigma_{\kappa}^2 \leq \hat{\sigma}_0^2 
+            H_1: \sigma_{\kappa}^2 > \hat{\sigma}_0^2
+        
+        So that if 
+        
+        .. math::
+            \frac{\nu \cdot \sigma_{\kappa}^2}{\hat{\sigma}_0^2} < \chi^2_{\nu, \alpha}
+        
+        We reject the hypothesis. 
 
         :param neighborhood: the point neighborhood.
         :param current_curvatures: curvatures of the points in neighborhood
-        :param noise_size: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
+        :param chi2: :math:`\chi^2` from the table (i.e., :math:`\chi^2_{\nu, \alpha}`)
+        :param sigma_expected: maximal std of the normals deviations (i.e., :math:`\hat{\sigma}_0^2). Default: 0.01
         :param verbose: print running messages. Default: False
 
         :type neighborhood: PointNeighborhood.PointNeighborhood
@@ -274,11 +321,13 @@ class SaliencyFactory(object):
         """
 
         # difference in curvature
-        dk = np.abs(current_curvatures[1:] - current_curvatures[0]) / (neighborhood.numberOfNeighbors - 1)
-        if np.any(dk.std(axis=0) > noise_size):
+        dk = current_curvatures[1:] - current_curvatures[0]
+
+        chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dk.std() / sigma_expected
+        if chi2_statistic < chi2:
             dk = np.zeros(current_curvatures.shape[0] - 1)
 
-        return np.abs(np.sum(dk * neighborhood.weights[1:]))
+        return np.abs(np.sum(dk * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:]))
 
     @staticmethod
     def multiscale_saliency(saliencies, percentiles=75):

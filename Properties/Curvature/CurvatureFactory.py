@@ -269,7 +269,7 @@ class CurvatureFactory:
         return k1[0], k2[0]
 
     @classmethod
-    def umbrella_curvature(cls, neighbrohood, normals, min_obj_size=0.01, alpha=0.05,
+    def umbrella_curvature(cls, neighbrohood, normals, roughness=0.01, alpha=0.05,
                            min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7, num_sectors=8,
                            invalid_value=-999, curvatureProperty=None, verbose=False):
         r"""
@@ -289,7 +289,7 @@ class CurvatureFactory:
 
         :param neighbrohood: neighborhood property of a point cloud
         :param normals: normals property of a point cloud
-        :param min_obj_size: minimal object size - usually refers to surface roughness
+        :param roughness: minimal object size - usually refers to surface roughness
         :param alpha: confidence value for statistical test
         :param min_points_in_neighborhood: minimal number of points in a neighborhood to make it viable for curvature computation. Default: 8
         :param min_points_in_sector: minimal points in a sector to be considered valid. Default: 1
@@ -301,7 +301,7 @@ class CurvatureFactory:
 
         :type neighbrohood: NeighborsProperty.NeighborsProperty
         :type normals: NormalsProperty.NormalsProperty
-        :type min_obj_size: float
+        :type roughness: float
         :type alpha: float
         :type min_points_in_neighborhood: int
         :type min_points_in_sector: int
@@ -323,7 +323,7 @@ class CurvatureFactory:
         from scipy import stats
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
 
-        epsilon = stats.norm.ppf(1 - alpha / 2) * min_obj_size
+        epsilon = stats.norm.ppf(1 - alpha / 2) * roughness # Z-distribution
         umbrellaCurvature = []
 
         for point_neighbors in tqdm(neighbrohood, total=neighbrohood.Size,
@@ -335,6 +335,8 @@ class CurvatureFactory:
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
                 point_idx = point_neighbors.neighborhoodIndices[0]
+                if point_idx == 240:
+                    print('!')
                 n = normals.Normals[point_idx]
 
                 # if point_neighbors.center_point_coords[2] >= 5:
@@ -345,15 +347,15 @@ class CurvatureFactory:
                 if verbose:
                     print(point_idx, n)
 
-                # compute the directions projections  on the normal at the center point of each neighbor
-                projections = point_neighbors.neighbors_vectors().dot(n)
+                # compute the direction projections  on the normal at the center point of each neighbor
+                projections = point_neighbors.neighbors_vectors().dot(n) * point_neighbors.distances[1:]
 
                 # check if the projections are statistically zero
                 # projections[np.where(np.abs(projections) < epsilon)] = 0
-                # if (np.sum(np.abs(projections)) / projections.shape)[0] < epsilon:
-                #     umbrellaCurvature.append(0)
-                # else:
-                umbrellaCurvature.append((np.sum(projections) / projections.shape)[0])
+                if np.abs((np.sum(projections) / point_neighbors.numberOfNeighbors)) < epsilon:
+                    umbrellaCurvature.append(0)
+                else:
+                    umbrellaCurvature.append(np.sum(projections) / point_neighbors.Size)
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)

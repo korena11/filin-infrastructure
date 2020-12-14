@@ -742,7 +742,7 @@ class NeighborsFactory:
 
         :param points: raster or gridded point cloud
         :param res: grid cell size
-        :param radius: search radius
+        :param radius: half window size (should be an odd number)
 
         :type points: DataClasses.BaseData.BaseData, DataClasses.PointSet.PointSet, DataClasses.PointSetOpen3D.PointSetOpen3D
         :type radius: int
@@ -755,23 +755,27 @@ class NeighborsFactory:
            - RasterData are not implemented
 
         """
+        import warnings
+        if radius %2 == 0:
+            warnings.warn('radius is an even number, window will be smaller than expected')
 
         pts_numpy = points.ToNumpy()
-        ind_sorted = np.argsort(pts_numpy.view((str(pts_numpy.dtype) + ',' + str(pts_numpy.dtype) + ',' + str( pts_numpy.dtype))), order=['f0', 'f1'], axis=0).view('int')
+        ind_sorted = np.argsort(pts_numpy.view((str(pts_numpy.dtype) + ',' + str(pts_numpy.dtype) + ',' + str( pts_numpy.dtype))),
+                                order=['f0', 'f1'], axis=0).view('int')
 
         num_cols = int((points.X.max() - points.X.min()) / res + 1)
         num_rows = int((points.Y.max() - points.Y.min()) / res + 1)
 
         ind_raster = ind_sorted[:,0].reshape((num_rows, num_cols))
         pcl_neighborhood = NeighborsProperty(points)
-
+        print('>> window size is {}'.format(int((radius))))
         for i in tqdm(np.arange(0, num_cols), desc='Raster-based neighbors '):
             for j in np.arange(0, num_rows):
                 # define the window
-                start_i = int(i-radius)
-                start_j = int(j-radius)
-                end_i = int(i+radius + 1)
-                end_j = int(j+radius + 1)
+                start_i = int(i-(radius-1)/2)
+                start_j = int(j-(radius-1)/2)
+                end_i = int(i+(radius-1)/2 + 1)
+                end_j = int(j+(radius-1)/2 + 1)
 
                 if start_i < 0:
                     start_i = 0

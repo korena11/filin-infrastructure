@@ -142,6 +142,7 @@ class VisualizationO3D:
         idx_weights = np.vstack((current_neighborhood.neighborhoodIndices, current_neighborhood.weights)).T.copy()
         idx_weights_sorted = np.sort(idx_weights.view('f8,f8'), order=['f0'], axis=0)   # sort by index
         try:
+            print('point number {}'.format(self.neighborhood.current))
             print(np.reshape(idx_weights_sorted['f1'], (size, size)))
             print('-'*20)
         except:
