@@ -223,8 +223,9 @@ class SaliencyFactory(object):
         # dk = np.asarray(dk_)
         sign_dk = np.asarray(sign_dk)
 
-        vis = VisualizationO3D()
-        vis.visualize_neighborhoods(w_neighborhood)
+        if verbose:
+            vis = VisualizationO3D()
+            vis.visualize_neighborhoods(w_neighborhood)
 
         tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
 
