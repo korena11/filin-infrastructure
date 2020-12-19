@@ -26,29 +26,37 @@ class LevelSetFunction(object):
 
     """
 
-    def __init__(self, function, regularization_note=0, **kwargs):
+    def __init__(self, function, gradientType = 'L2', ksize=3, sigma=2.5, epsilon=1., resolution=1., regularization_note=0, **kwargs):
         r"""
 
-
+        :param gradientType: the type of gradient computation ('L1', 'L2', 'LoG')
+        :param ksize: kernel size for Gaussian blurring
+        :param sigma: sigma size for Gaussian blurring
+        :param epsilon for regularization threshold, usually the size of the step size
+        :param resolution: scanning resolution 
         :param regularization_note: the regularization note (0,1, or 2) for the Heaviside and the Dirac-Delta functions
 
-        :param processing_properties:
-
-        :param sigma:
-        :param ksize:
-        :param gradientType:
-        :param epsilon for regularization threshold:
-
+        :type gradientType: str
+        :type ksize: int
+        :type sigma: float
+        :type epsilon: float
+        :type resolution: float
+        :type regularization_note: int
+        
         :rtype: LevelSetFunction
 
         """
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 1, 'resolution': 0.5}
-        self.__processing_props = processing_props
+        self.__gradientType = gradientType
+        self.__ksize = ksize
+        self.__sigma = sigma
+        self.__resolution = resolution
+        self.__epsilon = epsilon
+        self.__regularization_note = regularization_note
+        
         self.__value = function
         self.__ls_derivatives_curvature()
-        self.__regularization_note = regularization_note
-        self.compute_heaviside(**kwargs)
-        self.compute_dirac_delta(**kwargs)
+        self.compute_heaviside()
+        self.compute_dirac_delta()
 
     @property
     def value(self):
@@ -78,16 +86,6 @@ class LevelSetFunction(object):
         return self.__kappa
 
     @property
-    def processing_props(self):
-        """
-        Processing properties for gradient computation
-
-        :rtype: dict
-
-        """
-        return self.__processing_props
-
-    @property
     def dirac_delta(self):
         """
         Function's dirac-delta according to the regularization note
@@ -102,13 +100,6 @@ class LevelSetFunction(object):
 
         """
         return self.__heaviside
-
-    @property
-    def regularization_note(self):
-        """
-        Regularization note (0,1, or 2) for the Heaviside and the Dirac-Delta functions
-        """
-        return self.__regularization_note
 
     @property
     def _x(self):
@@ -155,12 +146,11 @@ class LevelSetFunction(object):
         Computes and updates the level set function derivatives and curvature
 
         :param processing_props: gradient type, sigma and ksize for derivatives and gradient computations
-        :param epsilon: when kappa is considered zero. Default 1e-4
+
         """
-        gradientType = self.processing_props['gradientType']
-        sigma =  self.processing_props['sigma']
-        ksize = self.processing_props['ksize']
-        epsilon = kwargs.get('eps', 1e-4)
+        gradientType = self.__gradientType
+        sigma =  self.__sigma
+        ksize = self.__ksize
 
         if np.all(self.value == 0):
             self.__x = np.zeros(self.value.shape)
@@ -173,7 +163,7 @@ class LevelSetFunction(object):
 
         self.__x, self.__y, self.__xx, self.__yy, self.__xy = \
             mt.computeImageDerivatives_numeric(self.value, 2, ksize=ksize,
-                                       sigma=sigma, resolution=self.__processing_props['resolution'])
+                                       sigma=sigma, resolution=self.__resolution)
 
         self.__x = mt.make_zero(self._x)
         self.__y = mt.make_zero(self._y)
@@ -192,19 +182,15 @@ class LevelSetFunction(object):
             # self.__norm_nabla = cv2.GaussianBlur(filters.gaussian_laplace(self.value, sigma), (ksize, ksize), sigma)
             self.__norm_nabla = filters.gaussian_laplace(self.value, sigma)
 
-        self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 +
-                                         self._yy * self._x ** 2 -
-                                         2 * self._xy * self._x * self._y) /
-                                        (self.norm_nabla + EPS),
-                                        (self.processing_props['ksize'], self.processing_props['ksize']),
-                                        self.processing_props['sigma'])
-        self.__kappa = mt.make_zero(self.kappa, epsilon)
+        self.__kappa = cv2.GaussianBlur((self._xx * self._y ** 2 + self._yy * self._x ** 2 - 2 * self._xy * self._x * self._y) / (self.norm_nabla + EPS),
+                                        (ksize, ksize), sigma)
+        # self.__kappa = mt.make_zero(self.kappa, EPS)
 
         # self.__kappa = (self._xx * self._y ** 2 +
         #                                  self._yy * self._x ** 2 -
         #                                  2 * self._xy * self._x * self._y) / (self.norm_nabla + EPS)
 
-    def update(self, new_function, **kwargs):
+    def update(self, new_function):
         """
         Updates the function according to the new given function
 
@@ -212,18 +198,19 @@ class LevelSetFunction(object):
         :param regularization_note: the regularization note (0,1, or 2) for the Heavisdie and the Dirac-Delta functions.
 
         """
+        ksize = self.__ksize
+        sigma = self.__sigma
+        
         if np.any(new_function.mean()+ 2.5* new_function.std() > new_function.max()):
             new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
             new_function[new_function< np.percentile(new_function, 3)] = np.percentile(new_function, 40)
 
-        self.__value = mt.make_zero(cv2.GaussianBlur(new_function,  (self.processing_props['ksize'], self.processing_props['ksize'])
-                                        , sigmaX=self.processing_props['sigma']))
+        # self.__value = mt.make_zero(cv2.GaussianBlur(new_function,  (ksize, ksize),  sigmaX=sigma))
+        self.__value = new_function
         self.__ls_derivatives_curvature()
-        if 'regularization_note' in list(kwargs.keys()):
-            self.__regularization_note = kwargs['regularization_note']
-
-        self.compute_heaviside(**kwargs)
-        self.compute_dirac_delta(**kwargs)
+        
+        self.compute_heaviside()
+        self.compute_dirac_delta()
 
     def move_function(self, dphi):
         """
@@ -236,9 +223,10 @@ class LevelSetFunction(object):
         """
         # Phi_temp = LevelSetFunction(self.value + dphi)
 
-        new_phi = cv2.GaussianBlur(self.value + dphi,
-                                   (self.processing_props['ksize'], self.processing_props['ksize']),
-                                   self.processing_props['sigma'])
+        # new_phi = cv2.GaussianBlur(self.value + dphi,
+        #                            (self.__ksize, self.__ksize),
+        #                            self.__sigma)
+        new_phi = self.value + dphi
         self.update(new_phi)
 
     def reinitialization(self, dphi):
@@ -267,11 +255,9 @@ class LevelSetFunction(object):
             S(\phi_0) = \frac{\phi_0}{\sqrt{\phi_0 + \epsilon^2}}, \qquad  \epsilon = \min(\Delta x, \Delta y)
 
         assuming a grid. 
-        
-
-        
+               
         """
-        from Utils.MyTools import scale_values, make_zero
+        from Utils.MyTools import scale_values
 
         phi_temp = LevelSetFunction(self.value + dphi)
 
@@ -287,11 +273,9 @@ class LevelSetFunction(object):
         new_value = self.value + phi_t
         # import skfmm
         # new_value = skfmm.distance(self.value + dphi)
-        new_value[new_value<=0] = scale_values(new_value[new_value<=0], -1., -0)
-        new_value[new_value>0] = scale_values(new_value[new_value>0], 0, 1.)
-        # new_value = make_zero(new_value)
-
-
+        # new_value[new_value<=0] = scale_values(new_value[new_value<=0], -1., -0)
+        # new_value[new_value>0] = scale_values(new_value[new_value>0], 0, 1.)
+        
         self.update(new_value)
         # while np.any(self.norm_nabla) > 1e10:
         #     new_value = self.value
@@ -299,148 +283,11 @@ class LevelSetFunction(object):
         #     new_value = scale_values(self.value + phi_t, -1.0, 1.0)
         #     self.update(new_value)
 
-
-    @staticmethod
-    def dist_from_circle(center_pt,  radius, func_shape, resolution=.5):
-        r"""
-        Build a Lipshitz distance function from a circle, with a specific size
-
-        .. math::
-        
-           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
-
-
-        :param center_pt:  center of the circle
-        :param radius:  radius of the circle
-        :param func_shape: size of the function (height, width)
-        :param resolution: the kernel size for later processing. Default: 0.5
-
-        :type center_pt: tuple
-        :type radius: int
-        :type func_shape: tuple
-
-        :return: a level set function that its zero-set is the defined circle (approximately)
-
-        :rtype: np.array
-
-        """
-
-        height = func_shape[0]
-        width = func_shape[1]
-        x = np.arange(width)
-        y = np.arange(height)
-        xx, yy = np.meshgrid(resolution * x, resolution* y)
-        x_x0 = (xx - center_pt[1] * resolution) # (x-x0)
-        y_y0 =  (yy - center_pt[0] * resolution) #(y-y0)
-
-        phi = radius *resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
-
-        return phi
-
-    @staticmethod
-    def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
-        r"""
-        Build a Lipshitz distance function with repetitive circles
-
-        .. math::
-
-           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
-
-        :param dx: distance between circles on x
-        :param dy: distance between circles on y
-        :param radius: radius of the circles
-        :param func_shape: size of the function (height, width)
-        :param resolution: grid size
-
-        :return: a level set function that its zero-set is the defined circles (approximately)
-        """
-
-        import skfmm
-        from tqdm import tqdm
-        phi = -np.ones(func_shape)
-        center_x = np.arange(dx/2 + radius, func_shape[1] , dx + radius)
-        center_y = np.arange(dy/2 + radius, func_shape[0] , dy + radius)
-
-        for i in tqdm(center_y, position=0, leave=False):
-            for j in tqdm(center_x, position=1, leave=True):
-                phi_temp = LevelSetFunction.dist_from_circle((i,j), radius, func_shape, resolution=resolution)
-                phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
-
-        return skfmm.distance(phi)
-
-    @staticmethod
-    def dist_from_ellipse(center_pt, axes, func_shape, resolution=.5):
-        r"""
-        Build a Lipshitz distance function from an ellipse, with a specific size
-
-        .. math::
-
-           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
-
-
-        :param center_pt:  center of the ellipse
-        :param axes:  axes sizes of the ellipse
-        :param func_shape: size of the function (height, width)
-        :param resolution: the kernel size for later processing. Default: 5
-
-        :type center_pt: tuple
-        :type radius: int
-        :type func_shape: tuple
-
-        :return: a level set function that its zero-set is the defined ellipse (approximately)
-
-        :rtype: np.array
-
-        """
-        height = func_shape[0]
-        width = func_shape[1]
-        x = np.arange(width)
-        y = np.arange(height)
-        xx, yy = np.meshgrid(resolution * x, resolution * y)
-        x_x0 = (xx - center_pt[1] * resolution)  # (x-x0)
-        y_y0 = (yy - center_pt[0] * resolution)  # (y-y0)
-
-        phi = np.sqrt((x_x0 / axes[0])** 2 + (y_y0/axes[1]) ** 2) - 1
-
-        return phi
-
-    @staticmethod
-    def dist_from_eggcrate(amplitude, func_shape, resolution=.5):
-        r"""
-        Build a Lipshitz distance function with a sine function, with a specific size
-
-        .. math::
-
-           \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
-
-
-        :param amplitude:  the amplitude of the egg grate
-        :param func_shape: size of the function (height, width)
-        :param resolution: the kernel size for later processing. Default: .5
-
-        :type center_pt: tuple
-        :type radius: int
-        :type func_shape: tuple
-
-        :return: a level set function that its zero-set is the defined circle (approximately)
-
-        :rtype: np.array
-        """
-        height = func_shape[0]
-        width = func_shape[1]
-        x = np.arange(-width/2, width/2, resolution)
-        y = np.arange(-height/2, height/2, resolution)
-        xx, yy = np.meshgrid(x, y)
-        sin_xx = np.sin(xx )
-        sin_yy = np.sin(yy )
-
-        return xx**2 + yy**2 - amplitude * (sin_xx**2 + sin_yy**2)
-
-    def compute_heaviside(self, **kwargs):
+    def compute_heaviside(self):
         r"""
         Computes the Heaviside function of phi: H(phi)
 
-        :param regularization_note:
+        regularization_note:
             - '0' - no regularization:
                 .. math::
                   \begin{cases}
@@ -468,8 +315,8 @@ class LevelSetFunction(object):
 
         """
 
-        epsilon = kwargs.get('epsilon', 1e-04)
-        regularization_note = kwargs.get('regularization_note', self.regularization_note)
+        epsilon = self.__epsilon
+        regularization_note = self.__regularization_note
 
         H = np.zeros(self.value.shape)
         x = self.value.copy()
@@ -489,11 +336,11 @@ class LevelSetFunction(object):
         self.__heaviside = H
         return H
 
-    def compute_dirac_delta(self, **kwargs):
+    def compute_dirac_delta(self):
         r"""
         Computes the Dirac Delta function of phi: d(phi)
 
-        :param regularization_note:
+        regularization_note:
             - '0' - no regularization:
                 .. math::
                    \begin{cases}
@@ -519,8 +366,8 @@ class LevelSetFunction(object):
         :return: the dirac delta function. Also updates the class
 
         """
-        epsilon = kwargs.get('epsilon', 1e-04)
-        regularization_note = kwargs.get('regularization_note', self.regularization_note)
+        epsilon = self.__epsilon
+        regularization_note = self.__regularization_note
 
         d = np.zeros(self.value.shape)
         x = self.value.copy()
@@ -529,10 +376,9 @@ class LevelSetFunction(object):
             d[np.abs(x) <= epsilon] = 1
 
         elif regularization_note == 1:
-            d[x==0] = 1
-            d[np.abs(x)<epsilon] = 0
-            d[np.abs(x) > epsilon] = 1 / (2 * epsilon) * (
-                    1 + np.cos(np.pi * x[np.abs(x) > epsilon] / epsilon))
+            d[np.abs(x) > epsilon] = 0
+            d[np.abs(x) <= epsilon] = 1 / (2 * epsilon) * (
+                    1 + np.cos(np.pi * x[np.abs(x) <= epsilon] / epsilon))
 
         elif regularization_note == 2:
             d = 1 / np.pi * epsilon / (epsilon ** 2 + x ** 2)
@@ -540,6 +386,7 @@ class LevelSetFunction(object):
         elif regularization_note == 3:
             d = self.norm_nabla
 
+        d = mt.make_zero(d, 2e-5)
         self.__dirac_delta = d
         return d
 

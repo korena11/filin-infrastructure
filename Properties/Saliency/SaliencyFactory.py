@@ -196,7 +196,7 @@ class SaliencyFactory(object):
             dn_.append(dn)
             dk_.append(dk)
 
-            if np.all(dk == 0):
+            if dk == 0:
                 sign_dk.append(0)
             else:
                 sign_dk.append(np.sign(current_curvatures[0]))
@@ -217,17 +217,34 @@ class SaliencyFactory(object):
             # values normalization
             # dn = 1- np.exp(-dn)
             # dk = 1 - np.exp(-dk)
-        dn = mt.scale_values(np.asarray(dn_))
-        dk = mt.scale_values(np.asarray(dk_))
-        # dn = np.asarray(dn_)
-        # dk = np.asarray(dk_)
+        # dn = mt.scale_values(np.asarray(dn_))
+        # dk = mt.scale_values(np.asarray(dk_))
+        dn = np.asarray(dn_)
+        dk = np.asarray(dk_)
         sign_dk = np.asarray(sign_dk)
 
-        if verbose:
-            vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood)
-
         tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
+
+        if verbose:
+            import matplotlib.pyplot as plt
+            # vis = VisualizationO3D()
+            # vis.visualize_neighborhoods(w_neighborhood)
+            fig, ax = plt.subplots(2, 2)
+            ax[0, 0].set_title('Histogram |dk|')
+            ax[0, 0].hist(dk)
+            ax[0, 1].set_title('Histogram dk')
+            ax[0, 1].hist(dk * sign_dk)
+            ax[1, 0].set_title('Histogram dn')
+            ax[1, 0].hist(dn)
+            ax[1, 1].set_title('Histogram saliency')
+            ax[1, 1].hist(tensor_saliency)
+            
+
+            # ax[1,1].text(0.2,.4, 'min dk {0:.3f}, min dn {0:.3f} \n max dk {0:.3f}, max dn {0:.3f}'.format
+            # (round(dk.min()), round(dn.min()), round(dk.max()), round(dn.max())), fontsize=15)
+            # ax[1,1].axis('off')
+
+            
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency), dn, dk * sign_dk
 

@@ -12,6 +12,12 @@ import Utils.MyTools as mt
 from LevelSets.LevelSetFunction import LevelSetFunction
 from DataClasses.RasterData import RasterData
 
+import winsound
+
+
+from matplotlib import animation
+from tqdm import trange, tqdm
+
 EPS = np.finfo(float).eps
 
 
@@ -102,7 +108,7 @@ class LevelSetFlow:
             else:
                 self.__img.append(img)
         if len(self.__Phi) ==0:
-            self.__GVF = np.zeros(self.img().shape)
+            self.__GVF = np.zeros((self.img().shape[0], self.img().shape[1], 2))
             self.__g = np.zeros(self.img().shape)
             self.__Phi = [LevelSetFunction(np.zeros(self.img().shape))]
             self.__psi = [LevelSetFunction(np.zeros(self.img().shape))]
@@ -220,7 +226,7 @@ class LevelSetFlow:
         # region = cv2.normalize(region.astype('float'), None, -1.0, 1.0, cv2.NORM_MINMAX)
         self.__region = region
 
-    def init_phi(self, **kwargs):
+    def init_phi(self,  gradientType = 'L2', ksize=3, sigma=2.5, epsilon=1., resolution=1., regularization_note=0, **kwargs):
         r"""
         Builds an initial smooth function (Lipschitz continuous) that represents the interface as the set where
         phi(x,y,t) = 0 is the curve.
@@ -236,14 +242,23 @@ class LevelSetFlow:
 
         with :math:`\left| \nabla \phi \right| = 1`
 
+                
+        :param gradientType: the type of gradient computation ('L1', 'L2', 'LoG')
+        :param ksize: kernel size for Gaussian blurring
+        :param sigma: sigma size for Gaussian blurring
+        :param epsilon for regularization threshold, usually the size of the step size
+        :param resolution: scanning resolution 
+        :param regularization_note: the regularization note (0,1, or 2) for the Heaviside and the Dirac-Delta functions
+
+        :type gradientType: str
+        :type ksize: int
+        :type sigma: float
+        :type epsilon: float
+        :type resolution: float
+        :type regularization_note: int
+
         **Characteristics of the function**
-
-        :param processing_props: properties for gradient and differentiation:
-
-            - 'gradientType' - distance computation method
-            - 'sigma' - for smoothing
-            - 'ksize' - for smoothing
-
+        
         :param radius: if the curve is a circle, the radius should be specified.
         :param center_pt: if the curve is a circle, the center point should be specified.
         :param reularization_note: regularization note for heaviside function
@@ -251,26 +266,21 @@ class LevelSetFlow:
 
             - 'circle' (default);
             - 'ellipse'
-            - 'egg_crate' - egg crate function :math:`x^2 + y^2 - amplitude * (\sin^2 x + \sin^2 y*)
-            - 'periodic_circles' - more like squares at dx and dy distances from one another
-            - 'checkerboard' - binary squares (from scikit-image)
-
-        :param epsilon: threshold to be considered zero. Default: 1e-4
-
+            - 'checkerboard' - checkerboard like function
+        
         :type processing_props: dict
         :type radius: int
         :type center_pt: tuple
         :type function_type: str
         :type start: tuple
-        :type regularization_note: int 0,1,2
-        :type epsilon: float
 
         """
         from MyTools import scale_values
-        eps = kwargs.get('epsilon', 1e-4)
-        processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'resolution': 1.}
-        if 'processing_props' in kwargs:
-            processing_props.update(kwargs['processing_props'])
+        from LevelSets import distance_functions 
+        
+        processing_props = {'gradientType': gradientType, 'ksize':ksize, 'sigma': sigma, 
+                           'epsilon': epsilon, 'resolution': resolution, 'regularization_note': regularization_note}
+                
         img_height, img_width = self.img().shape[:2]
         radius = kwargs.get('radius', np.int(img_width / 4))
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
@@ -279,38 +289,26 @@ class LevelSetFlow:
         func_shape = (img_height, img_width)
         phi = np.zeros(func_shape)
 
-        regularization = kwargs.get('regularization_note', 0)
-
         if func_type == 'circle':
 
-            phi = LevelSetFunction.dist_from_circle(center_pt, radius, func_shape,
-                                                    resolution=processing_props['resolution'])
+            phi = distance_functions.dist_from_circle(center_pt, radius, func_shape, resolution=resolution)
 
         elif func_type == 'ellipse':
-            phi = LevelSetFunction.dist_from_ellipse(center_pt, radius, func_shape,
-                                                     resolution=processing_props['resolution'])
-        elif func_type == 'egg_crate':
-            phi = LevelSetFunction.dist_from_eggcrate(amplitude=kwargs['amplitude'], func_shape=func_shape, resolution=kwargs['resolution'])
-
-        elif func_type == 'periodic_circles':
-            phi = LevelSetFunction.dist_from_circles(kwargs['dx'], kwargs['dy'], radius, func_shape=func_shape)
-
+            phi = distance_functions.dist_from_ellipse(center_pt, radius, func_shape, resolution)
+            
         elif func_type == 'checkerboard':
-            import skimage.segmentation as seg
-            phi = seg.checkerboard_level_set(func_shape, radius)
+            phi = distance_functions.dist_from_checkerboard(func_shape)
 
         # scale between [-1, 1], while keeping the level set unmoved
 
-        phi[phi >= 0] = scale_values(phi[phi >= 0], 0., 1.)
-        phi[phi <= 0] = scale_values(phi[phi <= 0], -1., 0.)
+        # phi[phi > 0] = scale_values(phi[phi > 0], 0., 1.)
+        # phi[phi <= 0] = scale_values(phi[phi <= 0], -1., -0.)
 
         if np.all(self.__Phi[0].value == 0):
             self.__Phi = []
 
         self.__Phi.append(
-            LevelSetFunction(phi, regularization_note=regularization,
-                             epsilon=eps,
-                             **processing_props))
+            LevelSetFunction(phi, **processing_props))
     # --------------- SEMI-PROPERTIES ---------------------
     def img(self, index=0):
         """
@@ -762,7 +760,7 @@ class LevelSetFlow:
             dPhi[:, :, i] += mt.make_zero((img - c) ** 2 * mult_dirac[i])
 
         return dPhi
-
+    
     def __compute_vb(self, **kwargs):
         """
         Computes the band velocity, according to Li et al., 2006.
@@ -829,15 +827,12 @@ class LevelSetFlow:
         :param color_random: randomize colors or use one. Default: randomize (True)
         :param color: the color in which the contours will be drawn
 
-
         :type nu: float
         :type mu: float
-
 
         :return the contours after level set
 
          """
-        from matplotlib import animation
 
         # ================================ MOVIE INITIALIZATIONS ===========================
         # Movie initializations
@@ -871,11 +866,8 @@ class LevelSetFlow:
 
         # -------- initializations ---------
         flow_types = self.flow_types
-        regularization_epsilon = self.regularization_epsilon
         iterations = self.iterations
-
         gvf_w = self.gvf_w
-        vo_w = self.vo_w
         region_w = self.region_w
         processing_props = self.processing_props
 
@@ -892,9 +884,9 @@ class LevelSetFlow:
         ax2.axis('off')
         # fig3, ax3 = plt.subplots(num='kappa')
         # mt.imshow(self.phi().kappa)
-
+        
+        # =================================================================================
         with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
-            from tqdm import trange
             for iteration in trange(iterations, desc='Running level set'):
                 # print(iteration)
                 # if iteration ==100 :
@@ -979,3 +971,127 @@ class LevelSetFlow:
         plt.savefig(movie_folder + movie_name + '_final.png', figsize=(16,9),  bbox_inches='tight', dpi=300 )
         print('Done with level sets')
         return l_curve
+    
+    def move_ChanVese(self, mu, nu, lambda1, lambda2, tol = 1e-3, **kwargs):
+        r"""
+        Runs the Chan-Vese model (Active contour withou edges) -- one channel   
+        
+        Implementation according to :cite:`Chan.Vese1999`. The energy is: 
+        
+        ..math::
+            \begin{split}
+            F(\phi, c_1, c_2) = & \mu \int_\Omega \delta(\phi)|\nabla \phi| + \nu \int_\Omega H(\phi)dxdy \\
+                                &+ \lambda_1\int_\Omega |u_0-c_1|^2 H(\phi)dxdy + \lambda_2\int_\Omega |u_0-c_2|^2(1-H(\phi))dxdy
+            \end{split}
+        
+        so that the flow is:
+        
+        ..math::
+            \frac{\partial \phi}{\partial t} = \delta(\phi) \left[\mu \nabla\left(\frac{\nabla \phi}{|\nabla \phi|}\right) -\nu -\lambda_1\left(u_0-c_1)^2 + 
+            \lambda_2\left(u_0-c_2\right)^2\right]
+            
+        :param mu: weight for the length regularization 
+        :param nu: weight for area regularization. 
+        :param lambda1: weighting for scalar inside the curve 
+        :param lambda2: weighting scalar for outside the curve
+        
+        **Optionals**
+        :param movie_name: the name of the generated movie. Default: "Chan Vese"
+        :param movie_folder: path to final generated movie. Default: project path
+        :param linewidth: line width for drawing. Default: 1.
+        :param color_random: randomize colors or use one. Default: randomize (True)
+        :param color: the color in which the contours will be drawn
+        :param image_showed: the image on which the movie will show. Default: the object's image    
+            
+        :type mu: float
+        :type nu: float
+        :type lambda1: float
+        :type lambda2: float
+        
+        :return: segmented curve
+        
+        :rtype: curve  
+        """
+
+        # ================================ MOVIE INITIALIZATIONS ===========================
+        movie_name = kwargs.get('movie_name', 'Level set example')
+        movie_folder = kwargs.get('movie_folder', '')
+
+        metadata = dict(title=movie_name, artist='Reuma',
+                        comment='Movie support!')
+        writer = animation.FFMpegFileWriter(fps=10, metadata=metadata)
+
+        # ------inputs--------
+        verbose = kwargs.get('verbose', False)
+        color_random = kwargs.get('color_random', True)
+        linewidth = kwargs.get('linewidth', 1)
+        color = kwargs.get('color', 'b')
+        blob_size = kwargs.get('blob_size', 0.1)
+
+        if np.any(self.img_rgb) != 0:
+            temp = self.img_rgb
+        else:
+            temp = self.img(0)
+
+        img_showed = kwargs.get('image_showed', temp)
+        # ==========================================================================
+
+        fig, ax = plt.subplots(num='img', figsize=(16, 9))
+        ax.axis('off')
+
+        if np.any(self.img_rgb) != 0:
+            mt.imshow(self.img_rgb, origin='lower', )
+        else:
+            mt.imshow(self.img(0), origin='lower')
+
+        _, ax2 = plt.subplots(num='phi')
+        mt.imshow(self.phi().value, origin='lower')
+        ax2.axis('off')
+        iteration=0
+        phivar = 1+tol
+        pbar = tqdm(total=self.iterations)
+
+        with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
+
+            while (phivar > tol and iteration < self.iterations):
+                pbar.update(1)
+                iteration += 1
+            # for iteration in trange(self.iterations, desc='Running Chan-Vese without edges'):
+                old_phi = self.phi().value
+                c1 = np.sum((self.phi().heaviside * self.img()))/np.sum(self.phi().heaviside) # the average of the image within the curve (\phi \ge 0)
+                c2 = np.sum((1- self.phi().heaviside) * self.img())/np.sum(1- self.phi().heaviside) # the average of the image outside the curve (\phi < 0)
+                kappa = self.phi().kappa
+                
+                dphi = self.phi().dirac_delta * self.step * ( mu * kappa - nu - lambda1 * (self.img() - c1)**2 + lambda2 * (self.img() - c2)**2)
+                self.phi().move_function(dphi)
+                
+                phivar = np.sqrt(((dphi) ** 2).mean())
+                
+                if iteration % 10 == 0:
+                    self.phi().reinitialization(dphi)
+                    print('phivar {}, energy {}'.format(phivar, np.sqrt(((self.phi().value**2).mean()))))
+    
+                # ------------ Drawing + Movie --------------
+                plt.figure('phi')
+                mt.imshow(np.flipud(self.phi().value))
+
+                plt.figure('img')
+
+                l_curve, ax = mt.draw_contours(self.phi().value, ax, img=img_showed, hold=False,
+                                                   color_random=color_random, linewidth=linewidth, blob_size=blob_size, color=color)
+                title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
+                                transform=ax.transAxes, ha="center")
+                title.set_text('Iteration #: {}'.format(iteration))
+                ax.axis('off')
+                # title(')
+                writer.grab_frame()
+                
+
+            plt.pause(.0001)
+
+            plt.savefig(movie_folder + movie_name + '_final.png', figsize=(16, 9), bbox_inches='tight', dpi=300)
+            print('Done with Chan Vese without edges')
+            duration = 500  # milliseconds
+            freq = 440  # Hz
+            winsound.Beep(freq, duration)
+            return l_curve

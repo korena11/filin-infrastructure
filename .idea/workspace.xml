@@ -19,12 +19,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Docs updated. &#10;PointNeighborhood was updated to return Size as the neighbrohood size with the center point and NumberOfNeighbors without is (i.e., Size-1)">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Added possibility to show the weighted neighborhood">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/NeighborsFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFlow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" beforeDir="false" afterPath="$PROJECT_DIR$/LevelSets/LevelSetFunction.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,10 +143,10 @@
     </favorite-branches>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1908" />
-    <option name="y" value="-12" />
-    <option name="width" value="1941" />
-    <option name="height" value="1050" />
+    <option name="x" value="-11" />
+    <option name="y" value="-11" />
+    <option name="width" value="1943" />
+    <option name="height" value="2123" />
   </component>
   <component name="ProjectId" id="1lTXMtCMziwStJF8UAMWUHbdi0W" />
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -430,20 +429,6 @@
       <workItem from="1607336305510" duration="13530000" />
       <workItem from="1607508723491" duration="3717000" />
       <workItem from="1607588880167" duration="1198000" />
-    </task>
-    <task id="LOCAL-00030" summary="Tensor classes added; neighborhood classes added;">
-      <created>1539783210899</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1539783210899</updated>
-    </task>
-    <task id="LOCAL-00031" summary="After meeting with Zachi for tensor classes">
-      <created>1539788061496</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1539788061497</updated>
     </task>
     <task id="LOCAL-00032" summary="Documentation updated with tensor classes">
       <created>1539790189970</created>
@@ -774,11 +759,25 @@
       <option name="project" value="LOCAL" />
       <updated>1607364811376</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="bug fixes in saliency and curvature; added hypothesis testing for (umbrella) curvature estimation and saliency &#10;Bug fixes for visualizationO3D">
+      <created>1607955099216</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1607955099216</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Added possibility to show the weighted neighborhood">
+      <created>1608023601581</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1608023601581</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="406786000" />
+    <option name="totallyTimeSpent" value="408056000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -790,7 +789,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2575" height="1415" extended-state="7" />
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info content_ui="combo" id="Project" order="0" weight="0.25" />
@@ -873,8 +873,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added hierarchical saliency based on Shtrom et al 2013 paper&#10;Added distance weightings to curvature saliency &#10;Added a function for computation of chi sq distance between two histograms&#10;changed key for toggeling attributes (to A instead of P)" />
-    <MESSAGE value="added open3d FPFH" />
     <MESSAGE value="Documentation update" />
     <MESSAGE value="curvature visualization preparation" />
     <MESSAGE value="xml stash" />
@@ -898,7 +896,9 @@
     <MESSAGE value="Docs updated. &#10;PointNeighborhood was updated to computed distacnes at the init phase so as to remove duplicate points in the same neighborhood&#10;Introducing neighborhood visualization into VisualizationO3D&#10;Removed Weight class, turned to utility class&#10;Added attribute of weights to PointNeighborhood class" />
     <MESSAGE value="Docs updated. &#10;PointNeighborhood was updated to computed distacnes at the init phase so as to remove duplicate points in the same neighborhood&#10;Introducing weighted neighborhood visualization into VisualizationO3D&#10;Changed WeightedPointNeighborhood class to utility module within the neighborhood properties" />
     <MESSAGE value="shelving tensor.html" />
-    <option name="LAST_COMMIT_MESSAGE" value="shelving tensor.html" />
+    <MESSAGE value="bug fixes in saliency and curvature; added hypothesis testing for (umbrella) curvature estimation and saliency &#10;Bug fixes for visualizationO3D" />
+    <MESSAGE value="Added possibility to show the weighted neighborhood" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added possibility to show the weighted neighborhood" />
   </component>
   <component name="WindowStateProjectService">
     <state x="93" y="93" width="2375" height="1215" key="DiffContextDialog" timestamp="1607622677582">
@@ -1253,7 +1253,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
-          <line>424</line>
+          <line>438</line>
           <option name="timeStamp" value="629" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
