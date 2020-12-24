@@ -215,12 +215,13 @@ class SaliencyFactory(object):
                 print('dn {}, dk {}'.format(dn, dk))
 
             # values normalization
-            # dn = 1- np.exp(-dn)
-            # dk = 1 - np.exp(-dk)
+
         # dn = mt.scale_values(np.asarray(dn_))
         # dk = mt.scale_values(np.asarray(dk_))
         dn = np.asarray(dn_)
         dk = np.asarray(dk_)
+        # dn = 1 - np.exp(-dn)
+        # dk = 1 - np.exp(-dk)
         sign_dk = np.asarray(sign_dk)
 
         tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
@@ -231,14 +232,14 @@ class SaliencyFactory(object):
             # vis.visualize_neighborhoods(w_neighborhood)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
-            ax[0, 0].hist(dk)
+            ax[0, 0].hist(dk[dk>0.001])
             ax[0, 1].set_title('Histogram dk')
-            ax[0, 1].hist(dk * sign_dk)
+            ax[0, 1].hist(dk[np.abs(dk)>0.001] * sign_dk[dk>0.001])
             ax[1, 0].set_title('Histogram dn')
-            ax[1, 0].hist(dn)
+            ax[1, 0].hist(dn[dn>0.001])
             ax[1, 1].set_title('Histogram saliency')
-            ax[1, 1].hist(tensor_saliency)
-            
+            ax[1, 1].hist(tensor_saliency[np.abs(tensor_saliency)>0.001])
+
 
             # ax[1,1].text(0.2,.4, 'min dk {0:.3f}, min dn {0:.3f} \n max dk {0:.3f}, max dn {0:.3f}'.format
             # (round(dk.min()), round(dn.min()), round(dk.max()), round(dn.max())), fontsize=15)
