@@ -111,7 +111,7 @@ class SaliencyFactory(object):
 
     # ----------------- DIRECTIONAL SALIENCY -----------------------
     @staticmethod
-    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func,
+    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func, neighborhood_property_curvature = None,
                              sigma_normal=0.01, sigma_curvature= 0.1, curvature_weight=.5, alpha=0.05,
                              verbose=False, **kwargs):
         """
@@ -121,6 +121,7 @@ class SaliencyFactory(object):
         :param curvature_property: curvature property computed in advance
         :param curvature_attribute: the attribute according to which the curvature is measured.
         :param weighting_func: the weighting function (from WeightingFuncions module, as an example)
+        :param neighborhood_property_curvature: the neighborhood property of the point cloud for curvature saliency. If None, both normals and curvature will be using the same neighborhood
         :param sigma_normal: maximal std of the normals deviations for a point to be considered as vegetation. Default: 0.01
         :param sigma_curvature: std of the curvature deviations for a surface texture. Default: 0.1
         :param alpha: for the hypothesis testing. Default: 0.05
@@ -131,6 +132,7 @@ class SaliencyFactory(object):
         :type normals_property: np.array
         :type curvature_attribute: str
         :type weighting_func: func
+        :type neighborhood_property_curvature: NeighborsProperty.NeighborsProperty
         :type neighbors_property: NeighborsProperty.NeighborsProperty
         :type sigma_normal: float
         :type sigma_curvature: float
@@ -158,48 +160,55 @@ class SaliencyFactory(object):
         dn_ = []
         dk_ = []
         w_neighborhood = NeighborsProperty(neighbors_property.Points)
-        for neighborhood, i in zip(neighbors_property, trange(neighbors_property.Size,
-                                                              desc='Directional Saliency for each neighborhood',
-                                                              position=0)):
+        if neighborhood_property_curvature is None:
+            neighborhood_property_curvature = neighbors_property
+
+        for neighborhood_normals, neighborhood_curvature, i in zip(neighbors_property, neighborhood_property_curvature,
+                                                                   trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
             if i==239:
                 print('!')
-            if neighborhood.numberOfNeighbors < 4:
-                w_neighborhood.setNeighborhood(i, neighborhood)
-                tensor_saliency.append(0)
-                dn_.append(0)
-                dk_.append(0)
-                continue
 
-            chi_statistic = stats.chi2.ppf(alpha, neighborhood.numberOfNeighbors - 1) # X^2-distribution
-
-            neighborhood.weightNeighborhood(weighting_func, **kwargs)
-            w_neighborhood.setNeighborhood(i, neighborhood)
+            neighborhood_normals.weightNeighborhood(weighting_func, **kwargs)
+            neighborhood_curvature.weightNeighborhood(weighting_func, **kwargs)
+            if verbose:
+                w_neighborhood.setNeighborhood(i, neighborhood_normals)
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
             try:
                 current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
-                    neighborhood.neighborhoodIndices]
+                    neighborhood_curvature.neighborhoodIndices]
             except:
                 try:
-                    current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
+                    current_curvatures = curvature_property[neighborhood_curvature.neighborhoodIndices]
                 except TypeError:
                     warn(
                         'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
                     return 1
 
-            current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
+            current_normals = normals_property.getPointNormal(neighborhood_normals.neighborhoodIndices)
 
-            dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals,  chi_statistic, sigma_normal, verbose=verbose)
-            dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
+            if neighborhood_normals.numberOfNeighbors < 4:
+                if verbose:
+                    w_neighborhood.setNeighborhood(i, neighborhood_normals)
+                dn_.append(0)
+            else:
+                chi_statistic = stats.chi2.ppf(alpha, neighborhood_normals.numberOfNeighbors - 1)  # X^2-distribution
+                dn = SaliencyFactory.__normal_saliency(neighborhood_normals, current_normals, chi_statistic, sigma_normal, verbose=verbose)
+                dn_.append(dn)
 
-            dn_.append(dn)
-            dk_.append(dk)
-
-            if dk == 0:
+            if neighborhood_curvature.numberOfNeighbors < 4:
+                dk_.append(0)
                 sign_dk.append(0)
             else:
-                sign_dk.append(np.sign(current_curvatures[0]))
+                chi_statistic = stats.chi2.ppf(alpha, neighborhood_curvature.numberOfNeighbors - 1)  # X^2-distribution
+                dk = SaliencyFactory.__curvature_saliency(neighborhood_curvature, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
+                dk_.append(dk)
+
+                if dk == 0:
+                    sign_dk.append(0)
+                else:
+                    sign_dk.append(np.sign(current_curvatures[0]))
             if verbose:
                 # if i%10 == 0:
                     # pts = neighborhood.color_neighborhood()
@@ -212,7 +221,7 @@ class SaliencyFactory(object):
                     # plt.show()
                     # plt.waitforbuttonpress(3)
                     # plt.close()
-                print('dn {}, dk {}'.format(dn, dk))
+                print('dn {}, dk {}'.format(dn_[-1], dk_[-1]))
 
             # values normalization
 
@@ -228,8 +237,8 @@ class SaliencyFactory(object):
 
         if verbose:
             import matplotlib.pyplot as plt
-            # vis = VisualizationO3D()
-            # vis.visualize_neighborhoods(w_neighborhood)
+            vis = VisualizationO3D()
+            vis.visualize_neighborhoods(w_neighborhood)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])
@@ -244,8 +253,6 @@ class SaliencyFactory(object):
             # ax[1,1].text(0.2,.4, 'min dk {0:.3f}, min dn {0:.3f} \n max dk {0:.3f}, max dn {0:.3f}'.format
             # (round(dk.min()), round(dn.min()), round(dk.max()), round(dn.max())), fontsize=15)
             # ax[1,1].axis('off')
-
-            
 
         return SaliencyProperty(neighbors_property.Points, tensor_saliency), dn, dk * sign_dk
 
