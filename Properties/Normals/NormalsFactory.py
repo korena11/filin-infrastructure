@@ -109,8 +109,12 @@ class NormalsFactory:
             if current_normal.dot(viewpoint - neighborhood.center_point_coords) < 0:
                 current_normal = -current_normal
             if current_normal[2] < 0:
-                print(neighborhood.center_point_idx)
+                # print(neighborhood.center_point_idx)
                 current_normal = -current_normal #TODO: this is not correct for all situations, but a temporary patch
+
+            if neighborhood.numberOfNeighbors < 3:
+                print(neighborhood.center_point_idx)
+                current_normal = np.array([1, 0, 0])
             normals.append(current_normal)
 
         return NormalsProperty(neighborsProperty.Points, np.array(normals))

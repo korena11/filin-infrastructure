@@ -111,7 +111,7 @@ class SaliencyFactory(object):
 
     # ----------------- DIRECTIONAL SALIENCY -----------------------
     @staticmethod
-    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func, neighborhood_property_curvature = None,
+    def directional_saliency(neighbors_property, normals_property, curvature_property, curvature_attribute, weighting_func, neighborhood_property_curvature=None,
                              sigma_normal=0.01, sigma_curvature= 0.1, curvature_weight=.5, alpha=0.05,
                              verbose=False, **kwargs):
         """
@@ -163,16 +163,20 @@ class SaliencyFactory(object):
         if neighborhood_property_curvature is None:
             neighborhood_property_curvature = neighbors_property
 
-        for neighborhood_normals, neighborhood_curvature, i in zip(neighbors_property, neighborhood_property_curvature,
-                                                                   trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
+        for neighborhood_normals,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
             if i==239:
                 print('!')
+            neighborhood_curvature = neighborhood_property_curvature.getNeighborhood(i)
 
-            neighborhood_normals.weightNeighborhood(weighting_func, **kwargs)
-            neighborhood_curvature.weightNeighborhood(weighting_func, **kwargs)
+            neighborhood_normals.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
+            if 'rho2' in kwargs:
+                neighborhood_curvature.weightNeighborhood(weighting_func, rho=kwargs['rho2'], sigma=kwargs['sigma2'])
+            else:
+                neighborhood_curvature.weightNeighborhood(weighting_func, **kwargs)
+
             if verbose:
-                w_neighborhood.setNeighborhood(i, neighborhood_normals)
+                w_neighborhood.setNeighborhood(i, neighborhood_curvature)
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
             try:
@@ -190,7 +194,7 @@ class SaliencyFactory(object):
 
             if neighborhood_normals.numberOfNeighbors < 4:
                 if verbose:
-                    w_neighborhood.setNeighborhood(i, neighborhood_normals)
+                    w_neighborhood.setNeighborhood(i, neighborhood_curvature)
                 dn_.append(0)
             else:
                 chi_statistic = stats.chi2.ppf(alpha, neighborhood_normals.numberOfNeighbors - 1)  # X^2-distribution
@@ -304,7 +308,7 @@ class SaliencyFactory(object):
         if chi2_statistic < chi2:
             dn = 0
         else:
-            dn = np.sum(dn * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:])
+            dn = np.sum(np.abs(dn) * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:])
         return dn
 
     @staticmethod
