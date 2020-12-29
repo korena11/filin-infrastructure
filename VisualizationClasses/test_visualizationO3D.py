@@ -34,6 +34,7 @@ class TestVisualizationO3D(TestCase):
 
     def test_visualize_neighborhood(self):
         import numpy as np
+        from Properties.Normals.NormalsFactory import  NormalsFactory
         import Properties.Neighborhood.WeightingFunctions as wf
         vis = VisualizationO3D()
         r = 3
@@ -70,7 +71,8 @@ class TestVisualizationO3D(TestCase):
         # plt.plot(np.arange(1, 20), np.asarray(radi))
 
         neighborhood = NeighborsFactory.ComputeNeighbors_raster(pts, 1, r)
+        normals = NormalsFactory.normalsPCA(neighborhood)
         weighted_neighborhood = NeighborsProperty(pts)
         for neighbors in neighborhood:
-            neighbors.weightNeighborhood(wf.laplacianWeights,  3.)
-        vis.visualize_neighborhoods(neighborhood)
+            neighbors.weightNeighborhood(wf.gaussianWeights,  rho=1, sigma=0.2)
+        vis.visualize_neighborhoods(neighborhood, normals, 200)

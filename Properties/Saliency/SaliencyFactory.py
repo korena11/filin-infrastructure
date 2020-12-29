@@ -238,11 +238,11 @@ class SaliencyFactory(object):
         sign_dk = np.asarray(sign_dk)
 
         tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
-
+        saliency = SaliencyProperty(neighbors_property.Points, tensor_saliency)
         if verbose:
             import matplotlib.pyplot as plt
             vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood)
+            vis.visualize_neighborhoods(w_neighborhood, normals_property, 2631)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])
@@ -258,7 +258,7 @@ class SaliencyFactory(object):
             # (round(dk.min()), round(dn.min()), round(dk.max()), round(dn.max())), fontsize=15)
             # ax[1,1].axis('off')
 
-        return SaliencyProperty(neighbors_property.Points, tensor_saliency), dn, dk * sign_dk
+        return saliency, dn, dk * sign_dk
 
     @staticmethod
     def __normal_saliency(neighborhood, current_normals, chi2, sigma_expected=0.01,  verbose=False):
