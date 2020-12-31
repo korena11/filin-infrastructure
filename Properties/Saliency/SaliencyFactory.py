@@ -242,7 +242,7 @@ class SaliencyFactory(object):
         if verbose:
             import matplotlib.pyplot as plt
             vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood, normals_property, 2631)
+            vis.visualize_neighborhoods(w_neighborhood, saliency, 16548)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])

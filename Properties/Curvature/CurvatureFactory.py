@@ -83,7 +83,7 @@ class CurvatureFactory:
     @classmethod
     def pointSetOpen3D_3parameters(cls, neighbors_property, normals_property=None,
                                    min_points_in_neighborhood=5, min_points_in_sector=2, valid_sectors=7, num_sectors=8,
-                                   invalid_value=-999, verbose=False):
+                                   invalid_value=-999, alpha=0.05, verbose=False):
         """
         Curvature of a PointSetOpen3D with its normals and neighborhood via the *three-parameters* algorithm.
 
@@ -162,7 +162,11 @@ class CurvatureFactory:
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
                 normal = normals[i, :]
-                k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal)
+                k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal, alpha)
+
+                if verbose:
+                    print('k1 {};   k2 {}'.format(k1_, k2_))
+
                 if np.abs(k1_ * k2_) > 1e3:
                     invalid_curvature += 1
                     k1.append(invalid_value)
@@ -175,6 +179,7 @@ class CurvatureFactory:
                 invalid_curvature += 1
                 k1.append(invalid_value)
                 k2.append(invalid_value)
+
         k1 = np.asarray(k1)
         k2 = np.asarray(k2)
 
@@ -184,15 +189,17 @@ class CurvatureFactory:
         return curvatures
 
     @classmethod
-    def curvature_by_3parameters(cls, neighborhood, normal):
+    def curvature_by_3parameters(cls, neighborhood, normal, alpha=0.05):
         r"""
         Curvature computation based on fundamental form when fitting bi-quadratic surface.
 
         :param neighborhood: the neighbors according to which the curvature is computed
         :param normal: normal to the point which the curvature is computed
+        :param alpha: for hypothesis testing
 
         :type neighborhood: PointNeighborhood.PointNeighbohhod, np.ndarray, PointSet.PointSet
         :type normal: np.array
+        :type alpha: float
 
         :return: minimal and maximal curvature
 
@@ -237,9 +244,6 @@ class CurvatureFactory:
             warnings.warn('Curvature_3d_params: Unknown type of neighborhood')
             return 1
 
-
-        # neighbors = neighbors[1:, :]
-
         # move points to center point
         neighbors -= neighbors[0, :]
 
@@ -254,7 +258,12 @@ class CurvatureFactory:
         neighbors = (np.dot(rot_mat, neighbors.T)).T
 
         # compute curvature by 3 parameters
-        p = CurvatureFactory.__BiQuadratic_Surface(neighbors)
+        p, Ftest_reject = CurvatureFactory.__BiQuadratic_Surface(neighbors, testCoeff=np.zeros((3,1)), alpha=alpha)
+        print(Ftest_reject)
+        # if the assumption that the coefficients equal zero is not rejected, assign zeros coefficients
+        if not Ftest_reject:
+            p = np.zeros((3,1))
+
         a = 2*p[0]
         b = 2* p[1]
         c = p[2]
@@ -627,20 +636,34 @@ class CurvatureFactory:
         return curves
 
     @staticmethod
-    def __BiQuadratic_Surface(neighbor_points):
-        '''
+    def __BiQuadratic_Surface(neighbor_points, testCoeff=None, alpha=None):
+        r'''
         BiQuadratic surface adjustment to discrete point cloud (when the surface is rotated to [0,0,1])
 
         :param neighbor_points: 3D points coordinates
+        :param testCoeff: array of values to statistically test the results against. Default: no testing (None)
+        :param alpha: for the F test
 
         :type neighbor_points: nx3 array
+        :type testCoeff: np.ndarray
+        :type alpha: float
 
-        :return: p - surface's coefficients
+        For testing the hypothesis that the unknowns are equal to testCoeff, i.e.,: :math:`H_0: {\bf x}=\{bf x_0}` we use the statistic:
+
+        .. math::
+            \frac{S_H}{u} = \frac{1}{u} \left({\bf x}-{\bf x_0}\right)^T\Sigma_x^{-1}\left({\bf x}-{\bf x_0}\right)
+
+        and compare it to the F-value :math:`F_{u, n-u, \alpha}`, where: u the number of observations and n the number of unknowns. If :math:`\frac{S_H}{u} > F_{u, n-u, \alpha}
+        then we reject the null hypothesis.
+
+        :return: p - surface's coefficients, and Ftest result (True if rejected, False if was not rejected)
 
         :rtype: nd-array
 
         '''
         from numpy.linalg import LinAlgError
+
+        Ftest_reject = False # do not reject
 
         x = np.expand_dims(neighbor_points[:, 0], 1)
         y = np.expand_dims(neighbor_points[:, 1], 1)
@@ -649,6 +672,7 @@ class CurvatureFactory:
         A = np.hstack((x ** 2, y ** 2, x * y))
         N = A.T.dot(A)
         u = A.T.dot(z)
+
 
         try:  # try to fit a bi-quadratic surface
             p = np.linalg.solve(N, u)
@@ -661,4 +685,18 @@ class CurvatureFactory:
             p = eigvecs[:, 0][:, None]
             p.reshape((3, 1))
 
-        return p
+        v = A.dot(p) - z
+        sigma2 = v.T.dot(v)
+        Sigma = sigma2 * np.linalg.inv(N) # TODO: check how this works with the eigenvalues solution
+
+        if testCoeff is not None:
+            from scipy.stats import f
+            F_statistic = f.ppf(alpha, 3, neighbor_points.shape[0])
+            statistic = 1/ neighbor_points.shape[0] * (p-testCoeff).T.dot(np.linalg.inv(Sigma)).dot(p-testCoeff)
+
+            if statistic > F_statistic: # rejecting the null hypothesis
+                Ftest_reject = True
+
+            return p, Ftest_reject
+        else:
+            return p
