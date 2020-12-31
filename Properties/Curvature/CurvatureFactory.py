@@ -335,8 +335,8 @@ class CurvatureFactory:
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
                 point_idx = point_neighbors.neighborhoodIndices[0]
-                if point_idx == 240:
-                    print('!')
+                # if point_idx == 240:
+                #     print('!')
                 n = normals.Normals[point_idx]
 
                 # if point_neighbors.center_point_coords[2] >= 5:

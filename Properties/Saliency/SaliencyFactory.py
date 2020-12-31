@@ -165,8 +165,8 @@ class SaliencyFactory(object):
 
         for neighborhood_normals,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
-            if i==239:
-                print('!')
+            # if i==239:
+            #     print('!')
             neighborhood_curvature = neighborhood_property_curvature.getNeighborhood(i)
 
             neighborhood_normals.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
@@ -242,7 +242,7 @@ class SaliencyFactory(object):
         if verbose:
             import matplotlib.pyplot as plt
             vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood, normals_property, 2631)
+            vis.visualize_neighborhoods(w_neighborhood, normals_property, 2443)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])
