@@ -243,7 +243,8 @@ class VisualizationO3D:
             self.index += 1
 
         print(self.attribute_name[self.index])
-        self.pointset.data.colors = self.colors[self.index]
+        colors = self.__apply_colormap(self.colors[self.index])
+        self.pointset.data.colors = colors
         vis.update_geometry()
 
     def toggle_colormaps(self, vis):
