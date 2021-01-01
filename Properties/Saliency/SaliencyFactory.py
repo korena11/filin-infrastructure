@@ -165,8 +165,8 @@ class SaliencyFactory(object):
 
         for neighborhood_normals,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
-            # if i==239:
-            #     print('!')
+            if i==16809:
+                print('!')
             neighborhood_curvature = neighborhood_property_curvature.getNeighborhood(i)
 
             neighborhood_normals.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
@@ -237,12 +237,14 @@ class SaliencyFactory(object):
         # dk = 1 - np.exp(-dk)
         sign_dk = np.asarray(sign_dk)
 
-        tensor_saliency = (dn * normal_weight + dk * curvature_weight) * sign_dk
+        tensor_saliency = (dn * normal_weight + dk * curvature_weight)
         saliency = SaliencyProperty(neighbors_property.Points, tensor_saliency)
+        saliency.__setattr__('dn', dn)
+        saliency.__setattr__('dk', dk * sign_dk)
         if verbose:
             import matplotlib.pyplot as plt
             vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood, saliency, 16548)
+            vis.visualize_neighborhoods(w_neighborhood, saliency, 16809)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])
@@ -304,8 +306,12 @@ class SaliencyFactory(object):
         # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
         #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)
-        chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std()/sigma_expected
-        if chi2_statistic < chi2:
+        num_zeros = np.sum(dn <= 0.003)
+        chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std() / sigma_expected
+
+        if num_zeros > 0.6 * dn.shape[0]:
+            dn = 0
+        elif chi2_statistic < chi2:
             dn = 0
         else:
             dn = np.sum(np.abs(dn) * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:])
@@ -352,12 +358,16 @@ class SaliencyFactory(object):
 
         # difference in curvature
         dk = current_curvatures[1:] - current_curvatures[0]
-
+        num_zeros = np.sum(np.abs(dk) <= 0.04)
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dk.std() / sigma_expected
-        if chi2_statistic < chi2:
-            dk = np.zeros(current_curvatures.shape[0] - 1)
 
-        return np.abs(np.sum(dk * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:]))
+        if num_zeros > 0.6 * dk.shape[0]:
+            dk = 0
+        elif chi2_statistic < chi2:
+            dk = 0
+        else:
+            dk = np.abs(np.sum(dk * neighborhood.weights[1:])/np.sum(neighborhood.weights[1:]))
+        return dk
 
     @staticmethod
     def multiscale_saliency(saliencies, percentiles=75):
