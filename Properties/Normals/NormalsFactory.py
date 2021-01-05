@@ -114,7 +114,7 @@ class NormalsFactory:
 
             if neighborhood.numberOfNeighbors < 3:
                 print(neighborhood.center_point_idx)
-                current_normal = np.array([1, 0, 0])
+                current_normal = np.array([0, 0, 0])
             normals.append(current_normal)
 
         return NormalsProperty(neighborsProperty.Points, np.array(normals))

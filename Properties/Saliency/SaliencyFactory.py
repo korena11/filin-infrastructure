@@ -127,6 +127,7 @@ class SaliencyFactory(object):
         :param alpha: for the hypothesis testing. Default: 0.05
         :param curvature_weight: the weight of the curvature in the saliency computation
         :param verbose: print running messages. Default: False
+        :param stopat: a point to stop at for debugging, show its neighborhood, and start from that point at the visualization of all points' neighborhood
 
         :type curvature_property: CurvatureProperty.CurvatureProperty or np.ndarray
         :type normals_property: np.array
@@ -147,12 +148,16 @@ class SaliencyFactory(object):
         from scipy import stats
         from Properties.Neighborhood.NeighborsProperty import NeighborsProperty
         from Properties.Neighborhood.PointNeighborhood import PointNeighborhood
+        from Properties.Normals.NormalsProperty import NormalsProperty
         from DataClasses.PointSubSet import PointSubSet
         from VisualizationClasses.VisualizationO3D import VisualizationO3D
 
         normal_weight = 1 - curvature_weight
         tensor_saliency = []
-
+        if 'stopat' in kwargs:
+            stopat = kwargs.pop('stopat')
+        else:
+            stopat = 0
         j = 0
         sign_dk = []
         kstd = []
@@ -163,50 +168,50 @@ class SaliencyFactory(object):
         if neighborhood_property_curvature is None:
             neighborhood_property_curvature = neighbors_property
 
-        for neighborhood_normals,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
+        for neighborhood,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
-            if i==16809:
+            if i==stopat:
                 print('!')
-            neighborhood_curvature = neighborhood_property_curvature.getNeighborhood(i)
 
-            neighborhood_normals.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
-            if 'rho2' in kwargs:
-                neighborhood_curvature.weightNeighborhood(weighting_func, rho=kwargs['rho2'], sigma=kwargs['sigma2'])
-            else:
-                neighborhood_curvature.weightNeighborhood(weighting_func, **kwargs)
+            neighborhood.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
 
             if verbose:
-                w_neighborhood.setNeighborhood(i, neighborhood_curvature)
+                w_neighborhood.setNeighborhood(i, neighborhood)
             # get all the current values of curvature and normals. The first is the point to which the
             # computation is made
             try:
                 current_curvatures = curvature_property.__getattribute__(curvature_attribute)[
-                    neighborhood_curvature.neighborhoodIndices]
+                    neighborhood.neighborhoodIndices]
             except:
                 try:
-                    current_curvatures = curvature_property[neighborhood_curvature.neighborhoodIndices]
+                    current_curvatures = curvature_property[neighborhood.neighborhoodIndices]
                 except TypeError:
                     warn(
                         'curvature_property has to be either array or CurvatureProperty. Add condition if needed otherwise')
                     return 1
 
-            current_normals = normals_property.getPointNormal(neighborhood_normals.neighborhoodIndices)
+            current_normals = normals_property.getPointNormal(neighborhood.neighborhoodIndices)
 
-            if neighborhood_normals.numberOfNeighbors < 4:
-                if verbose:
-                    w_neighborhood.setNeighborhood(i, neighborhood_curvature)
+            if neighborhood.numberOfNeighbors < 4:
                 dn_.append(0)
-            else:
-                chi_statistic = stats.chi2.ppf(alpha, neighborhood_normals.numberOfNeighbors - 1)  # X^2-distribution
-                dn = SaliencyFactory.__normal_saliency(neighborhood_normals, current_normals, chi_statistic, sigma_normal, verbose=verbose)
-                dn_.append(dn)
-
-            if neighborhood_curvature.numberOfNeighbors < 4:
                 dk_.append(0)
                 sign_dk.append(0)
             else:
-                chi_statistic = stats.chi2.ppf(alpha, neighborhood_curvature.numberOfNeighbors - 1)  # X^2-distribution
-                dk = SaliencyFactory.__curvature_saliency(neighborhood_curvature, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
+                if verbose:
+                    if i == stopat:
+                        vis = VisualizationO3D()
+                        print('\n current normals {}'.format(current_normals * neighborhood.weights[:, None]))
+                        print('\n current kappas {}'.format(current_curvatures * neighborhood.weights[:, None]))
+                        neighborhood.weights[0] = 1
+                        tmp_normals = NormalsProperty(neighborhood.neighbors, current_normals * neighborhood.weights[:, None])
+                        tmp_normals.__setattr__('k', np.round(current_curvatures * neighborhood.weights))
+                        vis.visualize_property(tmp_normals)
+                number_active = np.sum(neighborhood.weights > 0.01) # how many of the neighbors take part in the computation
+                chi_statistic = stats.chi2.ppf(alpha, number_active)  # X^2-distribution
+                dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, chi_statistic, sigma_normal, verbose=verbose)
+                dn_.append(dn)
+
+                dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
                 dk_.append(dk)
 
                 if dk == 0:
@@ -214,25 +219,12 @@ class SaliencyFactory(object):
                 else:
                     sign_dk.append(np.sign(current_curvatures[0]))
             if verbose:
-                # if i%10 == 0:
-                    # pts = neighborhood.color_neighborhood()
+                print('\n {}: dn {}, dk {}'.format(i, dn_[-1], dk_[-1]))
 
-                    # import matplotlib.pyplot as plt
-                    # print(neighborhood.numberOfNeighbors, neighborhood.weights)
-
-                    # plt.figure()
-                    # plt.scatter(neighborhood.distances, neighborhood.weights)
-                    # plt.show()
-                    # plt.waitforbuttonpress(3)
-                    # plt.close()
-                print('dn {}, dk {}'.format(dn_[-1], dk_[-1]))
-
-            # values normalization
-
-        # dn = mt.scale_values(np.asarray(dn_))
-        # dk = mt.scale_values(np.asarray(dk_))
-        dn = np.asarray(dn_)
-        dk = np.asarray(dk_)
+        dn = mt.scale_values(np.asarray(dn_))
+        dk = mt.scale_values(np.asarray(dk_))
+        # dn = np.asarray(dn_)
+        # dk = np.asarray(dk_)
         # dn = 1 - np.exp(-dn)
         # dk = 1 - np.exp(-dk)
         sign_dk = np.asarray(sign_dk)
@@ -240,11 +232,11 @@ class SaliencyFactory(object):
         tensor_saliency = (dn * normal_weight + dk * curvature_weight)
         saliency = SaliencyProperty(neighbors_property.Points, tensor_saliency)
         saliency.__setattr__('dn', dn)
-        saliency.__setattr__('dk', dk * sign_dk)
+        saliency.__setattr__('dk', dk )
         if verbose:
             import matplotlib.pyplot as plt
             vis = VisualizationO3D()
-            vis.visualize_neighborhoods(w_neighborhood, saliency, 16809)
+            vis.visualize_neighborhoods(w_neighborhood, saliency, stopat)
             fig, ax = plt.subplots(2, 2)
             ax[0, 0].set_title('Histogram |dk|')
             ax[0, 0].hist(dk[dk>0.001])
@@ -260,7 +252,7 @@ class SaliencyFactory(object):
             # (round(dk.min()), round(dn.min()), round(dk.max()), round(dn.max())), fontsize=15)
             # ax[1,1].axis('off')
 
-        return saliency, dn, dk * sign_dk
+        return saliency
 
     @staticmethod
     def __normal_saliency(neighborhood, current_normals, chi2, sigma_expected=0.01,  verbose=False):
@@ -306,9 +298,10 @@ class SaliencyFactory(object):
         # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
         #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)
-        num_zeros = np.sum(dn <= 0.003)
+        num_zeros = np.sum(np.abs(dn) < 0.016)
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std() / sigma_expected
 
+        # if there are more than 60% that are less than 5 deg difference
         if num_zeros > 0.6 * dn.shape[0]:
             dn = 0
         elif chi2_statistic < chi2:

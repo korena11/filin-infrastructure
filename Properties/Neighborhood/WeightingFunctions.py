@@ -59,11 +59,12 @@ def gaussianWeights(pointNeighborhood, sigma, rho):
     """
     from Utils.MyTools import scale_values
     neighbors = pointNeighborhood.neighbors.ToNumpy()
-    chess_distance = np.max((np.abs(neighbors[:, :2] - pointNeighborhood.center_point_coords[:2])), axis=1)
+    # distance = np.max((np.abs(neighbors[:, :2] - pointNeighborhood.center_point_coords[:2])), axis=1)
+    distance = np.linalg.norm(neighbors[:,:2] - pointNeighborhood.center_point_coords[:2], axis=1)
     if isinstance(pointNeighborhood, np.ndarray):
-        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(chess_distance - rho) ** 2 / (2 * sigma ** 2))
+        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(distance - rho) ** 2 / (2 * sigma ** 2))
     else:
-        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(chess_distance - rho)**2 / (2 * sigma ** 2))
+        weights = 1 / np.sqrt(2 * np.pi * sigma**2) * np.exp(-(distance - rho)**2 / (2 * sigma ** 2))
     return weights
 
 

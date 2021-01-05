@@ -19,11 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="separated window for  dn and dk in directional saliency">
+    <list default="true" id="e7899c33-095a-45e0-8247-fa46f8b9514f" name="Default" comment="Added F test for the parametric curvature estimation&#10;Bug fix visualize_property in  VisualizationO3D">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Curvature/CurvatureFactory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Curvature/curvature_types.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Neighborhood/WeightingFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Neighborhood/WeightingFunctions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Normals/NormalsFactory.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" beforeDir="false" afterPath="$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" beforeDir="false" afterPath="$PROJECT_DIR$/VisualizationClasses/VisualizationO3D.py" afterDir="false" />
     </list>
     <ignored path="D:\Documents\Python Scripts\Filin-Infrastructure\.idea\shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -98,7 +100,7 @@
         <entry file="file://$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="538">
-              <caret line="76" column="79" lean-forward="true" selection-start-line="76" selection-start-column="79" selection-end-line="76" selection-end-column="79" />
+              <caret line="76" column="79" selection-start-line="76" selection-start-column="79" selection-end-line="76" selection-end-column="79" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -110,7 +112,7 @@
         <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/WeightingFunctions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="91">
-              <caret line="69" column="4" selection-start-line="69" selection-start-column="4" selection-end-line="69" selection-end-column="4" />
+              <caret line="70" column="4" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -534,14 +536,7 @@
       <workItem from="1608824305954" duration="824000" />
       <workItem from="1609071890064" duration="593000" />
       <workItem from="1609092516103" duration="24000" />
-      <workItem from="1609175232023" duration="9572000" />
-    </task>
-    <task id="LOCAL-00037" summary="- Added setter to data in BaseData&#10;- ToNumpy updated to answer PointSetOpen3D&#10;- read raster in IOFactory updated &#10;- test data added as a separate folder. Some of the tests were updated, some still need to&#10;- bug fixes in LevelSetFlow + added scale for each direction&#10;- CurvatureProperty + CurvatureFactory updated&#10;- SaliencyFactory + TensorFactory updated&#10;- RasterTools added + testing --&gt; to compute slope and aspect using richDEM. Possible clashes with Open3D">
-      <created>1544370678563</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1544370678563</updated>
+      <workItem from="1609175232023" duration="11161000" />
     </task>
     <task id="LOCAL-00038" summary="Added ReadLAS&#10;imports for PointSetOpen3D inserted only where they are needed, as they clash with richDEM">
       <created>1544535890281</created>
@@ -879,7 +874,14 @@
       <option name="project" value="LOCAL" />
       <updated>1609263326760</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="Added F test for the parametric curvature estimation&#10;Bug fix visualize_property in  VisualizationO3D">
+      <created>1609432407184</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1609432407184</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -915,7 +917,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="420542000" />
+    <option name="totallyTimeSpent" value="422131000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -927,7 +929,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2575" height="1415" extended-state="7" />
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25983313" />
@@ -1011,7 +1013,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="GVF is computed outside of the level set flow (fixed)" />
     <MESSAGE value="Level set functions set to compute derivatives so that numerical zeros are zeros, as well as kappa. Update is with Guassian blur, and rescaling values to range [-1.1]" />
     <MESSAGE value="Added adaptive differentiation for panoramas. &#10;Added expanding and shrinking for padding" />
     <MESSAGE value="bug fixes IOFactory&#10;added colorProperty option to PoinSetOpen3D&#10;bug fixes RasterData&#10;bug fixes mumford shaw elements. Now flow accommodate Chan-Vese&#10;bug fixes LevelSetFunction&#10;drawContours now flips the image" />
@@ -1036,7 +1037,8 @@
     <MESSAGE value="added histograms to saliency when verbose true" />
     <MESSAGE value="separated window for  dn and dk in directional saliency" />
     <MESSAGE value="Added visualization of the neighborhood and the property values. Added possibility to start visualization from specific index" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added visualization of the neighborhood and the property values. Added possibility to start visualization from specific index" />
+    <MESSAGE value="Added F test for the parametric curvature estimation&#10;Bug fix visualize_property in  VisualizationO3D" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added F test for the parametric curvature estimation&#10;Bug fix visualize_property in  VisualizationO3D" />
   </component>
   <component name="WindowStateProjectService">
     <state x="93" y="93" width="2375" height="1215" key="DiffContextDialog" timestamp="1607622677582">
@@ -1340,7 +1342,7 @@
           <option name="timeStamp" value="554" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Properties/Curvature/curvature_types.py</url>
+          <url>file://$PROJECT_DIR$/Properties/Curvature/curvature_types_test.py</url>
           <line>19</line>
           <option name="timeStamp" value="557" />
         </line-breakpoint>
@@ -1391,7 +1393,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Properties/Saliency/SaliencyFactory.py</url>
-          <line>453</line>
+          <line>456</line>
           <option name="timeStamp" value="629" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1428,7 +1430,7 @@
     <entry file="file://$PROJECT_DIR$/Properties/Neighborhood/WeightingFunctions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="91">
-          <caret line="69" column="4" selection-start-line="69" selection-start-column="4" selection-end-line="69" selection-end-column="4" />
+          <caret line="70" column="4" selection-start-line="70" selection-start-column="4" selection-end-line="70" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -1454,7 +1456,7 @@
     <entry file="file://$PROJECT_DIR$/VisualizationClasses/test_visualizationO3D.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="538">
-          <caret line="76" column="79" lean-forward="true" selection-start-line="76" selection-start-column="79" selection-end-line="76" selection-end-column="79" />
+          <caret line="76" column="79" selection-start-line="76" selection-start-column="79" selection-end-line="76" selection-end-column="79" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>

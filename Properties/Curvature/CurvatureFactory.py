@@ -364,7 +364,7 @@ class CurvatureFactory:
                 if np.abs((np.sum(projections) / point_neighbors.numberOfNeighbors)) < epsilon:
                     umbrellaCurvature.append(0)
                 else:
-                    umbrellaCurvature.append(np.sum(projections) / point_neighbors.Size)
+                    umbrellaCurvature.append(np.sum(projections) / point_neighbors.numberOfNeighbors)
             else:
                 if verbose:
                     print('invalid point:', point_neighbors.center_point_idx)
