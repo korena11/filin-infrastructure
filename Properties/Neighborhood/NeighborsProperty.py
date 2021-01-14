@@ -20,9 +20,6 @@ class NeighborsProperty(BaseProperty):
         :type points: PointSet, PointSetOpen3D
         :param args:
 
-
-        .. warning::
-            Now works only for Linux (or with open3D for windows)
         """
         super(NeighborsProperty, self).__init__(points)
         self.__pointsNeighborsArray = np.empty(shape=(self.Size,), dtype=PointNeighborhood)
@@ -87,8 +84,10 @@ class NeighborsProperty(BaseProperty):
         :type point_neighbors: PointNeighborhood
 
         """
+
         if isinstance(point_neighbors, PointNeighborhood):
             self.__pointsNeighborsArray[idx] = point_neighbors
+
 
         else:
             if isinstance(point_neighbors, np.ndarray):

@@ -102,7 +102,38 @@ def dist_from_checkerboard(func_shape):
     x = np.arange(width)
     y = np.arange(height)
     xx, yy = np.meshgrid(x, y)
-    sin_xx = np.sin(np.pi / 5 * xx)
-    sin_yy = np.sin(np.pi / 5 * yy)
+    sin_xx = np.sin(np.pi / 25 * xx)
+    sin_yy = np.sin(np.pi / 25 * yy)
 
     return sin_xx * sin_yy
+
+
+def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
+    r"""
+    Build a Lipshitz distance function with repetitive circles
+
+    .. math::
+
+       \phi(x,y,t) < 0 \quad \text{for } (x,y) \not\in \Omega
+
+    :param dx: distance between circles on x
+    :param dy: distance between circles on y
+    :param radius: radius of the circles
+    :param func_shape: size of the function (height, width)
+    :param resolution: grid size
+
+    :return: a level set function that its zero-set is the defined circles (approximately)
+    """
+
+    import skfmm
+    from tqdm import tqdm
+    phi = -np.ones(func_shape)
+    center_x = np.arange(dx/2 + radius, func_shape[1] , dx + radius)
+    center_y = np.arange(dy/2 + radius, func_shape[0] , dy + radius)
+
+    for i in tqdm(center_y, position=0, leave=False):
+        for j in tqdm(center_x, position=1, leave=True):
+            phi_temp = dist_from_circle((i,j), radius, func_shape, resolution=resolution)
+            phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
+
+    return skfmm.distance(phi)

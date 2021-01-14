@@ -265,7 +265,8 @@ class LevelSetFlow:
         :param function_type:
 
             - 'circle' (default);
-            - 'ellipse'
+            - 'ellipse';
+            - 'circles';
             - 'checkerboard' - checkerboard like function
         
         :type processing_props: dict
@@ -299,6 +300,10 @@ class LevelSetFlow:
         elif func_type == 'checkerboard':
             phi = distance_functions.dist_from_checkerboard(func_shape)
 
+        elif func_type == 'circles':
+            dx = kwargs.get('dx', 1)
+            dy = kwargs.get('dy', 1)
+            phi = distance_functions.dist_from_circles(dx, dy, radius, func_shape, resolution)
         # scale between [-1, 1], while keeping the level set unmoved
 
         # phi[phi > 0] = scale_values(phi[phi > 0], 0., 1.)
@@ -1052,6 +1057,16 @@ class LevelSetFlow:
         pbar = tqdm(total=self.iterations)
 
         with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
+            plt.figure('img')
+
+            l_curve, ax = mt.draw_contours(self.phi().value, ax, img=img_showed, hold=False,
+                                           color_random=color_random, linewidth=linewidth, blob_size=blob_size, color=color)
+            title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
+                            transform=ax.transAxes, ha="center")
+            title.set_text('Iteration #: {}'.format(iteration))
+            ax.axis('off')
+            # title(')
+            writer.grab_frame()
 
             while (phivar > tol and iteration < self.iterations):
                 pbar.update(1)
@@ -1067,9 +1082,9 @@ class LevelSetFlow:
                 
                 phivar = np.sqrt(((dphi) ** 2).mean())
                 
-                if iteration % 10 == 0:
-                    self.phi().reinitialization(dphi)
-                    print('phivar {}, energy {}'.format(phivar, np.sqrt(((self.phi().value**2).mean()))))
+                # if iteration % 10 == 0:
+                #     self.phi().reinitialization(dphi)
+                #     print('phivar {}, energy {}'.format(phivar, np.sqrt(((self.phi().value**2).mean()))))
     
                 # ------------ Drawing + Movie --------------
                 plt.figure('phi')
@@ -1085,7 +1100,6 @@ class LevelSetFlow:
                 ax.axis('off')
                 # title(')
                 writer.grab_frame()
-                
 
             plt.pause(.0001)
 

@@ -161,6 +161,8 @@ class CurvatureFactory:
                                                                                        min_points_in_sector=min_points_in_sector,
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
+                if i == 2815:
+                    print('!')
                 normal = normals[i, :]
                 k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal, alpha)
 
@@ -185,7 +187,7 @@ class CurvatureFactory:
 
         curvatures = CurvatureProperty(pcl, np.vstack((k1, k2)).T)
         curvatures.set_invalid_value(invalid_value)
-        print(invalid_curvature)
+        # print(invalid_curvature)
         return curvatures
 
     @classmethod
@@ -259,7 +261,7 @@ class CurvatureFactory:
 
         # compute curvature by 3 parameters
         p, Ftest_reject = CurvatureFactory.__BiQuadratic_Surface(neighbors, testCoeff=np.zeros((3,1)), alpha=alpha)
-        print(Ftest_reject)
+        # print(Ftest_reject)
         # if the assumption that the coefficients equal zero is not rejected, assign zeros coefficients
         if not Ftest_reject:
             p = np.zeros((3,1))
@@ -344,8 +346,8 @@ class CurvatureFactory:
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
                 point_idx = point_neighbors.neighborhoodIndices[0]
-                # if point_idx == 240:
-                #     print('!')
+                if point_idx == 4230:
+                    print('!')
                 n = normals.Normals[point_idx]
 
                 # if point_neighbors.center_point_coords[2] >= 5:
@@ -686,7 +688,7 @@ class CurvatureFactory:
             p.reshape((3, 1))
 
         v = A.dot(p) - z
-        sigma2 = v.T.dot(v)
+        sigma2 = v.T.dot(v) / (neighbor_points.shape[0] - 3)
         Sigma = sigma2 * np.linalg.inv(N) # TODO: check how this works with the eigenvalues solution
 
         if testCoeff is not None:

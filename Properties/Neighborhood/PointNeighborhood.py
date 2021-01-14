@@ -5,7 +5,6 @@ from DataClasses.PointSubSet import PointSubSet
 
 class PointNeighborhood(object):
 
-
     def __init__(self, points_subset, distances=None):
         """
         Removes duplicate points, if exist (keeps the first)
@@ -18,6 +17,7 @@ class PointNeighborhood(object):
 
         """
         self.__neighbors = points_subset
+
         if distances is None:
             self.computeDistances()
         else:

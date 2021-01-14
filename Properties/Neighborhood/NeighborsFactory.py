@@ -226,6 +226,9 @@ class NeighborsFactory:
 
         .. warning::
             Division to parts doesn't work
+
+        .. warning::
+            The kmax doesn't work. It doesn't put the first point as the center point.
         """
         # TODO: division to parts doesn't work. Need to solve the mapping at the end
 
@@ -269,7 +272,6 @@ class NeighborsFactory:
             idx = np.hstack((idx,
                              pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
                                                       sort_results=True)))
-
         if kmax is not None:
             start = kmax
         else:

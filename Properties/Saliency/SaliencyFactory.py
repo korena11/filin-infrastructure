@@ -172,6 +172,7 @@ class SaliencyFactory(object):
             # print(i)
             if i==stopat:
                 print('!')
+                
 
             neighborhood.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
 
@@ -206,12 +207,12 @@ class SaliencyFactory(object):
                         tmp_normals = NormalsProperty(neighborhood.neighbors, current_normals * neighborhood.weights[:, None])
                         tmp_normals.__setattr__('k', np.round(current_curvatures * neighborhood.weights))
                         vis.visualize_property(tmp_normals)
-                number_active = np.sum(neighborhood.weights > 0.01) # how many of the neighbors take part in the computation
+                number_active = int(np.sum(neighborhood.weights > 0.01)) # how many of the neighbors take part in the computation
                 chi_statistic = stats.chi2.ppf(alpha, number_active)  # X^2-distribution
-                dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, chi_statistic, sigma_normal, verbose=verbose)
+                dn = SaliencyFactory.__normal_saliency(neighborhood, current_normals, chi_statistic, number_active, sigma_normal, verbose=verbose)
                 dn_.append(dn)
 
-                dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures,chi_statistic, sigma_curvature,  verbose=verbose)
+                dk = SaliencyFactory.__curvature_saliency(neighborhood, current_curvatures,chi_statistic, number_active, sigma_curvature,  verbose=verbose)
                 dk_.append(dk)
 
                 if dk == 0:
@@ -255,7 +256,7 @@ class SaliencyFactory(object):
         return saliency
 
     @staticmethod
-    def __normal_saliency(neighborhood, current_normals, chi2, sigma_expected=0.01,  verbose=False):
+    def __normal_saliency(neighborhood, current_normals, chi2, number_effective, sigma_expected=0.01, verbose=False):
         r"""
         Checks the saliency of a point based on  normals property
 
@@ -280,12 +281,14 @@ class SaliencyFactory(object):
         :param neighborhood: the neighborhood of a point
         :param current_normals: normals array of the current point
         :param chi2: :math:`\chi^2` from the table (i.e., :math:`\chi^2_{\nu, \alpha}`)
+        :param number_effective: effective number of neighbors that take part in the compuatation
         :param sigma_expected: maximal std of the normals deviations (i.e., :math:`\hat{\sigma}_0^2). Default: 0.01
         :param verbose: print running messages. Default: False
 
         :type current_normals: np.array
         :type neighborhood: PointNeighborhood.PointNeighborhood
         :type chi2: float
+        :type number_effective: int
         :type sigma_expected: float
         :type verbose: bool
 
@@ -298,11 +301,12 @@ class SaliencyFactory(object):
         # dn = (np.linalg.norm(current_normals[0, :] - current_normals[1:, :], axis=1)) / (
         #         neighborhood.numberOfNeighbors)
         # dn = mt.scale_values(dn)
-        num_zeros = np.sum(np.abs(dn) < 0.016)
+        num_zeros = np.sum(np.abs(dn[neighborhood.weights[1:] > 0.01]) < 0.016)
+
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std() / sigma_expected
 
         # if there are more than 60% that are less than 5 deg difference
-        if num_zeros > 0.6 * dn.shape[0]:
+        if num_zeros > 0.51 * number_effective:
             dn = 0
         elif chi2_statistic < chi2:
             dn = 0
@@ -311,7 +315,7 @@ class SaliencyFactory(object):
         return dn
 
     @staticmethod
-    def __curvature_saliency(neighborhood, current_curvatures,  chi2, sigma_expected=0.01, verbose=False):
+    def __curvature_saliency(neighborhood, current_curvatures,  chi2, number_effective, sigma_expected=0.01, verbose=False):
         r"""
         Computes saliency in each point according to difference in curvature.
 
@@ -336,11 +340,14 @@ class SaliencyFactory(object):
         :param neighborhood: the point neighborhood.
         :param current_curvatures: curvatures of the points in neighborhood
         :param chi2: :math:`\chi^2` from the table (i.e., :math:`\chi^2_{\nu, \alpha}`)
+        :param number_effective: effective number of neighbors that take part in the compuatation
         :param sigma_expected: maximal std of the normals deviations (i.e., :math:`\hat{\sigma}_0^2). Default: 0.01
         :param verbose: print running messages. Default: False
 
         :type neighborhood: PointNeighborhood.PointNeighborhood
         :type current_curvatures: np.ndarray
+        :type number_effective: int
+        :type chi2: float
         :type noise_size: float
         :type verbose: bool
 
@@ -351,10 +358,10 @@ class SaliencyFactory(object):
 
         # difference in curvature
         dk = current_curvatures[1:] - current_curvatures[0]
-        num_zeros = np.sum(np.abs(dk) <= 0.04)
+        num_zeros = np.sum(np.abs(dk[neighborhood.weights[1:] > 0.01]) <= 0.04)
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dk.std() / sigma_expected
 
-        if num_zeros > 0.6 * dk.shape[0]:
+        if num_zeros > 0.51 * number_effective:
             dk = 0
         elif chi2_statistic < chi2:
             dk = 0
