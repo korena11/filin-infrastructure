@@ -24,20 +24,20 @@ EPS = np.finfo(float).eps
 class LevelSetFlow:
     # General initializations
     __processing_props = {'gradientType': 'L1', 'sigma': 2.5, 'ksize': 5, 'regularization': 0}
-    __flow_types = {'geodesic': 1.}
+    __flow_types = None
     __regularization_epsilon = EPS
-    __iterations = 150
-    __step = 1.  # step size
+    __iterations = None
+    __step = None  # step size
 
     # Weighting initializations
-    __gvf_w = 0.
-    __vo_w = 0.
-    __region_w = 0.
-    __ms_w = 0.
+    __gvf_w = None
+    __vo_w = None
+    __region_w = None
+    __ms_w = None
     # Level set initializations
-    __Phi = []  # LevelSetFunction
-    __img = []  # the analyzed image (of the data)
-    __img_rgb = 0
+    __Phi = None  # LevelSetFunction
+    _img = None  # the analyzed image (of the data)
+    __img_rgb = None
 
     # Constraints initializations
     __imgGradient = None  #
@@ -46,10 +46,8 @@ class LevelSetFlow:
     __g_x = __g_y = None  # g derivatives
 
     __region = None  # region constraint
-
     __GVF = None  # external force (for GVF)
-
-    __psi = []  # internal force, for open contours;  LevelSetFunction *currently not in use*
+    __psi = None  # internal force, for open contours;  LevelSetFunction *currently not in use*
 
     # ------------------------- INITIALIZATIONS AND SETTINGS----------------------
     def __init__(self, img, **kwargs):
@@ -72,9 +70,26 @@ class LevelSetFlow:
 
         """
 
-        self.__step = kwargs.get('step', 0.05)
+
+        self.__regularization_epsilon = EPS
+
+        # Weighting initializations
+        self.__gvf_w = 0.
+        self.__vo_w = 0.
+        self.__region_w = 0.
+        self.__ms_w = 0.
+
+        # Level set initializations
+        self.__Phi = [] # LevelSetFunction
+        self._img = []  # the analyzed image (of the data)
+        self.__img_rgb = []
+
+        self.__step = kwargs.get('step', 1)
         self.__iterations = kwargs.get('iterations', 150)
         self.__iterations += 2
+
+        self._img = []
+
         if img is not None:
             self.init_img(img)
 
@@ -88,6 +103,8 @@ class LevelSetFlow:
 
         if 'flow_types' in list(kwargs.keys()):
             self.set_flow_types(**kwargs['flow_types'])
+        else:
+            self.__flow_types = {'geodesic': 0.}
 
         self.scale_x = 1
         self.scale_y = 1
@@ -100,13 +117,13 @@ class LevelSetFlow:
 
         """
         if isinstance(img, RasterData):
-            self.__img.append(img.data)
+            self._img.append(img.data)
             # self.data = img
         else:
             if isinstance(img, list):
-                self.__img = img
+                self._img = img
             else:
-                self.__img.append(img)
+                self._img.append(img)
         if len(self.__Phi) ==0:
             self.__GVF = np.zeros((self.img().shape[0], self.img().shape[1], 2))
             self.__g = np.zeros(self.img().shape)
@@ -326,7 +343,7 @@ class LevelSetFlow:
         :rtype: np.ndarray
 
         """
-        return self.__img[index]
+        return self._img[index]
 
     def phi(self, index=0):
         """
@@ -647,7 +664,7 @@ class LevelSetFlow:
         """
 
         if img:
-            images = self.__img
+            images = self._img
         else:
             images = img
 
@@ -1104,8 +1121,9 @@ class LevelSetFlow:
             plt.pause(.0001)
 
             plt.savefig(movie_folder + movie_name + '_final.png', figsize=(16, 9), bbox_inches='tight', dpi=300)
-            print('Done with Chan Vese without edges')
+            print('\n Done with Chan Vese without edges')
             duration = 500  # milliseconds
             freq = 440  # Hz
             winsound.Beep(freq, duration)
+            pbar.close()
             return l_curve

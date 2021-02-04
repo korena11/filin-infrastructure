@@ -102,8 +102,8 @@ def dist_from_checkerboard(func_shape):
     x = np.arange(width)
     y = np.arange(height)
     xx, yy = np.meshgrid(x, y)
-    sin_xx = np.sin(np.pi / 25 * xx)
-    sin_yy = np.sin(np.pi / 25 * yy)
+    sin_xx = np.sin(np.pi / 100 * xx)
+    sin_yy = np.sin(np.pi / 100 * yy)
 
     return sin_xx * sin_yy
 
@@ -131,8 +131,8 @@ def dist_from_circles(dx, dy, radius, func_shape, resolution=.5):
     center_x = np.arange(dx/2 + radius, func_shape[1] , dx + radius)
     center_y = np.arange(dy/2 + radius, func_shape[0] , dy + radius)
 
-    for i in tqdm(center_y, position=0, leave=False):
-        for j in tqdm(center_x, position=1, leave=True):
+    for i in tqdm(center_y, position=0, leave=False, desc='building phi by circles'):
+        for j in center_x:
             phi_temp = dist_from_circle((i,j), radius, func_shape, resolution=resolution)
             phi[int(i-radius):int(i+radius),int(j-radius):int(j+radius)] = phi_temp[int(i-radius):int(i+radius),int(j-radius):int(j+radius)]
 

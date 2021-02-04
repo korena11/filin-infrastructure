@@ -170,10 +170,10 @@ class SaliencyFactory(object):
 
         for neighborhood,  i in zip(neighbors_property, trange(neighbors_property.Size, desc='Directional Saliency for each neighborhood', position=0)):
             # print(i)
-            if i==stopat:
-                print('!')
-                
-
+            if verbose:
+                if i==stopat:
+                    print('!')
+                    
             neighborhood.weightNeighborhood(weighting_func, rho=kwargs['rho'], sigma=kwargs['sigma'])
 
             if verbose:
@@ -306,7 +306,7 @@ class SaliencyFactory(object):
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dn.std() / sigma_expected
 
         # if there are more than 60% that are less than 5 deg difference
-        if num_zeros > 0.51 * number_effective:
+        if num_zeros > 0.6 * number_effective:
             dn = 0
         elif chi2_statistic < chi2:
             dn = 0
@@ -361,7 +361,7 @@ class SaliencyFactory(object):
         num_zeros = np.sum(np.abs(dk[neighborhood.weights[1:] > 0.01]) <= 0.04)
         chi2_statistic = (neighborhood.numberOfNeighbors - 1) * dk.std() / sigma_expected
 
-        if num_zeros > 0.51 * number_effective:
+        if num_zeros > 0.6 * number_effective:
             dk = 0
         elif chi2_statistic < chi2:
             dk = 0
@@ -881,7 +881,7 @@ class SaliencyFactory(object):
         normals = []
         for normal in normals_tuple:
             n = normal * (1-curvature_weight)
-        rasters.append(n)
+            rasters.append(n)
 
         # rasters = rasters + normals # combine lists
         convolved = np.zeros(curvature_raster.shape)
@@ -892,6 +892,36 @@ class SaliencyFactory(object):
                 convolved += (convolve2d(raster, kernel, mode='same'))
         return SaliencyProperty(raster, mt.scale_values(convolved, 0 ,1))
         #
+
+    @classmethod
+    def saliency_raster_laplacian(cls, raster, curvature_raster, dn, win_size=(3, 3),  curvature_weight=.5):
+        """
+        Computes directional saliency with laplacian
+
+        :param raster: the raster data on which the saliency is computed
+        :param curvature_raster: computed curvature, as a (m,n) raster
+        :param dn: dn as computed point-wise (but as raster)
+        :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
+        :param curvature_weight: weighting parameter for saliency computation
+
+        :type raster: RasterData
+        :type curvature_raster: np.ndarray
+        :type dn: np.ndarray
+        :type win_size: int
+        :type width: int
+        :type curvature_weight: float
+
+        :return: raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)
+        """
+        ddepth = cv2.CV_16S
+
+        dn[np.where(np.isnan(dn))] =0
+
+        convolved = cv2.Laplacian(curvature_raster, ddepth, ksize=win_size) * curvature_weight + dn * (1-curvature_weight)
+        convolved = cv2.convertScaleAbs(convolved)
+
+        return SaliencyProperty(convolved, mt.scale_values(convolved, 0 ,1))
+
 
     @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):

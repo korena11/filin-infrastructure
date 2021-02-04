@@ -1,5 +1,8 @@
 import numpy as np
 from shapely import geometry
+from tqdm import tqdm
+from DataClasses.PointSubSet import PointSubSet
+
 
 def curve2shapely(contour, crs=(0,0), eps=.2):
     """
@@ -17,7 +20,6 @@ def curve2shapely(contour, crs=(0,0), eps=.2):
     :rtype: list of shapely_polygon.geometry.polygon.Polygon
 
     """
-
 
     poly = []
 
@@ -47,6 +49,7 @@ def curve2shapely(contour, crs=(0,0), eps=.2):
         poly.append(new_shape)
 
     return poly
+
 
 def reclassify_shapely(shapes, eps=.2):
     """
@@ -131,11 +134,8 @@ def points_in_polygon(multi_p, poly, pointset):
 
     """
 
-    from DataClasses.PointSubSet import PointSubSet
-    from tqdm import tqdm
-
     # find all points in polygon
-    idx = [p.within(poly) for p in tqdm(multi_p, desc='looking for points within the polygon')]
+    idx = [p.within(poly) for p in tqdm(multi_p, desc='looking for points in  polygon')]
     id = np.where(idx)[0]
 
     return PointSubSet(pointset, id)
@@ -224,9 +224,67 @@ def fit_line_LS(xy):
 
     return  x0, np.sqrt(sig2), v
 
-def fit_circle_GH(xy, r_approx, ):
+def check_sinkhole(c, pts, transformationMatrix, **kwargs):
     """
-    Fit a circle using Gauss-Helmert model
-    :param xy:
-    :return:
+    checks if a polygon is a sinkhole
+
+    :param c: the polygon vertices
+    :param pts: point cloud
+    :param multi_p: the point cloud as a shapely vertices
+    :param transformationMatrix: transformation matrix from image to world
+
+    :type pts: DataClasses.PointSet.PointSet
+
+    :return: true the polygon represents a sinkhole, false otherwise
+
+    :rtype: bool
     """
+    from Utils.SurfaceFitting import fit_plane_PCA
+    from shapely.geometry import Polygon
+    import matplotlib.path as mpltPath
+    shape = kwargs['img'].shape
+    # for sinkholes
+    if not isinstance(c, geometry.polygon.Polygon):
+        c = geometry.asPolygon(c)
+
+    # look only for point in the vicinity of the polygon
+    c = np.asarray(c.exterior.xy)
+    c_h = np.vstack((c, np.ones(c.shape[1])[None, :]))
+    c_h[1, :] = -(c_h[1, :] - shape[0]) # reflect around y axis
+    c_trans = transformationMatrix.dot(c_h)
+    c = Polygon(c_trans[:2, :].T)
+    path = mpltPath.Path(c_trans[:2,:].T)
+    bounding_box = np.asarray(c.bounds)
+
+    idx = pts.X >= bounding_box[0]
+    idx *= pts.Y >= bounding_box[1]
+    idx *= pts.X <= bounding_box[2]
+    idx *= pts.Y <= bounding_box[3]
+    subset = PointSubSet(pts, np.where(idx)[0].astype(np.int))
+    idx_in = path.contains_points(subset.ToNumpy()[:, :2])
+    idx_out = np.invert(idx_in)
+    if 'pid' in kwargs:
+        np.savetxt('bbox' + str(kwargs['pid']) + '.txt', subset.ToNumpy())
+
+    # multi_p = geometry.MultiPoint([(i[0], i[1]) for i in tqdm(zip(subset.X, subset.Y), total=subset.Size)])
+
+    # points_in_curves = points_in_polygon(multi_p, c, subset)
+    # points_on_curves = point_on_polygon(c, subset)
+
+    # measure 2: off-planarity
+    if np.sum(idx_in) <2:
+        print('not enough points')
+        return False
+
+    x0, sig, v = fit_plane_PCA(subset, True)
+    if np.sum(idx_out) == 0 or np.sum(idx_in) ==0:
+        h=1
+    else:
+        h = subset.Z[idx_out].mean() - subset.Z[idx_in].mean()
+    if h > 0: # concave (point in curve are lower than those on the curve)
+        if sig >.03: # should not fit a plane
+            return True
+        else:
+            return False
+    else:
+        return False

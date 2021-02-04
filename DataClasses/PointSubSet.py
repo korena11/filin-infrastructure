@@ -1,6 +1,7 @@
 # Framework Imports
 import VisualizationUtils
 from DataClasses.PointSet import PointSet
+import numpy as np
 
 
 class PointSubSet(PointSet):
@@ -43,7 +44,6 @@ class PointSubSet(PointSet):
         """
         Return nX1 ndarray of intensity values 
         """
-        import numpy as np
         if isinstance(self.data, PointSet):
             intensity = self.data.Intensity
         else:
@@ -52,6 +52,37 @@ class PointSubSet(PointSet):
             return intensity[self.indices]
         else:
             return np.asarray(intensity)[self.indices]
+
+    @property
+    def X(self):
+        """
+        :return: X coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return self.data.X[self.indices]
+
+    @property
+    def Y(self):
+        """
+
+        :return: Y coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return self.data.Y[self.indices]
+
+    @property
+    def Z(self):
+        """
+        :return: Z coordinates
+
+        :rtype: nx1 nd-array
+
+        """
+        return self.data.Z[self.indices]
 
     def GetPoint(self, index):
         """

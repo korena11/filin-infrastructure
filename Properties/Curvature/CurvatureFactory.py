@@ -161,8 +161,9 @@ class CurvatureFactory:
                                                                                        min_points_in_sector=min_points_in_sector,
                                                                                        valid_sectors=valid_sectors,
                                                                                        num_sectors=num_sectors):
-                if i == 2815:
-                    print('!')
+                if verbose:
+                    if i == 2815:
+                        print('!')
                 normal = normals[i, :]
                 k1_, k2_ = cls.curvature_by_3parameters(neighborhood, normal, alpha)
 
