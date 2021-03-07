@@ -894,34 +894,52 @@ class SaliencyFactory(object):
         #
 
     @classmethod
-    def saliency_raster_laplacian(cls, raster, curvature_raster, dn, win_size=(3, 3),  curvature_weight=.5):
+    def saliency_raster_gaussian(cls, curvature_property, dn, win_size, rho, sigma, curvature_weight=.5, curvature_attribute ='mean'):
         """
         Computes directional saliency with laplacian
 
-        :param raster: the raster data on which the saliency is computed
-        :param curvature_raster: computed curvature, as a (m,n) raster
+        :param curvature_property: computed curvature, as a (m,n) raster
         :param dn: dn as computed point-wise (but as raster)
-        :param win_size: the window sizes in which the saliency is checked. Must be odd number. Default: (3,3)
+        :param win_size: the window sizes in which the saliency is checked (in meters).
+        :param rho: the distance of the highest weight
+        :param sigma: the Gaussian sigma
         :param curvature_weight: weighting parameter for saliency computation
+        :param curvature_attribute: the curvature type which will be used for the computation. Default: mean
 
-        :type raster: RasterData
-        :type curvature_raster: np.ndarray
+        :type curvature_property: CurvatureProperty.CurvatureProperty
         :type dn: np.ndarray
         :type win_size: int
-        :type width: int
+        :type rho: float
+        :type sigma: float
         :type curvature_weight: float
 
         :return: raster with enhanced saliency values according to their difference from specific directions. Note that the returned saliency is normalized between (0,1)
         """
-        ddepth = cv2.CV_16S
+        from scipy.ndimage import convolve
+        from Properties.Curvature.CurvatureProperty import CurvatureProperty
+        resolution = curvature_property._BaseProperty__dataset.resolution[0]
 
-        dn[np.where(np.isnan(dn))] =0
+        dn[np.where(np.isnan(dn))] = 0
+        if win_size % 2 ==0:
+            center_pix = int(win_size/(2 * resolution))
+        else:
+            center_pix = int((win_size - 1)/(2 * resolution))
 
-        convolved = cv2.Laplacian(curvature_raster, ddepth, ksize=win_size) * curvature_weight + dn * (1-curvature_weight)
-        convolved = cv2.convertScaleAbs(convolved)
+        # create distance map
+        x = np.arange(0, win_size, resolution)
+        y = np.arange(0, win_size, resolution)
+        xx, yy = np.meshgrid(x,y)
+        xx -= center_pix * resolution
+        yy -= center_pix * resolution
+        dist_map = np.sqrt((xx)**2 + (yy)**2)
 
-        return SaliencyProperty(convolved, mt.scale_values(convolved, 0 ,1))
+        # create weights map according to phi and sigma
+        window = 1/(np.sqrt(2*np.pi) * sigma) * np.exp(- (dist_map - rho)**2 / (2*sigma**2))
+        window[center_pix, center_pix] = -1
 
+        convolved = np.abs(convolve(curvature_property.__getattribute__(curvature_attribute), window)) * curvature_weight + dn * (1 - curvature_weight)
+
+        return SaliencyProperty(curvature_property._BaseProperty__dataset, mt.scale_values(convolved, 0,1))
 
     @classmethod
     def panorama_frequency(cls, panorama_property, filters, sigma_sent=True, feature='pixel_val'):
@@ -1163,6 +1181,107 @@ class SaliencyFactory(object):
              for ksize in ksizes if ksize.astype('int') !=0 ]
         saliency_map = np.array(s)
         return np.mean(saliency_map, axis=0)
+
+
+    @classmethod
+    def ballTree_saliency(cls,pointset, scale, neighborhood_properties, curvature_attribute, leaf_size=10,
+                          weight_distance=1, weight_normals=1, verbose=False):
+        """
+        Compute curvature based saliency using ball-tree and k-nearest-neighbors.
+
+        The saliency for every set of points within a ball-tree cell is computed as one for all points.
+
+        .. seealso::
+            :meth:`SaliencyFactory.curvature_saliency`
+
+        :param pointset: a point cloud of any sort
+        :param scale: the scale of the minimal phenomena (size of the smallest ball-tree cell)
+        :param neighborhood_properties: k nearest neighbors
+        :param curvature_attribute: the attribute according to which the curvature is measured.
+
+        :param leaf_size: the minimum number of points in the ball tree leaves. Default: 10
+        :param weight_distance: weights for distance element. Default: 1.
+        :param weight_normals: weights for normal element. Default: 1.
+        :param verbose: print running messages. Default: False
+
+        :type pointset: np.ndarray, PointSet.PointSet, BallTreePointSet.BallTreePointSet, PointSetOpen3D.PointSetOpen3D
+        :type scale: float
+        :type neighborhood_properties: int or float
+        :type leaf_size: int
+        :type weight_normals: float
+        :type weight_distance: float
+        :type verbose: bool
+
+        :return: curvature property, normals property, saliency property
+
+        :rtype: CurvatureProperty, NormalsProperty, SaliencyProperty
+
+
+        .. warning::
+           This method is old, not debugged, and returns more than SaliencyProperty.
+
+        .. TODO: Should be updated so that the curvature and normals are inputs and not computed inside. Should also check if this is not redundant
+        """
+
+        from CurvatureFactory import CurvatureFactory, CurvatureProperty
+        from NeighborsFactory import NeighborsFactory
+        from BallTreePointSet import BallTreePointSet
+        from PointSubSet import PointSubSet
+        from TensorFactory import TensorFactory, TensorProperty
+        from NormalsFactory import NormalsFactory, NormalsProperty
+
+        # 1. Build the BallTree
+        if isinstance(pointset, BallTreePointSet):
+            balltree = pointset
+
+        else:
+            balltree = BallTreePointSet(pointset, leaf_size=leaf_size)
+
+        # 2. Choose vertices according to minimal scale
+        nodes = balltree.getSmallestNodesOfSize(scale, 'leaves')
+
+        # 3. Build tensors out of each node's points, and build their neighborhoods
+        tensors = []
+        new_cloud = []
+        if verbose:
+            i = 0
+
+        for node in nodes:
+            if verbose:
+                i += 1
+                if i == 1192:
+                    print('hello')
+            tmp_subset = PointSubSet(pointset, balltree.getPointsOfNode(node))
+            tensors.append(TensorFactory.tensorFromPoints(tmp_subset, -1))
+            new_cloud.append(tensors[-1].reference_point)
+
+        new_bt = BallTreePointSet(np.asarray(new_cloud))  # the new cloud of the centers of mass of each tensor
+        tensors_property = TensorProperty(new_bt, np.asarray(tensors))
+        neighbors = NeighborsFactory.balltreePointSet_knn(new_bt, neighborhood_properties)  # neighborhood construction
+
+        # 4. Curvature for each tensor
+        tensor_curvature = CurvatureFactory.tensorProperty_3parameters(tensors_property)
+
+        # 5. Normal for each tensor
+        tensor_normals = NormalsFactory.normals_from_tensors(tensors_property)
+
+        # 6.  Saliency for each tensor
+        tensor_saliency = cls.directional_saliency(neighbors, tensor_normals, tensor_curvature,
+                                                               curvature_attribute=curvature_attribute, verbose=verbose)
+
+        # 7. Assign saliency value for each point in the tensor
+        pcl_saliency = SaliencyProperty(pointset)
+        pcl_curvature = CurvatureProperty(pointset)
+        pcl_normals = NormalsProperty(pointset)
+
+        for node_, saliency, curvature, normal in zip(nodes, tensor_saliency, tensor_curvature, tensor_normals):
+            idx = balltree.getPointsOfNode(node_)
+            pcl_saliency.setPointSaliency(idx, saliency)
+            pcl_curvature.setPointCurvature(idx, curvature)
+            pcl_normals.setPointNormal(idx, normal)
+
+        return pcl_saliency, pcl_curvature, pcl_normals
+
 
     # ------------------ Private Functions ------------------------
 
