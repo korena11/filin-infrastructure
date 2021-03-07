@@ -37,7 +37,7 @@ def dist_from_circle(center_pt, radius, func_shape, resolution=.5):
     x_x0 = (xx - center_pt[1] * resolution) # (x-x0)
     y_y0 =  (yy - center_pt[0] * resolution)  # (y-y0)
 
-    phi = radius *resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
+    phi = radius / resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
 
     return phi
 
@@ -76,7 +76,7 @@ def dist_from_ellipse(center_pt, axes, func_shape, resolution=.5):
 
     return phi
 
-def dist_from_checkerboard(func_shape):
+def dist_from_checkerboard(func_shape, denominator=30):
     r"""
     Build a Lipshitz distance function with a sine function, with a specific size
 
@@ -102,8 +102,8 @@ def dist_from_checkerboard(func_shape):
     x = np.arange(width)
     y = np.arange(height)
     xx, yy = np.meshgrid(x, y)
-    sin_xx = np.sin(np.pi / 100 * xx)
-    sin_yy = np.sin(np.pi / 100 * yy)
+    sin_xx = np.sin(np.pi / denominator * xx)
+    sin_yy = np.sin(np.pi / denominator * yy)
 
     return sin_xx * sin_yy
 

@@ -107,7 +107,7 @@ class NormalsProperty(BaseProperty):
 
         numerator = np.sqrt(self.dX**2 + self.dY**2)
         denominator = np.sqrt(self.dX**2 + self.dY**2 + self.dZ**2)
-
+        denominator[np.where(denominator == 0)] =1 # assuming dx and dy are zeros, the values where the denominator is zero will be zero
         return np.arcsin(numerator / denominator)
 
 

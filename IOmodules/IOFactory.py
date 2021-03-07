@@ -83,6 +83,39 @@ class IOFactory:
         return obj
 
     @classmethod
+    def Read_or_create_neighborhood(cls, pts, folder, filename, neighborhood_function,
+                                        radius=None, k_nearest_neighbors=None, parts_num=None, parts_size=int(5e5)):
+        """
+           Loads a neighborhood file if exists, otherwise, creates the neighborhood and saves it as pickle
+
+           :param pts: point cloud
+           :param folder: path for the  neighborhood file
+           :param filename:  name of the  neighborhood file
+           :param neighborhood_function: the function by which the neighborhood will be computed. Default :func:`cls.kdtreePointSet_rnn`
+           :param k_nearest_neighbors: number of nearest neighbors
+           :param radius:  radius of search
+           :param parts_size: number of points in section for more efficient computation. Defauls: 5e5
+           :param parts_num: number of parts to divide the computation. Default: None
+
+           :type pts: DataClasses.BaseData.BaseData
+           :type folder: str
+           :type filename: str
+           :type neighborhood_function: ufunc
+           :type k_nearest_neighbors: int
+           :type radius: float
+           :type parts_num: int
+           :type parts_size: int
+
+           :return: neighborhood property
+           :rtype: Properties.Neighborhood.NeighborhoodProperty.NeighborhoodProperty
+
+           .. seealso::
+               :func:`Properties.Neighborhood.NeighborsFactory.NeighborsFactory.load_or_create_NeighborhoodFile
+        """
+        from Properties.Neighborhood.NeighborsFactory import NeighborsFactory
+        return NeighborsFactory.load_or_create_NeighborhoodFile(pts, folder, filename, neighborhood_function, radius, k_nearest_neighbors, parts_num, parts_size)
+
+    @classmethod
     def ReadPickle(cls, fileobj, classname):
         """
         Reads any pickle and assigns it according to given class.

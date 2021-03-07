@@ -250,7 +250,7 @@ def computeImageGradient_numeric(img, gradientType='L1', ksize=3, sigma=1, resol
     # img = cv2.GaussianBlur(I, (ksize, ksize), sigma)
 
     # compute image gradient (numeric)
-    dx, dy = computeImageDerivatives_numeric(img, 1, ksize, sigma, resolution,blur_window)
+    dx, dy = imageDerivatives_4connected(img, 1, ksize, sigma, resolution, blur_window)
 
     if gradientType == 'L1':
         gradient = cv2.GaussianBlur((np.abs(dx) + np.abs(dy)), (ksize, ksize), sigma)  # L1-norm of grad(I)
@@ -262,7 +262,7 @@ def computeImageGradient_numeric(img, gradientType='L1', ksize=3, sigma=1, resol
     # return cv2.normalize((gradient).astype('float'), None, 0.0,1.0, cv2.NORM_MINMAX)
     return gradient
 
-def computeImageDerivatives_numeric(img, order, ksize=3, sigma=1., resolution=1., blur_window=(0,0), **kwargs):
+def imageDerivatives_4connected(img, order, ksize=3, sigma=1., resolution=1., blur_window=(0, 0), **kwargs):
     """
         Computes numeric image derivatives up to order 2.
 
@@ -487,7 +487,7 @@ def draw_contours(func, ax, img, hold=False, blob_size=5, color_random=False,  *
     linewidth = kwargs.get('linewidth', 1)
 
     tmp_func = func.copy()
-    tmp_func[np.abs(tmp_func)<=1e-4] = 1e-4
+    tmp_func[np.abs(tmp_func)<=1e-4] = 0
     # segmenting and presenting the found areas
     # function_binary[np.where(func > 0.)] = 0
     # function_binary[np.where(func <= 0.)] = 1
@@ -729,6 +729,9 @@ def scale_values(array, min=0., max=1.):
     """
     if len(array) <1:
         return array
+    if np.all(array==0):
+        return array
+
     return (max-min) * (array - array.min()) / (array.max() - array.min()) + min
 
 def make_zero(array, eps=1e-5):

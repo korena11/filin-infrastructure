@@ -161,8 +161,8 @@ def GVF(f, mu, iterations, ksize=3, sigma=1.,
     m, n = f.shape[:2]
 
     f = boundMirrorExpand(f) # Take care of boundary condition
-    [fx, fy] = mt.computeImageDerivatives_numeric(f, 1, ksize=ksize, sigma=sigma, resolution=resolution,
-                                                  blur_window=blur_window) # Calculate the gradient of the edge map
+    [fx, fy] = mt.imageDerivatives_4connected(f, 1, ksize=ksize, sigma=sigma, resolution=resolution,
+                                              blur_window=blur_window) # Calculate the gradient of the edge map
 
     # Initialize  GVF to the gradient
     u = fx

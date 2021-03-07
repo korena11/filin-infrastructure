@@ -61,7 +61,7 @@ def computePanoramaDerivatives_adaptive(img, ksize=0.2, sigma=0., resolution=1.,
     for window in tqdm(np.unique(d), desc='compute central derivatives'):
         indx = np.where(d==window)
         # central derivative
-        dx_, dy_ = mt.computeImageDerivatives_numeric(img_extended, 1, window, sigma, resolution, blur_window=blur_window)
+        dx_, dy_ = mt.imageDerivatives_4connected(img_extended, 1, window, sigma, resolution, blur_window=blur_window)
         dx_ = dx_[row_T:-row_B, column_L:-column_R]
         dy_ = dy_[row_T:-row_B, column_L:-column_R]
         dx[indx] = dx_[indx]

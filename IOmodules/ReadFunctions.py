@@ -476,3 +476,5 @@ def ReadPly(filename, returnAdditionalAttributes=True):
             return pntSet, attributes
     except:
         print('Failed to extract data from ply file')
+
+

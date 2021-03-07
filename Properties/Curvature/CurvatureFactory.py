@@ -462,9 +462,9 @@ class CurvatureFactory:
         img = cv2.normalize(img.astype('float'), None, 0.0, 1.0,
                             cv2.NORM_MINMAX)  # Convert to normalized floating point
 
-        dx, dy, Zxx, Zyy, Zxy = mt.computeImageDerivatives_numeric(img, 2, sigma=sigma,
-                                                           gradientType=gradientType,
-                                                           ksize=ksize)
+        dx, dy, Zxx, Zyy, Zxy = mt.imageDerivatives_4connected(img, 2, sigma=sigma,
+                                                               gradientType=gradientType,
+                                                               ksize=ksize)
 
         k1 = (((Zxx + Zyy) + np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)
         k2 = (((Zxx + Zyy) - np.sqrt((Zxx - Zyy) ** 2 + 4 * Zxy ** 2)) / 2)

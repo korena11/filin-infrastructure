@@ -206,18 +206,19 @@ class NeighborsFactory:
         return neighbors
 
     @staticmethod
-    def kdtreePointSet_rnn(pointset_kdt, search_radius, kmax=None, parts_size=int(5e5), parts_num=None):
+    def kdtreePointSet_rnn(pointset_kdt, search_radius, k_nearest_neighbors=None, parts_size=int(5e5), parts_num=None, **kwargs):
         r"""
         Create NeighborsProperty of KdTreePointSet (whole cloud) based on search radius (RNN)
 
         :param pointset_kdt: the cloud to which the NeighborhoodProperty should be computed
         :param search_radius: the neighborhood radius
-        :param kmax: maximum number or neighbors. If sent, only the farthest k-neighbors will be stored. When None, there will be no limit. Default: None.
+        :param k_nearest_neighbors: maximum number or neighbors. If sent, only the farthest k-neighbors will be stored. When None, there will be no limit. Default: None.
         :param parts_size: number of points in section for more efficient computation. Default: None
         :param parts_num: number of parts to divide the computation. Default: 1
 
         :type pointset_kdt: KdTreePointSet.KdTreePointSet
         :type search_radius: float
+        :type k_nearest_neighbors: int
         :type parts_size: int
         :type parts_num: int
 
@@ -272,8 +273,8 @@ class NeighborsFactory:
             idx = np.hstack((idx,
                              pointset_kdt.queryRadius(pointset_kdt.ToNumpy()[parts_size * parts_num:], search_radius,
                                                       sort_results=True)))
-        if kmax is not None:
-            start = kmax
+        if k_nearest_neighbors is not None:
+            start = k_nearest_neighbors
         else:
             start = -0
 
@@ -800,5 +801,59 @@ class NeighborsFactory:
 
         return pcl_neighborhood
 
+    @classmethod
+    def load_or_create_NeighborhoodFile(cls, pts, folder, filename, neighborhood_function,
+                                        search_radius=None, k_nearest_neighbors=None, parts_num=None, parts_size=int(5e5), overwrite=False):
+        """
+        Loads a neighborhood file if exists, otherwise, creates the neighborhood and saves it as pickle
 
-        # for i in np.arange(0, points.Size):
+        :param pts: point cloud
+        :param folder: path for the  neighborhood file
+        :param filename:  name of the  neighborhood file
+        :param neighborhood_function: the function by which the neighborhood will be computed. Default :func:`cls.kdtreePointSet_rnn`
+        :param k_nearest_neighbors: number of nearest neighbors
+        :param search_radius:  radius of search
+        :param parts_size: number of points in section for more efficient computation. Defauls: 5e5
+        :param parts_num: number of parts to divide the computation. Default: None
+        :param overwrite: recompute the neighborhood file, even if exists
+
+        :type pts: DataClasses.BaseData.BaseData
+        :type folder: str
+        :type filename: str
+        :type neighborhood_function: ufunc
+        :type k_nearest_neighbors: int
+        :type search_radius: float
+        :type parts_num: int
+        :type parts_size: int
+        :type overwrite: bool
+
+        :return: neighborhood property
+
+        :rtype: Properties.Neighborhood.NeighborhoodProperty.NeighborhoodProperty
+
+        .. TODO::
+            The saving should be changed to save only the path of the point cloud and the neighbors for each point - not the property as it saves now as this one falls when the dataset is big
+        """
+        import os
+        import pickle
+        from os import path
+
+        kwargs = dict(search_radius=search_radius, k_nearest_neighbors=k_nearest_neighbors, parts_num=parts_num, parts_size=parts_size)
+        create_flag = overwrite
+        # check if the folder exists. if not, create it
+        if not path.isdir(folder):
+            os.makedirs(folder)
+            create_flag = True
+        else:
+            if path.exists(folder+filename +'.p'):
+                if not create_flag:
+                    neighborhood = pickle.load(open(folder + filename + '.p', 'rb'))
+                    print(filename + 'neighborhood loaded')
+            else:
+                create_flag = True
+
+        if create_flag:
+            neighborhood = neighborhood_function(pts, **kwargs)
+            pickle.dump(neighborhood, open(folder + filename + '.p', 'wb'))
+
+        return neighborhood

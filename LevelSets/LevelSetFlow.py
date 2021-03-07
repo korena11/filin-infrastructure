@@ -203,7 +203,7 @@ class LevelSetFlow:
 
         """
         self.__g = g
-        self.__g_x, self.__g_y = mt.computeImageDerivatives_numeric(g, 1, **kwargs)
+        self.__g_x, self.__g_y = mt.imageDerivatives_4connected(g, 1, **kwargs)
 
     def init_GVF(self, f, mu, iterations, ksize=3, sigma=1.,
                  resolution=1., blur_window=(0, 0), **kwargs):
@@ -279,6 +279,7 @@ class LevelSetFlow:
         :param radius: if the curve is a circle, the radius should be specified.
         :param center_pt: if the curve is a circle, the center point should be specified.
         :param reularization_note: regularization note for heaviside function
+        :param phi: predefined image as phi
         :param function_type:
 
             - 'circle' (default);
@@ -302,20 +303,24 @@ class LevelSetFlow:
         img_height, img_width = self.img().shape[:2]
         radius = kwargs.get('radius', np.int(img_width / 4))
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
-        func_type = kwargs.get('function_type', 'circle')
+        denominator = kwargs.get('denominator', 30)
+        func_type = kwargs.get('function_type', None)
+
 
         func_shape = (img_height, img_width)
         phi = np.zeros(func_shape)
 
-        if func_type == 'circle':
+        if func_type is None:
+            phi = kwargs['phi']
 
+        elif func_type == 'circle':
             phi = distance_functions.dist_from_circle(center_pt, radius, func_shape, resolution=resolution)
 
         elif func_type == 'ellipse':
             phi = distance_functions.dist_from_ellipse(center_pt, radius, func_shape, resolution)
             
         elif func_type == 'checkerboard':
-            phi = distance_functions.dist_from_checkerboard(func_shape)
+            phi = distance_functions.dist_from_checkerboard(func_shape, denominator)
 
         elif func_type == 'circles':
             dx = kwargs.get('dx', 1)
@@ -906,12 +911,24 @@ class LevelSetFlow:
         ax2.axis('off')
         # fig3, ax3 = plt.subplots(num='kappa')
         # mt.imshow(self.phi().kappa)
+
         
         # =================================================================================
         with writer.saving(fig, movie_folder + movie_name + ".mp4", 100):
+            # plt.figure('img')
+            #
+            # l_curve, ax = mt.draw_contours(self.phi().value, ax, img=img_showed, hold=False,
+            #                                color_random=color_random, linewidth=linewidth, blob_size=blob_size, color=color)
+            # title = ax.text(0, 1.07, "", bbox={'facecolor': 'w', 'alpha': 0.5, 'pad': 5},
+            #                 transform=ax.transAxes, ha="center")
+            # title.set_text('Iteration #: {}'.format(0))
+            # ax.axis('off')
+            # # title(')
+            # writer.grab_frame()
+
             for iteration in trange(iterations, desc='Running level set'):
                 # print(iteration)
-                # if iteration ==100 :
+                # if iteration % 10 ==0 :
                 #     print('hello')
                 dphi_intrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
                 extrinsic = np.zeros((self.img().shape[0],self.img().shape[1],  self.num_ls))
@@ -958,7 +975,7 @@ class LevelSetFlow:
                     # extrinsic += self.__compute_vo() * vo_w
                     phi_t = self.step * (intrinsic - extrinsic)
                     # reinitializtion every 10 iterations:
-                    if iteration % 10== 0 and iteration != 0:
+                    if iteration % 5 == 0 and iteration != 0:
                         self.phi(k).reinitialization(phi_t[:, :, k])
                         # plt.figure('3d')
                         # ax4 = plt.axes(projection='3d')

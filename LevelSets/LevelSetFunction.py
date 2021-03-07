@@ -53,7 +53,7 @@ class LevelSetFunction(object):
         self.__epsilon = epsilon
         self.__regularization_note = regularization_note
         
-        self.__value = function
+        self.__value = mt.scale_values(function, -1, 1)
         self.__ls_derivatives_curvature()
         self.compute_heaviside()
         self.compute_dirac_delta()
@@ -162,8 +162,8 @@ class LevelSetFunction(object):
             return
 
         self.__x, self.__y, self.__xx, self.__yy, self.__xy = \
-            mt.computeImageDerivatives_numeric(self.value, 2, ksize=ksize,
-                                       sigma=sigma, resolution=self.__resolution)
+            mt.imageDerivatives_4connected(self.value, 2, ksize=ksize,
+                                           sigma=sigma, resolution=self.__resolution)
 
         self.__x = mt.make_zero(self._x)
         self.__y = mt.make_zero(self._y)
@@ -201,12 +201,12 @@ class LevelSetFunction(object):
         ksize = self.__ksize
         sigma = self.__sigma
         
-        if np.any(new_function.mean()+ 2.5* new_function.std() > new_function.max()):
-            new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
-            new_function[new_function< np.percentile(new_function, 3)] = np.percentile(new_function, 40)
+        # if np.any(new_function.mean()+ 2.5* new_function.std() > new_function.max()):
+        #     new_function[new_function > np.percentile(new_function, 97)] = np.percentile(new_function, 60)
+        #     new_function[new_function< np.percentile(new_function, 3)] = np.percentile(new_function, 40)
 
         # self.__value = mt.make_zero(cv2.GaussianBlur(new_function,  (ksize, ksize),  sigmaX=sigma))
-        self.__value = new_function
+        self.__value = cv2.GaussianBlur(new_function,  (ksize, ksize),  sigmaX=sigma)
         self.__ls_derivatives_curvature()
         
         self.compute_heaviside()

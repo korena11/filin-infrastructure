@@ -133,6 +133,7 @@ class VisualizationO3D:
 
         if property is not None:
             self.__prepare_property(property)
+            self.property = property
             key_to_callback[ord('A')] = self.toggle_attributes_colors
             key_to_callback[ord('C')] = self.toggle_colormaps
         else:
@@ -146,6 +147,10 @@ class VisualizationO3D:
         Light the next neighborhood in the list
 
         two new point clouds: one holds only the point (colored in red) and another holds the neighborhood colored in gray levels (can be changed)
+
+        :param property: a property to show the value of the current point
+
+        :type property: BaseProperty
         """
 
         current_neighborhood = self.neighborhood.__next__()
@@ -158,7 +163,7 @@ class VisualizationO3D:
         idx_weights = np.vstack((current_neighborhood.neighborhoodIndices, current_neighborhood.weights)).T.copy()
         idx_weights_sorted = np.sort(idx_weights.view('f8,f8'), order=['f0'], axis=0)   # sort by index
         try:
-            print('point number {}'.format(self.neighborhood.current))
+            print('point number {}, value {}'.format(self.neighborhood.current, self.property.getValues()[self.neighborhood.current]))
             print(np.reshape(idx_weights_sorted['f1'], (size, size)))
             print('-'*20)
         except:
