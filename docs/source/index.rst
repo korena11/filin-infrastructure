@@ -49,6 +49,9 @@ This project is implemented for Python 3.6.
 -  `tqdm <https://tqdm.github.io/>`_ :   Installation via `pip install tqdm`
 -  `richdem <https://richdem.readthedocs.io/en/latest/>`_ :   Installation via `pip install richdem`
 - `scikit-image <http://scikit-image.org>`_ :    Installation via `pip install scikit-image`
+- `shapely <https://shapely.readthedocs.io/en/latest/>`_ :    Installation via `pip install Shapely`
+- `plyfile <https://github.com/dranjan/python-plyfile>`_ :    Installation via `pip install plyfile`
+
 
 
 

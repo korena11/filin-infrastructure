@@ -12,7 +12,7 @@ import Utils.MyTools as mt
 from LevelSets.LevelSetFunction import LevelSetFunction
 from DataClasses.RasterData import RasterData
 
-import winsound
+# import winsound
 
 
 from matplotlib import animation
@@ -305,7 +305,6 @@ class LevelSetFlow:
         center_pt = kwargs.get('center_pt', [np.int(img_height / 2), np.int(img_width / 2)])
         denominator = kwargs.get('denominator', 30)
         func_type = kwargs.get('function_type', None)
-
 
         func_shape = (img_height, img_width)
         phi = np.zeros(func_shape)
@@ -1141,6 +1140,6 @@ class LevelSetFlow:
             print('\n Done with Chan Vese without edges')
             duration = 500  # milliseconds
             freq = 440  # Hz
-            winsound.Beep(freq, duration)
+            # winsound.Beep(freq, duration)
             pbar.close()
             return l_curve

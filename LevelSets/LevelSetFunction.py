@@ -52,8 +52,9 @@ class LevelSetFunction(object):
         self.__resolution = resolution
         self.__epsilon = epsilon
         self.__regularization_note = regularization_note
-        
-        self.__value = mt.scale_values(function, -1, 1)
+
+        self.__value = function
+        # self.__value = mt.scale_values(function, -1, 1)
         self.__ls_derivatives_curvature()
         self.compute_heaviside()
         self.compute_dirac_delta()

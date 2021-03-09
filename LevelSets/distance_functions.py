@@ -35,9 +35,9 @@ def dist_from_circle(center_pt, radius, func_shape, resolution=.5):
     y = np.arange(height)
     xx, yy = np.meshgrid(resolution * x, resolution* y)
     x_x0 = (xx - center_pt[1] * resolution) # (x-x0)
-    y_y0 =  (yy - center_pt[0] * resolution)  # (y-y0)
+    y_y0 = (yy - center_pt[0] * resolution)  # (y-y0)
 
-    phi = radius / resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
+    phi = radius * resolution - np.sqrt(x_x0 ** 2 + y_y0 ** 2)
 
     return phi
 
