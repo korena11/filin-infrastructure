@@ -974,16 +974,16 @@ class LevelSetFlow:
                     # extrinsic += self.__compute_vo() * vo_w
                     phi_t = self.step * (intrinsic - extrinsic)
                     # reinitializtion every 10 iterations:
-                    if iteration % 5 == 0 and iteration != 0:
-                        self.phi(k).reinitialization(phi_t[:, :, k])
+                    # if iteration % 15 == 0 and iteration != 0:
+                        # self.phi(k).reinitialization(phi_t[:, :, k])
                         # plt.figure('3d')
                         # ax4 = plt.axes(projection='3d')
                         # ax4.view_init(45,65)
                         # X, Y = np.meshgrid(np.arange(0, self.phi().value.shape[1]), np.arange(0, self.phi().value.shape[0]))
                         # ax4.plot_surface(X, Y, self.phi().value, cmap='gray')
 
-                    else:
-                        self.phi(k).move_function(phi_t[:, :, k])
+                    # else:
+                    self.phi(k).move_function(phi_t[:, :, k])
 
                 plt.figure('phi')
                 mt.imshow(np.flipud(self.phi().value))
