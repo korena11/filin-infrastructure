@@ -37,6 +37,7 @@ git clone url_of_the_repo
 Step 2: Check the python version of your pc, and install requirements from the given file.
 * We support python 3.6
 * Windows and Linux [requirement_win10.txt and requirement_linux.txt]
+
 ```bash
 pip install requirement_YourPlatform.txt
 ```
